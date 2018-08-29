@@ -1,0 +1,33 @@
+{
+  "name": "a-touch",
+  "version": "1.0.0",
+  "description": "a touch, any touch, atom touch",
+  "main": "rollup.config.js",
+  "scripts": {
+    "dev": "rollup -wc",
+    "build": "rollup -c",
+    "tsc": "tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/383514580/a-touch.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/383514580/a-touch/issues"
+  },
+  "homepage": "https://github.com/383514580/a-touch#readme",
+  "dependencies": {
+    "typescript": "^3.0.1"
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.3",
+    "babel-plugin-external-helpers": "^6.22.0",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-stage-2": "^6.24.1",
+    "rollup": "^0.62.0",
+    "rollup-plugin-babel": "^3.0.7",
+    "rollup-plugin-typescript": "^0.8.1"
+  }
+}

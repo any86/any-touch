@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="./dist/touch2.umd.js"></script>
+    <script src="https://res.wx.qq.com/mmbizwap/zh_CN/htmledition/js/vconsole/3.0.0/vconsole.min.js"></script>
+    <script>
+        console.log(window)
+
+        // var vConsole = new VConsole();
+    </script>
+    <style>
+        html,
+        body {
+            padding: 0;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        .box {
+            padding: 200px 30px;
+            text-align: center;
+            font-size: 1.2em;
+            background: #888;
+            color:#fff;
+        }
+    </style>
+</head>
+
+<body>
+    <pre id="box" class="box">
+        AnyTouch
+    </pre>
+    <script>
+        new AnyTouch(document.getElementById('box'));
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,14 @@
+{
+    "compilerOptions": {
+        "target": "es3",
+        "module": "umd",
+        "noImplicitAny": true,
+        "removeComments": true,
+        "preserveConstEnums": true,
+        "sourceMap": true,
+        "outDir": "tscbuild/",
+    },
+    "include": [
+        "src/main.ts"
+    ]
+}
