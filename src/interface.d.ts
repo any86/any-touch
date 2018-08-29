@@ -1,18 +1,19 @@
 // AnyTouch手势的事件数据
 export interface AnyTouchEvent {
-    velocityX: number
-    velocityY:number
-    scale:number
-    angle:number
-    centerX:number
-    centerY:number
-    deltaX:number
-    deltaY:number
-    absDeltaX:number
-    absDeltaY:number
-    offsetX:number
-    offsetY:number
-    countTime:number
+    type: string;
+    velocityX: number;
+    velocityY:number;
+    scale:number;
+    angle:number;
+    centerX:number;
+    centerY:number;
+    deltaX:number;
+    deltaY:number;
+    absDeltaX:number;
+    absDeltaY:number;
+    offsetX:number;
+    offsetY:number;
+    countTime:number;
 }
 
 // 事件触发函数
