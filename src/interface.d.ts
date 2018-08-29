@@ -16,6 +16,20 @@ export interface AnyPointers {
 
 export interface Session extends AnyPointers {}
 
+
+export interface handlerBus{
+    rotate?: [()=>{}];
+    pinch?: [()=>{}];
+    tap?: [()=>{}];
+    doubletap?: [()=>{}];
+    press?: [()=>{}];
+    pan?: [()=>{}];
+    swipe?: [()=>{}];
+    touchStart?: [()=>{}];
+    touchMove?: [()=>{}];
+    touchEnd?: [()=>{}];
+}
+
 export interface EventHandler {
     rotate?: EventListener;
     pinch?: EventListener;
@@ -27,6 +41,7 @@ export interface EventHandler {
     touchStart?: EventListener;
     touchMove?: EventListener;
     touchEnd?: EventListener;
+    [propName: string]:any;
 }
 
 export interface Recognizer {
