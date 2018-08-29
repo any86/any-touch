@@ -1,8 +1,8 @@
 {
-  "name": "a-touch",
-  "version": "1.0.0",
-  "description": "a touch, any touch, atom touch",
-  "main": "rollup.config.js",
+  "name": "any-touch",
+  "version": "0.0.1",
+  "description": "只做一个纯粹的手势库",
+  "main": "dist/any-touch.js",
   "scripts": {
     "dev": "rollup -wc",
     "build": "rollup -c",
@@ -15,9 +15,9 @@
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/383514580/a-touch/issues"
+    "url": "https://github.com/383514580/any-touch/issues"
   },
-  "homepage": "https://github.com/383514580/a-touch#readme",
+  "homepage": "https://github.com/383514580/any-touch#readme",
   "dependencies": {
     "typescript": "^3.0.1"
   },
