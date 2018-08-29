@@ -1,12 +1,10 @@
 import session from './session';
-import { AnyPointers } from './interface';
-import { getCenter, getAngle,getVLength } from './vector';
+import { AnyTouchEvent } from './interface';
+import { getCenter, getAngle, getVLength } from './vector';
 
 
-let angle=0;
-let scale= 1;
-export default function (input: AnyPointers) {
-    const { abs,round } = Math;
+export default function (input: AnyTouchEvent) {
+    const { abs, round } = Math;
 
     // 每次变化产生的偏移
     let deltaX, deltaY, absDeltaX, absDeltaY;
@@ -22,17 +20,18 @@ export default function (input: AnyPointers) {
         absDeltaY = abs(deltaY);
     }
 
-    // 时间
-    const deltaTime = input.activeTime - input.startTime;
-    const timestamp = Date.now();
+    // 从start到end的时间
+    const countTime = input.activeTime - input.startTime;
 
     // 速度
-    const velocityX = offsetX / deltaTime;
-    const velocityY = offsetY / deltaTime;
+    const velocityX = offsetX / countTime;
+    const velocityY = offsetY / countTime;
 
 
-    
+
     // 多点
+    let angle = 0;
+    let scale = 1;
     if (1 < input.length) {
         const v0 = {
             x: input.prevPointers[1].pageX - input.prevPointers[0].pageX,
@@ -44,12 +43,25 @@ export default function (input: AnyPointers) {
             y: input.activePointers[1].pageY - input.activePointers[0].pageY
         };
 
-        angle+= getAngle(v0, v1);
-        scale*= getVLength(v1)/ getVLength(v0);
+        angle = getAngle(v0, v1);
+        scale = getVLength(v1) / getVLength(v0);
     }
 
-// return {};
     // 中心
     const { x: centerX, y: centerY } = getCenter(input.activePointers);
-    return {velocityX, velocityY,scale, angle, centerX, centerY, deltaX, deltaY, absDeltaX, absDeltaY, offsetX, offsetY, deltaTime, timestamp };
+    return {
+        velocityX,
+        velocityY,
+        scale,
+        angle,
+        centerX,
+        centerY,
+        deltaX,
+        deltaY,
+        absDeltaX,
+        absDeltaY,
+        offsetX,
+        offsetY,
+        countTime
+    };
 };
