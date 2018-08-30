@@ -3,6 +3,7 @@ export interface AnyTouchEvent {
     type: string;
     velocityX: number;
     velocityY:number;
+    maxVelocity:number;
     scale:number;
     angle:number;
     centerX:number;
@@ -11,9 +12,11 @@ export interface AnyTouchEvent {
     deltaY:number;
     absDeltaX:number;
     absDeltaY:number;
-    offsetX:number;
-    offsetY:number;
-    countTime:number;
+    displacementX:number;
+    displacementY:number;
+    distanceX:number;
+    distanceY:number;
+    duration:number;
 }
 
 // 事件触发函数
