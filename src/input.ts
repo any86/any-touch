@@ -24,5 +24,7 @@ export default function (event: TouchEvent) {
         session.input.endPointers = changedPointers;
         session.input.endTime = now();
     }
+
+    session.computed = compute(session.input);
     return session.input;
 };
