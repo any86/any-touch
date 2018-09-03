@@ -1,9 +1,7 @@
-import session from './session';
-import { AnyTouchEvent, AnyInput } from './interface';
+import { InputComputed, AnyInput } from './interface';
 import { getCenter, getAngle, getVLength } from './vector';
 
-
-export default function (input: AnyInput): AnyTouchEvent {
+export default function (input: any): InputComputed {
     const { abs, round, max } = Math;
     
     // 每次变化产生的偏移
@@ -14,10 +12,9 @@ export default function (input: AnyInput): AnyTouchEvent {
     let displacementY = round(input.activePointers[0].pageY - input.startPointers[0].pageY);
     let distanceX = abs(displacementX);
     let distanceY = abs(displacementY);
+    let distance = getVLength({x: distanceX, y: distanceY});
 
-
-
-
+    // 每次变化的位移增量
     if (undefined !== input.prevPointers) {
         deltaX = round(input.activePointers[0].pageX - input.prevPointers[0].pageX);
         deltaY = round(input.activePointers[0].pageY - input.prevPointers[0].pageY);
@@ -53,25 +50,7 @@ export default function (input: AnyInput): AnyTouchEvent {
     // 中心
     const { x: centerX, y: centerY } = getCenter(input.activePointers);
 
-    session.velocityX = velocityX;
-    session.velocityY = velocityY;
-    session.maxVelocity = maxVelocity;
-    session.scale = scale;
-    session.angle = angle;
-    session.centerX = centerX;
-    session.centerY = centerY;
-    session.deltaX = deltaX;
-    session.deltaY = deltaY;
-    session.absDeltaX = absDeltaX;
-    session.absDeltaY = absDeltaY;
-    session.displacementX = displacementX;
-    session.displacementY = displacementY;
-    session.distanceX = distanceX;
-    session.distanceY = distanceY;
-    session.duration = duration;
-
     return {
-        type: 'anytouch',
         velocityX,
         velocityY,
         maxVelocity,
@@ -87,6 +66,7 @@ export default function (input: AnyInput): AnyTouchEvent {
         displacementY,
         distanceX,
         distanceY,
+        distance,
         duration
     };
 };
