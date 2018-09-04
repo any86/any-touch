@@ -78,16 +78,16 @@ const getCenter = (points:TouchList) => {
 
 /**
  * 
- * @param {Number} 事件开始到结束的X偏移 
- * @param {Number} 事件开始到结束的Y偏移 
+ * @param {Number} 事件开始到结束的X位移 
+ * @param {Number} 事件开始到结束的Y位移 
  */
-const getDirection = (offsetX: number, offsetY: number): string => {
-    if (offsetX === offsetY) {
+const getDirection = (displacementX: number, displacementY: number): string => {
+    if (displacementX === displacementY) {
         return 'none';
-    } else if (Math.abs(offsetX) > Math.abs(offsetY)) {
-        return 0 < offsetX ? 'right' : 'left';
+    } else if (Math.abs(displacementX) > Math.abs(displacementY)) {
+        return 0 < displacementX ? 'right' : 'left';
     } else {
-        return 0 < offsetY ? 'down' : 'up';
+        return 0 < displacementY ? 'down' : 'up';
     }
 };
 
