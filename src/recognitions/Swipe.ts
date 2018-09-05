@@ -11,7 +11,8 @@ export default class SwipeRecognizer {
     };
 
     test(computedInput: any) {
-        const { length, distance, velocityX, velocityY,duration } = computedInput;
-        return 1 === length && 250 > duration &&  (0.3 < velocityX || 0.3 < velocityY);
+        const {max} = Math;
+        const { velocityX, velocityY,duration, isEnd } = computedInput;
+        return isEnd && 250 > duration &&  0.3 < max(velocityX, velocityY);
     };
 };
