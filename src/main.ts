@@ -8,28 +8,36 @@
  * press 按压
  * pan 拖拽
  * swipe 快速划过
- * touchStart
- * touchMove
- * touchEnd
  */
 
-import {EventHandler} from './interface';
+import { HandlerBus, AnyTouchHandler } from './interface';
+import EventBus from './EventBus';
+import session from './session';
 import {
     getVLength,
 } from './vector'
-import input from './input';
+import normalizeInput from './input';
 import compute from './compute';
-
+import TapRecognizer from './recognitions/Tap';
+import PressRecognizer from './recognitions/Press';
+import PanRecognizer from './recognitions/Pan';
+import SwipeRecognizer from './recognitions/Swipe';
+import PinchRecognizer from './recognitions/Pinch';
+import RotateRecognizer from './recognitions/Rotate';
 export default class AnyTouch {
     // 目标元素
-    el: Element;
+    $el: Element;
     // 是否阻止默认事件
     isPreventDefault: Boolean;
     // 是否阻止冒泡
     isStopPropagation: Boolean;
 
     // 各个手势对应的handle集合
-    handleMap: EventHandler;
+    handlerBus: HandlerBus;
+
+    recognizers: any[];
+
+    unbinders: any[];
 
     /**
      * @param {Element} el
@@ -39,11 +47,26 @@ export default class AnyTouch {
         isPreventDefault = false,
         isStopPropagation = false
     } = {}) {
+        this.$el = el;
+        this.handlerBus = {};
+        session.eventBus = new EventBus();
+        this.recognizers = [
+            new TapRecognizer(),
+            new PanRecognizer(),
+            new SwipeRecognizer(),
+            new PinchRecognizer(),
+            new RotateRecognizer(),
+            new PressRecognizer(),
+        ];
         // 绑定事件
-        el.addEventListener('touchstart', this.handler);
-        el.addEventListener('touchmove', this.handler);
-        el.addEventListener('touchend', this.handler);
-        el.addEventListener('touchcancel', this.handler);
+        // ['mouseup', 'mousemove','mousedown'];
+        this.unbinders = ['touchstart', 'touchmove', 'touchend', 'touchcancel'].map(eventName => {
+            let boundFn = this.handler.bind(this);
+            this.$el.addEventListener(eventName, boundFn);
+            return () => {
+                this.$el.removeEventListener(eventName, boundFn);
+            }
+        });
     }
 
     setConfig({
@@ -54,20 +77,23 @@ export default class AnyTouch {
         this.isStopPropagation = isStopPropagation;
     };
 
-    handler(event:TouchEvent){
+    handler(event: TouchEvent) {
         event.preventDefault();
-        let data = input(event);
-        let data2 = compute(data);
-        event.target.textContent = JSON.stringify(data2, null, 4);
-    }
-    /**
-     * "-"格式转成驼峰格式
-     * @param {String} string 
-     */
-    camelize(string:string):string {
-        var camelizeRE = /-(\w)/g;
-        return string.replace(camelizeRE, word => {
-            return word.toLocaleUpperCase().slice(1)
+        const input = normalizeInput(event);
+        const computed = compute(input);
+        session.computed = computed;
+        
+        this.recognizers.forEach(recognizer => {
+            recognizer.recognize({ ...input, ...computed });
         });
+    };
+
+    on(eventName: string, callback: AnyTouchHandler, preset: object): void {
+        session.eventBus.on(eventName, callback);
+    };
+
+
+    headUpperCase(str: string) {
+        return str.toLowerCase().replace(/( |^)[a-z]/g, (L) => L.toUpperCase());
     }
 }
