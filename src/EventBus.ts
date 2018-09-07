@@ -50,5 +50,14 @@ export default class EventBus {
                 break;
             }
         }
+    };
+
+    /**
+     * 判断是否绑定指定事件
+     * @param {String} 事件名
+     * @return {Boolean} 是否存在
+     */
+    has(eventName:string):boolean{
+        return undefined !== this.stack[eventName];
     }
 };
