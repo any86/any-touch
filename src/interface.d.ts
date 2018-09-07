@@ -1,6 +1,4 @@
-// AnyTouch手势的事件数据
-export interface AnyTouchEvent {
-    type: string;
+export interface InputComputed {
     velocityX: number;
     velocityY:number;
     maxVelocity:number;
@@ -16,6 +14,30 @@ export interface AnyTouchEvent {
     displacementY:number;
     distanceX:number;
     distanceY:number;
+    distance: number;
+    duration:number;
+}
+
+// AnyTouch手势的事件数据
+export interface AnyTouchEvent {
+    type: string;
+    eventBus: object,
+    velocityX: number;
+    velocityY:number;
+    maxVelocity:number;
+    scale:number;
+    angle:number;
+    centerX:number;
+    centerY:number;
+    deltaX:number;
+    deltaY:number;
+    absDeltaX:number;
+    absDeltaY:number;
+    displacementX:number;
+    displacementY:number;
+    distanceX:number;
+    distanceY:number;
+    distance: number;
     duration:number;
 }
 
@@ -44,12 +66,14 @@ export interface AnyInput {
     isStart: boolean,
     isMove: boolean,
     isEnd: boolean,
-    deltaX: number,
-    deltaY: number,
+    // 上一点
     prevPointers?: TouchList,
+    // 起始点
     startPointers?: TouchList,
+    // 当前点
     activePointers?: TouchList,
-    endPointers?: TouchList,
+    // 离开时的触点
+    endPointers?: TouchList, 
     startTime?: number,
     activeTime?: number,
     endTime?: number,
@@ -61,6 +85,3 @@ export interface Vector {
     x: number;
     y: number;
 }
-
-export interface Session extends AnyTouchEvent { }
-export interface Session extends AnyInput { }
