@@ -1,62 +1,80 @@
+import { InputComputed, AnyTouch } from './interface';
+import { MAX_MOVE_OF_TAP, propX, propY } from './const';
+
+import InputFactory from './InputFactory';
+
 import session from './session';
-export default function (event: TouchEvent) {
+import compute from './compute';
+export default function (event: TouchEvent): any {
     const pointers = event.touches;
     const length = pointers.length;
     const changedPointers = event.changedTouches;
-    const { now } = Date;
     const { max } = Math;
 
-    // 触碰点数
-    session.input.length = length;
-
     // 判断当前状态
-    session.input.isStart = session.input.isEnd;
-    session.input.isEnd = 0 === length;
-    session.input.isMove = !session.input.isStart && !session.input.isEnd;
+    session.isStart = session.isEnd;
+    session.isEnd = 0 === length;
+    session.isMove = !session.isStart && !session.isEnd;
 
     // 上一步的触点
-    session.input.prevPointers = session.input.activePointers;
+    session.prevInput = session.input;
 
     // [Start]
-    if (session.input.isStart) {
+    if (session.isStart) {
         // 记录起点信息
-        session.input.startPointers = pointers;
-        session.input.startTime = now();
+        session.startInput = new InputFactory(pointers);
+        // 清空上一点和最终点
+        session.prevInput = undefined;
     }
     // [Move]
-    else if (session.input.isMove) {
+    else if (session.isMove) {
         // 当从多点触碰变为单点
         // 该位置的代码完全是为了当pinch/rotate后进行pan操作的时候,
         // 让distance相关能够以变为单点后的坐标进行计算
-        const isMultiToSingle = 1 < session.input.prevPointers.length && 1 === session.input.length;
+        // const isMultiToSingle = 1 < session.prevInput.length && 1 === session.length;
 
-        // 每300ms重新计算startPointers, startTime
+        // 每300ms重新计算startInput, startTime
         // 用来识别当用户按住屏幕一段时间才开始操作的手势
-        const isLongHold = 300 < session.input.activeTime - session.input.reStartTime;
-        if (isMultiToSingle || isLongHold) {
-            // 新起点
-            session.input.reStartPointers = pointers;
-            session.input.reStartTime = now();
-        }
+        // const isLongHold = 300 < session.activeTime - session.reStartTime;
+        // if (isMultiToSingle) {
+        // 新起点
+        // session.reStartPointers = pointers;
+        // session.reStartTime = now();
+        // }
     }
     // [End]
-    else if (session.input.isEnd) {
-        session.input.endPointers = changedPointers;
-        session.input.endTime = now();
+    else if (session.isEnd) {
+        session.endInput = new InputFactory(changedPointers);
+        // if(1 < session.lastInputArray.length){
+        //     session.penultInput = session.lastInputArray[0];
+        // } else {
+        //     session.penultInput = undefined;
+        // }
     }
 
-    // 当前点数据
-    session.input.activePointers = pointers;
-    session.input.activeTime = now();
+    // 当前触碰点
+    session.input = new InputFactory(pointers);
 
-    // 可用点, 当end阶段为离开时候的点
-    session.input.validPointers = 0 < session.input.activePointers.length ? session.input.activePointers : session.input.endPointers;
 
     // 出现过的最大触点数量
-    if (undefined === session.input.maxLength) {
-        session.input.maxLength = length;
+    if (undefined === session.maxLength) {
+        session.maxLength = length;
     } else {
-        session.input.maxLength = max(session.input.maxLength, length);
+        session.maxLength = max(session.maxLength, length);
     }
-    return session.input;
+
+    const { 
+        startInput,
+        prevInput,
+        input,
+        maxLength } = session;
+
+    const computed = compute({
+        startInput,
+        prevInput,
+        input,
+        maxLength
+    });
+    // console.log(session);
+    return { ...input, ...computed };
 }; 
