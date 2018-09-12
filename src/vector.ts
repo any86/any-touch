@@ -1,5 +1,5 @@
-import { Vector} from './interface';
-
+import { Vector } from './interface';
+import { propX, propY } from './const';
 /**
  * 获取向量长度(向量模)
  * @param {Object} 向 量
@@ -55,15 +55,15 @@ const getAngle = (v1: Vector, v2: Vector) => {
  * 获取多点之间的中心坐标
  * @param {Array} 触碰点 
  */
-const getCenter = (points:TouchList) => {
+const getCenter = (points: TouchList) => {
     const pointLength = points.length;
     if (1 < pointLength) {
         let x = 0;
         let y = 0;
         let i = 0;
         while (i < pointLength) {
-            x += points[i].clientX;
-            y += points[i].clientY;
+            x += points[i][propX];
+            y += points[i][propY];
             i++;
         }
 
@@ -72,7 +72,7 @@ const getCenter = (points:TouchList) => {
             y: Math.round(y / pointLength)
         };
     } else {
-        return { x: undefined, y: undefined };
+        return { x: points[0][propX], y: points[0][propY] };
     }
 };
 
