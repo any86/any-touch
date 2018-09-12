@@ -9,7 +9,7 @@ import computeLast from './computeLast'
 export default function ({
     startInput,
     prevInput,
-    input, validInput, startMultiInput
+    input, startMultiInput
 }: any): any {
     const { abs, round, max } = Math;
     const length = input.pointers.length;
@@ -50,8 +50,8 @@ export default function ({
     // 有效点, 包含位置信息
     if (2 > length) {
         // 单指滑动计算
-        computed.displacementX = round(validInput.pointers[0][propX] - startInput.pointers[0][propX]);
-        computed.displacementY = round(validInput.pointers[0][propY] - startInput.pointers[0][propY]);
+        computed.displacementX = round(input.pointers[0][propX] - startInput.pointers[0][propX]);
+        computed.displacementY = round(input.pointers[0][propY] - startInput.pointers[0][propY]);
         computed.distanceX = abs(computed.displacementX);
         computed.distanceY = abs(computed.displacementY);
         computed.distance = round(getVLength({ x: computed.distanceX, y: computed.distanceY }));
@@ -59,25 +59,31 @@ export default function ({
         // 已消耗时间
         computed.duration = input.timestamp - startInput.timestamp;
 
-        // 计算每次移动时产生的位移增量
-        const deltaData = computeDeltaXY(validInput, prevInput);
-        computed.deltaX = deltaData.deltaX;
-        computed.deltaY = deltaData.deltaY;
+        // 如果非第一下触碰
+        if (undefined !== prevInput) {
+            // 位移增量
+            computed.deltaX = input.pointers[0][propX] - prevInput.pointers[0][propX];
+            computed.deltaY = input.pointers[0][propY] - prevInput.pointers[0][propY];
+            computed.absDeltaX = abs(computed.deltaX);
+            computed.absDeltaY = abs(computed.deltaY);
+            // 时间增量
+            computed.deltaTime = input.timestamp - prevInput.timestamp;
+            // 瞬时速度
+            computed.lastVelocityX = computed.deltaX / computed.deltaTime;
+            computed.lastVelocityY = computed.deltaY / computed.deltaTime;
 
-        const velocityData = computeLast(deltaData);
-        computed.lastVelocityX = velocityData.velocityX;
-        computed.lastVelocityY = velocityData.velocityY;
-
-        computed.absDeltaX = abs(computed.deltaX);
-        computed.absDeltaY = abs(computed.deltaY);
-
-        // 速率
-        computed.velocityX = abs(computed.distanceX / computed.duration);
-        computed.velocityY = abs(computed.distanceY / computed.duration);
-        computed.maxVelocity = max(computed.velocityX, computed.velocityY);
+            // 速率
+            computed.velocityX = abs(computed.distanceX / computed.duration);
+            computed.velocityY = abs(computed.distanceY / computed.duration);
+            computed.maxVelocity = max(computed.velocityX, computed.velocityY);
+        }
+        
+        // 中心
+        computed.centerX = input.center.x;
+        computed.centerY = input.center.y;
 
         // 计算方向
-        const direction: string = getDirection(computed.deltaX, computed.deltaY);
+        computed.direction = getDirection(computed.deltaX, computed.deltaY);
     }
     // ================== 多点 ==================
     else if (1 < prevInput.pointers.length) {

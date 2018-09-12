@@ -15,7 +15,7 @@ export default function (event: TouchEvent): any {
     session.isEnd = 0 === length;
     session.isMove = !session.isStart && !session.isEnd;
 
-    
+
 
     // [Start]
     if (session.isStart) {
@@ -40,13 +40,11 @@ export default function (event: TouchEvent): any {
         session.endInput = new InputFactory(changedPointers);
     }
 
-    session.validInput = 0 === session.input.pointers.length ? session.prevInput : session.input;
-
     // 开始多点触碰
     if (1 < length && undefined === session.startMultiInput) {
         session.startMultiInput = new InputFactory(pointers);
     }
-    
+
     if (undefined !== session.prevInput && 1 < session.prevInput.pointers.length && 1 === session.input.pointers.length) {
         session.startInput = new InputFactory(pointers);
     }
@@ -61,7 +59,6 @@ export default function (event: TouchEvent): any {
         startInput,
         prevInput,
         input, startMultiInput,
-        validInput: session.validInput
     });
     return { ...input, ...computed };
 }; 
