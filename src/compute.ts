@@ -3,8 +3,6 @@ import session from './session';
 import { InputComputed, AnyTouch } from './interface';
 import { getCenter, getAngle, getVLength, getDirection } from './vector';
 import { propX, propY } from './const';
-import computeDeltaXY from './computeDeltaXY'
-import computeLast from './computeLast'
 
 export default function ({
     startInput,
@@ -13,8 +11,6 @@ export default function ({
 }: any): any {
     const { abs, round, max } = Math;
     const length = input.pointers.length;
-
-
     let computed: any = {
         // 起始到结束的偏移
         displacementX: 0,
@@ -77,10 +73,6 @@ export default function ({
             computed.velocityY = abs(computed.distanceY / computed.duration);
             computed.maxVelocity = max(computed.velocityX, computed.velocityY);
         }
-        
-        // 中心
-        computed.centerX = input.center.x;
-        computed.centerY = input.center.y;
 
         // 计算方向
         computed.direction = getDirection(computed.deltaX, computed.deltaY);
@@ -96,17 +88,16 @@ export default function ({
             x: input.pointers[1][propX] - input.pointers[0][propX],
             y: input.pointers[1][propY] - input.pointers[0][propY]
         };
-
+        
+        // 角度
         computed.angle = getAngle(v1, v0);
+        // 缩放
         computed.scale = getVLength(v1) / getVLength(v0);
-
-
     };
 
     // 中心
-    // const { x, y } = getCenter(input);
-    // computed.centerX = x;
-    // computed.centerY = y;
+    computed.centerX = input.center.x;
+    computed.centerY = input.center.y;
 
     // 出现过的最大触点数量
     if (session.isStart) {
