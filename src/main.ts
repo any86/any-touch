@@ -16,8 +16,7 @@ import session from './session';
 import {
     getVLength,
 } from './vector'
-import normalizeInput from './input';
-import compute from './compute';
+import normalize from './input';
 import TapRecognizer from './recognitions/Tap';
 import PressRecognizer from './recognitions/Press';
 import PanRecognizer from './recognitions/Pan';
@@ -52,11 +51,11 @@ export default class AnyTouch {
         session.eventBus = new EventBus();
         this.recognizers = [
             new TapRecognizer(),
+            new PressRecognizer(),
             new PanRecognizer(),
             new SwipeRecognizer(),
             new PinchRecognizer(),
             new RotateRecognizer(),
-            new PressRecognizer(),
         ];
         // 绑定事件
         // ['mouseup', 'mousemove','mousedown'];
@@ -79,12 +78,9 @@ export default class AnyTouch {
 
     handler(event: TouchEvent) {
         event.preventDefault();
-        const input = normalizeInput(event);
-        const computed = compute(input);
-        session.computed = computed;
-        
+        const input = normalize(event);
         this.recognizers.forEach(recognizer => {
-            recognizer.recognize({ ...input, ...computed });
+            recognizer.recognize(input);
         });
     };
 
