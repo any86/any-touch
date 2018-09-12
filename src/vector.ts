@@ -1,5 +1,6 @@
 import { Vector } from './interface';
 import { propX, propY } from './const';
+const { round } = Math;
 /**
  * 获取向量长度(向量模)
  * @param {Object} 向 量
@@ -68,11 +69,11 @@ const getCenter = (points: TouchList) => {
         }
 
         return {
-            x: Math.round(x / pointLength),
-            y: Math.round(y / pointLength)
+            x: round(x / pointLength),
+            y: round(y / pointLength)
         };
     } else {
-        return { x: points[0][propX], y: points[0][propY] };
+        return { x: round(points[0][propX]), y: round(points[0][propY]) };
     }
 };
 
