@@ -1,41 +1,198 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta data-n-head="true" name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width"/>
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
-    <script src="./dist/touch2.umd.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="./dist/anyTouch.umd.js"></script>
     <script src="https://res.wx.qq.com/mmbizwap/zh_CN/htmledition/js/vconsole/3.0.0/vconsole.min.js"></script>
     <script>
-        console.log(window)
-
         // var vConsole = new VConsole();
     </script>
     <style>
-        html,
-        body {
-            padding: 0;
-            margin: 0;
-            overflow: hidden;
+        :root {
+            --bg: rgb(116, 186, 189);
         }
 
-        .box {
-            padding: 200px 30px;
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            width: 100%;
+            min-height: 100vh;
+            padding: 15px 15px;
+            overflow-x: hidden;
+            background: var(--bg);
+        }
+
+        main {
+            overflow-x: hidden;
+            touch-action: manipulation;
+            background: var(--bg);
+            min-height: calc(100vh - 20px);
+        }
+
+        .text {
+            margin: 0;
+            padding: 0 10px;
             text-align: center;
-            font-size: 1.2em;
-            background: #888;
-            color:#fff;
+            font-size: 12px;
+            color: #fff;
+        }
+
+        .circle {
+            box-sizing: content-box;
+            width: 30px;
+            height: 30px;
+            border-radius: 5px;
+            background: rgb(255, 255, 255, 0.2);
+            border: 50px solid rgb(0, 0, 0, 0.4);
+            /* box-shadow: 0 0 30px rgba(0, 0, 0, .9); */
+            position: absolute;
+            left: calc(50vw - 25px);
+            top: calc(50vh - 25px);
+        }
+
+
+        .tap {
+            animation: tap 500ms;
+        }
+
+        @keyframes tap {
+            from {
+                transform: scale(1);
+                opacity: 1;
+            }
+
+            50%{
+                transform: scale(.9);
+                opacity: .8;
+            }
+
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+
+        .doubletap {
+            animation: doubletap 500ms;
+        }
+
+        @keyframes doubletap {
+            from {
+                transform: scaleY(1);
+            }
+
+            50%{
+                transform: scaleY(.6);
+            }
+
+            to {
+                transform:scaleY(1);
+            }
         }
     </style>
 </head>
 
 <body>
-    <pre id="box" class="box">
-        AnyTouch
-    </pre>
+    <main id="app">
+        <div class="circle" ref="circle" 
+        @animationend="animationend"
+        :class="{
+            tap: 'tap' === message.type,
+            doubletap: 'doubletap' === message.type,
+        }"
+        :style="{
+            transform: `scale(${scale}) translate(${x/scale}px, ${y/scale}px) rotate(${angle}deg)`,
+            transformOrigin: `${centerX}px//// ${centerY}px`
+        }"></div>
+        <p class="text">scale: {{scale}}</p>
+        <p class="text">angle: {{angle}}</p>
+        <p v-for="(item, key) in message" class="text">{{key}} : {{item}}</p>
+    </main>
+
     <script>
-        new AnyTouch(document.getElementById('box'));
+        new Vue({
+            el: '#app',
+
+            data() {
+                return {
+                    angle: 0,
+                    scale: 1,
+                    x: 0,
+                    y: 0,
+                    centerX: 0,
+                    centerY: 0,
+                    message: 'AnyTouch'
+                };
+            },
+
+            mounted() {
+                const anyTouch = new AnyTouch(this.$refs.circle);
+
+                anyTouch.on('pan', e => {
+                    console.log('pan');
+                    this.message = e;
+                    this.x += e.deltaX;
+                    this.y += e.deltaY;
+                });
+
+
+                anyTouch.on('press', e => {
+                    console.log('press');
+                    this.message = e;
+                });
+
+
+                anyTouch.on('tap', e => {
+                    console.log('tap');
+                    this.message = e;
+                });
+
+                anyTouch.on('doubletap', e => {
+                    console.log('doubletap');
+                    this.message = e;
+                });
+
+
+                anyTouch.on('pinch', e => {
+                    console.log('pinch');
+                    this.message = e;
+                    this.scale *= e.scale;
+                    this.centerX = e.centerX;
+                    this.centerY = e.centerY;
+                });
+
+                anyTouch.on('rotate', e => {
+                    console.log('rotate');
+                    this.message = e;
+                    this.angle += e.angle;
+                    this.centerX = e.centerX;
+                    this.centerY = e.centerY;
+
+                });
+
+                anyTouch.on('swipe', e => {
+                    console.log('swipe');
+                    this.message = e;
+                });
+            },
+
+            methods:{
+                animationend(){
+                    // this.message = {};
+                }
+            }
+        });
     </script>
 </body>
 

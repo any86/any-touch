@@ -9,8 +9,10 @@ export default function ({
     prevInput,
     input, startMultiInput
 }: any): any {
+    const { now } = Date;
     const { abs, round, max } = Math;
     const length = input.pointers.length;
+
     let computed: any = {
         // 起始到结束的偏移
         displacementX: 0,
@@ -39,14 +41,12 @@ export default function ({
         centerX: undefined, centerY: undefined,
         lastVelocityY: undefined, lastVelocityX: undefined
     };
-
-
-
     // ================== 单点 ==================
     // 有效点, 包含位置信息
     if (2 > length) {
         // 单指滑动计算
         computed.displacementX = round(input.pointers[0][propX] - startInput.pointers[0][propX]);
+
         computed.displacementY = round(input.pointers[0][propY] - startInput.pointers[0][propY]);
         computed.distanceX = abs(computed.displacementX);
         computed.distanceY = abs(computed.displacementY);
@@ -64,6 +64,7 @@ export default function ({
             computed.absDeltaY = abs(computed.deltaY);
             // 时间增量
             computed.deltaTime = input.timestamp - prevInput.timestamp;
+
             // 瞬时速度
             computed.lastVelocityX = computed.deltaX / computed.deltaTime;
             computed.lastVelocityY = computed.deltaY / computed.deltaTime;
@@ -88,7 +89,7 @@ export default function ({
             x: input.pointers[1][propX] - input.pointers[0][propX],
             y: input.pointers[1][propY] - input.pointers[0][propY]
         };
-        
+
         // 角度
         computed.angle = getAngle(v1, v0);
         // 缩放
@@ -100,7 +101,7 @@ export default function ({
     computed.centerY = input.center.y;
 
     // 出现过的最大触点数量
-    if (session.isStart) {
+    if ('start' === session.inputStatus) {
         session.maxLength = 0;
     }
     if (0 === session.maxLength) {

@@ -1,9 +1,5 @@
 import session from '../session';
 export default class SwipeRecognizer {
-    constructor() {
-
-    };
-
     recognize(computedInput: any) {
         if (this.test(computedInput)) {
             session.eventBus.emit('swipe', ({ type: 'swipe', ...computedInput }))
@@ -11,8 +7,7 @@ export default class SwipeRecognizer {
     };
 
     test(computedInput: any) {
-        const {max} = Math;
-        const { velocityX, velocityY,duration, isEnd } = computedInput;
-        return isEnd && 250 > duration &&  0.3 < max(velocityX, velocityY);
+        const {lastVelocityX, lastVelocityY,maxLength} = computedInput;
+        return 1 === maxLength && 'end' === session.inputStatus && 0.3 < Math.max(Math.abs(lastVelocityX), Math.abs(lastVelocityY));
     };
 };

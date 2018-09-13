@@ -1,17 +1,13 @@
 import session from '../session';
 export default class PanRecognizer {
-    constructor() {
-
-    };
-
-    recognize(computedInput: any) {
-        if (this.test(computedInput)) {
-            session.eventBus.emit('pan', ({ type: 'pan', ...computedInput }));
+    recognize(computedinput: any) {
+        if (this.test(computedinput)) {
+            session.eventBus.emit('pan', ({ type: 'pan', ...computedinput }));
         }
     };
 
-    test(computedInput: any) {
-        const { length, distance } = computedInput;
-        return 1 === length && 10 < distance;
+    test(computedinput: any) {
+        const { length, distance } = computedinput;
+        return 'move' === session.inputStatus && 10 < distance && 1 === length;
     };
 };

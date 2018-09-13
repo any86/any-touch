@@ -1,8 +1,12 @@
 // 简单判断是否手机设备
-const MOBILE_REGEX = /mobile|tablet|ip(ad|hone|od)|android/i;
+export const MOBILE_REGEX = /mobile|tablet|ip(ad|hone|od)|android/i;
 
 // 是否支持touch事件
-const SUPPORT_TOUCH = ('ontouchstart' in window);
+export const SUPPORT_TOUCH = ('ontouchstart' in window);
+
+// 是否是移动设备
+export const SUPPORT_ONLY_TOUCH = SUPPORT_TOUCH && MOBILE_REGEX.test(navigator.userAgent);
+
 
 // 方向
 export const DIRECTION_NONE = 1; // 0000 0001

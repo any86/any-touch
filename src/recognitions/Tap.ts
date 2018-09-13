@@ -1,6 +1,6 @@
 import session from '../session';
 import { MAX_MOVE_OF_TAP, propX, propY } from '../const';
-import { AnyInput, InputComputed } from '../interface';
+import { AnyTouch, InputComputed } from '../interface';
 export default class TapRecognizer {
     tapCount: number;
     tapTimeout: number;
@@ -18,8 +18,8 @@ export default class TapRecognizer {
         if (this.test(computedInput)) {
             // 累加点击
             this.tapCount++;
-            this.prevTapX = computedInput.validPointers[0][propX];
-            this.prevTapY = computedInput.validPointers[0][propY];
+            this.prevTapX = session.input.pointers[0][propX];
+            this.prevTapY = session.input.pointers[0][propY];
             // 是否需要识别双击
             const hasDoubleTap = session.eventBus.has('doubletap');
             if (hasDoubleTap) {
@@ -41,9 +41,9 @@ export default class TapRecognizer {
     };
 
     test(computedInput: any) {
-        if (computedInput.isEnd) {
-            let { distance, duration } = computedInput;
-            return 2 > distance && 250 > duration;
+        if ('end' === session.inputStatus) {
+            let { distance, duration, maxLength } = computedInput;
+            return 1 === maxLength &&  2 > distance && 250 > duration;
         }
     };
 };

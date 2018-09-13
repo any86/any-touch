@@ -5,21 +5,21 @@ export default class PressRecognizer {
         this.timeoutId = null;
     };
 
-    recognize(computedInput: any) {
-        this.test(computedInput)
+    recognize(computedinput: any) {
+        this.test(computedinput)
     };
 
-    test(computedInput: any) {
-        if (computedInput.isStart) {
+    test(computedinput: any) {
+        if ('start' === session.inputStatus) {
             this.timeoutId = window.setTimeout(() => {
-                session.eventBus.emit('press', { type: 'press', ...computedInput });
+                session.eventBus.emit('press', { type: 'press', ...computedinput });
             }, 250);
-        } else if (computedInput.isMove) {
-            if (9 < computedInput.distance) {
+        } else if ('move' === session.inputStatus) {
+            if (9 < computedinput.distance) {
                 this.reset();
             }
-        } else if (computedInput.isEnd) {
-            if (251 > computedInput.duration || 9 < computedInput.distance) {
+        } else if ('end' === session.inputStatus) {
+            if (251 > computedinput.duration || 9 < computedinput.distance) {
                 this.reset();
             }
         }

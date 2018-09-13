@@ -1,17 +1,6 @@
-interface Session {
-    input: any;
-    computed: any;
-    eventBus: any;
-}
-
+import { Session } from './interface';
 let session: Session = {
-    input: {
-        isStart: false,
-        isMove: false,
-        isEnd: true,
-    },
-    computed: {},
-    eventBus: {},
+    inputStatus: 'end',
+    maxLength:0
 };
-
 export default session;

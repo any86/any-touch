@@ -1,21 +1,12 @@
 import session from '../session';
 export default class RotateRecognizer {
-    tapCount: number;
-    tapTimeout: number;
-    status: string;
-
-    constructor() {
-        this.tapTimeout = null;
-        this.tapCount = 0;
-    };
-
-    recognize(computedInput: any) {
-        if (this.test(computedInput)) {
-            session.eventBus.emit('rotate', { type: 'rotate', ...computedInput });
+    recognize(computedinput: any) {
+        if (this.test(computedinput)) {
+            session.eventBus.emit('rotate', { type: 'rotate', ...computedinput });
         }
     };
 
-    test(computedInput: any) {
-        return 1 < computedInput.length;
+    test(computedinput: any) {
+        return 1 < computedinput.length;
     };
 };

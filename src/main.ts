@@ -59,13 +59,17 @@ export default class AnyTouch {
         ];
         // 绑定事件
         // ['mouseup', 'mousemove','mousedown'];
-        this.unbinders = ['touchstart', 'touchmove', 'touchend', 'touchcancel'].map(eventName => {
+        this.unbinders = ['touchstart', 'touchmove', 'touchend', 'touchcancel', 'mousedown'].map(eventName => {
             let boundFn = this.handler.bind(this);
             this.$el.addEventListener(eventName, boundFn);
             return () => {
                 this.$el.removeEventListener(eventName, boundFn);
             }
         });
+        let boundFn = this.handler.bind(this);
+        window.addEventListener('mousemove', boundFn);
+        window.addEventListener('mouseup', boundFn);
+
     }
 
     setConfig({
@@ -79,9 +83,13 @@ export default class AnyTouch {
     handler(event: TouchEvent) {
         event.preventDefault();
         const input = normalize(event);
-        this.recognizers.forEach(recognizer => {
-            recognizer.recognize(input);
-        });
+        // 当是鼠标事件的时候, mouseup阶段的input为空
+        if(undefined !== input){
+            this.recognizers.forEach(recognizer => {
+                recognizer.recognize(input);
+            });
+        }
+
     };
 
     on(eventName: string, callback: AnyTouchHandler, preset: object): void {

@@ -1,12 +1,13 @@
 {
     "compilerOptions": {
-        "target": "es3",
-        "module": "umd",
+        "target": "es6",
+        // "module": "commonjs",
         "noImplicitAny": true,
         "removeComments": true,
         "preserveConstEnums": true,
         "sourceMap": true,
-        "outDir": "tscbuild/",
+        "outDir": "dist/",
+        "lib": ["dom", "es2017"]
     },
     "include": [
         "src/main.ts"
