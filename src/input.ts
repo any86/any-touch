@@ -1,21 +1,56 @@
 import { InputComputed, AnyTouch } from './interface';
-import { MAX_MOVE_OF_TAP, propX, propY } from './const';
-
 import InputFactory from './InputFactory';
-
 import session from './session';
 import compute from './compute';
-export default function (event: TouchEvent): any {
-    const pointers = event.touches;
-    const length = pointers.length;
-    const changedPointers = event.changedTouches;
-    const { max } = Math;
-    // 判断当前状态
-    session.isStart = session.isEnd;
-    session.isEnd = 0 === length;
-    session.isMove = !session.isStart && !session.isEnd;
+import mouseInput from './input/mouse'
+export default function (event: any): any {
+    let pointers;
+    let length;
+    let changedPointers;
+    if ('ontouchstart' in window) {
+        switch (event.type) {
+            case 'touchstart':
+                session.isStart = true;
+                session.isEnd = session.isMove = false;
+                break;
 
+            case 'touchmove':
+                session.isMove = true;
+                session.isEnd = session.isStart = false;
+                break;
 
+            case 'touchend':
+                session.isEnd = true;
+                session.isMove = session.isStart = false;
+                break;
+        }
+        pointers = event.touches;
+        length = pointers.length;
+        changedPointers = event.changedTouches;
+    } else {
+        switch (event.type) {
+            case 'mousedown':
+                session.isStart = true;
+                session.isEnd = session.isMove = false;
+                break;
+
+            case 'mousemove':
+                session.isMove = true;
+                session.isEnd = session.isStart = false;
+                break;
+
+            case 'mouseup':
+                session.isEnd = true;
+                session.isMove = session.isStart = false;
+                break;
+        }
+
+        const mouse = mouseInput(event);
+        if(undefined === mouse) return;
+        pointers = mouse.pointers;
+        length = mouse.length;
+        changedPointers = mouse.changedPointers;
+    }
 
     // [Start]
     if (session.isStart) {
