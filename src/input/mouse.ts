@@ -10,23 +10,22 @@ export default function (event: any): any {
         mouseup: 'end'
     };
     session.inputStatus = Map[type];
-    
+
     let pointers = prevPointers = [{ clientX, clientY }];
     let length = 1;
     if ('mousedown' === type) {
         isPressed = true;
+    } else if ('mousemove' === type) {
+        if (!isPressed) return;
     } else if ('mouseup' === type) {
-        pointers = [];
-        length = 0;
-        isPressed = false;
-        return {
-            changedPointers,
-            pointers,
-            length
+        if (isPressed) {
+            pointers = [];
+            length = 0;
+        } else {
+            return;
         };
+        isPressed = false;
     }
-
-    if (!isPressed) return;
 
     return {
         changedPointers,
