@@ -1,6 +1,10 @@
 /**
+ * ==================== 参考 ====================
  * https://segmentfault.com/a/1190000010511484#articleHeader0
  * https://segmentfault.com/a/1190000007448808#articleHeader1
+ * hammer.js
+ * 
+ * ==================== 支持的手势 ====================
  * rotate 旋转
  * pinch : Function,
  * tap 单机
@@ -8,9 +12,14 @@
  * press 按压
  * pan 拖拽
  * swipe 快速划过
+ * 
+ * ==================== 流程 ====================
+ * 格式化Event成统一的pointer格式 => 通过pointer数据计算 => 用计算结果去识别手势
  */
 
-import { HandlerBus, AnyTouchHandler } from './interface';
+
+import {EventHandler } from './interface';
+import { SUPPORT_ONLY_TOUCH } from './const';
 import EventBus from './EventBus';
 import session from './session';
 import {
@@ -24,6 +33,13 @@ import SwipeRecognizer from './recognitions/Swipe';
 import PinchRecognizer from './recognitions/Pinch';
 import RotateRecognizer from './recognitions/Rotate';
 export default class AnyTouch {
+    static TapRecognizer = TapRecognizer;
+    static PressRecognizer = PressRecognizer;
+    static PanRecognizer = PanRecognizer;
+    static SwipeRecognizer = SwipeRecognizer;
+    static PinchRecognizer = PinchRecognizer;
+    static RotateRecognizer = RotateRecognizer;
+
     // 目标元素
     $el: Element;
     // 是否阻止默认事件
@@ -32,7 +48,7 @@ export default class AnyTouch {
     isStopPropagation: Boolean;
 
     // 各个手势对应的handle集合
-    handlerBus: HandlerBus;
+    eventBus: any;
 
     recognizers: any[];
 
@@ -47,8 +63,8 @@ export default class AnyTouch {
         isStopPropagation = false
     } = {}) {
         this.$el = el;
-        this.handlerBus = {};
-        session.eventBus = new EventBus();
+        this.eventBus = new EventBus();
+        // session.eventBus = new EventBus();
         this.recognizers = [
             new TapRecognizer(),
             new PressRecognizer(),
@@ -58,18 +74,20 @@ export default class AnyTouch {
             new RotateRecognizer(),
         ];
         // 绑定事件
-        // ['mouseup', 'mousemove','mousedown'];
-        this.unbinders = ['touchstart', 'touchmove', 'touchend', 'touchcancel', 'mousedown'].map(eventName => {
+        if (SUPPORT_ONLY_TOUCH) {
+            this.unbinders = ['touchstart', 'touchmove', 'touchend', 'touchcancel'].map(eventName => {
+                let boundFn = this.handler.bind(this);
+                this.$el.addEventListener(eventName, boundFn);
+                return () => {
+                    this.$el.removeEventListener(eventName, boundFn);
+                }
+            });
+        } else {
             let boundFn = this.handler.bind(this);
-            this.$el.addEventListener(eventName, boundFn);
-            return () => {
-                this.$el.removeEventListener(eventName, boundFn);
-            }
-        });
-        let boundFn = this.handler.bind(this);
-        window.addEventListener('mousemove', boundFn);
-        window.addEventListener('mouseup', boundFn);
-
+            this.$el.addEventListener('mousedown', boundFn);
+            window.addEventListener('mousemove', boundFn);
+            window.addEventListener('mouseup', boundFn);
+        }
     }
 
     setConfig({
@@ -83,17 +101,21 @@ export default class AnyTouch {
     handler(event: TouchEvent) {
         event.preventDefault();
         const input = normalize(event);
+        // console.log(input);
         // 当是鼠标事件的时候, mouseup阶段的input为空
-        if(undefined !== input){
+        if (undefined !== input) {
             this.recognizers.forEach(recognizer => {
-                recognizer.recognize(input);
+                recognizer.recognize(input, (data:any)=>{
+                    // console.log(data);
+                    this.eventBus.emit(data.type, data);
+                });
             });
         }
 
     };
 
-    on(eventName: string, callback: AnyTouchHandler, preset: object): void {
-        session.eventBus.on(eventName, callback);
+    on(eventName: string, callback: EventHandler, preset: object): void {
+        this.eventBus.on(eventName, callback);
     };
 
 

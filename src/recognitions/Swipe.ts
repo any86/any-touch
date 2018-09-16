@@ -1,8 +1,8 @@
 import session from '../session';
 export default class SwipeRecognizer {
-    recognize(computedInput: any) {
+    recognize(computedInput: any, callback: (paylod: any) => {}) {
         if (this.test(computedInput)) {
-            session.eventBus.emit('swipe', ({ type: 'swipe', ...computedInput }))
+            callback({ type: 'swipe', ...computedInput });
         }
     };
 

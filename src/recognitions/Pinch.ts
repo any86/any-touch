@@ -1,12 +1,12 @@
 import session from '../session';
 export default class PinchRecognizer {
-    recognize(computedinput: any) {
+    recognize(computedinput: any, callback: (paylod: any) => {}) {
         if (this.test(computedinput)) {
-            session.eventBus.emit('pinch', { type: 'pinch', ...computedinput });
+            callback({ type: 'pinch', ...computedinput });
         }
     };
 
-    test(computedinput: any) {
-        return 1 < computedinput.length;
+    test({ length }: any) {
+        return 1 < length;
     };
 };

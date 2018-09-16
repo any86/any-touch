@@ -1,8 +1,7 @@
-import session from '../session';
 export default class RotateRecognizer {
-    recognize(computedinput: any) {
+    recognize(computedinput: any, callback: (paylod: any) => {}) {
         if (this.test(computedinput)) {
-            session.eventBus.emit('rotate', { type: 'rotate', ...computedinput });
+            callback({ type: 'rotate', ...computedinput });
         }
     };
 

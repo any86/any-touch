@@ -14,27 +14,27 @@ export default class TapRecognizer {
 
     };
 
-    recognize(computedInput: any) {
+    recognize(computedInput: any, callback: (paylod: any) => {}):void {
         if (this.test(computedInput)) {
             // 累加点击
             this.tapCount++;
             this.prevTapX = session.input.pointers[0][propX];
             this.prevTapY = session.input.pointers[0][propY];
             // 是否需要识别双击
-            const hasDoubleTap = session.eventBus.has('doubletap');
+            const hasDoubleTap = true;
             if (hasDoubleTap) {
                 if(1 === this.tapCount) {
                     this.tapTimeout = window.setTimeout(()=>{
-                        session.eventBus.emit('tap', { type: 'tap', ...computedInput});
+                        callback( { type: 'tap', ...computedInput});
                         this.tapCount = 0;
                     }, 200);
                 } else {
                     clearTimeout(this.tapTimeout);
-                    session.eventBus.emit('doubletap', { type: 'doubletap', ...computedInput});
+                    callback({ type: 'doubletap', ...computedInput});
                     this.tapCount = 0;
                 }
             } else {
-                session.eventBus.emit('tap', { type: 'tap', ...computedInput });
+                callback({ type: 'tap', ...computedInput });
                 this.tapCount = 0;
             }
         }
