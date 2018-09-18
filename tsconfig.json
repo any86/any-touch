@@ -1,12 +1,11 @@
 {
     "compilerOptions": {
-        "target": "es3",
-        // "module": "commonjs",
+        "target": "es6",
         "noImplicitAny": true,
         "removeComments": true,
-        "preserveConstEnums": true,
-        "sourceMap": true,
-        "outDir": "dist/",
+        "preserveConstEnums": false,
+        "sourceMap": false,
+        "outDir": "./.tsc-output",
         "lib": ["dom", "es2017"]
     },
     "include": [
