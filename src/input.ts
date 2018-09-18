@@ -1,20 +1,23 @@
-import { InputComputed, AnyTouch } from './interface';
+import { Computed } from './interface';
 import InputFactory from './InputFactory';
 import session from './session';
 import compute from './compute';
 import mouseInput from './input/mouse'
-export default function (event: any): any {
+import { SUPPORT_ONLY_TOUCH } from './const'
+export default function (event: any): Computed {
+
     let pointers;
     let length;
     let changedPointers;
     const { type } = event;
     // Touch
-    if ('ontouchstart' in window) {
+    if (SUPPORT_ONLY_TOUCH) {
         session.inputStatus = type.replace('touch', '');
         pointers = event.touches;
         length = pointers.length;
         changedPointers = event.changedTouches;
     }
+
     // Mouse
     else {
         const input = mouseInput(event);
@@ -23,7 +26,6 @@ export default function (event: any): any {
         length = input.length;
         changedPointers = input.changedPointers;
     }
-
     // [Start]
     if ('start' === session.inputStatus) {
         // 清空缓存的多点起点数据
@@ -61,13 +63,14 @@ export default function (event: any): any {
     let {
         startInput,
         prevInput,
-        input, startMultiInput
+        input,
+        startMultiInput
     } = session;
-
     const computed = compute({
         startInput,
         prevInput,
-        input, startMultiInput,
+        input,
+        startMultiInput,
     });
-    return { ...input, ...computed };
+    return { ...input, ...computed, status: session.inputStatus };
 }; 

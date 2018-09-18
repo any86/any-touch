@@ -18,7 +18,7 @@
  */
 
 
-import {EventHandler } from './interface';
+import { EventHandler } from './interface';
 import { SUPPORT_ONLY_TOUCH } from './const';
 import EventBus from './EventBus';
 import session from './session';
@@ -60,13 +60,13 @@ export default class AnyTouch {
      */
     constructor(el: Element, {
         isPreventDefault = false,
-        isStopPropagation = false
+        isStopPropagation = false,
+        hasDoubleTap = true
     } = {}) {
         this.$el = el;
         this.eventBus = new EventBus();
-        // session.eventBus = new EventBus();
         this.recognizers = [
-            new TapRecognizer(),
+            new TapRecognizer({hasDoubleTap}),
             new PressRecognizer(),
             new PanRecognizer(),
             new SwipeRecognizer(),
@@ -100,18 +100,17 @@ export default class AnyTouch {
 
     handler(event: TouchEvent) {
         event.preventDefault();
-        const input = normalize(event);
-        // console.log(input);
-        // 当是鼠标事件的时候, mouseup阶段的input为空
-        if (undefined !== input) {
+        // computed为包含了计算值的input
+        const computed = normalize(event);
+        // console.log(computed);
+        // 当是鼠标事件的时候, mouseup阶段的input和computed为空
+        if (undefined !== computed) {
             this.recognizers.forEach(recognizer => {
-                recognizer.recognize(input, (data:any)=>{
-                    // console.log(data);
+                recognizer.recognize(computed, (data: any) => {
                     this.eventBus.emit(data.type, data);
                 });
             });
         }
-
     };
 
     on(eventName: string, callback: EventHandler, preset: object): void {

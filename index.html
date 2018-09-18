@@ -10,7 +10,9 @@
     <script src="./dist/anyTouch.umd.js"></script>
     <script src="https://res.wx.qq.com/mmbizwap/zh_CN/htmledition/js/vconsole/3.0.0/vconsole.min.js"></script>
     <script>
-        // var vConsole = new VConsole();
+        if(!!window.location.search) {
+            var vConsole = new VConsole();
+        }
     </script>
     <style>
         :root {
@@ -105,6 +107,9 @@
 
 <body>
     <main id="app">
+        <a href="?debug">debug on</a>
+        <a href="?">debug off</a>
+
         <div class="circle" ref="circle" 
         @animationend="animationend"
         :class="{
@@ -140,7 +145,7 @@
                 const anyTouch = new AnyTouch(this.$refs.circle);
 
                 anyTouch.on('pan', e => {
-                    console.log('pan');
+                    console.warn('pan',e);
                     this.message = e;
                     this.x += e.deltaX;
                     this.y += e.deltaY;
@@ -148,24 +153,24 @@
 
 
                 anyTouch.on('press', e => {
-                    console.log('press');
+                    console.warn('press');
                     this.message = e;
                 });
 
 
                 anyTouch.on('tap', e => {
-                    console.log('tap');
+                    console.warn('tap');
                     this.message = e;
                 });
 
                 anyTouch.on('doubletap', e => {
-                    console.log('doubletap');
+                    console.warn('doubletap');
                     this.message = e;
                 });
 
 
                 anyTouch.on('pinch', e => {
-                    console.log('pinch');
+                    console.warn('pinch');
                     this.message = e;
                     this.scale *= e.scale;
                     this.centerX = e.centerX;
@@ -173,7 +178,7 @@
                 });
 
                 anyTouch.on('rotate', e => {
-                    console.log('rotate');
+                    console.warn('rotate');
                     this.message = e;
                     this.angle += e.angle;
                     this.centerX = e.centerX;
@@ -182,7 +187,7 @@
                 });
 
                 anyTouch.on('swipe', e => {
-                    console.log('swipe');
+                    console.warn('swipe',e);
                     this.message = e;
                 });
             },

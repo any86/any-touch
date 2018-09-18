@@ -1,6 +1,6 @@
 
 import session from './session';
-import { InputComputed, AnyTouch } from './interface';
+import { Computed } from './interface';
 import { getCenter, getAngle, getVLength, getDirection } from './vector';
 import { propX, propY } from './const';
 
@@ -9,9 +9,10 @@ export default function ({
     prevInput,
     input, startMultiInput
 }: any): any {
-    const { now } = Date;
-    const { abs, round, max } = Math;
+    // 如果输入为空, 那么就计算了, 鼠标模式下, 点击了非元素部分, mouseup阶段会初选input为undefined
+    if(undefined === input) return;
     const length = input.pointers.length;
+    const { abs, round, max } = Math;
 
     let computed: any = {
         // 起始到结束的偏移
@@ -38,8 +39,10 @@ export default function ({
         // 旋转和缩放
         angle: 0,
         scale: 1,
-        centerX: undefined, centerY: undefined,
-        lastVelocityY: undefined, lastVelocityX: undefined
+        centerX: undefined, 
+        centerY: undefined,
+        lastVelocityY: undefined, 
+        lastVelocityX: undefined
     };
     // ================== 单点 ==================
     // 有效点, 包含位置信息
