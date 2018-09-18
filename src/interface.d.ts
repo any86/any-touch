@@ -8,7 +8,7 @@ interface Session {
     prevInput?: any;
     startMultiInput?: any;
     validInput?: any;
-    endInput?: any;
+    // endInput?: any;
     deltaX?: number,
     deltaY?: number,
     lastDeltaTime?: number

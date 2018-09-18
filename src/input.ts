@@ -46,7 +46,7 @@ export default function (event: any): Computed {
     }
     // [End]
     else if ('end' === session.inputStatus) {
-        session.endInput = new InputFactory(changedPointers);
+        // session.endInput = new InputFactory(changedPointers);
     } else if ('cancel' === session.inputStatus) {
         //cancel;
     }
