@@ -7,7 +7,6 @@ export const SUPPORT_TOUCH = ('ontouchstart' in window);
 // 是否是移动设备
 export const SUPPORT_ONLY_TOUCH = SUPPORT_TOUCH && MOBILE_REGEX.test(navigator.userAgent);
 
-
 // 方向
 export const DIRECTION_NONE = 1; // 0000 0001
 export const DIRECTION_LEFT = 2; //  0000 0010

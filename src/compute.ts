@@ -71,6 +71,7 @@ export default function ({
             const intervalComputed = intervalCompute(input); 
             computed.lastVelocityX = intervalComputed.velocityX;
             computed.lastVelocityY = intervalComputed.velocityY;
+
             // computed.lastVelocityX = computed.deltaX / computed.deltaTime;
             // computed.lastVelocityY = computed.deltaY / computed.deltaTime;
 
