@@ -1,7 +1,7 @@
 {
   "name": "any-touch",
   "version": "0.0.1",
-  "description": "只做一个纯粹的手势库",
+  "description": "一个纯粹的手势库",
   "main": "dist/any-touch.js",
   "scripts": {
     "dev": "rollup -wc",
@@ -18,9 +18,6 @@
     "url": "https://github.com/383514580/any-touch/issues"
   },
   "homepage": "https://github.com/383514580/any-touch#readme",
-  "dependencies": {
-    "lodash": "^4.17.10"
-  },
   "devDependencies": {
     "typescript": "^3.0.1",
     "rollup": "^0.62.0",
