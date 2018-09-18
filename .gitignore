@@ -2,3 +2,4 @@
 /dist
 /node_module
 /.rpt2_cache
+/.tsc-output
