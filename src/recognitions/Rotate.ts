@@ -1,11 +1,11 @@
 export default class RotateRecognizer {
-    recognize(computedinput: any, callback: (paylod: any) => {}) {
-        if (this.test(computedinput)) {
-            callback({ type: 'rotate', ...computedinput });
+    recognize(computed: any, callback: (paylod: any) => {}) {
+        if (this.test(computed)) {
+            callback({ type: 'rotate', ...computed });
         }
     };
 
-    test(computedinput: any) {
-        return 1 < computedinput.length;
+    test({length}:any) {
+        return 1 < length;
     };
 };

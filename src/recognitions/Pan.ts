@@ -1,13 +1,12 @@
-import session from '../session';
+import { Computed,RecognizerCallback } from '../interface';
 export default class PanRecognizer {
-    recognize(computedinput: any, callback: (paylod: any) => {}): void {
-        if (this.test(computedinput)) {
-            callback({ type: 'pan', ...computedinput });
+    recognize(computed: Computed, callback: RecognizerCallback) {
+        if (this.test(computed)) {
+            callback({ type: 'pan', ...computed });
         }
     };
 
-    test(computedinput: any) {
-        const { length, distance,status } = computedinput;
+    test({ length, distance, status }: Computed) {
         return 'move' === status && 10 < distance && 1 === length;
     };
 };

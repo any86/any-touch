@@ -1,12 +1,12 @@
-import session from '../session';
+import { Computed,RecognizerCallback } from '../interface';
 export default class PinchRecognizer {
-    recognize(computedinput: any, callback: (paylod: any) => {}) {
-        if (this.test(computedinput)) {
-            callback({ type: 'pinch', ...computedinput });
+    recognize(computed: Computed, callback: RecognizerCallback) {
+        if (this.test(computed)) {
+            callback({ type: 'pinch', ...computed });
         }
     };
 
-    test({ length }: any) {
+    test({ length }: Computed) {
         return 1 < length;
     };
 };
