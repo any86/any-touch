@@ -19,7 +19,10 @@ interface Session {
 export interface Input {
     changedPointers: TouchList,
     pointers: TouchList,
-    length:number
+    length:number,
+    timestamp: number,
+    center: {x:number, y:number},
+    target: EventTarget,
 }
 
 // input的计算结果
