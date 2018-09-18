@@ -34,7 +34,6 @@ export interface Computed {
     lastVelocityY: number;
     velocityX: number;
     velocityY: number;
-    maxVelocity: number;
     scale: number;
     angle: number;
     centerX: number;

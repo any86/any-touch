@@ -3,7 +3,7 @@ import session from './session';
 import { Computed } from './interface';
 import { getCenter, getAngle, getVLength, getDirection } from './vector';
 import { propX, propY } from './const';
-
+import intervalCompute from './intervalCompute';
 export default function ({
     startInput,
     prevInput,
@@ -13,7 +13,7 @@ export default function ({
     if(undefined === input) return;
     const length = input.pointers.length;
     const { abs, round, max } = Math;
-
+    // console.log(intervalCompute(input)); 
     let computed: any = {
         // 起始到结束的偏移
         displacementX: 0,
@@ -31,7 +31,6 @@ export default function ({
         //  速率
         velocityX: 0,
         velocityY: 0,
-        maxVelocity: 0,
 
         // 时间
         duration: 0,
@@ -57,7 +56,7 @@ export default function ({
 
         // 已消耗时间
         computed.duration = input.timestamp - startInput.timestamp;
-
+        
         // 如果非第一下触碰
         if (undefined !== prevInput) {
             // 位移增量
@@ -69,13 +68,16 @@ export default function ({
             computed.deltaTime = input.timestamp - prevInput.timestamp;
 
             // 瞬时速度
-            computed.lastVelocityX = computed.deltaX / computed.deltaTime;
-            computed.lastVelocityY = computed.deltaY / computed.deltaTime;
+            const intervalComputed = intervalCompute(input); 
+            computed.lastVelocityX = intervalComputed.velocityX;
+            computed.lastVelocityY = intervalComputed.velocityY;
+            // computed.lastVelocityX = computed.deltaX / computed.deltaTime;
+            // computed.lastVelocityY = computed.deltaY / computed.deltaTime;
 
             // 速率
             computed.velocityX = abs(computed.distanceX / computed.duration);
             computed.velocityY = abs(computed.distanceY / computed.duration);
-            computed.maxVelocity = max(computed.velocityX, computed.velocityY);
+            // computed.maxVelocity = max(computed.velocityX, computed.velocityY);
         }
 
         // 计算方向
