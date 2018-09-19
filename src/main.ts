@@ -25,7 +25,7 @@ import session from './session';
 import {
     getVLength,
 } from './vector'
-import normalize from './input';
+import normalize from './input/index';
 import TapRecognizer from './recognitions/Tap';
 import PressRecognizer from './recognitions/Press';
 import PanRecognizer from './recognitions/Pan';
