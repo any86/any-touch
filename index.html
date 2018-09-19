@@ -151,6 +151,10 @@
                     this.y += e.deltaY;
                 });
 
+                anyTouch.on('panleft', e => {
+                    console.warn('panleft');
+                });
+
 
                 anyTouch.on('press', e => {
                     console.warn('press');
