@@ -55,6 +55,7 @@ export interface Computed {
     distanceY: number;
     distance: number;
     duration: number;
+    direction: string;
 }
 
 // 识别器中recognize方法返回的数据格式
