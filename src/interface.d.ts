@@ -19,7 +19,7 @@ export interface Input extends Input {}
 // 统一各种设备的输入
 // export interface Input {
 //     // start | move | end | cancel
-//     status: string;
+//     action: string;
 //     pointers: any[];
 //     changedPointers: any[];
 //     timestamp: number;
@@ -34,7 +34,7 @@ export interface Input extends Input {}
 
 // input的计算结果
 export interface Computed {
-    status: string; //start | move | end | cancel
+    action: string; //start | move | end | cancel
     length: number;
     maxLength: number;
     lastVelocityX: number;

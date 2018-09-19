@@ -4,9 +4,9 @@ import session from '../session';
 import compute from './compute';
 export default function (event: any): Computed {
     const inputData = new Input(event);
-    const { status } = inputData;
+    const { action } = inputData;
     // [Start]
-    if ('start' === status) {
+    if ('start' === action) {
         // 清空缓存的多点起点数据
         session.startMultiInput = undefined;
         // 起点(单点|多点)
@@ -17,16 +17,16 @@ export default function (event: any): Computed {
         session.input = inputData;
     }
     // [Move]
-    else if ('move' === status) {
+    else if ('move' === action) {
         // 上一步的触点
         session.prevInput = session.input;
         // 当前触碰点
         session.input = inputData;
     }
     // [End]
-    else if ('end' === status) {
+    else if ('end' === action) {
         // session.endInput = inputData;
-    } else if ('cancel' === status) {
+    } else if ('cancel' === action) {
         //cancel;
     }
 
@@ -52,5 +52,5 @@ export default function (event: any): Computed {
         startMultiInput,
     });
 
-    return { ...input, ...computed, status };
+    return { ...input, ...computed, action };
 }; 

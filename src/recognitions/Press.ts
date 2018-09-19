@@ -10,15 +10,15 @@ export default class PressRecognizer {
     };
 
     test(computed: any, callback: (paylod: any) => {}) {
-        if ('start' === session.inputStatus) {
+        if ('start' === session.inputaction) {
             this.timeoutId = window.setTimeout(() => {
                 callback({ type: 'press', ...computed });
             }, 250);
-        } else if ('move' === session.inputStatus) {
+        } else if ('move' === session.inputaction) {
             if (9 < computed.distance) {
                 this.reset();
             }
-        } else if ('end' === session.inputStatus) {
+        } else if ('end' === session.inputaction) {
             if (251 > computed.duration || 9 < computed.distance) {
                 this.reset();
             }

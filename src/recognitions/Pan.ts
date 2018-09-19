@@ -36,7 +36,7 @@ export default class PanRecognizer {
      * @param {Computed} 计算数据
      * @return {Boolean}} 是否是当前手势 
      */
-    test({ length, distance, status }: Computed): Boolean {
-        return 'move' === status && this.threshold < distance && this.maxPointerLength === length;
+    test({ length, distance, action }: Computed): Boolean {
+        return 'move' === action && this.threshold < distance && this.maxPointerLength === length;
     };
 };
