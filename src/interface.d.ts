@@ -1,6 +1,6 @@
 interface Session {
     // 输入状态: start | move | end | cancel
-    inputStatus: string;
+    type: string;
     maxLength?: number;
     startInput?: any;
     lastInputArray?: any[];
@@ -13,17 +13,24 @@ interface Session {
     deltaY?: number,
     lastDeltaTime?: number
 }
-
+import Input from './input/index';
+export interface Input extends Input {}
 
 // 统一各种设备的输入
-export interface Input {
-    changedPointers: TouchList,
-    pointers: TouchList,
-    length:number,
-    timestamp: number,
-    center: {x:number, y:number},
-    target: EventTarget,
-}
+// export interface Input {
+//     // start | move | end | cancel
+//     status: string;
+//     pointers: any[];
+//     changedPointers: any[];
+//     timestamp: number;
+//     target: EventTarget;
+//     currentTarget: EventTarget;
+//     center: { x: number, y: number };
+//     stopPropagation: () => {}
+//     preventDefault: () => {}
+//     stopImmediatePropagation: () => {}
+//     sourceEvent: any;
+// }
 
 // input的计算结果
 export interface Computed {
@@ -51,11 +58,11 @@ export interface Computed {
 }
 
 // 识别器中recognize方法返回的数据格式
-export interface RecognizerCallbackPaylod extends Computed{
+export interface RecognizerCallbackPaylod extends Computed {
     type: string;
 }
 
-export interface RecognizerCallback{
+export interface RecognizerCallback {
     (paylod: RecognizerCallbackPaylod): void
 }
 

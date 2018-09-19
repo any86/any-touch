@@ -5,49 +5,51 @@ import { propX, propY, SUPPORT_ONLY_TOUCH } from '../const';
 import { getCenter } from '../vector';
 import touchInput from '../input/touch'
 import mouseInput from '../input/mouse';
+
 export default class Input {
     // start | move | end | cancel
     public status: string;
     public pointers: any[] = [];
-    public pointerLength: number = 0;
+    public changedPointers: any[] = [];
     public timestamp: number;
     public target: EventTarget;
+    public currentTarget: EventTarget;
     public center: { x: number, y: number };
+    public stopPropagation: () => {}
+    public preventDefault: () => {}
+    public stopImmediatePropagation: () => {}
+    public sourceEvent: any;
 
     constructor(event: any) {
-
-        let pointers: any;
-        let pointerLength: number = 0;
-
+        let input: Input;
         // Touch
         if (SUPPORT_ONLY_TOUCH) {
-            const input = touchInput(event);
-            pointers = input.pointers;
-            this.status = input.status;
+            input = touchInput(event);
         }
-
         // Mouse
         else {
-            const input = mouseInput(event);
+            input = mouseInput(event);
             if (undefined === input) return;
-            pointers = input.pointers;
-            this.status = input.status;
         }
 
         // 当前触点数
-        pointerLength = pointers.length;
+        const pointerLength: number = input.pointers.length;
+
+        // pointers只存储clientX/Y就够了
         for (let i = 0; i < pointerLength; i++) {
-            let pointer = pointers[i];
+            let pointer = input.pointers[i];
             this.pointers[i] = {
                 [propX]: Math.round(pointer[propX]),
                 [propY]: Math.round(pointer[propY])
             };
         }
-
-        
-        this.center = 0 < pointerLength ? getCenter(pointers) : undefined;
-        this.timestamp = Date.now();
-        this.target = event.target;
-        this.pointerLength = pointerLength;
+        // 中心坐标
+        const center = 0 < pointerLength ? getCenter(this.pointers) : undefined;
+        // 当前时间
+        const timestamp = Date.now();
+        // 原生属性/方法
+        const { stopPropagation, preventDefault, stopImmediatePropagation, target, currentTarget } = event;
+        // mixin
+        Object.assign(this, input, { center, timestamp, stopPropagation, preventDefault, stopImmediatePropagation, target, currentTarget });
     }
 }
