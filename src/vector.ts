@@ -56,7 +56,7 @@ const getAngle = (v1: Vector, v2: Vector) => {
  * 获取多点之间的中心坐标
  * @param {Array} 触碰点 
  */
-const getCenter = (points: TouchList) => {
+const getCenter = (points: any) => {
     const pointLength = points.length;
     if (1 < pointLength) {
         let x = 0;
