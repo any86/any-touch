@@ -21,11 +21,10 @@
 import { EventHandler } from './interface';
 import { SUPPORT_ONLY_TOUCH } from './const';
 import EventBus from './EventBus';
-import session from './session';
 import {
     getVLength,
 } from './vector'
-import normalize from './input/index';
+import compute from './compute/index';
 import TapRecognizer from './recognitions/Tap';
 import PressRecognizer from './recognitions/Press';
 import PanRecognizer from './recognitions/Pan';
@@ -66,7 +65,7 @@ export default class AnyTouch {
         this.$el = el;
         this.eventBus = new EventBus();
         this.recognizers = [
-            new TapRecognizer({hasDoubleTap}),
+            new TapRecognizer({ hasDoubleTap }),
             new PressRecognizer(),
             new PanRecognizer(),
             new SwipeRecognizer(),
@@ -101,7 +100,7 @@ export default class AnyTouch {
     handler(event: TouchEvent) {
         event.preventDefault();
         // computed为包含了计算值的input
-        const computed = normalize(event);
+        const computed = compute(event);
         // console.log(computed);
         // 当是鼠标事件的时候, mouseup阶段的input和computed为空
         if (undefined !== computed) {
@@ -116,7 +115,6 @@ export default class AnyTouch {
     on(eventName: string, callback: EventHandler, preset: object): void {
         this.eventBus.on(eventName, callback);
     };
-
 
     headUpperCase(str: string) {
         return str.toLowerCase().replace(/( |^)[a-z]/g, (L) => L.toUpperCase());
