@@ -5,7 +5,7 @@ export default function (event: any): any {
     const changedPointers = prevPointers;
     let pointers = prevPointers = [{ clientX, clientY }];
     let length = 1;
-    
+
     if ('mousedown' === type) {
         isPressed = true;
     } else if ('mousemove' === type) {
@@ -33,6 +33,12 @@ export default function (event: any): any {
         status: MAP[type],
         changedPointers,
         pointers,
-        length
+        pointerLength: length,
+        sourceEvent: event,
+        stopPropagation: event.stopPropagation,
+        preventDefault: event.preventDefault,
+        stopImmediatePropagation: event.stopImmediatePropagation,
+        target: event.target,
+        currentTarget: event.currentTarget
     }
 }; 
