@@ -1,7 +1,7 @@
 let prevPointers: any[] = undefined;
 let isPressed = false;
-export default function (event: any): any {
-    const { clientX, clientY, type } = event;
+export default (event: MouseEvent): any => {
+    const { clientX, clientY, type} = event;
     const changedPointers = prevPointers;
     let pointers = prevPointers = [{ clientX, clientY }];
     let length = 1;
@@ -29,16 +29,9 @@ export default function (event: any): any {
     };
 
     return {
-        source: 'mouse',
         status: MAP[type],
         changedPointers,
         pointers,
-        pointerLength: length,
-        sourceEvent: event,
-        stopPropagation: event.stopPropagation,
-        preventDefault: event.preventDefault,
-        stopImmediatePropagation: event.stopImmediatePropagation,
-        target: event.target,
-        currentTarget: event.currentTarget
-    }
+        sourceEvent: event
+    };
 }; 
