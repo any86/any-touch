@@ -1,6 +1,6 @@
 // 默认25ms做一次最终速度计算, 防止快速滑动到慢速滑动的手势识别成swipe
-import { Input } from './interface';
-import {COMPUTE_INTERVAL} from './const';
+import { Input } from '../interface';
+import {COMPUTE_INTERVAL} from '../const';
 // 上次采集的input
 let prevInput: Input;
 // 上次采集时的瞬时速度
