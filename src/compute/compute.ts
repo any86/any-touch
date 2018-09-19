@@ -1,8 +1,8 @@
 
-import session from './session';
-import { Computed } from './interface';
-import { getCenter, getAngle, getVLength, getDirection } from './vector';
-import { propX, propY } from './const';
+import session from '../session';
+import { Computed } from '../interface';
+import { getCenter, getAngle, getVLength, getDirection } from '../vector';
+import { propX, propY } from '../const';
 import intervalCompute from './intervalCompute';
 export default function ({
     startInput,
@@ -107,7 +107,7 @@ export default function ({
     computed.centerY = input.center.y;
 
     // 出现过的最大触点数量
-    if ('start' === session.inputStatus) {
+    if ('start' === session.status) {
         session.maxLength = 0;
     }
     if (0 === session.maxLength) {
