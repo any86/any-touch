@@ -1,11 +1,12 @@
-import { Computed, RecognizerCallback } from '../interface';
+import { Computed, RecognizerCallback, status } from '../interface';
+import Base from './Base';
 interface Options {
     name?: string;
     threshold?: number;
     maxPointerLength?: number;
 }
 
-export default class PanRecognizer {
+export default class PanRecognizer extends Base {
     public name: string;
     public threshold: number;
     public maxPointerLength: number;
@@ -14,6 +15,7 @@ export default class PanRecognizer {
         name = 'pan',
         threshold = 10,
         maxPointerLength = 1 }: Options = {}) {
+        super();
         this.name = name;
         this.threshold = threshold;
         this.maxPointerLength = maxPointerLength;
@@ -25,7 +27,14 @@ export default class PanRecognizer {
      * @param {RecognizerCallback} 识别后触发钩子 
      */
     recognize(computed: Computed, callback: RecognizerCallback) {
+        let eventStatus: string;
         if (this.test(computed)) {
+            const { status } = computed;
+            eventStatus = this.recognizeStatus(status);
+            console.error(eventStatus);
+            // panstart | panmove | panend
+            callback({ type: this.name + eventStatus, ...computed });
+
             callback({ type: this.name, ...computed });
             // panleft | panright | pandown | panup
             callback({ type: this.name + computed.direction, ...computed });
@@ -36,7 +45,7 @@ export default class PanRecognizer {
      * @param {Computed} 计算数据
      * @return {Boolean}} 是否是当前手势 
      */
-    test({ length, distance, action }: Computed): Boolean {
-        return 'move' === action && this.threshold < distance && this.maxPointerLength === length;
+    test({ length, distance, status }: Computed): Boolean {
+        return 'start' !== status && this.threshold < distance && this.maxPointerLength === length;
     };
 };
