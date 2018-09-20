@@ -3,14 +3,14 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta data-n-head="true" name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width"/>
+    <meta data-n-head="true" name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="./dist/anyTouch.umd.js"></script>
     <script src="https://res.wx.qq.com/mmbizwap/zh_CN/htmledition/js/vconsole/3.0.0/vconsole.min.js"></script>
     <script>
-        if(!!window.location.search) {
+        if (!!window.location.search) {
             var vConsole = new VConsole();
         }
     </script>
@@ -73,7 +73,7 @@
                 opacity: 1;
             }
 
-            50%{
+            50% {
                 transform: scale(.9);
                 opacity: .8;
             }
@@ -94,12 +94,12 @@
                 transform: scaleY(1);
             }
 
-            50%{
+            50% {
                 transform: scaleY(.6);
             }
 
             to {
-                transform:scaleY(1);
+                transform: scaleY(1);
             }
         }
     </style>
@@ -110,13 +110,10 @@
         <a href="?debug">debug on</a>
         <a href="?">debug off</a>
 
-        <div class="circle" ref="circle" 
-        @animationend="animationend"
-        :class="{
+        <div class="circle" ref="circle" @animationend="animationend" :class="{
             tap: 'tap' === message.type,
             doubletap: 'doubletap' === message.type,
-        }"
-        :style="{
+        }" :style="{
             transform: `scale(${scale}) translate(${x/scale}px, ${y/scale}px) rotate(${angle}deg)`,
             transformOrigin: `${centerX}px//// ${centerY}px`
         }"></div>
@@ -142,10 +139,12 @@
             },
 
             mounted() {
+
+
                 const anyTouch = new AnyTouch(this.$refs.circle);
 
                 anyTouch.on('pan', e => {
-                    console.warn('pan',e);
+                    console.warn('pan', e);
                     this.message = e;
                     this.x += e.deltaX;
                     this.y += e.deltaY;
@@ -157,24 +156,20 @@
 
 
                 anyTouch.on('press', e => {
-                    console.warn('press');
                     this.message = e;
                 });
 
 
                 anyTouch.on('tap', e => {
-                    console.warn('tap');
                     this.message = e;
                 });
 
                 anyTouch.on('doubletap', e => {
-                    console.warn('doubletap');
                     this.message = e;
                 });
 
 
                 anyTouch.on('pinch', e => {
-                    console.warn('pinch');
                     this.message = e;
                     this.scale *= e.scale;
                     this.centerX = e.centerX;
@@ -182,7 +177,6 @@
                 });
 
                 anyTouch.on('rotate', e => {
-                    console.warn('rotate');
                     this.message = e;
                     this.angle += e.angle;
                     this.centerX = e.centerX;
@@ -191,13 +185,12 @@
                 });
 
                 anyTouch.on('swipe', e => {
-                    console.warn('swipe',e);
                     this.message = e;
                 });
             },
 
-            methods:{
-                animationend(){
+            methods: {
+                animationend() {
                     // this.message = {};
                 }
             }

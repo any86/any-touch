@@ -8,7 +8,7 @@ import mouseInput from '../input/mouse';
 
 export default class Input {
     // start | move | end | cancel
-    public action: string;
+    public status: string;
     public pointers: any[] = [];
     public changedPointers: any[] = [];
     public timestamp: number;

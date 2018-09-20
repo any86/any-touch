@@ -1,4 +1,3 @@
-import session from '../session';
 export default class PressRecognizer {
     timeoutId: number;
     constructor() {
@@ -10,15 +9,15 @@ export default class PressRecognizer {
     };
 
     test(computed: any, callback: (paylod: any) => {}) {
-        if ('start' === session.inputaction) {
+        if ('start' === computed.status) {
             this.timeoutId = window.setTimeout(() => {
                 callback({ type: 'press', ...computed });
             }, 250);
-        } else if ('move' === session.inputaction) {
+        } else if ('move' === computed.status) {
             if (9 < computed.distance) {
                 this.reset();
             }
-        } else if ('end' === session.inputaction) {
+        } else if ('end' === computed.status) {
             if (251 > computed.duration || 9 < computed.distance) {
                 this.reset();
             }

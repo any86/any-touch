@@ -107,7 +107,7 @@ export default function ({
     computed.centerY = input.center.y;
 
     // 出现过的最大触点数量
-    if ('start' === session.action) {
+    if ('start' === session.status) {
         session.maxLength = 0;
     }
     if (0 === session.maxLength) {

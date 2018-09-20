@@ -42,8 +42,8 @@ export default class TapRecognizer {
         }
     };
 
-    test({ action, distance, duration, maxLength }: Computed) {
-        if ('end' === action) {
+    test({ status, distance, duration, maxLength }: Computed) {
+        if ('end' === status) {
             return 1 === maxLength && 2 > distance && 250 > duration;
         }
     };

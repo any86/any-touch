@@ -1,3 +1,5 @@
+export type status = 'start' | 'move' | 'end' | 'cancel';
+
 interface Session {
     // 输入状态: start | move | end | cancel
     type: string;
@@ -19,7 +21,7 @@ export interface Input extends Input {}
 // 统一各种设备的输入
 // export interface Input {
 //     // start | move | end | cancel
-//     action: string;
+//     status: string;
 //     pointers: any[];
 //     changedPointers: any[];
 //     timestamp: number;
@@ -34,7 +36,7 @@ export interface Input extends Input {}
 
 // input的计算结果
 export interface Computed {
-    action: string; //start | move | end | cancel
+    status: status; //start | move | end | cancel
     length: number;
     maxLength: number;
     lastVelocityX: number;

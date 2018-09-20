@@ -1,11 +1,11 @@
 export default (event: TouchEvent): any => {
     const SOURCE_TYPE: string = 'touch';
     const { type } = event;
-    const action = type.replace(SOURCE_TYPE, '');
+    const status = type.replace(SOURCE_TYPE, '');
     const pointers = event.touches;
     const changedPointers = event.changedTouches;
     return {
-        action,
+        status,
         changedPointers,
         pointers,
         sourceEvent: event,
