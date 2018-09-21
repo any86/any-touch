@@ -1,30 +1,28 @@
+import { Computed, RecognizerCallback } from '../interface';
 export default class PressRecognizer {
-    timeoutId: number;
+    private timeoutId: number;
     constructor() {
         this.timeoutId = null;
     };
 
-    recognize(computed: any, callback: (paylod: any) => {}) {
-        this.test(computed, callback)
-    };
-
-    test(computed: any, callback: (paylod: any) => {}) {
-        if ('start' === computed.status) {
+    recognize(computed: Computed, callback: RecognizerCallback): void {
+        const { status, distance, duration } = computed;
+        if ('start' === status) {
             this.timeoutId = window.setTimeout(() => {
                 callback({ type: 'press', ...computed });
             }, 250);
-        } else if ('move' === computed.status) {
-            if (9 < computed.distance) {
-                this.reset();
+        } else if ('move' === status) {
+            if (9 < distance) {
+                this.cancel();
             }
-        } else if ('end' === computed.status) {
-            if (251 > computed.duration || 9 < computed.distance) {
-                this.reset();
+        } else if ('end' === status) {
+            if (251 > duration || 9 < distance) {
+                this.cancel();
             }
         }
-    }
+    };
 
-    reset() {
+    cancel() {
         clearTimeout(this.timeoutId);
     }
 };
