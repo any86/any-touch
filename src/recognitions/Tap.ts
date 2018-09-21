@@ -1,5 +1,3 @@
-import session from '../session';
-import { propX, propY } from '../const';
 import { Computed, RecognizerCallback } from '../interface';
 interface Options { hasDoubleTap: boolean };
 
