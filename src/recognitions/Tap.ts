@@ -7,8 +7,8 @@ export default class TapRecognizer {
     tapCount: number;
     tapTimeout: number;
     // 上一次tap的点击坐标
-    prevTapX: number;
-    prevTapY: number;
+    private _prevCenterX: number;
+    private _prevCenterY: number;
     hasDoubleTap: boolean;
 
     constructor({ hasDoubleTap }: Options) {
@@ -21,8 +21,7 @@ export default class TapRecognizer {
         if (this.test(computed)) {
             // 累加点击
             this.tapCount++;
-            this.prevTapX = session.input.pointers[0][propX];
-            this.prevTapY = session.input.pointers[0][propY];
+            
             // 是否需要识别双击
             if (this.hasDoubleTap) {
                 if (1 === this.tapCount) {
@@ -42,9 +41,17 @@ export default class TapRecognizer {
         }
     };
 
-    test({ status, distance, duration, maxLength }: Computed) {
+    test({ status, distance, duration, maxLength, centerX, centerY }: Computed):boolean {
+        const {abs, max} = Math;
+        // 判断是否发生大的位置变化
+        this._prevCenterX = centerX;
+        this._prevCenterY = centerY;
+        let _xMove = abs(centerX - this._prevCenterX);
+        let _yMove = abs(centerY - this._prevCenterY);
+        const hasMove = 2 < max(_xMove, _yMove);
+
         if ('end' === status) {
-            return 1 === maxLength && 2 > distance && 250 > duration;
+            return 1 === maxLength && 2 > distance && 250 > duration && !hasMove;
         }
     };
 };
