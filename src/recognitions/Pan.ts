@@ -29,15 +29,14 @@ export default class PanRecognizer extends Base {
     recognize(computed: Computed, callback: RecognizerCallback) {
         let eventStatus: string;
         if (this.test(computed)) {
-            const { status } = computed;
-            eventStatus = this.recognizeStatus(status);
-            console.error(eventStatus);
-            // panstart | panmove | panend
-            callback({ type: this.name + eventStatus, ...computed });
-
             callback({ type: this.name, ...computed });
+
             // panleft | panright | pandown | panup
             callback({ type: this.name + computed.direction, ...computed });
+
+            // panstart | panmove | panend
+            eventStatus = this.recognizeStatus(computed.status);
+            callback({ type: this.name + eventStatus, ...computed });
         }
     };
 
