@@ -85,7 +85,7 @@ export default function ({
         computed.direction = getDirection(computed.deltaX, computed.deltaY);
     }
     // ================== 多点 ==================
-    else if (1 < prevInput.pointers.length) {
+    else if (undefined !== prevInput && 1 < prevInput.pointers.length) {
         const v0 = {
             x: prevInput.pointers[1][propX] - prevInput.pointers[0][propX],
             y: prevInput.pointers[1][propY] - prevInput.pointers[0][propY]
