@@ -1,39 +1,7 @@
 export type status = 'start' | 'move' | 'end' | 'cancel';
 
-interface Session {
-    // 输入状态: start | move | end | cancel
-    type: string;
-    maxLength?: number;
-    startInput?: any;
-    lastInputArray?: any[];
-    input?: any;
-    prevInput?: any;
-    startMultiInput?: any;
-    validInput?: any;
-    // endInput?: any;
-    deltaX?: number,
-    deltaY?: number,
-    lastDeltaTime?: number
-}
 import Input from './input/index';
-export interface Input extends Input {}
-
-// 统一各种设备的输入
-// export interface Input {
-//     // start | move | end | cancel
-//     status: string;
-//     pointers: any[];
-//     changedPointers: any[];
-//     timestamp: number;
-//     target: EventTarget;
-//     currentTarget: EventTarget;
-//     center: { x: number, y: number };
-//     stopPropagation: () => {}
-//     preventDefault: () => {}
-//     stopImmediatePropagation: () => {}
-//     sourceEvent: any;
-// }
-
+export interface AnyInput extends Input {}
 // input的计算结果
 export interface Computed {
     status: status; //start | move | end | cancel

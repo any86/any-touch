@@ -1,6 +1,8 @@
 /**
  * 构造统一的touchEvent格式
  */
+
+import { status } from '../interface';
 import { propX, propY, SUPPORT_ONLY_TOUCH } from '../const';
 import { getCenter } from '../vector';
 import touchInput from '../input/touch'
@@ -8,16 +10,16 @@ import mouseInput from '../input/mouse';
 
 export default class Input {
     // start | move | end | cancel
-    public status: string;
+    public status: status;
     public pointers: any[] = [];
     public changedPointers: any[] = [];
     public timestamp: number;
     public target: EventTarget;
     public currentTarget: EventTarget;
     public center: { x: number, y: number };
-    public stopPropagation: () => {}
-    public preventDefault: () => {}
-    public stopImmediatePropagation: () => {}
+    public stopPropagation: () => void;
+    public preventDefault: () => void;
+    public stopImmediatePropagation: () => void;
     public sourceEvent: any;
 
     constructor(event: any) {
@@ -50,6 +52,6 @@ export default class Input {
         // 原生属性/方法
         const { stopPropagation, preventDefault, stopImmediatePropagation, target, currentTarget } = event;
         // mixin
-        Object.assign(this, input, { center, timestamp, stopPropagation, preventDefault, stopImmediatePropagation, target, currentTarget });
+        Object.assign(this, input, { center, timestamp, stopPropagation, preventDefault, stopImmediatePropagation, target, currentTarget, sourceEvent: event });
     }
 }
