@@ -16,7 +16,7 @@
     </script>
     <style>
         :root {
-            --bg: rgb(116, 186, 189);
+            --bg: rgb(255, 255, 255);
         }
 
         * {
@@ -46,7 +46,7 @@
             padding: 0 10px;
             text-align: center;
             font-size: 12px;
-            color: #fff;
+            color: rgb(189, 174, 116);
         }
 
         .circle {
@@ -54,8 +54,8 @@
             width: 30px;
             height: 30px;
             border-radius: 5px;
-            background: rgb(255, 255, 255, 0.2);
-            border: 50px solid rgb(0, 0, 0, 0.4);
+            background: rgb(0, 0, 0 ,0);
+            border: 50px solid rgb(189, 174, 116,.7);
             /* box-shadow: 0 0 30px rgba(0, 0, 0, .9); */
             position: absolute;
             left: calc(50vw - 25px);
@@ -144,31 +144,41 @@
                 const anyTouch = new AnyTouch(this.$refs.circle);
 
                 anyTouch.on('pan', e => {
-                    console.warn('pan', e);
+                    // console.warn('pan');
                     this.message = e;
                     this.x += e.deltaX;
                     this.y += e.deltaY;
                 });
 
-                anyTouch.on('panleft', e => {
-                    console.warn('panleft');
+                anyTouch.on('panend', e => {
+                    console.warn('panend');
+                });
+
+                anyTouch.on('panend', e => {
+                    console.warn('panend');
                 });
 
 
+
                 anyTouch.on('press', e => {
+                    console.log(e);
                     this.message = e;
                 });
 
 
                 anyTouch.on('tap', e => {
+                    // console.warn('tap');
                     this.message = e;
                 });
 
                 anyTouch.on('doubletap', e => {
+                    // console.warn('doubletap');
                     this.message = e;
                 });
 
-
+                anyTouch.on('pinchstart', e => {
+                    // console.warn('pinchstart');
+                });
                 anyTouch.on('pinch', e => {
                     this.message = e;
                     this.scale *= e.scale;
@@ -177,7 +187,7 @@
                 });
 
                 anyTouch.on('rotate', e => {
-                    this.message = e;
+                    // this.message = e;
                     this.angle += e.angle;
                     this.centerX = e.centerX;
                     this.centerY = e.centerY;

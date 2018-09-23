@@ -8,15 +8,17 @@ import { getCenter } from '../vector';
 import touchInput from '../input/touch'
 import mouseInput from '../input/mouse';
 
+let centerX: number;
+let centerY: number;
 export default class Input {
     // start | move | end | cancel
     public status: status;
     public pointers: any[] = [];
-    public changedPointers: any[] = [];
     public timestamp: number;
     public target: EventTarget;
     public currentTarget: EventTarget;
-    public center: { x: number, y: number };
+    public centerX: number;
+    public centerY: number;
     public stopPropagation: () => void;
     public preventDefault: () => void;
     public stopImmediatePropagation: () => void;
@@ -46,12 +48,18 @@ export default class Input {
             };
         }
         // 中心坐标
-        const center = 0 < pointerLength ? getCenter(this.pointers) : undefined;
+        // let centerX: number;
+        // let centerY: number;
+        if (0 < pointerLength) {
+            const center = getCenter(this.pointers);
+            centerX = center.x;
+            centerY = center.y;
+        }
         // 当前时间
         const timestamp = Date.now();
         // 原生属性/方法
         const { stopPropagation, preventDefault, stopImmediatePropagation, target, currentTarget } = event;
         // mixin
-        Object.assign(this, input, { center, timestamp, stopPropagation, preventDefault, stopImmediatePropagation, target, currentTarget, sourceEvent: event });
+        Object.assign(this, input, { pointerLength, centerX, centerY, timestamp, stopPropagation, preventDefault, stopImmediatePropagation, target, currentTarget, sourceEvent: event });
     }
 }

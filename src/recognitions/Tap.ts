@@ -19,7 +19,7 @@ export default class TapRecognizer {
         if (this.test(computed)) {
             // 累加点击
             this.tapCount++;
-            
+
             // 是否需要识别双击
             if (this.hasDoubleTap) {
                 if (1 === this.tapCount) {
@@ -39,8 +39,8 @@ export default class TapRecognizer {
         }
     };
 
-    test({ status, distance, duration, maxLength, centerX, centerY }: Computed):boolean {
-        const {abs, max} = Math;
+    test({ status, distance, duration, length, centerX, centerY }: Computed): boolean {
+        const { abs, max } = Math;
         // 判断是否发生大的位置变化
         this._prevCenterX = centerX;
         this._prevCenterY = centerY;
@@ -49,7 +49,7 @@ export default class TapRecognizer {
         const hasMove = 2 < max(_xMove, _yMove);
 
         if ('end' === status) {
-            return 1 === maxLength && 2 > distance && 250 > duration && !hasMove;
+            return 1 === length && 2 > distance && 250 > duration && !hasMove;
         }
     };
 };

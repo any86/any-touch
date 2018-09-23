@@ -7,6 +7,7 @@ export interface Computed {
     status: status; //start | move | end | cancel
     length: number;
     maxLength: number;
+    prevLength: number;
     lastVelocityX: number;
     lastVelocityY: number;
     velocityX: number;

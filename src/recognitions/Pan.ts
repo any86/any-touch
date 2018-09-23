@@ -3,22 +3,22 @@ import Base from './Base';
 interface Options {
     name?: string;
     threshold?: number;
-    maxPointerLength?: number;
+    allowLength?: number;
 }
 
 export default class PanRecognizer extends Base {
     public name: string;
     public threshold: number;
-    public maxPointerLength: number;
+    public allowLength: number;
 
     constructor({
         name = 'pan',
         threshold = 10,
-        maxPointerLength = 1 }: Options = {}) {
+        allowLength = 1 }: Options = {}) {
         super();
         this.name = name;
         this.threshold = threshold;
-        this.maxPointerLength = maxPointerLength;
+        this.allowLength = allowLength;
     };
 
     /**
@@ -30,13 +30,12 @@ export default class PanRecognizer extends Base {
         let eventStatus: string;
         if (this.test(computed)) {
             callback({ type: this.name, ...computed });
-
             // panleft | panright | pandown | panup
-            callback({ type: this.name + computed.direction, ...computed });
+            // callback({ type: this.name + computed.direction, ...computed });
 
             // panstart | panmove | panend
-            eventStatus = this.recognizeStatus(computed.status);
-            callback({ type: this.name + eventStatus, ...computed });
+            // eventStatus = this.recognizeStatus(computed.status);
+            // callback({ type: this.name + eventStatus, ...computed });
         }
     };
 
@@ -45,6 +44,6 @@ export default class PanRecognizer extends Base {
      * @return {Boolean}} 是否是当前手势 
      */
     test({ length, distance, status }: Computed): Boolean {
-        return 'start' !== status && this.threshold < distance && this.maxPointerLength === length;
+        return 'start' !== status && this.threshold < distance && this.allowLength === length;
     };
 };

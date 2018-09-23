@@ -4,25 +4,30 @@ import compute from './compute';
 let startMultiInput: AnyInput;
 let startInput: AnyInput;
 let prevInput: AnyInput;
-
+let activeInput: AnyInput;
 export default function (event: any): Computed {
     // 格式化设备输入数据
     const input = new Input(event);
     // 当前输入状态
     const { status } = input;
+    
     // [Start]
     if ('start' === status) {
         // 清空缓存的多点起点数据
         startMultiInput = undefined;
-        // 起点(单点|多点)
-        startInput = input;
         // 上一步的触点
         prevInput = undefined;
+        // 当前点
+        activeInput = input;
+        // 起点(单点|多点)
+        startInput = activeInput;
     }
     // [Move]
     else if ('move' === status) {
         // 上一步的触点
-        prevInput = input;
+        prevInput = activeInput;
+        // 当前点
+        activeInput = input;
     }
     // [End]
     else if ('end' === status) {
@@ -40,7 +45,6 @@ export default function (event: any): Computed {
     if (undefined !== prevInput && 1 < prevInput.pointers.length && 1 === input.pointers.length) {
         startInput = input;
     }
-
 
     const computed = compute({
         status,
