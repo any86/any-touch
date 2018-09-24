@@ -3,6 +3,8 @@ import { Computed } from '../interface';
 import { getAngle, getVLength, getDirection } from '../vector';
 import { propX, propY } from '../const';
 import intervalCompute from './intervalCompute';
+import computeDistance from './computeDistance';
+
 let maxLength: number = 0;
 export default function ({
     status,
@@ -44,15 +46,20 @@ export default function ({
         lastVelocityX: undefined
     };
 
-
+    const { displacementX, displacementY, distanceX, distanceY, distance } = computeDistance({
+        status,
+        startInput,
+        input
+    });
+    computed = {...computed, displacementX, displacementY, distanceX, distanceY, distance};
     // ================== 单点 ==================
     if (1 === length) {
         // 单指滑动计算
-        computed.displacementX = round(input.pointers[0][propX] - startInput.pointers[0][propX]);
-        computed.displacementY = round(input.pointers[0][propY] - startInput.pointers[0][propY]);
-        computed.distanceX = abs(computed.displacementX);
-        computed.distanceY = abs(computed.displacementY);
-        computed.distance = round(getVLength({ x: computed.distanceX, y: computed.distanceY }));
+        // computed.displacementX = round(input.pointers[0][propX] - startInput.pointers[0][propX]);
+        // computed.displacementY = round(input.pointers[0][propY] - startInput.pointers[0][propY]);
+        // computed.distanceX = abs(computed.displacementX);
+        // computed.distanceY = abs(computed.displacementY);
+        // computed.distance = round(getVLength({ x: computed.distanceX, y: computed.distanceY }));
 
         // 已消耗时间
         computed.duration = input.timestamp - startInput.timestamp;
@@ -61,8 +68,6 @@ export default function ({
             // 位移增量
             computed.deltaX = input.pointers[0][propX] - prevInput.pointers[0][propX];
             computed.deltaY = input.pointers[0][propY] - prevInput.pointers[0][propY];
-            computed.absDeltaX = abs(computed.deltaX);
-            computed.absDeltaY = abs(computed.deltaY);
             // 时间增量
             computed.deltaTime = input.timestamp - prevInput.timestamp;
         }
@@ -97,6 +102,7 @@ export default function ({
 
         // 角度增量
         computed.angle = getAngle(v1, v0);
+    } else if (0 === length) {
     };
 
     maxLength = max(maxLength, length);
