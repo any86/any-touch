@@ -101,7 +101,7 @@ export default class AnyTouch {
         event.preventDefault();
         // computed为包含了计算值的input
         const computed = compute(event);
-        console.log(computed);
+        // console.log(computed);
         // 当是鼠标事件的时候, mouseup阶段的input和computed为空
         if (undefined !== computed) {
             this.recognizers.forEach(recognizer => {

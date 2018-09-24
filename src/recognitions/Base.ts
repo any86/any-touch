@@ -13,6 +13,7 @@ export default class Recognizer {
      * @param {status} 输入状态 
      */
     public recognizeStatus(status: status) {
+        
         if (this._isRecognized) {
             if ('move' === status) {
                 return 'move';

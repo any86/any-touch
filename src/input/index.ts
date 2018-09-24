@@ -1,7 +1,6 @@
 /**
  * 构造统一的touchEvent格式
  */
-
 import { status } from '../interface';
 import { propX, propY, SUPPORT_ONLY_TOUCH } from '../const';
 import { getCenter } from '../vector';

@@ -28,14 +28,17 @@ export default class PanRecognizer extends Base {
      */
     recognize(computed: Computed, callback: RecognizerCallback) {
         let eventStatus: string;
+        // if('end' == computed.status) console.log(computed);
+        
+
         if (this.test(computed)) {
             callback({ type: this.name, ...computed });
             // panleft | panright | pandown | panup
-            // callback({ type: this.name + computed.direction, ...computed });
+            callback({ type: this.name + computed.direction, ...computed });
 
             // panstart | panmove | panend
-            // eventStatus = this.recognizeStatus(computed.status);
-            // callback({ type: this.name + eventStatus, ...computed });
+            eventStatus = this.recognizeStatus(computed.status);
+            callback({ type: this.name + eventStatus, ...computed });
         }
     };
 
@@ -43,7 +46,8 @@ export default class PanRecognizer extends Base {
      * @param {Computed} 计算数据
      * @return {Boolean}} 是否是当前手势 
      */
-    test({ length, distance, status }: Computed): Boolean {
-        return 'start' !== status && this.threshold < distance && this.allowLength === length;
+    test({ maxLength, distance, status }: Computed): Boolean {
+        // console.log({ maxLength, distance, status });
+        return 'start' !== status && this.threshold < distance && this.allowLength === maxLength;
     };
 };

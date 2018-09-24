@@ -1,7 +1,6 @@
 import { Computed, AnyInput } from '../interface';
 import Input from '../input/index';
 import compute from './compute';
-let startMultiInput: AnyInput;
 let startInput: AnyInput;
 let prevInput: AnyInput;
 let activeInput: AnyInput;
@@ -13,8 +12,6 @@ export default function (event: any): Computed {
     
     // [Start]
     if ('start' === status) {
-        // 清空缓存的多点起点数据
-        startMultiInput = undefined;
         // 上一步的触点
         prevInput = undefined;
         // 当前点
@@ -36,22 +33,11 @@ export default function (event: any): Computed {
         //cancel;
     }
 
-    // 开始多点触碰
-    if (1 < length && undefined === startMultiInput) {
-        startMultiInput = input;
-    }
-
-    // 如果多点变成单点, 那么单点的起点重置
-    if (undefined !== prevInput && 1 < prevInput.pointers.length && 1 === input.pointers.length) {
-        startInput = input;
-    }
-
     const computed = compute({
         status,
         startInput,
         prevInput,
         input,
-        startMultiInput,
     });
 
     return { ...input, ...computed, status };

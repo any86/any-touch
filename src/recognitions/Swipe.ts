@@ -7,7 +7,7 @@ export default class SwipeRecognizer {
 
     test(computed: any): boolean {
         const { status, lastVelocityX, lastVelocityY, maxLength } = computed;
-        // console.log( maxLength, status, Math.max(Math.abs(lastVelocityX), Math.abs(lastVelocityY)));
+        console.log( maxLength, status, Math.max(Math.abs(lastVelocityX), Math.abs(lastVelocityY)));
         return 1 === maxLength && 'end' === status && 0.3 < Math.max(Math.abs(lastVelocityX), Math.abs(lastVelocityY));
     };
 };

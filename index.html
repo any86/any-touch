@@ -55,7 +55,7 @@
             height: 30px;
             border-radius: 5px;
             background: rgb(0, 0, 0 ,0);
-            border: 50px solid rgb(189, 174, 116,.7);
+            border: 50px solid rgba(189, 174, 116,0.7);
             /* box-shadow: 0 0 30px rgba(0, 0, 0, .9); */
             position: absolute;
             left: calc(50vw - 25px);
@@ -139,40 +139,31 @@
             },
 
             mounted() {
-
-
                 const anyTouch = new AnyTouch(this.$refs.circle);
 
                 anyTouch.on('pan', e => {
-                    // console.warn('pan');
+                    console.log(`%c ${e.type} `, 'background-color:#69c;color:#fff;');
                     this.message = e;
                     this.x += e.deltaX;
                     this.y += e.deltaY;
                 });
 
                 anyTouch.on('panend', e => {
-                    console.warn('panend');
+                    console.log(`%c ${e.type} `, 'background-color:#fa0;color:#fff;');
                 });
-
-                anyTouch.on('panend', e => {
-                    console.warn('panend');
-                });
-
-
 
                 anyTouch.on('press', e => {
-                    console.log(e);
+                    console.warn('press');
                     this.message = e;
                 });
 
-
                 anyTouch.on('tap', e => {
-                    // console.warn('tap');
+                    console.log(`%c ${e.type} `, 'background-color:#f10;color:#fff;');
                     this.message = e;
                 });
 
                 anyTouch.on('doubletap', e => {
-                    // console.warn('doubletap');
+                    console.log(`%c ${e.type} `, 'background-color:#9c3;color:#fff;');
                     this.message = e;
                 });
 
@@ -195,6 +186,7 @@
                 });
 
                 anyTouch.on('swipe', e => {
+                    console.log(`%c ${e.type} `, 'background-color:#444;color:#fff;');
                     this.message = e;
                 });
             },

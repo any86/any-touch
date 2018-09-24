@@ -5,7 +5,7 @@ export default class PinchRecognizer extends Base {
         let eventStatus: string;
         if (this.test(computed)) {
             callback({ type: 'pinch', ...computed });
-            console.log(computed.status);
+            // console.log(computed.status);
             // pinchstart | pinchmove | pinchend
             eventStatus = this.recognizeStatus(computed.status);
             callback({ type: 'pinch' + eventStatus, ...computed });

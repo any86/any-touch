@@ -10,13 +10,12 @@ export default function ({
     status,
     startInput,
     prevInput,
-    input, startMultiInput
+    input
 }: any): any {
     // 如果输入为空, 那么就计算了, 鼠标模式下, 点击了非元素部分, mouseup阶段会初选input为undefined
     if (undefined === input) return;
     const length = input.pointers.length;
-
-    const { abs, round, max } = Math;
+    const { abs, max } = Math;
 
     let computed: any = {
         // 起始到结束的偏移
@@ -64,14 +63,13 @@ export default function ({
 
     // ================== 单点 ==================
     if (1 === length) {
-        if (undefined !== prevInput) {
+        if (undefined !== prevInput && 2 > prevInput.pointers.length) {
             // 位移增量
-            computed.deltaX = input.pointers[0][propX] - prevInput.pointers[0][propX];
-            computed.deltaY = input.pointers[0][propY] - prevInput.pointers[0][propY];
+            computed.deltaX = input.centerX - prevInput.centerX;
+            computed.deltaY = input.centerY - prevInput.centerY;
             // 时间增量
             computed.deltaTime = input.timestamp - prevInput.timestamp;
         }
-
 
         // 速率
         computed.velocityX = abs(computed.distanceX / computed.duration);
@@ -82,7 +80,7 @@ export default function ({
         computed.direction = getDirection(computed.deltaX, computed.deltaY);
     }
     // ================== 多点 ==================
-    else if (undefined !== prevInput && 1 < prevInput.pointers.length) {
+    else if (undefined !== prevInput && 1 < prevInput.pointers.length && 1 < input.pointers.length) {
         const v0 = {
             x: prevInput.pointers[1][propX] - prevInput.pointers[0][propX],
             y: prevInput.pointers[1][propY] - prevInput.pointers[0][propY]
@@ -98,10 +96,16 @@ export default function ({
 
         // 角度增量
         computed.angle = getAngle(v1, v0);
-    } else if (0 === length) {
-    };
+    }
+
 
     maxLength = max(maxLength, length);
+    if('start' === status) {
+        maxLength = length;
+    } else if('end' === status) {
+        maxLength = Math.max(1, length);
+    }
+
 
     return {
         ...input,
