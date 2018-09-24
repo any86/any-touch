@@ -11,7 +11,9 @@ export default function ({
     const { round, abs } = Math;
     let displacementX = 0;
     let displacementY = 0;
-    if ('move' === status) {
+    if ('start' === status) {
+        prevDisplacementX = prevDisplacementY = 0;
+    } else if ('move' === status) {
         displacementX = round(input.pointers[0][propX] - startInput.pointers[0][propX]);
         displacementY = round(input.pointers[0][propY] - startInput.pointers[0][propY]);
 
