@@ -46,24 +46,24 @@ export default function ({
         lastVelocityX: undefined
     };
 
+    // 滑动距离
     const { displacementX, displacementY, distanceX, distanceY, distance } = computeDistance({
         status,
         startInput,
         input
     });
-    computed = {...computed, displacementX, displacementY, distanceX, distanceY, distance};
+    computed = { ...computed, displacementX, displacementY, distanceX, distanceY, distance };
+    // 已消耗时间
+    computed.duration = input.timestamp - startInput.timestamp;
+
+    // 最近25ms内速度
+    // console.log(input.status);
+    const intervalComputed = intervalCompute(input);
+    computed.lastVelocityX = intervalComputed.velocityX;
+    computed.lastVelocityY = intervalComputed.velocityY;
+
     // ================== 单点 ==================
     if (1 === length) {
-        // 单指滑动计算
-        // computed.displacementX = round(input.pointers[0][propX] - startInput.pointers[0][propX]);
-        // computed.displacementY = round(input.pointers[0][propY] - startInput.pointers[0][propY]);
-        // computed.distanceX = abs(computed.displacementX);
-        // computed.distanceY = abs(computed.displacementY);
-        // computed.distance = round(getVLength({ x: computed.distanceX, y: computed.distanceY }));
-
-        // 已消耗时间
-        computed.duration = input.timestamp - startInput.timestamp;
-
         if (undefined !== prevInput) {
             // 位移增量
             computed.deltaX = input.pointers[0][propX] - prevInput.pointers[0][propX];
@@ -72,11 +72,7 @@ export default function ({
             computed.deltaTime = input.timestamp - prevInput.timestamp;
         }
 
-        // 最近25ms内速度
-        // console.log(input.status);
-        const intervalComputed = intervalCompute(input);
-        computed.lastVelocityX = intervalComputed.velocityX;
-        computed.lastVelocityY = intervalComputed.velocityY;
+
         // 速率
         computed.velocityX = abs(computed.distanceX / computed.duration);
         computed.velocityY = abs(computed.distanceY / computed.duration);
