@@ -147,9 +147,17 @@
                     this.x += e.deltaX;
                     this.y += e.deltaY;
                 });
+                
+                anyTouch.on('panstart', e => {
+                    console.log(`%c ${e.type} `, 'background-color:#63f;color:#333;');
+                });
+
+                anyTouch.on('panmove', e => {
+                    console.log(`%c ${e.type} `, 'background-color:#66f;color:#fff;');
+                });
 
                 anyTouch.on('panend', e => {
-                    console.log(`%c ${e.type} `, 'background-color:#fa0;color:#fff;');
+                    console.log(`%c ${e.type} `, 'background-color:#68f;color:#fff;');
                 });
 
                 anyTouch.on('press', e => {

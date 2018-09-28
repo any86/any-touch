@@ -32,9 +32,11 @@ export default class PanRecognizer extends Base {
         
 
         if (this.test(computed)) {
-            callback({ type: this.name, ...computed });
             // panleft | panright | pandown | panup
             callback({ type: this.name + computed.direction, ...computed });
+
+            // pan
+            callback({ type: this.name, ...computed });
 
             // panstart | panmove | panend
             eventStatus = this.recognizeStatus(computed.status);
