@@ -197,6 +197,26 @@
                     console.log(`%c ${e.type} `, 'background-color:#444;color:#fff;');
                     this.message = e;
                 });
+
+                anyTouch.on('swipeup', e => {
+                    console.log(`%c ${e.type} `, 'background-color:#444;color:#fff;');
+                    this.message = e;
+                });
+
+                anyTouch.on('swipeleft', e => {
+                    console.log(`%c ${e.type} `, 'background-color:#444;color:#fff;');
+                    this.message = e;
+                });
+
+                anyTouch.on('swiperight', e => {
+                    console.log(`%c ${e.type} `, 'background-color:#444;color:#fff;');
+                    this.message = e;
+                });
+
+                anyTouch.on('swipedown', e => {
+                    console.log(`%c ${e.type} `, 'background-color:#444;color:#fff;');
+                    this.message = e;
+                });
             },
 
             methods: {

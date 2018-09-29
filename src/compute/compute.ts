@@ -62,25 +62,31 @@ export default function ({
     computed.lastVelocityY = intervalComputed.velocityY;
 
     // ================== 单点 ==================
-    if (1 === length) {
-        if (undefined !== prevInput && 2 > prevInput.pointers.length) {
-            // 位移增量
-            computed.deltaX = input.centerX - prevInput.centerX;
-            computed.deltaY = input.centerY - prevInput.centerY;
-            // 时间增量
-            computed.deltaTime = input.timestamp - prevInput.timestamp;
-        }
+    // if (undefined !== prevInput && 2 > prevInput.pointers.length) {
 
-        // 速率
-        computed.velocityX = abs(computed.distanceX / computed.duration);
-        computed.velocityY = abs(computed.distanceY / computed.duration);
-        computed.maxVelocity = max(computed.velocityX, computed.velocityY);
-
-        // 计算方向
-        computed.direction = getDirection(computed.deltaX, computed.deltaY);
+    // 位移增量
+    if (undefined !== prevInput) {
+        computed.deltaX = input.centerX - prevInput.centerX;
+        computed.deltaY = input.centerY - prevInput.centerY;
+        // 时间增量
+        computed.deltaTime = input.timestamp - prevInput.timestamp;
+    } else {
+        computed.deltaX = 0;
+        computed.deltaY = 0;
+        // 时间增量
+        computed.deltaTime = 0;
     }
-    // ================== 多点 ==================
-    else if (undefined !== prevInput && 1 < prevInput.pointers.length && 1 < input.pointers.length) {
+
+
+    // 速率
+    computed.velocityX = abs(computed.distanceX / computed.duration);
+    computed.velocityY = abs(computed.distanceY / computed.duration);
+    computed.maxVelocity = max(computed.velocityX, computed.velocityY);
+
+    // 计算方向
+    computed.direction = getDirection(computed.deltaX, computed.deltaY);
+    // ================== 多触点 ==================
+    if (undefined !== prevInput && 1 < prevInput.pointers.length && 1 < input.pointers.length) {
         const v0 = {
             x: prevInput.pointers[1][propX] - prevInput.pointers[0][propX],
             y: prevInput.pointers[1][propY] - prevInput.pointers[0][propY]
@@ -100,9 +106,9 @@ export default function ({
 
 
     maxLength = max(maxLength, length);
-    if('start' === status) {
+    if ('start' === status) {
         maxLength = length;
-    } else if('end' === status) {
+    } else if ('end' === status) {
         maxLength = Math.max(1, length);
     }
 

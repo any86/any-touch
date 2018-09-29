@@ -30,6 +30,7 @@ export default class PanRecognizer extends Base {
         let eventStatus: string;
         // if('end' == computed.status) console.log(computed);
         
+        console.log(computed);
 
         if (this.test(computed)) {
             // panleft | panright | pandown | panup

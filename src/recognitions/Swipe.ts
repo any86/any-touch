@@ -1,7 +1,17 @@
 export default class SwipeRecognizer {
+    public name: string;
+
+    constructor(){
+        this.name = 'swipe'
+    };
+
     recognize(computed: any, callback: (paylod: any) => {}): void {
         if (this.test(computed)) {
-            callback({ type: 'swipe', ...computed });
+            // console.log(computed);
+            // swipeleft | swiperight | swipedown | swipeup
+            callback({ type: this.name + computed.direction, ...computed });
+
+            callback({ type: this.name, ...computed });
         }
     };
 

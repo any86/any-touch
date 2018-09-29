@@ -9,7 +9,7 @@ export default function (event: any): Computed {
     const input = new Input(event);
     // 当前输入状态
     const { status } = input;
-    
+
     // [Start]
     if ('start' === status) {
         // 上一步的触点
@@ -28,6 +28,7 @@ export default function (event: any): Computed {
     }
     // [End]
     else if ('end' === status) {
+        console.log(input);
         // end
     } else if ('cancel' === status) {
         //cancel;
