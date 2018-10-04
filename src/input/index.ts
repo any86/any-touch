@@ -1,7 +1,7 @@
 /**
  * 构造统一的touchEvent格式
  */
-import { status } from '../interface';
+import { nativeEventType } from '../interface';
 import { propX, propY, SUPPORT_ONLY_TOUCH } from '../const';
 import { getCenter } from '../vector';
 import touchInput from './adapters/touch'
@@ -11,7 +11,7 @@ let centerX: number;
 let centerY: number;
 export default class Input {
     // start | move | end | cancel
-    public status: status;
+    public nativeEventType: nativeEventType;
     public pointers: any[] = [];
     public timestamp: number;
     public target: EventTarget;

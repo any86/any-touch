@@ -4,23 +4,23 @@ let prevDisplacementY = 0;
 import { propX, propY } from '../const';
 import { getVLength } from '../vector';
 export default function ({
-    status,
+    nativeEventType,
     startInput,
     input
 }: any): any {
     const { round, abs } = Math;
     let displacementX = 0;
     let displacementY = 0;
-    if ('start' === status) {
+    if ('start' === nativeEventType) {
         prevDisplacementX = prevDisplacementY = 0;
-    } else if ('move' === status) {
+    } else if ('move' === nativeEventType) {
         displacementX = round(input.pointers[0][propX] - startInput.pointers[0][propX]);
         displacementY = round(input.pointers[0][propY] - startInput.pointers[0][propY]);
 
         // 记录本次位移
         prevDisplacementX = displacementX;
         prevDisplacementY = displacementY;
-    } else if ('end' === status) {
+    } else if ('end' === nativeEventType) {
         displacementX = prevDisplacementX;
         displacementY = prevDisplacementY;
     }

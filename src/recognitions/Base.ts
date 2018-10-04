@@ -1,4 +1,4 @@
-import { status } from '../interface';
+import { nativeEventType } from '../interface';
 
 export default class Recognizer {
     private _isRecognized: boolean;
@@ -10,12 +10,12 @@ export default class Recognizer {
     /**
      * 识别手势事件的状态
      * 手势的状态, 非原生事件的状态
-     * @param {status} 输入状态 
+     * @param {nativeEventType} 输入状态 
      */
-    public recognizeStatus(status: status) {
+    public recognizenativeEventType(nativeEventType: nativeEventType) {
         
         if (this._isRecognized) {
-            if ('move' === status) {
+            if ('move' === nativeEventType) {
                 return 'move';
             } else {
                 this._isRecognized = false;

@@ -7,7 +7,7 @@ export default function ({
     if (undefined === prevInput) {
         deltaX = 0;
         deltaY = 0;
-    } else if ('end' === input.status) {
+    } else if ('end' === input.nativeEventType) {
         deltaX = 0;
         deltaY = 0;
     } else {

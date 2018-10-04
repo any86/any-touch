@@ -2,13 +2,13 @@ import { Computed, RecognizerCallback } from '../interface';
 import Base from './Base';
 export default class PinchRecognizer extends Base {
     recognize(computed: Computed, callback: RecognizerCallback) {
-        let eventStatus: string;
+        let eventnativeEventType: string;
         if (this.test(computed)) {
             callback({ type: 'pinch', ...computed });
-            // console.log(computed.status);
+            // console.log(computed.nativeEventType);
             // pinchstart | pinchmove | pinchend
-            eventStatus = this.recognizeStatus(computed.status);
-            callback({ type: 'pinch' + eventStatus, ...computed });
+            eventnativeEventType = this.recognizenativeEventType(computed.nativeEventType);
+            callback({ type: 'pinch' + eventnativeEventType, ...computed });
         }
     };
 

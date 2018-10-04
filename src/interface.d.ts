@@ -1,10 +1,10 @@
-export type status = 'start' | 'move' | 'end' | 'cancel';
+export type nativeEventType = 'start' | 'move' | 'end' | 'cancel';
 
 import Input from './input/index';
 export interface AnyInput extends Input {}
 // input的计算结果
 export interface Computed {
-    status: status; //start | move | end | cancel
+    nativeEventType: nativeEventType; //start | move | end | cancel
     length: number;
     maxLength: number;
     prevLength: number;

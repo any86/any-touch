@@ -8,7 +8,7 @@ import computeDeltaXY from './computeDeltaXY';
 
 let maxLength: number = 0;
 export default function ({
-    status,
+    nativeEventType,
     startInput,
     prevInput,
     input
@@ -48,7 +48,7 @@ export default function ({
 
     // 滑动距离
     const { displacementX, displacementY, distanceX, distanceY, distance } = computeDistance({
-        status,
+        nativeEventType,
         startInput,
         input
     });
@@ -105,9 +105,9 @@ export default function ({
 
 
     maxLength = max(maxLength, length);
-    if ('start' === status) {
+    if ('start' === nativeEventType) {
         maxLength = length;
-    } else if ('end' === status) {
+    } else if ('end' === nativeEventType) {
         maxLength = Math.max(1, length);
     }
 

@@ -29,7 +29,7 @@ export default (event: MouseEvent): any => {
     };
 
     return {
-        status: MAP[type],
+        nativeEventType: MAP[type],
         changedPointers,
         pointers,
         sourceEvent: event

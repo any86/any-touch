@@ -1,4 +1,4 @@
-import { Computed, RecognizerCallback, status } from '../interface';
+import { Computed, RecognizerCallback, nativeEventType } from '../interface';
 import Base from './Base';
 interface Options {
     name?: string;
@@ -27,8 +27,8 @@ export default class PanRecognizer extends Base {
      * @param {RecognizerCallback} 识别后触发钩子 
      */
     recognize(computed: Computed, callback: RecognizerCallback) {
-        let eventStatus: string;
-        // if('end' == computed.status) console.log(computed);
+        let eventnativeEventType: string;
+        // if('end' == computed.nativeEventType) console.log(computed);
 
         // console.log(computed);
 
@@ -40,8 +40,8 @@ export default class PanRecognizer extends Base {
             callback({ type: this.name, ...computed });
 
             // panstart | panmove | panend
-            eventStatus = this.recognizeStatus(computed.status);
-            callback({ type: this.name + eventStatus, ...computed });
+            eventnativeEventType = this.recognizenativeEventType(computed.nativeEventType);
+            callback({ type: this.name + eventnativeEventType, ...computed });
         }
     };
 
@@ -49,8 +49,8 @@ export default class PanRecognizer extends Base {
      * @param {Computed} 计算数据
      * @return {Boolean}} 是否是当前手势 
      */
-    test({ maxLength, distance, status }: Computed): Boolean {
-        // console.log({ maxLength, distance, status });
-        return 'start' !== status && this.threshold < distance && this.allowLength === maxLength;
+    test({ maxLength, distance, nativeEventType }: Computed): Boolean {
+        // console.log({ maxLength, distance, nativeEventType });
+        return 'start' !== nativeEventType && this.threshold < distance && this.allowLength === maxLength;
     };
 };

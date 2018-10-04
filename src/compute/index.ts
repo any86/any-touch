@@ -8,10 +8,10 @@ export default function (event: any): Computed {
     // 格式化设备输入数据
     const input = new Input(event);
     // 当前输入状态
-    const { status } = input;
+    const { nativeEventType } = input;
 
     // [Start]
-    if ('start' === status) {
+    if ('start' === nativeEventType) {
         // 上一步的触点
         prevInput = undefined;
         // 当前点
@@ -20,29 +20,29 @@ export default function (event: any): Computed {
         startInput = activeInput;
     }
     // [Move]
-    else if ('move' === status) {
+    else if ('move' === nativeEventType) {
         // 上一步的触点
         prevInput = activeInput;
         // 当前点
         activeInput = input;
     }
     // [End]
-    else if ('end' === status) {
+    else if ('end' === nativeEventType) {
         prevInput = activeInput;
         // 当前点
         activeInput = input;
 
-    } else if ('cancel' === status) {
+    } else if ('cancel' === nativeEventType) {
         prevInput = activeInput;
         // 当前点
         activeInput = input;
     }
     const computed = compute({
-        status,
+        nativeEventType,
         startInput,
         prevInput,
         input,
     });
 
-    return { ...input, ...computed, status };
+    return { ...input, ...computed, nativeEventType };
 }; 
