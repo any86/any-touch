@@ -10,29 +10,38 @@ let _prevInput: AnyInput;
 // 上次采集时的瞬时速度
 let _prevVelocityX: number;
 let _prevVelocityY: number;
+// 上次采集的方向
+let _prevDirection: string;
 
-export default (input: AnyInput): { maxVelocity: number, velocityX: number, velocityY: number, direction: string } => {
+export default (input: AnyInput): { velocity: number, velocityX: number, velocityY: number, direction: string } => {
     // 速度
     let velocityX: number;
     let velocityY: number;
+    // 方向
+    let direction: string;
+
+    // _prevInput || input用来保证start阶段也有prevInput, 当然这时等于input
     _prevInput = _prevInput || input;
     const deltaTime = input.timestamp - _prevInput.timestamp;
     const deltaX = input.centerX - _prevInput.centerX;
     const deltaY = input.centerY - _prevInput.centerY;
 
+    // 每25ms刷新速度数据
     if (COMPUTE_INTERVAL < deltaTime) {
-        _prevVelocityX = velocityX = deltaX / deltaTime || 0;
-        _prevVelocityY = velocityY = deltaY / deltaTime || 0;
+        velocityX = deltaX / deltaTime;
+        velocityY = deltaY / deltaTime;
+        direction = getDirection(deltaX, deltaY);
+        // 存储状态
+        _prevVelocityX = velocityX;
+        _prevVelocityY = velocityY;
+        _prevDirection = direction;
         _prevInput = input;
     } else {
         velocityX = _prevVelocityX || 0;
         velocityY = _prevVelocityY || 0;
+        direction = _prevDirection || 'none';
     }
     // 取xy方向2者的最大值
     const maxVelocity = Math.max(velocityX, velocityY);
-
-    // 方向
-    const direction = getDirection(deltaX, deltaY);
-
-    return { maxVelocity, velocityX, velocityY, direction };
+    return { velocity: maxVelocity, velocityX, velocityY, direction };
 };
