@@ -4,8 +4,8 @@
 import { status } from '../interface';
 import { propX, propY, SUPPORT_ONLY_TOUCH } from '../const';
 import { getCenter } from '../vector';
-import touchInput from '../input/touch'
-import mouseInput from '../input/mouse';
+import touchInput from './adapters/touch'
+import mouseInput from './adapters/mouse';
 
 let centerX: number;
 let centerY: number;

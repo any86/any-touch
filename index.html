@@ -123,6 +123,9 @@
     </main>
 
     <script>
+        const log = console.log;
+        // const log = ()=>{};
+
         new Vue({
             el: '#app',
 
@@ -142,22 +145,22 @@
                 const anyTouch = new AnyTouch(this.$refs.circle);
 
                 anyTouch.on('pan', e => {
-                    console.log(`%c ${e.type} `, 'background-color:#69c;color:#fff;');
+                    log(`%c ${e.type} `, 'background-color:#69c;color:#fff;');
                     this.message = e;
                     this.x += e.deltaX;
                     this.y += e.deltaY;
                 });
                 
                 anyTouch.on('panstart', e => {
-                    console.log(`%c ${e.type} `, 'background-color:#63f;color:#333;');
+                    log(`%c ${e.type} `, 'background-color:#63f;color:#333;');
                 });
 
                 anyTouch.on('panmove', e => {
-                    console.log(`%c ${e.type} `, 'background-color:#66f;color:#fff;');
+                    log(`%c ${e.type} `, 'background-color:#66f;color:#fff;');
                 });
 
                 anyTouch.on('panend', e => {
-                    console.log(`%c ${e.type} `, 'background-color:#68f;color:#fff;');
+                    log(`%c ${e.type} `, 'background-color:#68f;color:#fff;');
                 });
 
                 anyTouch.on('press', e => {
@@ -166,12 +169,12 @@
                 });
 
                 anyTouch.on('tap', e => {
-                    console.log(`%c ${e.type} `, 'background-color:#f10;color:#fff;');
+                    log(`%c ${e.type} `, 'background-color:#f10;color:#fff;');
                     this.message = e;
                 });
 
                 anyTouch.on('doubletap', e => {
-                    console.log(`%c ${e.type} `, 'background-color:#9c3;color:#fff;');
+                    log(`%c ${e.type} `, 'background-color:#9c3;color:#fff;');
                     this.message = e;
                 });
 
@@ -194,27 +197,27 @@
                 });
 
                 anyTouch.on('swipe', e => {
-                    console.log(`%c ${e.type} `, 'background-color:#444;color:#fff;');
+                    log(`%c ${e.type} `, 'background-color:#444;color:#fff;');
                     this.message = e;
                 });
 
                 anyTouch.on('swipeup', e => {
-                    console.log(`%c ${e.type} `, 'background-color:#444;color:#fff;');
+                    log(`%c ${e.type} `, 'background-color:#444;color:#fff;');
                     this.message = e;
                 });
 
                 anyTouch.on('swipeleft', e => {
-                    console.log(`%c ${e.type} `, 'background-color:#444;color:#fff;');
+                    log(`%c ${e.type} `, 'background-color:#444;color:#fff;');
                     this.message = e;
                 });
 
                 anyTouch.on('swiperight', e => {
-                    console.log(`%c ${e.type} `, 'background-color:#444;color:#fff;');
+                    log(`%c ${e.type} `, 'background-color:#444;color:#fff;');
                     this.message = e;
                 });
 
                 anyTouch.on('swipedown', e => {
-                    console.log(`%c ${e.type} `, 'background-color:#444;color:#fff;');
+                    log(`%c ${e.type} `, 'background-color:#444;color:#fff;');
                     this.message = e;
                 });
             },
