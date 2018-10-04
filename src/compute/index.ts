@@ -28,12 +28,15 @@ export default function (event: any): Computed {
     }
     // [End]
     else if ('end' === status) {
-        console.log(input);
-        // end
-    } else if ('cancel' === status) {
-        //cancel;
-    }
+        prevInput = activeInput;
+        // 当前点
+        activeInput = input;
 
+    } else if ('cancel' === status) {
+        prevInput = activeInput;
+        // 当前点
+        activeInput = input;
+    }
     const computed = compute({
         status,
         startInput,

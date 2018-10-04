@@ -53,18 +53,19 @@ export default function ({
         input
     });
     computed = { ...computed, displacementX, displacementY, distanceX, distanceY, distance };
+
+    // 计算方向
+    computed.direction = getDirection(displacementX, displacementY);
+
     // 已消耗时间
     computed.duration = input.timestamp - startInput.timestamp;
 
-    // 最近25ms内速度
-    // console.log(input.status);
-    const computedLast = computeLast(input);
-    computed.lastVelocityX = computedLast.velocityX;
-    computed.lastVelocityY = computedLast.velocityY;
-    computed.lastDirection = computedLast.direction;
-    // ================== 单点 ==================
-    // if (undefined !== prevInput && 2 > prevInput.pointers.length) {
-    // console.log('prevInput', prevInput.status);
+    // 最近25ms内计算数据
+    const lastComputed = computeLast(input);
+    computed.lastVelocityX = lastComputed.velocityX;
+    computed.lastVelocityY = lastComputed.velocityY;
+    computed.lastVelocity = lastComputed.velocity;
+    computed.lastDirection = lastComputed.direction;
 
     // 中心点位移增量
     let { deltaX, deltaY } = computeDeltaXY({ input, prevInput });
@@ -83,8 +84,6 @@ export default function ({
     computed.velocityY = abs(computed.distanceY / computed.duration);
     computed.maxVelocity = max(computed.velocityX, computed.velocityY);
 
-    // 计算方向
-    computed.direction = getDirection(computed.deltaX, computed.deltaY);
     // ================== 多触点 ==================
     if (undefined !== prevInput && 1 < prevInput.pointers.length && 1 < input.pointers.length) {
         const v0 = {
