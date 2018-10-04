@@ -4,6 +4,7 @@ import { getAngle, getVLength, getDirection } from '../vector';
 import { propX, propY } from '../const';
 import intervalCompute from './intervalCompute';
 import computeDistance from './computeDistance';
+import computeDeltaXY from './computeDeltaXY';
 
 let maxLength: number = 0;
 export default function ({
@@ -26,8 +27,8 @@ export default function ({
         distance: 0,
 
         // 位移变化量
-        deltaX: 0,
-        deltaY: 0,
+        deltaX: undefined,
+        deltaY: undefined,
         absDeltaX: 0,
         absDeltaY: 0,
 
@@ -63,20 +64,19 @@ export default function ({
 
     // ================== 单点 ==================
     // if (undefined !== prevInput && 2 > prevInput.pointers.length) {
+    // console.log('prevInput', prevInput.status);
 
-    // 位移增量
+    // 中心点位移增量
+    let { deltaX, deltaY } = computeDeltaXY({ input, prevInput });
+    computed.deltaX = deltaX;
+    computed.deltaY = deltaY;
+
+    // 时间增量
     if (undefined !== prevInput) {
-        computed.deltaX = input.centerX - prevInput.centerX;
-        computed.deltaY = input.centerY - prevInput.centerY;
-        // 时间增量
         computed.deltaTime = input.timestamp - prevInput.timestamp;
     } else {
-        computed.deltaX = 0;
-        computed.deltaY = 0;
-        // 时间增量
         computed.deltaTime = 0;
     }
-
 
     // 速率
     computed.velocityX = abs(computed.distanceX / computed.duration);
