@@ -1,7 +1,7 @@
 export default class SwipeRecognizer {
     public name: string;
 
-    constructor(){
+    constructor() {
         this.name = 'swipe'
     };
 
@@ -9,7 +9,7 @@ export default class SwipeRecognizer {
         if (this.test(computed)) {
             // console.log(computed);
             // swipeleft | swiperight | swipedown | swipeup
-            // console.log(computed.direction);
+            // console.log(computed.lastDirection);
             callback({ type: this.name + computed.lastDirection, ...computed });
 
             callback({ type: this.name, ...computed });
@@ -17,8 +17,12 @@ export default class SwipeRecognizer {
     };
 
     test(computed: any): boolean {
-        const { status, lastVelocityX, lastVelocityY, maxLength } = computed;
-        // console.log( maxLength, status, Math.max(Math.abs(lastVelocityX), Math.abs(lastVelocityY)));
-        return 1 === maxLength && 'end' === status && 0.3 < Math.max(Math.abs(lastVelocityX), Math.abs(lastVelocityY));
+        const { status, lastDirection, direction, lastVelocity, maxLength, distance } = computed;
+        return 1 === maxLength &&
+            10 < distance &&
+            'end' === status &&
+            'none' !== lastDirection &&
+            'none' !== direction &&
+            0.3 < lastVelocity;
     };
 };
