@@ -14,7 +14,7 @@ let _prevVelocityY: number;
 let _prevDirection: string;
 
 export default (input: AnyInput): { velocity: number, velocityX: number, velocityY: number, direction: string } => {
-    // 速度
+    // 速率
     let velocityX: number;
     let velocityY: number;
     // 方向
@@ -28,8 +28,8 @@ export default (input: AnyInput): { velocity: number, velocityX: number, velocit
 
     // 每25ms刷新速度数据
     if (COMPUTE_INTERVAL < deltaTime) {
-        velocityX = deltaX / deltaTime;
-        velocityY = deltaY / deltaTime;
+        velocityX = Math.abs(deltaX / deltaTime);
+        velocityY = Math.abs(deltaY / deltaTime);
         direction = getDirection(deltaX, deltaY);
         // 存储状态
         _prevVelocityX = velocityX;
