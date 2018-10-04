@@ -9,7 +9,8 @@ export default class SwipeRecognizer {
         if (this.test(computed)) {
             // console.log(computed);
             // swipeleft | swiperight | swipedown | swipeup
-            callback({ type: this.name + computed.direction, ...computed });
+            // console.log(computed.direction);
+            callback({ type: this.name + computed.lastDirection, ...computed });
 
             callback({ type: this.name, ...computed });
         }

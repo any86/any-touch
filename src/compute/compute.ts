@@ -2,7 +2,7 @@
 import { Computed } from '../interface';
 import { getAngle, getVLength, getDirection } from '../vector';
 import { propX, propY } from '../const';
-import intervalCompute from './intervalCompute';
+import computeLast from './computeLast';
 import computeDistance from './computeDistance';
 import computeDeltaXY from './computeDeltaXY';
 
@@ -58,10 +58,10 @@ export default function ({
 
     // 最近25ms内速度
     // console.log(input.status);
-    const intervalComputed = intervalCompute(input);
-    computed.lastVelocityX = intervalComputed.velocityX;
-    computed.lastVelocityY = intervalComputed.velocityY;
-
+    const computedLast = computeLast(input);
+    computed.lastVelocityX = computedLast.velocityX;
+    computed.lastVelocityY = computedLast.velocityY;
+    computed.lastDirection = computedLast.direction;
     // ================== 单点 ==================
     // if (undefined !== prevInput && 2 > prevInput.pointers.length) {
     // console.log('prevInput', prevInput.status);
