@@ -21,7 +21,7 @@ export default class Input {
     public stopPropagation: () => void;
     public preventDefault: () => void;
     public stopImmediatePropagation: () => void;
-    public sourceEvent: any;
+    public nativeEvent: any;
 
     constructor(event: any) {
         let input: Input;
@@ -59,6 +59,6 @@ export default class Input {
         // 原生属性/方法
         const { stopPropagation, preventDefault, stopImmediatePropagation, target, currentTarget } = event;
         // mixin
-        Object.assign(this, input, { pointerLength, centerX, centerY, timestamp, stopPropagation, preventDefault, stopImmediatePropagation, target, currentTarget, sourceEvent: event });
+        Object.assign(this, input, { pointerLength, centerX, centerY, timestamp, stopPropagation, preventDefault, stopImmediatePropagation, target, currentTarget, nativeEvent: event });
     }
 }

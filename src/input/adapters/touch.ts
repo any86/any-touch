@@ -8,6 +8,6 @@ export default (event: TouchEvent): any => {
         nativeEventType,
         changedPointers,
         pointers,
-        sourceEvent: event,
+        nativeEvent: event,
     }
 }
