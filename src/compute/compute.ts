@@ -1,16 +1,20 @@
 
 import { Computed } from '../interface';
-import { getAngle, getVLength, getDirection } from '../vector';
-import { propX, propY } from '../const';
+import {getDirection } from '../vector';
 import computeLast from './computeLast';
 import computeDistance from './computeDistance';
 import computeDeltaXY from './computeDeltaXY';
+import computeVector from './computeVector';
+import computeScale from './computeScale';
+import computeAngle from './computeAngle';
+
 
 let maxLength: number = 0;
 export default function ({
     nativeEventType,
     startInput,
     prevInput,
+    startMutliInput,
     input
 }: any): any {
     // 如果输入为空, 那么就计算了, 鼠标模式下, 点击了非元素部分, mouseup阶段会初选input为undefined
@@ -41,7 +45,10 @@ export default function ({
 
         // 旋转和缩放
         angle: 0,
+        deltaAngle:0,
         scale: 1,
+        deltaScale: 1,
+
         lastVelocityY: undefined,
         lastVelocityX: undefined
     };
@@ -84,23 +91,25 @@ export default function ({
     computed.velocityY = abs(computed.distanceY / computed.duration);
     computed.maxVelocity = max(computed.velocityX, computed.velocityY);
 
-    // ================== 多触点 ==================
+    // 前面有判断, 如果出现了单触点, 那么startMutliInput === undefined;
+    // if (undefined !== startMutliInput) {
     if (undefined !== prevInput && 1 < prevInput.pointers.length && 1 < input.pointers.length) {
-        const v0 = {
-            x: prevInput.pointers[1][propX] - prevInput.pointers[0][propX],
-            y: prevInput.pointers[1][propY] - prevInput.pointers[0][propY]
-        };
+        // 2指形成的向量
+        const startV = computeVector(startMutliInput);
+        const prevV = computeVector(prevInput);
+        const activeV = computeVector(input);
 
-        const v1 = {
-            x: input.pointers[1][propX] - input.pointers[0][propX],
-            y: input.pointers[1][propY] - input.pointers[0][propY]
-        };
+        // 计算缩放
+        const { scale, deltaScale } = computeScale({
+            startV, prevV, activeV
+        });
+        computed.scale = scale;
+        computed.deltaScale = deltaScale;
 
-        // 缩放增量
-        computed.scale = getVLength(v1) / getVLength(v0);
-
-        // 角度增量
-        computed.angle = getAngle(v1, v0);
+        // 计算旋转角度
+        const { angle, deltaAngle } = computeAngle({ startV, prevV, activeV });
+        computed.angle = angle;
+        computed.deltaAngle = deltaAngle;
     }
 
 
