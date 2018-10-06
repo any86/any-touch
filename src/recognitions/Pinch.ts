@@ -1,19 +1,36 @@
-import { Computed, RecognizerCallback } from '../interface';
+import { Computed } from '../interface';
 import Base from './Base';
 export default class PinchRecognizer extends Base {
-    recognize(computed: Computed, callback: RecognizerCallback) {
-        let eventnativeEventType: string;
+    private _prevScale: number;
+    constructor() {
+        super();
+    };
+
+    recognize(computed: Computed, callback: (anyTouchEvent: any) => void) {
         if (this.test(computed)) {
+            // console.log(computed);
             callback({ type: 'pinch', ...computed });
-            // console.log(computed.nativeEventType);
+
             // pinchstart | pinchmove | pinchend
-            eventnativeEventType = this.recognizenativeEventType(computed.nativeEventType);
-            callback({ type: 'pinch' + eventnativeEventType, ...computed });
+            const type = this.recognizeType(computed.nativeEventType);
+            callback({ type: 'pinch' + type, ...computed });
+
+            // pinchin | pinchout
+            const { scale } = computed;
+            if(1 !== scale) {
+                const inOrOut = scale > this._prevScale ? 'out' : 'in';
+                console.log({type,scale});
+                if ('move' === type) {
+                    callback({ type: 'pinch' + inOrOut, ...computed });
+                    this._prevScale = scale;
+                }
+            }
         }
     };
 
-    test({ length }: Computed) {
-        // console.log(length || 0);
-        return 1 < length;
+    test({ length, nativeEventType }: Computed) {
+        // 如果触碰点要大于1
+        // 如果已经识别, 并且当前事件是离开阶段
+        return 1 < length || ('end' === nativeEventType && this.isRecognized);
     };
 };
