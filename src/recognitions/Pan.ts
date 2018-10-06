@@ -27,22 +27,17 @@ export default class PanRecognizer extends Base {
      * @param {RecognizerCallback} 识别后触发钩子 
      */
     recognize(computed: Computed, callback: RecognizerCallback) {
-        let eventnativeEventType: string;
-        // if('end' == computed.nativeEventType) console.log(computed);
-
-        // console.log(computed);
-
+        let type: string;
         if (this.test(computed)) {
             // panleft | panright | pandown | panup
             callback({ type: this.name + computed.direction, ...computed });
 
             // pan
             callback({ type: this.name, ...computed });
-
             // panstart | panmove | panend
-            eventnativeEventType = this.recognizenativeEventType(computed.nativeEventType);
-            callback({ type: this.name + eventnativeEventType, ...computed });
-        }
+            type = this.recognizeType(computed.nativeEventType);
+            callback({ type: this.name + type, ...computed });
+        } 
     };
 
     /**

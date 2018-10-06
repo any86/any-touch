@@ -19,7 +19,6 @@ export default class PinchRecognizer extends Base {
             const { scale } = computed;
             if(1 !== scale) {
                 const inOrOut = scale > this._prevScale ? 'out' : 'in';
-                console.log({type,scale});
                 if ('move' === type) {
                     callback({ type: 'pinch' + inOrOut, ...computed });
                     this._prevScale = scale;

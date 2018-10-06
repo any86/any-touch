@@ -17,6 +17,7 @@
     <style>
         :root {
             --bg: rgb(255, 255, 255);
+            --primary: rgb(189, 174, 116);
         }
 
         * {
@@ -29,7 +30,7 @@
         body {
             width: 100%;
             min-height: 100vh;
-            padding: 15px 15px;
+            padding: 5px 5px 30px 5px;
             overflow-x: hidden;
             background: var(--bg);
         }
@@ -43,10 +44,8 @@
 
         .text {
             margin: 0;
-            padding: 0 10px;
-            text-align: center;
             font-size: 12px;
-            color: rgb(189, 174, 116);
+            color: var(--primary);
         }
 
         .circle {
@@ -56,10 +55,10 @@
             border-radius: 5px;
             background: rgb(0, 0, 0, 0);
             border: 50px solid rgba(189, 174, 116, 0.7);
-            /* box-shadow: 0 0 30px rgba(0, 0, 0, .9); */
             position: absolute;
             left: calc(50vw - 25px);
             top: calc(50vh - 25px);
+            transition: transform 100ms;
         }
 
 
@@ -102,13 +101,33 @@
                 transform: scaleY(1);
             }
         }
+
+        .fixed-bottom {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            background: rgba(255, 255, 255, .7);
+            width: 100%;
+            box-shadow: -1px -2px 3px rgba(0,0,0,0.1);
+        }
+
+        .fixed-bottom>a {
+            display: inline-block;
+            padding:15px;
+            color: var(--primary);
+            border-right: 1px solid rgba(189, 174, 116, 0.3);
+            text-decoration: none;
+        }
     </style>
 </head>
 
 <body>
     <main id="app">
-        <a href="?debug">debug on</a>
-        <a href="?">debug off</a>
+        <section class="fixed-bottom">
+            <a href="?debug">vconsole</a>
+            <a href="?">vconsole off</a>
+        </section>
+
 
         <div class="circle" ref="circle" @animationend="animationend" :class="{
             tap: 'tap' === message.type,
@@ -118,14 +137,14 @@
             transform: `scale(${scale}) translate(${x/scale}px, ${y/scale}px) rotate(${angle}deg)`,
             transformOrigin: `${centerX}px//// ${centerY}px`
         }"></div>
-        <p class="text">scale: {{scale}}</p>
-        <p class="text">angle: {{angle}}</p>
-        <p v-for="(item, key) in message" class="text">{{key}} : {{item}}</p>
+        <!-- <p class="text">scale: {{scale}}</p>
+        <p class="text">angle: {{angle}}</p> -->
+        <p v-if="message.type" v-for="(item, key) in message" class="text">{{key}} : {{item}}</p>
     </main>
 
     <script>
-        // const log = console.log;
-        const log = () => { };
+        const log = console.log;
+        // const log = () => { };
 
         new Vue({
             el: '#app',
@@ -145,6 +164,16 @@
             mounted() {
                 const anyTouch = new AnyTouch(this.$refs.circle);
 
+                /**
+                 * =========================== pan ===========================
+                 */
+                ['panstart', 'panmove', 'panend'].forEach(name => {
+                    anyTouch.on(name, e => {
+                        this.message = e;
+                        log(e.type);
+                    })
+                });
+
                 anyTouch.on('pan', e => {
                     log(`%c ${e.type} `, 'background-color:#69c;color:#fff;');
                     this.message = e;
@@ -152,23 +181,22 @@
                     this.y += e.deltaY;
                 });
 
-                anyTouch.on('panstart', e => {
-                    log(`%c ${e.type} `, 'background-color:#63f;color:#333;');
-                });
-
-                anyTouch.on('panmove', e => {
-                    log(`%c ${e.type} `, 'background-color:#66f;color:#fff;');
-                });
-
-                anyTouch.on('panend', e => {
-                    log(`%c ${e.type} `, 'background-color:#68f;color:#fff;');
-                });
-
+                /**
+                 * =========================== press ===========================
+                 */
                 anyTouch.on('press', e => {
-                    log('press');
+                    log(`%c ${e.type} `, 'background-color:#fa0;color:#fff;');
                     this.message = e;
                 });
 
+                anyTouch.on('pressup', e => {
+                    log(`%c ${e.type} `, 'background-color:#f70;color:#fff;');
+                    this.message = e;
+                });
+
+                /**
+                 * =========================== tap ===========================
+                 */
                 anyTouch.on('tap', e => {
                     log(`%c ${e.type} `, 'background-color:#f10;color:#fff;');
                     this.message = e;
@@ -179,80 +207,73 @@
                     this.message = e;
                 });
 
-                anyTouch.on('pinchstart', e => {
-                    log(`%c ${e.type} `, 'background-color:#f90;color:#fff;');
-                });
-
-
-                anyTouch.on('pinchmove', e => {
-                    log(`%c ${e.type} `, 'background-color:#f90;color:#fff;');
-                });
-
-                anyTouch.on('pinchend', e => {
-                    log(`%c ${e.type} `, 'background-color:#f90;color:#fff;');
-                });
-
-                anyTouch.on('pinchin', e => {
-                    log(`%c ${e.type} `, 'background-color:#f90;color:#fff;');
-                });
-
-                anyTouch.on('pinchout', e => {
-                    log(`%c ${e.type} `, 'background-color:#f90;color:#fff;');
+                /**
+                 * =========================== pinch ===========================
+                 */
+                ['pinchstart', 'pinchmove', 'pinchend', 'pinchin', 'pinchout'].forEach(name => {
+                    anyTouch.on(name, e => {
+                        this.message = e;
+                        log(e.type);
+                    })
                 });
 
                 anyTouch.on('pinch', e => {
                     this.message = e;
                     this.scale *= e.deltaScale;
-                    // this.scale = e.scale;
                     this.centerX = e.centerX;
                     this.centerY = e.centerY;
                     log(`%c ${e.type} `, 'background-color:#f90;color:#fff;');
                 });
 
+                /**
+                 * =========================== rotate ===========================
+                 */
+                ['rotatestart', 'rotatemove', 'rotateend'].forEach(name => {
+                    anyTouch.on(name, e => {
+                        log(e.type);
+                        this.message = e;
+                    })
+                });
+
                 anyTouch.on('rotate', e => {
-                    // this.message = e;
+                    this.message = e;
                     this.angle += e.deltaAngle;
                     this.centerX = e.centerX;
                     this.centerY = e.centerY;
                 });
 
+                /**
+                 * =========================== swipe ===========================
+                 */
+                ['swipeup', 'swipeleft', 'swiperight', 'swipedown'].forEach(name => {
+                    anyTouch.on(name, e => {
+                        log(e.type);
+                        switch (name) {
+                            case 'swipeup': {
+                                this.y = this.y - 200;
+                                break;
+                            };
 
-                anyTouch.on('rotatestart', e => {
-                    console.warn('rotatestart')
-                })
+                            case 'swipedown': {
+                                this.y = this.y + 200;
+                                break;
+                            };
+                            case 'swipeleft': {
+                                this.x = this.x - 200;
+                                break;
+                            };
 
+                            case 'swiperight': {
+                                this.x = this.x + 200;
+                                break;
+                            };
+                        };
 
-                anyTouch.on('rotatemove', e => {
-                    console.warn('rotatemove')
-                })
-
-
-                anyTouch.on('rotateend', e => {
-                    console.warn('rotateend')
-                })
-
+                        this.message = e;
+                    })
+                });
 
                 anyTouch.on('swipe', e => {
-                    log(`%c ${e.type} `, 'background-color:#444;color:#fff;');
-                    this.message = e;
-                });
-
-                anyTouch.on('swipeup', e => {
-                    log(`%c ${e.type} `, 'background-color:#444;color:#fff;');
-                    this.message = e;
-                });
-
-                anyTouch.on('swipeleft', e => {
-                    log(`%c ${e.type} `, 'background-color:#444;color:#fff;');
-                    this.message = e;
-                });
-
-                anyTouch.on('swiperight', e => {
-                    log(`%c ${e.type} `, 'background-color:#444;color:#fff;');
-                    this.message = e;
-                });
-
-                anyTouch.on('swipedown', e => {
                     log(`%c ${e.type} `, 'background-color:#444;color:#fff;');
                     this.message = e;
                 });

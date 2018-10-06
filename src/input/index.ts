@@ -13,6 +13,7 @@ export default class Input {
     // start | move | end | cancel
     public nativeEventType: nativeEventType;
     public pointers: any[] = [];
+    public pointerLength: number;
     public timestamp: number;
     public target: EventTarget;
     public currentTarget: EventTarget;
