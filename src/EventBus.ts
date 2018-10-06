@@ -26,6 +26,16 @@ export default class EventBus {
             callbacks.forEach(callback => {
                 callback(payload);
             });
+            // setTimeout(()=>{
+            const event = new CustomEvent(eventName, {
+                detail: payload,
+                bubbles: true
+            });
+
+            
+            document.getElementById('circle').dispatchEvent(event);
+            // }, 0);
+
         }
     };
 
@@ -57,7 +67,7 @@ export default class EventBus {
      * @param {String} 事件名
      * @return {Boolean} 是否存在
      */
-    has(eventName:string):boolean{
+    has(eventName: string): boolean {
         return undefined !== this.stack[eventName];
     }
 };

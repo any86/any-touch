@@ -123,13 +123,13 @@
 
 <body>
     <main id="app">
-        <section class="fixed-bottom">
+        <section @tap="tap" class="fixed-bottom">
             <a href="?debug">vconsole</a>
             <a href="?">vconsole off</a>
         </section>
 
 
-        <div class="circle" ref="circle" @animationend="animationend" :class="{
+        <div class="circle" id="circle" ref="circle" @animationend="animationend" :class="{
             tap: 'tap' === message.type,
             doubletap: 'doubletap' === message.type,
         }"
@@ -162,6 +162,10 @@
             },
 
             mounted() {
+                this.$refs.circle.addEventListener('tap', e=>{
+                    console.log(e);
+                });
+
                 const anyTouch = new AnyTouch(this.$refs.circle);
 
                 /**
@@ -282,6 +286,10 @@
             methods: {
                 animationend() {
                     // this.message = {};
+                },
+
+                tap(){
+                    alert('tap')
                 }
             }
         });
