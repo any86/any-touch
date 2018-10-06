@@ -54,8 +54,8 @@
             width: 30px;
             height: 30px;
             border-radius: 5px;
-            background: rgb(0, 0, 0 ,0);
-            border: 50px solid rgba(189, 174, 116,0.7);
+            background: rgb(0, 0, 0, 0);
+            border: 50px solid rgba(189, 174, 116, 0.7);
             /* box-shadow: 0 0 30px rgba(0, 0, 0, .9); */
             position: absolute;
             left: calc(50vw - 25px);
@@ -113,7 +113,8 @@
         <div class="circle" ref="circle" @animationend="animationend" :class="{
             tap: 'tap' === message.type,
             doubletap: 'doubletap' === message.type,
-        }" :style="{
+        }"
+            :style="{
             transform: `scale(${scale}) translate(${x/scale}px, ${y/scale}px) rotate(${angle}deg)`,
             transformOrigin: `${centerX}px//// ${centerY}px`
         }"></div>
@@ -123,8 +124,8 @@
     </main>
 
     <script>
-        const log = console.log;
-        // const log = ()=>{};
+        // const log = console.log;
+        const log = () => { };
 
         new Vue({
             el: '#app',
@@ -150,7 +151,7 @@
                     this.x += e.deltaX;
                     this.y += e.deltaY;
                 });
-                
+
                 anyTouch.on('panstart', e => {
                     log(`%c ${e.type} `, 'background-color:#63f;color:#333;');
                 });
@@ -164,7 +165,7 @@
                 });
 
                 anyTouch.on('press', e => {
-                    console.warn('press');
+                    log('press');
                     this.message = e;
                 });
 
@@ -179,22 +180,57 @@
                 });
 
                 anyTouch.on('pinchstart', e => {
-                    // console.warn('pinchstart');
+                    log(`%c ${e.type} `, 'background-color:#f90;color:#fff;');
                 });
+
+
+                anyTouch.on('pinchmove', e => {
+                    log(`%c ${e.type} `, 'background-color:#f90;color:#fff;');
+                });
+
+                anyTouch.on('pinchend', e => {
+                    log(`%c ${e.type} `, 'background-color:#f90;color:#fff;');
+                });
+
+                anyTouch.on('pinchin', e => {
+                    log(`%c ${e.type} `, 'background-color:#f90;color:#fff;');
+                });
+
+                anyTouch.on('pinchout', e => {
+                    log(`%c ${e.type} `, 'background-color:#f90;color:#fff;');
+                });
+
                 anyTouch.on('pinch', e => {
                     this.message = e;
-                    this.scale *= e.scale;
+                    this.scale *= e.deltaScale;
+                    // this.scale = e.scale;
                     this.centerX = e.centerX;
                     this.centerY = e.centerY;
+                    log(`%c ${e.type} `, 'background-color:#f90;color:#fff;');
                 });
 
                 anyTouch.on('rotate', e => {
                     // this.message = e;
-                    this.angle += e.angle;
+                    this.angle += e.deltaAngle;
                     this.centerX = e.centerX;
                     this.centerY = e.centerY;
-
                 });
+
+
+                anyTouch.on('rotatestart', e => {
+                    console.warn('rotatestart')
+                })
+
+
+                anyTouch.on('rotatemove', e => {
+                    console.warn('rotatemove')
+                })
+
+
+                anyTouch.on('rotateend', e => {
+                    console.warn('rotateend')
+                })
+
 
                 anyTouch.on('swipe', e => {
                     log(`%c ${e.type} `, 'background-color:#444;color:#fff;');
