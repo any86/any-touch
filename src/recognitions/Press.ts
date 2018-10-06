@@ -22,6 +22,8 @@ export default class PressRecognizer {
             } else if ('end' === nativeEventType) {
                 if (251 > duration || 9 < distance) {
                     this.cancel();
+                } else {
+                    callback({ type: 'pressup', ...computed });
                 }
             }
         }
