@@ -58,8 +58,18 @@ export default class Input {
         // 当前时间
         const timestamp = Date.now();
         // 原生属性/方法
-        const { stopPropagation, preventDefault, stopImmediatePropagation, target, currentTarget } = event;
+        const { target, currentTarget } = event;
         // mixin
-        Object.assign(this, input, { pointerLength, centerX, centerY, timestamp, stopPropagation, preventDefault, stopImmediatePropagation, target, currentTarget, nativeEvent: event });
+        Object.assign(this, input, {
+            pointerLength, centerX, centerY, timestamp,
+            stopPropagation: () => {
+                event.stopPropagation();
+            },
+            preventDefault: () => {
+                event.preventDefault();
+            }, stopImmediatePropagation: () => {
+                event.stopImmediatePropagation();
+            }, target, currentTarget, nativeEvent: event
+        });
     }
 }
