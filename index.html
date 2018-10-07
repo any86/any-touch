@@ -108,12 +108,12 @@
             left: 0;
             background: rgba(255, 255, 255, .7);
             width: 100%;
-            box-shadow: -1px -2px 3px rgba(0,0,0,0.1);
+            box-shadow: -1px -2px 3px rgba(0, 0, 0, 0.1);
         }
 
         .fixed-bottom>a {
             display: inline-block;
-            padding:15px;
+            padding: 15px;
             color: var(--primary);
             border-right: 1px solid rgba(189, 174, 116, 0.3);
             text-decoration: none;
@@ -129,11 +129,10 @@
         </section>
 
 
-        <div class="circle" ref="circle" @animationend="animationend" :class="{
+        <div @tap="tap" class="circle" id="circle" ref="circle" @animationend="animationend" :class="{
             tap: 'tap' === message.type,
             doubletap: 'doubletap' === message.type,
-        }"
-            :style="{
+        }" :style="{
             transform: `scale(${scale}) translate(${x/scale}px, ${y/scale}px) rotate(${angle}deg)`,
             transformOrigin: `${centerX}px//// ${centerY}px`
         }"></div>
@@ -162,6 +161,24 @@
             },
 
             mounted() {
+                const event = new CustomEvent('ubox', {
+                    detail: {
+                        a: 123
+                    },
+                    bubbles: true
+                });
+
+                
+
+
+                // this.$refs.circle.addEventListener('ubox', e => {
+                //     console.log(e);
+                // });
+
+
+document.getElementById('circle').dispatchEvent(event);
+
+
                 const anyTouch = new AnyTouch(this.$refs.circle);
 
                 /**
@@ -249,24 +266,28 @@
                     anyTouch.on(name, e => {
                         log(e.type);
                         switch (name) {
-                            case 'swipeup': {
-                                this.y = this.y - 200;
-                                break;
-                            };
+                            case 'swipeup':
+                                {
+                                    this.y = this.y - 200;
+                                    break;
+                                };
 
-                            case 'swipedown': {
-                                this.y = this.y + 200;
-                                break;
-                            };
-                            case 'swipeleft': {
-                                this.x = this.x - 200;
-                                break;
-                            };
+                            case 'swipedown':
+                                {
+                                    this.y = this.y + 200;
+                                    break;
+                                };
+                            case 'swipeleft':
+                                {
+                                    this.x = this.x - 200;
+                                    break;
+                                };
 
-                            case 'swiperight': {
-                                this.x = this.x + 200;
-                                break;
-                            };
+                            case 'swiperight':
+                                {
+                                    this.x = this.x + 200;
+                                    break;
+                                };
                         };
 
                         this.message = e;
@@ -282,6 +303,10 @@
             methods: {
                 animationend() {
                     // this.message = {};
+                },
+
+                tap() {
+                    alert('tap')
                 }
             }
         });

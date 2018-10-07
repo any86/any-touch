@@ -31,6 +31,13 @@ import PanRecognizer from './recognitions/Pan';
 import SwipeRecognizer from './recognitions/Swipe';
 import PinchRecognizer from './recognitions/Pinch';
 import RotateRecognizer from './recognitions/Rotate';
+
+// create and dispatch the event
+
+
+
+
+
 export default class AnyTouch {
     static TapRecognizer = TapRecognizer;
     static PressRecognizer = PressRecognizer;
@@ -63,7 +70,7 @@ export default class AnyTouch {
         hasDoubleTap = true
     } = {}) {
         this.$el = el;
-        this.eventBus = new EventBus();
+        this.eventBus = new EventBus(el);
         this.recognizers = [
             new TapRecognizer({ hasDoubleTap }),
             new PressRecognizer(),
@@ -98,7 +105,7 @@ export default class AnyTouch {
     };
 
     handler(event: TouchEvent) {
-        event.preventDefault();
+        // event.preventDefault();
         // computed为包含了计算值的input
         const computed = compute(event);
         // console.log(computed);

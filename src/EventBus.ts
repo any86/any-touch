@@ -9,10 +9,21 @@ interface Stack {
 };
 
 export default class EventBus {
-    private stack: Stack;
+    private _stack: Stack;
+    public targetElement: Element | Document;
 
-    constructor() {
-        this.stack = <Stack>{};
+    constructor(targetElement: Element | Document = document) {
+        this._stack = <Stack>{};
+        this.targetElement = targetElement;
+    };
+
+    /**
+     * 选取绑定事件的元素
+     * @param 绑定事件的元素 
+     */
+    el(targetElement: Element | Document = document) {
+        this.targetElement = targetElement;
+        return this;
     };
 
     /**
@@ -21,11 +32,19 @@ export default class EventBus {
      * @param {Object} 参数
      */
     emit(eventName: string, payload: object): void {
-        if (undefined !== this.stack[eventName]) {
-            const callbacks = this.stack[eventName];
+        if (undefined !== this._stack[eventName]) {
+            const callbacks = this._stack[eventName];
             callbacks.forEach(callback => {
                 callback(payload);
             });
+
+            // 创建浏览器事件
+            const event = new CustomEvent(eventName, {
+                detail: payload,
+                bubbles: true,
+                cancelable: true
+            });
+            this.targetElement.dispatchEvent(event);
         }
     };
 
@@ -35,14 +54,14 @@ export default class EventBus {
      * @param {Function} 回调函数
      */
     on(eventName: string, callback: never) {
-        if (undefined === this.stack[eventName]) {
-            this.stack[eventName] = [] as Callback[];
+        if (undefined === this._stack[eventName]) {
+            this._stack[eventName] = [] as Callback[];
         };
-        this.stack[eventName].push(callback);
+        this._stack[eventName].push(callback);
     };
 
     off(eventName: string, callback: never) {
-        let events = this.stack[eventName];
+        let events = this._stack[eventName];
         for (let i = 0, len = events.length; i < len; i++) {
             let existCallback = events[i];
             if (existCallback === callback) {
@@ -57,7 +76,7 @@ export default class EventBus {
      * @param {String} 事件名
      * @return {Boolean} 是否存在
      */
-    has(eventName:string):boolean{
-        return undefined !== this.stack[eventName];
+    has(eventName: string): boolean {
+        return undefined !== this._stack[eventName];
     }
 };
