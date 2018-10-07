@@ -105,7 +105,7 @@ export default class AnyTouch {
     };
 
     handler(event: TouchEvent) {
-        // event.preventDefault();
+        event.preventDefault();
         // computed为包含了计算值的input
         const computed = compute(event);
         // console.log(computed);
