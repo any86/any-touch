@@ -123,7 +123,7 @@
 
 <body>
     <main id="app">
-        <section class="fixed-bottom">
+        <section @tap="tap" class="fixed-bottom">
             <a href="?debug">vconsole</a>
             <a href="?">vconsole off</a>
         </section>
@@ -161,23 +161,9 @@
             },
 
             mounted() {
-                const event = new CustomEvent('ubox', {
-                    detail: {
-                        a: 123
-                    },
-                    bubbles: true
+                this.$refs.circle.addEventListener('tap', e=>{
+                    console.log(e);
                 });
-
-                
-
-
-                // this.$refs.circle.addEventListener('ubox', e => {
-                //     console.log(e);
-                // });
-
-
-document.getElementById('circle').dispatchEvent(event);
-
 
                 const anyTouch = new AnyTouch(this.$refs.circle);
 
