@@ -7,4 +7,8 @@
 支持tap/doubletap/pan/swipe/pinch/rotate.
 
 ### 待完成
-识别前数据变形(transform) / 自定义识别器(recgnize) / 手势识别顺序(order) / 手势互斥(stop)
+1. 销毁(destory)
+2. 手势识别顺序(order)
+3. 手势互斥(stop)
+4. 识别input数据变形(transform)
+5. 自定义识别器(recgnize)
