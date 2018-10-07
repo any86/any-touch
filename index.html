@@ -49,6 +49,7 @@
         }
 
         .circle {
+            touch-action: none;
             box-sizing: content-box;
             width: 30px;
             height: 30px;
@@ -58,7 +59,6 @@
             position: absolute;
             left: calc(50vw - 25px);
             top: calc(50vh - 25px);
-            transition: transform 100ms;
         }
 
 
@@ -142,8 +142,8 @@
     </main>
 
     <script>
-        const log = console.log;
-        // const log = () => { };
+        let log = console.log;
+        // log = () => { };
 
         new Vue({
             el: '#app',
@@ -178,6 +178,8 @@
                 });
 
                 anyTouch.on('pan', e => {
+                    e.preventDefault();
+                    
                     log(`%c ${e.type} `, 'background-color:#69c;color:#fff;');
                     this.message = e;
                     this.x += e.deltaX;

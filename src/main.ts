@@ -96,16 +96,12 @@ export default class AnyTouch {
         }
     }
 
-    setConfig({
-        isPreventDefault = false,
-        isStopPropagation = false
+    set({
     } = {}) {
-        this.isPreventDefault = isPreventDefault;
-        this.isStopPropagation = isStopPropagation;
     };
 
     handler(event: TouchEvent) {
-        event.preventDefault();
+        
         // computed为包含了计算值的input
         const computed = compute(event);
         // console.log(computed);
@@ -119,8 +115,22 @@ export default class AnyTouch {
         }
     };
 
-    on(eventName: string, callback: EventHandler, preset: object): void {
+    /**
+         * 注册事件
+         * @param {String} 事件名
+         * @param {Function} 回调函数
+         */
+    on(eventName: string, callback: EventHandler): void {
         this.eventBus.on(eventName, callback);
+    };
+
+    /**
+     * 解绑事件
+     * @param {String} 事件名 
+     * @param {Function} 事件回调
+     */
+    off(eventName: string, callback: EventHandler): void {
+        this.eventBus.off(eventName, callback);
     };
 
     headUpperCase(str: string) {

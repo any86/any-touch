@@ -1,11 +1,11 @@
 // 事件的回调
-interface Callback {
+interface EventHandler {
     (payload: object): void;
 };
 
 // 事件堆栈
 interface Stack {
-    [propsName: string]: Callback[];
+    [propsName: string]: EventHandler[];
 };
 
 export default class EventBus {
@@ -53,20 +53,29 @@ export default class EventBus {
      * @param {String} 事件名
      * @param {Function} 回调函数
      */
-    on(eventName: string, callback: never) {
+    on(eventName: string, callback: EventHandler) {
         if (undefined === this._stack[eventName]) {
-            this._stack[eventName] = [] as Callback[];
+            this._stack[eventName] = [] as EventHandler[];
         };
         this._stack[eventName].push(callback);
     };
 
-    off(eventName: string, callback: never) {
+    /**
+     * 解绑事件
+     * @param {String} 事件名 
+     * @param {Function} 事件回调
+     */
+    off(eventName: string, callback: EventHandler) {
         let events = this._stack[eventName];
-        for (let i = 0, len = events.length; i < len; i++) {
-            let existCallback = events[i];
-            if (existCallback === callback) {
-                events.splice(i, 1);
-                break;
+        if (undefined === callback) {
+            events = [];
+        } else {
+            for (let i = 0, len = events.length; i < len; i++) {
+                let existCallback = events[i];
+                if (existCallback === callback) {
+                    events.splice(i, 1);
+                    break;
+                }
             }
         }
     };
