@@ -87,8 +87,8 @@ export default function ({
     }
 
     // 速率
-    computed.velocityX = abs(computed.distanceX / computed.duration);
-    computed.velocityY = abs(computed.distanceY / computed.duration);
+    computed.velocityX = abs(computed.distanceX / computed.duration) || 0;
+    computed.velocityY = abs(computed.distanceY / computed.duration) || 0;
     computed.maxVelocity = max(computed.velocityX, computed.velocityY);
 
     // 前面有判断, 如果出现了单触点, 那么startMutliInput === undefined;
