@@ -1,7 +1,21 @@
 export type nativeEventType = 'start' | 'move' | 'end' | 'cancel';
 
-import Input from './input/index';
-export interface AnyInput extends Input {}
+export interface AnyInput {
+    nativeEventType: nativeEventType;
+    nativeEvent: any;
+    pointers: { clientX: number, clientY: number }[];
+    pointerLength: number;
+    changedPointers: { clientX: number, clientY: number }[];
+    changedPointerLength: number;
+    timestamp: number;
+    target: EventTarget;
+    currentTarget: EventTarget;
+    centerX: number;
+    centerY: number;
+    stopPropagation: () => void;
+    preventDefault: () => void;
+    stopImmediatePropagation: () => void;
+}
 // input的计算结果
 export interface Computed {
     nativeEventType: nativeEventType; //start | move | end | cancel
