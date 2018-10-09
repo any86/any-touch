@@ -1,5 +1,5 @@
 import { Computed, AnyInput } from '../interface';
-import Input from '../input/index';
+import createInput from '../input/create';
 import compute from './compute';
 // 起点(单点|多点)
 let startInput: AnyInput;
@@ -10,8 +10,12 @@ let activeInput: AnyInput;
 // 多点触碰的起点
 let startMutliInput: AnyInput;
 export default function (event: any): Computed {
-    // 格式化设备输入数据
-    const input = new Input(event);
+    // 格式化不同设备输入数据
+    const input = createInput(event);
+    
+    // 无效的输入    
+    if (undefined === input) return;
+    
     // 当前输入状态
     const { nativeEventType } = input;
     // [Start]
@@ -21,7 +25,7 @@ export default function (event: any): Computed {
         // 当前点
         activeInput = input;
         // 起点(单点|多点)
-        startInput = new Input(event);
+        startInput = createInput(event);
         // 起点(多点)
         if (1 < input.pointerLength) {
             startMutliInput = input;
