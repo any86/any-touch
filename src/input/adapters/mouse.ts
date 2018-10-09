@@ -3,9 +3,8 @@ let isPressed = false;
 export default (event: MouseEvent): any => {
     const { clientX, clientY, type } = event;
     const changedPointers = prevPointers;
-    let pointers = prevPointers = [{ clientX, clientY }];
-    let length = 1;
-
+    let pointers = [{ clientX, clientY }];
+    prevPointers = [{ clientX, clientY }];
     if ('mousedown' === type) {
         isPressed = true;
     } else if ('mousemove' === type) {
@@ -13,7 +12,6 @@ export default (event: MouseEvent): any => {
     } else if ('mouseup' === type) {
         if (isPressed) {
             pointers = [];
-            length = 0;
         } else {
             return;
         };
