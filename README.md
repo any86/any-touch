@@ -4,7 +4,7 @@
 开发中...
 
 ### 已完成
-[x] 支持tap/doubletap/pan/swipe/pinch/rotate.
+. [x] 支持tap/doubletap/pan/swipe/pinch/rotate.
 
 ### 待完成
 1. 销毁(destory)
