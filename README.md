@@ -13,3 +13,4 @@
 4. [ ] 识别input数据变形(transform)
 5. [ ] 自定义识别器(recgnize)
 6. [ ] 停止继续识别(stop)
+7. [ ] 自定义任意触点,让鼠标支持rotate和pinch
