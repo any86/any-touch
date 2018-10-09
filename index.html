@@ -139,7 +139,7 @@
         }"></div>
         <!-- <p class="text">scale: {{scale}}</p>
         <p class="text">angle: {{angle}}</p> -->
-        <!-- <p v-if="message.type" v-for="(item, key) in message" class="text">{{key}} : {{item}}</p> -->
+        <p v-if="message.type" v-for="(item, key) in message" class="text">{{key}} : {{item}}</p>
     </main>
 
     <script>
@@ -220,6 +220,7 @@
                 });
 
                 anyTouch.on('pinch', e => {
+                    e.preventDefault();
                     this.message = e;
                     this.scale *= e.deltaScale;
                     this.centerX = e.centerX;
@@ -238,6 +239,7 @@
                 });
 
                 anyTouch.on('rotate', e => {
+                    e.preventDefault();
                     this.message = e;
                     this.angle += e.deltaAngle;
                     this.centerX = e.centerX;
@@ -250,30 +252,30 @@
                 ['swipeup', 'swipeleft', 'swiperight', 'swipedown'].forEach(name => {
                     anyTouch.on(name, e => {
                         log(e.type);
-                        switch (name) {
-                            case 'swipeup':
-                                {
-                                    this.y = this.y - 200;
-                                    break;
-                                };
+                        // switch (name) {
+                        //     case 'swipeup':
+                        //         {
+                        //             this.y = this.y - 200;
+                        //             break;
+                        //         };
 
-                            case 'swipedown':
-                                {
-                                    this.y = this.y + 200;
-                                    break;
-                                };
-                            case 'swipeleft':
-                                {
-                                    this.x = this.x - 200;
-                                    break;
-                                };
+                        //     case 'swipedown':
+                        //         {
+                        //             this.y = this.y + 200;
+                        //             break;
+                        //         };
+                        //     case 'swipeleft':
+                        //         {
+                        //             this.x = this.x - 200;
+                        //             break;
+                        //         };
 
-                            case 'swiperight':
-                                {
-                                    this.x = this.x + 200;
-                                    break;
-                                };
-                        };
+                        //     case 'swiperight':
+                        //         {
+                        //             this.x = this.x + 200;
+                        //             break;
+                        //         };
+                        // };
 
                         this.message = e;
                     })
@@ -291,7 +293,7 @@
                 },
 
                 tap() {
-                    alert('tap')
+                    log('native tap')
                 }
             }
         });

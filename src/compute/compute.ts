@@ -93,6 +93,7 @@ export default function ({
     // 前面有判断, 如果出现了单触点, 那么startMutliInput === undefined;
     // if (undefined !== startMutliInput) {
     if (undefined !== prevInput && 1 < prevInput.pointers.length && 1 < input.pointers.length) {
+    // if(undefined !== startMutliInput){
         // 2指形成的向量
         const startV = computeVector(startMutliInput);
         const prevV = computeVector(prevInput);
