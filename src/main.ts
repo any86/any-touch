@@ -17,13 +17,9 @@
  * 格式化Event成统一的pointer格式 => 通过pointer数据计算 => 用计算结果去识别手势
  */
 
-
 import { EventHandler } from './interface';
 import { SUPPORT_ONLY_TOUCH } from './const';
 import EventBus from './EventBus';
-import {
-    getVLength,
-} from './vector'
 import compute from './compute/index';
 import TapRecognizer from './recognitions/Tap';
 import PressRecognizer from './recognitions/Press';
@@ -31,12 +27,6 @@ import PanRecognizer from './recognitions/Pan';
 import SwipeRecognizer from './recognitions/Swipe';
 import PinchRecognizer from './recognitions/Pinch';
 import RotateRecognizer from './recognitions/Rotate';
-
-// create and dispatch the event
-
-
-
-
 
 export default class AnyTouch {
     static TapRecognizer = TapRecognizer;
@@ -48,10 +38,6 @@ export default class AnyTouch {
 
     // 目标元素
     $el: Element;
-    // 是否阻止默认事件
-    isPreventDefault: Boolean;
-    // 是否阻止冒泡
-    isStopPropagation: Boolean;
 
     // 各个手势对应的handle集合
     eventBus: any;
@@ -65,14 +51,11 @@ export default class AnyTouch {
      * @param {Object} param1
      */
     constructor(el: Element, {
-        isPreventDefault = false,
-        isStopPropagation = false,
-        hasDoubleTap = true
     } = {}) {
         this.$el = el;
         this.eventBus = new EventBus(el);
         this.recognizers = [
-            new TapRecognizer({ hasDoubleTap }),
+            new TapRecognizer({ hasDoubleTap: true }),
             new PressRecognizer(),
             new PanRecognizer(),
             new SwipeRecognizer(),
@@ -101,7 +84,6 @@ export default class AnyTouch {
     };
 
     handler(event: TouchEvent) {
-        
         // computed为包含了计算值的input
         const computed = compute(event);
         // console.log(computed);

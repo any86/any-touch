@@ -66,7 +66,6 @@ export default function ({
 
     // 已消耗时间
     computed.duration = input.timestamp - startInput.timestamp;
-
     // 最近25ms内计算数据
     const lastComputed = computeLast(input);
     computed.lastVelocityX = lastComputed.velocityX;

@@ -132,18 +132,19 @@
         <div @tap="tap" class="circle" id="circle" ref="circle" @animationend="animationend" :class="{
             tap: 'tap' === message.type,
             doubletap: 'doubletap' === message.type,
-        }" :style="{
+        }"
+            :style="{
             transform: `scale(${scale}) translate(${x/scale}px, ${y/scale}px) rotate(${angle}deg)`,
             transformOrigin: `${centerX}px//// ${centerY}px`
         }"></div>
         <!-- <p class="text">scale: {{scale}}</p>
         <p class="text">angle: {{angle}}</p> -->
-        <p v-if="message.type" v-for="(item, key) in message" class="text">{{key}} : {{item}}</p>
+        <!-- <p v-if="message.type" v-for="(item, key) in message" class="text">{{key}} : {{item}}</p> -->
     </main>
 
     <script>
         let log = console.log;
-        // log = () => { };
+        log = () => { };
 
         new Vue({
             el: '#app',
@@ -161,10 +162,6 @@
             },
 
             mounted() {
-                this.$refs.circle.addEventListener('tap', e=>{
-                    console.log(e);
-                });
-
                 const anyTouch = new AnyTouch(this.$refs.circle);
 
                 /**
@@ -179,7 +176,7 @@
 
                 anyTouch.on('pan', e => {
                     e.preventDefault();
-                    
+
                     log(`%c ${e.type} `, 'background-color:#69c;color:#fff;');
                     this.message = e;
                     this.x += e.deltaX;
