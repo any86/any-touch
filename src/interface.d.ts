@@ -33,8 +33,6 @@ export interface Computed {
     centerY: number;
     deltaX: number;
     deltaY: number;
-    absDeltaX: number;
-    absDeltaY: number;
     displacementX: number;
     displacementY: number;
     distanceX: number;
