@@ -5,6 +5,7 @@ export default (event: TouchEvent): any => {
     // const pointers = event.targetTouches;
     const pointers = event.touches;
     const changedPointers = event.changedTouches;
+
     return {
         nativeEventType,
         changedPointers,

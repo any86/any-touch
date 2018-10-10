@@ -16,7 +16,6 @@
  * ==================== 流程 ====================
  * 格式化Event成统一的pointer格式 => 通过pointer数据计算 => 用计算结果去识别手势
  */
-
 import { EventHandler, Computed } from './interface';
 import { SUPPORT_ONLY_TOUCH } from './const';
 import EventBus from './EventBus';
@@ -46,12 +45,15 @@ export default class AnyTouch {
 
     unbinders: any[];
 
+    version:string;
+
     /**
      * @param {Element} el
      * @param {Object} param1
      */
     constructor(el: Element, {
     } = {}) {
+        this.version = '0.0.2';
         this.$el = el;
         this.eventBus = new EventBus(el);
         this.recognizers = [

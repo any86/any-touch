@@ -1,6 +1,6 @@
 {
   "name": "any-touch",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "一个纯粹的手势库",
   "main": "dist/any-touch.js",
   "scripts": {

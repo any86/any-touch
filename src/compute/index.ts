@@ -12,7 +12,7 @@ let startMutliInput: Input;
 export default function (event: TouchEvent | MouseEvent): Computed {
     // 格式化不同设备输入数据
     const input = createInput(event);
-    
+
     // 无效的输入    
     if (undefined === input) return;
     
