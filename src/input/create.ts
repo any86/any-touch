@@ -6,7 +6,7 @@ import { SUPPORT_ONLY_TOUCH } from '../const';
 import { getCenter } from '../vector';
 import touchAdapter from './adapters/touch'
 import mouseAdapter from './adapters/mouse';
-
+let centerX: number, centerY: number;
 export default (event: TouchEvent | MouseEvent): Input => {
     let input: any = {};
     // Touch
@@ -28,7 +28,6 @@ export default (event: TouchEvent | MouseEvent): Input => {
     const changedPointerLength: number = input.changedPointers.length;
 
     // 中心坐标
-    let centerX: number, centerY: number;
     if (0 < pointerLength) {
         const { x, y } = getCenter(input.pointers);
         centerX = x;
@@ -40,12 +39,12 @@ export default (event: TouchEvent | MouseEvent): Input => {
 
     // 原生属性/方法
     const { target, currentTarget } = event;
-
+    
     // 阻止冒泡
     const stopPropagation = () => {
         event.stopPropagation();
     };
-
+    
     // 阻止默认默认事件
     const preventDefault = () => {
         event.preventDefault();
