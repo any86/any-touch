@@ -161,11 +161,10 @@
             },
             mounted() {
                 const anyTouch = new AnyTouch(this.$refs.circle);
-    setTimeout(()=>{
-        // anyTouch.destroy();
-    }, 1000);
-
-
+                // setTimeout(() => {
+                //     // anyTouch.destroy();
+                // }, 1000);
+this.testPan();
                 /**
                  * =========================== pan ===========================
                  */
@@ -290,6 +289,43 @@
             },
 
             methods: {
+                testPan() {
+                    let event1 = new Event('touchstart', {});
+                    event1.touches = event1.changedTouches = [{
+                        clientX: 0,
+                        clientY: 0,
+                    }];
+                    this.$refs.circle.dispatchEvent(event1);
+
+                    let event3 = new Event('touchend', {});
+                    event3.touches = event3.changedTouches = [{
+                        clientX: 150,
+                        clientY: 150
+                    }];
+
+                    let x = 0;
+                    let y = 0;
+                    let timeId = setInterval(() => {
+                        if (50 <= x){
+                            clearInterval(timeId)
+                            setTimeout(()=>{
+                                this.$refs.circle.dispatchEvent(event3);
+                            }, 0)
+                        } 
+                        let event2 = new Event('touchmove', {});
+                        event2.touches = event2.changedTouches = [{
+                            clientX: x,
+                            clientY: y
+                        }];
+                        this.$refs.circle.dispatchEvent(event2);
+                        x += 1;
+                        y += 1;
+                    }, 1);
+
+
+                    
+                },
+
                 animationend() {
                     // this.message = {};
                 },
