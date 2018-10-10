@@ -33,8 +33,6 @@ export default function ({
         // 位移变化量
         deltaX: undefined,
         deltaY: undefined,
-        absDeltaX: 0,
-        absDeltaY: 0,
 
         //  速率
         velocityX: 0,
