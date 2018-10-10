@@ -23,8 +23,8 @@ export default (input: Input): { velocity: number, velocityX: number, velocityY:
     // _prevInput || input用来保证start阶段也有prevInput, 当然这时等于input
     _prevInput = _prevInput || input;
     const deltaTime = input.timestamp - _prevInput.timestamp;
-    const deltaX = input.centerX - _prevInput.centerX;
-    const deltaY = input.centerY - _prevInput.centerY;
+    const deltaX = (0 < input.centerX) ? input.centerX - _prevInput.centerX : 0;
+    const deltaY = (0 < input.centerY) ? input.centerY - _prevInput.centerY : 0;
 
     // 每25ms刷新速度数据
     if (COMPUTE_INTERVAL < deltaTime) {
