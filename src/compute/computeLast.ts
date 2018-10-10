@@ -2,18 +2,18 @@
 // 默认间隔25ms做一次计算, 让数据更新,
 // 让end阶段读取上一步的计算数据, 比如方向, 速率等...
 // 防止快速滑动到慢速滑动的手势识别成swipe
-import { AnyInput } from '../interface';
+import { Input } from '../interface';
 import { COMPUTE_INTERVAL } from '../const';
 import { getDirection } from '../vector';
 // 上次采集的input
-let _prevInput: AnyInput;
+let _prevInput: Input;
 // 上次采集时的瞬时速度
 let _prevVelocityX: number;
 let _prevVelocityY: number;
 // 上次采集的方向
 let _prevDirection: string;
 
-export default (input: AnyInput): { velocity: number, velocityX: number, velocityY: number, direction: string } => {
+export default (input: Input): { velocity: number, velocityX: number, velocityY: number, direction: string } => {
     // 速率
     let velocityX: number;
     let velocityY: number;

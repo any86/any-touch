@@ -1,13 +1,13 @@
 /**
  * 构造统一的touchEvent格式
  */
-import { AnyInput } from '../interface';
-import { propX, propY, SUPPORT_ONLY_TOUCH } from '../const';
+import { Input } from '../interface';
+import {SUPPORT_ONLY_TOUCH } from '../const';
 import { getCenter } from '../vector';
 import touchAdapter from './adapters/touch'
 import mouseAdapter from './adapters/mouse';
 
-export default (event: any): AnyInput => {
+export default (event: any): Input => {
 
     let input: any;
     // Touch

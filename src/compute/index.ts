@@ -1,14 +1,14 @@
-import { Computed, AnyInput } from '../interface';
+import { Computed, Input } from '../interface';
 import createInput from '../input/create';
 import compute from './compute';
 // 起点(单点|多点)
-let startInput: AnyInput;
+let startInput: Input;
 // 前一次的触电
-let prevInput: AnyInput;
+let prevInput: Input;
 // 当前触点
-let activeInput: AnyInput;
+let activeInput: Input;
 // 多点触碰的起点
-let startMutliInput: AnyInput;
+let startMutliInput: Input;
 export default function (event: any): Computed {
     // 格式化不同设备输入数据
     const input = createInput(event);

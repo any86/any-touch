@@ -1,6 +1,6 @@
 export type nativeEventType = 'start' | 'move' | 'end' | 'cancel';
 
-export interface AnyInput {
+export interface Input {
     nativeEventType: nativeEventType;
     nativeEvent: any;
     pointers: { clientX: number, clientY: number }[];
