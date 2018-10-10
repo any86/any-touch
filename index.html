@@ -159,9 +159,12 @@
                     message: 'AnyTouch'
                 };
             },
-
             mounted() {
                 const anyTouch = new AnyTouch(this.$refs.circle);
+    setTimeout(()=>{
+        // anyTouch.destroy();
+    }, 1000);
+
 
                 /**
                  * =========================== pan ===========================

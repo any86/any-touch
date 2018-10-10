@@ -18,6 +18,7 @@ export interface Input {
 }
 // input的计算结果
 export interface Computed {
+    type?: string; 
     nativeEventType: nativeEventType; //start | move | end | cancel
     length: number;
     maxLength: number;

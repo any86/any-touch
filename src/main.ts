@@ -17,7 +17,7 @@
  * 格式化Event成统一的pointer格式 => 通过pointer数据计算 => 用计算结果去识别手势
  */
 
-import { EventHandler } from './interface';
+import { EventHandler, Computed } from './interface';
 import { SUPPORT_ONLY_TOUCH } from './const';
 import EventBus from './EventBus';
 import compute from './compute/index';
@@ -76,6 +76,17 @@ export default class AnyTouch {
             this.$el.addEventListener('mousedown', boundFn);
             window.addEventListener('mousemove', boundFn);
             window.addEventListener('mouseup', boundFn);
+            this.unbinders = [
+                () => {
+                    this.$el.removeEventListener('mousedown', boundFn);
+                },
+                () => {
+                    window.removeEventListener('mousemove', boundFn);
+                },
+                () => {
+                    window.removeEventListener('mouseup', boundFn);
+                }
+            ]
         }
     }
 
@@ -85,12 +96,15 @@ export default class AnyTouch {
 
     handler(event: TouchEvent) {
         // computed为包含了计算值的input
-        const computed = compute(event);
+        // console.time('a');
+        const computed: Computed = compute(event);
+        // console.timeEnd('a');
+
         // console.log(computed);
         // 当是鼠标事件的时候, mouseup阶段的input和computed为空
         if (undefined !== computed) {
             this.recognizers.forEach(recognizer => {
-                recognizer.recognize(computed, (data: any) => {
+                recognizer.recognize(computed, (data: Computed) => {
                     this.eventBus.emit(data.type, data);
                 });
             });
@@ -98,10 +112,10 @@ export default class AnyTouch {
     };
 
     /**
-         * 注册事件
-         * @param {String} 事件名
-         * @param {Function} 回调函数
-         */
+     * 注册事件
+     * @param {String} 事件名
+     * @param {Function} 回调函数
+     */
     on(eventName: string, callback: EventHandler): void {
         this.eventBus.on(eventName, callback);
     };
@@ -117,5 +131,15 @@ export default class AnyTouch {
 
     headUpperCase(str: string) {
         return str.toLowerCase().replace(/( |^)[a-z]/g, (L) => L.toUpperCase());
-    }
+    };
+
+    /**
+     * 销毁
+     */
+    destroy() {
+        // 解绑事件
+        this.unbinders.forEach(unbinder => {
+            unbinder();
+        });
+    };
 }

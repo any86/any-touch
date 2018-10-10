@@ -9,7 +9,7 @@ let prevInput: Input;
 let activeInput: Input;
 // 多点触碰的起点
 let startMutliInput: Input;
-export default function (event: any): Computed {
+export default function (event: TouchEvent | MouseEvent): Computed {
     // 格式化不同设备输入数据
     const input = createInput(event);
     
