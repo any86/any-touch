@@ -132,7 +132,8 @@
         <div @tap="tap" class="circle" id="circle" ref="circle" @animationend="animationend" :class="{
             tap: 'tap' === message.type,
             doubletap: 'doubletap' === message.type,
-        }" :style="{
+        }"
+            :style="{
             transform: `scale(${scale}) translate(${x/scale}px, ${y/scale}px) rotate(${angle}deg)`,
             transformOrigin: `${centerX}px//// ${centerY}px`
         }"></div>
@@ -143,7 +144,7 @@
 
     <script>
         let log = console.log;
-        log = () => {};
+        log = () => { };
 
         new Vue({
             el: '#app',
@@ -164,7 +165,7 @@
                 // setTimeout(() => {
                 //     // anyTouch.destroy();
                 // }, 1000);
-this.testPan();
+                // this.testPan();
                 /**
                  * =========================== pan ===========================
                  */
@@ -176,7 +177,7 @@ this.testPan();
                 });
 
                 anyTouch.on('pan', e => {
-                    e.preventDefault();
+                    // e.preventDefault();
 
                     log(`%c ${e.type} `, 'background-color:#69c;color:#fff;');
                     this.message = e;
@@ -221,7 +222,7 @@ this.testPan();
                 });
 
                 anyTouch.on('pinch', e => {
-                    e.preventDefault();
+                    // e.preventDefault();
                     this.message = e;
                     this.scale *= e.deltaScale;
                     this.centerX = e.centerX;
@@ -240,7 +241,7 @@ this.testPan();
                 });
 
                 anyTouch.on('rotate', e => {
-                    e.preventDefault();
+                    // e.preventDefault();
                     this.message = e;
                     this.angle += e.deltaAngle;
                     this.centerX = e.centerX;
@@ -290,10 +291,12 @@ this.testPan();
 
             methods: {
                 testPan() {
+                    let $el = this.$refs.circle;
+
                     let event1 = new Event('touchstart', {});
                     event1.touches = event1.changedTouches = [{
-                        clientX: 0,
-                        clientY: 0,
+                        clientX: 100,
+                        clientY: 100,
                     }];
                     this.$refs.circle.dispatchEvent(event1);
 
@@ -303,27 +306,30 @@ this.testPan();
                         clientY: 150
                     }];
 
-                    let x = 0;
-                    let y = 0;
-                    let timeId = setInterval(() => {
-                        if (50 <= x){
-                            clearInterval(timeId)
-                            setTimeout(()=>{
-                                this.$refs.circle.dispatchEvent(event3);
-                            }, 0)
-                        } 
+
+
+                    function touchMove(x, y) {
                         let event2 = new Event('touchmove', {});
                         event2.touches = event2.changedTouches = [{
                             clientX: x,
                             clientY: y
                         }];
-                        this.$refs.circle.dispatchEvent(event2);
-                        x += 1;
-                        y += 1;
-                    }, 1);
+                        $el.dispatchEvent(event2);
+                    }
+
+                    // let x = 100;
+                    // let y = 100;
+                    // setInterval(()=>{
+                    //     console.log({x,y});
+                    //     x++;
+                    //     y++;
+                    //     touchMove(x, y);
+                    //     if(x > 110) {
+                    //         x = y = 100;
+                    //     }
+                    // }, 100);
 
 
-                    
                 },
 
                 animationend() {

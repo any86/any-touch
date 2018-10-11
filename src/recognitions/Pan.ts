@@ -28,16 +28,18 @@ export default class PanRecognizer extends Base {
      */
     recognize(computed: Computed, callback: RecognizerCallback) {
         let type: string;
+        const {nativeEventType, distance, deltaX, deltaY} = computed
+        console.log({nativeEventType, distance, deltaX, deltaY}, computed);
         if (this.test(computed)) {
             // panleft | panright | pandown | panup
             callback({ type: this.name + computed.direction, ...computed });
-
+            console.warn(this.name);
             // pan
             callback({ type: this.name, ...computed });
             // panstart | panmove | panend
             type = this.recognizeType(computed.nativeEventType);
             callback({ type: this.name + type, ...computed });
-        } 
+        }
     };
 
     /**
@@ -46,6 +48,6 @@ export default class PanRecognizer extends Base {
      */
     test({ maxLength, distance, nativeEventType }: Computed): Boolean {
         // console.log({ maxLength, distance, nativeEventType });
-        return 'start' !== nativeEventType && this.threshold < distance && this.allowLength === maxLength;
+        return 'start' !== nativeEventType && (this.isRecognized || this.threshold < distance) && this.allowLength === maxLength;
     };
 };
