@@ -12,7 +12,5 @@ export default function ({
         deltaY = input.centerY - prevInput.centerY;
     }
 
-    console.log({ deltaX, deltaY, type:input.nativeEventType });
-
     return { deltaX, deltaY };
 };

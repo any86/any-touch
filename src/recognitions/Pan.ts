@@ -29,11 +29,9 @@ export default class PanRecognizer extends Base {
     recognize(computed: Computed, callback: RecognizerCallback) {
         let type: string;
         const {nativeEventType, distance, deltaX, deltaY} = computed
-        console.log({nativeEventType, distance, deltaX, deltaY}, computed);
         if (this.test(computed)) {
             // panleft | panright | pandown | panup
             callback({ type: this.name + computed.direction, ...computed });
-            console.warn(this.name);
             // pan
             callback({ type: this.name, ...computed });
             // panstart | panmove | panend
