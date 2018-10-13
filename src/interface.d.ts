@@ -19,18 +19,21 @@ export interface Input {
 // input的计算结果
 export interface Computed {
     type?: string; 
-    nativeEventType: nativeEventType; //start | move | end | cancel
-    length: number;
-    maxLength: number;
-    prevLength: number;
+    nativeEventType?: nativeEventType; //start | move | end | cancel
+    length?: number;
+    maxLength?: number;
+    lastVelocity: number;
     lastVelocityX: number;
     lastVelocityY: number;
     velocityX: number;
     velocityY: number;
+    maxVelocity:number;
     scale: number;
+    deltaScale:number;
     angle: number;
-    centerX: number;
-    centerY: number;
+    deltaAngle: number;
+    centerX?: number;
+    centerY?: number;
     deltaX: number;
     deltaY: number;
     displacementX: number;
@@ -40,6 +43,10 @@ export interface Computed {
     distance: number;
     duration: number;
     direction: string;
+    // 最近的方向
+    lastDirection:string;
+    // 2次input的时间差
+    deltaTime?:number;
 }
 
 // 识别器中recognize方法返回的数据格式

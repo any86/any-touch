@@ -22,13 +22,16 @@ export default function ({
     const length = input.pointers.length;
     const { abs, max } = Math;
 
-    let computed: any = {
+    let computed: Computed = {
         // 起始到结束的偏移
         displacementX: 0,
         displacementY: 0,
         distanceX: 0,
         distanceY: 0,
         distance: 0,
+
+        direction: 'none',
+        lastDirection: 'none',
 
         // 位移变化量
         deltaX: undefined,
@@ -37,7 +40,7 @@ export default function ({
         //  速率
         velocityX: 0,
         velocityY: 0,
-
+        maxVelocity: 0,
         // 时间
         duration: 0,
 
@@ -46,7 +49,7 @@ export default function ({
         deltaAngle:0,
         scale: 1,
         deltaScale: 1,
-
+        lastVelocity: undefined,
         lastVelocityY: undefined,
         lastVelocityX: undefined
     };
