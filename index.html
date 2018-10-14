@@ -222,7 +222,7 @@
                 });
 
                 anyTouch.on('pinch', e => {
-                    // e.preventDefault();
+                    e.preventDefault();
                     this.message = e;
                     this.scale *= e.deltaScale;
                     this.centerX = e.centerX;
@@ -241,7 +241,7 @@
                 });
 
                 anyTouch.on('rotate', e => {
-                    // e.preventDefault();
+                    e.preventDefault();
                     this.message = e;
                     this.angle += e.deltaAngle;
                     this.centerX = e.centerX;
