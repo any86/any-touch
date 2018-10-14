@@ -9,13 +9,13 @@ let prevInput: Input;
 let activeInput: Input;
 // 多点触碰的起点
 let startMutliInput: Input;
-export default function (event: TouchEvent | MouseEvent): Computed {
+export default (event: TouchEvent | MouseEvent): Computed => {
     // 格式化不同设备输入数据
     const input = createInput(event);
 
     // 无效的输入    
     if (undefined === input) return;
-    
+
     // 当前输入状态
     const { nativeEventType } = input;
     // [Start]

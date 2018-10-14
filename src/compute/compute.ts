@@ -1,22 +1,22 @@
 
 import { Computed } from '../interface';
-import {getDirection } from '../vector';
+import { getDirection } from '../vector';
 import computeLast from './computeLast';
 import computeDistance from './computeDistance';
 import computeDeltaXY from './computeDeltaXY';
 import computeVector from './computeVector';
 import computeScale from './computeScale';
 import computeAngle from './computeAngle';
+import computeMaxLength from './computeMaxLength';
 
-
-let maxLength: number = 0;
+// 最大触点数
 export default function ({
     nativeEventType,
     startInput,
     prevInput,
     startMutliInput,
     input
-}: any): any {
+}: any): Computed {
     // 如果输入为空, 那么就计算了, 鼠标模式下, 点击了非元素部分, mouseup阶段会初选input为undefined
     if (undefined === input) return;
     const length = input.pointers.length;
@@ -46,7 +46,7 @@ export default function ({
 
         // 旋转和缩放
         angle: 0,
-        deltaAngle:0,
+        deltaAngle: 0,
         scale: 1,
         deltaScale: 1,
         lastVelocity: undefined,
@@ -94,7 +94,7 @@ export default function ({
     // 前面有判断, 如果出现了单触点, 那么startMutliInput === undefined;
     // if (undefined !== startMutliInput) {
     if (undefined !== prevInput && 1 < prevInput.pointers.length && 1 < input.pointers.length) {
-    // if(undefined !== startMutliInput){
+        // if(undefined !== startMutliInput){
         // 2指形成的向量
         const startV = computeVector(startMutliInput);
         const prevV = computeVector(prevInput);
@@ -113,14 +113,8 @@ export default function ({
         computed.deltaAngle = deltaAngle;
     }
 
-
-    maxLength = max(maxLength, length);
-    if ('start' === nativeEventType) {
-        maxLength = length;
-    } else if ('end' === nativeEventType) {
-        maxLength = Math.max(1, length);
-    }
-
+    // 最大触点数
+    const maxLength = computeMaxLength(input);
 
     return {
         ...input,
