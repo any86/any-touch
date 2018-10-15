@@ -1,8 +1,8 @@
 export type nativeEventType = 'start' | 'move' | 'end' | 'cancel';
 
 export interface Input {
-    nativeEventType: nativeEventType;
-    nativeEvent: any;
+    nativeEventType?: nativeEventType;
+    nativeEvent?: any;
     pointers: { clientX: number, clientY: number }[];
     pointerLength: number;
     changedPointers: { clientX: number, clientY: number }[];
@@ -10,14 +10,14 @@ export interface Input {
     timestamp: number;
     target: EventTarget;
     currentTarget: EventTarget;
-    centerX: number;
-    centerY: number;
+    centerX?: number;
+    centerY?: number;
     stopPropagation: () => void;
     preventDefault: () => void;
     stopImmediatePropagation: () => void;
 }
 // input的计算结果
-export interface Computed {
+export interface Computed extends Input {
     type?: string; 
     nativeEventType?: nativeEventType; //start | move | end | cancel
     length?: number;
