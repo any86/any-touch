@@ -22,7 +22,7 @@ export default function ({
     const length = input.pointers.length;
     const { abs, max } = Math;
 
-    let computed: Computed = {
+    let computed = <Computed>{
         // 起始到结束的偏移
         displacementX: 0,
         displacementY: 0,
