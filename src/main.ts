@@ -108,7 +108,7 @@ export default class AnyTouch {
         if (undefined !== computed) {
             this.recognizers.forEach(recognizer => {
                 recognizer.recognize(computed, (data: Computed) => {
-                    this.eventBus.emit(data.type, data);
+                    this.eventBus.dispatch(data.type, data);
                 });
             });
         }
