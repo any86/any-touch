@@ -129,11 +129,10 @@
         </section>
 
 
-        <div @tap="tap" class="circle" id="circle" ref="circle" @animationend="animationend" :class="{
+        <div @touchstart="touchstart" @touchmove="touchmove" @touchend="touchend" @tap="tap" class="circle" id="circle" ref="circle" @animationend="animationend" :class="{
             tap: 'tap' === message.type,
             doubletap: 'doubletap' === message.type,
-        }"
-            :style="{
+        }" :style="{
             transform: `scale(${scale}) translate(${x/scale}px, ${y/scale}px) rotate(${angle}deg)`,
             transformOrigin: `${centerX}px//// ${centerY}px`
         }"></div>
@@ -144,7 +143,7 @@
 
     <script>
         let log = console.log;
-        log = () => { };
+        log = () => {};
 
         new Vue({
             el: '#app',
@@ -290,6 +289,15 @@
             },
 
             methods: {
+                touchstart(e) {
+                    // console.log('touchstart', e.touches, e.touches.length, e.changedTouches.length);
+                },
+                touchmove(e) {
+                    // console.log('touchmove', e, e.touches.length, e.changedTouches.length);
+                },
+                touchend(e) {
+                    // console.log('touchend', e, e.touches.length, e.changedTouches.length);
+                },
                 testPan() {
                     let $el = this.$refs.circle;
 

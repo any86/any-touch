@@ -48,7 +48,6 @@ export default class TapRecognizer {
         let _yMove = abs(centerY - this._prevCenterY);
         const hasMove = 2 < max(_xMove, _yMove);
         if ('end' === nativeEventType) {
-            // console.log({distance, duration, maxLength, centerX, centerY });
             return 1 === maxLength && 2 > distance && 250 > duration && !hasMove;
         }
     };

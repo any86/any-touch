@@ -99,15 +99,12 @@ export default class AnyTouch {
     };
 
     handler(event: TouchEvent) {
-        let inputs = inputManage(event);
-        // console.log(inputs);
         // event.preventDefault();
-        // computed为包含了计算值的input
-        // console.time('a');
+        // 记录各个阶段的input
+        let inputs = inputManage(event);
+
         const computed: Computed = compute(inputs);
-        // console.timeEnd('a');
-// console.log(computed);
-        // console.log(computed);
+
         // 当是鼠标事件的时候, mouseup阶段的input和computed为空
         if (undefined !== computed) {
             this.recognizers.forEach(recognizer => {
