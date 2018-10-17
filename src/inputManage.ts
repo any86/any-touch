@@ -1,6 +1,5 @@
-import { Computed, Input } from './interface';
+import { Input } from './interface';
 import createInput from './input/create';
-import compute from './compute/compute';
 // 起点(单点|多点)
 let startInput: Input;
 // 前一次的触电
@@ -9,7 +8,7 @@ let prevInput: Input;
 let activeInput: Input;
 // 多点触碰的起点
 let startMutliInput: Input;
-export default (event: TouchEvent | MouseEvent): Computed => {
+export default (event: TouchEvent | MouseEvent): any => {
     // 格式化不同设备输入数据
     const input = createInput(event);
 
@@ -38,13 +37,11 @@ export default (event: TouchEvent | MouseEvent): Computed => {
         prevInput = activeInput;
         activeInput = input;
     }
-    const computed = compute({
-        nativeEventType,
+
+    return {
         startMutliInput,
         startInput,
         prevInput,
-        input,
-    });
-
-    return { ...input, ...computed, nativeEventType };
+        input
+    };
 }; 

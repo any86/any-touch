@@ -19,7 +19,9 @@
 import { EventHandler, Computed } from './interface';
 import { SUPPORT_ONLY_TOUCH } from './const';
 import EventBus from './EventBus';
+import inputManage from './inputManage';
 import compute from './compute/index';
+
 import TapRecognizer from './recognitions/Tap';
 import PressRecognizer from './recognitions/Press';
 import PanRecognizer from './recognitions/Pan';
@@ -45,7 +47,7 @@ export default class AnyTouch {
 
     unbinders: any[];
 
-    version:string;
+    version: string;
 
     /**
      * @param {Element} el
@@ -97,12 +99,14 @@ export default class AnyTouch {
     };
 
     handler(event: TouchEvent) {
+        let inputs = inputManage(event);
+        // console.log(inputs);
         // event.preventDefault();
         // computed为包含了计算值的input
         // console.time('a');
-        const computed: Computed = compute(event);
+        const computed: Computed = compute(inputs);
         // console.timeEnd('a');
-
+// console.log(computed);
         // console.log(computed);
         // 当是鼠标事件的时候, mouseup阶段的input和computed为空
         if (undefined !== computed) {

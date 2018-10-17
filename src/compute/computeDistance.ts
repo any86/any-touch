@@ -4,10 +4,10 @@ let prevDisplacementY = 0;
 import { propX, propY } from '../const';
 import { getVLength } from '../vector';
 export default function ({
-    nativeEventType,
     startInput,
     input
 }: any): any {
+    const { nativeEventType } = input;
     const { round, abs } = Math;
     let displacementX = 0;
     let displacementY = 0;
