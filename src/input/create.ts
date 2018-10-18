@@ -6,7 +6,9 @@ import { SUPPORT_ONLY_TOUCH } from '../const';
 import { getCenter } from '../vector';
 import touchAdapter from './adapters/touch'
 import mouseAdapter from './adapters/mouse';
-let centerX: number, centerY: number;
+let centerX: number;
+let centerY: number;
+
 export default (event: TouchEvent | MouseEvent): Input => {
     let input: any = {};
     // Touch
@@ -20,12 +22,16 @@ export default (event: TouchEvent | MouseEvent): Input => {
             return;
         }
     }
+    const { nativeEventType, pointers, changedPointers } = input;
 
     // 当前触点数
-    const pointerLength: number = input.pointers.length;
+    const pointerLength: number = pointers.length;
 
     // 变化前触点数
-    const changedPointerLength: number = input.changedPointers.length;
+    const changedPointerLength: number = changedPointers.length;
+
+    const isFirst = ('start' === nativeEventType) && (0 === changedPointerLength - pointerLength);
+    const isFinal = ('end' === nativeEventType) && (0 === pointerLength);
 
     // 中心坐标
     if (0 < pointerLength) {
@@ -39,12 +45,12 @@ export default (event: TouchEvent | MouseEvent): Input => {
 
     // 原生属性/方法
     const { target, currentTarget } = event;
-    
+
     // 阻止冒泡
     const stopPropagation = () => {
         event.stopPropagation();
     };
-    
+
     // 阻止默认默认事件
     const preventDefault = () => {
         event.preventDefault();
@@ -57,6 +63,8 @@ export default (event: TouchEvent | MouseEvent): Input => {
 
     return {
         ...input,
+        isFirst,
+        isFinal,
         stopPropagation,
         preventDefault,
         stopImmediatePropagation,
