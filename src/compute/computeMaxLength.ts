@@ -1,12 +1,10 @@
 import { Input } from '../interface';
 let maxLength = 0;
-export default ({ nativeEventType, pointerLength, changedPointerLength }: Input): number => {
-    // maxLength = Math.max(maxLength, pointerLength);
-    if ('start' === nativeEventType) {
-        console.log(pointerLength, changedPointerLength);
+export default ({ pointerLength, isFirst, isFinal }: Input): number => {
+    if (isFirst) {
         maxLength = pointerLength;
-    } else if ('end' === nativeEventType) {
-        // maxLength = Math.max(1, pointerLength);
+    } else {
+        maxLength = Math.max(maxLength, pointerLength);
     }
     return maxLength;
 };

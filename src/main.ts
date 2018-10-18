@@ -66,6 +66,7 @@ export default class AnyTouch {
             new PinchRecognizer(),
             new RotateRecognizer(),
         ];
+        
         // 绑定事件
         if (SUPPORT_ONLY_TOUCH) {
             this.unbinders = ['touchstart', 'touchmove', 'touchend', 'touchcancel'].map(eventName => {
@@ -102,9 +103,7 @@ export default class AnyTouch {
         // event.preventDefault();
         // 记录各个阶段的input
         let inputs = inputManage(event);
-
         const computed: Computed = compute(inputs);
-
         // 当是鼠标事件的时候, mouseup阶段的input和computed为空
         if (undefined !== computed) {
             this.recognizers.forEach(recognizer => {

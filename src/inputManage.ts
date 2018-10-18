@@ -24,7 +24,7 @@ export default (event: TouchEvent | MouseEvent): any => {
         // 当前点
         activeInput = input;
         // 起点(单点|多点)
-        startInput = createInput(event);
+        startInput = input;
         // 起点(多点)
         if (1 < input.pointerLength) {
             startMutliInput = input;
@@ -32,12 +32,11 @@ export default (event: TouchEvent | MouseEvent): any => {
             // 如果出现了单点, 那么之前的多点起点记录失效
             startMutliInput = undefined;
         }
-    } else {
+    } else if ('move' === nativeEventType) {
         // 读取上一点
         prevInput = activeInput;
         activeInput = input;
-    }
-
+    };
     return {
         startMutliInput,
         startInput,
