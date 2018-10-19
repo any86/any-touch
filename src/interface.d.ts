@@ -60,15 +60,10 @@ export interface RecognizerCallback {
     (paylod: RecognizerCallbackPaylod): void
 }
 
-// AnyTouch手势的事件数据
-export interface AnyPointers {
-    centerX: number;
-    centerY: number;
-}
 
 // 事件触发函数
 export interface EventHandler {
-    (event: AnyPointers): void;
+    (event: Computed): void;
 }
 
 // 手势的触发函数
