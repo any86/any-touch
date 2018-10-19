@@ -1,5 +1,6 @@
 {
     "compilerOptions": {
+        "esModuleInterop":true,
         "target": "es6",
         "noImplicitAny": true,
         "removeComments": true,
@@ -9,6 +10,6 @@
         "lib": ["dom", "es2017"]
     },
     "include": [
-        "src/main.ts"
+        "src/main.ts", "src/a.spec.ts"
     ]
 }

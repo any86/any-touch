@@ -1,3 +1,8 @@
+declare global {
+    interface Window {
+        isWeixin: boolean
+    }
+}
 // 简单判断是否手机设备
 export const MOBILE_REGEX = /mobile|tablet|ip(ad|hone|od)|android/i;
 

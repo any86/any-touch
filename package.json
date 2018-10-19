@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "rollup -wc",
     "build": "rollup -c",
-    "tsc": "tsc -W"
+    "tsc": "tsc -W",
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -19,8 +20,10 @@
   },
   "homepage": "https://github.com/383514580/any-touch#readme",
   "devDependencies": {
-    "typescript": "^3.0.1",
+    "@types/jest": "^23.3.5",
     "rollup": "^0.62.0",
-    "rollup-plugin-typescript2": "^0.17.0"
+    "rollup-plugin-typescript2": "^0.17.0",
+    "ts-jest": "^23.10.4",
+    "typescript": "^3.0.1"
   }
 }

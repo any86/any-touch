@@ -123,13 +123,13 @@
 
 <body>
     <main id="app">
-        <section @tap="tap" class="fixed-bottom">
+        <section class="fixed-bottom">
             <a href="?debug">vconsole</a>
             <a href="?">vconsole off</a>
         </section>
 
 
-        <div @touchstart="touchstart" @touchmove="touchmove" @touchend="touchend" @tap="tap" class="circle" id="circle" ref="circle" @animationend="animationend" :class="{
+        <div class="circle" id="circle" ref="circle" @animationend="animationend" :class="{
             tap: 'tap' === message.type,
             doubletap: 'doubletap' === message.type,
         }" :style="{
@@ -176,7 +176,7 @@
                 });
 
                 anyTouch.on('pan', e => {
-                    // e.preventDefault();
+                    e.preventDefault();
 
                     log(`%c ${e.type} `, 'background-color:#69c;color:#fff;');
                     this.message = e;
