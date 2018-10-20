@@ -17,7 +17,7 @@
  * 格式化Event成统一的pointer格式 => 通过pointer数据计算 => 用计算结果去识别手势
  */
 import { EventHandler, Computed } from './interface';
-import { SUPPORT_ONLY_TOUCH } from './const';
+import { SUPPORT_ONLY_TOUCH, IS_MOBILE } from './const';
 import EventBus from './EventBus';
 import inputManage from './inputManage';
 import compute from './compute/index';
@@ -49,6 +49,8 @@ export default class AnyTouch {
 
     version: string;
 
+    isMobile: boolean;
+
     /**
      * @param {Element} el
      * @param {Object} param1
@@ -56,6 +58,7 @@ export default class AnyTouch {
     constructor(el: Element, {
     } = {}) {
         this.version = '0.0.2';
+        this.isMobile = IS_MOBILE;
         this.$el = el;
         this.eventBus = new EventBus(el);
         this.recognizers = [
@@ -68,7 +71,7 @@ export default class AnyTouch {
         ];
         
         // 绑定事件
-        if (SUPPORT_ONLY_TOUCH) {
+        if (this.isMobile) {
             this.unbinders = ['touchstart', 'touchmove', 'touchend', 'touchcancel'].map(eventName => {
                 let boundFn = this.handler.bind(this);
                 this.$el.addEventListener(eventName, boundFn);
@@ -104,11 +107,17 @@ export default class AnyTouch {
         // 记录各个阶段的input
         let inputs = inputManage(event);
         const computed: Computed = compute(inputs);
+
+
+
+
+        
         // 当是鼠标事件的时候, mouseup阶段的input和computed为空
         if (undefined !== computed) {
             this.recognizers.forEach(recognizer => {
                 recognizer.recognize(computed, (data: Computed) => {
                     this.eventBus.dispatch(data.type, data);
+                    this.eventBus.dispatch('input', data);
                 });
             });
         }
@@ -119,8 +128,9 @@ export default class AnyTouch {
      * @param {String} 事件名
      * @param {Function} 回调函数
      */
-    on(eventName: string, callback: EventHandler): void {
+    on(eventName: string, callback: EventHandler): any {
         this.eventBus.on(eventName, callback);
+        this.eventBus.on('input', callback);
     };
 
     /**

@@ -6,6 +6,9 @@ declare global {
 // 简单判断是否手机设备
 export const MOBILE_REGEX = /mobile|tablet|ip(ad|hone|od)|android/i;
 
+// 是否手机设备
+export const IS_MOBILE = MOBILE_REGEX.test(navigator.userAgent);
+
 // 是否支持touch事件
 export const SUPPORT_TOUCH = ('ontouchstart' in window);
 

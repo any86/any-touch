@@ -1,62 +1,58 @@
+import { dispatchTouchStart, dispatchTouchMove, dispatchTouchEnd } from './touchEventSmulate';
 import AnyTouch from '../src/main'
-test('流程ok?', (done) => {
-    document.body.innerHTML = '<span id="box">box</span>';
-    const el = document.getElementById('box');
-    const at = new AnyTouch(el);
+
+document.body.innerHTML = '<div id="box">box</div>';
+const el = document.getElementById('box');
+const at = new AnyTouch(el);
+
+test('当前是否移动设备?', () => {
+    expect(at).toHaveProperty('on');
+    expect(at.recognizers).toHaveLength(6);
+    expect(at.unbinders).toHaveLength(4);
+    expect(at.$el).toEqual(el);
+    expect(at.isMobile).toBeTruthy();
+});
+
+test('事件pan是否生效?', (done) => {
     let data = 0;
-    at.on('panstart', ({ deltaX }) => {
-        data += 1900;
+    let xOrg = 0;
+    let yOrg = 0;
+
+    at.on('panmove', ({
+        deltaX,
+        deltaY
+    }) => {
+        console.log(JSON.stringify({
+            deltaX,
+            deltaY
+        }));
+        xOrg += deltaX;
+        yOrg += deltaY;
     });
 
-    at.on('panmove', () => {
-        
+    at.on('panend', (e) => {
+        console.log('panend 啊圣诞节哦')
+        expect(xOrg).toBe(100);
+        expect(yOrg).toBe(100);
         done();
     });
 
-
-
-    let event1: any = new Event('touchstart', {});
-    event1.touches = event1.changedTouches = [{
-        clientX: 0,
-        clientY: 0,
-    }];
-    el.dispatchEvent(event1);
-
-    function dispatchTouchMove(x:any, y:any) {
-        let event2: any = new Event('touchmove', {});
-        event2.touches = event2.changedTouches = [{
-            clientX: x,
-            clientY: y
-        }];
-        el.dispatchEvent(event2);
-    };
-
-
-
-
-    function dispatchTouchEnd(x:any,y:any) {
-        let event3: any = new Event('touchend', {});
-        event3.touches = event3.changedTouches = [{
-            clientX: x,
-            clientY: y
-        }];
-        el.dispatchEvent(event3);
+    // 模拟touch触碰
+    {
+        let x: any = 0;
+        let y: any = 0;
+        let i: number = 0;
+        dispatchTouchStart(el, { x, y });
+        let timer = setInterval(() => {
+            i++;
+            if (100 < x) {
+                clearInterval(timer);
+                dispatchTouchEnd(el, { x, y });
+            } else {
+                y = x = i;
+                console.log({x});
+                dispatchTouchMove(el, { x, y });
+            }
+        }, 10);
     }
-
-    dispatchTouchMove(11, 11);
-    dispatchTouchMove(100, 100);
-
-    // let x = 0;
-    // let y = 0;
-    // let timer = setInterval(() => {
-    //     x += 1;
-    //     y += 1;
-    //     dispatchTouchMove(x, y);
-    //     if(100 < x) {
-    //         clearInterval(timer);
-    //         dispatchTouchEnd(x, y);
-    //     }
-    // }, 100);
-
-    expect(data).toBe(1900);
 });

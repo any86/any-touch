@@ -21,6 +21,7 @@
   "homepage": "https://github.com/383514580/any-touch#readme",
   "devDependencies": {
     "@types/jest": "^23.3.5",
+    "jest": "^23.6.0",
     "rollup": "^0.62.0",
     "rollup-plugin-typescript2": "^0.17.0",
     "ts-jest": "^23.10.4",
