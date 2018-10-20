@@ -14,7 +14,6 @@ test('当前是否移动设备?', () => {
 });
 
 test('事件pan是否生效?', (done) => {
-    let data = 0;
     let xOrg = 0;
     let yOrg = 0;
 
@@ -22,37 +21,27 @@ test('事件pan是否生效?', (done) => {
         deltaX,
         deltaY
     }) => {
-        console.log(JSON.stringify({
-            deltaX,
-            deltaY
-        }));
         xOrg += deltaX;
         yOrg += deltaY;
     });
 
     at.on('panend', (e) => {
-        console.log('panend 啊圣诞节哦')
         expect(xOrg).toBe(100);
         expect(yOrg).toBe(100);
         done();
     });
 
+
+
+
     // 模拟touch触碰
     {
-        let x: any = 0;
-        let y: any = 0;
-        let i: number = 0;
-        dispatchTouchStart(el, { x, y });
-        let timer = setInterval(() => {
-            i++;
-            if (100 < x) {
-                clearInterval(timer);
-                dispatchTouchEnd(el, { x, y });
-            } else {
-                y = x = i;
-                console.log({x});
-                dispatchTouchMove(el, { x, y });
-            }
-        }, 10);
+        dispatchTouchStart(el, { x: 0, y: 0 });
+        dispatchTouchMove(el, { x: 10, y: 10 });
+        dispatchTouchMove(el, { x: 100, y: 100 });
+
+        setTimeout(() => {
+            dispatchTouchEnd(el, { x: 100, y: 100 });
+        }, 200);
     }
 });
