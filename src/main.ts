@@ -117,7 +117,6 @@ export default class AnyTouch {
             this.recognizers.forEach(recognizer => {
                 recognizer.recognize(computed, (data: Computed) => {
                     this.eventBus.dispatch(data.type, data);
-                    this.eventBus.dispatch('input', data);
                 });
             });
         }
@@ -130,7 +129,6 @@ export default class AnyTouch {
      */
     on(eventName: string, callback: EventHandler): any {
         this.eventBus.on(eventName, callback);
-        this.eventBus.on('input', callback);
     };
 
     /**

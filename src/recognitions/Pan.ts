@@ -28,7 +28,6 @@ export default class PanRecognizer extends Base {
      */
     recognize(computed: Computed, callback: RecognizerCallback) {
         let type: string;
-        const {nativeEventType, distance, deltaX, deltaY} = computed
         if (this.test(computed)) {
             // panleft | panright | pandown | panup
             callback({ type: this.name + computed.direction, ...computed });
@@ -45,7 +44,6 @@ export default class PanRecognizer extends Base {
      * @return {Boolean}} 是否是当前手势 
      */
     test({ maxLength, distance, nativeEventType }: Computed): Boolean {
-        // console.log({ maxLength, distance, nativeEventType });
         return 'start' !== nativeEventType && (this.isRecognized || this.threshold < distance) && this.allowLength === maxLength;
     };
 };

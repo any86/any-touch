@@ -132,7 +132,8 @@
         <div class="circle" id="circle" ref="circle" @animationend="animationend" :class="{
             tap: 'tap' === message.type,
             doubletap: 'doubletap' === message.type,
-        }" :style="{
+        }"
+            :style="{
             transform: `scale(${scale}) translate(${x/scale}px, ${y/scale}px) rotate(${angle}deg)`,
             transformOrigin: `${centerX}px//// ${centerY}px`
         }"></div>
@@ -143,7 +144,7 @@
 
     <script>
         let log = console.log;
-        log = () => {};
+        log = () => { };
 
         new Vue({
             el: '#app',
@@ -165,32 +166,30 @@
                 // setTimeout(() => {
                 //     // anyTouch.destroy();
                 // }, 1000);
-                this.testPan();
+                // this.testPan();
                 /**
                  * =========================== pan ===========================
                  */
-                // ['panstart', 'panmove', 'panend'].forEach(name => {
-                //     anyTouch.on(name, e => {
-                //         this.message = e;
-                //         console.log(e.type);
-                //     })
-                // });
-
-
-                anyTouch.on('panmove', ({
-                    deltaX,
-                    deltaY
-                }) => {
-                    console.log({
-                        deltaX,
-                        deltaY
-                    });
+                anyTouch.on('panstart', e => {
+                    this.message = e;
+                    console.log(e.type);
                 });
 
-                anyTouch.on('pan', e => {
-                    console.log(e.deltaX);
-                    e.preventDefault();
+                anyTouch.on('panmove', e => {
+                    this.message = e;
+                    console.log(e.type);
+                });
 
+                anyTouch.on('panend', e => {
+                    this.message = e;
+                    console.log(e.type);
+                });
+
+
+
+                anyTouch.on('pan', e => {
+                    e.preventDefault();
+                    console.log(e);
                     log(`%c ${e.type} `, 'background-color:#69c;color:#fff;');
                     this.message = e;
                     this.x += e.deltaX;
@@ -361,9 +360,9 @@
                     // this.message = {};
                 },
 
-                tap() {
-                    log('native tap')
-                }
+                // tap() {
+                //     log('native tap')
+                // }
             }
         });
     </script>

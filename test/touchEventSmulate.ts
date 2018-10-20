@@ -1,26 +1,35 @@
-export function dispatchTouchStart(el: any, {x,y}:any) {
-    let event1: any = new Event('touchstart', {});
-    event1.touches = event1.changedTouches = [{
+let lastClientX: number;
+let lastClientY: number;
+export function dispatchTouchStart(el: any, { x, y }: any) {
+    let event: any = new Event('touchstart', {});
+    event.touches = event.changedTouches = [{
         clientX: x,
         clientY: y,
     }];
-    el.dispatchEvent(event1);
+    lastClientX = x;
+    lastClientY = y;
+    el.dispatchEvent(event);
 }
 
 export function dispatchTouchMove(el: any, { x, y }: any) {
-    let event2: any = new Event('touchmove', {});
-    event2.touches = event2.changedTouches = [{
+    let event: any = new Event('touchmove', {});
+    event.changedTouches = [{ clientX: lastClientX, clientY: lastClientY }]
+    event.touches = [{
         clientX: x,
         clientY: y
     }];
-    el.dispatchEvent(event2);
+    lastClientX = x;
+    lastClientY = y;
+    el.dispatchEvent(event);
 };
 
-export function dispatchTouchEnd(el: any, { x, y }: any) {
-    let event3: any = new Event('touchend', {});
-    event3.touches = event3.changedTouches = [{
-        clientX: x,
-        clientY: y
+export function dispatchTouchEnd(el: any) {
+    let event: any = new Event('touchend', {});
+    event.changedTouches = [{
+        clientX: lastClientX,
+        clientY: lastClientY
     }];
-    el.dispatchEvent(event3);
+
+    event.touches = [];
+    el.dispatchEvent(event);
 }
