@@ -162,7 +162,6 @@
             },
             mounted() {
                 const anyTouch = new AnyTouch(this.$refs.circle);
-                console.log(anyTouch);
                 // setTimeout(() => {
                 //     // anyTouch.destroy();
                 // }, 1000);
@@ -172,24 +171,24 @@
                  */
                 anyTouch.on('panstart', e => {
                     this.message = e;
-                    console.log(e.type);
+                    log(e.type);
                 });
 
                 anyTouch.on('panmove', e => {
                     this.message = e;
-                    console.log(e.type);
+                    log(e.type);
                 });
 
                 anyTouch.on('panend', e => {
                     this.message = e;
-                    console.log(e.type);
+                    log(e.type);
                 });
 
 
 
                 anyTouch.on('pan', e => {
                     e.preventDefault();
-                    console.log(e);
+                    log(e);
                     log(`%c ${e.type} `, 'background-color:#69c;color:#fff;');
                     this.message = e;
                     this.x += e.deltaX;
@@ -213,12 +212,12 @@
                  * =========================== tap ===========================
                  */
                 anyTouch.on('tap', e => {
-                    log(`%c ${e.type} `, 'background-color:#f10;color:#fff;');
+                    console.log(`%c ${e.type} `, 'background-color:#f10;color:#fff;');
                     this.message = e;
                 });
 
                 anyTouch.on('doubletap', e => {
-                    log(`%c ${e.type} `, 'background-color:#9c3;color:#fff;');
+                    console.log(`%c ${e.type} `, 'background-color:#9c3;color:#fff;');
                     this.message = e;
                 });
 

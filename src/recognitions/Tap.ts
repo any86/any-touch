@@ -1,5 +1,5 @@
 import { Computed, RecognizerCallback } from '../interface';
-interface Options { hasDoubleTap: boolean };
+interface Options { name: string, pointer: number, taps: number };
 
 export default class TapRecognizer {
     tapCount: number;
@@ -7,35 +7,42 @@ export default class TapRecognizer {
     // 上一次tap的点击坐标
     private _prevCenterX: number;
     private _prevCenterY: number;
-    hasDoubleTap: boolean;
+    public options: Options;
 
-    constructor({ hasDoubleTap }: Options) {
+    constructor(options: Options) {
+        this.options = options;
         this.tapTimeout = null;
         this.tapCount = 0;
-        this.hasDoubleTap = hasDoubleTap;
     };
 
     recognize(computed: Computed, callback: RecognizerCallback): void {
+
+        
         if (this.test(computed)) {
             // 累加点击
             this.tapCount++;
-
-            // 是否需要识别双击
-            if (this.hasDoubleTap) {
-                if (1 === this.tapCount) {
-                    this.tapTimeout = window.setTimeout(() => {
-                        callback({ type: 'tap', ...computed });
-                        this.tapCount = 0;
-                    }, 200);
-                } else {
-                    clearTimeout(this.tapTimeout);
-                    callback({ type: 'doubletap', ...computed });
-                    this.tapCount = 0;
-                }
-            } else {
-                callback({ type: 'tap', ...computed });
+            if(this.options.taps === this.tapCount) {
+                console.log(this.tapCount);
+                callback({ type: this.options.name, ...computed });
                 this.tapCount = 0;
             }
+
+            // // 是否需要识别双击
+            // if (this.hasDoubleTap) {
+            //     if (1 === this.tapCount) {
+            //         this.tapTimeout = window.setTimeout(() => {
+            //             callback({ type: 'tap', ...computed });
+            //             this.tapCount = 0;
+            //         }, 200);
+            //     } else {
+            //         clearTimeout(this.tapTimeout);
+            //         callback({ type: 'doubletap', ...computed });
+            //         this.tapCount = 0;
+            //     }
+            // } else {
+            //     callback({ type: 'tap', ...computed });
+            //     this.tapCount = 0;
+            // }
         }
     };
 

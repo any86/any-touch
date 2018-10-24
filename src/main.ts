@@ -62,14 +62,15 @@ export default class AnyTouch {
         this.$el = el;
         this.eventBus = new EventBus(el);
         this.recognizers = [
-            new TapRecognizer({ hasDoubleTap: true }),
+            new TapRecognizer({name:'tap', pointer: 1,taps:1 }),
+            new TapRecognizer({name: 'doubletap', pointer: 1,taps:2 }),
             new PressRecognizer(),
             new PanRecognizer(),
             new SwipeRecognizer(),
             new PinchRecognizer(),
             new RotateRecognizer(),
         ];
-        
+
         // 绑定事件
         if (this.isMobile) {
             this.unbinders = ['touchstart', 'touchmove', 'touchend', 'touchcancel'].map(eventName => {
@@ -98,6 +99,14 @@ export default class AnyTouch {
         }
     }
 
+    /**
+     * 添加识别器
+     * @param recognizer 识别器
+     */
+    add(recognizer: any) {
+        this.recognizers.push(recognizer);
+    };
+
     set({
     } = {}) {
     };
@@ -111,7 +120,7 @@ export default class AnyTouch {
 
 
 
-        
+
         // 当是鼠标事件的时候, mouseup阶段的input和computed为空
         if (undefined !== computed) {
             this.recognizers.forEach(recognizer => {
