@@ -4,7 +4,7 @@
   "description": "一个纯粹的手势库",
   "main": "dist/any-touch.js",
   "scripts": {
-    "dev": "rollup -wc",
+    "dev": "parcel index.html",
     "build": "rollup -c",
     "tsc": "tsc -W",
     "test": "jest"
@@ -22,6 +22,7 @@
   "devDependencies": {
     "@types/jest": "^23.3.5",
     "jest": "^23.6.0",
+    "parcel-bundler": "^1.10.3",
     "rollup": "^0.62.0",
     "rollup-plugin-typescript2": "^0.17.0",
     "ts-jest": "^23.10.4",

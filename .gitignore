@@ -3,3 +3,5 @@
 /.rpt2_cache
 /.tsc-output
 coverage
+/.vscode
+.cache/
