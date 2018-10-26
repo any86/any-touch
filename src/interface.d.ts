@@ -49,6 +49,7 @@ export interface Computed extends Input {
     lastDirection:string;
     // 2次input的时间差
     deltaTime?:number;
+    tapCount?:number;
 }
 
 // 识别器中recognize方法返回的数据格式

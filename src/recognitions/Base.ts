@@ -5,9 +5,28 @@
 * */
 import { nativeEventType } from '../interface';
 export default class Recognizer {
+    public status: string;
     public isRecognized: boolean;
+    public options: any;
+    private _requireFailureList:any[];
     constructor() {
+        this.status = 'unknown';
         this.isRecognized = false;
+        this._requireFailureList = [];
+    };
+
+    /**
+     * 前者需要后者失败才能触发
+     * @param 识别器实例 
+     */
+    public requireFailure(recognizerInstance:any){
+        const {name} = this.options;
+        this._requireFailureList.push({name, requireFailureName: recognizerInstance.options.name})
+    };
+
+    public hasRequireFailure(){
+        // this._requireFailureList.find()
+        // return this.
     };
 
     /**
@@ -16,7 +35,6 @@ export default class Recognizer {
      * @param {nativeEventType} 输入状态 
      */
     public recognizeType(nativeEventType: nativeEventType) {
-
         if (this.isRecognized) {
             if ('move' === nativeEventType) {
                 return 'move';
@@ -28,5 +46,5 @@ export default class Recognizer {
             this.isRecognized = true;
             return 'start';
         }
-    }
+    };
 };

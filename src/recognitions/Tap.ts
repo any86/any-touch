@@ -1,49 +1,37 @@
 import { Computed, RecognizerCallback } from '../interface';
 interface Options { name: string, pointer: number, taps: number };
-
-export default class TapRecognizer {
+import Base from './Base';
+export default class TapRecognizer extends Base {
     tapCount: number;
-    tapTimeout: number;
+    tapTimeoutId: number;
     // 上一次tap的点击坐标
     private _prevCenterX: number;
     private _prevCenterY: number;
     public options: Options;
 
     constructor(options: Options) {
+        super();
         this.options = options;
-        this.tapTimeout = null;
+        this.tapTimeoutId = null;
         this.tapCount = 0;
     };
 
     recognize(computed: Computed, callback: RecognizerCallback): void {
-
-        
         if (this.test(computed)) {
+            // console.log(this.tapCount);
             // 累加点击
             this.tapCount++;
-            if(this.options.taps === this.tapCount) {
-                console.log(this.tapCount);
-                callback({ type: this.options.name, ...computed });
+            callback({ type: this.options.name, ...computed, tapCount:this.tapCount });
+            clearTimeout(this.tapTimeoutId);
+            this.tapTimeoutId = window.setTimeout(() => {
                 this.tapCount = 0;
-            }
-
-            // // 是否需要识别双击
-            // if (this.hasDoubleTap) {
-            //     if (1 === this.tapCount) {
-            //         this.tapTimeout = window.setTimeout(() => {
-            //             callback({ type: 'tap', ...computed });
-            //             this.tapCount = 0;
-            //         }, 200);
-            //     } else {
-            //         clearTimeout(this.tapTimeout);
-            //         callback({ type: 'doubletap', ...computed });
-            //         this.tapCount = 0;
-            //     }
-            // } else {
-            //     callback({ type: 'tap', ...computed });
-            //     this.tapCount = 0;
-            // }
+            }, 300);
         }
+    };
+
+    cancelTap() {
+        clearTimeout(this.tapTimeoutId);
+        this.tapCount = 0;
     };
 
     test({ nativeEventType, distance, duration, maxLength, centerX, centerY }: Computed): boolean {

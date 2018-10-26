@@ -1,6 +1,7 @@
 import AnyTouch from './src/main.ts';
+import { watchFile } from 'fs';
 let log = console.log;
-log = () => { };
+log = () => {};
 new Vue({
     el: '#app',
 
@@ -62,7 +63,7 @@ new Vue({
             log(`%c ${e.type} `, 'background-color:#f70;color:#fff;');
             this.message = e;
         });
-
+        
         /**
          * =========================== tap ===========================
          */
@@ -73,6 +74,11 @@ new Vue({
 
         anyTouch.on('doubletap', e => {
             console.log(`%c ${e.type} `, 'background-color:#9c3;color:#fff;');
+            this.message = e;
+        });
+
+        anyTouch.on('threetap', e => {
+            console.log(`%c ${e.type} `, 'background-color:#99c;color:#fff;');
             this.message = e;
         });
 
