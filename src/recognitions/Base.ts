@@ -5,12 +5,14 @@
 * */
 import { nativeEventType } from '../interface';
 export default class Recognizer {
+    public name:string;
     public status: string;
     public isRecognized: boolean;
     public options: any;
     public requireFailureRecognizers: any[];
-    constructor() {
-        this.status = 'wait';
+    constructor(options:any) {
+        this.name = options.name;
+        this.status = 'unknown';
         this.isRecognized = false;
         this.requireFailureRecognizers = [];
     };
@@ -37,7 +39,7 @@ export default class Recognizer {
         for (let index = 0; index < length; index++) {
             const recognizer = this.requireFailureRecognizers[index];
             // console.log(recognizer.status);
-            if ('fail' !== recognizer.status && 'wait' !== recognizer.status) {
+            if ('fail' !== recognizer.status && 'unknown' !== recognizer.status) {
                 return false;
             }
         };

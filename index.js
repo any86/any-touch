@@ -1,6 +1,6 @@
 import AnyTouch from './src/main.ts';
 let log = console.log;
-log = () => {};
+log = () => { };
 new Vue({
     el: '#app',
 
@@ -16,11 +16,15 @@ new Vue({
         };
     },
     mounted() {
+        const tap2 = new AnyTouch.TapRecognizer({ name: 'doubletap', pointer: 1, taps: 2 })
+        const tap3 = new AnyTouch.TapRecognizer({ name: 'threetap', pointer: 1, taps: 3 })
         const anyTouch = new AnyTouch(this.$refs.circle);
-        // setTimeout(() => {
-        //     // anyTouch.destroy();
-        // }, 1000);
-        // this.testPan();
+        anyTouch.add(tap2);
+        anyTouch.add(tap3);
+        const tap1 = anyTouch.get('tap');
+        tap1.requireFailure(tap2);
+        tap1.requireFailure(tap3);
+        tap2.requireFailure(tap3);
         /**
          * =========================== pan ===========================
          */
@@ -62,7 +66,7 @@ new Vue({
             log(`%c ${e.type} `, 'background-color:#f70;color:#fff;');
             this.message = e;
         });
-        
+
         /**
          * =========================== tap ===========================
          */

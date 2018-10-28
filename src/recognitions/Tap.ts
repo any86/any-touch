@@ -11,7 +11,7 @@ export default class TapRecognizer extends Base {
     public options: Options;
 
     constructor(options: Options) {
-        super();
+        super(options);
         this.options = options;
         this.tapTimeoutId = null;
         this.tapCount = 0;

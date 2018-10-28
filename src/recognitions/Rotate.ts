@@ -2,6 +2,10 @@ import Base from './Base';
 import { Computed } from '../interface';
 
 export default class RotateRecognizer extends Base {
+    constructor(options:any){
+        super(options);
+    };
+
     recognize(computed: any, callback: (paylod: any) => {}) {
         if (this.test(computed)) {
             callback({ type: 'rotate', ...computed });

@@ -15,7 +15,7 @@ export default class PanRecognizer extends Base {
         name = 'pan',
         threshold = 10,
         allowLength = 1 }: Options = {}) {
-        super();
+        super({name});
         this.name = name;
         this.threshold = threshold;
         this.allowLength = allowLength;

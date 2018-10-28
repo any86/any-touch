@@ -1,7 +1,10 @@
 import { Computed, RecognizerCallback } from '../interface';
-export default class PressRecognizer {
+
+import Base from './Base';
+export default class PressRecognizer extends Base {
     private timeoutId: number;
-    constructor() {
+    constructor(options:any) {
+        super(options);
         this.timeoutId = null;
     };
 

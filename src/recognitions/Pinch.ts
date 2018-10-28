@@ -2,8 +2,8 @@ import { Computed } from '../interface';
 import Base from './Base';
 export default class PinchRecognizer extends Base {
     private _prevScale: number;
-    constructor() {
-        super();
+    constructor(options:any) {
+        super(options);
     };
 
     recognize(computed: Computed, callback: (anyTouchEvent: any) => void) {
