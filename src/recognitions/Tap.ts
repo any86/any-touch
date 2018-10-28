@@ -1,5 +1,6 @@
 import { Computed, RecognizerCallback } from '../interface';
 interface Options { name: string, pointer: number, taps: number };
+const { setTimeout, clearTimeout } = window;
 import Base from './Base';
 export default class TapRecognizer extends Base {
     tapCount: number;
@@ -18,14 +19,34 @@ export default class TapRecognizer extends Base {
 
     recognize(computed: Computed, callback: RecognizerCallback): void {
         if (this.test(computed)) {
-            // console.log(this.tapCount);
             // 累加点击
             this.tapCount++;
-            callback({ type: this.options.name, ...computed, tapCount:this.tapCount });
-            clearTimeout(this.tapTimeoutId);
-            this.tapTimeoutId = window.setTimeout(() => {
-                this.tapCount = 0;
-            }, 300);
+            if (this.hasRequireFailure()) {
+                
+                // 如果是需要其他手势失败才能触发的手势,
+                // 需要等待(300ms)其他手势失败才能触发
+                clearTimeout(this.tapTimeoutId);
+                this.tapTimeoutId = setTimeout(() => {
+                    // console.log(this.isOtherFailOrWait());
+                    if (this.options.taps === this.tapCount && this.isOtherFailOrWait()) {
+                        callback({ type: this.options.name, ...computed, tapCount: this.tapCount });
+                    }
+                    this.tapCount = 0;
+                }, 300);
+            } else {
+                // 如果不需要等待其他手势失败
+                // 那么立即执行
+                clearTimeout(this.tapTimeoutId);
+                if (this.options.taps === this.tapCount) {
+                    callback({ type: this.options.name, ...computed, tapCount: this.tapCount });
+                    
+                    this.tapCount = 0;
+                }
+                this.tapTimeoutId = setTimeout(() => {
+                    this.status = 'fail';
+                    this.tapCount = 0;
+                }, 300)
+            }
         }
     };
 

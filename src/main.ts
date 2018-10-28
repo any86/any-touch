@@ -64,7 +64,7 @@ export default class AnyTouch {
         this.recognizers = [
             new TapRecognizer({name:'tap', pointer: 1,taps:1 }),
             new TapRecognizer({name: 'doubletap', pointer: 1,taps:2 }),
-            new TapRecognizer({name: 'threetap', pointer: 1,taps:3 }, ),
+            new TapRecognizer({name: 'threetap', pointer: 1,taps:3 } ),
             new PressRecognizer(),
             new PanRecognizer(),
             new SwipeRecognizer(),
@@ -72,8 +72,9 @@ export default class AnyTouch {
             new RotateRecognizer(),
         ];
 
-
         this.recognizers[0].requireFailure(this.recognizers[1]);
+        this.recognizers[0].requireFailure(this.recognizers[2]);
+        this.recognizers[1].requireFailure(this.recognizers[2]);
 
         // 绑定事件
         if (this.isMobile) {

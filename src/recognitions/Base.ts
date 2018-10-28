@@ -8,25 +8,40 @@ export default class Recognizer {
     public status: string;
     public isRecognized: boolean;
     public options: any;
-    private _requireFailureList:any[];
+    public requireFailureRecognizers: any[];
     constructor() {
-        this.status = 'unknown';
+        this.status = 'wait';
         this.isRecognized = false;
-        this._requireFailureList = [];
+        this.requireFailureRecognizers = [];
     };
 
     /**
-     * 前者需要后者失败才能触发
-     * @param 识别器实例 
+     * 前者需要后者识别失败才能触发
+     * @param {Recognizer} 识别器实例 
      */
-    public requireFailure(recognizerInstance:any){
-        const {name} = this.options;
-        this._requireFailureList.push({name, requireFailureName: recognizerInstance.options.name})
+    public requireFailure(recognizer: any) {
+        if (!this.requireFailureRecognizers.includes(recognizer)) {
+            this.requireFailureRecognizers.push(recognizer);
+        }
     };
 
-    public hasRequireFailure(){
-        // this._requireFailureList.find()
-        // return this.
+    public hasRequireFailure() {
+        return 0 < this.requireFailureRecognizers.length;
+    };
+
+    /**
+     * 是否要求注册时指定失败的选择器是失败状态
+     */
+    public isOtherFailOrWait(): boolean {
+        const { length } = this.requireFailureRecognizers;
+        for (let index = 0; index < length; index++) {
+            const recognizer = this.requireFailureRecognizers[index];
+            // console.log(recognizer.status);
+            if ('fail' !== recognizer.status && 'wait' !== recognizer.status) {
+                return false;
+            }
+        };
+        return true;
     };
 
     /**
