@@ -62,19 +62,13 @@ export default class AnyTouch {
         this.$el = el;
         this.eventBus = new EventBus(el);
         this.recognizers = [
-            new TapRecognizer({name:'tap', pointer: 1,taps:1 }),
-            new TapRecognizer({name: 'doubletap', pointer: 1,taps:2 }),
-            new TapRecognizer({name: 'threetap', pointer: 1,taps:3 } ),
-            new PressRecognizer(),
-            new PanRecognizer(),
-            new SwipeRecognizer(),
-            new PinchRecognizer(), 
-            new RotateRecognizer(),
+            new TapRecognizer({ name: 'tap', pointer: 1, taps: 1 }),
+            new PressRecognizer({name:'press'}),
+            new PanRecognizer({name:'pan'}),
+            new SwipeRecognizer({name:'swipe'}),
+            new PinchRecognizer({name:'pinch'}),
+            new RotateRecognizer({name:'rotate'}),
         ];
-
-        this.recognizers[0].requireFailure(this.recognizers[1]);
-        this.recognizers[0].requireFailure(this.recognizers[2]);
-        this.recognizers[1].requireFailure(this.recognizers[2]);
 
         // 绑定事件
         if (this.isMobile) {
@@ -110,6 +104,19 @@ export default class AnyTouch {
      */
     add(recognizer: any) {
         this.recognizers.push(recognizer);
+    };
+
+    /**
+     * 获取识别器通过名字
+     * @param {String} 识别器的名字
+     * @return {Recognizer} 返回识别器
+     */
+    get(name: string): any {
+        // console.log(this.recognizers);
+        // this.recognizers.forEach(item => {
+        //     console.log(item);
+        // });
+        return this.recognizers.find(recognizer=>name === recognizer.name);
     };
 
     set({
