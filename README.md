@@ -9,10 +9,9 @@
 
 
 ### 待完成
-- [ ] 手势识别顺序(order)
-- [ ] 手势互斥(reject)
+- [ ] 手势互斥(requireFailure)
 - [ ] 识别input数据变形(transform)
-- [ ] 自定义识别器(recgnize)
+- [ ] 自定义识别器(recgnizer)
 - [ ] 停止继续识别(stop)
 - [ ] 自定义任意触点,让鼠标支持rotate和pinch(addPointer)
 - [ ] 单元测试(test)
