@@ -6,11 +6,9 @@
 ### 已完成
 - [x] 支持手势: tap | doubletap | pan | swipe | pinch | rotate.
 - [x] 支持鼠标(mouse)
-- [x] 销毁(destory)
-
+- [x] 手势互斥(requireFailure)
 
 ### 待完成
-- [ ] 手势互斥(requireFailure)
 - [ ] 识别input数据变形(transform)
 - [ ] 自定义识别器(recgnizer)
 - [ ] 停止继续识别(stop)
