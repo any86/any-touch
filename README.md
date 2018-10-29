@@ -5,6 +5,7 @@
 
 ### 已完成
 - [x] 支持手势: tap | doubletap | pan | swipe | pinch | rotate.
+- [x] 支持鼠标(mouse)
 - [x] 销毁(destory)
 
 
