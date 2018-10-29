@@ -63,11 +63,11 @@ export default class AnyTouch {
         this.eventBus = new EventBus(el);
         this.recognizers = [
             new TapRecognizer({ name: 'tap', pointer: 1, taps: 1 }),
-            new PressRecognizer({name:'press'}),
-            new PanRecognizer({name:'pan'}),
-            new SwipeRecognizer({name:'swipe'}),
-            new PinchRecognizer({name:'pinch'}),
-            new RotateRecognizer({name:'rotate'}),
+            new PressRecognizer({ name: 'press' }),
+            new PanRecognizer({ name: 'pan' }),
+            new SwipeRecognizer({ name: 'swipe' }),
+            new PinchRecognizer({ name: 'pinch' }),
+            new RotateRecognizer({ name: 'rotate' }),
         ];
 
         // 绑定事件
@@ -112,11 +112,7 @@ export default class AnyTouch {
      * @return {Recognizer} 返回识别器
      */
     get(name: string): any {
-        // console.log(this.recognizers);
-        // this.recognizers.forEach(item => {
-        //     console.log(item);
-        // });
-        return this.recognizers.find(recognizer=>name === recognizer.name);
+        return this.recognizers.find(recognizer => name === recognizer.name);
     };
 
     set({
@@ -127,14 +123,9 @@ export default class AnyTouch {
         // event.preventDefault();
         // 记录各个阶段的input
         let inputs = inputManage(event);
-        const computed: Computed = compute(inputs);
-
-
-
-
-
-        // 当是鼠标事件的时候, mouseup阶段的input和computed为空
-        if (undefined !== computed) {
+        if (undefined !== inputs) {
+            const computed: Computed = compute(inputs);
+            // 当是鼠标事件的时候, mouseup阶段的input和computed为空
             this.recognizers.forEach(recognizer => {
                 recognizer.recognize(computed, (data: Computed) => {
                     this.eventBus.dispatch(data.type, data);
