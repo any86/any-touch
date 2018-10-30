@@ -1,6 +1,6 @@
 import babel from 'rollup-plugin-babel';
 export default {
-    input: '.tsc-output/main.js',
+    input: 'esm/main.js',
     plugins: [babel({
         exclude: 'node_modules/**'
     })],

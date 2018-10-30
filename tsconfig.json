@@ -6,10 +6,10 @@
         "removeComments": true,
         "preserveConstEnums": false,
         "sourceMap": false,
-        "outDir": "./.tsc-output",
+        "outDir": "./esm",
         "lib": ["dom", "es2017"]
     },
     "include": [
-        "src/main.ts", "src/a.spec.ts"
+        "src/main.ts"
     ]
 }
