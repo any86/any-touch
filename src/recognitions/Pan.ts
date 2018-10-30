@@ -11,17 +11,10 @@ import {
 } from '../const';
 import Base from './Base';
 interface Options {
-<<<<<<< HEAD
     name?: string;
     threshold?: number;
     pointerLength?: number;
     direction?: number;
-=======
-    name: string;
-    threshold: number;
-    pointerLength: number;
-    direction: number;
->>>>>>> 87f3025d70dbb239810eb636bbb50badd7280db7
 };
 
 export default class PanRecognizer extends Base {
