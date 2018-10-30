@@ -2,10 +2,10 @@
   "name": "any-touch",
   "version": "0.0.2",
   "description": "一个纯粹的手势库",
-  "main": "dist/any-touch.js",
+  "main": "esm/main.js",
   "scripts": {
     "dev": "parcel index.html",
-    "build": "tsc && rollup -c && rimraf .tsc-output/",
+    "build": "tsc && rollup -c && rimraf esm/",
     "test": "jest"
   },
   "repository": {
