@@ -17,7 +17,18 @@
  * 格式化Event成统一的pointer格式 => 通过pointer数据计算 => 用计算结果去识别手势
  */
 import { EventHandler, Computed } from './interface';
-import { SUPPORT_ONLY_TOUCH, IS_MOBILE } from './const';
+import {
+    SUPPORT_ONLY_TOUCH,
+    IS_MOBILE,
+    DIRECTION_NONE, 
+    DIRECTION_LEFT, 
+    DIRECTION_RIGHT, 
+    DIRECTION_UP, 
+    DIRECTION_DOWN, 
+    DIRECTION_HORIZONTAL, 
+    DIRECTION_VERTICAL, 
+    DIRECTION_ALL
+} from './const';
 import EventBus from './EventBus';
 import inputManage from './inputManage';
 import compute from './compute/index';
@@ -36,6 +47,14 @@ export default class AnyTouch {
     static SwipeRecognizer = SwipeRecognizer;
     static PinchRecognizer = PinchRecognizer;
     static RotateRecognizer = RotateRecognizer;
+    static DIRECTION_NONE = DIRECTION_NONE;
+    static DIRECTION_UP = DIRECTION_UP;
+    static DIRECTION_RIGHT = DIRECTION_RIGHT;
+    static DIRECTION_DOWN = DIRECTION_DOWN;
+    static DIRECTION_LEFT = DIRECTION_LEFT;
+    static DIRECTION_HORIZONTAL = DIRECTION_LEFT | DIRECTION_RIGHT;
+    static DIRECTION_VERTICAL = DIRECTION_UP | DIRECTION_DOWN;
+    static DIRECTION_ALL = DIRECTION_HORIZONTAL | DIRECTION_VERTICAL;
 
     // 目标元素
     $el: Element;

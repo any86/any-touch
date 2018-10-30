@@ -1,24 +1,38 @@
-import { Computed, RecognizerCallback, nativeEventType } from '../interface';
+import { Computed, RecognizerCallback } from '../interface';
+import {
+    DIRECTION_NONE,
+    DIRECTION_LEFT,
+    DIRECTION_RIGHT,
+    DIRECTION_UP,
+    DIRECTION_DOWN,
+    DIRECTION_HORIZONTAL,
+    DIRECTION_VERTICAL,
+    DIRECTION_ALL
+} from '../const';
 import Base from './Base';
 interface Options {
-    name?: string;
-    threshold?: number;
-    allowLength?: number;
-}
+    name: string;
+    threshold: number;
+    pointerLength: number;
+    direction: number;
+};
 
 export default class PanRecognizer extends Base {
     public name: string;
     public threshold: number;
-    public allowLength: number;
+    public pointerLength: number;
+    public direction: number;
 
     constructor({
         name = 'pan',
         threshold = 10,
-        allowLength = 1 }: Options = {}) {
-        super({name});
+        pointerLength = 1,
+        direction = DIRECTION_HORIZONTAL }: Options) {
+        super({ name });
         this.name = name;
         this.threshold = threshold;
-        this.allowLength = allowLength;
+        this.pointerLength = pointerLength;
+        this.direction = direction;
     };
 
     /**
@@ -43,7 +57,10 @@ export default class PanRecognizer extends Base {
      * @param {Computed} 计算数据
      * @return {Boolean}} 是否是当前手势 
      */
-    test({ maxLength, distance, nativeEventType }: Computed): Boolean {
-        return 'start' !== nativeEventType && (this.isRecognized || this.threshold < distance) && this.allowLength === maxLength;
+    test({ maxLength, distance, nativeEventType,direction }: Computed): Boolean {
+        let isDirectVaild = false;
+        if(DIRECTION_HORIZONTAL === this.direction && 'left' === direction )
+
+        return isDirectVaild && 'start' !== nativeEventType && (this.isRecognized || this.threshold < distance) && this.pointerLength === maxLength;
     };
 };
