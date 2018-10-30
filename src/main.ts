@@ -59,7 +59,6 @@ export default class AnyTouch {
     } = {}) {
         this.version = '0.0.2';
         this.isMobile = IS_MOBILE;
-        this.$el = el;
         this.eventBus = new EventBus(el);
         this.recognizers = [
             new TapRecognizer({ name: 'tap', pointer: 1, taps: 1 }),
@@ -71,22 +70,29 @@ export default class AnyTouch {
         ];
 
         // 绑定事件
+        this.unbinders = this._bindRecognizers(el);
+    };
+
+    /**
+     * 绑定手势到指定元素
+     * @param {Element} 待绑定手势元素
+     */
+    private _bindRecognizers(el: Element) {
+        const boundFn = this.handler.bind(this);
         if (this.isMobile) {
-            this.unbinders = ['touchstart', 'touchmove', 'touchend', 'touchcancel'].map(eventName => {
-                let boundFn = this.handler.bind(this);
-                this.$el.addEventListener(eventName, boundFn);
+            return ['touchstart', 'touchmove', 'touchend', 'touchcancel'].map(eventName => {
+                el.addEventListener(eventName, boundFn);
                 return () => {
-                    this.$el.removeEventListener(eventName, boundFn);
+                    el.removeEventListener(eventName, boundFn);
                 }
             });
         } else {
-            let boundFn = this.handler.bind(this);
-            this.$el.addEventListener('mousedown', boundFn);
+            el.addEventListener('mousedown', boundFn);
             window.addEventListener('mousemove', boundFn);
             window.addEventListener('mouseup', boundFn);
-            this.unbinders = [
+            return [
                 () => {
-                    this.$el.removeEventListener('mousedown', boundFn);
+                    el.removeEventListener('mousedown', boundFn);
                 },
                 () => {
                     window.removeEventListener('mousemove', boundFn);
@@ -96,7 +102,7 @@ export default class AnyTouch {
                 }
             ]
         }
-    }
+    };
 
     /**
      * 添加识别器
