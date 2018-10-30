@@ -1,6 +1,5 @@
 /dist
 /node_modules
-/.rpt2_cache
 /.tsc-output
 coverage
 /.vscode
