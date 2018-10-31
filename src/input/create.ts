@@ -29,7 +29,6 @@ export default (event: TouchEvent | MouseEvent): Input => {
 
     // 变化前触点数
     const changedPointerLength: number = changedPointers.length;
-
     const isFirst = ('start' === inputStatus) && (0 === changedPointerLength - pointerLength);
     const isFinal = ('end' === inputStatus) && (0 === pointerLength);
 

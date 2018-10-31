@@ -1,5 +1,5 @@
 
-import { Computed,directionString } from '../interface';
+import { Computed, directionString } from '../interface';
 import { getDirection } from '../vector';
 import computeLast from './computeLast';
 import computeDistance from './computeDistance';
@@ -18,16 +18,14 @@ export default function ({
 }: any): Computed {
     // 如果输入为空, 那么就计算了, 鼠标模式下, 点击了非元素部分, mouseup阶段会初选input为undefined
     if (undefined === input) return;
-    const length = input.pointers.length;
+
     const { abs, max } = Math;
 
     let computed = <Computed>{
-        isFirst: true,
-        isFinal: false,
         pointers: [],
         changedPointers: [],
-        pointerLength: 0,
-        changedPointerLength: 0,
+        pointerLength: input.pointerLength,
+        changedPointerLength: input.changedPointerLength,
         // 起始到结束的偏移
         displacementX: 0,
         displacementY: 0,
@@ -35,7 +33,7 @@ export default function ({
         distanceY: 0,
         distance: 0,
 
-
+        // 方向
         direction: 'none',
         lastDirection: 'none',
 
@@ -96,8 +94,7 @@ export default function ({
     computed.velocityY = abs(computed.distanceY / computed.duration) || 0;
     computed.maxVelocity = max(computed.velocityX, computed.velocityY);
 
-    // 前面有判断, 如果出现了单触点, 那么startMutliInput === undefined;
-    // if (undefined !== startMutliInput) {
+    // 多点计算
     if (undefined !== prevInput && 1 < prevInput.pointers.length && 1 < input.pointers.length) {
         // if(undefined !== startMutliInput){
         // 2指形成的向量
@@ -119,12 +116,11 @@ export default function ({
     }
 
     // 最大触点数
-    const maxLength = computeMaxLength(input);
+    const maxPointerLength = computeMaxLength(input);
 
     return {
         ...input,
-        length,
-        maxLength,
+        maxPointerLength,
         ...computed
     };
 };
