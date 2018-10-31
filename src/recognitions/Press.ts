@@ -9,8 +9,8 @@ export default class PressRecognizer extends Base {
     };
 
     recognize(computed: Computed, callback: RecognizerCallback): void {
-        const { inputStatus, distance, duration, maxLength } = computed;
-        if(1 < maxLength){
+        const { inputStatus, distance, duration, maxPointerLength } = computed;
+        if(1 < maxPointerLength){
             this.cancel();
             return;
         } else {

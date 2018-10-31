@@ -17,9 +17,9 @@ export default class RotateRecognizer extends Base {
         }
     };
 
-    test({ length, inputStatus }: Computed) {
+    test({ pointerLength }: Computed) {
         // 如果触碰点要大于1
         // 如果已经识别, 并且当前事件是离开阶段
-        return 1 < length || ('end' === inputStatus && this.isRecognized);
+        return 1 < pointerLength || this.isRecognized;
     };
 };

@@ -26,7 +26,7 @@ export interface Computed extends Input {
     type?: string;
     inputStatus?: inputStatus; //start | move | end | cancel
     length?: number;
-    maxLength?: number;
+    maxPointerLength?: number;
     lastVelocity: number;
     lastVelocityX: number;
     lastVelocityY: number;

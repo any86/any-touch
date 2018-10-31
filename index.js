@@ -30,7 +30,7 @@ new Vue({
          */
         anyTouch.on('panstart', e => {
             this.message = e;
-            log(e.type);
+            // console.log(e.type);
         });
 
         anyTouch.on('panmove', e => {
@@ -95,7 +95,7 @@ new Vue({
          */
         ['pinchstart', 'pinchmove', 'pinchend', 'pinchin', 'pinchout'].forEach(name => {
             anyTouch.on(name, e => {
-                this.message = e;
+                // this.message = e;
                 log(e.type);
             })
         });
@@ -118,7 +118,7 @@ new Vue({
         ['rotatestart', 'rotatemove', 'rotateend'].forEach(name => {
             anyTouch.on(name, e => {
                 log(e.type);
-                this.message = e;
+                // this.message = e;
             })
         });
 

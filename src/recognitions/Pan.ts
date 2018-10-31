@@ -9,9 +9,7 @@ interface Options {
 
 export default class PanRecognizer extends Base {
     public name: string;
-    public threshold: number;
-    public pointerLength: number;
-    public directions: directionString[];
+    public options: Options;
     constructor({
         name = 'pan',
         threshold = 10,
@@ -19,9 +17,11 @@ export default class PanRecognizer extends Base {
         directions = ['up', 'right', 'down', 'left'] }: Options = {}) {
         super({ name });
         this.name = name;
-        this.threshold = threshold;
-        this.pointerLength = pointerLength;
-        this.directions = directions;
+        this.options = {
+            threshold,
+            pointerLength,
+            directions
+        };
     };
 
     /**
@@ -30,15 +30,14 @@ export default class PanRecognizer extends Base {
      * @param {RecognizerCallback} 识别后触发钩子 
      */
     recognize(computed: Computed, callback: RecognizerCallback) {
-        let type: string;
         if (this.test(computed)) {
             // panleft | panright | pandown | panup
             callback({ type: this.name + computed.direction, ...computed });
             // pan
             callback({ type: this.name, ...computed });
             // panstart | panmove | panend
-            type = this.getRecognizerState(computed.inputStatus);
-            callback({ type: this.name + type, ...computed });
+            let status = this.getRecognizerState(computed.inputStatus);
+            callback({ type: this.name + status, ...computed });
         }
     };
 
@@ -46,9 +45,9 @@ export default class PanRecognizer extends Base {
      * @param {Computed} 计算数据
      * @return {Boolean}} 是否是当前手势 
      */
-    test({ maxLength, distance, inputStatus, direction }: Computed): Boolean {
-        const isValidDirection = -1 !== this.directions.indexOf(direction);
-        const isValidType = 'start' !== inputStatus;
-        return isValidDirection && isValidType && (this.isRecognized || this.threshold < distance) && this.pointerLength === maxLength;
+    test({ pointerLength, distance, direction }: Computed): Boolean {
+        const isValidDirection = -1 !== this.options.directions.indexOf(direction);
+        const isValidThreshold = this.options.threshold < distance;
+        return isValidDirection && (this.isRecognized || isValidThreshold) && this.pointerLengthTest(pointerLength);
     };
 };

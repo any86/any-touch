@@ -55,7 +55,7 @@ export default class TapRecognizer extends Base {
         this.tapCount = 0;
     };
 
-    test({ inputStatus, distance, duration, maxLength, centerX, centerY }: Computed): boolean {
+    test({ inputStatus, distance, duration, maxPointerLength, centerX, centerY }: Computed): boolean {
         const { abs, max } = Math;
         // 判断是否发生大的位置变化
         this._prevCenterX = centerX;
@@ -64,7 +64,7 @@ export default class TapRecognizer extends Base {
         let _yMove = abs(centerY - this._prevCenterY);
         const hasMove = 2 < max(_xMove, _yMove);
         if ('end' === inputStatus) {
-            return 1 === maxLength && 2 > distance && 250 > duration && !hasMove;
+            return 1 === maxPointerLength && 2 > distance && 250 > duration && !hasMove;
         }
     };
 };
