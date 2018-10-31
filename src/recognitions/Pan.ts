@@ -45,9 +45,10 @@ export default class PanRecognizer extends Base {
      * @param {Computed} 计算数据
      * @return {Boolean}} 是否是当前手势 
      */
-    test({ pointerLength, distance, direction }: Computed): Boolean {
+    test({ pointerLength, changedPointerLength,distance, direction }: Computed): Boolean {
+        console.log(this.status);
         const isValidDirection = -1 !== this.options.directions.indexOf(direction);
         const isValidThreshold = this.options.threshold < distance;
-        return isValidDirection && (this.isRecognized || isValidThreshold) && this.pointerLengthTest(pointerLength);
+        return isValidDirection && (this.isRecognized || isValidThreshold) && 1=== pointerLength;
     };
 };
