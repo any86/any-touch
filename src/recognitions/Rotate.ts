@@ -11,15 +11,15 @@ export default class RotateRecognizer extends Base {
             callback({ type: 'rotate', ...computed });
 
             //rotatestart |rotatemove |rotateend
-            const type = this.recognizeType(computed.nativeEventType);
+            const type = this.getRecognizerStatus(computed.inputType);
             callback({ type: 'rotate' + type, ...computed });
 
         }
     };
 
-    test({ length, nativeEventType }: Computed) {
+    test({ length, inputType }: Computed) {
         // 如果触碰点要大于1
         // 如果已经识别, 并且当前事件是离开阶段
-        return 1 < length || ('end' === nativeEventType && this.isRecognized);
+        return 1 < length || ('end' === inputType && this.isRecognized);
     };
 };

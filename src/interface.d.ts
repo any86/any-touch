@@ -1,27 +1,30 @@
-export type nativeEventType = 'start' | 'move' | 'end' | 'cancel';
+
+export type directionString = 'up' | 'right' | 'down' | 'left' | 'none' | 'all';
+export type inputType = 'start' | 'move' | 'end' | 'cancel';
+export type RecognizerStatus = 'unknown' | 'recognized' | 'began' | 'changed' | 'ended' | 'failed' | 'cancelled';
 
 export interface Input {
     isFirst: boolean;
     isFinal: boolean;
-    nativeEventType?: nativeEventType;
+    inputType?: inputType;
     nativeEvent?: any;
     pointers: { clientX: number, clientY: number }[];
     pointerLength: number;
     changedPointers: { clientX: number, clientY: number }[];
     changedPointerLength: number;
     timestamp: number;
-    target: EventTarget;
-    currentTarget: EventTarget;
+    target?: EventTarget;
+    currentTarget?: EventTarget;
     centerX?: number;
     centerY?: number;
-    stopPropagation: () => void;
-    preventDefault: () => void;
-    stopImmediatePropagation: () => void;
+    stopPropagation?: () => void;
+    preventDefault?: () => void;
+    stopImmediatePropagation?: () => void;
 }
 // input的计算结果
 export interface Computed extends Input {
-    type?: string; 
-    nativeEventType?: nativeEventType; //start | move | end | cancel
+    type?: string;
+    inputType?: inputType; //start | move | end | cancel
     length?: number;
     maxLength?: number;
     lastVelocity: number;
@@ -29,9 +32,9 @@ export interface Computed extends Input {
     lastVelocityY: number;
     velocityX: number;
     velocityY: number;
-    maxVelocity:number;
+    maxVelocity: number;
     scale: number;
-    deltaScale:number;
+    deltaScale: number;
     angle: number;
     deltaAngle: number;
     centerX?: number;
@@ -44,12 +47,12 @@ export interface Computed extends Input {
     distanceY: number;
     distance: number;
     duration: number;
-    direction: string;
+    direction: directionString;
     // 最近的方向
-    lastDirection:string;
+    lastDirection: directionString;
     // 2次input的时间差
-    deltaTime?:number;
-    tapCount?:number;
+    deltaTime?: number;
+    tapCount?: number;
 }
 
 // 识别器中recognize方法返回的数据格式

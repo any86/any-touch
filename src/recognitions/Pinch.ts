@@ -12,7 +12,7 @@ export default class PinchRecognizer extends Base {
             callback({ type: 'pinch', ...computed });
 
             // pinchstart | pinchmove | pinchend
-            const type = this.recognizeType(computed.nativeEventType);
+            const type = this.getRecognizerStatus(computed.inputType);
             callback({ type: 'pinch' + type, ...computed });
 
             // pinchin | pinchout
@@ -27,9 +27,9 @@ export default class PinchRecognizer extends Base {
         }
     };
 
-    test({ length, nativeEventType }: Computed) {
+    test({ length, inputType }: Computed) {
         // 如果触碰点要大于1
         // 如果已经识别, 并且当前事件是离开阶段
-        return 1 < length || ('end' === nativeEventType && this.isRecognized);
+        return 1 < length || ('end' === inputType && this.isRecognized);
     };
 };

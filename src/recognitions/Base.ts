@@ -3,14 +3,14 @@
 * 未知 => 识别失败 
 * 未知 => 取消(已知的任意阶段)
 * */
-import { nativeEventType } from '../interface';
+import { inputType,RecognizerStatus } from '../interface';
 export default class Recognizer {
-    public name:string;
+    public name: string;
     public status: string;
     public isRecognized: boolean;
     public options: any;
     public requireFailureRecognizers: any[];
-    constructor(options:any) {
+    constructor(options: any) {
         this.name = options.name;
         this.status = 'unknown';
         this.isRecognized = false;
@@ -49,11 +49,12 @@ export default class Recognizer {
     /**
      * 识别手势事件的状态
      * 手势的状态, 非原生事件的状态
-     * @param {nativeEventType} 输入状态 
+     * @param {inputType} 输入状态 
      */
-    public recognizeType(nativeEventType: nativeEventType) {
+    public getRecognizerStatus(inputType: inputType){
+        console.log(inputType);
         if (this.isRecognized) {
-            if ('move' === nativeEventType) {
+            if ('move' === inputType) {
                 return 'move';
             } else {
                 this.isRecognized = false;

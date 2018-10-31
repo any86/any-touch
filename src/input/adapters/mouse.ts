@@ -27,7 +27,7 @@ export default (event: MouseEvent): any => {
     };
 
     return {
-        nativeEventType: MAP[type],
+        inputType: MAP[type],
         changedPointers,
         pointers,
         nativeEvent: event

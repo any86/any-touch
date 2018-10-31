@@ -1,38 +1,27 @@
-import { Computed, RecognizerCallback } from '../interface';
-import {
-    DIRECTION_NONE,
-    DIRECTION_LEFT,
-    DIRECTION_RIGHT,
-    DIRECTION_UP,
-    DIRECTION_DOWN,
-    DIRECTION_HORIZONTAL,
-    DIRECTION_VERTICAL,
-    DIRECTION_ALL
-} from '../const';
+import { Computed, RecognizerCallback, directionString } from '../interface';
 import Base from './Base';
 interface Options {
     name?: string;
     threshold?: number;
     pointerLength?: number;
-    direction?: number;
+    directions?: directionString[];
 };
 
 export default class PanRecognizer extends Base {
     public name: string;
     public threshold: number;
     public pointerLength: number;
-    public direction: number;
-
+    public directions: directionString[];
     constructor({
         name = 'pan',
         threshold = 10,
         pointerLength = 1,
-        direction = DIRECTION_HORIZONTAL }: Options={}) {
+        directions = ['up', 'right', 'down', 'left'] }: Options = {}) {
         super({ name });
         this.name = name;
         this.threshold = threshold;
         this.pointerLength = pointerLength;
-        this.direction = direction;
+        this.directions = directions;
     };
 
     /**
@@ -48,7 +37,7 @@ export default class PanRecognizer extends Base {
             // pan
             callback({ type: this.name, ...computed });
             // panstart | panmove | panend
-            type = this.recognizeType(computed.nativeEventType);
+            type = this.getRecognizerStatus(computed.inputType);
             callback({ type: this.name + type, ...computed });
         }
     };
@@ -57,10 +46,9 @@ export default class PanRecognizer extends Base {
      * @param {Computed} 计算数据
      * @return {Boolean}} 是否是当前手势 
      */
-    test({ maxLength, distance, nativeEventType,direction }: Computed): Boolean {
-        let isDirectVaild = false;
-        if(DIRECTION_HORIZONTAL === this.direction && 'left' === direction )
-
-        return isDirectVaild && 'start' !== nativeEventType && (this.isRecognized || this.threshold < distance) && this.pointerLength === maxLength;
+    test({ maxLength, distance, inputType, direction }: Computed): Boolean {
+        const isValidDirectionVaild = -1 !== this.directions.indexOf(direction);
+        const isValidType = 'start' !== inputType;
+        return isValidDirectionVaild && isValidType && (this.isRecognized || this.threshold < distance) && this.pointerLength === maxLength;
     };
 };

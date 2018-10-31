@@ -1,5 +1,5 @@
 
-import { Computed } from '../interface';
+import { Computed,directionString } from '../interface';
 import { getDirection } from '../vector';
 import computeLast from './computeLast';
 import computeDistance from './computeDistance';
@@ -22,12 +22,19 @@ export default function ({
     const { abs, max } = Math;
 
     let computed = <Computed>{
+        isFirst: true,
+        isFinal: false,
+        pointers: [],
+        changedPointers: [],
+        pointerLength: 0,
+        changedPointerLength: 0,
         // 起始到结束的偏移
         displacementX: 0,
         displacementY: 0,
         distanceX: 0,
         distanceY: 0,
         distance: 0,
+
 
         direction: 'none',
         lastDirection: 'none',
@@ -42,7 +49,7 @@ export default function ({
         maxVelocity: 0,
         // 时间
         duration: 0,
-
+        timestamp: Date.now(),
         // 旋转和缩放
         angle: 0,
         deltaAngle: 0,
@@ -61,7 +68,7 @@ export default function ({
     computed = { ...computed, displacementX, displacementY, distanceX, distanceY, distance };
 
     // 计算方向
-    computed.direction = getDirection(displacementX, displacementY);
+    computed.direction = <directionString>getDirection(displacementX, displacementY);
 
     // 已消耗时间
     computed.duration = input.timestamp - startInput.timestamp;
@@ -70,7 +77,7 @@ export default function ({
     computed.lastVelocityX = lastComputed.velocityX;
     computed.lastVelocityY = lastComputed.velocityY;
     computed.lastVelocity = lastComputed.velocity;
-    computed.lastDirection = lastComputed.direction;
+    computed.lastDirection = <directionString>lastComputed.direction;
 
     // 中心点位移增量
     let { deltaX, deltaY } = computeDeltaXY({ input, prevInput });

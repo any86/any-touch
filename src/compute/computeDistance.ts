@@ -7,20 +7,20 @@ export default function ({
     startInput,
     input
 }: any): any {
-    const { nativeEventType } = input;
+    const { inputType } = input;
     const { round, abs } = Math;
     let displacementX = 0;
     let displacementY = 0;
-    if ('start' === nativeEventType) {
+    if ('start' === inputType) {
         prevDisplacementX = prevDisplacementY = 0;
-    } else if ('move' === nativeEventType) {
+    } else if ('move' === inputType) {
         displacementX = round(input.pointers[0][propX] - startInput.pointers[0][propX]);
         displacementY = round(input.pointers[0][propY] - startInput.pointers[0][propY]);
 
         // 记录本次位移
         prevDisplacementX = displacementX;
         prevDisplacementY = displacementY;
-    } else if ('end' === nativeEventType) {
+    } else if ('end' === inputType) {
         displacementX = prevDisplacementX;
         displacementY = prevDisplacementY;
     }
