@@ -9,20 +9,20 @@ export default class PressRecognizer extends Base {
     };
 
     recognize(computed: Computed, callback: RecognizerCallback): void {
-        const { inputStatus, distance, duration, maxLength } = computed;
+        const { inputState, distance, duration, maxLength } = computed;
         if(1 < maxLength){
             this.cancel();
             return;
         } else {
-            if ('start' === inputStatus) {
+            if ('start' === inputState) {
                 this.timeoutId = window.setTimeout(() => {
                     callback({ type: 'press', ...computed });
                 }, 250);
-            } else if ('move' === inputStatus) {
+            } else if ('move' === inputState) {
                 if (9 < distance) {
                     this.cancel();
                 }
-            } else if ('end' === inputStatus) {
+            } else if ('end' === inputState) {
                 if (251 > duration || 9 < distance) {
                     this.cancel();
                 } else {

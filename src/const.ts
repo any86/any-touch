@@ -1,8 +1,3 @@
-declare global {
-    interface Window {
-        isWeixin: boolean
-    }
-}
 // 简单判断是否手机设备
 export const MOBILE_REGEX = /mobile|tablet|ip(ad|hone|od)|android/i;
 
@@ -36,3 +31,12 @@ export const MAX_MOVE_OF_TAP = 2;
 // 计算时候取touchs.clientX | clientY
 export const propX = 'clientX';
 export const propY = 'clientY';
+
+// 识别器状态码
+export const RECOGNIZER_STATUS_POSSIBLE = 1;
+export const RECOGNIZER_STATUS_BEGAN = 2;
+export const RECOGNIZER_STATUS_CHANGED = 4;
+export const RECOGNIZER_STATUS_ENDED = 8;
+export const RECOGNIZER_STATUS_RECOGNIZED = RECOGNIZER_STATUS_ENDED;
+export const RECOGNIZER_STATUS_CANCELLED = 16;
+export const RECOGNIZER_STATUS_FAILED = 32;

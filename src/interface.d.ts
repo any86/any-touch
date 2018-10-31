@@ -1,12 +1,12 @@
 
 export type directionString = 'up' | 'right' | 'down' | 'left' | 'none' | 'all';
-export type inputStatus = 'start' | 'move' | 'end' | 'cancel';
+export type inputState = 'start' | 'move' | 'end' | 'cancel';
 export type RecognizerStatus = 'unknown' | 'recognized' | 'began' | 'changed' | 'ended' | 'failed' | 'cancelled';
 
 export interface Input {
     isFirst: boolean;
     isFinal: boolean;
-    inputStatus?: inputStatus;
+    inputState?: inputState;
     nativeEvent?: any;
     pointers: { clientX: number, clientY: number }[];
     pointerLength: number;
@@ -24,7 +24,7 @@ export interface Input {
 // input的计算结果
 export interface Computed extends Input {
     type?: string;
-    inputStatus?: inputStatus; //start | move | end | cancel
+    inputState?: inputState; //start | move | end | cancel
     length?: number;
     maxLength?: number;
     lastVelocity: number;

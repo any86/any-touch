@@ -22,7 +22,7 @@ export default (event: TouchEvent | MouseEvent): Input => {
             return;
         }
     }
-    const { inputStatus, pointers, changedPointers } = input;
+    const { inputState, pointers, changedPointers } = input;
 
     // 当前触点数
     const pointerLength: number = pointers.length;
@@ -30,8 +30,8 @@ export default (event: TouchEvent | MouseEvent): Input => {
     // 变化前触点数
     const changedPointerLength: number = changedPointers.length;
 
-    const isFirst = ('start' === inputStatus) && (0 === changedPointerLength - pointerLength);
-    const isFinal = ('end' === inputStatus) && (0 === pointerLength);
+    const isFirst = ('start' === inputState) && (0 === changedPointerLength - pointerLength);
+    const isFinal = ('end' === inputState) && (0 === pointerLength);
 
     // 中心坐标
     if (0 < pointerLength) {
