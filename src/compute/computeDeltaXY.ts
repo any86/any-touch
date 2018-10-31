@@ -4,7 +4,7 @@ export default function ({
 }: any): { deltaX: number, deltaY: number } {
     let deltaX: number;
     let deltaY: number;
-    if ('end' === input.inputType || 'start' === input.inputType) {
+    if ('end' === input.inputStatus || 'start' === input.inputStatus) {
         deltaX = 0;
         deltaY = 0;
     } else {
