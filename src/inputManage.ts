@@ -16,9 +16,9 @@ export default (event: TouchEvent | MouseEvent): any => {
     if (undefined === input) return;
 
     // 当前输入状态
-    const { inputState } = input;
+    const { inputStatus } = input;
     // [Start]
-    if ('start' === inputState) {
+    if ('start' === inputStatus) {
         // 上一步的触点
         // prevInput = undefined;
         // 当前点
@@ -32,7 +32,7 @@ export default (event: TouchEvent | MouseEvent): any => {
             // 如果出现了单点, 那么之前的多点起点记录失效
             startMutliInput = undefined;
         }
-    } else if ('move' === inputState) {
+    } else if ('move' === inputStatus) {
         // 读取上一点
         prevInput = activeInput;
         activeInput = input;

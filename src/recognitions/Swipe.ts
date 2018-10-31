@@ -17,10 +17,10 @@ export default class SwipeRecognizer extends Base {
     };
 
     test(computed: any): boolean {
-        const { inputState, lastDirection, direction, lastVelocity, maxLength, distance } = computed;
+        const { inputStatus, lastDirection, direction, lastVelocity, maxLength, distance } = computed;
         return 1 === maxLength &&
             10 < distance &&
-            'end' === inputState &&
+            'end' === inputStatus &&
             'none' !== lastDirection &&
             'none' !== direction &&
             0.3 < lastVelocity;

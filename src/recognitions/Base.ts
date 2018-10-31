@@ -3,7 +3,7 @@
 * 未知 => 识别失败 
 * 未知 => 取消(已知的任意阶段)
 * */
-import { inputState, RecognizerStatus } from '../interface';
+import { inputStatus, RecognizerStatus } from '../interface';
 import { RECOGNIZER_STATUS_POSSIBLE, RECOGNIZER_STATUS_BEGAN, RECOGNIZER_STATUS_CHANGED, RECOGNIZER_STATUS_ENDED, RECOGNIZER_STATUS_RECOGNIZED, RECOGNIZER_STATUS_CANCELLED, RECOGNIZER_STATUS_FAILED } from '../const'
 export default class Recognizer {
     public name: string;
@@ -50,11 +50,11 @@ export default class Recognizer {
     /**
      * 识别手势事件的状态
      * 手势的状态, 非原生事件的状态
-     * @param {inputState} 输入状态 
+     * @param {inputStatus} 输入状态 
      */
-    public getRecognizerState(inputState: inputState) {
+    public getRecognizerState(inputStatus: inputStatus) {
         if (this.isRecognized) {
-            if ('move' === inputState) {
+            if ('move' === inputStatus) {
                 return 'move';
             } else {
                 this.isRecognized = false;

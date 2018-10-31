@@ -37,7 +37,7 @@ export default class PanRecognizer extends Base {
             // pan
             callback({ type: this.name, ...computed });
             // panstart | panmove | panend
-            type = this.getRecognizerState(computed.inputState);
+            type = this.getRecognizerState(computed.inputStatus);
             callback({ type: this.name + type, ...computed });
         }
     };
@@ -46,9 +46,9 @@ export default class PanRecognizer extends Base {
      * @param {Computed} 计算数据
      * @return {Boolean}} 是否是当前手势 
      */
-    test({ maxLength, distance, inputState, direction }: Computed): Boolean {
-        const isValidDirectionVaild = -1 !== this.directions.indexOf(direction);
-        const isValidType = 'start' !== inputState;
-        return isValidDirectionVaild && isValidType && (this.isRecognized || this.threshold < distance) && this.pointerLength === maxLength;
+    test({ maxLength, distance, inputStatus, direction }: Computed): Boolean {
+        const isValidDirection = -1 !== this.directions.indexOf(direction);
+        const isValidType = 'start' !== inputStatus;
+        return isValidDirection && isValidType && (this.isRecognized || this.threshold < distance) && this.pointerLength === maxLength;
     };
 };
