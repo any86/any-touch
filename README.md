@@ -1,7 +1,21 @@
 # any-touch
 一个手势库 
 
-开发中...
+## 安装
+```
+npm i -S any-touch
+```
+
+## 使用
+```javascript
+import AnyTouch from 'any-touch';
+const el = doucument.getElementById('gesture-box');
+const at = new AnyTouch(el);
+
+at.on('pan', anyTouchEvent=>{
+  console.log(anyTouchEvent.deltaX);
+})
+```
 
 ### 已完成
 - [x] 支持手势: tap | doubletap | pan | swipe | pinch | rotate.
