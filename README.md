@@ -1,12 +1,14 @@
 # any-touch
 :wave:    一个手势库
 
-### 安装
-```
+## 安装
+
+```javascript
 npm i -S any-touch
 ```
 
-### 使用
+## 使用
+
 ```javascript
 import AnyTouch from 'any-touch';
 
@@ -23,12 +25,14 @@ at.on('pan', anyTouchEvent=>{
 at.destory();
 ```
 
-### 已完成
+## 已完成
+
 - [x] 支持手势: tap | doubletap | pan | swipe | pinch | rotate.
 - [x] 支持鼠标(mouse)
 - [x] 手势互斥(requireFailure)
 
-### 计划加入功能
+## 计划加入功能
+
 - [ ] 识别input数据变形(transform)
 - [ ] 自定义识别器(recgnizer)
 - [ ] 停止继续识别(stop)
