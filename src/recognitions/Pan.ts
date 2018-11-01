@@ -1,24 +1,27 @@
-import { Computed, RecognizerCallback, nativeEventType } from '../interface';
+import { Computed, RecognizerCallback, directionString } from '../interface';
 import Base from './Base';
 interface Options {
     name?: string;
     threshold?: number;
-    allowLength?: number;
-}
+    pointerLength?: number;
+    directions?: directionString[];
+};
 
 export default class PanRecognizer extends Base {
     public name: string;
-    public threshold: number;
-    public allowLength: number;
-
+    public options: Options;
     constructor({
         name = 'pan',
         threshold = 10,
-        allowLength = 1 }: Options = {}) {
-        super();
+        pointerLength = 1,
+        directions = ['up', 'right', 'down', 'left'] }: Options = {}) {
+        super({ name });
         this.name = name;
-        this.threshold = threshold;
-        this.allowLength = allowLength;
+        this.options = {
+            threshold,
+            pointerLength,
+            directions
+        };
     };
 
     /**
@@ -27,23 +30,25 @@ export default class PanRecognizer extends Base {
      * @param {RecognizerCallback} 识别后触发钩子 
      */
     recognize(computed: Computed, callback: RecognizerCallback) {
-        let type: string;
         if (this.test(computed)) {
             // panleft | panright | pandown | panup
-            callback({ type: this.name + computed.direction, ...computed });
+            callback({ ...computed, type: this.name + computed.direction });
             // pan
-            callback({ type: this.name, ...computed });
+            callback({ ...computed, type: this.name });
+
             // panstart | panmove | panend
-            type = this.recognizeType(computed.nativeEventType);
-            callback({ type: this.name + type, ...computed });
+            let status = this.getRecognizerState(computed.inputStatus);
+            callback({ ...computed, type: this.name + status });
         }
     };
 
     /**
      * @param {Computed} 计算数据
-     * @return {Boolean}} 是否是当前手势 
+     * @return {Boolean}} .是否是当前手势 
      */
-    test({ maxLength, distance, nativeEventType }: Computed): Boolean {
-        return 'start' !== nativeEventType && (this.isRecognized || this.threshold < distance) && this.allowLength === maxLength;
+    test({ pointerLength, distance, direction}: Computed): Boolean {
+        const isValidDirection = -1 !== this.options.directions.indexOf(direction);
+        const isValidThreshold = this.options.threshold < distance;
+        return isValidDirection && (this.isRecognized || isValidThreshold) && this.pointerLengthTest(pointerLength);
     };
 };

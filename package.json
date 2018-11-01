@@ -2,11 +2,10 @@
   "name": "any-touch",
   "version": "0.0.2",
   "description": "一个纯粹的手势库",
-  "main": "dist/any-touch.js",
+  "main": "esm/main.js",
   "scripts": {
-    "dev": "rollup -wc",
-    "build": "rollup -c",
-    "tsc": "tsc -W",
+    "dev": "parcel index.html",
+    "build": "tsc && rollup -c && rimraf esm/",
     "test": "jest"
   },
   "repository": {
@@ -22,9 +21,13 @@
   "devDependencies": {
     "@types/jest": "^23.3.5",
     "jest": "^23.6.0",
+    "parcel-bundler": "^1.10.3",
     "rollup": "^0.62.0",
-    "rollup-plugin-typescript2": "^0.17.0",
+    "rollup-plugin-babel": "^4.0.3",
     "ts-jest": "^23.10.4",
     "typescript": "^3.0.1"
+  },
+  "dependencies": {
+    "setTimeout": "^0.4.9"
   }
 }

@@ -2,7 +2,7 @@
  * 构造统一的touchEvent格式
  */
 import { Input } from '../interface';
-import { SUPPORT_ONLY_TOUCH , IS_MOBILE} from '../const';
+import { SUPPORT_ONLY_TOUCH, IS_MOBILE, INPUT_CHANGE_LENGTH, INPUT_END, INPUT_MOVE, INPUT_START } from '../const';
 import { getCenter } from '../vector';
 import touchAdapter from './adapters/touch'
 import mouseAdapter from './adapters/mouse';
@@ -22,16 +22,15 @@ export default (event: TouchEvent | MouseEvent): Input => {
             return;
         }
     }
-    const { nativeEventType, pointers, changedPointers } = input;
+    const { type, pointers, changedPointers } = input;
 
     // 当前触点数
     const pointerLength: number = pointers.length;
 
     // 变化前触点数
     const changedPointerLength: number = changedPointers.length;
-
-    const isFirst = ('start' === nativeEventType) && (0 === changedPointerLength - pointerLength);
-    const isFinal = ('end' === nativeEventType) && (0 === pointerLength);
+    const isFirst = (INPUT_START === type) && (0 === changedPointerLength - pointerLength);
+    const isFinal = (INPUT_END === type) && (0 === pointerLength);
 
     // 中心坐标
     if (0 < pointerLength) {

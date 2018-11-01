@@ -1,15 +1,14 @@
 export default (event: TouchEvent): any => {
-    const SOURCE_TYPE: string = 'touch';
-    const { type } = event;
-    const nativeEventType = type.replace(SOURCE_TYPE, '');
     // const pointers = event.targetTouches;
     const pointers = event.touches;
     const changedPointers = event.changedTouches;
-
+    const inputStatus = event.type.replace('touch', '');
+    const type = `input-${inputStatus}`;
     return {
-        nativeEventType,
+        type,
+        inputStatus,
         changedPointers,
         pointers,
         nativeEvent: event,
     };
-};
+}; 

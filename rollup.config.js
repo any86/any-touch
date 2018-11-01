@@ -1,11 +1,9 @@
-// import babel from 'rollup-plugin-babel';
-import typescript from 'rollup-plugin-typescript2';
+import babel from 'rollup-plugin-babel';
 export default {
-    input: 'src/main.ts',
-    // plugins: [ babel({ exclude: 'node_modules/**' }) ],
-    plugins: [typescript(
-
-    )],
+    input: 'esm/main.js',
+    plugins: [babel({
+        exclude: 'node_modules/**'
+    })],
     output: [{
         format: 'es',
         file: 'dist/anyTouch.es.js',
