@@ -32,9 +32,9 @@ export default class PanRecognizer extends Base {
     recognize(computed: Computed, callback: RecognizerCallback) {
         if (this.test(computed)) {
             // panleft | panright | pandown | panup
-            callback({ ...computed,type: this.name + computed.direction });
+            callback({ ...computed, type: this.name + computed.direction });
             // pan
-            callback({ ...computed,type: this.name });
+            callback({ ...computed, type: this.name });
 
             // panstart | panmove | panend
             let status = this.getRecognizerState(computed.inputStatus);
@@ -46,11 +46,9 @@ export default class PanRecognizer extends Base {
      * @param {Computed} 计算数据
      * @return {Boolean}} .是否是当前手势 
      */
-    test({ pointerLength, changedPointerLength,distance, direction,nativeEvent }: Computed): Boolean {
-        // console.log(this.status, nativeEvent.type);
+    test({ pointerLength, distance, direction}: Computed): Boolean {
         const isValidDirection = -1 !== this.options.directions.indexOf(direction);
         const isValidThreshold = this.options.threshold < distance;
-        console.log(isValidDirection, isValidThreshold);
-        return isValidDirection && (this.isRecognized || isValidThreshold) && 1=== pointerLength && 'touchend' !== nativeEvent.type;
+        return isValidDirection && (this.isRecognized || isValidThreshold) && this.pointerLengthTest(pointerLength);
     };
 };

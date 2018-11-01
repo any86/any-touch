@@ -36,7 +36,10 @@ export default (event: TouchEvent | MouseEvent): any => {
         // 读取上一点
         prevInput = activeInput;
         activeInput = input;
-    };
+    } else if ('end' === inputStatus) {
+        prevInput = activeInput;
+        activeInput = input;
+    }
     return {
         startMutliInput,
         startInput,
