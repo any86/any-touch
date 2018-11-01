@@ -1,6 +1,9 @@
 # any-touch
 :wave:    一个手势库
 
+
+[npm-image]: https://img.shields.io/npm/v/any-touch.svg
+ [![NPM Version][npm-image]][npm-url] 
 ## 安装
 
 ```javascript
