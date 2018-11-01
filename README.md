@@ -2,7 +2,7 @@
 :wave:    一个手势库
 
 ## 安装
-```shell
+```
 npm i -S any-touch
 ```
 
