@@ -1,12 +1,12 @@
 # any-touch
 :wave:    一个手势库
 
-## 安装
+### 安装
 ```
 npm i -S any-touch
 ```
 
-## 使用
+### 使用
 ```javascript
 import AnyTouch from 'any-touch';
 
