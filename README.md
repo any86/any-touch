@@ -28,7 +28,7 @@ at.destory();
 - [x] 支持鼠标(mouse)
 - [x] 手势互斥(requireFailure)
 
-### 待完成
+### 计划加入功能
 - [ ] 识别input数据变形(transform)
 - [ ] 自定义识别器(recgnizer)
 - [ ] 停止继续识别(stop)
