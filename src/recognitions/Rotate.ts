@@ -2,17 +2,17 @@ import Base from './Base';
 import { Computed } from '../interface';
 
 export default class RotateRecognizer extends Base {
-    constructor(options:any){
+    constructor(options: any) {
         super(options);
     };
 
     recognize(computed: any, callback: (paylod: any) => {}) {
         if (this.test(computed)) {
-            callback({ type: 'rotate', ...computed });
+            callback({ ...computed, type: 'rotate', });
 
             //rotatestart |rotatemove |rotateend
             const type = this.getRecognizerState(computed.inputStatus);
-            callback({ type: 'rotate' + type, ...computed });
+            callback({ ...computed, type: 'rotate' + type });
 
         }
     };

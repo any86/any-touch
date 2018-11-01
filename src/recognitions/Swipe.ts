@@ -2,16 +2,16 @@ import Base from './Base';
 export default class SwipeRecognizer extends Base {
     public name: string;
 
-    constructor(options:any) {
+    constructor(options: any) {
         super(options);
         this.name = 'swipe'
     };
 
     recognize(computed: any, callback: (paylod: any) => {}): void {
         if (this.test(computed)) {
-            callback({ type: this.name, ...computed });
+            callback({ ...computed, type: this.name });
 
-            callback({ type: this.name + computed.lastDirection, ...computed });
+            callback({ ...computed, type: this.name + computed.lastDirection });
 
         }
     };

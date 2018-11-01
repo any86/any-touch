@@ -9,7 +9,7 @@ export default class Recognizer {
     public name: string;
     public status: string;
     public isRecognized: boolean;
-    public options: {[propName:string]:any};
+    public options: { [propName: string]: any };
     public requireFailureRecognizers: any[];
     constructor(options: any) {
         this.name = options.name;
@@ -50,8 +50,8 @@ export default class Recognizer {
      * 验证触点
      * @param {Number} 触点数
      */
-    public pointerLengthTest(pointerLength:number):boolean{
-        return 0 === pointerLength || this.options.pointerLength === pointerLength
+    public pointerLengthTest(pointerLength: number): boolean {
+        return 0 === this.options.pointerLength || this.options.pointerLength === pointerLength
     };
     /**
      * 识别手势事件的状态
@@ -61,16 +61,17 @@ export default class Recognizer {
     public getRecognizerState(inputStatus: inputStatus) {
         if (this.isRecognized) {
             if ('move' === inputStatus) {
-                return 'move';
+                this.status = 'move';
             } else if ('cancel' === inputStatus) {
-                return 'cancel';
+                this.status = 'cancel';
             } else {
                 this.isRecognized = false;
-                return 'end';
+                this.status = 'end';
             }
         } else {
             this.isRecognized = true;
-            return 'start';
+            this.status = 'start';
         }
+        return this.status;
     };
 };

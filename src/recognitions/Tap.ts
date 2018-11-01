@@ -29,7 +29,7 @@ export default class TapRecognizer extends Base {
                 this.tapTimeoutId = setTimeout(() => {
                     // console.log(this.isOtherFailOrWait());
                     if (this.options.taps === this.tapCount && this.isOtherFailOrWait()) {
-                        callback({ type: this.options.name, ...computed, tapCount: this.tapCount });
+                        callback({ ...computed, tapCount: this.tapCount,type: this.options.name });
                     }
                     this.tapCount = 0;
                 }, 300);
@@ -38,7 +38,7 @@ export default class TapRecognizer extends Base {
                 // 那么立即执行
                 clearTimeout(this.tapTimeoutId);
                 if (this.options.taps === this.tapCount) {
-                    callback({ type: this.options.name, ...computed, tapCount: this.tapCount });
+                    callback({ ...computed, tapCount: this.tapCount, type: this.options.name });
                     
                     this.tapCount = 0;
                 }
