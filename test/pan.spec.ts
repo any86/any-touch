@@ -1,4 +1,4 @@
-import { dispatchTouchStart, dispatchTouchMove, dispatchTouchEnd } from './touchEventSmulate';
+import { dispatchTouchStart, dispatchTouchMove, dispatchTouchEnd } from './touchEventSimulator';
 import AnyTouch from '../src/main'
 document.body.innerHTML = '<div id="box">box</div>';
 const el = document.getElementById('box');
@@ -21,12 +21,12 @@ test('事件pan是否正确?', (done) => {
     });
 
     // 模拟touch触碰
-    dispatchTouchStart(el, { x: 30, y: 0 });
-    dispatchTouchMove(el, { x: 30, y: 20 });
-    dispatchTouchMove(el, { x: 30, y: 50 });
-    dispatchTouchMove(el, { x: 30, y: 90 });
-    dispatchTouchMove(el, { x: 30, y: 120 });
+    dispatchTouchStart(el, [{ x: 30, y: 0 }]);
+    dispatchTouchMove(el, [{ x: 30, y: 20 }]);
+    dispatchTouchMove(el, [{ x: 30, y: 50 }]);
+    dispatchTouchMove(el, [{ x: 30, y: 90 }]);
+    dispatchTouchMove(el, [{ x: 30, y: 120 }]);
     setTimeout(() => {
         dispatchTouchEnd(el);
-    }, 100); 
+    }, 100);
 });
