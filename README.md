@@ -1,4 +1,5 @@
 # any-touch  [![NPM Version][npm-image]][npm-url] [![NPM Downloads][downloads-image]][downloads-url] 
+<a href="https://circleci.com/gh/383514580/any-touch"><img src="https://img.shields.io/circleci/project/github/383514580/any-touch/dev.svg" alt="Build Status"></a>
 :wave:    一个手势库
 
 
