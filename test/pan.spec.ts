@@ -15,15 +15,17 @@ test('事件pan是否正确?', (done) => {
     });
 
     at.on('panend', (e) => {
-        expect(orgX).toBe(100);
+        expect(orgX).toBe(0);
         expect(orgY).toBe(100);
         done();
     });
 
     // 模拟touch触碰
-    dispatchTouchStart(el, { x: 0, y: 0 });
-    dispatchTouchMove(el, { x: 20, y: 20 });
-    dispatchTouchMove(el, { x: 120, y: 120 });
+    dispatchTouchStart(el, { x: 30, y: 0 });
+    dispatchTouchMove(el, { x: 30, y: 20 });
+    dispatchTouchMove(el, { x: 30, y: 50 });
+    dispatchTouchMove(el, { x: 30, y: 90 });
+    dispatchTouchMove(el, { x: 30, y: 120 });
     setTimeout(() => {
         dispatchTouchEnd(el);
     }, 100); 
