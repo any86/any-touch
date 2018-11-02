@@ -1,9 +1,12 @@
-# any-touch  [![NPM Version][npm-image]][npm-url]
+# any-touch  [![NPM Version][npm-image]][npm-url] [![NPM Downloads][downloads-image]][downloads-url] 
 :wave:    一个手势库
 
 
 [npm-image]: https://img.shields.io/npm/v/any-touch.svg
 [npm-url]: https://npmjs.org/package/any-touch
+
+[downloads-image]: https://img.shields.io/npm/dm/any-touch.svg
+[downloads-url]: https://npmjs.org/package/any-touch
 
 ## 安装
 
