@@ -48,8 +48,9 @@ at.destory();
 ## 单元测试(test)
 
 - [x] tap
+- [x] press
 - [x] pan
-- [ ] swipe
-- [ ] rotate
-- [ ] pinch
+- [x] swipe
+- [x] rotate
+- [x] pinch
 
