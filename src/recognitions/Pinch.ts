@@ -6,21 +6,19 @@ export default class PinchRecognizer extends Base {
         super(options);
     };
 
-    recognize(computed: Computed, callback: (anyTouchEvent: any) => void) {
+    recognize(computed: Computed) {
         if (this.test(computed)) {
             // console.log(computed);
-            callback({ ...computed, type: 'pinch' });
-
+            this.emit(this.name, computed);
             // pinchstart | pinchmove | pinchend
             const type = this.getRecognizerState(computed.inputStatus);
-            callback({ ...computed, type: 'pinch' + type });
-
+            this.emit(this.name + type, computed);
             // pinchin | pinchout
             const { scale } = computed;
             if (1 !== scale) {
                 const inOrOut = scale > this._prevScale ? 'out' : 'in';
                 if ('move' === type) {
-                    callback({ ...computed, type: 'pinch' + inOrOut });
+                    this.emit(this.name + inOrOut, computed);
                     this._prevScale = scale;
                 }
             }

@@ -8,7 +8,7 @@ export default class PressRecognizer extends Base {
         this.timeoutId = null;
     };
 
-    recognize(computed: Computed, callback: RecognizerCallback): void {
+    recognize(computed: Computed): void {
         const { inputStatus, distance, duration, maxPointerLength } = computed;
         if (1 < maxPointerLength) {
             this.cancel();
@@ -16,7 +16,7 @@ export default class PressRecognizer extends Base {
         } else {
             if ('start' === inputStatus) {
                 this.timeoutId = window.setTimeout(() => {
-                    callback({ ...computed, type: 'press' });
+                    this.emit('press', computed);
                 }, 250);
             } else if ('move' === inputStatus) {
                 if (9 < distance) {
@@ -26,7 +26,7 @@ export default class PressRecognizer extends Base {
                 if (251 > duration || 9 < distance) {
                     this.cancel();
                 } else {
-                    callback({ ...computed, type: 'pressup' });
+                    this.emit('pressup', computed);
                 }
             }
         }

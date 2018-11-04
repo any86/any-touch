@@ -6,14 +6,13 @@ export default class RotateRecognizer extends Base {
         super(options);
     };
 
-    recognize(computed: any, callback: (paylod: any) => {}) {
+    recognize(computed: Computed):void {
         if (this.test(computed)) {
-            callback({ ...computed, type: 'rotate', });
+            this.emit(this.name, computed);
 
             //rotatestart |rotatemove |rotateend
             const type = this.getRecognizerState(computed.inputStatus);
-            callback({ ...computed, type: 'rotate' + type });
-
+            this.emit(this.name + type, computed);
         }
     };
 

@@ -17,19 +17,19 @@ export default class TapRecognizer extends Base {
         this.tapCount = 0;
     };
 
-    recognize(computed: Computed, callback: RecognizerCallback): void {
+    recognize(computed: Computed): void {
         if (this.test(computed)) {
             // 累加点击
             this.tapCount++;
             if (this.hasRequireFailure()) {
-                
+
                 // 如果是需要其他手势失败才能触发的手势,
                 // 需要等待(300ms)其他手势失败才能触发
                 clearTimeout(this.tapTimeoutId);
                 this.tapTimeoutId = setTimeout(() => {
                     // console.log(this.isOtherFailOrWait());
                     if (this.options.taps === this.tapCount && this.isOtherFailOrWait()) {
-                        callback({ ...computed, tapCount: this.tapCount,type: this.options.name });
+                        this.emit(this.options.name, { ...computed, tapCount: this.tapCount });
                     }
                     this.tapCount = 0;
                 }, 300);
@@ -38,8 +38,7 @@ export default class TapRecognizer extends Base {
                 // 那么立即执行
                 clearTimeout(this.tapTimeoutId);
                 if (this.options.taps === this.tapCount) {
-                    callback({ ...computed, tapCount: this.tapCount, type: this.options.name });
-                    
+                    this.emit(this.options.name, { ...computed, tapCount: this.tapCount });
                     this.tapCount = 0;
                 }
                 this.tapTimeoutId = setTimeout(() => {

@@ -11,11 +11,24 @@ export default class Recognizer {
     public isRecognized: boolean;
     public options: { [propName: string]: any };
     public requireFailureRecognizers: any[];
+    private _injectedEmit: any;
     constructor(options: any) {
         this.name = options.name;
         this.status = 'unknown';
         this.isRecognized = false;
         this.requireFailureRecognizers = [];
+    };
+
+    /**
+     * 注入通用emit方法, 方便改写
+     */
+    public injectEmit(emit: any) {
+        this._injectedEmit = emit;
+    };
+
+    public emit(type: string, payload: { [propName: string]: any }) {
+        payload.type = type;
+        this._injectedEmit(type, payload);
     };
 
     /**

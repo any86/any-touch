@@ -31,7 +31,7 @@ export default class EventBus {
      * @param {String} 事件名
      * @param {Object} 参数
      */
-    dispatch(eventName: string, payload: object): void {
+    emit(eventName: string, payload: object): void {
         if (undefined !== this._stack[eventName]) {
             const callbacks = this._stack[eventName];
             callbacks.forEach(callback => {

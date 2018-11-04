@@ -29,16 +29,15 @@ export default class PanRecognizer extends Base {
      * @param {Computed} 计算数据 
      * @param {RecognizerCallback} 识别后触发钩子 
      */
-    recognize(computed: Computed, callback: RecognizerCallback) {
+    recognize(computed: Computed) {
         if (this.test(computed)) {
             // panleft | panright | pandown | panup
-            callback({ ...computed, type: this.name + computed.direction });
+            this.emit(this.name + computed.direction, computed);
             // pan
-            callback({ ...computed, type: this.name });
+            this.emit(this.name, computed);
             // panstart | panmove | panend
             let status = this.getRecognizerState(computed.inputStatus);
-
-            callback({ ...computed, type: this.name + status });
+            this.emit(this.name + status, computed);
         }
     };
 

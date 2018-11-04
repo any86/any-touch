@@ -27,7 +27,7 @@ export default (event: MouseEvent): any => {
     };
 
     return {
-        type: `input-${MAP[type]}`,
+        // type: `input-${MAP[type]}`,
         inputStatus: MAP[type],
         changedPointers,
         pointers,

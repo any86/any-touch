@@ -1,4 +1,5 @@
 import Base from './Base';
+import { Computed } from '../interface';
 export default class SwipeRecognizer extends Base {
     public name: string;
 
@@ -7,12 +8,10 @@ export default class SwipeRecognizer extends Base {
         this.name = 'swipe'
     };
 
-    recognize(computed: any, callback: (paylod: any) => {}): void {
+    recognize(computed: Computed): void {
         if (this.test(computed)) {
-            callback({ ...computed, type: this.name });
-
-            callback({ ...computed, type: this.name + computed.lastDirection });
-
+            this.emit(this.name, computed);
+            this.emit(this.name + computed.lastDirection, computed);
         }
     };
 

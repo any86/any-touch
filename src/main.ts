@@ -152,9 +152,9 @@ export default class AnyTouch {
             const computed: Computed = compute(inputs);
             // 当是鼠标事件的时候, mouseup阶段的input和computed为空
             this.recognizers.forEach(recognizer => {
-                recognizer.recognize(computed, (data: Computed) => {
-                    this.eventBus.dispatch(data.type, data);
-                });
+                // 注入emit到recognizer中
+                recognizer.injectEmit(this.eventBus.emit.bind(this.eventBus));
+                recognizer.recognize(computed);
             });
         }
     };
