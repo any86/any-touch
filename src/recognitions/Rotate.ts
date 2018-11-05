@@ -6,19 +6,19 @@ export default class RotateRecognizer extends Base {
         super(options);
     };
 
-    recognize(computed: Computed):void {
-        if (this.test(computed)) {
-            this.emit(this.name, computed);
-
-            //rotatestart |rotatemove |rotateend
-            const type = this.getRecognizerState(computed.inputStatus);
-            this.emit(this.name + type, computed);
-        }
+    afterRecognized(computed: Computed) {
+        //rotatestart |rotatemove |rotateend
+        this.emit(this.name + this.status, computed);
     };
 
-    test({ pointerLength }: Computed) {
+    /**
+     * 识别条件
+     * @param {Computed} 计算数据
+     * @param {(isRecognized: boolean) => void}} 接收是否识别状态
+     */    
+    test({ pointerLength }: Computed, callback: (isRecognized: boolean) => void) {
         // 如果触碰点要大于1
         // 如果已经识别, 并且当前事件是离开阶段
-        return 1 < pointerLength || this.isRecognized;
+        callback(1 < pointerLength || this.isRecognized);
     };
 };

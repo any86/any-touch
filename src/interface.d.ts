@@ -1,7 +1,7 @@
 
 export type directionString = 'up' | 'right' | 'down' | 'left' | 'none' | 'all';
 export type inputStatus = 'start' | 'move' | 'end' | 'cancel';
-export type RecognizerStatus = 'unknown' | 'recognized' | 'began' | 'changed' | 'ended' | 'failed' | 'cancelled';
+export type RecognizerStatus = 'possible' | 'recognized' | 'began' | 'changed' | 'ended' | 'failed' | 'cancelled';
 
 export interface Input {
     isFirst: boolean;

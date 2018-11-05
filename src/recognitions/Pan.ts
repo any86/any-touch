@@ -1,5 +1,5 @@
-import { Computed, RecognizerCallback, directionString } from '../interface';
-import Base from './Base';
+import { Computed, directionString } from '../interface';
+import Recognizer from './Base';
 interface Options {
     name?: string;
     threshold?: number;
@@ -7,7 +7,7 @@ interface Options {
     directions?: directionString[];
 };
 
-export default class PanRecognizer extends Base {
+export default class PanRecognizer extends Recognizer {
     public name: string;
     public options: Options;
     constructor({
@@ -25,32 +25,27 @@ export default class PanRecognizer extends Base {
     };
 
     /**
-     * 识别器
-     * @param {Computed} 计算数据 
-     * @param {RecognizerCallback} 识别后触发钩子 
-     */
-    recognize(computed: Computed) {
-        if (this.test(computed)) {
-            // panleft | panright | pandown | panup
-            this.emit(this.name + computed.direction, computed);
-            // pan
-            this.emit(this.name, computed);
-            // panstart | panmove | panend
-            let status = this.getRecognizerState(computed.inputStatus);
-            this.emit(this.name + status, computed);
-        }
-    };
-
-    /**
+     * 识别条件
      * @param {Computed} 计算数据
-     * @return {Boolean}} .是否是当前手势 
+     * @param {(isRecognized: boolean) => void}} 接收是否识别状态
      */
-    test({ pointerLength, distance, direction, inputStatus }: Computed): Boolean {
+    test({ pointerLength, distance, direction, inputStatus }: Computed, callback: (isRecognized: boolean) => void) {
         const isValidDirection = -1 !== this.options.directions.indexOf(direction);
         const isValidThreshold = this.options.threshold < distance;
         const isEnd = ('end' === inputStatus && this.isRecognized);
-        return isValidDirection &&
+        callback(isValidDirection &&
             (this.isRecognized || isValidThreshold) &&
-            this.pointerLengthTest(pointerLength) || isEnd;
+            this.pointerLengthTest(pointerLength) || isEnd);
+    };
+
+    /**
+     * 识别后执行
+     * @param {Computed} 计算数据 
+     */
+    afterRecognized(computed: Computed) {
+        // panleft | panright | pandown | panup
+        this.emit(this.name + computed.direction, computed);
+        // panstart | panmove | panend
+        this.emit(this.name + this.status, computed);
     };
 };

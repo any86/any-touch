@@ -1,6 +1,6 @@
-import Base from './Base';
+import Recognizer from './Base';
 import { Computed } from '../interface';
-export default class SwipeRecognizer extends Base {
+export default class SwipeRecognizer extends Recognizer {
     public name: string;
 
     constructor(options: any) {
@@ -8,20 +8,22 @@ export default class SwipeRecognizer extends Base {
         this.name = 'swipe'
     };
 
-    recognize(computed: Computed): void {
-        if (this.test(computed)) {
-            this.emit(this.name, computed);
-            this.emit(this.name + computed.lastDirection, computed);
-        }
+    afterRecognized(computed: Computed): void {
+        this.emit(this.name + computed.lastDirection, computed);
     };
-
-    test(computed: any): boolean {
+    
+    /**
+     * 识别条件
+     * @param {Computed} 计算数据
+     * @param {(isRecognized: boolean) => void}} 接收是否识别状态
+     */
+    test(computed: Computed,callback: (isRecognized: boolean) => void) {
         const { inputStatus, lastDirection, direction, lastVelocity, maxPointerLength, distance } = computed;
-        return 1 === maxPointerLength &&
+        callback(1 === maxPointerLength &&
             10 < distance &&
             'end' === inputStatus &&
             'none' !== lastDirection &&
             'none' !== direction &&
-            0.3 < lastVelocity;
+            0.3 < lastVelocity);
     };
 };

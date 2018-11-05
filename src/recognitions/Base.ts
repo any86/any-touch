@@ -3,9 +3,9 @@
 * 未知 => 识别失败 
 * 未知 => 取消(已知的任意阶段)
 * */
-import { inputStatus, RecognizerStatus } from '../interface';
+import { inputStatus, Computed } from '../interface';
 // import { RECOGNIZER_STATUS_POSSIBLE, RECOGNIZER_STATUS_BEGAN, RECOGNIZER_STATUS_CHANGED, RECOGNIZER_STATUS_ENDED, RECOGNIZER_STATUS_RECOGNIZED, RECOGNIZER_STATUS_CANCELLED, RECOGNIZER_STATUS_FAILED } from '../const'
-export default class Recognizer {
+export default abstract class Recognizer {
     public name: string;
     public status: string;
     public isRecognized: boolean;
@@ -14,7 +14,7 @@ export default class Recognizer {
     private _injectedEmit: any;
     constructor(options: any) {
         this.name = options.name;
-        this.status = 'unknown';
+        this.status = 'possible';
         this.isRecognized = false;
         this.requireFailureRecognizers = [];
     };
@@ -48,12 +48,12 @@ export default class Recognizer {
     /**
      * 是否要求注册时指定失败的选择器是失败状态
      */
-    public isOtherFailOrWait(): boolean {
+    public isTheOtherFail(): boolean {
         const { length } = this.requireFailureRecognizers;
         for (let index = 0; index < length; index++) {
             const recognizer = this.requireFailureRecognizers[index];
             // console.log(recognizer.status);
-            if ('fail' !== recognizer.status && 'unknown' !== recognizer.status) {
+            if ('fail' !== recognizer.status && 'possible' !== recognizer.status) {
                 return false;
             }
         };
@@ -71,9 +71,11 @@ export default class Recognizer {
      * 手势的状态, 非原生事件的状态
      * @param {inputStatus} 输入状态 
      */
-    public getRecognizerState(inputStatus: inputStatus) {
+    public changeStatus(inputStatus: inputStatus) {
         if (this.isRecognized) {
-            if ('move' === inputStatus) {
+            if('end'=== this.status) {
+                this.status = 'possible';
+            } else if ('move' === inputStatus) {
                 this.status = 'move';
             } else if ('cancel' === inputStatus) {
                 this.status = 'cancel';
@@ -85,6 +87,35 @@ export default class Recognizer {
             this.isRecognized = true;
             this.status = 'start';
         }
-        return this.status;
     };
+
+    /**
+     * 识别器也是整个识别器控制流程走向的方法
+     * @param {Computed} 计算数据 
+     * @param {RecognizerCallback} 识别后触发钩子 
+     */
+    public recognize(computed: Computed) {
+        this.test(computed, isRecognized => {
+            if (isRecognized) {
+                this.changeStatus(computed.inputStatus);
+                this.afterRecognized(computed);
+                this.emit(this.name, computed);
+            } else {
+                this.status = 'fail';
+            }
+        })
+    };
+
+    /**
+     * 识别条件, 基于异步
+     * @param {Computed} 计算数据
+     * @param {(isRecognized: boolean) => void}} 接收是否识别状态
+     */
+    abstract test(computed: Computed, callback: (isRecognized: boolean) => void): void;
+
+    /**
+     * 识别成功后执行
+     * @param {Computed} 计算数据 
+     */
+    abstract afterRecognized(computed: Computed): void;
 };
