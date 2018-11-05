@@ -74,13 +74,13 @@ export default abstract class Recognizer {
     public changeStatus(inputStatus: inputStatus) {
         if (this.isRecognized) {
             if ('end' === this.status) {
+                this.isRecognized = false;
                 this.status = 'possible';
             } else if ('move' === inputStatus) {
                 this.status = 'move';
             } else if ('cancel' === inputStatus) {
                 this.status = 'cancel';
             } else if('end' === inputStatus) {
-                this.isRecognized = false;
                 this.status = 'end';
             }
         } else {
@@ -98,17 +98,18 @@ export default abstract class Recognizer {
         this.test(computed, isRecognized => {
             if (isRecognized) {
                 this.changeStatus(computed.inputStatus);
-                
                 this.afterRecognized(computed);
                 this.emit(this.options.name, computed);
-            } else if(this.options.pointerLength !== computed.pointerLength){
+            } else if(this.options.pointerLength === computed.pointerLength){
+                this.status = 'possible';
+            } else {
                 this.status = 'fail';
             }
+        });
 
-            if(this.name ==='pan') {
-                console.log(this.status);
-            }
-        })
+        if(this.options.name ==='pan') {
+            console.log(this.status,this.isRecognized,computed.inputStatus);
+        }
     };
 
     /**
