@@ -15,13 +15,7 @@ export default class PanRecognizer extends Recognizer {
         threshold = 10,
         pointerLength = 1,
         directions = ['up', 'right', 'down', 'left'] }: Options = {}) {
-        super({ name });
-        this.name = name;
-        this.options = {
-            threshold,
-            pointerLength,
-            directions
-        };
+        super({ name,threshold,pointerLength,directions });
     };
 
     /**
@@ -33,6 +27,7 @@ export default class PanRecognizer extends Recognizer {
         const isValidDirection = -1 !== this.options.directions.indexOf(direction);
         const isValidThreshold = this.options.threshold < distance;
         const isEnd = ('end' === inputStatus && this.isRecognized);
+
         callback(isValidDirection &&
             (this.isRecognized || isValidThreshold) &&
             this.pointerLengthTest(pointerLength) || isEnd);
@@ -44,8 +39,8 @@ export default class PanRecognizer extends Recognizer {
      */
     afterRecognized(computed: Computed) {
         // panleft | panright | pandown | panup
-        this.emit(this.name + computed.direction, computed);
+        this.emit(this.options.name + computed.direction, computed);
         // panstart | panmove | panend
-        this.emit(this.name + this.status, computed);
+        this.emit(this.options.name + this.status, computed);
     };
 };

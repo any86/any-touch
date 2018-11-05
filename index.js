@@ -30,17 +30,17 @@ new Vue({
          */
         anyTouch.on('panstart', e => {
             this.message = e;
-            console.log(e.type,e.deltaX,e.deltaY);
+            log(e.type,e.deltaX,e.deltaY);
         });
 
         anyTouch.on('panmove', e => {
             this.message = e;
-            console.log(e.type,e.deltaX,e.deltaY);
+            log(e.type,e.deltaX,e.deltaY);
         });
 
         anyTouch.on('panend', e => {
             this.message = e;
-            console.log(e.type,e.deltaX,e.deltaY);
+            log(e.type,e.deltaX,e.deltaY);
         });
 
 

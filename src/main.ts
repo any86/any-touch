@@ -137,7 +137,7 @@ export default class AnyTouch {
      * @return {Recognizer} 返回识别器
      */
     get(name: string): any {
-        return this.recognizers.find(recognizer => name === recognizer.name);
+        return this.recognizers.find(recognizer => name === recognizer.options.name);
     };
 
     set({

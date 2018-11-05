@@ -3,7 +3,7 @@ import { Computed } from '../interface';
 import Recognizer from './Base';
 export default class PressRecognizer extends Recognizer {
     protected _timeoutId: number;
-    constructor(options: any) {
+    constructor(options: any = {pointerLength:1}) {
         super(options);
         this._timeoutId = null;
     };

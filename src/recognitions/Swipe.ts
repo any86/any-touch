@@ -3,7 +3,7 @@ import { Computed } from '../interface';
 export default class SwipeRecognizer extends Recognizer {
     public name: string;
 
-    constructor(options: any) {
+    constructor(options: any = {pointerLength:1}) {
         super(options);
         this.name = 'swipe'
     };

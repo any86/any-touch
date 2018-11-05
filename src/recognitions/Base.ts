@@ -13,7 +13,7 @@ export default abstract class Recognizer {
     public requireFailureRecognizers: any[];
     private _injectedEmit: any;
     constructor(options: any) {
-        this.name = options.name;
+        this.options = Object.assign({}, options);
         this.status = 'possible';
         this.isRecognized = false;
         this.requireFailureRecognizers = [];
@@ -73,13 +73,13 @@ export default abstract class Recognizer {
      */
     public changeStatus(inputStatus: inputStatus) {
         if (this.isRecognized) {
-            if('end'=== this.status) {
+            if ('end' === this.status) {
                 this.status = 'possible';
             } else if ('move' === inputStatus) {
                 this.status = 'move';
             } else if ('cancel' === inputStatus) {
                 this.status = 'cancel';
-            } else {
+            } else if('end' === inputStatus) {
                 this.isRecognized = false;
                 this.status = 'end';
             }
@@ -98,10 +98,15 @@ export default abstract class Recognizer {
         this.test(computed, isRecognized => {
             if (isRecognized) {
                 this.changeStatus(computed.inputStatus);
+                
                 this.afterRecognized(computed);
-                this.emit(this.name, computed);
-            } else {
+                this.emit(this.options.name, computed);
+            } else if(this.options.pointerLength !== computed.pointerLength){
                 this.status = 'fail';
+            }
+
+            if(this.name ==='pan') {
+                console.log(this.status);
             }
         })
     };
