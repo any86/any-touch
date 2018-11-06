@@ -80,7 +80,7 @@ export default abstract class Recognizer {
                 this.status = 'move';
             } else if ('cancel' === inputStatus) {
                 this.status = 'cancel';
-            } else if('end' === inputStatus) {
+            } else if ('end' === inputStatus) {
                 this.status = 'end';
             }
         } else {
@@ -96,19 +96,32 @@ export default abstract class Recognizer {
      */
     public recognize(computed: Computed) {
         this.test(computed, isRecognized => {
+
             if (isRecognized) {
-                this.changeStatus(computed.inputStatus);
+                // 已识别
+                // this.changeStatus(computed.inputStatus);
+                if ('possible' === this.status && !this.isRecognized) {
+                    this.status = 'start';
+                } else if ('start' === this.status) {
+                    this.status = 'move';
+                }
                 this.afterRecognized(computed);
                 this.emit(this.options.name, computed);
-            } else if(this.options.pointerLength === computed.pointerLength){
-                this.status = 'possible';
             } else {
-                this.status = 'fail';
+                if ('move' === this.status && -1 < ['end', 'cancel'].indexOf(computed.inputStatus)) {
+                    this.status = 'end';
+                    this.afterRecognized(computed);
+                } else if('end' === this.status && !this.isRecognized){
+                    this.status = 'fail';
+                } else {
+                    this.status = 'possible';
+                }
             }
+            this.isRecognized = isRecognized;
         });
 
-        if(this.options.name ==='pan') {
-            console.log(this.status,this.isRecognized,computed.inputStatus);
+        if (this.options.name === 'pan') {
+            console.log(this.status, this.isRecognized, computed.inputStatus);
         }
     };
 

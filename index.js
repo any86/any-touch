@@ -166,7 +166,7 @@ new Vue({
         });
 
         anyTouch.on('swipe', e => {
-            log(`%c ${e.type} `, 'background-color:#444;color:#fff;');
+            console.log(`%c ${e.type} `, 'background-color:#444;color:#fff;');
             this.message = e;
         });
     },
