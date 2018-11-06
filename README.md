@@ -32,25 +32,15 @@ at.on('pan', anyTouchEvent=>{
 at.destory();
 ```
 
-## 已完成
+## 支持
 
 - [x] 支持手势: tap | doubletap | pan | swipe | pinch | rotate.
 - [x] 支持鼠标(mouse)
 - [x] 手势互斥(requireFailure)
 
-## 计划加入功能
+## 计划支持
 
 - [ ] 识别input数据变形(transform)
 - [ ] 自定义识别器(recgnizer)
 - [ ] 停止继续识别(stop)
 - [ ] 自定义任意触点,让鼠标支持rotate和pinch(addPointer)
-
-## 单元测试(test)
-
-- [x] tap
-- [x] press
-- [x] pan
-- [x] swipe
-- [x] rotate
-- [x] pinch
-
