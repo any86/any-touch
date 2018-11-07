@@ -4,7 +4,7 @@
   "description": "一个纯粹的手势库",
   "main": "esm/main.js",
   "scripts": {
-    "dev": "parcel example/base/index.html",
+    "dev": "parcel example/base/index.html --open",
     "dev-three": "parcel example/threejs/index.html --public-url / --no-source-maps",
     "build": "tsc && rollup -c && rimraf esm/",
     "test": "jest"

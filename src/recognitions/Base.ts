@@ -53,7 +53,7 @@ export default abstract class Recognizer {
         for (let index = 0; index < length; index++) {
             const recognizer = this.requireFailureRecognizers[index];
             // console.log(recognizer.status);
-            if ('fail' !== recognizer.status && 'possible' !== recognizer.status) {
+            if ('failed' !== recognizer.status && 'possible' !== recognizer.status) {
                 return false;
             }
         };
@@ -66,75 +66,69 @@ export default abstract class Recognizer {
     public pointerLengthTest(pointerLength: number): boolean {
         return 0 === this.options.pointerLength || this.options.pointerLength === pointerLength
     };
-    /**
-     * 识别手势事件的状态
-     * 手势的状态, 非原生事件的状态
-     * @param {inputStatus} 输入状态 
-     */
-    public changeStatus(inputStatus: inputStatus) {
-        if (this.isRecognized) {
-            if ('end' === this.status) {
-                this.isRecognized = false;
-                this.status = 'possible';
-            } else if ('move' === inputStatus) {
-                this.status = 'move';
-            } else if ('cancel' === inputStatus) {
-                this.status = 'cancel';
-            } else if ('end' === inputStatus) {
-                this.status = 'end';
-            }
-        } else {
-            this.isRecognized = true;
-            this.status = 'start';
-        }
-    };
+
 
     /**
      * 识别器也是整个识别器控制流程走向的方法
      * @param {Computed} 计算数据 
      * @param {RecognizerCallback} 识别后触发钩子 
      */
-    public recognize(computed: Computed) {
-        this.test(computed, isRecognized => {
+    public flowStatus(computed:Computed, isRecognized:boolean) {
             if (isRecognized) {
                 // 已识别
-                if ('start' !== this.status && 'move'!== this.status ) {
+                if ('start' !== this.status && 'move' !== this.status) {
                     this.status = 'start';
                 } else {
                     this.status = 'move';
                 }
-                this.afterRecognized(computed);
+                // this.afterRecognized(computed);
                 this.emit(this.options.name, computed);
             } else {
                 if ('end' === computed.inputStatus) {
-                    if(!this.isRecognized) {
-                        this.status = 'fail';
+                    if (!this.isRecognized) {
+                        this.status = 'failed';
                     } else {
                         this.status = 'end';
-                        this.afterRecognized(computed);
+                        // this.afterRecognized(computed);
                     }
                 } else {
                     this.status = 'possible';
                 }
             }
             this.isRecognized = isRecognized;
-        });
 
-        // if (this.options.name === 'threetap') {
+        // if (this.options.name === 'doubletap') {
         //     console.log(this.status, this.isRecognized, computed.inputStatus);
         // }
     };
+
+
+    recognize(computed: Computed) {
+        if (this.test(computed)) {
+            this.flowStatus(computed, true);
+            // panleft | panright | pandown | panup
+            this.emit(this.options.name + computed.direction, computed);
+            // panstart | panmove | panend
+            this.emit(this.options.name + this.status, computed);
+        } else {
+            if(this.isRecognized) {
+                this.flowStatus(computed, false);
+                this.emit(this.options.name + this.status, computed);
+            }
+        }
+    };
+
 
     /**
      * 识别条件, 基于异步
      * @param {Computed} 计算数据
      * @param {(isRecognized: boolean) => void}} 接收是否识别状态
      */
-    abstract test(computed: Computed, callback: (isRecognized: boolean) => void): void;
+    abstract test(computed: Computed): boolean;
 
     /**
      * 识别成功后执行
      * @param {Computed} 计算数据 
      */
-    abstract afterRecognized(computed: Computed): void;
+    // abstract afterRecognized(computed: Computed): void;
 };

@@ -19,24 +19,13 @@ export default class PanRecognizer extends Recognizer {
     };
 
     /**
-     * 识别条件
      * @param {Computed} 计算数据
-     * @param {(isRecognized: boolean) => void}} 接收是否识别状态
+     * @return {Boolean}} .是否是当前手势 
      */
-    test({ pointerLength, distance, direction, inputStatus }: Computed, callback: (isRecognized: boolean) => void) {
+    test({ pointerLength, distance, direction, inputStatus }: Computed): boolean {
         const isValidDirection = -1 !== this.options.directions.indexOf(direction);
         const isValidThreshold = this.options.threshold < distance;
-        callback(isValidDirection && (this.isRecognized || isValidThreshold) && this.pointerLengthTest(pointerLength));
-    };
-
-    /**
-     * 识别后执行
-     * @param {Computed} 计算数据 
-     */
-    afterRecognized(computed: Computed) {
-        // panleft | panright | pandown | panup
-        this.emit(this.options.name + computed.direction, computed);
-        // panstart | panmove | panend
-        this.emit(this.options.name + this.status, computed);
+        return isValidDirection &&
+            (this.isRecognized || isValidThreshold) && 'move' === inputStatus;
     };
 };

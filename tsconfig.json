@@ -10,6 +10,6 @@
         "lib": ["dom", "es2017"]
     },
     "include": [
-        "src/main.ts"
+        "src/main.ts", "example/base/index.js"
     ]
 }

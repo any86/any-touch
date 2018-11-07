@@ -20,16 +20,43 @@ export default class TapRecognizer extends Recognizer {
      * 识别后执行
      * @param {Computed} 计算数据 
      */
-    public afterRecognized(computed: Computed) {
+    public recognize(computed: Computed): void {
+        if (this.test(computed)) {
+            // 累加点击
+            this.tapCount++;
+            if (this.hasRequireFailure()) {
 
+                // 如果是需要其他手势失败才能触发的手势,
+                // 需要等待(300ms)其他手势失败才能触发
+                clearTimeout(this.tapTimeoutId);
+                this.tapTimeoutId = setTimeout(() => {
+                    // console.log(this.isOtherFailOrWait());
+                    if (this.options.taps === this.tapCount && this.isTheOtherFail()) {
+                        this.emit(this.options.name, { ...computed, tapCount: this.tapCount });
+                    }
+                    this.tapCount = 0;
+                }, 300);
+            } else {
+                // 如果不需要等待其他手势失败
+                // 那么立即执行
+                clearTimeout(this.tapTimeoutId);
+                if (this.options.taps === this.tapCount) {
+                    this.emit(this.options.name, { ...computed, tapCount: this.tapCount });
+                    this.tapCount = 0;
+                }
+                this.tapTimeoutId = setTimeout(() => {
+                    this.status = 'failed';
+                    this.tapCount = 0;
+                }, 300)
+            }
+        }
     };
-
     /**
-     * 识别条件
-     * @param {Computed} 计算数据
-     * @param {(isRecognized: boolean) => void}} 接收是否识别状态
-     */
-    public test(computed: Computed, callback: (isRecognized: boolean) => void): void {
+      * 识别条件
+      * @param {Computed} 计算数据
+      * @return {Boolean} 是否验证成功
+      */
+    public test(computed: Computed): boolean {
         const { abs, max } = Math;
         // 判断是否发生大的位置变化
         const { inputStatus, distance, duration, maxPointerLength, centerX, centerY } = computed;
@@ -39,38 +66,6 @@ export default class TapRecognizer extends Recognizer {
         let offsetX = abs(centerX - this._prevX);
         let offsetY = abs(centerY - this._prevY);
         const hasMove = 2 < max(offsetX, offsetY);
-        if ('end' === inputStatus && 1 === maxPointerLength && 2 > distance && 250 > duration && !hasMove) {
-            // 累加点击
-            this.tapCount++;
-            if (this.hasRequireFailure()) {
-                // 如果是需要其他手势失败才能触发的手势,
-                // 需要等待(300ms)其他手势失败才能触发
-                clearTimeout(this.tapTimeoutId);
-                this.tapTimeoutId = setTimeout(() => {
-                    if (this.options.taps === this.tapCount && this.isTheOtherFail()) {
-                        callback(true);
-                        callback(false);
-                    } else {
-                        callback(false);
-                        clearTimeout(this.tapTimeoutId);
-                    }
-                    this.tapCount = 0;
-                }, 300);
-            } else {
-                // 如果不需要等待其他手势失败
-                // 那么立即执行
-                clearTimeout(this.tapTimeoutId);
-                if (this.options.taps === this.tapCount) {
-                    callback(true);
-                    this.tapCount = 0;
-                }
-
-                // 300ms后如何没有点击, 那么tapCount复位
-                this.tapTimeoutId = setTimeout(() => {
-                    callback(false);
-                    this.tapCount = 0;
-                }, 300);
-            }
-        }
+        return 'end' === inputStatus && 1 === maxPointerLength && 2 > distance && 250 > duration && !hasMove
     };
 };

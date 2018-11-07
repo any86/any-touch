@@ -1,6 +1,6 @@
-import AnyTouch from '../src/main.ts';
+import AnyTouch from '../../src/main.ts';
 let log = console.log;
-log = () => { };
+// log = () => { };
 new Vue({
     el: '#app',
 
@@ -30,24 +30,23 @@ new Vue({
          */
         anyTouch.on('panstart', e => {
             this.message = e;
-            log(e.type,e.deltaX,e.deltaY);
+            log(e.type);
         });
 
         anyTouch.on('panmove', e => {
             this.message = e;
-            log(e.type,e.deltaX,e.deltaY);
+            log(e.type);
         });
 
         anyTouch.on('panend', e => {
             this.message = e;
-            log(e.type,e.deltaX,e.deltaY);
+            log(e.type);
         });
 
 
 
         anyTouch.on('pan', e => {
             e.preventDefault();
-            log(e);
             log(`%c ${e.type} `, 'background-color:#69c;color:#fff;');
             this.message = e;
             this.x += e.deltaX;
@@ -71,22 +70,22 @@ new Vue({
          * =========================== tap ===========================
          */
         anyTouch.on('tap', e => {
-            console.log(`%c ${e.type} `, 'background-color:#f10;color:#fff;');
+            log(`%c ${e.type} `, 'background-color:#f10;color:#fff;');
             this.message = e;
         });
 
         anyTouch.on('doubletap', e => {
-            console.log(`%c ${e.type} `, 'background-color:#9c3;color:#fff;');
+            log(`%c ${e.type} `, 'background-color:#9c3;color:#fff;');
             this.message = e;
         });
 
         anyTouch.on('threetap', e => {
-            console.log(`%c ${e.type} `, 'background-color:#99c;color:#fff;');
+            log(`%c ${e.type} `, 'background-color:#99c;color:#fff;');
             this.message = e;
         });
 
         anyTouch.on('fourtap', e => {
-            console.log(`%c ${e.type} `, 'background-color:#847;color:#fff;');
+            log(`%c ${e.type} `, 'background-color:#847;color:#fff;');
             this.message = e;
         });
 
@@ -166,20 +165,20 @@ new Vue({
         });
 
         anyTouch.on('swipe', e => {
-            console.log(`%c ${e.type} `, 'background-color:#444;color:#fff;');
+            log(`%c ${e.type} `, 'background-color:#444;color:#fff;');
             this.message = e;
         });
     },
 
     methods: {
         touchstart(e) {
-            // console.log('touchstart', e.touches, e.touches.length, e.changedTouches.length);
+            // log('touchstart', e.touches, e.touches.length, e.changedTouches.length);
         },
         touchmove(e) {
-            // console.log('touchmove', e, e.touches.length, e.changedTouches.length);
+            // log('touchmove', e, e.touches.length, e.changedTouches.length);
         },
         touchend(e) {
-            // console.log('touchend', e, e.touches.length, e.changedTouches.length);
+            // log('touchend', e, e.touches.length, e.changedTouches.length);
         },
         testPan() {
             el = this.$refs.circle;
