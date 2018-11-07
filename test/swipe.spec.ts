@@ -13,9 +13,9 @@ test('事件swipe是否正确?', (done) => {
 
     // 模拟touch触碰
     dispatchTouchStart(el, [{ x: 30, y: 0 }]);
-    dispatchTouchMove(el, [{ x: 30, y: 20 }]);
-    dispatchTouchMove(el, [{ x: 30, y: 60 }]);
-    dispatchTouchMove(el, [{ x: 30, y: 120 }]);
+    dispatchTouchMove(el, [{ x: 30, y: 100 }]);
+    dispatchTouchMove(el, [{ x: 30, y: 200 }]);
+    dispatchTouchMove(el, [{ x: 30, y: 300 }]);
     setTimeout(() => {
         dispatchTouchEnd(el);
     }, 100);
