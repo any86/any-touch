@@ -7,8 +7,7 @@
     "dev": "parcel example/base/index.html",
     "dev-three": "parcel example/threejs/index.html --public-url / --no-source-maps",
     "build": "tsc && rollup -c && rimraf esm/",
-    "test": "jest",
-    "test-pan": "jest pan"
+    "test": "jest"
   },
   "repository": {
     "type": "git",
