@@ -1,4 +1,4 @@
-import AnyTouch from './src/main.ts';
+import AnyTouch from '../src/main.ts';
 let log = console.log;
 log = () => { };
 new Vue({
