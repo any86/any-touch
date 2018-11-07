@@ -81,3 +81,34 @@ loader.load(`./Alex.json`, function (font) {
     renderer.shadowMap.enabled = true;
     renderer.render(scene, camera);
 });
+
+
+
+
+const log = console.log;
+const tap2 = new AnyTouch.TapRecognizer({ name: 'doubletap', pointer: 1, taps: 2 })
+const tap3 = new AnyTouch.TapRecognizer({ name: 'threetap', pointer: 1, taps: 3 })
+const anyTouch = new AnyTouch(document.getElementById('box'));
+anyTouch.add(tap2);
+anyTouch.add(tap3);
+const tap1 = anyTouch.get('tap');
+tap1.requireFailure(tap2);
+tap1.requireFailure(tap3);
+tap2.requireFailure(tap3);
+/**
+ * =========================== pan ===========================
+ */
+anyTouch.on('tap', e => {
+    console.log(`%c ${e.type} `, 'background-color:#f10;color:#fff;');
+});
+
+anyTouch.on('doubletap', e => {
+    console.log(`%c ${e.type} `, 'background-color:#9c3;color:#fff;');
+});
+
+anyTouch.on('threetap', e => {
+    console.log(`%c ${e.type} `, 'background-color:#99c;color:#fff;');
+});
+anyTouch.on('swipe', e => {
+    console.warn(e.type,e.deltaX,e.deltaY);
+});

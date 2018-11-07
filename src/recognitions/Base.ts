@@ -96,23 +96,23 @@ export default abstract class Recognizer {
      */
     public recognize(computed: Computed) {
         this.test(computed, isRecognized => {
-
             if (isRecognized) {
                 // 已识别
-                // this.changeStatus(computed.inputStatus);
-                if ('possible' === this.status && !this.isRecognized) {
+                if ('start' !== this.status && 'move'!== this.status ) {
                     this.status = 'start';
-                } else if ('start' === this.status) {
+                } else {
                     this.status = 'move';
                 }
                 this.afterRecognized(computed);
                 this.emit(this.options.name, computed);
             } else {
-                if ('move' === this.status && -1 < ['end', 'cancel'].indexOf(computed.inputStatus)) {
-                    this.status = 'end';
-                    this.afterRecognized(computed);
-                } else if('end' === this.status && !this.isRecognized){
-                    this.status = 'fail';
+                if ('end' === computed.inputStatus) {
+                    if(!this.isRecognized) {
+                        this.status = 'fail';
+                    } else {
+                        this.status = 'end';
+                        this.afterRecognized(computed);
+                    }
                 } else {
                     this.status = 'possible';
                 }
@@ -120,9 +120,9 @@ export default abstract class Recognizer {
             this.isRecognized = isRecognized;
         });
 
-        if (this.options.name === 'pan') {
-            console.log(this.status, this.isRecognized, computed.inputStatus);
-        }
+        // if (this.options.name === 'threetap') {
+        //     console.log(this.status, this.isRecognized, computed.inputStatus);
+        // }
     };
 
     /**
