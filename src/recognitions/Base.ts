@@ -73,29 +73,29 @@ export default abstract class Recognizer {
      * @param {Computed} 计算数据 
      * @param {RecognizerCallback} 识别后触发钩子 
      */
-    public flowStatus(computed:Computed, isRecognized:boolean) {
-            if (isRecognized) {
-                // 已识别
-                if ('start' !== this.status && 'move' !== this.status) {
-                    this.status = 'start';
-                } else {
-                    this.status = 'move';
-                }
-                // this.afterRecognized(computed);
-                this.emit(this.options.name, computed);
+    public flowStatus(computed: Computed, isRecognized: boolean) {
+        if (isRecognized) {
+            // 已识别
+            if ('start' !== this.status && 'move' !== this.status) {
+                this.status = 'start';
             } else {
-                if ('end' === computed.inputStatus) {
-                    if (!this.isRecognized) {
-                        this.status = 'failed';
-                    } else {
-                        this.status = 'end';
-                        // this.afterRecognized(computed);
-                    }
-                } else {
-                    this.status = 'possible';
-                }
+                this.status = 'move';
             }
-            this.isRecognized = isRecognized;
+            // this.afterRecognized(computed);
+            this.emit(this.options.name, computed);
+        } else {
+            if ('end' === computed.inputStatus) {
+                if (!this.isRecognized) {
+                    this.status = 'failed';
+                } else {
+                    this.status = 'end';
+                    // this.afterRecognized(computed);
+                }
+            } else {
+                this.status = 'possible';
+            }
+        }
+        this.isRecognized = isRecognized;
 
         // if (this.options.name === 'doubletap') {
         //     console.log(this.status, this.isRecognized, computed.inputStatus);
@@ -104,18 +104,33 @@ export default abstract class Recognizer {
 
 
     recognize(computed: Computed) {
-        if (this.test(computed)) {
-            this.flowStatus(computed, true);
-            // panleft | panright | pandown | panup
-            this.emit(this.options.name + computed.direction, computed);
-            // panstart | panmove | panend
-            this.emit(this.options.name + this.status, computed);
+        let { inputStatus } = computed;
+        let isVaild = this.test(computed);
+        // this.flowStatus(computed, true);
+        let isRecognized = -1 < ['start', 'move'].indexOf(this.status);
+        if ('possible' === this.status && isVaild) {
+            this.status = 'start';
+        } else if ('start' === this.status) {
+            this.status = 'move';
+        } else if (isRecognized && 'end' === inputStatus) {
+            this.status = 'end';
+        } else if ('cancel' === inputStatus) {
+            this.status = 'cancel';
         } else {
-            if(this.isRecognized) {
-                this.flowStatus(computed, false);
-                this.emit(this.options.name + this.status, computed);
-            }
+            this.status = 'possible';
         }
+        this.emit(this.options.name + this.status, computed);
+
+        //     // panleft | panright | pandown | panup
+        //     this.emit(this.options.name + computed.direction, computed);
+        //     // panstart | panmove | panend
+        //     this.emit(this.options.name + this.status, computed);
+        // } else {
+        //     if (this.isRecognized) {
+        //         this.flowStatus(computed, false);
+        //         this.emit(this.options.name + this.status, computed);
+        //     }
+        // }
     };
 
 
