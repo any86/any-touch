@@ -29,7 +29,6 @@ export default (event: TouchEvent | MouseEvent): Input => {
     // 变化前触点数
     const changedPointerLength: number = changedPointers.length;
     const isFirst = (INPUT_START === inputStatus) && (0 === changedPointerLength - pointerLength);
-    console.log({isFirst,changedPointerLength, pointerLength,inputStatus});
     const isFinal = (INPUT_END === inputStatus) && (0 === pointerLength);
 
     // 中心坐标
