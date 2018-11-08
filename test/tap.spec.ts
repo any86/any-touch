@@ -1,5 +1,5 @@
 import { dispatchTouchStart, dispatchTouchMove, dispatchTouchEnd } from './utils/touchEventSimulator';
-import wait from './utils/wait';
+import sleep from './utils/sleep';
 import AnyTouch from '../src/main'
 document.body.innerHTML = '<div id="box">box</div>';
 const el = document.getElementById('box');
@@ -15,7 +15,7 @@ test('仅有tap识别, 事件是否触发', async (done) => {
 
     // 模拟touch触碰
     dispatchTouchStart(el, [{ x: 0, y: 0 }]);
-    await wait(100);
+    await sleep(100);
     dispatchTouchEnd(el);
 });
 
@@ -50,11 +50,11 @@ test('仅有tap识别, 事件是否触发', async (done) => {
 
 //     // 模拟touch触碰
 //     dispatchTouchStart(el, [{ x: 0, y: 0 }]);
-//     await wait(50);
+//     await sleep(50);
 //     dispatchTouchEnd(el);
 
-//     await wait(10);
+//     await sleep(10);
 //     dispatchTouchStart(el, [{ x: 0, y: 0 }]);
-//     await wait(50);
+//     await sleep(50);
 //     dispatchTouchEnd(el);
 // });

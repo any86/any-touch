@@ -1,21 +1,61 @@
-import { dispatchTouchStart, dispatchTouchMove, dispatchTouchEnd } from './utils/touchEventSimulator';
+import TouchSimulator from './utils/TouchSimulator';
+import sleep from './utils/sleep';
+
 import AnyTouch from '../src/main'
 document.body.innerHTML = '<div id="box">box</div>';
 const el = document.getElementById('box');
 const at = new AnyTouch(el);
-test('事件pinch是否正确?', (done) => {
-    let isInvoke = false;
-    at.on('pinch', () => {
-        isInvoke = true;
-        expect(isInvoke).toBeTruthy();
+
+/**
+ * 模拟PinchIn
+ */
+const simulatorPinchIn = () => {
+    const ts = new TouchSimulator();
+    ts.dispatchTouchStart(el, [{ x: 0, y: 0 }, { x: 200, y: 0 }]);
+    ts.dispatchTouchMove(el, [{ x: 0, y: 0 }, { x: 100, y: 0 }]);
+    ts.dispatchTouchMove(el, [{ x: 0, y: 0 }, { x: 40, y: 0 }]);
+    ts.dispatchTouchEnd(el);
+};
+
+/**
+ * 模拟PinchOut
+ */
+const simulatorPinchOut = () => {
+    const ts = new TouchSimulator();
+    ts.dispatchTouchStart(el, [{ x: 0, y: 0 }, { x: 50, y: 0 }]);
+    ts.dispatchTouchMove(el, [{ x: 0, y: 0 }, { x: 100, y: 0 }]);
+    ts.dispatchTouchMove(el, [{ x: 0, y: 0 }, { x: 170, y: 0 }]);
+    ts.dispatchTouchEnd(el);
+};
+
+
+test('pinchin是否触发?', (done) => {
+    at.on('pinchin', ({ type, scale, deltaScale }) => {
+        expect(type).toBe('pinchin');
         done();
     });
-
     // 模拟touch触碰
-    dispatchTouchStart(el, [{ x: 50, y: 50 }, { x: 60, y: 60 }]);
-    dispatchTouchMove(el, [{ x: 30, y: 30 }, { x: 80, y: 80 }]);
-    dispatchTouchMove(el, [{ x: 0, y: 0 }, { x: 100, y: 100 }]);
-    setTimeout(() => {
-        dispatchTouchEnd(el);
-    }, 100);
+    simulatorPinchIn();
+});
+
+test('pinchout是否触发?', async (done) => {
+    at.on('pinchout', ({ type, scale, deltaScale }) => {
+        expect(type).toBe('pinchout');
+        done();
+    });
+    // 模拟touch触碰
+    await sleep(500);
+    simulatorPinchOut();
+});
+
+
+test('pinch缩放是否正确?', (done) => {
+    let index = 0;
+    let expectScales = [1,0.5,0.2];
+    at.on('pinch', ({scale, deltaScale }) => {
+        expect(scale).toBe(expectScales[index]);
+        index++;
+        done();
+    });
+    simulatorPinchIn();
 });

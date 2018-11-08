@@ -84,7 +84,7 @@ export default class AnyTouch {
             new PressRecognizer({ name: 'press' }),
             new PanRecognizer({ name: 'pan' }),
             // new SwipeRecognizer({ name: 'swipe' }),
-            // new PinchRecognizer({ name: 'pinch' }),
+            new PinchRecognizer({ name: 'pinch' }),
             // new RotateRecognizer({ name: 'rotate' }),
         ];
 

@@ -39,7 +39,7 @@ loader.load(`./Alex.json`, function (font) {
     {
         let spotLight = new SpotLight(0xffffff, 1);
         spotLight.castShadow = true;
-        spotLight.position.set(-100, 100, 100);
+        spotLight.position.set(-10, 100, 100);
         scene.add(spotLight);
         var spotLightHelper = new SpotLightHelper(spotLight);
         scene.add(spotLightHelper);
@@ -53,8 +53,6 @@ loader.load(`./Alex.json`, function (font) {
         var spotLightHelper = new SpotLightHelper(spotLight);
         scene.add(spotLightHelper);
     }
-
-
 
     // 材质
     let material = new MeshPhongMaterial({
@@ -73,9 +71,10 @@ loader.load(`./Alex.json`, function (font) {
 
     // 加入到场景中
     scene.add(mesh);
-
     let renderer = new WebGLRenderer({ antialias: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
+    let child = document.body.getElementsByTagName('canvas')[0];
+    if(undefined !== child)  document.body.removeChild(child);
     document.body.appendChild(renderer.domElement);
     // renderer.setClearColor(0xaaaaaa);
     renderer.shadowMap.enabled = true;
@@ -98,17 +97,17 @@ tap2.requireFailure(tap3);
 /**
  * =========================== pan ===========================
  */
-anyTouch.on('tap', e => {
-    console.log(`%c ${e.type} `, 'background-color:#f10;color:#fff;');
-});
+// anyTouch.on('tap', e => {
+//     console.log(`%c ${e.type} `, 'background-color:#f10;color:#fff;');
+// });
 
-anyTouch.on('doubletap', e => {
-    console.log(`%c ${e.type} `, 'background-color:#9c3;color:#fff;');
-});
+// anyTouch.on('doubletap', e => {
+//     console.log(`%c ${e.type} `, 'background-color:#9c3;color:#fff;');
+// });
 
-anyTouch.on('threetap', e => {
-    console.log(`%c ${e.type} `, 'background-color:#99c;color:#fff;');
-});
-anyTouch.on('swipe', e => {
-    console.warn(e.type,e.deltaX,e.deltaY);
+// anyTouch.on('threetap', e => {
+//     console.log(`%c ${e.type} `, 'background-color:#99c;color:#fff;');
+// });
+anyTouch.on('panright', e => {
+    console.warn(e.type);
 });

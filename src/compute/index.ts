@@ -103,12 +103,12 @@ export default function ({
         const activeV = computeVector(input);
 
         // 计算缩放
-        const { scale, deltaScale } = computeScale({
+        const scale = computeScale({
             startV, activeV
         });
-
         computed.scale = scale;
-        computed.deltaScale = deltaScale;
+        console.log({scale});
+        // computed.deltaScale = deltaScale;
 
         // 计算旋转角度
         const { angle, deltaAngle } = computeAngle({ startV, prevV, activeV });
