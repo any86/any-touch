@@ -1,22 +1,25 @@
-import { dispatchTouchStart, dispatchTouchMove, dispatchTouchEnd } from './utils/touchEventSimulator';
-import AnyTouch from '../src/main'
+import TouchSimulator from './utils/TouchSimulator';import AnyTouch from '../src/main'
 document.body.innerHTML = '<div id="box">box</div>';
 const el = document.getElementById('box');
 const at = new AnyTouch(el);
-test('事件swipe是否正确?', (done) => {
-    let isInvoke = false;
-    at.on('swipe', () => {
-        isInvoke = true;
-        expect(isInvoke).toBeTruthy();
+test('swipedown是否触发?', (done) => {
+    at.on('swipedown', ({type}) => {
+        expect(type).toBe('swipedown');
         done();
     });
 
+    at.on('swipe', ({type}) => {
+        expect(type).toBe('swipe');
+        done();
+    });
+
+    const ts = new TouchSimulator();
     // 模拟touch触碰
-    dispatchTouchStart(el, [{ x: 30, y: 0 }]);
-    dispatchTouchMove(el, [{ x: 30, y: 100 }]);
-    dispatchTouchMove(el, [{ x: 30, y: 200 }]);
-    dispatchTouchMove(el, [{ x: 30, y: 300 }]);
+    ts.dispatchTouchStart(el, [{ x: 30, y: 0 }]);
+    ts.dispatchTouchMove(el, [{ x: 30, y: 100 }]);
+    ts.dispatchTouchMove(el, [{ x: 30, y: 200 }]);
+    ts.dispatchTouchMove(el, [{ x: 30, y: 300 }]);
     setTimeout(() => {
-        dispatchTouchEnd(el);
+        ts.dispatchTouchEnd(el);
     }, 100);
 });

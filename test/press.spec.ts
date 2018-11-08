@@ -1,4 +1,4 @@
-import { dispatchTouchStart, dispatchTouchMove, dispatchTouchEnd } from './utils/touchEventSimulator';
+import TouchSimulator from './utils/TouchSimulator';
 import AnyTouch from '../src/main'
 
 document.body.innerHTML = '<div id="box">box</div>';
@@ -14,8 +14,9 @@ test('press事件是否正确?', (done) => {
     });
 
     // 模拟touch触碰
-    dispatchTouchStart(el, [{ x: 0, y: 0 }]);
+    const ts = new TouchSimulator();
+    ts.dispatchTouchStart(el, [{ x: 0, y: 0 }]);
     setTimeout(() => {
-        dispatchTouchEnd(el);
+        ts.dispatchTouchEnd(el);
     }, 300); 
 });
