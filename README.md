@@ -24,8 +24,8 @@ const el = doucument.getElementById('gesture-box');
 const at = new AnyTouch(el);
 
 // 绑定手势
-at.on('pan', anyTouchEvent=>{
-  console.log(anyTouchEvent.deltaX);
+at.on('pan', ev=>{
+  console.log(ev.deltaX);
 })
 
 // 销毁
