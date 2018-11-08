@@ -1,4 +1,5 @@
-import TouchSimulator from './utils/TouchSimulator';import sleep from './utils/sleep';
+import TouchSimulator from './utils/TouchSimulator';
+import sleep from './utils/sleep';
 import AnyTouch from '../src/main'
 document.body.innerHTML = '<div id="box">box</div>';
 const el = document.getElementById('box');
