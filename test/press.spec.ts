@@ -1,4 +1,4 @@
-import { dispatchTouchStart, dispatchTouchMove, dispatchTouchEnd } from './touchEventSimulator';
+import { dispatchTouchStart, dispatchTouchMove, dispatchTouchEnd } from './utils/touchEventSimulator';
 import AnyTouch from '../src/main'
 
 document.body.innerHTML = '<div id="box">box</div>';

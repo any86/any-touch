@@ -46,6 +46,7 @@ export function dispatchTouchMove(el: any, pointers: Pointer[]) {
 export function dispatchTouchEnd(el: any, pointerIndex?: number, pointerNumber?: number) {
     let event: any = new Event('touchend', {});
     event.changedTouches = prevTouches.splice(pointerIndex || 0, pointerNumber || prevTouches.length);
+    // 当前的prevTouches已经是减去了变化点后的数组
     event.touches = prevTouches;
     el.dispatchEvent(event);
 }
