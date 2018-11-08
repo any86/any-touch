@@ -1,8 +1,10 @@
 import { getVLength } from '../vector';
+let prevScale: number = 1;
 export default function ({
-    startV, prevV, activeV
+    startV, activeV
 }: any): { scale: number, deltaScale: number } {
-    const deltaScale = getVLength(activeV) / getVLength(prevV);
     const scale = getVLength(activeV) / getVLength(startV);
+    const deltaScale = scale / prevScale;
+    prevScale = scale;
     return { scale, deltaScale };
 };

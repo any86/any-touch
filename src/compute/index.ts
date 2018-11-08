@@ -104,8 +104,9 @@ export default function ({
 
         // 计算缩放
         const { scale, deltaScale } = computeScale({
-            startV, prevV, activeV
+            startV, activeV
         });
+
         computed.scale = scale;
         computed.deltaScale = deltaScale;
 
