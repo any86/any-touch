@@ -23,7 +23,7 @@ export interface Input {
 }
 // input的计算结果
 export interface Computed extends Input {
-    type?: string;
+    // type?: string;
     inputStatus?: inputStatus; //start | move | end | cancel
     length?: number;
     maxPointerLength?: number;
