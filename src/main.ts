@@ -83,9 +83,9 @@ export default class AnyTouch {
             new TapRecognizer({ name: 'tap', pointer: 1, taps: 1 }),
             new PressRecognizer({ name: 'press' }),
             new PanRecognizer({ name: 'pan' }),
-            // new SwipeRecognizer({ name: 'swipe' }),
-            // new PinchRecognizer({ name: 'pinch' }),
-            // new RotateRecognizer({ name: 'rotate' }),
+            new SwipeRecognizer({ name: 'swipe' }),
+            new PinchRecognizer({ name: 'pinch' }),
+            new RotateRecognizer({ name: 'rotate' }),
         ];
 
         // 绑定事件

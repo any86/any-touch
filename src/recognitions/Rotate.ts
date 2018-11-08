@@ -8,17 +8,16 @@ export default class RotateRecognizer extends Base {
 
     afterRecognized(computed: Computed) {
         //rotatestart |rotatemove |rotateend
-        this.emit(this.name + this.status, computed);
+        this.emit(this.options.name + this.status, computed);
     };
 
     /**
      * 识别条件
      * @param {Computed} 计算数据
-     * @param {(isRecognized: boolean) => void}} 接收是否识别状态
-     */    
-    test({ pointerLength }: Computed, callback: (isRecognized: boolean) => void) {
+     * @return {Boolean} 接收是否识别状态
+     */
+    test({ pointerLength }: Computed): boolean {
         // 如果触碰点要大于1
-        // 如果已经识别, 并且当前事件是离开阶段
-        callback(1 < pointerLength || this.isRecognized);
+        return 1 < pointerLength;
     };
 };

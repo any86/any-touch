@@ -1,5 +1,17 @@
 import { Computed } from '../interface';
-interface Options { name: string, pointer: number, taps: number };
+import {
+    STATUS_RECOGNIZED,
+    STATUS_POSSIBLE,
+    STATUS_FAILED
+} from '../const/recognizerStatus';
+interface Options { name?: string, pointer?: number, taps?: number, interval?: number };
+// 默认参数
+const DEFAULT_OPTIONS = {
+    name: 'tap',
+    pointer: 1,
+    taps: 1,
+    interval: 300
+};
 const { setTimeout, clearTimeout } = window;
 import Recognizer from './Base';
 export default class TapRecognizer extends Recognizer {
@@ -12,6 +24,7 @@ export default class TapRecognizer extends Recognizer {
 
     constructor(options: Options) {
         super(options);
+        this.options = { ...DEFAULT_OPTIONS, ...options };
         this.tapTimeoutId = null;
         this.tapCount = 0;
     };
@@ -21,36 +34,46 @@ export default class TapRecognizer extends Recognizer {
      * @param {Computed} 计算数据 
      */
     public recognize(computed: Computed): void {
+        this.status = STATUS_POSSIBLE;
+        // this.cancel();
         if (this.test(computed)) {
             // 累加点击
             this.tapCount++;
+            const isValidTapCount = this.options.taps === this.tapCount;
             if (this.hasRequireFailure()) {
-
                 // 如果是需要其他手势失败才能触发的手势,
                 // 需要等待(300ms)其他手势失败才能触发
-                clearTimeout(this.tapTimeoutId);
+                this.cancel();
                 this.tapTimeoutId = setTimeout(() => {
-                    // console.log(this.isOtherFailOrWait());
-                    if (this.options.taps === this.tapCount && this.isTheOtherFail()) {
+                    if (isValidTapCount && this.isTheOtherFail()) {
+                        this.status = STATUS_RECOGNIZED;
                         this.emit(this.options.name, { ...computed, tapCount: this.tapCount });
-                    }
+                    };
                     this.tapCount = 0;
-                }, 300);
+                }, this.options.interval);
             } else {
                 // 如果不需要等待其他手势失败
                 // 那么立即执行
-                clearTimeout(this.tapTimeoutId);
-                if (this.options.taps === this.tapCount) {
+                this.cancel();
+                if (isValidTapCount) {
                     this.emit(this.options.name, { ...computed, tapCount: this.tapCount });
                     this.tapCount = 0;
                 }
                 this.tapTimeoutId = setTimeout(() => {
-                    this.status = 'failed';
+                    this.status = STATUS_FAILED;
                     this.tapCount = 0;
-                }, 300)
+                }, this.options.interval)
             }
         }
     };
+
+    /**
+     * 取消等待识别的
+     */
+    public cancel() {
+        clearTimeout(this.tapTimeoutId);
+    };
+
     /**
       * 识别条件
       * @param {Computed} 计算数据
@@ -68,4 +91,6 @@ export default class TapRecognizer extends Recognizer {
         const hasMove = 2 < max(offsetX, offsetY);
         return 'end' === inputStatus && 1 === maxPointerLength && 2 > distance && 250 > duration && !hasMove
     };
+
+    afterRecognized(computed: Computed): void{}
 };

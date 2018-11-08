@@ -96,19 +96,18 @@ export default function ({
 
     // 多点计算
     if (undefined !== prevInput && 1 < prevInput.pointers.length && 1 < input.pointers.length) {
-        // if(undefined !== startMutliInput){
         // 2指形成的向量
         const startV = computeVector(startMutliInput);
         const prevV = computeVector(prevInput);
         const activeV = computeVector(input);
 
         // 计算缩放
-        const { scale, deltaScale } = computeScale({
-            startV, activeV
+        const {deltaScale, scale} = computeScale({
+            startV, activeV,prevV
         });
-
         computed.scale = scale;
         computed.deltaScale = deltaScale;
+        // console.log({scale, deltaScale});
 
         // 计算旋转角度
         const { angle, deltaAngle } = computeAngle({ startV, prevV, activeV });

@@ -1,5 +1,9 @@
 import { Computed } from '../interface';
-
+import {
+    STATUS_RECOGNIZED,
+    STATUS_POSSIBLE,
+    STATUS_FAILED
+} from '../const/recognizerStatus';
 import Recognizer from './Base';
 export default class PressRecognizer extends Recognizer {
     protected _timeoutId: number;
@@ -32,11 +36,13 @@ export default class PressRecognizer extends Recognizer {
         }
     };
 
-    public test({maxPointerLength}: Computed):boolean{
+    public test({ maxPointerLength }: Computed): boolean {
         return 1 < maxPointerLength;
     };
 
     protected cancel() {
         clearTimeout(this._timeoutId);
     }
+
+    afterRecognized(){}
 };

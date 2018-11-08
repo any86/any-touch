@@ -3,8 +3,15 @@
 * 未知 => 识别失败 
 * 未知 => 取消(已知的任意阶段)
 * */
-import { inputStatus, Computed } from '../interface';
-// import { RECOGNIZER_STATUS_POSSIBLE, RECOGNIZER_STATUS_BEGAN, RECOGNIZER_STATUS_CHANGED, RECOGNIZER_STATUS_ENDED, RECOGNIZER_STATUS_RECOGNIZED, RECOGNIZER_STATUS_CANCELLED, RECOGNIZER_STATUS_FAILED } from '../const'
+import { Computed } from '../interface';
+import {
+    STATUS_POSSIBLE,
+    STATUS_START,
+    STATUS_MOVE,
+    STATUS_END,
+    STATUS_CANCELLED,
+    STATUS_FAILED
+} from '../const/recognizerStatus';
 export default abstract class Recognizer {
     public name: string;
     public status: string;
@@ -14,7 +21,7 @@ export default abstract class Recognizer {
     private _injectedEmit: any;
     constructor(options: any) {
         this.options = Object.assign({}, options);
-        this.status = 'possible';
+        this.status = STATUS_POSSIBLE;
         this.isRecognized = false;
         this.requireFailureRecognizers = [];
     };
@@ -53,7 +60,7 @@ export default abstract class Recognizer {
         for (let index = 0; index < length; index++) {
             const recognizer = this.requireFailureRecognizers[index];
             // console.log(recognizer.status);
-            if ('failed' !== recognizer.status && 'possible' !== recognizer.status) {
+            if (STATUS_FAILED !== recognizer.status && STATUS_POSSIBLE !== recognizer.status) {
                 return false;
             }
         };
@@ -76,23 +83,23 @@ export default abstract class Recognizer {
     public flowStatus(computed: Computed, isRecognized: boolean) {
         if (isRecognized) {
             // 已识别
-            if ('start' !== this.status && 'move' !== this.status) {
-                this.status = 'start';
+            if (STATUS_START !== this.status && STATUS_MOVE !== this.status) {
+                this.status = STATUS_START;
             } else {
-                this.status = 'move';
+                this.status = STATUS_MOVE;
             }
             // this.afterRecognized(computed);
             this.emit(this.options.name, computed);
         } else {
             if ('end' === computed.inputStatus) {
                 if (!this.isRecognized) {
-                    this.status = 'failed';
+                    this.status = STATUS_FAILED;
                 } else {
-                    this.status = 'end';
+                    this.status = STATUS_END;
                     // this.afterRecognized(computed);
                 }
             } else {
-                this.status = 'possible';
+                this.status = STATUS_POSSIBLE;
             }
         }
         this.isRecognized = isRecognized;
@@ -102,37 +109,40 @@ export default abstract class Recognizer {
         // }
     };
 
-
     recognize(computed: Computed) {
+        // this.beforeRecognize(computed);
         let { inputStatus } = computed;
+        // 是否识别成功
         let isVaild = this.test(computed);
-        // this.flowStatus(computed, true);
-        let isRecognized = -1 < ['start', 'move'].indexOf(this.status);
-        if ('possible' === this.status && isVaild) {
-            this.status = 'start';
-        } else if ('start' === this.status) {
-            this.status = 'move';
+        // 是否已识别
+        let isRecognized = -1 < [STATUS_START, STATUS_MOVE].indexOf(this.status);
+        if (STATUS_POSSIBLE === this.status && isVaild) {
+            this.status = STATUS_START;
+        } else if (isRecognized && 'move' === inputStatus) {
+            this.status = STATUS_MOVE;
         } else if (isRecognized && 'end' === inputStatus) {
-            this.status = 'end';
+            this.status = STATUS_END;
+        } else if (!isRecognized && !isVaild) {
+            this.status = STATUS_POSSIBLE;
         } else if ('cancel' === inputStatus) {
-            this.status = 'cancel';
+            this.status = STATUS_CANCELLED;
+        } else if (!isRecognized && !isVaild && 'end' === inputStatus) {
+            this.status = STATUS_FAILED;
         } else {
-            this.status = 'possible';
+            this.status = 'uncatched'
         }
-        this.emit(this.options.name + this.status, computed);
+        if(isVaild) {
+            this.emit(this.options.name, computed);
+        }
 
-        //     // panleft | panright | pandown | panup
-        //     this.emit(this.options.name + computed.direction, computed);
-        //     // panstart | panmove | panend
-        //     this.emit(this.options.name + this.status, computed);
-        // } else {
-        //     if (this.isRecognized) {
-        //         this.flowStatus(computed, false);
-        //         this.emit(this.options.name + this.status, computed);
-        //     }
-        // }
+        if(-1 < ['start', 'move', 'end'].indexOf(this.status)) {
+            // panleft | panright | pandown | panup
+            // this.emit(this.options.name + computed.direction, computed);
+            // panstart | panmove | panend
+            this.emit(this.options.name + this.status, computed);
+            this.afterRecognized(computed);
+        }
     };
-
 
     /**
      * 识别条件, 基于异步
@@ -145,5 +155,6 @@ export default abstract class Recognizer {
      * 识别成功后执行
      * @param {Computed} 计算数据 
      */
-    // abstract afterRecognized(computed: Computed): void;
+    abstract afterRecognized(computed: Computed): void;
+    // abstract beforeRecognize(computed: Computed): void;
 };

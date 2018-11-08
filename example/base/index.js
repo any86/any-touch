@@ -1,6 +1,6 @@
 import AnyTouch from '../../src/main.ts';
 let log = console.log;
-// log = () => { };
+log = () => { };
 new Vue({
     el: '#app',
 
@@ -106,6 +106,7 @@ new Vue({
             e.preventDefault();
             this.message = e;
             this.scale *= e.deltaScale;
+            console.log(e.deltaScale);
             this.centerX = e.centerX;
             this.centerY = e.centerY;
             log(`%c ${e.type} `, 'background-color:#f90;color:#fff;');
