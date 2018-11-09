@@ -5,89 +5,79 @@ import {
     Scene,
     WebGLRenderer,
     PerspectiveCamera,
-    BoxGeometry,
     MeshBasicMaterial, DirectionalLight,
-    FontLoader,
     TextGeometry, SpotLight, SpotLightHelper,
-    MeshPhongMaterial, PointLight, AmbientLight,
-    Mesh
+    PointLight, AmbientLight,
+    AxesHelper,
+    Object3D
 } from 'three';
-import createPlane from './geometrys/plane';
+import createPlane from './object3D/plane';
+import createFont from './object3D/font';
+import createSphere from './object3D/sphere';
+
+// 渲染器
+let renderer = new WebGLRenderer({ antialias: true });
+renderer.setSize(window.innerWidth, window.innerHeight);
+document.body.appendChild(box)
+box.appendChild(renderer.domElement);
+renderer.setClearColor(0xaaaaaa);
+renderer.shadowMap.enabled = true;
+
+
+let position = { x: 188, y: 36, z: 210 };
+const dat = require('dat.gui');
+const gui = new dat.GUI();
+gui.add(position, 'x', -1000, 1000);
+gui.add(position, 'y', -1000, 1000);
+gui.add(position, 'z', -1000, 1000);
+
 
 // 场景
 let scene = new Scene()
 
+// 相机
 let camera = new PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
-camera.position.z = 600;
+camera.position.x = 100;
+camera.position.y = 100;
+camera.position.z = 400;
+camera.lookAt(scene.position)
+
+// 辅助线
+scene.add(new AxesHelper(130));
+// 平面
+scene.add(createPlane());
+
+// 球体
+// scene.add(createSphere());
+
+// 光源
+
+let spotLight = new SpotLight(0xffffff);
+spotLight.position.set(-40, 60, 300);
+spotLight.castShadow = true;
+scene.add(spotLight);
 
 
 
-// import './fonts/Alex.json'
-var loader = new FontLoader();
-loader.load(`./Alex.json`, function (font) {
+!async function () {
+    //3D文字
+    const fontMesh = <Object3D>await createFont();
+    scene.add(fontMesh);
+    
 
-    // 形状
-    let geometry = new TextGeometry('Hell123o', {
-        font,
-        height: 20,
-        // bevelEnabled:true,ack
-        // bevelThickness:1,
-    });
-
-    var ambientLight = new AmbientLight(0xffffff, 0.1);
-    scene.add(ambientLight);
-
-    // 光
-    {
-        let spotLight = new SpotLight(0xffffff, 1);
+    function render3() {
+        requestAnimationFrame(render3);
+        scene.remove(spotLight);
+        spotLight = new SpotLight(0xffffff);
+        spotLight.position.set(position.x, position.y, position.z);
         spotLight.castShadow = true;
-        spotLight.position.set(-10, 100, 100);
         scene.add(spotLight);
-        var spotLightHelper = new SpotLightHelper(spotLight);
-        scene.add(spotLightHelper);
+
+        // 开始渲染
+        renderer.render(scene, camera);
     }
-
-    {
-        let spotLight = new SpotLight(0xffffff, 1);
-        spotLight.castShadow = true;
-        spotLight.position.set(10, -100, 100);
-        scene.add(spotLight);
-        var spotLightHelper = new SpotLightHelper(spotLight);
-        scene.add(spotLightHelper);
-    }
-
-    // 材质
-    let material = new MeshPhongMaterial({
-        // map: texture,
-        color: 0xeeeeee,
-        specular: 0xeeeeee,
-        shininess: 97,
-    });
-    //3D文字材质
-    var mesh = new Mesh(geometry, material);
-
-    mesh.rotateX(.3);
-    mesh.rotateY(.3);
-    // mesh.rotateZ(1);
-
-    // 加入到场景中
-    scene.add(mesh);
-
-    scene.add(createPlane());
-
-    let renderer = new WebGLRenderer({ antialias: true });
-    renderer.setSize(window.innerWidth, window.innerHeight);
-
-
-    document.body.appendChild(box)
-    box.appendChild(renderer.domElement);
-    renderer.setClearColor(0xaaaaaa);
-    renderer.shadowMap.enabled = true;
-    renderer.render(scene, camera);
-});
-
-
-
+    render3();
+}();
 
 // const log = console.log;
 // const tap2 = new AnyTouch.TapRecognizer({ name: 'doubletap', pointer: 1, taps: 2 })
