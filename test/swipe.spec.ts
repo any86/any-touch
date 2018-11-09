@@ -21,5 +21,5 @@ test('swipedown是否触发?', (done) => {
     ts.dispatchTouchMove(el, [{ x: 30, y: 300 }]);
     setTimeout(() => {
         ts.dispatchTouchEnd(el);
-    }, 100);
+    }, 30);
 });
