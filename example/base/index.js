@@ -94,13 +94,10 @@ new Vue({
          */
         ['pinchstart', 'pinchmove', 'pinchend', 'pinchin', 'pinchout'].forEach(name => {
             anyTouch.on(name, e => {
-                // this.message = e;
-                log(e.type);
+                this.message = e;
+                console.log(e.type);
             })
         });
-
-
-
 
         anyTouch.on('pinch', e => {
             e.preventDefault();
