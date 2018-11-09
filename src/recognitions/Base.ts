@@ -110,10 +110,10 @@ export default abstract class Recognizer {
             this.emit(this.options.name, computed);
         }
 
-        if (this.options.name == 'pan') {
-            console.log({ status: this.status, isVaild, isRecognized: this.isRecognized });
+        // if (this.options.name == 'pan') {
+        //     console.log({ status: this.status, isVaild, isRecognized: this.isRecognized });
 
-        }
+        // }
 
         if (-1 < ['start', 'move', 'end'].indexOf(this.status)) {
             // panleft | panright | pandown | panup
