@@ -1,4 +1,5 @@
 import AnyTouch from '../../src/main.ts';
+import TouchSimulator from '../../test/utils/TouchSimulator';
 let log = console.log;
 log = () => { };
 new Vue({
@@ -95,7 +96,7 @@ new Vue({
         ['pinchstart', 'pinchmove', 'pinchend', 'pinchin', 'pinchout'].forEach(name => {
             anyTouch.on(name, e => {
                 this.message = e;
-                console.log(e.type);
+                console.warn(e.type);
             })
         });
 
@@ -103,10 +104,10 @@ new Vue({
             e.preventDefault();
             this.message = e;
             this.scale *= e.deltaScale;
-            console.log(e.deltaScale);
+            // console.log(e.deltaScale);
             this.centerX = e.centerX;
             this.centerY = e.centerY;
-            log(`%c ${e.type} `, 'background-color:#f90;color:#fff;');
+            console.warn(`%c ${e.type} `, 'background-color:#f90;color:#fff;');
         });
 
         /**
@@ -132,7 +133,7 @@ new Vue({
          */
         ['swipeup', 'swipeleft', 'swiperight', 'swipedown'].forEach(name => {
             anyTouch.on(name, e => {
-                log(e.type);
+                console.warn(e.type);
                 // switch (name) {
                 //     case 'swipeup':
                 //         {
@@ -163,9 +164,10 @@ new Vue({
         });
 
         anyTouch.on('swipe', e => {
-            log(`%c ${e.type} `, 'background-color:#444;color:#fff;');
+            console.warn(`%c ${e.type} `, 'background-color:#444;color:#fff;');
             this.message = e;
         });
+
     },
 
     methods: {

@@ -10,7 +10,7 @@ import {
     STATUS_MOVE,
     STATUS_END,
     STATUS_CANCELLED,
-    STATUS_FAILED
+    STATUS_FAILED,STATUS_RECOGNIZED
 } from '../const/recognizerStatus';
 export default abstract class Recognizer {
     public name: string;
@@ -74,68 +74,48 @@ export default abstract class Recognizer {
         return 0 === this.options.pointerLength || this.options.pointerLength === pointerLength
     };
 
-
     /**
-     * 识别器也是整个识别器控制流程走向的方法
+     * 适用于大部分移动类型的手势
      * @param {Computed} 计算数据 
-     * @param {RecognizerCallback} 识别后触发钩子 
      */
-    public flowStatus(computed: Computed, isRecognized: boolean) {
-        if (isRecognized) {
-            // 已识别
-            if (STATUS_START !== this.status && STATUS_MOVE !== this.status) {
-                this.status = STATUS_START;
-            } else {
-                this.status = STATUS_MOVE;
-            }
-            // this.afterRecognized(computed);
-            this.emit(this.options.name, computed);
-        } else {
-            if ('end' === computed.inputStatus) {
-                if (!this.isRecognized) {
-                    this.status = STATUS_FAILED;
-                } else {
-                    this.status = STATUS_END;
-                    // this.afterRecognized(computed);
-                }
-            } else {
-                this.status = STATUS_POSSIBLE;
-            }
-        }
-        this.isRecognized = isRecognized;
-
-        // if (this.options.name === 'doubletap') {
-        //     console.log(this.status, this.isRecognized, computed.inputStatus);
-        // }
-    };
-
     recognize(computed: Computed) {
         // this.beforeRecognize(computed);
         let { inputStatus } = computed;
         // 是否识别成功
         let isVaild = this.test(computed);
-        // 是否已识别
-        let isRecognized = -1 < [STATUS_START, STATUS_MOVE].indexOf(this.status);
-        if (STATUS_POSSIBLE === this.status && isVaild) {
-            this.status = STATUS_START;
-        } else if (isRecognized && 'move' === inputStatus) {
-            this.status = STATUS_MOVE;
-        } else if (isRecognized && 'end' === inputStatus) {
-            this.status = STATUS_END;
-        } else if (!isRecognized && !isVaild) {
+
+        // 如果识别结束, 那么重置状态
+        if (-1 < [STATUS_END, STATUS_CANCELLED, STATUS_FAILED, STATUS_RECOGNIZED].indexOf(this.status)) {
             this.status = STATUS_POSSIBLE;
-        } else if ('cancel' === inputStatus) {
-            this.status = STATUS_CANCELLED;
-        } else if (!isRecognized && !isVaild && 'end' === inputStatus) {
+        };
+
+        if (!this.isRecognized && !isVaild && STATUS_POSSIBLE === this.status && 'end' === inputStatus) {
             this.status = STATUS_FAILED;
-        } else {
-            this.status = 'uncatched'
+        } else if (STATUS_POSSIBLE === this.status && 'end' === inputStatus && isVaild) {
+            this.status = STATUS_RECOGNIZED;
+        } else if (STATUS_POSSIBLE === this.status && isVaild) {
+            this.status = STATUS_START;
+        } else if (this.isRecognized && 'move' === inputStatus) {
+            this.status = STATUS_MOVE;
+        } else if (this.isRecognized && 'end' === inputStatus) {
+            this.status = STATUS_END;
+        } else if (this.isRecognized && 'cancel' === inputStatus) {
+            this.status = STATUS_CANCELLED;
         }
-        if(isVaild) {
+
+        // 是否已识别
+        this.isRecognized = -1 < [STATUS_START, STATUS_MOVE].indexOf(this.status);
+
+        if (isVaild) {
             this.emit(this.options.name, computed);
         }
 
-        if(-1 < ['start', 'move', 'end'].indexOf(this.status)) {
+        if (this.options.name == 'pan') {
+            console.log({ status: this.status, isVaild, isRecognized: this.isRecognized });
+
+        }
+
+        if (-1 < ['start', 'move', 'end'].indexOf(this.status)) {
             // panleft | panright | pandown | panup
             // this.emit(this.options.name + computed.direction, computed);
             // panstart | panmove | panend

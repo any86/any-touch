@@ -29,14 +29,14 @@ const simulatorPinchOut = () => {
 };
 
 
-// test('pinchin是否触发?', (done) => {
-//     at.on('pinchin', ({ type, scale, deltaScale }) => {
-//         expect(type).toBe('pinchin');
-//         done();
-//     });
-//     // 模拟touch触碰
-//     simulatorPinchIn();
-// });
+test('pinchin是否触发?', (done) => {
+    at.on('pinchin', ({ type, scale, deltaScale }) => {
+        expect(type).toBe('pinchin');
+        done();
+    });
+    // 模拟touch触碰
+    simulatorPinchIn();
+});
 
 test('pinchout是否触发?', (done) => {
     at.on('pinchout', ({ type, scale, deltaScale }) => {

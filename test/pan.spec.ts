@@ -56,7 +56,7 @@ test('pan位移计算是否正确?', (done) => {
 
     at.on('panend', () => {
         expect(orgX).toBe(0);
-        expect(orgY).toBe(100);
+        expect(orgY).toBe(110);
         done();
     });
 
