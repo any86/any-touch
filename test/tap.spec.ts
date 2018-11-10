@@ -12,11 +12,11 @@ test('仅有tap识别, 事件是否触发', async (done) => {
         expect(type).toBe('tap');
         done();
     });
-    const ts = new TouchSimulator();
+    const ts = new TouchSimulator(el);
     // 模拟touch触碰
-    ts.dispatchTouchStart(el, [{ x: 0, y: 0 }]);
+    ts.dispatchTouchStart([{ x: 0, y: 0 }]);
     await sleep(100);
-    ts.dispatchTouchEnd(el);
+    ts.dispatchTouchEnd();
 });
 
 
@@ -36,13 +36,13 @@ test('tap与doubletap之间的requireFailure是否生效?', async (done) => {
         done();
     });
 
-    const ts = new TouchSimulator();
+    const ts = new TouchSimulator(el);
     // 模拟touch触碰
-    ts.dispatchTouchStart(el, [{ x: 0, y: 0 }]);
-    ts.dispatchTouchEnd(el);
+    ts.dispatchTouchStart([{ x: 0, y: 0 }]);
+    ts.dispatchTouchEnd();
 
     await sleep(10);
-    ts.dispatchTouchStart(el, [{ x: 0, y: 0 }]);
-    ts.dispatchTouchEnd(el);
+    ts.dispatchTouchStart([{ x: 0, y: 0 }]);
+    ts.dispatchTouchEnd();
 
 });

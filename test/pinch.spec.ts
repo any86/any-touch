@@ -10,22 +10,22 @@ const at = new AnyTouch(el);
  * 模拟PinchIn
  */
 const simulatorPinchIn = () => {
-    const ts = new TouchSimulator();
-    ts.dispatchTouchStart(el, [{ x: 0, y: 0 }, { x: 200, y: 0 }]);
-    ts.dispatchTouchMove(el, [{ x: 0, y: 0 }, { x: 100, y: 0 }]);
-    ts.dispatchTouchMove(el, [{ x: 0, y: 0 }, { x: 40, y: 0 }]);
-    ts.dispatchTouchEnd(el);
+    const ts = new TouchSimulator(el);
+    ts.dispatchTouchStart([{ x: 0, y: 0 }, { x: 200, y: 0 }]);
+    ts.dispatchTouchMove([{ x: 0, y: 0 }, { x: 100, y: 0 }]);
+    ts.dispatchTouchMove([{ x: 0, y: 0 }, { x: 40, y: 0 }]);
+    ts.dispatchTouchEnd();
 };
 
 /**
  * 模拟PinchOut
  */
 const simulatorPinchOut = () => {
-    const ts = new TouchSimulator();
-    ts.dispatchTouchStart(el, [{ x: 0, y: 0 }, { x: 50, y: 0 }]);
-    ts.dispatchTouchMove(el, [{ x: 0, y: 0 }, { x: 100, y: 0 }]);
-    ts.dispatchTouchMove(el, [{ x: 0, y: 0 }, { x: 170, y: 0 }]);
-    ts.dispatchTouchEnd(el);
+    const ts = new TouchSimulator(el);
+    ts.dispatchTouchStart([{ x: 0, y: 0 }, { x: 50, y: 0 }]);
+    ts.dispatchTouchMove([{ x: 0, y: 0 }, { x: 100, y: 0 }]);
+    ts.dispatchTouchMove([{ x: 0, y: 0 }, { x: 170, y: 0 }]);
+    ts.dispatchTouchEnd();
 };
 
 

@@ -7,16 +7,16 @@ const at = new AnyTouch(el);
  * 模拟向下滑动
  */
 const simulatorPan = () => {
-    const ts = new TouchSimulator();
-    ts.dispatchTouchStart(el, [{ x: 30, y: 0 }]);
-    ts.dispatchTouchMove(el, [{ x: 30, y: 5 }]);
-    ts.dispatchTouchMove(el, [{ x: 30, y: 9 }]);
-    ts.dispatchTouchMove(el, [{ x: 30, y: 15 }]);
-    ts.dispatchTouchMove(el, [{ x: 30, y: 30 }]);
-    ts.dispatchTouchMove(el, [{ x: 30, y: 50 }]);
-    ts.dispatchTouchMove(el, [{ x: 30, y: 90 }]);
-    ts.dispatchTouchMove(el, [{ x: 30, y: 100 }]);
-    ts.dispatchTouchEnd(el);
+    const ts = new TouchSimulator(el);
+    ts.dispatchTouchStart([{ x: 30, y: 0 }]);
+    ts.dispatchTouchMove([{ x: 30, y: 5 }]);
+    ts.dispatchTouchMove([{ x: 30, y: 9 }]);
+    ts.dispatchTouchMove([{ x: 30, y: 15 }]);
+    ts.dispatchTouchMove([{ x: 30, y: 30 }]);
+    ts.dispatchTouchMove([{ x: 30, y: 50 }]);
+    ts.dispatchTouchMove([{ x: 30, y: 90 }]);
+    ts.dispatchTouchMove([{ x: 30, y: 100 }]);
+    ts.dispatchTouchEnd();
 };
 
 ['panstart', 'panmove', 'panend', 'pan', 'pandown'].forEach(name => {

@@ -13,13 +13,13 @@ test('swipedown是否触发?', (done) => {
         done();
     });
 
-    const ts = new TouchSimulator();
+    const ts = new TouchSimulator(el);
     // 模拟touch触碰
-    ts.dispatchTouchStart(el, [{ x: 30, y: 0 }]);
-    ts.dispatchTouchMove(el, [{ x: 30, y: 100 }]);
-    ts.dispatchTouchMove(el, [{ x: 30, y: 200 }]);
-    ts.dispatchTouchMove(el, [{ x: 30, y: 300 }]);
+    ts.dispatchTouchStart([{ x: 30, y: 0 }]);
+    ts.dispatchTouchMove([{ x: 30, y: 100 }]);
+    ts.dispatchTouchMove([{ x: 30, y: 200 }]);
+    ts.dispatchTouchMove([{ x: 30, y: 300 }]);
     setTimeout(() => {
-        ts.dispatchTouchEnd(el);
+        ts.dispatchTouchEnd();
     }, 30);
 });

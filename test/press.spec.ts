@@ -14,9 +14,9 @@ test('press事件是否正确?', (done) => {
     });
 
     // 模拟touch触碰
-    const ts = new TouchSimulator();
-    ts.dispatchTouchStart(el, [{ x: 0, y: 0 }]);
+    const ts = new TouchSimulator(el);
+    ts.dispatchTouchStart([{ x: 0, y: 0 }]);
     setTimeout(() => {
-        ts.dispatchTouchEnd(el);
+        ts.dispatchTouchEnd();
     }, 300); 
 });
