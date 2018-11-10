@@ -9,14 +9,14 @@ const at = new AnyTouch(el);
 const simulatorPan = () => {
     const ts = new TouchSimulator();
     ts.dispatchTouchStart(el, [{ x: 30, y: 0 }]);
-    ts.dispatchTouchMove(el, [{ x: 30, y: 10 }]);
-    ts.dispatchTouchMove(el, [{ x: 30, y: 20 }]);
+    ts.dispatchTouchMove(el, [{ x: 30, y: 5 }]);
+    ts.dispatchTouchMove(el, [{ x: 30, y: 9 }]);
+    ts.dispatchTouchMove(el, [{ x: 30, y: 15 }]);
+    ts.dispatchTouchMove(el, [{ x: 30, y: 30 }]);
     ts.dispatchTouchMove(el, [{ x: 30, y: 50 }]);
     ts.dispatchTouchMove(el, [{ x: 30, y: 90 }]);
-    ts.dispatchTouchMove(el, [{ x: 30, y: 110 }]);
-    setTimeout(() => {
-        ts.dispatchTouchEnd(el);
-    }, 100);
+    ts.dispatchTouchMove(el, [{ x: 30, y: 100 }]);
+    ts.dispatchTouchEnd(el);
 };
 
 ['panstart', 'panmove', 'panend', 'pan', 'pandown'].forEach(name => {
@@ -32,7 +32,6 @@ const simulatorPan = () => {
         simulatorPan();
     });
 });
-
 
 test('pan位移计算是否正确?', (done) => {
     let orgX = 0;
@@ -54,9 +53,10 @@ test('pan位移计算是否正确?', (done) => {
         orgY += deltaY;
     });
 
-    at.on('panend', () => {
+    at.on('panend', ({displacementY}) => {
         expect(orgX).toBe(0);
-        expect(orgY).toBe(110);
+        expect(orgY).toBe(91);
+        expect(displacementY).toBe(100);
         done();
     });
 
