@@ -68,7 +68,7 @@ export default class EventBus {
     off(eventName: string, callback: EventHandler) {
         let events = this._stack[eventName];
         if (undefined === callback) {
-            events = [];
+            this._stack[eventName] = [];
         } else {
             for (let i = 0, len = events.length; i < len; i++) {
                 let existCallback = events[i];

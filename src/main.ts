@@ -173,8 +173,9 @@ export default class AnyTouch {
      * @param {String} 事件名 
      * @param {Function} 事件回调
      */
-    off(eventName: string, callback: EventHandler): void {
-        this.eventBus.off(eventName, callback);
+    off(eventName: string, handler: any=undefined): void {
+        
+        this.eventBus.off(eventName, handler);
     };
 
     headUpperCase(str: string) {
