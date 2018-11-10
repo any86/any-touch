@@ -10,6 +10,12 @@ export default class TouchSimulator {
         clientY: number;
     }[];
 
+    public el: Element | Document;
+
+    // constructor(el: Element | Document) {
+    //     this.el = el;
+    // };
+
     /**
      * 模拟touchstart
      * @param {ELement} dom元素

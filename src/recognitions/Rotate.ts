@@ -1,15 +1,15 @@
 import Base from './Base';
 import { Computed } from '../interface';
-
+import { STATUS_START } from '../const/recognizerStatus';
 export default class RotateRecognizer extends Base {
     constructor(options: any) {
         super(options);
     };
 
-    afterRecognized(computed: Computed) {
-        //rotatestart |rotatemove |rotateend
-        this.emit(this.options.name + this.status, computed);
-    };
+    /**
+     * 无特殊事件要触发
+     */
+    afterRecognized(computed: Computed) {};
 
     /**
      * 识别条件
