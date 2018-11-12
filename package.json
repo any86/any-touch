@@ -5,7 +5,7 @@
   "main": "esm/main.js",
   "scripts": {
     "dev": "tsc -w",
-    "build": "tsc && rollup -c && rimraf esm/",
+    "build": "rimraf dist && rollup -c",
     "test": "jest"
   },
   "repository": {

@@ -1,5 +1,4 @@
-import AnyTouch from '../../src/main.ts';
-import TouchSimulator from '../../test/utils/TouchSimulator';
+
 let log = console.log;
 log = () => { };
 new Vue({

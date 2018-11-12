@@ -1,7 +1,7 @@
 // import babel from 'rollup-plugin-babel';
 import typescript from 'rollup-plugin-typescript';
 export default {
-    input: 'esm/main.js',
+    input: './src/main.ts',
     plugins: [typescript({
         exclude: 'node_modules/**',
         typescript: require('typescript')
