@@ -1,8 +1,10 @@
-import babel from 'rollup-plugin-babel';
+// import babel from 'rollup-plugin-babel';
+import typescript from 'rollup-plugin-typescript';
 export default {
     input: 'esm/main.js',
-    plugins: [babel({
-        exclude: 'node_modules/**'
+    plugins: [typescript({
+        exclude: 'node_modules/**',
+        typescript: require('typescript')
     })],
     output: [{
         format: 'es',
