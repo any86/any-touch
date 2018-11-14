@@ -13,14 +13,11 @@ export default class PressRecognizer extends Recognizer {
     };
 
     recognize(computed: Computed): void {
-        const { inputStatus, distance, duration, maxPointerLength } = computed;
-        if (1 < maxPointerLength) {
-            this.cancel();
-            return;
-        } else {
+        const { inputStatus, distance, duration} = computed;
+        if (this.test(computed)) {
             if ('start' === inputStatus) {
                 this._timeoutId = window.setTimeout(() => {
-                    this.emit('press', computed);
+                    this.emit(this.options.name, computed);
                 }, 250);
             } else if ('move' === inputStatus) {
                 if (9 < distance) {
@@ -30,19 +27,21 @@ export default class PressRecognizer extends Recognizer {
                 if (251 > duration || 9 < distance) {
                     this.cancel();
                 } else {
-                    this.emit('pressup', computed);
+                    this.emit(`${this.options.name}up`, computed);
                 }
             }
+        } else {
+            this.cancel();
         }
     };
 
-    public test({ maxPointerLength }: Computed): boolean {
-        return 1 < maxPointerLength;
+    public test({ pointerLength }: Computed): boolean {
+        return 1 >= pointerLength;
     };
 
     protected cancel() {
         clearTimeout(this._timeoutId);
     }
 
-    afterRecognized(){}
+    afterRecognized() { }
 };
