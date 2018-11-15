@@ -18,9 +18,11 @@ export default abstract class Recognizer {
     public isRecognized: boolean;
     public options: { [propName: string]: any };
     public requireFailureRecognizers: any[];
+    // 默认参数
+    public defaultOptions: { [propName: string]: any };
     private _injectedEmit: any;
     constructor(options: any) {
-        this.options = Object.assign({}, options);
+        this.options = { ...this.defaultOptions, ...options };
         this.status = STATUS_POSSIBLE;
         this.isRecognized = false;
         this.requireFailureRecognizers = [];
@@ -70,8 +72,16 @@ export default abstract class Recognizer {
      * 验证触点
      * @param {Number} 触点数
      */
-    public pointerLengthTest(pointerLength: number): boolean {
+    public isValidPointerLength(pointerLength: number): boolean {
         return 0 === this.options.pointerLength || this.options.pointerLength === pointerLength
+    };
+
+    /**
+     * 方向是否符合要求
+     * @param {String} 方向 
+     */
+    isValidDirection(direction:string){
+        return -1 < this.options.directions.indexOf(direction)
     };
 
     /**

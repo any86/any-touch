@@ -23,9 +23,17 @@ export default class PinchRecognizer extends Recognizer {
      * @param {Computed} 计算数据
      * @param {(isRecognized: boolean) => void}} 接收是否识别状态
      */
-    test({ pointerLength }: Computed): boolean {
-        // 如果触碰点要大于1
-        // 如果已经识别, 并且当前事件是离开阶段
-        return 1 < pointerLength;
+    test({ pointerLength, scale }: Computed): boolean {
+        // 如果触碰点数要大于指定
+        // 如果缩放超过阈值, 或者已识别
+        return this.isValidPointerLength(pointerLength) && (this.options.threshold < Math.abs(scale - 1) || this.isRecognized);
     };
+};
+
+// 默认参数
+PinchRecognizer.prototype.defaultOptions = {
+    name: 'pinch',
+    // 触发事件所需要的最小缩放比例
+    threshold: 0,
+    pointerLength: 1,
 };

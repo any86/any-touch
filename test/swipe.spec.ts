@@ -1,25 +1,19 @@
-import TouchSimulator from './utils/TouchSimulator';import AnyTouch from '../src/main'
+import TouchSimulator from './utils/TouchSimulator';
+import swipeSimulator from './utils/Gesture/swipeSimulator';
+import AnyTouch from '../src/main';
 document.body.innerHTML = '<div id="box">box</div>';
 const el = document.getElementById('box');
 const at = new AnyTouch(el);
-test('swipedown是否触发?', (done) => {
-    at.on('swipedown', ({type}) => {
-        expect(type).toBe('swipedown');
-        done();
-    });
 
-    at.on('swipe', ({type}) => {
-        expect(type).toBe('swipe');
-        done();
-    });
+// ['up', 'right', 'down', 'left'].forEach(direction => {
+['left'].forEach(direction => {
 
-    const ts = new TouchSimulator(el);
-    // 模拟touch触碰
-    ts.dispatchTouchStart([{ x: 30, y: 0 }]);
-    ts.dispatchTouchMove([{ x: 30, y: 100 }]);
-    ts.dispatchTouchMove([{ x: 30, y: 200 }]);
-    ts.dispatchTouchMove([{ x: 30, y: 300 }]);
-    setTimeout(() => {
-        ts.dispatchTouchEnd();
-    }, 30);
+    test(`swipe${direction}是否触发?`, (done) => {
+        at.on(`swipe`, ({ type }) => {
+            expect(type).toBe(`swipe`);
+            done();
+        });
+        // 模拟touch触碰
+        swipeSimulator(el, { direction });
+    });
 });

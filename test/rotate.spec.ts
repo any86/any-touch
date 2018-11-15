@@ -11,7 +11,7 @@ test('rotate旋转角度是否计算正确?', (done) => {
     at.on('rotate', ({ type, angle }) => {
         expect(type).toBe('rotate');
         let expectAngle = Math.round(angle);
-        let receiveAngle = [0, ...ANGLES_TEST][times];
+        let receiveAngle = ANGLES_TEST[times];
         expect(expectAngle).toBe(receiveAngle);
         times++;
         done();
@@ -20,14 +20,14 @@ test('rotate旋转角度是否计算正确?', (done) => {
 });
 
 
-['start', 'move', 'end'].forEach(name=>{
+['start', 'move', 'end'].forEach(name => {
     test(`${ROTATE}${name}触发?`, (done) => {
         at.off(ROTATE);
-        at.on(ROTATE+name, ({type}) => {
-            expect(type).toBe(ROTATE+name);
+        at.on(ROTATE + name, ({ type }) => {
+            expect(type).toBe(ROTATE + name);
             done();
         });
         rotateSimulator(el, { angles: ANGLES_TEST });
     });
-    
+
 })

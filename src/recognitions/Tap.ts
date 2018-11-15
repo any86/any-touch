@@ -5,13 +5,6 @@ import {
     STATUS_FAILED
 } from '../const/recognizerStatus';
 interface Options { name?: string, pointer?: number, taps?: number, interval?: number };
-// 默认参数
-const DEFAULT_OPTIONS = {
-    name: 'tap',
-    pointer: 1,
-    taps: 1,
-    interval: 300
-};
 const { setTimeout, clearTimeout } = window;
 import Recognizer from './Base';
 export default class TapRecognizer extends Recognizer {
@@ -21,10 +14,10 @@ export default class TapRecognizer extends Recognizer {
     private _prevX: number;
     private _prevY: number;
     public options: Options;
-
+    public defaultOptions: Options;
     constructor(options: Options) {
         super(options);
-        this.options = { ...DEFAULT_OPTIONS, ...options };
+        
         this.tapTimeoutId = null;
         this.tapCount = 0;
     };
@@ -92,5 +85,13 @@ export default class TapRecognizer extends Recognizer {
         return 'end' === inputStatus && 1 === maxPointerLength && 2 > distance && 250 > duration && !hasMove
     };
 
-    afterRecognized(computed: Computed): void{}
+    afterRecognized(computed: Computed): void { }
+};
+
+// 默认参数
+TapRecognizer.prototype.defaultOptions = {
+    name: 'tap',
+    pointer: 1,
+    taps: 1,
+    interval: 300
 };

@@ -30,7 +30,7 @@ const simulatorPinchOut = () => {
 
 
 test('pinchin是否触发?', (done) => {
-    at.on('pinchin', ({ type, scale, deltaScale }) => {
+    at.on('pinchin', ({ type }) => {
         expect(type).toBe('pinchin');
         done();
     });
@@ -39,7 +39,7 @@ test('pinchin是否触发?', (done) => {
 });
 
 test('pinchout是否触发?', (done) => {
-    at.on('pinchout', ({ type, scale, deltaScale }) => {
+    at.on('pinchout', ({ type }) => {
         expect(type).toBe('pinchout');
         done();
     });
@@ -54,8 +54,8 @@ test('pinchout是否触发?', (done) => {
 
 test('pinch缩放是否正确?', (done) => {
     let index = 0;
-    let expectScales = [1,0.5,0.2];
-    at.on('pinch', ({scale, deltaScale }) => {
+    let expectScales = [0.5, 0.2];
+    at.on('pinch', ({ scale }) => {
         expect(scale).toBe(expectScales[index]);
         index++;
         done();

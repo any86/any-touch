@@ -20,12 +20,11 @@ export default (input: Input): { velocity: number, velocityX: number, velocityY:
     // 方向
     let direction: string;
 
-    // _prevInput || input用来保证start阶段也有prevInput, 当然这时等于input
+    // _prevInput || input用来保证deltaX等不会有undefined参与计算
     _prevInput = _prevInput || input;
     const deltaTime = input.timestamp - _prevInput.timestamp;
     const deltaX = (0 < input.centerX) ? input.centerX - _prevInput.centerX : 0;
     const deltaY = (0 < input.centerY) ? input.centerY - _prevInput.centerY : 0;
-
     // 每25ms刷新速度数据
     if (COMPUTE_INTERVAL < deltaTime) {
         velocityX = Math.abs(deltaX / deltaTime);
@@ -41,7 +40,11 @@ export default (input: Input): { velocity: number, velocityX: number, velocityY:
         velocityY = _prevVelocityY || 0;
         direction = _prevDirection || 'none';
     }
+
+
     // 取xy方向2者的最大值
     const maxVelocity = Math.max(velocityX, velocityY);
+console.log({ velocity: maxVelocity, velocityX, velocityY, direction });
+
     return { velocity: maxVelocity, velocityX, velocityY, direction };
 };
