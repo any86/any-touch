@@ -1,7 +1,7 @@
 {
     "compilerOptions": {
         "esModuleInterop":true,
-        "target": "es6",
+        "target": "es3",
         "noImplicitAny": true,
         "removeComments": true,
         "preserveConstEnums": false,
