@@ -25,11 +25,11 @@ const simulatorPan = () => {
             type
         }) => {
             expect(type).toBe(name);
-            done();
         });
 
         // 模拟事件
         simulatorPan();
+        done();
     });
 });
 
@@ -57,9 +57,9 @@ test('pan位移计算是否正确?', (done) => {
         expect(orgX).toBe(0);
         expect(orgY).toBe(91);
         expect(displacementY).toBe(100);
-        done();
     });
 
     // 模拟事件
     simulatorPan();
+    done();
 });

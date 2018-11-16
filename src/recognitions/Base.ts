@@ -10,7 +10,7 @@ import {
     STATUS_MOVE,
     STATUS_END,
     STATUS_CANCELLED,
-    STATUS_FAILED,STATUS_RECOGNIZED
+    STATUS_FAILED, STATUS_RECOGNIZED
 } from '../const/recognizerStatus';
 export default abstract class Recognizer {
     public name: string;
@@ -77,11 +77,37 @@ export default abstract class Recognizer {
     };
 
     /**
-     * 方向是否符合要求
+     * 是否只支持水平方向
+     */
+    public isOnlyHorizontal() {
+        let isOnlyHorizontal = true;
+        for (let direction of this.options.directions) {
+            isOnlyHorizontal = -1 < ['left', 'right'].indexOf(direction);
+            if (!isOnlyHorizontal) {
+                return false;
+            }
+        }
+    };
+
+    /**
+     * 是否只支持垂直方向
+     */
+    public isOnlyVertical() {
+        let isOnlyVertical = true;
+        for (let direction of this.options.directions) {
+            isOnlyVertical = -1 < ['up', 'down'].indexOf(direction);
+            if (!isOnlyVertical) {
+                return false;
+            }
+        }
+    };
+
+    /**
+     * 是否支持该方向
      * @param {String} 方向 
      */
-    isValidDirection(direction:string){
-        return -1 < this.options.directions.indexOf(direction)
+    public isVaildDirection(direction:string){
+        return -1 < this.options.directions.indexOf(direction);
     };
 
     /**
@@ -120,12 +146,11 @@ export default abstract class Recognizer {
             this.emit(this.options.name, computed);
         }
 
-        // if (this.options.name == 'pan') {
+        // if (this.options.name == 'swipe') {
         //     console.log({ status: this.status, isVaild, isRecognized: this.isRecognized });
-
         // }
 
-        if (-1 < ['start', 'move', 'end'].indexOf(this.status)) {
+        if (-1 < ['start', 'move', 'end', 'recognized'].indexOf(this.status)) {
             // panleft | panright | pandown | panup
             // this.emit(this.options.name + computed.direction, computed);
             // panstart | panmove | panend

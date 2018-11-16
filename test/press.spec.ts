@@ -11,7 +11,6 @@ test('press事件是否正确?', async(done) => {
     at.on('press', ({ type, timestamp }) => {
         lastTime = timestamp;
         expect(type).toBe('press');
-        
     });
 
     at.on('pressup', ({ type, timestamp }) => {

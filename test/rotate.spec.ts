@@ -14,9 +14,9 @@ test('rotate旋转角度是否计算正确?', (done) => {
         let receiveAngle = ANGLES_TEST[times];
         expect(expectAngle).toBe(receiveAngle);
         times++;
-        done();
     });
     rotateSimulator(el, { angles: ANGLES_TEST });
+    done();
 });
 
 
@@ -25,9 +25,8 @@ test('rotate旋转角度是否计算正确?', (done) => {
         at.off(ROTATE);
         at.on(ROTATE + name, ({ type }) => {
             expect(type).toBe(ROTATE + name);
-            done();
         });
         rotateSimulator(el, { angles: ANGLES_TEST });
+        done();
     });
-
 })

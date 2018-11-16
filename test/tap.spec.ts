@@ -44,5 +44,4 @@ test('tap与doubletap之间的requireFailure是否生效?', async (done) => {
     await sleep(10);
     ts.dispatchTouchStart([{ x: 0, y: 0 }]);
     ts.dispatchTouchEnd();
-
 });

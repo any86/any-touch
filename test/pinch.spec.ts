@@ -32,23 +32,21 @@ const simulatorPinchOut = () => {
 test('pinchin是否触发?', (done) => {
     at.on('pinchin', ({ type }) => {
         expect(type).toBe('pinchin');
-        done();
     });
     // 模拟touch触碰
     simulatorPinchIn();
+    done();
 });
 
-test('pinchout是否触发?', (done) => {
+test('pinchout是否触发?', async(done) => {
     at.on('pinchout', ({ type }) => {
         expect(type).toBe('pinchout');
-        done();
+        
     });
     // 模拟touch触碰
-    // await sleep(100);
-    setTimeout(() => {
-        simulatorPinchOut();
-    }, 1000)
-
+    await sleep(100);
+    simulatorPinchOut();
+    done();
 });
 
 
@@ -58,7 +56,7 @@ test('pinch缩放是否正确?', (done) => {
     at.on('pinch', ({ scale }) => {
         expect(scale).toBe(expectScales[index]);
         index++;
-        done();
     });
     simulatorPinchIn();
+    done();
 });
