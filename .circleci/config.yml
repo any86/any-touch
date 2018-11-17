@@ -25,7 +25,7 @@ jobs:
             - dependencies-{{ checksum "package.json" }}
 
         - run: yarn install
-        - run: npm install codecov -g
+        - run: yarn global add codecov
 
         - save_cache:
             paths:
@@ -34,4 +34,4 @@ jobs:
             
         # run tests!  
         - run: npm run test
-        - run: codecov
+        - run: ./node_modules/.bin/codecov
