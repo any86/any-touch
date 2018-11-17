@@ -30,7 +30,7 @@ at.on('pan', ev=>{
 })
 
 // 解除绑定
-at.off('pan)
+at.off('pan')
 
 // 销毁
 at.destory();
