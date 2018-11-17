@@ -29,6 +29,9 @@ at.on('pan', ev=>{
   console.log(ev.deltaX);
 })
 
+// 解除绑定
+at.off('pan)
+
 // 销毁
 at.destory();
 ```
