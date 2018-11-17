@@ -9,10 +9,10 @@ const at = new AnyTouch(el);
     test(`swipe${direction}是否触发?`, async (done) => {
         at.on(`swipe${direction}`, ({ type }) => {
             expect(type).toBe(`swipe${direction}`);
-            done();
         });
         // 模拟touch触碰
         await sleep(500)
         swipeSimulator(el, { direction });
+        done();
     });
 });
