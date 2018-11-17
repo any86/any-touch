@@ -14,7 +14,6 @@ export default class PinchRecognizer extends Recognizer {
             const inOrOut = scale > this._prevScale ? 'out' : 'in';
             this.emit(this.options.name + inOrOut, computed);
         }
-
         this._prevScale = scale;
     };
 
