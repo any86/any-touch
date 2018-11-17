@@ -27,5 +27,5 @@ RotateRecognizer.prototype.defaultOptions = {
     name: 'rotate',
     // 触发事件所需要的最小角度
     threshold: 0,
-    pointerLength: 1,
+    pointerLength: 2,
 };

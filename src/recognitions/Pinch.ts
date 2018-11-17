@@ -34,5 +34,5 @@ PinchRecognizer.prototype.defaultOptions = {
     name: 'pinch',
     // 触发事件所需要的最小缩放比例
     threshold: 0,
-    pointerLength: 1,
+    pointerLength: 2,
 };
