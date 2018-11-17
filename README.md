@@ -1,5 +1,4 @@
-# any-touch  [![NPM Version][npm-image]][npm-url] [![NPM Downloads][downloads-image]][downloads-url] [![codecov](https://codecov.io/gh/383514580/any-touch/branch/develop/graph/badge.svg)](https://codecov.io/gh/383514580/any-touch)  
-[![CircleCI](https://circleci.com/gh/383514580/any-touch/tree/develop.svg?style=svg)](https://circleci.com/gh/383514580/any-touch/tree/develop)
+# any-touch  [![NPM Version][npm-image]][npm-url] [![NPM Downloads][downloads-image]][downloads-url] [![codecov](https://codecov.io/gh/383514580/any-touch/branch/develop/graph/badge.svg)](https://codecov.io/gh/383514580/any-touch)  [![CircleCI](https://circleci.com/gh/383514580/any-touch/tree/develop.svg?style=svg)](https://circleci.com/gh/383514580/any-touch/tree/develop)
 
 :wave:    一个手势库
 
