@@ -43,7 +43,7 @@ export default (input: Input): { velocity: number, velocityX: number, velocityY:
 
     // 取xy方向2者的最大值
     const maxVelocity = Math.max(velocityX, velocityY);
-console.log({deltaX,deltaY,direction});
+// console.log({deltaX,deltaY,direction});
 
     return { velocity: maxVelocity, velocityX, velocityY, direction };
 };
