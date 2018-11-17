@@ -3,6 +3,7 @@
 [![NPM Downloads][downloads-image]][downloads-url] 
 [![CircleCI](https://circleci.com/gh/383514580/any-touch/tree/develop.svg?style=svg)](https://circleci.com/gh/383514580/any-touch/tree/develop)
 [![codecov](https://codecov.io/gh/383514580/any-touch/branch/develop/graph/badge.svg)](https://codecov.io/gh/383514580/any-touch)
+
 :wave:    一个手势库
 
 
