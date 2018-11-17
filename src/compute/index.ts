@@ -51,7 +51,7 @@ export default function ({
         // 旋转和缩放
         angle: 0,
         deltaAngle: 0,
-        scale: 1,
+        scale: undefined,
         deltaScale: 1,
         lastVelocity: undefined,
         lastVelocityY: undefined,
@@ -95,15 +95,15 @@ export default function ({
     computed.maxVelocity = max(computed.velocityX, computed.velocityY);
 
     // 多点计算
+    // 上一触点数大于1, 当前触点大于1
     if (undefined !== prevInput && 1 < prevInput.pointers.length && 1 < input.pointers.length) {
         // 2指形成的向量
         const startV = computeVector(startMutliInput);
         const prevV = computeVector(prevInput);
         const activeV = computeVector(input);
-
         // 计算缩放
-        const {deltaScale, scale} = computeScale({
-            startV, activeV,prevV
+        const { deltaScale, scale } = computeScale({
+            startV, activeV, prevV
         });
         computed.scale = scale;
         computed.deltaScale = deltaScale;

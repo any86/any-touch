@@ -119,7 +119,6 @@ export default abstract class Recognizer {
         let { inputStatus } = computed;
         // 是否识别成功
         let isVaild = this.test(computed);
-
         // 如果识别结束, 那么重置状态
         if (-1 < [STATUS_END, STATUS_CANCELLED, STATUS_FAILED, STATUS_RECOGNIZED].indexOf(this.status)) {
             this.status = STATUS_POSSIBLE;
@@ -146,8 +145,12 @@ export default abstract class Recognizer {
             this.emit(this.options.name, computed);
         }
 
-        // if (this.options.name == 'swipe') {
-        //     console.log({ status: this.status, isVaild, isRecognized: this.isRecognized });
+        // if (this.options.name == 'pinch') {
+        //     console.log({ 
+        //         status: this.status, 
+        //         scale:computed.scale,
+        //         isVaild, 
+        //         isRecognized: this.isRecognized });
         // }
 
         if (-1 < ['start', 'move', 'end', 'recognized'].indexOf(this.status)) {

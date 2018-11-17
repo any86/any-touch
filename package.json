@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "tsc -w",
     "build": "rimraf dist && rollup -c",
+    "watch": "rimraf dist && rollup -c --watch",
     "test": "jest"
   },
   "repository": {

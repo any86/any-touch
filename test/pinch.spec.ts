@@ -6,39 +6,43 @@ document.body.innerHTML = '<div id="box">box</div>';
 const el = document.getElementById('box');
 const at = new AnyTouch(el);
 
-// const simulatorPinchIn = pinchIn;
-// const simulatorPinchOut = pinchOut;
 
-test('pinch缩放是否正确?', (done) => {
+test('pinch缩放计算是否正确?', (done) => {
     let index = 0;
-    let expectScales = [1,0.5, 0.2];
-    at.on('pinch', ({ scale }) => {
+    let expectScales = [2, 4, 6, 3, 1, 0.5, 0.2];
+    at.on('pinch', ({ type, scale }) => {
+        // scale===1 不触发pinchin/out
+        if (1 === scale) {
+            index++;
+        }
+        expect(type).toBe('pinch');
+
+    });
+
+    at.on('pinchout', ({ scale }) => {
         expect(scale).toBe(expectScales[index]);
         index++;
     });
 
-    at.on('pinchin', ({ type }) => {
-        expect(type).toBe('pinchin');
+    at.on('pinchin', ({ scale }) => {
+        expect(scale).toBe(expectScales[index]);
+        index++;
     });
+
+    at.on('pinchstart', ({ scale }) => {
+        expect(scale).toBe(expectScales[0]);
+    });
+
+    at.on('pinchmove', ({ scale }) => {
+        expect(scale).not.toBe(expectScales[0]);
+        expect(scale).not.toBeUndefined();
+    });
+
+    at.on('pinchend', ({ scale }) => {
+        expect(scale).toBeUndefined();
+    });
+
     // 模拟缩放
     pinchSimulator(el, { scales: expectScales });
     done();
-});
-
-test('pinchout是否触发?', async (done) => {
-    at.on('pinchout', ({ type }) => {
-        expect(type).toBe('pinchout');
-    });
-    pinchSimulator(el, { scales: [1, 2, 3, 4] });
-    done();
-});
-
-['start', 'move', 'end'].forEach(status=>{
-    test(`pinch${status}是否触发?`, async (done) => {
-        at.on(`pinch${status}`, ({ type }) => {
-            expect(type).toBe(`pinch${status}`);
-        });
-        pinchSimulator(el, { scales: [1, 2, 3, 4] });
-        done();
-    });
 });

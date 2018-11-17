@@ -6,5 +6,5 @@ module.exports = {
     },
     collectCoverage: true,
     coverageDirectory: "./coverage/",
-    // verbose:false,
+    verbose:false,
 };
