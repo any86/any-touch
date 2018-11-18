@@ -31,7 +31,7 @@ new Vue({
 
         anyTouch.on('input', e => {
             this.message = e;
-            console.log(e, e.type);
+            log(e, e.type);
         });
 
 
@@ -54,7 +54,7 @@ new Vue({
 
 
         anyTouch.on('pan', e => {
-            e.preventDefault();
+            // e.preventDefault();
             log(`%c ${e.type} `, 'background-color:#69c;color:#fff;');
             this.message = e;
             this.x += e.deltaX;
@@ -108,7 +108,7 @@ new Vue({
         });
 
         anyTouch.on('pinch', e => {
-            e.preventDefault();
+            // e.preventDefault();
             this.message = e;
             this.scale *= e.deltaScale;
             // console.log(e.deltaScale);
@@ -128,7 +128,7 @@ new Vue({
         });
 
         anyTouch.on('rotate', e => {
-            e.preventDefault();
+            // e.preventDefault();
             this.message = e;
             this.angle += e.deltaAngle;
             this.centerX = e.centerX;
