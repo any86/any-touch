@@ -28,6 +28,14 @@ new Vue({
         /**
          * =========================== pan ===========================
          */
+
+        anyTouch.on('input', e => {
+            this.message = e;
+            console.log(e, e.type);
+        });
+
+
+
         anyTouch.on('panstart', e => {
             this.message = e;
             log(e.type);

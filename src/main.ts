@@ -155,6 +155,7 @@ export default class AnyTouch {
                 // 注入emit到recognizer中
                 recognizer.injectEmit(this.eventBus.emit.bind(this.eventBus));
                 recognizer.recognize(computed);
+                this.eventBus.emit('input', {...computed, type: 'input'});
             });
         }
     };
