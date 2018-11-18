@@ -82,7 +82,7 @@ export default class AnyTouch {
         this.recognizers = [
             new TapRecognizer({ name: 'tap', pointer: 1, taps: 1 }),
             new PressRecognizer({ name: 'press' }),
-            new PanRecognizer({ name: 'pan' }),
+            new PanRecognizer({ name: 'pan' }, el),
             new SwipeRecognizer({ name: 'swipe' }),
             new PinchRecognizer({ name: 'pinch' }),
             new RotateRecognizer({ name: 'rotate' }),
@@ -100,7 +100,7 @@ export default class AnyTouch {
         const boundFn = this.handler.bind(this);
         if (this.isMobile) {
             return ['touchstart', 'touchmove', 'touchend', 'touchcancel'].map(eventName => {
-                el.addEventListener(eventName, boundFn);
+                el.addEventListener(eventName, boundFn, {passive: false});
                 return () => {
                     el.removeEventListener(eventName, boundFn);
                 }
