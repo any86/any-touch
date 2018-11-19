@@ -6,6 +6,10 @@ export default class SwipeRecognizer extends Recognizer {
         super(options);
     };
 
+    getTouchAction(){
+        return 'none';
+    };
+
     /**
      * 识别后发布swipeleft等事件
      * @param {Computed} 计算数据

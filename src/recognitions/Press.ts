@@ -12,6 +12,10 @@ export default class PressRecognizer extends Recognizer {
         this._timeoutId = null;
     };
 
+    getTouchAction(){
+        return 'none';
+    };
+
     recognize(computed: Computed): void {
         const { inputStatus, distance, duration} = computed;
         if (this.test(computed)) {

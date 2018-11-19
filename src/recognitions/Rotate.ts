@@ -5,6 +5,10 @@ export default class RotateRecognizer extends Base {
         super(options);
     };
 
+    getTouchAction(){
+        return 'none';
+    };
+    
     /**
      * 无特殊事件要触发
      */

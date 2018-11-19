@@ -10,17 +10,14 @@ interface Options {
 export default class PanRecognizer extends Recognizer {
     public name: string;
     public options: Options;
-    public el: HTMLElement;
 
-    constructor(options: Options, el:HTMLElement) {
+    constructor(options: Options) {
         super(options);
-        this.el = el;
-        this.el.style.touchAction = 'none';
     };
 
-    touchAction(){
-        this.el.style.touchAction = 'none';
-    }
+    getTouchAction(){
+        return 'none';
+    };
 
     /**
      * @param {Computed} 计算数据

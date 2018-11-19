@@ -77,6 +77,24 @@ export default abstract class Recognizer {
     };
 
     /**
+     * 计算是否只会水平和垂直方向移动
+     */
+    public isSupportHV() {
+        let hasHorizontal = false;
+        let hasVertical = false;
+        for (let direction of this.options.directions) {
+            if (-1 < ['left', 'right'].indexOf(direction)) {
+                hasHorizontal = true;
+                if(hasVertical) break;
+            } else if(-1 < ['up', 'down'].indexOf(direction)){
+                hasVertical = true;
+                if(hasHorizontal) break;
+            }
+        }
+        return {hasHorizontal, hasVertical};
+    };
+
+    /**
      * 是否只支持水平方向
      */
     public isOnlyHorizontal() {
@@ -106,7 +124,7 @@ export default abstract class Recognizer {
      * 是否支持该方向
      * @param {String} 方向 
      */
-    public isVaildDirection(direction:string){
+    public isVaildDirection(direction: string) {
         return -1 < this.options.directions.indexOf(direction);
     };
 
@@ -154,8 +172,6 @@ export default abstract class Recognizer {
         // }
 
         if (-1 < ['start', 'move', 'end', 'recognized'].indexOf(this.status)) {
-            // panleft | panright | pandown | panup
-            // this.emit(this.options.name + computed.direction, computed);
             // panstart | panmove | panend
             this.emit(this.options.name + this.status, computed);
             this.afterRecognized(computed);
@@ -174,5 +190,9 @@ export default abstract class Recognizer {
      * @param {Computed} 计算数据 
      */
     abstract afterRecognized(computed: Computed): void;
-    // abstract beforeRecognize(computed: Computed): void;
+
+    /**
+     * 计算当前手势的touch-action
+     */
+    abstract getTouchAction(): string;
 };

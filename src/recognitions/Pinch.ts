@@ -6,6 +6,10 @@ export default class PinchRecognizer extends Recognizer {
         super(options);
         this._prevScale = 1;
     };
+    
+    getTouchAction(){
+        return 'none';
+    };
 
     afterRecognized(computed: Computed) {
         // pinchin | pinchout

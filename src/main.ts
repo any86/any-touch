@@ -82,11 +82,15 @@ export default class AnyTouch {
         this.recognizers = [
             new TapRecognizer({ name: 'tap', pointer: 1, taps: 1 }),
             new PressRecognizer({ name: 'press' }),
-            new PanRecognizer({ name: 'pan' }, el),
+            new PanRecognizer({ name: 'pan' }),
             new SwipeRecognizer({ name: 'swipe' }),
             new PinchRecognizer({ name: 'pinch' }),
             new RotateRecognizer({ name: 'rotate' }),
         ];
+
+        this.recognizers.forEach(recognizer=>{
+            el.style.touchAction = recognizer.getTouchAction();
+        });
 
         // 绑定事件
         this.unbinders = this._bindRecognizers(el);

@@ -17,10 +17,13 @@ export default class TapRecognizer extends Recognizer {
     public defaultOptions: Options;
     constructor(options: Options) {
         super(options);
-        
         this.tapTimeoutId = null;
         this.tapCount = 0;
     };
+
+    getTouchAction(){
+        return 'none';
+    };    
 
     /**
      * 识别后执行
