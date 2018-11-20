@@ -21,9 +21,9 @@ export default class TapRecognizer extends Recognizer {
         this.tapCount = 0;
     };
 
-    getTouchAction(){
-        return 'none';
-    };    
+    getTouchAction() {
+        return (1 < this.options.taps) ? ['manipulation'] : ['auto'];
+    };
 
     /**
      * 识别后执行

@@ -19,6 +19,7 @@ new Vue({
         const tap2 = new AnyTouch.TapRecognizer({ name: 'doubletap', pointer: 1, taps: 2 })
         const tap3 = new AnyTouch.TapRecognizer({ name: 'threetap', pointer: 1, taps: 3 })
         const anyTouch = new AnyTouch(this.$refs.circle);
+        anyTouch.get('pan').set({pointerLength:1});
         anyTouch.add(tap2);
         anyTouch.add(tap3);
         const tap1 = anyTouch.get('tap');
@@ -33,8 +34,6 @@ new Vue({
             this.message = e;
             log(e, e.type);
         });
-
-
 
         anyTouch.on('panstart', e => {
             this.message = e;

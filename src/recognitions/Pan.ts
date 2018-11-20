@@ -1,10 +1,11 @@
 import { Computed, directionString } from '../interface';
 import Recognizer from './Base';
+import getHV from '../untils/getHV';
 interface Options {
     name?: string;
     threshold?: number;
     pointerLength?: number;
-    directions?: string[];
+    directions?: [directionString?, directionString?, directionString?, directionString?];
 };
 
 export default class PanRecognizer extends Recognizer {
@@ -16,7 +17,14 @@ export default class PanRecognizer extends Recognizer {
     };
 
     getTouchAction(){
-        return 'none';
+        let touchActions = [];
+        let {hasHorizontal, hasVertical } = getHV(this.options.directions);
+        if(!hasHorizontal) {
+            touchActions.push('pan-x');
+        } else if(!hasVertical) {
+            touchActions.push('pan-y');
+        }
+        return touchActions;
     };
 
     /**

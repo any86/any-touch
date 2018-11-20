@@ -27,7 +27,14 @@ export default abstract class Recognizer {
         this.isRecognized = false;
         this.requireFailureRecognizers = [];
     };
-
+    
+    /**
+     * 设置识别器
+     * @param {Object} 选项 
+     */
+    public set(options: {[propName: string]: any}){
+        this.options = { ...this.options, ...options };
+    };
     /**
      * 注入通用emit方法, 方便改写
      */
@@ -74,24 +81,6 @@ export default abstract class Recognizer {
      */
     public isValidPointerLength(pointerLength: number): boolean {
         return 0 === this.options.pointerLength || this.options.pointerLength === pointerLength
-    };
-
-    /**
-     * 计算是否只会水平和垂直方向移动
-     */
-    public isSupportHV() {
-        let hasHorizontal = false;
-        let hasVertical = false;
-        for (let direction of this.options.directions) {
-            if (-1 < ['left', 'right'].indexOf(direction)) {
-                hasHorizontal = true;
-                if(hasVertical) break;
-            } else if(-1 < ['up', 'down'].indexOf(direction)){
-                hasVertical = true;
-                if(hasHorizontal) break;
-            }
-        }
-        return {hasHorizontal, hasVertical};
     };
 
     /**
@@ -194,5 +183,5 @@ export default abstract class Recognizer {
     /**
      * 计算当前手势的touch-action
      */
-    abstract getTouchAction(): string;
+    abstract getTouchAction(): string[];
 };
