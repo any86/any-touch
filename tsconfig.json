@@ -7,7 +7,8 @@
         "preserveConstEnums": false,
         "sourceMap": true,
         "outDir": "./esm",
-        "lib": ["dom", "es2017"]
+        "lib": ["dom", "es2017"],
+        "downlevelIteration": true
     },
     "include": [
         "src/main.ts", "example/base/index.js"
