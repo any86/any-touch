@@ -20,13 +20,13 @@ import { EventHandler, Computed } from './interface';
 import {
     SUPPORT_ONLY_TOUCH,
     IS_MOBILE,
-    DIRECTION_NONE, 
-    DIRECTION_LEFT, 
-    DIRECTION_RIGHT, 
-    DIRECTION_UP, 
-    DIRECTION_DOWN, 
-    DIRECTION_HORIZONTAL, 
-    DIRECTION_VERTICAL, 
+    DIRECTION_NONE,
+    DIRECTION_LEFT,
+    DIRECTION_RIGHT,
+    DIRECTION_UP,
+    DIRECTION_DOWN,
+    DIRECTION_HORIZONTAL,
+    DIRECTION_VERTICAL,
     DIRECTION_ALL
 } from './const';
 import EventBus from './EventBus';
@@ -62,7 +62,7 @@ export default class AnyTouch {
     // 各个手势对应的handle集合
     eventBus: any;
 
-    recognizers: any[];
+    recognizers: { [propName: string]: any, name: string }[];
 
     unbinders: any[];
 
@@ -88,7 +88,7 @@ export default class AnyTouch {
             new RotateRecognizer({ name: 'rotate' }),
         ];
 
-        this.recognizers.forEach(recognizer=>{
+        this.recognizers.forEach(recognizer => {
             el.style.touchAction = recognizer.getTouchAction();
         });
 
@@ -104,7 +104,7 @@ export default class AnyTouch {
         const boundFn = this.handler.bind(this);
         if (this.isMobile) {
             return ['touchstart', 'touchmove', 'touchend', 'touchcancel'].map(eventName => {
-                el.addEventListener(eventName, boundFn, {passive: false});
+                el.addEventListener(eventName, boundFn, { passive: false });
                 return () => {
                     el.removeEventListener(eventName, boundFn);
                 }
@@ -145,7 +145,23 @@ export default class AnyTouch {
     };
 
     set({
+        touchAction = 'compute',
+        enable = true,
+        domEvents = false
     } = {}) {
+
+    };
+
+    /**
+     * 删除识别器
+     * @param {String} 识别器name
+     */
+    remove(recognizerName: string) {
+        for (let [index, recognizer] of this.recognizers.entries()) {
+            if (recognizerName === recognizer.name) {
+                this.recognizers.splice(index, 1);
+            }
+        }
     };
 
     handler(event: TouchEvent) {
@@ -159,7 +175,7 @@ export default class AnyTouch {
                 // 注入emit到recognizer中
                 recognizer.injectEmit(this.eventBus.emit.bind(this.eventBus));
                 recognizer.recognize(computed);
-                this.eventBus.emit('input', {...computed, type: 'input'});
+                this.eventBus.emit('input', { ...computed, type: 'input' });
             });
         }
     };
@@ -178,8 +194,7 @@ export default class AnyTouch {
      * @param {String} 事件名 
      * @param {Function} 事件回调
      */
-    off(eventName: string, handler: any=undefined): void {
-        
+    off(eventName: string, handler: any = undefined): void {
         this.eventBus.off(eventName, handler);
     };
 
