@@ -1,1 +1,0 @@
-{"version":3,"file":"computeMaxLength.js","sourceRoot":"","sources":["../../src/compute/computeMaxLength.ts"],"names":[],"mappings":";;AACA,IAAI,SAAS,GAAG,CAAC,CAAC;AAClB,sBAAe,UAAC,EAA0C;QAAxC,gCAAa,EAAE,oBAAO,EAAE,oBAAO;IAC7C,IAAI,OAAO,EAAE;QACT,SAAS,GAAG,aAAa,CAAC;KAC7B;SAAM;QACH,SAAS,GAAG,IAAI,CAAC,GAAG,CAAC,SAAS,EAAE,aAAa,CAAC,CAAC;KAClD;IACD,OAAO,SAAS,CAAC;AACrB,CAAC,EAAC"}
