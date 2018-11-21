@@ -13,7 +13,7 @@ export default class PressRecognizer extends Recognizer {
     };
 
     getTouchAction(){
-        return ['none'];
+        return 'auto';
     };
 
     recognize(computed: Computed): void {

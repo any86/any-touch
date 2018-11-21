@@ -183,5 +183,5 @@ export default abstract class Recognizer {
     /**
      * 计算当前手势的touch-action
      */
-    abstract getTouchAction(): string[];
+    abstract getTouchAction(): string;
 };

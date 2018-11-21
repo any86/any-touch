@@ -8,7 +8,7 @@ export default class PinchRecognizer extends Recognizer {
     };
     
     getTouchAction(){
-        return ['none'];
+        return 'none';
     };
 
     afterRecognized(computed: Computed) {

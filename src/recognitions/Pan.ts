@@ -17,14 +17,23 @@ export default class PanRecognizer extends Recognizer {
     };
 
     getTouchAction(){
-        let touchActions = [];
+        let touchAction = 'auto';
         let {hasHorizontal, hasVertical } = getHV(this.options.directions);
-        if(!hasHorizontal) {
-            touchActions.push('pan-x');
-        } else if(!hasVertical) {
-            touchActions.push('pan-y');
+
+        // 没有水平移动
+        if(!hasHorizontal && hasVertical) {
+            touchAction = 'pan-x';
         }
-        return touchActions;
+
+        // 没有垂直移动
+        if(!hasVertical && hasHorizontal) {
+            touchAction= 'pan-y';
+        }
+        
+        if(hasHorizontal && hasVertical) {
+            touchAction = 'none';
+        }
+        return touchAction;
     };
 
     /**

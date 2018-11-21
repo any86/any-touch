@@ -88,8 +88,24 @@ export default class AnyTouch {
             new RotateRecognizer({ name: 'rotate' }),
         ];
 
+        const order = ['none', 'pan-x', 'pan-y', 'manipulation', 'auto'];
+        let touchActionCSS = '';
+        for(let recognizer of this.recognizers) {
+            let touchAction = recognizer.getTouchAction();
+            if('none' === touchAction) {
+                touchActionCSS = 'none';
+                break;
+            } else if(-1 < ['pan-x', 'pan-y'].indexOf(touchAction)) {
+                touchActionCSS+= ` ${touchAction}`;
+            }
+
+
+        }
+
         this.recognizers.forEach(recognizer => {
-            el.style.touchAction = recognizer.getTouchAction();
+            
+            // console.log(touchAction);
+            // el.style.touchAction = recognizer.getTouchAction();
         });
 
         // 绑定事件
