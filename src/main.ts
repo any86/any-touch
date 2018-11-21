@@ -32,6 +32,7 @@ import {
 import EventBus from './EventBus';
 import inputManage from './inputManage';
 import compute from './compute/index';
+import computeTouchAction from './untils/computeTouchAction'
 
 import TapRecognizer from './recognitions/Tap';
 import PressRecognizer from './recognitions/Press';
@@ -88,25 +89,12 @@ export default class AnyTouch {
             new RotateRecognizer({ name: 'rotate' }),
         ];
 
-        const order = ['none', 'pan-x', 'pan-y', 'manipulation', 'auto'];
-        let touchActionCSS = '';
-        for(let recognizer of this.recognizers) {
-            let touchAction = recognizer.getTouchAction();
-            if('none' === touchAction) {
-                touchActionCSS = 'none';
-                break;
-            } else if(-1 < ['pan-x', 'pan-y'].indexOf(touchAction)) {
-                touchActionCSS+= ` ${touchAction}`;
-            }
-
-
-        }
-
-        this.recognizers.forEach(recognizer => {
-            
-            // console.log(touchAction);
-            // el.style.touchAction = recognizer.getTouchAction();
-        });
+        let touchActions= [];
+        for (let recognizer of this.recognizers) {
+            touchActions.push(...recognizer.getTouchAction());
+        };
+        let touchActionCSS = computeTouchAction(touchActions);
+        el.style.touchAction = touchActionCSS;
 
         // 绑定事件
         this.unbinders = this._bindRecognizers(el);

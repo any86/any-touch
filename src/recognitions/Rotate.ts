@@ -6,7 +6,7 @@ export default class RotateRecognizer extends Base {
     };
 
     getTouchAction(){
-        return 'none';
+        return ['none'];
     };
     
     /**

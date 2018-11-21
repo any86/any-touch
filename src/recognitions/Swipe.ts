@@ -7,7 +7,7 @@ export default class SwipeRecognizer extends Recognizer {
     };
 
     getTouchAction(){
-        return 'none';
+        return ['none'];
     };
 
     /**
