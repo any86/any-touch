@@ -70,7 +70,8 @@ export default class AnyTouch {
     version: string;
 
     isMobile: boolean;
-
+    
+    options: any;
     /**
      * @param {Element} el
      * @param {Object} param1
@@ -89,12 +90,13 @@ export default class AnyTouch {
             new RotateRecognizer({ name: 'rotate' }),
         ];
 
+        // 
         let touchActions= [];
         for (let recognizer of this.recognizers) {
             touchActions.push(...recognizer.getTouchAction());
         };
         let touchActionCSS = computeTouchAction(touchActions);
-        el.style.touchAction = touchActionCSS;
+        // el.style.touchAction = touchActionCSS;
 
         // 绑定事件
         this.unbinders = this._bindRecognizers(el);
@@ -153,7 +155,7 @@ export default class AnyTouch {
         enable = true,
         domEvents = false
     } = {}) {
-
+        this.options = {...this.options, touchAction,enable,domEvents}
     };
 
     /**
