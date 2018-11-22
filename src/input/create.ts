@@ -51,7 +51,9 @@ export default (event: TouchEvent | MouseEvent): Input => {
 
     // 阻止默认默认事件
     const preventDefault = () => {
-        event.preventDefault();
+        if(event.cancelable) {
+            event.preventDefault();
+        }
     };
 
     // 阻止其他事件
