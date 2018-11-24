@@ -4,6 +4,7 @@
 * 未知 => 取消(已知的任意阶段)
 * */
 import { Computed } from '../interface';
+import {INPUT_CANCEL, INPUT_END, INPUT_MOVE, INPUT_START } from '../const';
 import {
     STATUS_POSSIBLE,
     STATUS_START,
@@ -21,7 +22,7 @@ export default abstract class Recognizer {
     // 默认参数
     public defaultOptions: { [propName: string]: any };
     private _injectedEmit: any;
-    constructor(options: any) {
+    constructor(options: any={}) {
         this.options = { ...this.defaultOptions, ...options };
         this.status = STATUS_POSSIBLE;
         this.isRecognized = false;
@@ -131,17 +132,17 @@ export default abstract class Recognizer {
             this.status = STATUS_POSSIBLE;
         };
 
-        if (!this.isRecognized && !isVaild && STATUS_POSSIBLE === this.status && 'end' === inputStatus) {
+        if (!this.isRecognized && !isVaild && STATUS_POSSIBLE === this.status && INPUT_END === inputStatus) {
             this.status = STATUS_FAILED;
-        } else if (STATUS_POSSIBLE === this.status && 'end' === inputStatus && isVaild) {
+        } else if (STATUS_POSSIBLE === this.status && INPUT_END === inputStatus && isVaild) {
             this.status = STATUS_RECOGNIZED;
         } else if (STATUS_POSSIBLE === this.status && isVaild) {
             this.status = STATUS_START;
-        } else if (this.isRecognized && 'move' === inputStatus) {
+        } else if (this.isRecognized && INPUT_MOVE === inputStatus) {
             this.status = STATUS_MOVE;
-        } else if (this.isRecognized && 'end' === inputStatus) {
+        } else if (this.isRecognized && INPUT_END === inputStatus) {
             this.status = STATUS_END;
-        } else if (this.isRecognized && 'cancel' === inputStatus) {
+        } else if (this.isRecognized && INPUT_CANCEL === inputStatus) {
             this.status = STATUS_CANCELLED;
         }
 

@@ -1,4 +1,5 @@
 import { Computed, directionString } from '../interface';
+import {INPUT_MOVE} from '../const';
 import Recognizer from './Base';
 import getHV from '../untils/getHV';
 interface Options {
@@ -12,7 +13,7 @@ export default class PanRecognizer extends Recognizer {
     public name: string;
     public options: Options;
 
-    constructor(options: Options) {
+    constructor(options: Options={}) {
         super(options);
     };
 
@@ -42,7 +43,7 @@ export default class PanRecognizer extends Recognizer {
         const isValidDirection = -1 !== this.options.directions.indexOf(direction);
         const isValidThreshold = this.options.threshold < distance;
         return this.isValidPointerLength(pointerLength) && isValidDirection &&
-            (this.isRecognized || isValidThreshold) && 'move' === inputStatus;
+            (this.isRecognized || isValidThreshold) && INPUT_MOVE === inputStatus;
     };
 
     /**

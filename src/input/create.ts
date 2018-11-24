@@ -2,7 +2,7 @@
  * 构造统一的touchEvent格式
  */
 import { Input } from '../interface';
-import { SUPPORT_ONLY_TOUCH, IS_MOBILE, INPUT_CHANGE_LENGTH, INPUT_END, INPUT_MOVE, INPUT_START } from '../const';
+import { SUPPORT_ONLY_TOUCH, IS_MOBILE, INPUT_CANCEL, INPUT_END, INPUT_MOVE, INPUT_START } from '../const';
 import { getCenter } from '../vector';
 import touchAdapter from './adapters/touch'
 import mouseAdapter from './adapters/mouse';
@@ -51,7 +51,7 @@ export default (event: TouchEvent | MouseEvent): Input => {
 
     // 阻止默认默认事件
     const preventDefault = () => {
-        if(event.cancelable) {
+        if (event.cancelable) {
             event.preventDefault();
         }
     };

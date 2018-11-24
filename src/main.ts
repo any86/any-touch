@@ -20,14 +20,6 @@ import { EventHandler, Computed } from './interface';
 import {
     SUPPORT_ONLY_TOUCH,
     IS_MOBILE,
-    DIRECTION_NONE,
-    DIRECTION_LEFT,
-    DIRECTION_RIGHT,
-    DIRECTION_UP,
-    DIRECTION_DOWN,
-    DIRECTION_HORIZONTAL,
-    DIRECTION_VERTICAL,
-    DIRECTION_ALL
 } from './const';
 import EventBus from './EventBus';
 import inputManage from './inputManage';
@@ -48,14 +40,6 @@ export default class AnyTouch {
     static SwipeRecognizer = SwipeRecognizer;
     static PinchRecognizer = PinchRecognizer;
     static RotateRecognizer = RotateRecognizer;
-    static DIRECTION_NONE = DIRECTION_NONE;
-    static DIRECTION_UP = DIRECTION_UP;
-    static DIRECTION_RIGHT = DIRECTION_RIGHT;
-    static DIRECTION_DOWN = DIRECTION_DOWN;
-    static DIRECTION_LEFT = DIRECTION_LEFT;
-    static DIRECTION_HORIZONTAL = DIRECTION_LEFT | DIRECTION_RIGHT;
-    static DIRECTION_VERTICAL = DIRECTION_UP | DIRECTION_DOWN;
-    static DIRECTION_ALL = DIRECTION_HORIZONTAL | DIRECTION_VERTICAL;
 
     // 目标元素
     $el: Element;
@@ -70,7 +54,7 @@ export default class AnyTouch {
     version: string;
 
     isMobile: boolean;
-    
+
     options: any;
     /**
      * @param {Element} el
@@ -82,21 +66,20 @@ export default class AnyTouch {
         this.isMobile = IS_MOBILE;
         this.eventBus = new EventBus(el);
         this.recognizers = [
-            new TapRecognizer({ name: 'tap', pointer: 1, taps: 1 }),
-            new PressRecognizer({ name: 'press' }),
-            new PanRecognizer({ name: 'pan' }),
-            new SwipeRecognizer({ name: 'swipe' }),
-            new PinchRecognizer({ name: 'pinch' }),
-            new RotateRecognizer({ name: 'rotate' }),
+            new TapRecognizer(),
+            new PressRecognizer(),
+            new PanRecognizer(),
+            new SwipeRecognizer(),
+            new PinchRecognizer(),
+            new RotateRecognizer(),
         ];
 
-        // 
-        let touchActions= [];
+        // 计算touch-action
+        let touchActions = [];
         for (let recognizer of this.recognizers) {
             touchActions.push(...recognizer.getTouchAction());
         };
-        let touchActionCSS = computeTouchAction(touchActions);
-        // el.style.touchAction = touchActionCSS;
+        el.style.touchAction = computeTouchAction(touchActions);
 
         // 绑定事件
         this.unbinders = this._bindRecognizers(el);
@@ -155,7 +138,7 @@ export default class AnyTouch {
         enable = true,
         domEvents = false
     } = {}) {
-        this.options = {...this.options, touchAction,enable,domEvents}
+        this.options = { ...this.options, touchAction, enable, domEvents }
     };
 
     /**

@@ -1,7 +1,7 @@
 import Base from './Base';
 import { Computed } from '../interface';
 export default class RotateRecognizer extends Base {
-    constructor(options: any) {
+    constructor(options: any={}) {
         super(options);
     };
 
