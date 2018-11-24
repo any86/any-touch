@@ -32,7 +32,16 @@ import PanRecognizer from './recognitions/Pan';
 import SwipeRecognizer from './recognitions/Swipe';
 import PinchRecognizer from './recognitions/Pinch';
 import RotateRecognizer from './recognitions/Rotate';
-
+interface Options {
+    touchAction: 'compute' | 'auto' | 'manipulation' | 'pan-x' | 'pan-y' | 'none';
+    enable: boolean;
+    domEvents: boolean;
+};
+const DEFAULT_OPTIONS: Options = {
+    touchAction: 'compute',
+    enable: true,
+    domEvents: false
+};
 export default class AnyTouch {
     static TapRecognizer = TapRecognizer;
     static PressRecognizer = PressRecognizer;
@@ -42,7 +51,7 @@ export default class AnyTouch {
     static RotateRecognizer = RotateRecognizer;
 
     // 目标元素
-    $el: Element;
+    el: HTMLElement;
 
     // 各个手势对应的handle集合
     eventBus: any;
@@ -55,16 +64,17 @@ export default class AnyTouch {
 
     isMobile: boolean;
 
-    options: any;
+    options: Options;
     /**
      * @param {Element} el
      * @param {Object} param1
      */
-    constructor(el: HTMLElement, {
-    } = {}) {
+    constructor(el: HTMLElement, options:Options) {
         this.version = '0.0.2';
+        this.el = el;
         this.isMobile = IS_MOBILE;
         this.eventBus = new EventBus(el);
+        this.options = {...DEFAULT_OPTIONS, ...options};
         this.recognizers = [
             new TapRecognizer(),
             new PressRecognizer(),
@@ -73,16 +83,31 @@ export default class AnyTouch {
             new PinchRecognizer(),
             new RotateRecognizer(),
         ];
-
         // 计算touch-action
-        let touchActions = [];
-        for (let recognizer of this.recognizers) {
-            touchActions.push(...recognizer.getTouchAction());
-        };
-        el.style.touchAction = computeTouchAction(touchActions);
+        this.setTouchAction(el);
+    };
 
-        // 绑定事件
-        this.unbinders = this._bindRecognizers(el);
+    /**
+     * 计算touch-action
+     * @param {HTMLElement} 目标元素 
+     */
+    public setTouchAction(el: HTMLElement) {
+        if ('compute' === this.options.touchAction) {
+            let touchActions = [];
+            for (let recognizer of this.recognizers) {
+                touchActions.push(...recognizer.getTouchAction());
+            };
+            el.style.touchAction = computeTouchAction(touchActions);
+
+            // 绑定事件
+            this.unbinders = this._bindRecognizers(el);
+        } else {
+            el.style.touchAction = this.options.touchAction;
+        }
+    };
+
+    private _update() {
+        this.setTouchAction(this.el);
     };
 
     /**
@@ -133,12 +158,9 @@ export default class AnyTouch {
         return this.recognizers.find(recognizer => name === recognizer.options.name);
     };
 
-    set({
-        touchAction = 'compute',
-        enable = true,
-        domEvents = false
-    } = {}) {
-        this.options = { ...this.options, touchAction, enable, domEvents }
+    set(options:Options) {
+        this.options = {...DEFAULT_OPTIONS, ...options};
+        this._update();
     };
 
     /**
