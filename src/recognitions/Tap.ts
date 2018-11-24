@@ -7,6 +7,7 @@ import {
 interface Options { name?: string, pointer?: number, taps?: number, interval?: number };
 const { setTimeout, clearTimeout } = window;
 import Recognizer from './Base';
+import { INPUT_END } from '../const';
 export default class TapRecognizer extends Recognizer {
     tapCount: number;
     tapTimeoutId: number;
@@ -15,7 +16,7 @@ export default class TapRecognizer extends Recognizer {
     private _prevY: number;
     public options: Options;
     public defaultOptions: Options;
-    constructor(options: Options) {
+    constructor(options: Options={}) {
         super(options);
         this.tapTimeoutId = null;
         this.tapCount = 0;
@@ -85,7 +86,7 @@ export default class TapRecognizer extends Recognizer {
         let offsetX = abs(centerX - this._prevX);
         let offsetY = abs(centerY - this._prevY);
         const hasMove = 2 < max(offsetX, offsetY);
-        return 'end' === inputStatus && 1 === maxPointerLength && 2 > distance && 250 > duration && !hasMove
+        return INPUT_END === inputStatus && 1 === maxPointerLength && 2 > distance && 250 > duration && !hasMove
     };
 
     afterRecognized(computed: Computed): void { }

@@ -1,8 +1,8 @@
 import Recognizer from './Base';
 import { Computed } from '../interface';
-import { DIRECTION_UP, DIRECTION_RIGHT, DIRECTION_DOWN, DIRECTION_LEFT } from '../const/directions';
+import {INPUT_END} from '../const';
 export default class SwipeRecognizer extends Recognizer {
-    constructor(options: any) {
+    constructor(options: any={}) {
         super(options);
     };
 
@@ -35,11 +35,10 @@ export default class SwipeRecognizer extends Recognizer {
         }
 
         let vaildVelocity = Math.sqrt(vaildVelocityX * vaildVelocityX + vaildVelocityY * vaildVelocityY)
-// console.log({lastDirection,direction});
 
         return 1 === maxPointerLength &&
             this.options.threshold < distance &&
-            'end' === inputStatus &&
+            INPUT_END === inputStatus &&
             this.isVaildDirection(lastDirection) &&
             this.isVaildDirection(lastDirection) &&
             this.options.velocity < vaildVelocity;

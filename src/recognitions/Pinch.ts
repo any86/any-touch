@@ -2,7 +2,7 @@ import { Computed } from '../interface';
 import Recognizer from './Base';
 export default class PinchRecognizer extends Recognizer {
     private _prevScale: number;
-    constructor(options: any) {
+    constructor(options: any={}) {
         super(options);
         this._prevScale = 1;
     };

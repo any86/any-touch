@@ -25,8 +25,6 @@ export const DIRECTION_ALL = DIRECTION_HORIZONTAL | DIRECTION_VERTICAL; // 30
 // 计算触发时间间隔, 防止事件触发就一直计算
 export const COMPUTE_INTERVAL = 25;
 
-// 识别tap允许最大的移动距离
-export const MAX_MOVE_OF_TAP = 2;
 
 // 计算时候取touchs.clientX | clientY
 export const propX = 'clientX';
@@ -44,5 +42,5 @@ export const RECOGNIZER_STATUS_FAILED = 32;
 // input的类型
 export const INPUT_START = 'start';
 export const INPUT_MOVE = 'move';
-export const INPUT_CHANGE_LENGTH = 'change-length';
+export const INPUT_CANCEL = 'cancel';
 export const INPUT_END = 'end';
