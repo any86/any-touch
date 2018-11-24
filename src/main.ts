@@ -33,9 +33,9 @@ import SwipeRecognizer from './recognitions/Swipe';
 import PinchRecognizer from './recognitions/Pinch';
 import RotateRecognizer from './recognitions/Rotate';
 interface Options {
-    touchAction: 'compute' | 'auto' | 'manipulation' | 'pan-x' | 'pan-y' | 'none';
-    enable: boolean;
-    domEvents: boolean;
+    touchAction?: 'compute' | 'auto' | 'manipulation' | 'pan-x' | 'pan-y' | 'none';
+    enable?: boolean;
+    domEvents?: boolean;
 };
 const DEFAULT_OPTIONS: Options = {
     touchAction: 'compute',
@@ -69,12 +69,12 @@ export default class AnyTouch {
      * @param {Element} el
      * @param {Object} param1
      */
-    constructor(el: HTMLElement, options:Options) {
+    constructor(el: HTMLElement, options: Options = DEFAULT_OPTIONS) {
         this.version = '0.0.2';
         this.el = el;
         this.isMobile = IS_MOBILE;
         this.eventBus = new EventBus(el);
-        this.options = {...DEFAULT_OPTIONS, ...options};
+        this.options = { ...DEFAULT_OPTIONS, ...options };
         this.recognizers = [
             new TapRecognizer(),
             new PressRecognizer(),
@@ -83,6 +83,9 @@ export default class AnyTouch {
             new PinchRecognizer(),
             new RotateRecognizer(),
         ];
+        this.recognizers.forEach(recognizer=>{
+            recognizer.injectUpdate(this._update.bind(this));
+        });
         // 计算touch-action
         this.setTouchAction(el);
     };
@@ -158,8 +161,8 @@ export default class AnyTouch {
         return this.recognizers.find(recognizer => name === recognizer.options.name);
     };
 
-    set(options:Options) {
-        this.options = {...DEFAULT_OPTIONS, ...options};
+    set(options: Options=DEFAULT_OPTIONS) {
+        this.options = { ...DEFAULT_OPTIONS, ...options };
         this._update();
     };
 
@@ -185,6 +188,7 @@ export default class AnyTouch {
             this.recognizers.forEach(recognizer => {
                 // 注入emit到recognizer中
                 recognizer.injectEmit(this.eventBus.emit.bind(this.eventBus));
+                
                 recognizer.recognize(computed);
                 this.eventBus.emit('input', { ...computed, type: 'input' });
             });
