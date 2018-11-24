@@ -102,6 +102,7 @@ export default abstract class Recognizer {
                 return false;
             }
         }
+        return isOnlyHorizontal;
     };
 
     /**
@@ -115,6 +116,7 @@ export default abstract class Recognizer {
                 return false;
             }
         }
+        return isOnlyVertical;
     };
 
     /**
