@@ -21,13 +21,13 @@ export default class PressRecognizer extends Recognizer {
         const { inputStatus, distance, duration } = computed;
         // 手指一直按住屏幕
         if (this.test(computed)) {
-            if (9 < distance || 251 > duration) {
+            if (this.options.threshold < distance ) {
                 this.cancel();
             } else {
                 this._timeoutId = window.setTimeout(() => {
                     this.status = STATUS_RECOGNIZED;
                     this.emit(this.options.name, computed);
-                }, 250);
+                }, this.options.minPressTime);
             }
         }
         // 已识别, end阶段触发pressup
@@ -57,4 +57,6 @@ export default class PressRecognizer extends Recognizer {
 PressRecognizer.prototype.defaultOptions = {
     name: 'press',
     pointerLength: 1,
+    threshold:9,
+    minPressTime: 251
 };

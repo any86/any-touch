@@ -16,19 +16,20 @@ test('press|pressup事件是否正确?', async(done) => {
     at.on('pressup', ({ type, timestamp }) => {
         expect(timestamp - lastTime).toBeGreaterThanOrEqual(MIN_PRESS_TIME);
         expect(type).toBe('pressup');
+        done();
     });
 
     // 模拟touch触碰
     const ts = new TouchSimulator(el);
     ts.dispatchTouchStart([{ x: 0, y: 0 }]);
-    ts.dispatchTouchStart([{ x: 8, y: 8 }]);
+    ts.dispatchTouchMove([{ x: 3, y: 3 }]);
     await sleep(MIN_PRESS_TIME);
     ts.dispatchTouchEnd();
-    done();
+    
 });
 
 
-test('超时造成的press事件失败,流程是否正确?', async (done) => {
+test('移动距离过大press事件失败,流程是否正确?', async (done) => {
     const mockCallback = jest.fn();
     at.off('press');
     at.off('pressup');
@@ -44,7 +45,7 @@ test('超时造成的press事件失败,流程是否正确?', async (done) => {
     // 模拟touch触碰
     const ts = new TouchSimulator(el);
     ts.dispatchTouchStart([{ x: 0, y: 0 }]);
-    ts.dispatchTouchStart([{ x: 8, y: 8 }]);
+    ts.dispatchTouchMove([{ x: 30, y: 30 }]);
     await sleep(MIN_PRESS_TIME - 100);
     ts.dispatchTouchEnd();
     // 等待MIN_PRESS_TIME秒后, 看看是否触发了事件
