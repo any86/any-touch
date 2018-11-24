@@ -28,9 +28,6 @@ export default class PanRecognizer extends Recognizer {
         } else if (!hasVertical && hasHorizontal) {
             // 没有垂直移动
             touchActions = ['pan-y'];
-        } else {
-            // 没有水平也没有垂直
-            touchActions = ['pan-x', 'pan-y'];
         }
         return touchActions;
     };
