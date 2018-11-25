@@ -34,12 +34,10 @@ import PinchRecognizer from './recognitions/Pinch';
 import RotateRecognizer from './recognitions/Rotate';
 interface Options {
     touchAction?: 'compute' | 'auto' | 'manipulation' | 'pan-x' | 'pan-y' | 'none';
-    enable?: boolean;
     domEvents?: boolean;
 };
 const DEFAULT_OPTIONS: Options = {
     touchAction: 'compute',
-    enable: true,
     domEvents: true
 };
 export default class AnyTouch {
@@ -165,10 +163,6 @@ export default class AnyTouch {
 
     set(options: Options = DEFAULT_OPTIONS) {
         this.options = { ...DEFAULT_OPTIONS, ...options };
-        if (!this.options.enable) {
-            this.destroy();
-            return;
-        }
         this._update();
     };
 
