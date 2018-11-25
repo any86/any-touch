@@ -163,6 +163,10 @@ export default class AnyTouch {
 
     set(options: Options=DEFAULT_OPTIONS) {
         this.options = { ...DEFAULT_OPTIONS, ...options };
+        if(!this.options.enable) {
+            this.destroy();
+            return;
+        }
         this._update();
     };
 
