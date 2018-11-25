@@ -171,11 +171,15 @@ export default class AnyTouch {
      * @param {String} 识别器name
      */
     remove(recognizerName: string) {
+        // 解绑事件
+        // this.destroy();
         for (let [index, recognizer] of this.recognizers.entries()) {
-            if (recognizerName === recognizer.name) {
+            if (recognizerName === recognizer.options.name) {
                 this.recognizers.splice(index, 1);
+                break;
             }
         }
+        // this._bindRecognizers(this.el);
     };
 
     handler(event: TouchEvent) {
@@ -211,10 +215,6 @@ export default class AnyTouch {
      */
     off(eventName: string, handler: any = undefined): void {
         this.eventBus.off(eventName, handler);
-    };
-
-    headUpperCase(str: string) {
-        return str.toLowerCase().replace(/( |^)[a-z]/g, (L) => L.toUpperCase());
     };
 
     /**
