@@ -143,6 +143,17 @@
         <p v-if="message.type && key != 'currentTarget'" v-for="(item, key) in message" class="text">{{key}} : {{item}}</p>
     </main>
     <script src="./index.js"></script>
+    <script>
+    
+
+        let circle = document.getElementById('circle');
+        circle.addEventListener('pan', ev=>{
+            console.log(ev);
+        });
+
+        
+    
+    </script>
 </body>
 
 </html>
