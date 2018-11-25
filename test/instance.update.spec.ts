@@ -7,12 +7,7 @@ const el = document.getElementById('box');
 test('实例上的update是否生效', async (done) => {
     const mockCallback = jest.fn();
     const at = new AnyTouch(el);
-    at.set({ enable: false });
-    at.on('pan', ev => {
-        mockCallback();
-    });
-    // 模拟事件
-    panSimulator(el, { direction: 'left' });
-    expect(mockCallback.mock.calls.length).toBe(0);
+    at.set({ touchAction: 'auto' });
+    expect(el.style.touchAction).toBe('auto');
     done();
 });
