@@ -20,6 +20,7 @@ export default abstract class Recognizer {
     public options: { [propName: string]: any };
     public requireFailureRecognizers: any[];
     public update : ()=>void
+    public afterEmitCallback: (type: string, payload: { [propName: string]: any })=>void;
     // 默认参数
     public defaultOptions: { [propName: string]: any };
     private _injectedEmit: any;
@@ -53,6 +54,11 @@ export default abstract class Recognizer {
     public emit(type: string, payload: { [propName: string]: any }) {
         payload.type = type;
         this._injectedEmit(type, payload);
+        this.afterEmitCallback(type, payload);
+    };
+
+    public afterEmit(callback:(type: string, payload: { [propName: string]: any })=>void){
+        this.afterEmitCallback = callback;
     };
 
     /**
@@ -102,6 +108,7 @@ export default abstract class Recognizer {
                 return false;
             }
         }
+        return isOnlyHorizontal;
     };
 
     /**
@@ -115,6 +122,7 @@ export default abstract class Recognizer {
                 return false;
             }
         }
+        return isOnlyVertical;
     };
 
     /**

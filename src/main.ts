@@ -34,13 +34,11 @@ import PinchRecognizer from './recognitions/Pinch';
 import RotateRecognizer from './recognitions/Rotate';
 interface Options {
     touchAction?: 'compute' | 'auto' | 'manipulation' | 'pan-x' | 'pan-y' | 'none';
-    enable?: boolean;
     domEvents?: boolean;
 };
 const DEFAULT_OPTIONS: Options = {
     touchAction: 'compute',
-    enable: true,
-    domEvents: false
+    domEvents: true
 };
 export default class AnyTouch {
     static TapRecognizer = TapRecognizer;
@@ -83,7 +81,7 @@ export default class AnyTouch {
             new PinchRecognizer(),
             new RotateRecognizer(),
         ];
-        this.recognizers.forEach(recognizer=>{
+        this.recognizers.forEach(recognizer => {
             recognizer.injectUpdate(this._update.bind(this));
         });
         // 计算touch-action
@@ -112,6 +110,8 @@ export default class AnyTouch {
     private _update() {
         this.setTouchAction(this.el);
     };
+
+
 
     /**
      * 绑定手势到指定元素
@@ -161,7 +161,7 @@ export default class AnyTouch {
         return this.recognizers.find(recognizer => name === recognizer.options.name);
     };
 
-    set(options: Options=DEFAULT_OPTIONS) {
+    set(options: Options = DEFAULT_OPTIONS) {
         this.options = { ...DEFAULT_OPTIONS, ...options };
         this._update();
     };
@@ -172,13 +172,14 @@ export default class AnyTouch {
      */
     remove(recognizerName: string) {
         for (let [index, recognizer] of this.recognizers.entries()) {
-            if (recognizerName === recognizer.name) {
+            if (recognizerName === recognizer.options.name) {
                 this.recognizers.splice(index, 1);
+                break;
             }
         }
     };
 
-    handler(event: TouchEvent) {
+    public handler(event: TouchEvent) {
         // event.preventDefault();
         // 记录各个阶段的input
         let inputs = inputManage(event);
@@ -188,7 +189,14 @@ export default class AnyTouch {
             this.recognizers.forEach(recognizer => {
                 // 注入emit到recognizer中
                 recognizer.injectEmit(this.eventBus.emit.bind(this.eventBus));
-                
+                // 构造原生event
+                recognizer.afterEmit((type: string, payload: {[propName:string]:any}) => {
+                    if (this.options.domEvents) {
+                        let event:any = new Event(type, {});
+                        event.computed = payload;
+                        this.el.dispatchEvent(event);
+                    }
+                });
                 recognizer.recognize(computed);
                 this.eventBus.emit('input', { ...computed, type: 'input' });
             });
@@ -211,10 +219,6 @@ export default class AnyTouch {
      */
     off(eventName: string, handler: any = undefined): void {
         this.eventBus.off(eventName, handler);
-    };
-
-    headUpperCase(str: string) {
-        return str.toLowerCase().replace(/( |^)[a-z]/g, (L) => L.toUpperCase());
     };
 
     /**
