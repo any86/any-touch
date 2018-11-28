@@ -22,9 +22,12 @@
   "devDependencies": {
     "@types/jest": "^23.3.5",
     "jest": "^23.6.0",
+    "mini-events": "^0.0.1",
+    "rimraf": "^2.6.2",
     "rollup": "^0.67.1",
     "rollup-plugin-typescript": "^1.0.0",
     "ts-jest": "^23.10.4",
+    "tslib": "^1.9.3",
     "typescript": "^3.0.1"
   },
   "dependencies": {
