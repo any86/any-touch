@@ -1,13 +1,13 @@
 {
   "name": "any-touch",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "一个手势库",
   "main": "esm/main.js",
   "scripts": {
-    "dev": "tsc -w",
+    "release": "npm run build && npm run test && npm pub && git push",
     "build": "rimraf dist && rollup -c",
     "watch": "rimraf dist && rollup -c --watch",
-    "test": "jest"
+    "test": "jest --no-cache"
   },
   "repository": {
     "type": "git",
