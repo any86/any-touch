@@ -16,6 +16,9 @@
  * ==================== 流程 ====================
  * 格式化Event成统一的pointer格式 => 通过pointer数据计算 => 用计算结果去识别手势
  */
+
+import MiniEvents from 'mini-events';
+
 import { EventHandler, Computed } from './interface';
 import {
     SUPPORT_ONLY_TOUCH,
@@ -68,6 +71,10 @@ export default class AnyTouch {
      * @param {Object} param1
      */
     constructor(el: HTMLElement, options: Options = DEFAULT_OPTIONS) {
+
+        const miniEvents = new MiniEvents();
+
+
         this.version = '0.0.2';
         this.el = el;
         this.isMobile = IS_MOBILE;
