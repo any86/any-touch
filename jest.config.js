@@ -7,9 +7,4 @@ module.exports = {
     collectCoverage: true,
     coverageDirectory: "./coverage/",
     verbose: false,
-    globals: {
-        'ts-jest': {
-            babelConfig: true
-        }
-    }
 };
