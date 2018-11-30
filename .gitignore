@@ -1,6 +1,4 @@
-/dist
-/node_modules
-/.tsc-output
+node_modules
 coverage
-/.vscode
+.vscode
 .cache/

@@ -7,6 +7,9 @@ export default {
         typescript: require('typescript')
     })],
     output: [{
+        format: 'cjs',
+        file: 'dist/anyTouch.common.js',
+    }, {
         format: 'es',
         file: 'dist/anyTouch.es.js',
     }, {
