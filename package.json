@@ -3,6 +3,7 @@
   "version": "0.0.4",
   "description": "一个手势库",
   "main": "dist/anyTouch.common.js",
+  "module": "dist/anyTouch.es.js",
   "scripts": {
     "release": "npm run build && npm run test && npm pub && git push",
     "build": "rimraf dist && rollup -c",
