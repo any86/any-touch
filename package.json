@@ -7,7 +7,7 @@
   "scripts": {
     "release": "npm run build && npm run test && npm pub && git push",
     "build": "rimraf dist && rollup -c",
-    "watch": "rimraf dist && rollup -c --watch",
+    "dev": "rimraf dist && rollup -c --watch && serve ./example",
     "test": "jest --no-cache"
   },
   "repository": {
@@ -27,6 +27,7 @@
     "rimraf": "^2.6.2",
     "rollup": "^0.67.1",
     "rollup-plugin-typescript": "^1.0.0",
+    "serve": "^10.1.1",
     "ts-jest": "^23.10.4",
     "tslib": "^1.9.3",
     "typescript": "^3.0.1"
