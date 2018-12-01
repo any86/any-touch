@@ -16,6 +16,8 @@
  * ==================== 流程 ====================
  * 格式化Event成统一的pointer格式 => 通过pointer数据计算 => 用计算结果去识别手势
  */
+
+
 import { EventHandler, Computed } from './interface';
 import {
     SUPPORT_ONLY_TOUCH,

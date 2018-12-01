@@ -1,5 +1,6 @@
 {
     "compilerOptions": {
+        "allowJs": true,
         "esModuleInterop":true,
         "target": "es3",
         "noImplicitAny": true,
@@ -8,9 +9,10 @@
         "sourceMap": true,
         "outDir": "./esm",
         "lib": ["dom", "es2017"],
-        "downlevelIteration": true
+        "downlevelIteration": true,
+        "moduleResolution": "node"
     },
     "include": [
-        "src/main.ts", "example/base/index.js"
+        "src/main.ts"
     ]
 }
