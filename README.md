@@ -1,9 +1,9 @@
-# any-touch  [![NPM Version][npm-image]][npm-url] [![NPM Downloads][downloads-image]][downloads-url] ![npm bundle size (minified + gzip)][size-image] [![codecov](https://codecov.io/gh/383514580/any-touch/branch/develop/graph/badge.svg)](https://codecov.io/gh/383514580/any-touch)  [![CircleCI](https://circleci.com/gh/383514580/any-touch/tree/develop.svg?style=svg)](https://circleci.com/gh/383514580/any-touch/tree/develop)  
+# any-touch  [![NPM Version][npm-image]][npm-url] [![NPM Downloads][downloads-image]][downloads-url] [![npm bundle size (minified + gzip)][size-image]][[size-url]] [![codecov](https://codecov.io/gh/383514580/any-touch/branch/develop/graph/badge.svg)](https://codecov.io/gh/383514580/any-touch)  [![CircleCI](https://circleci.com/gh/383514580/any-touch/tree/develop.svg?style=svg)](https://circleci.com/gh/383514580/any-touch/tree/develop)  
 
 :wave:    一个手势库
 
 [size-image]: https://img.shields.io/bundlephobia/minzip/any-touch.svg
-
+[size-url]: https://bundlephobia.com/result?p=any-touch
 [npm-image]: https://img.shields.io/npm/v/any-touch.svg
 [npm-url]: https://npmjs.org/package/any-touch
 
