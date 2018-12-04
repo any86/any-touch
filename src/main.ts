@@ -16,7 +16,7 @@
  * ==================== 流程 ====================
  * 格式化Event成统一的pointer格式 => 通过pointer数据计算 => 用计算结果去识别手势
  */
-
+import AnyEvent from 'any-event';
 
 import { EventHandler, Computed } from './interface';
 import {
@@ -150,7 +150,7 @@ export default class AnyTouch {
      * 添加识别器
      * @param recognizer 识别器
      */
-    add(recognizer: any) {
+    add(recognizer: any):void {
         this.recognizers.push(recognizer);
     };
 
@@ -163,7 +163,7 @@ export default class AnyTouch {
         return this.recognizers.find(recognizer => name === recognizer.options.name);
     };
 
-    set(options: Options = DEFAULT_OPTIONS) {
+    set(options: Options = DEFAULT_OPTIONS):void {
         this.options = { ...DEFAULT_OPTIONS, ...options };
         this._update();
     };
@@ -172,7 +172,7 @@ export default class AnyTouch {
      * 删除识别器
      * @param {String} 识别器name
      */
-    remove(recognizerName: string) {
+    remove(recognizerName: string):void {
         for (let [index, recognizer] of this.recognizers.entries()) {
             if (recognizerName === recognizer.options.name) {
                 this.recognizers.splice(index, 1);
@@ -181,7 +181,7 @@ export default class AnyTouch {
         }
     };
 
-    public handler(event: TouchEvent) {
+    handler(event: TouchEvent|MouseEvent):void {
         // event.preventDefault();
         // 记录各个阶段的input
         let inputs = inputManage(event);
@@ -210,7 +210,7 @@ export default class AnyTouch {
      * @param {String} 事件名
      * @param {Function} 回调函数
      */
-    on(eventName: string, callback: EventHandler): any {
+    on(eventName: string, callback: EventHandler): void {
         this.eventBus.on(eventName, callback);
     };
 
@@ -219,7 +219,7 @@ export default class AnyTouch {
      * @param {String} 事件名 
      * @param {Function} 事件回调
      */
-    off(eventName: string, handler: any = undefined): void {
+    off(eventName: string, handler?: any): void {
         this.eventBus.off(eventName, handler);
     };
 

@@ -1096,7 +1096,6 @@ var AnyTouch = (function () {
         this.eventBus.on(eventName, callback);
     };
     AnyTouch.prototype.off = function (eventName, handler) {
-        if (handler === void 0) { handler = undefined; }
         this.eventBus.off(eventName, handler);
     };
     AnyTouch.prototype.destroy = function () {

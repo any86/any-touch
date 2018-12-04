@@ -1,6 +1,6 @@
 {
   "name": "any-touch",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "一个手势库",
   "main": "dist/anyTouch.common.js",
   "module": "dist/anyTouch.es.js",
@@ -34,6 +34,6 @@
     "typescript": "^3.0.1"
   },
   "dependencies": {
-    "mini-events": "^0.2.3"
+    "any-event": "^0.2.1"
   }
 }
