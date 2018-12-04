@@ -83,7 +83,6 @@ var INPUT_START = 'start';
 var INPUT_MOVE = 'move';
 var INPUT_CANCEL = 'cancel';
 var INPUT_END = 'end';
-//# sourceMappingURL=const.js.map
 
 var EventBus = (function () {
     function EventBus(targetElement) {
@@ -136,7 +135,6 @@ var EventBus = (function () {
     };
     return EventBus;
 }());
-//# sourceMappingURL=EventBus.js.map
 
 var round = Math.round;
 var getVLength = function (v) {
@@ -195,7 +193,6 @@ var getDirection = function (displacementX, displacementY) {
         return 0 < displacementY ? 'down' : 'up';
     }
 };
-//# sourceMappingURL=vector.js.map
 
 var touchAdapter = (function (event) {
     var pointers = event.touches;
@@ -208,7 +205,6 @@ var touchAdapter = (function (event) {
         nativeEvent: event
     };
 });
-//# sourceMappingURL=touch.js.map
 
 var prevPointers = undefined;
 var isPressed = false;
@@ -245,7 +241,6 @@ var mouseAdapter = (function (event) {
         nativeEvent: event
     };
 });
-//# sourceMappingURL=mouse.js.map
 
 var centerX;
 var centerY;
@@ -296,7 +291,6 @@ var createInput = (function (event) {
         target: target,
         currentTarget: currentTarget, nativeEvent: event });
 });
-//# sourceMappingURL=create.js.map
 
 var startInput;
 var prevInput;
@@ -332,7 +326,6 @@ var inputManage = (function (event) {
         input: input
     };
 });
-//# sourceMappingURL=inputManage.js.map
 
 var _prevInput;
 var _prevVelocityX;
@@ -363,7 +356,6 @@ var computeLast = (function (input) {
     var maxVelocity = Math.max(velocityX, velocityY);
     return { velocity: maxVelocity, velocityX: velocityX, velocityY: velocityY, direction: direction };
 });
-//# sourceMappingURL=computeLast.js.map
 
 var prevDisplacementX = 0;
 var prevDisplacementY = 0;
@@ -393,7 +385,6 @@ function computeDistance (_a) {
         displacementX: displacementX, displacementY: displacementY, distanceX: distanceX, distanceY: distanceY, distance: distance
     };
 }
-//# sourceMappingURL=computeDistance.js.map
 
 function computeDeltaXY (_a) {
     var prevInput = _a.prevInput, input = _a.input;
@@ -409,13 +400,11 @@ function computeDeltaXY (_a) {
     }
     return { deltaX: deltaX, deltaY: deltaY };
 }
-//# sourceMappingURL=computeDeltaXY.js.map
 
 var computeVector = (function (input) { return ({
     x: input.pointers[1][propX] - input.pointers[0][propX],
     y: input.pointers[1][propY] - input.pointers[0][propY]
 }); });
-//# sourceMappingURL=computeVector.js.map
 
 function computeScale (_a) {
     var startV = _a.startV, prevV = _a.prevV, activeV = _a.activeV;
@@ -423,7 +412,6 @@ function computeScale (_a) {
     var scale = getVLength(activeV) / getVLength(startV);
     return { scale: scale, deltaScale: deltaScale };
 }
-//# sourceMappingURL=computeScale.js.map
 
 function computeAngle (_a) {
     var startV = _a.startV, prevV = _a.prevV, activeV = _a.activeV;
@@ -431,7 +419,6 @@ function computeAngle (_a) {
     var angle = getAngle(activeV, startV);
     return { angle: angle, deltaAngle: deltaAngle };
 }
-//# sourceMappingURL=computeAngle.js.map
 
 var maxLength = 0;
 var computeMaxLength = (function (_a) {
@@ -444,7 +431,6 @@ var computeMaxLength = (function (_a) {
     }
     return maxLength;
 });
-//# sourceMappingURL=computeMaxLength.js.map
 
 function compute (_a) {
     var startInput = _a.startInput, prevInput = _a.prevInput, startMutliInput = _a.startMutliInput, input = _a.input;
@@ -518,7 +504,6 @@ function compute (_a) {
     var maxPointerLength = computeMaxLength(input);
     return __assign({}, input, { maxPointerLength: maxPointerLength }, computed);
 }
-//# sourceMappingURL=index.js.map
 
 var computeTouchAction = (function (touchActions) {
     var e_1, _a;
@@ -559,7 +544,6 @@ var computeTouchAction = (function (touchActions) {
     }
     return touchActionCSSArray.join(' ');
 });
-//# sourceMappingURL=computeTouchAction.js.map
 
 var STATUS_POSSIBLE = 'possible';
 var STATUS_START = 'start';
@@ -568,7 +552,6 @@ var STATUS_END = 'end';
 var STATUS_CANCELLED = 'cancel';
 var STATUS_FAILED = 'failed';
 var STATUS_RECOGNIZED = 'recognized';
-//# sourceMappingURL=recognizerStatus.js.map
 
 var Recognizer = (function () {
     function Recognizer(options) {
@@ -698,7 +681,6 @@ var Recognizer = (function () {
     };
     return Recognizer;
 }());
-//# sourceMappingURL=Base.js.map
 
 var setTimeout = window.setTimeout, clearTimeout$1 = window.clearTimeout;
 var TapRecognizer = (function (_super) {
@@ -764,7 +746,6 @@ TapRecognizer.prototype.defaultOptions = {
     taps: 1,
     interval: 300
 };
-//# sourceMappingURL=Tap.js.map
 
 var PressRecognizer = (function (_super) {
     __extends(PressRecognizer, _super);
@@ -817,7 +798,6 @@ PressRecognizer.prototype.defaultOptions = {
     threshold: 9,
     minPressTime: 251
 };
-//# sourceMappingURL=Press.js.map
 
 var getHV = (function (directions) {
     var e_1, _a;
@@ -850,7 +830,6 @@ var getHV = (function (directions) {
     }
     return { hasHorizontal: hasHorizontal, hasVertical: hasVertical };
 });
-//# sourceMappingURL=getHV.js.map
 
 var PanRecognizer = (function (_super) {
     __extends(PanRecognizer, _super);
@@ -890,7 +869,6 @@ PanRecognizer.prototype.defaultOptions = {
     pointerLength: 1,
     directions: ['up', 'right', 'down', 'left']
 };
-//# sourceMappingURL=Pan.js.map
 
 var SwipeRecognizer = (function (_super) {
     __extends(SwipeRecognizer, _super);
@@ -931,7 +909,6 @@ SwipeRecognizer.prototype.defaultOptions = {
     pointerLength: 1,
     directions: ['up', 'right', 'down', 'left']
 };
-//# sourceMappingURL=Swipe.js.map
 
 var PinchRecognizer = (function (_super) {
     __extends(PinchRecognizer, _super);
@@ -963,7 +940,6 @@ PinchRecognizer.prototype.defaultOptions = {
     threshold: 0,
     pointerLength: 2
 };
-//# sourceMappingURL=Pinch.js.map
 
 var RotateRecognizer = (function (_super) {
     __extends(RotateRecognizer, _super);
@@ -986,9 +962,7 @@ RotateRecognizer.prototype.defaultOptions = {
     threshold: 0,
     pointerLength: 2
 };
-//# sourceMappingURL=Rotate.js.map
 
-<<<<<<< HEAD
 var DEFAULT_OPTIONS = {
     touchAction: 'compute',
     domEvents: true
@@ -1136,156 +1110,6 @@ var AnyTouch = (function () {
     AnyTouch.PinchRecognizer = PinchRecognizer;
     AnyTouch.RotateRecognizer = RotateRecognizer;
     return AnyTouch;
-=======
-var DEFAULT_OPTIONS = {
-    touchAction: 'compute',
-    domEvents: true
-};
-var AnyTouch = (function () {
-    function AnyTouch(el, options) {
-        if (options === void 0) { options = DEFAULT_OPTIONS; }
-        var _this = this;
-        this.version = '0.0.2';
-        this.el = el;
-        this.isMobile = IS_MOBILE;
-        this.eventBus = new EventBus(el);
-        this.options = __assign({}, DEFAULT_OPTIONS, options);
-        this.recognizers = [
-            new TapRecognizer(),
-            new PressRecognizer(),
-            new PanRecognizer(),
-            new SwipeRecognizer(),
-            new PinchRecognizer(),
-            new RotateRecognizer(),
-        ];
-        this.recognizers.forEach(function (recognizer) {
-            recognizer.injectUpdate(_this._update.bind(_this));
-        });
-        this.setTouchAction(el);
-    }
-    AnyTouch.prototype.setTouchAction = function (el) {
-        var e_1, _a;
-        if ('compute' === this.options.touchAction) {
-            var touchActions = [];
-            try {
-                for (var _b = __values(this.recognizers), _c = _b.next(); !_c.done; _c = _b.next()) {
-                    var recognizer = _c.value;
-                    touchActions.push.apply(touchActions, __spread(recognizer.getTouchAction()));
-                }
-            }
-            catch (e_1_1) { e_1 = { error: e_1_1 }; }
-            finally {
-                try {
-                    if (_c && !_c.done && (_a = _b["return"])) _a.call(_b);
-                }
-                finally { if (e_1) throw e_1.error; }
-            }
-            el.style.touchAction = computeTouchAction(touchActions);
-            this.unbinders = this._bindRecognizers(el);
-        }
-        else {
-            el.style.touchAction = this.options.touchAction;
-        }
-    };
-    AnyTouch.prototype._update = function () {
-        this.setTouchAction(this.el);
-    };
-    AnyTouch.prototype._bindRecognizers = function (el) {
-        var boundFn = this.handler.bind(this);
-        if (this.isMobile) {
-            return ['touchstart', 'touchmove', 'touchend', 'touchcancel'].map(function (eventName) {
-                el.addEventListener(eventName, boundFn, { passive: false });
-                return function () {
-                    el.removeEventListener(eventName, boundFn);
-                };
-            });
-        }
-        else {
-            el.addEventListener('mousedown', boundFn);
-            window.addEventListener('mousemove', boundFn);
-            window.addEventListener('mouseup', boundFn);
-            return [
-                function () {
-                    el.removeEventListener('mousedown', boundFn);
-                },
-                function () {
-                    window.removeEventListener('mousemove', boundFn);
-                },
-                function () {
-                    window.removeEventListener('mouseup', boundFn);
-                }
-            ];
-        }
-    };
-    AnyTouch.prototype.add = function (recognizer) {
-        this.recognizers.push(recognizer);
-    };
-    AnyTouch.prototype.get = function (name) {
-        return this.recognizers.find(function (recognizer) { return name === recognizer.options.name; });
-    };
-    AnyTouch.prototype.set = function (options) {
-        if (options === void 0) { options = DEFAULT_OPTIONS; }
-        this.options = __assign({}, DEFAULT_OPTIONS, options);
-        this._update();
-    };
-    AnyTouch.prototype.remove = function (recognizerName) {
-        var e_2, _a;
-        try {
-            for (var _b = __values(this.recognizers.entries()), _c = _b.next(); !_c.done; _c = _b.next()) {
-                var _d = __read(_c.value, 2), index = _d[0], recognizer = _d[1];
-                if (recognizerName === recognizer.options.name) {
-                    this.recognizers.splice(index, 1);
-                    break;
-                }
-            }
-        }
-        catch (e_2_1) { e_2 = { error: e_2_1 }; }
-        finally {
-            try {
-                if (_c && !_c.done && (_a = _b["return"])) _a.call(_b);
-            }
-            finally { if (e_2) throw e_2.error; }
-        }
-    };
-    AnyTouch.prototype.handler = function (event) {
-        var _this = this;
-        var inputs = inputManage(event);
-        if (undefined !== inputs) {
-            var computed_1 = compute(inputs);
-            this.recognizers.forEach(function (recognizer) {
-                recognizer.injectEmit(_this.eventBus.emit.bind(_this.eventBus));
-                recognizer.afterEmit(function (type, payload) {
-                    if (_this.options.domEvents) {
-                        var event_1 = new Event(type, {});
-                        event_1.computed = payload;
-                        _this.el.dispatchEvent(event_1);
-                    }
-                });
-                recognizer.recognize(computed_1);
-                _this.eventBus.emit('input', __assign({}, computed_1, { type: 'input' }));
-            });
-        }
-    };
-    AnyTouch.prototype.on = function (eventName, callback) {
-        this.eventBus.on(eventName, callback);
-    };
-    AnyTouch.prototype.off = function (eventName, handler) {
-        if (handler === void 0) { handler = undefined; }
-        this.eventBus.off(eventName, handler);
-    };
-    AnyTouch.prototype.destroy = function () {
-        this.unbinders.forEach(function (unbinder) {
-            unbinder();
-        });
-    };
-    AnyTouch.TapRecognizer = TapRecognizer;
-    AnyTouch.PressRecognizer = PressRecognizer;
-    AnyTouch.PanRecognizer = PanRecognizer;
-    AnyTouch.SwipeRecognizer = SwipeRecognizer;
-    AnyTouch.PinchRecognizer = PinchRecognizer;
-    AnyTouch.RotateRecognizer = RotateRecognizer;
-    return AnyTouch;
->>>>>>> 42c207d0d2c9ece705bd58c302b797fc011d8775
 }());
 
 export default AnyTouch;
