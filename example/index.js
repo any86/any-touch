@@ -26,10 +26,8 @@ new Vue({
             taps: 3
         })
         const anyTouch = new AnyTouch(this.$refs.circle);
-        anyTouch.get('pan').set({
-            pointerLength: 1,
-            threshold: 0
-        });
+        const pan = anyTouch.get('pan');
+        pan.set({ threshold: 0 });
         anyTouch.add(tap2);
         anyTouch.add(tap3);
         const tap1 = anyTouch.get('tap');
