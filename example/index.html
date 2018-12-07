@@ -142,7 +142,7 @@
         <p class="text">angle: {{angle}}</p> -->
         <p v-if="message.type && key != 'currentTarget'" v-for="(item, key) in message" class="text">{{key}} : {{item}}</p>
     </main>
-    <script src="./index.js"></script>
+    <!-- <script src="./index.js"></script> -->
     <script>
     
 
@@ -150,7 +150,12 @@
         // circle.addEventListener('pan', ev=>{
         //     console.log(ev);
         // });
-
+        const anyTouch1 = new AnyTouch(document.getElementById('circle'));
+        const pan1 = anyTouch1.get('pan');
+        pan1.set({ threshold: 10 });
+        anyTouch1.on('panmove', ({centerX, centerY})=>{
+            console.log({centerX, centerY});
+        });
         
     
     </script>

@@ -38,7 +38,7 @@ export default abstract class Recognizer {
      */
     public set(options: {[propName: string]: any}){
         this.options = { ...this.options, ...options };
-        this.update();
+        // this.update();
     };
     /**
      * 注入通用emit方法, 方便改写

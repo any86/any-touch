@@ -101,7 +101,7 @@ export default class AnyTouch {
                 touchActions.push(...recognizer.getTouchAction());
             };
             el.style.touchAction = computeTouchAction(touchActions);
-
+            
             // 绑定事件
             this.unbinders = this._bindRecognizers(el);
         } else {
