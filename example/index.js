@@ -1,6 +1,5 @@
-
 let log = console.log;
-log = () => { };
+log = () => {};
 new Vue({
     el: '#app',
 
@@ -16,10 +15,21 @@ new Vue({
         };
     },
     mounted() {
-        const tap2 = new AnyTouch.TapRecognizer({ name: 'doubletap', pointer: 1, taps: 2 })
-        const tap3 = new AnyTouch.TapRecognizer({ name: 'threetap', pointer: 1, taps: 3 })
+        const tap2 = new AnyTouch.TapRecognizer({
+            name: 'doubletap',
+            pointer: 1,
+            taps: 2
+        })
+        const tap3 = new AnyTouch.TapRecognizer({
+            name: 'threetap',
+            pointer: 1,
+            taps: 3
+        })
         const anyTouch = new AnyTouch(this.$refs.circle);
-        anyTouch.get('pan').set({pointerLength:1});
+        anyTouch.get('pan').set({
+            pointerLength: 1,
+            threshold: 0
+        });
         anyTouch.add(tap2);
         anyTouch.add(tap3);
         const tap1 = anyTouch.get('tap');
@@ -53,8 +63,9 @@ new Vue({
 
 
         anyTouch.on('pan', e => {
-            console.log(e.direction);
-            if(e.nativeEvent.cancelable && 'down' === e.direction) {
+            console.log(e.centerX, e.centerY);
+            log(e.direction);
+            if (e.nativeEvent.cancelable && 'down' === e.direction) {
                 e.preventDefault();
             }
             // e.preventDefault();
