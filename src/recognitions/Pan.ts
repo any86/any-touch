@@ -39,7 +39,6 @@ export default class PanRecognizer extends Recognizer {
     test({ distance, direction, inputStatus, pointerLength }: Computed): boolean {
         const isValidDirection = -1 !== this.options.directions.indexOf(direction);
         const isValidThreshold = this.options.threshold < distance;
-        console.log(this.options.threshold, distance);
         return this.isValidPointerLength(pointerLength) && isValidDirection &&
             (this.isRecognized || isValidThreshold) && INPUT_MOVE === inputStatus;
     };
