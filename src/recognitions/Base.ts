@@ -4,7 +4,7 @@
 * 未知 => 取消(已知的任意阶段)
 * */
 import { Computed } from '../interface';
-import { INPUT_CANCEL, INPUT_END, INPUT_MOVE, INPUT_START } from '../const';
+import {INPUT_CANCEL, INPUT_END, INPUT_MOVE, INPUT_START } from '../const';
 import {
     STATUS_POSSIBLE,
     STATUS_START,
@@ -19,50 +19,45 @@ export default abstract class Recognizer {
     public isRecognized: boolean;
     public options: { [propName: string]: any };
     public requireFailureRecognizers: any[];
-    public $inject: { [k: string]: (...array:any[]) => void };
-    public afterEmitCallback: (type: string, payload: { [propName: string]: any }) => void;
+    public update : ()=>void
+    public afterEmitCallback: (type: string, payload: { [propName: string]: any })=>void;
     // 默认参数
     public defaultOptions: { [propName: string]: any };
-    constructor(options: any = {}) {
+    private _injectedEmit: any;
+    constructor(options: any={}) {
         this.options = { ...this.defaultOptions, ...options };
-        this.$inject = {};
         this.status = STATUS_POSSIBLE;
         this.isRecognized = false;
         this.requireFailureRecognizers = [];
+        this.update = ()=>{};
     };
-
+    
     /**
      * 设置识别器
      * @param {Object} 选项 
      */
-    public set(options: { [propName: string]: any }) {
+    public set(options: {[propName: string]: any}){
         this.options = { ...this.options, ...options };
-        this.$inject.update();
+        // this.update();
     };
     /**
      * 注入通用emit方法, 方便改写
      */
     public injectEmit(emit: any) {
-        this.$inject.emit = emit;
+        this._injectedEmit = emit;
     };
 
-    /**
-     * 注入方法到实例上
-     * 主要用来注入AnyTouch实例上的方法
-     * @param {String} 方法名 
-     * @param {()=>void} 方法
-     */
-    public inject(key: string, fn: () => void): void {
-        this.$inject[key] = fn;
+    public injectUpdate(fn:any){
+        this.update = fn;
     };
 
     public emit(type: string, payload: { [propName: string]: any }) {
         payload.type = type;
-        this.$inject.emit(type, payload);
+        this._injectedEmit(type, payload);
         this.afterEmitCallback(type, payload);
     };
 
-    public afterEmit(callback: (type: string, payload: { [propName: string]: any }) => void) {
+    public afterEmit(callback:(type: string, payload: { [propName: string]: any })=>void){
         this.afterEmitCallback = callback;
     };
 
@@ -170,7 +165,7 @@ export default abstract class Recognizer {
         this.isRecognized = -1 < [STATUS_START, STATUS_MOVE].indexOf(this.status);
 
         if (isVaild) {
-            this.$inject.emit(this.options.name, computed);
+            this.emit(this.options.name, computed);
         }
 
         // if (this.options.name == 'pinch') {
@@ -183,7 +178,7 @@ export default abstract class Recognizer {
 
         if (-1 < ['start', 'move', 'end', 'recognized'].indexOf(this.status)) {
             // panstart | panmove | panend
-            this.$inject.emit(this.options.name + this.status, computed);
+            this.emit(this.options.name + this.status, computed);
             this.afterRecognized(computed);
         }
     };

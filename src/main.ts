@@ -70,7 +70,7 @@ export default class AnyTouch {
      * @param {Object} param1
      */
     constructor(el: HTMLElement, options: Options = DEFAULT_OPTIONS) {
-        this.version = '0.0.11';
+        this.version = '0.0.2';
         this.el = el;
         this.isMobile = IS_MOBILE;
         this.eventBus = new EventBus(el);
@@ -84,12 +84,10 @@ export default class AnyTouch {
             new RotateRecognizer(),
         ];
         this.recognizers.forEach(recognizer => {
-            recognizer.inject('update', this._update.bind(this));
+            recognizer.injectUpdate(this._update.bind(this));
         });
         // 计算touch-action
         this.setTouchAction(el);
-        // 绑定事件
-        this.unbinders = this._bindRecognizers(el);
     };
 
     /**
@@ -102,17 +100,20 @@ export default class AnyTouch {
             for (let recognizer of this.recognizers) {
                 touchActions.push(...recognizer.getTouchAction());
             };
-
-            // computeTouchAction计算最终的touch-action
             el.style.touchAction = computeTouchAction(touchActions);
+            
+            // 绑定事件
+            this.unbinders = this._bindRecognizers(el);
         } else {
             el.style.touchAction = this.options.touchAction;
         }
     };
 
     private _update() {
-        // this.setTouchAction(this.el);
+        this.setTouchAction(this.el);
     };
+
+
 
     /**
      * 绑定手势到指定元素
@@ -149,7 +150,7 @@ export default class AnyTouch {
      * 添加识别器
      * @param recognizer 识别器
      */
-    add(recognizer: any): void {
+    add(recognizer: any):void {
         this.recognizers.push(recognizer);
     };
 
@@ -162,16 +163,16 @@ export default class AnyTouch {
         return this.recognizers.find(recognizer => name === recognizer.options.name);
     };
 
-    set(options: Options = DEFAULT_OPTIONS): void {
+    set(options: Options = DEFAULT_OPTIONS):void {
         this.options = { ...DEFAULT_OPTIONS, ...options };
-        // this._update();
+        this._update();
     };
 
     /**
      * 删除识别器
      * @param {String} 识别器name
      */
-    remove(recognizerName: string): void {
+    remove(recognizerName: string):void {
         for (let [index, recognizer] of this.recognizers.entries()) {
             if (recognizerName === recognizer.options.name) {
                 this.recognizers.splice(index, 1);
@@ -180,7 +181,7 @@ export default class AnyTouch {
         }
     };
 
-    handler(event: TouchEvent | MouseEvent): void {
+    handler(event: TouchEvent|MouseEvent):void {
         // event.preventDefault();
         // 记录各个阶段的input
         let inputs = inputManage(event);
@@ -189,11 +190,11 @@ export default class AnyTouch {
             // 当是鼠标事件的时候, mouseup阶段的input和computed为空
             this.recognizers.forEach(recognizer => {
                 // 注入emit到recognizer中
-                recognizer.inject('emit', this.eventBus.emit.bind(this.eventBus));
+                recognizer.injectEmit(this.eventBus.emit.bind(this.eventBus));
                 // 构造原生event
-                recognizer.afterEmit((type: string, payload: { [propName: string]: any }) => {
+                recognizer.afterEmit((type: string, payload: {[propName:string]:any}) => {
                     if (this.options.domEvents) {
-                        let event: any = new Event(type, {});
+                        let event:any = new Event(type, {});
                         event.computed = payload;
                         this.el.dispatchEvent(event);
                     }
