@@ -17,7 +17,10 @@ export default class PanRecognizer extends Recognizer {
         super(options);
     };
 
-    getTouchAction() {
+    /**
+     * 计算当前适合的touch-action
+     */
+    public getTouchAction() {
         let touchActions = ['auto'];
         let { hasHorizontal, hasVertical } = getHV(this.options.directions);
         if (hasHorizontal && hasVertical) {

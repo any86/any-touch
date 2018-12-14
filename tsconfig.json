@@ -10,7 +10,8 @@
         "outDir": "./esm",
         "lib": ["dom", "es2017"],
         "downlevelIteration": true,
-        "moduleResolution": "node"
+        "moduleResolution": "node",
+        "experimentalDecorators":true
     },
     "include": [
         "src/main.ts"

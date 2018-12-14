@@ -115,7 +115,7 @@ new Vue({
         ['pinchstart', 'pinchmove', 'pinchend', 'pinchin', 'pinchout'].forEach(name => {
             anyTouch.on(name, e => {
                 this.message = e;
-                console.warn(e.type);
+               log(e.type);
             })
         });
 
@@ -126,7 +126,7 @@ new Vue({
             // console.log(e.deltaScale);
             this.centerX = e.centerX;
             this.centerY = e.centerY;
-            console.warn(`%c ${e.type} `, 'background-color:#f90;color:#fff;');
+           log(`%c ${e.type} `, 'background-color:#f90;color:#fff;');
         });
 
         /**
@@ -152,7 +152,7 @@ new Vue({
          */
         ['swipeup', 'swipeleft', 'swiperight', 'swipedown'].forEach(name => {
             anyTouch.on(name, e => {
-                console.warn(e.type);
+               log(e.type);
                 // switch (name) {
                 //     case 'swipeup':
                 //         {
@@ -183,7 +183,7 @@ new Vue({
         });
 
         anyTouch.on('swipe', e => {
-            console.warn(`%c ${e.type} `, 'background-color:#444;color:#fff;');
+           log(`%c ${e.type} `, 'background-color:#444;color:#fff;');
             this.message = e;
         });
 
