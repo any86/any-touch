@@ -27,7 +27,8 @@ import EventBus from './EventBus';
 import inputManage from './inputManage';
 import compute from './compute/index';
 import computeTouchAction from './untils/computeTouchAction'
-
+// 识别器
+import Recognizer from './recognitions/Base';
 import TapRecognizer from './recognitions/Tap';
 import PressRecognizer from './recognitions/Press';
 import PanRecognizer from './recognitions/Pan';
@@ -85,9 +86,20 @@ export default class AnyTouch {
         ];
 
         // 识别器注入update方法
-        this.recognizers.forEach(recognizer => {
-            recognizer.injectUpdate(this.update.bind(this));
-        });
+        Recognizer.$inject('update', this.update.bind(this));
+
+        // 识别器注入emit方法
+        function _emit(type: string, payload: { [propName: string]: any }){
+            this.eventBus.emit(type, payload);
+            if (this.options.domEvents) {
+                let event: any = new Event(type, {});
+                // Object.assign(event, payload)
+                event.computed = payload;
+                this.el.dispatchEvent(event);
+            }
+        }
+
+        Recognizer.$inject('emit', (_emit.bind(this)));
 
         // 应用设置
         this.update();
@@ -113,6 +125,7 @@ export default class AnyTouch {
     };
 
     public update() {
+        console.warn('update')
         this.updateTouchAction(this.el);
     };
 
@@ -164,6 +177,10 @@ export default class AnyTouch {
         return this.recognizers.find(recognizer => name === recognizer.options.name);
     };
 
+    /**
+     * 设置
+     * @param {Options} 选项 
+     */
     set(options: Options = DEFAULT_OPTIONS): void {
         this.options = { ...DEFAULT_OPTIONS, ...options };
         this.update();
@@ -190,16 +207,14 @@ export default class AnyTouch {
             const computed: Computed = compute(inputs);
             // 当是鼠标事件的时候, mouseup阶段的input和computed为空
             this.recognizers.forEach(recognizer => {
-                // 注入emit到recognizer中
-                recognizer.injectEmit(this.eventBus.emit.bind(this.eventBus));
-                // 构造原生event
-                recognizer.afterEmit((type: string, payload: { [propName: string]: any }) => {
-                    if (this.options.domEvents) {
-                        let event: any = new Event(type, {});
-                        event.computed = payload;
-                        this.el.dispatchEvent(event);
-                    }
-                });
+                // // 构造原生event
+                // recognizer.afterEmit((type: string, payload: { [propName: string]: any }) => {
+                //     if (this.options.domEvents) {
+                //         let event: any = new Event(type, {});
+                //         event.computed = payload;
+                //         this.el.dispatchEvent(event);
+                //     }
+                // });
                 recognizer.recognize(computed);
                 this.eventBus.emit('input', { ...computed, type: 'input' });
             });

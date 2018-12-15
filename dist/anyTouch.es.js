@@ -576,25 +576,14 @@ var Recognizer = (function () {
         this.status = STATUS_POSSIBLE;
         this.isRecognized = false;
         this.requireFailureRecognizers = [];
-        this.$inject = {};
-        this.update = function () { };
     }
     Recognizer.prototype.set = function (options) {
         this.options = __assign({}, this.options, options);
-    };
-    Recognizer.prototype.injectEmit = function (emit) {
-        this._injectedEmit = emit;
-    };
-    Recognizer.prototype.injectUpdate = function (fn) {
-        this.update = fn;
+        Recognizer.prototype.$root.update();
     };
     Recognizer.prototype.emit = function (type, payload) {
         payload.type = type;
-        this._injectedEmit(type, payload);
-        this.afterEmitCallback(type, payload);
-    };
-    Recognizer.prototype.afterEmit = function (callback) {
-        this.afterEmitCallback = callback;
+        Recognizer.prototype.$root.emit(type, payload);
     };
     Recognizer.prototype.requireFailure = function (recognizer) {
         if (!this.requireFailureRecognizers.includes(recognizer)) {
@@ -697,6 +686,10 @@ var Recognizer = (function () {
     };
     return Recognizer;
 }());
+Recognizer.prototype.$root = {};
+Recognizer.$inject = function (key, method) {
+    Recognizer.prototype.$root[key] = method;
+};
 //# sourceMappingURL=Base.js.map
 
 var setTimeout = window.setTimeout, clearTimeout$1 = window.clearTimeout;
@@ -994,7 +987,6 @@ var DEFAULT_OPTIONS = {
 var AnyTouch = (function () {
     function AnyTouch(el, options) {
         if (options === void 0) { options = DEFAULT_OPTIONS; }
-        var _this = this;
         this.version = '0.0.11';
         this.el = el;
         this.isMobile = IS_MOBILE;
@@ -1008,9 +1000,16 @@ var AnyTouch = (function () {
             new PinchRecognizer(),
             new RotateRecognizer(),
         ];
-        this.recognizers.forEach(function (recognizer) {
-            recognizer.injectUpdate(_this.update.bind(_this));
-        });
+        Recognizer.$inject('update', this.update.bind(this));
+        function _emit(type, payload) {
+            this.eventBus.emit(type, payload);
+            if (this.options.domEvents) {
+                var event = new Event(type, {});
+                event.computed = payload;
+                this.el.dispatchEvent(event);
+            }
+        }
+        Recognizer.$inject('emit', (_emit.bind(this)));
         this.update();
         this.unbinders = this._bindRecognizers(this.el);
     }
@@ -1038,6 +1037,7 @@ var AnyTouch = (function () {
         }
     };
     AnyTouch.prototype.update = function () {
+        console.warn('update');
         this.updateTouchAction(this.el);
     };
     AnyTouch.prototype._bindRecognizers = function (el) {
@@ -1103,14 +1103,6 @@ var AnyTouch = (function () {
         if (undefined !== inputs) {
             var computed_1 = compute(inputs);
             this.recognizers.forEach(function (recognizer) {
-                recognizer.injectEmit(_this.eventBus.emit.bind(_this.eventBus));
-                recognizer.afterEmit(function (type, payload) {
-                    if (_this.options.domEvents) {
-                        var event_1 = new Event(type, {});
-                        event_1.computed = payload;
-                        _this.el.dispatchEvent(event_1);
-                    }
-                });
                 recognizer.recognize(computed_1);
                 _this.eventBus.emit('input', __assign({}, computed_1, { type: 'input' }));
             });
