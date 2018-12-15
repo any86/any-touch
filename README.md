@@ -21,21 +21,19 @@ npm i -S any-touch
 ```javascript
 import AnyTouch from 'any-touch';
 
-// 开始使用
-// 1. 初始化
+// 初始化
 const el = doucument.getElementById('gesture-box');
 const at = new AnyTouch(el);
 
-// 2. 绑定手势
+// 绑定手势
 at.on('pan', ev=>{
   console.log(ev.deltaX);
 })
 
-// 不想使用
-// 3. 解除绑定
+// 解除绑定
 at.off('pan')
 
-// 4. 销毁
+// 销毁
 at.destory();
 ```
 
