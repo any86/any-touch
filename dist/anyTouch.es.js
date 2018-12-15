@@ -1004,7 +1004,7 @@ var AnyTouch = (function () {
         function _emit(type, payload) {
             this.eventBus.emit(type, payload);
             if (this.options.domEvents) {
-                var event = new Event(type, {});
+                var event = new Event(type, payload);
                 event.computed = payload;
                 this.el.dispatchEvent(event);
             }
@@ -1037,7 +1037,6 @@ var AnyTouch = (function () {
         }
     };
     AnyTouch.prototype.update = function () {
-        console.warn('update');
         this.updateTouchAction(this.el);
     };
     AnyTouch.prototype._bindRecognizers = function (el) {

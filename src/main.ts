@@ -92,7 +92,7 @@ export default class AnyTouch {
         function _emit(type: string, payload: { [propName: string]: any }){
             this.eventBus.emit(type, payload);
             if (this.options.domEvents) {
-                let event: any = new Event(type, {});
+                let event: any = new Event(type, payload);
                 // Object.assign(event, payload)
                 event.computed = payload;
                 this.el.dispatchEvent(event);
@@ -125,7 +125,6 @@ export default class AnyTouch {
     };
 
     public update() {
-        console.warn('update')
         this.updateTouchAction(this.el);
     };
 
