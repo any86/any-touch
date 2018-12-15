@@ -71,7 +71,7 @@ export default class AnyTouch {
      * @param {Object} param1
      */
     constructor(el: HTMLElement, options: Options = DEFAULT_OPTIONS) {
-        this.version = '0.0.11';
+        this.version = '0.0.12';
         this.el = el;
         this.isMobile = IS_MOBILE;
         this.eventBus = new EventBus(el);

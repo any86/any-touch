@@ -993,7 +993,7 @@
     var AnyTouch = (function () {
         function AnyTouch(el, options) {
             if (options === void 0) { options = DEFAULT_OPTIONS; }
-            this.version = '0.0.11';
+            this.version = '0.0.12';
             this.el = el;
             this.isMobile = IS_MOBILE;
             this.eventBus = new EventBus(el);
