@@ -72,6 +72,8 @@ export default (event: TouchEvent | MouseEvent): Input => {
         changedPointerLength,
         centerX,
         centerY,
+        x: centerX,
+        y: centerY,
         timestamp,
         target,
         currentTarget,

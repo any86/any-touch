@@ -1,6 +1,5 @@
-
 let log = console.log;
-log = () => { };
+log = () => {};
 new Vue({
     el: '#app',
 
@@ -16,10 +15,19 @@ new Vue({
         };
     },
     mounted() {
-        const tap2 = new AnyTouch.TapRecognizer({ name: 'doubletap', pointer: 1, taps: 2 })
-        const tap3 = new AnyTouch.TapRecognizer({ name: 'threetap', pointer: 1, taps: 3 })
+        const tap2 = new AnyTouch.TapRecognizer({
+            name: 'doubletap',
+            pointer: 1,
+            taps: 2
+        })
+        const tap3 = new AnyTouch.TapRecognizer({
+            name: 'threetap',
+            pointer: 1,
+            taps: 3
+        })
         const anyTouch = new AnyTouch(this.$refs.circle);
-        anyTouch.get('pan').set({pointerLength:1});
+        const pan = anyTouch.get('pan');
+        pan.set({ threshold: 0 });
         anyTouch.add(tap2);
         anyTouch.add(tap3);
         const tap1 = anyTouch.get('tap');
@@ -50,11 +58,10 @@ new Vue({
             log(e.type);
         });
 
-
-
         anyTouch.on('pan', e => {
-            console.log(e.direction);
-            if(e.nativeEvent.cancelable && 'down' === e.direction) {
+            console.log(e.centerX, e.centerY);
+            log(e.direction);
+            if (e.nativeEvent.cancelable && 'down' === e.direction) {
                 e.preventDefault();
             }
             // e.preventDefault();
@@ -106,7 +113,7 @@ new Vue({
         ['pinchstart', 'pinchmove', 'pinchend', 'pinchin', 'pinchout'].forEach(name => {
             anyTouch.on(name, e => {
                 this.message = e;
-                console.warn(e.type);
+                log(e.type);
             })
         });
 
@@ -117,7 +124,7 @@ new Vue({
             // console.log(e.deltaScale);
             this.centerX = e.centerX;
             this.centerY = e.centerY;
-            console.warn(`%c ${e.type} `, 'background-color:#f90;color:#fff;');
+            log(`%c ${e.type} `, 'background-color:#f90;color:#fff;');
         });
 
         /**
@@ -143,7 +150,7 @@ new Vue({
          */
         ['swipeup', 'swipeleft', 'swiperight', 'swipedown'].forEach(name => {
             anyTouch.on(name, e => {
-                console.warn(e.type);
+                log(e.type);
                 // switch (name) {
                 //     case 'swipeup':
                 //         {
@@ -174,7 +181,7 @@ new Vue({
         });
 
         anyTouch.on('swipe', e => {
-            console.warn(`%c ${e.type} `, 'background-color:#444;color:#fff;');
+            log(`%c ${e.type} `, 'background-color:#444;color:#fff;');
             this.message = e;
         });
 

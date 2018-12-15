@@ -4,7 +4,7 @@
 * 未知 => 取消(已知的任意阶段)
 * */
 import { Computed } from '../interface';
-import {INPUT_CANCEL, INPUT_END, INPUT_MOVE, INPUT_START } from '../const';
+import { INPUT_CANCEL, INPUT_END, INPUT_MOVE, INPUT_START } from '../const';
 import {
     STATUS_POSSIBLE,
     STATUS_START,
@@ -14,51 +14,48 @@ import {
     STATUS_FAILED, STATUS_RECOGNIZED
 } from '../const/recognizerStatus';
 export default abstract class Recognizer {
+    // 手势名
     public name: string;
+    // 识别状态
     public status: string;
+    // 是否已识别
     public isRecognized: boolean;
+    // 选项
     public options: { [propName: string]: any };
+    // 需要对应手势失败才能识别成功
     public requireFailureRecognizers: any[];
-    public update : ()=>void
-    public afterEmitCallback: (type: string, payload: { [propName: string]: any })=>void;
+    // 存储外部注入方法的容器
+    public $root: { [k: string]: (...args: any[]) => void };
+    // 注入外部方法到识别器原型上
+    public static $inject: (key: string, method: (...args: any[]) => void) => void;
     // 默认参数
     public defaultOptions: { [propName: string]: any };
-    private _injectedEmit: any;
-    constructor(options: any={}) {
+
+    constructor(options: { [propName: string]: any } = {}) {
         this.options = { ...this.defaultOptions, ...options };
         this.status = STATUS_POSSIBLE;
         this.isRecognized = false;
         this.requireFailureRecognizers = [];
-        this.update = ()=>{};
     };
-    
+
     /**
      * 设置识别器
      * @param {Object} 选项 
      */
-    public set(options: {[propName: string]: any}){
+    public set(options: { [propName: string]: any }) {
         this.options = { ...this.options, ...options };
-        this.update();
+        // 刷新anyTouch
+        Recognizer.prototype.$root.update();
     };
+
     /**
-     * 注入通用emit方法, 方便改写
+     * 对emit进行封装
+     * @param type 
+     * @param payload 
      */
-    public injectEmit(emit: any) {
-        this._injectedEmit = emit;
-    };
-
-    public injectUpdate(fn:any){
-        this.update = fn;
-    };
-
     public emit(type: string, payload: { [propName: string]: any }) {
         payload.type = type;
-        this._injectedEmit(type, payload);
-        this.afterEmitCallback(type, payload);
-    };
-
-    public afterEmit(callback:(type: string, payload: { [propName: string]: any })=>void){
-        this.afterEmitCallback = callback;
+        Recognizer.prototype.$root.emit(type, payload);
     };
 
     /**
@@ -200,4 +197,16 @@ export default abstract class Recognizer {
      * 计算当前手势的touch-action
      */
     abstract getTouchAction(): string[];
+};
+
+// 外部的方法的载体
+Recognizer.prototype.$root = {};
+
+/**
+ * 注入AnyTouch上的方法到识别器原型上
+ * @param {String} 方法名
+ * @param {Function} 对应AnyTouch上方法
+ */
+Recognizer.$inject = (key, method) => {
+    Recognizer.prototype.$root[key] = method;
 };
