@@ -9,7 +9,8 @@
     "release": "npm run build && npm run test && npm pub && git push",
     "build": "rimraf dist && rollup -c",
     "dev": "rimraf dist && rollup -c --watch",
-    "test": "jest --no-cache"
+    "test": "jest"
+
   },
   "repository": {
     "type": "git",
