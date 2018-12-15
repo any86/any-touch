@@ -7,4 +7,5 @@ module.exports = {
     collectCoverage: true,
     coverageDirectory: "./coverage/",
     verbose: false,
+    testPathIgnorePatterns: ["<rootDir>/node_modules/", "<rootDir>/__tests__/utils"]
 };

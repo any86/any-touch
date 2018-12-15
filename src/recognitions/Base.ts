@@ -19,6 +19,8 @@ export default abstract class Recognizer {
     public isRecognized: boolean;
     public options: { [propName: string]: any };
     public requireFailureRecognizers: any[];
+    public $inject : {[k:string]: (...argument:any[])=>void};
+
     public update : ()=>void
     public afterEmitCallback: (type: string, payload: { [propName: string]: any })=>void;
     // 默认参数
@@ -29,6 +31,9 @@ export default abstract class Recognizer {
         this.status = STATUS_POSSIBLE;
         this.isRecognized = false;
         this.requireFailureRecognizers = [];
+        this.$inject = {};
+
+
         this.update = ()=>{};
     };
     
