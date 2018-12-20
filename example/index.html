@@ -6,128 +6,115 @@
     <meta data-n-head="true" name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
+    <link rel="stylesheet" href="index.css">
+    </link>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="https://res.wx.qq.com/mmbizwap/zh_CN/htmledition/js/vconsole/3.0.0/vconsole.min.js"></script>
     <script src="../../dist/anyTouch.umd.js"></script>
-    
+
     <script>
-        if (!!window.location.search) {
-            var vConsole = new VConsole();
-        }
+        // if (!!window.location.search) {
+        //     var vConsole = new VConsole();
+        // }
     </script>
-    <style>
-        :root {
-            --bg: rgb(255, 255, 255);
-            --primary: rgb(189, 174, 116);
-        }
-
-        * {
-            padding: 0;
-            margin: 0;
-            box-sizing: border-box;
-        }
-
-        html,
-        body {
-            width: 100%;
-            min-height: 100vh;
-            padding: 5px 5px 30px 5px;
-            overflow-x: hidden;
-            background: var(--bg);
-        }
-
-        main {
-            overflow-x: hidden;
-            touch-action: manipulation;
-            background: var(--bg);
-            min-height: calc(100vh - 20px);
-        }
-
-        .text {
-            margin: 0;
-            font-size: 12px;
-            color: var(--primary);
-        }
-
-        .circle {
-            /* touch-action: none; */
-            box-sizing: content-box;
-            width: 30px;
-            height: 30px;
-            border-radius: 5px;
-            background: rgb(0, 0, 0, 0);
-            border: 50px solid rgba(189, 174, 116, 0.7);
-            position: absolute;
-            left: calc(50vw - 25px);
-            top: calc(50vh - 25px);
-        }
-
-
-        .tap {
-            animation: tap 500ms;
-        }
-
-        @keyframes tap {
-            from {
-                transform: scale(1);
-                opacity: 1;
-            }
-
-            50% {
-                transform: scale(.9);
-                opacity: .8;
-            }
-
-            to {
-                transform: scale(1);
-                opacity: 1;
-            }
-        }
-
-
-        .doubletap {
-            animation: doubletap 500ms;
-        }
-
-        @keyframes doubletap {
-            from {
-                transform: scaleY(1);
-            }
-
-            50% {
-                transform: scaleY(.6);
-            }
-
-            to {
-                transform: scaleY(1);
-            }
-        }
-
-        .fixed-bottom {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            background: rgba(255, 255, 255, .7);
-            width: 100%;
-            box-shadow: -1px -2px 3px rgba(0, 0, 0, 0.1);
-        }
-
-        .fixed-bottom>a {
-            display: inline-block;
-            padding: 15px;
-            color: var(--primary);
-            border-right: 1px solid rgba(189, 174, 116, 0.3);
-            text-decoration: none;
-        }
-    </style>
 </head>
 
 <body>
     <main id="app">
+        <header>
+            已识别: {{message.type}}
+        </header>
+
+        <h1>返回数据说明</h1>
+        <table>
+            <tr>
+                <th>键值</th>
+                <th>当前值</th>
+                <th>说明</th>
+            </tr>
+            <tr>
+                <td>inputStatus</td>
+                <td>{{message.inputStatus}}</td>
+                <td>触点离开/减少值为end | 触点离开/减少值为end</td>
+            </tr>
+
+            <tr>
+                <td>centerX / x</td>
+                <td>{{message.inputStatus}}</td>
+                <td>触点X坐标, 如果触点有多个, 那么centerX/x为多点的中心点坐标</td>
+            </tr>
+
+            <tr>
+                <td>centerY / y</td>
+                <td>{{message.inputStatus}}</td>
+                <td>同centerX/x</td>
+            </tr>
+
+
+            <tr>
+                <td>distanceX / distanceY</td>
+                <td>{{message.distanceX}} / {{message.distanceY}}</td>
+                <td>拖拽类手势(pan/rotate/pinch)产生的, 值为当前触点(中心点)对起始触点的距离, 是个标量</td>
+            </tr>
+
+            <tr>
+                <td>displacementX / displacementY</td>
+                <td>{{message.displacementX}} / {{message.displacementY}}</td>
+                <td>distanceX / distanceY的向量表示, 向右拖拽x为正整数,向左x为负整数,向上y为负整数,向下y为正整数</td>
+            </tr>
+
+            <tr>
+                <td>deltaX / deltaY</td>
+                <td>{{message.deltaX}} / {{message.deltaY}}</td>
+                <td>2次相邻手势之间发生位移变化, 值为向量.</td>
+            </tr>
+
+
+            <tr>
+                <td>angle</td>
+                <td>{{message.angle}}</td>
+                <td>从rotatestart开始累加的旋转角度</td>
+            </tr>
+
+            <tr>
+                <td>deltaAngle</td>
+                <td>{{message.deltaAngle}}</td>
+                <td>每次rotatemove触发改变的角度</td>
+            </tr>
+
+            <tr>
+                <td>scale</td>
+                <td>{{message.scale}}</td>
+                <td>从pinchstart开始累加的缩放</td>
+            </tr>
+
+            <tr>
+                <td>deltaScale</td>
+                <td>{{message.deltaScale}}</td>
+                <td>每次pinchmove触发改变的缩放</td>
+            </tr>
+
+            <tr>
+                <td>timestamp</td>
+                <td>{{message.timestamp}}</td>
+                <td>当前时间戳</td>
+            </tr>
+
+
+            <tr>
+                <td>lastDirection</td>
+                <td>{{message.lastDirection}}</td>
+                <td>最近25ms内手势产生的方向</td>
+            </tr>
+
+        </table>
+
+
+        <!-- 
         <section class="fixed-bottom">
             <a href="?debug">vconsole</a>
             <a href="?">vconsole off</a>
-        </section>
+        </section> -->
 
 
         <div class="circle" id="circle" ref="circle" @animationend="animationend" :class="{
@@ -140,18 +127,14 @@
         }"></div>
         <!-- <p class="text">scale: {{scale}}</p>
         <p class="text">angle: {{angle}}</p> -->
-        <p v-if="message.type && key != 'currentTarget'" v-for="(item, key) in message" class="text">{{key}} : {{item}}</p>
+
     </main>
     <script src="./index.js"></script>
     <script>
-    
-
         let circle = document.getElementById('circle');
-        circle.addEventListener('pan', ev=>{
-            console.log(ev);
+        circle.addEventListener('pan', ev => {
+            // console.log(ev);
         });
-        
-    
     </script>
 </body>
 

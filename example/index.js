@@ -38,10 +38,10 @@ new Vue({
          * =========================== pan ===========================
          */
 
-        anyTouch.on('input', e => {
-            this.message = e;
-            log(e, e.type);
-        });
+        // anyTouch.on('input', e => {
+        //     this.message = e;
+        //     log(e, e.type);
+        // });
 
         anyTouch.on('panstart', e => {
             this.message = e;
@@ -59,7 +59,7 @@ new Vue({
         });
 
         anyTouch.on('pan', e => {
-            console.log(e.centerX, e.centerY);
+            console.log(e)
             log(e.direction);
             if (e.nativeEvent.cancelable && 'down' === e.direction) {
                 e.preventDefault();

@@ -1,7 +1,7 @@
 export default (event: TouchEvent): any => {
     // const pointers = event.targetTouches;
-    const pointers = event.touches;
-    const changedPointers = event.changedTouches;
+    const pointers = Array.from(event.touches).map(({clientX,clientY})=>({clientX,clientY}));
+    const changedPointers = Array.from(event.changedTouches).map(({clientX,clientY})=>({clientX,clientY}));
     const inputStatus = event.type.replace('touch', '');
     return {
         inputStatus,

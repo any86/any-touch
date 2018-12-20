@@ -198,8 +198,14 @@ var getDirection = function (displacementX, displacementY) {
 //# sourceMappingURL=vector.js.map
 
 var touchAdapter = (function (event) {
-    var pointers = event.touches;
-    var changedPointers = event.changedTouches;
+    var pointers = Array.from(event.touches).map(function (_a) {
+        var clientX = _a.clientX, clientY = _a.clientY;
+        return ({ clientX: clientX, clientY: clientY });
+    });
+    var changedPointers = Array.from(event.changedTouches).map(function (_a) {
+        var clientX = _a.clientX, clientY = _a.clientY;
+        return ({ clientX: clientX, clientY: clientY });
+    });
     var inputStatus = event.type.replace('touch', '');
     return {
         inputStatus: inputStatus,
