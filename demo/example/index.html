@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta data-n-head="true" name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="index.css">
+    </link>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://res.wx.qq.com/mmbizwap/zh_CN/htmledition/js/vconsole/3.0.0/vconsole.min.js"></script>
+    <script src="../../dist/anyTouch.umd.js"></script>
+    <script>
+        // if (!!window.location.search) {
+        //     var vConsole = new VConsole();
+        // }
+    </script>
+</head>
+
+<body>
+    <main id="app">
+        <header>
+            已识别: {{message.type}}
+        </header>
+
+        <h1>返回数据说明</h1>
+        <table>
+            <tr>
+                <th width="105">键值</th>
+                <th width="110">当前值</th>
+                <th>说明</th>
+            </tr>
+            
+            <tr>
+                <td>type</td>
+                <td>{{message.type}}</td>
+                <td>事件名称</td>
+            </tr>
+            
+            <tr>
+                <td>inputStatus</td>
+                <td>{{message.inputStatus}}</td>
+                <td>触点离开/减少值为end | 触点离开/减少值为end</td>
+            </tr>
+
+            <tr>
+                <td>pointerLength</td>
+                <td>{{message.pointerLength}}</td>
+                <td>触点数</td>
+            </tr>
+
+            <tr style="height:60px;">
+                <td>pointers</td>
+                <td>{{message.pointers}}</td>
+                <td>触点信息</td>
+            </tr>
+
+            <tr >
+                <td>maxPointerLength</td>
+                <td>{{message.maxPointerLength}}</td>
+                <td>出现过的最大触点数</td>
+            </tr>
+            
+            <tr>
+                <td>centerX / centerY</td>
+                <td>{{message.centerX}}</td>
+                <td>触点X坐标, 如果触点有多个, 那么centerX / centerY为多点的中心点坐标</td>
+            </tr>
+
+            <tr>
+                <td>x / y</td>
+                <td>{{message.centerY}}</td>
+                <td>同centerX / centerY</td>
+            </tr>
+
+
+            <tr>
+                <td>distanceX / distanceY</td>
+                <td>{{message.distanceX}} / {{message.distanceY}}</td>
+                <td>拖拽类手势(pan/rotate/pinch)产生的, 值为当前触点(中心点)对起始触点的距离, 是个标量</td>
+            </tr>
+
+            <tr>
+                <td>displacementX / displacementY</td>
+                <td>{{message.displacementX}} / {{message.displacementY}}</td>
+                <td>distanceX / distanceY的向量表示, 向右拖拽x为正整数,向左x为负整数,向上y为负整数,向下y为正整数</td>
+            </tr>
+
+            <tr>
+                <td>deltaX / deltaY</td>
+                <td>{{message.deltaX}} / {{message.deltaY}}</td>
+                <td>2次相邻手势之间发生位移变化, 值为向量.</td>
+            </tr>
+
+
+            <tr>
+                <td>angle</td>
+                <td>{{message.angle}}</td>
+                <td>从rotatestart开始累加的旋转角度</td>
+            </tr>
+
+            <tr>
+                <td>deltaAngle</td>
+                <td>{{message.deltaAngle}}</td>
+                <td>每次rotatemove触发改变的角度</td>
+            </tr>
+
+            <tr>
+                <td>scale</td>
+                <td>{{message.scale}}</td>
+                <td>从pinchstart开始累加的缩放</td>
+            </tr>
+
+            <tr>
+                <td>deltaScale</td>
+                <td>{{message.deltaScale}}</td>
+                <td>每次pinchmove触发改变的缩放</td>
+            </tr>
+
+            <tr>
+                <td>timestamp</td>
+                <td>{{message.timestamp}}</td>
+                <td>当前时间戳</td>
+            </tr>
+            
+
+            <tr>
+                <td>direction</td>
+                <td>{{message.direction}}</td>
+                <td>相对起始触点移动的方向</td>
+            </tr>
+
+            <tr>
+                <td>lastDirection</td>
+                <td>{{message.lastDirection}}</td>
+                <td>最近25ms内手势产生的方向</td>
+            </tr>
+
+            <tr>
+                <td>lastVelocityX/lastVelocityY</td>
+                <td>{{message.lastVelocity}}</td>
+                <td>最近25ms内触点移动速率, 标量</td>
+            </tr>
+            
+            <tr>
+                <td>duration</td>
+                <td>{{message.duration}}</td>
+                <td>从触点接触屏幕到离开屏幕经过的时间</td>
+            </tr>
+
+            <tr>
+                <td>deltaTime</td>
+                <td>{{message.deltaTime}}</td>
+                <td>每次发生移动或者离开动作之间的时间间隔, 比如可以用来判断距离上次移动经历了多长时间</td>
+            </tr>
+            
+            <tr>
+                <td>isFirst</td>
+                <td>{{message.isFinal}}</td>
+                <td>是否第一次接触屏幕</td>
+            </tr>
+
+            <tr>
+                <td>isFinal</td>
+                <td>{{message.isFinal}}</td>
+                <td>是否所有触点都离开了屏幕</td>
+            </tr>
+            
+            <tr>
+                <td>target</td>
+                <td>ElementTarget</td>
+                <td>绑定事件的元素</td>
+            </tr>
+
+            <tr>
+                <td>currentTarget</td>
+                <td>ElementTarget</td>
+                <td>触发事件的元素</td>
+            </tr>
+
+            <tr>
+                <td>nativeEvent</td>
+                <td>MouseEvent | TouchEvent</td>
+                <td>Mouse/Touch事件数据</td>
+            </tr>
+
+            <tr>
+                <td>preventDefault</td>
+                <td>()=>void</td>
+                <td>阻止默认事件</td>
+            </tr>
+
+            <tr>
+                <td>stopPropagation</td>
+                <td>()=>void</td>
+                <td>阻止事件冒泡</td>
+            </tr>
+            
+            
+        </table>
+
+
+        <!-- 
+        <section class="fixed-bottom">
+            <a href="?debug">vconsole</a>
+            <a href="?">vconsole off</a>
+        </section> -->
+
+
+        <div class="circle" id="circle" ref="circle" @animationend="animationend" :class="{
+            tap: 'tap' === message.type,
+            doubletap: 'doubletap' === message.type,
+        }"
+            :style="{
+            transform: `scale(${scale}) translate(${x/scale}px, ${y/scale}px) rotate(${angle}deg)`,
+            transformOrigin: `${centerX}px ${centerY}px`
+        }"></div>
+        <!-- <p class="text">scale: {{scale}}</p>
+        <p class="text">angle: {{angle}}</p> -->
+
+    </main>
+    <script src="./index.js"></script>
+    <script>
+        let circle = document.getElementById('circle');
+        circle.addEventListener('pan', ev => {
+            // console.log(ev);
+        });
+    </script>
+</body>
+
+</html>

@@ -9,8 +9,8 @@
     "release": "npm run build && npm run test && npm pub && git push",
     "build": "rimraf dist && rollup -c",
     "dev": "rimraf dist && rollup -c --watch",
-    "test": "jest"
-
+    "test": "jest",
+    "demo": "node script/demo.js"
   },
   "repository": {
     "type": "git",
@@ -24,12 +24,14 @@
   "homepage": "https://github.com/383514580/any-touch#readme",
   "devDependencies": {
     "@types/jest": "^23.3.5",
+    "gh-pages": "^2.0.1",
     "jest": "^23.6.0",
     "rimraf": "^2.6.2",
     "rollup": "^0.67.1",
     "rollup-plugin-commonjs": "^9.2.0",
     "rollup-plugin-node-resolve": "^3.4.0",
     "rollup-plugin-typescript": "^1.0.0",
+    "shelljs": "^0.8.3",
     "ts-jest": "^23.10.4",
     "tslib": "^1.9.3",
     "typescript": "^3.0.1"
