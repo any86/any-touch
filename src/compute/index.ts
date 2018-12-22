@@ -22,8 +22,8 @@ export default function ({
     const { abs, max } = Math;
 
     let computed = <Computed>{
-        pointers: [],
-        changedPointers: [],
+        // pointers: [],
+        // changedPointers: [],
         pointerLength: input.pointerLength,
         changedPointerLength: input.changedPointerLength,
         // 起始到结束的偏移

@@ -59,6 +59,9 @@ new Vue({
         });
 
         anyTouch.on('pan', e => {
+            this.centerX = e.centerX;
+            this.centerY = e.centerY;
+
             console.log(e)
             log(e.direction);
             if (e.nativeEvent.cancelable && 'down' === e.direction) {

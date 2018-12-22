@@ -27,8 +27,8 @@ export default (input: Input): { velocity: number, velocityX: number, velocityY:
     const deltaY = (0 < input.centerY) ? input.centerY - _prevInput.centerY : 0;
     // 每25ms刷新速度数据
     if (COMPUTE_INTERVAL < deltaTime) {
-        velocityX = Math.abs(deltaX / deltaTime);
-        velocityY = Math.abs(deltaY / deltaTime);
+        velocityX = Math.round(Math.abs(deltaX / deltaTime)*100)/100;
+        velocityY = Math.round(Math.abs(deltaY / deltaTime)*100)/100;
         direction = getDirection(deltaX, deltaY);
         // 存储状态
         _prevVelocityX = velocityX;

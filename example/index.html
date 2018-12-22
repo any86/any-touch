@@ -28,10 +28,17 @@
         <h1>返回数据说明</h1>
         <table>
             <tr>
-                <th>键值</th>
-                <th>当前值</th>
+                <th width="105">键值</th>
+                <th width="110">当前值</th>
                 <th>说明</th>
             </tr>
+            
+            <tr>
+                <td>type</td>
+                <td>{{message.type}}</td>
+                <td>事件名称</td>
+            </tr>
+            
             <tr>
                 <td>inputStatus</td>
                 <td>{{message.inputStatus}}</td>
@@ -39,15 +46,33 @@
             </tr>
 
             <tr>
-                <td>centerX / x</td>
-                <td>{{message.inputStatus}}</td>
-                <td>触点X坐标, 如果触点有多个, 那么centerX/x为多点的中心点坐标</td>
+                <td>pointerLength</td>
+                <td>{{message.pointerLength}}</td>
+                <td>触点数</td>
+            </tr>
+
+            <tr style="height:60px;">
+                <td>pointers</td>
+                <td>{{message.pointers}}</td>
+                <td>触点信息</td>
+            </tr>
+
+            <tr >
+                <td>maxPointerLength</td>
+                <td>{{message.maxPointerLength}}</td>
+                <td>出现过的最大触点数</td>
+            </tr>
+            
+            <tr>
+                <td>centerX / centerY</td>
+                <td>{{message.centerX}}</td>
+                <td>触点X坐标, 如果触点有多个, 那么centerX / centerY为多点的中心点坐标</td>
             </tr>
 
             <tr>
-                <td>centerY / y</td>
-                <td>{{message.inputStatus}}</td>
-                <td>同centerX/x</td>
+                <td>x / y</td>
+                <td>{{message.centerY}}</td>
+                <td>同centerX / centerY</td>
             </tr>
 
 
@@ -99,7 +124,13 @@
                 <td>{{message.timestamp}}</td>
                 <td>当前时间戳</td>
             </tr>
+            
 
+            <tr>
+                <td>direction</td>
+                <td>{{message.direction}}</td>
+                <td>相对起始触点移动的方向</td>
+            </tr>
 
             <tr>
                 <td>lastDirection</td>
@@ -107,6 +138,67 @@
                 <td>最近25ms内手势产生的方向</td>
             </tr>
 
+            <tr>
+                <td>lastVelocityX/lastVelocityY</td>
+                <td>{{message.lastVelocity}}</td>
+                <td>最近25ms内触点移动速率, 标量</td>
+            </tr>
+            
+            <tr>
+                <td>duration</td>
+                <td>{{message.duration}}</td>
+                <td>从触点接触屏幕到离开屏幕经过的时间</td>
+            </tr>
+
+            <tr>
+                <td>deltaTime</td>
+                <td>{{message.deltaTime}}</td>
+                <td>每次发生移动或者离开动作之间的时间间隔, 比如可以用来判断距离上次移动经历了多长时间</td>
+            </tr>
+            
+            <tr>
+                <td>isFirst</td>
+                <td>{{message.isFinal}}</td>
+                <td>是否第一次接触屏幕</td>
+            </tr>
+
+            <tr>
+                <td>isFinal</td>
+                <td>{{message.isFinal}}</td>
+                <td>是否所有触点都离开了屏幕</td>
+            </tr>
+            
+            <tr>
+                <td>target</td>
+                <td>ElementTarget</td>
+                <td>绑定事件的元素</td>
+            </tr>
+
+            <tr>
+                <td>currentTarget</td>
+                <td>ElementTarget</td>
+                <td>触发事件的元素</td>
+            </tr>
+
+            <tr>
+                <td>nativeEvent</td>
+                <td>MouseEvent | TouchEvent</td>
+                <td>Mouse/Touch事件数据</td>
+            </tr>
+
+            <tr>
+                <td>preventDefault</td>
+                <td>()=>void</td>
+                <td>阻止默认事件</td>
+            </tr>
+
+            <tr>
+                <td>stopPropagation</td>
+                <td>()=>void</td>
+                <td>阻止事件冒泡</td>
+            </tr>
+            
+            
         </table>
 
 
@@ -123,7 +215,7 @@
         }"
             :style="{
             transform: `scale(${scale}) translate(${x/scale}px, ${y/scale}px) rotate(${angle}deg)`,
-            transformOrigin: `${centerX}px//// ${centerY}px`
+            transformOrigin: `${centerX}px ${centerY}px`
         }"></div>
         <!-- <p class="text">scale: {{scale}}</p>
         <p class="text">angle: {{angle}}</p> -->

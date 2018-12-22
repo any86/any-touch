@@ -42,7 +42,7 @@ main h1{
     padding:5px;background:var(--primary);color:#fff;
 }
 
-main table{border-collapse: collapse;}
+main table{border-collapse: collapse;table-layout:fixed;}
 main table tr{border-bottom: 1px solid #eee}
 
 main table tr th{
@@ -55,45 +55,27 @@ main table tr th{
 main table tr td{
     font-size: 12px;
     color: var(--primary);
-    padding:10px 0;
+    padding:10px;
     text-align: left;
-    /* white-space:nowrap; */
-    padding: 10px 15px;
     
 }
 
 
-main table tr th:nth-child(1){
-    width: 20%;
-}
-main table tr th:nth-child(2){
-    width: 20%;
-}
-
-main table tr th:nth-child(3){
-    /* width: 60%; */
-}
-
 main table tr td:nth-child(1){
-    width: 20%;
-    word-break: keep-all;
+    word-break: break-word;
 }
+
 main table tr td:nth-child(2){
-    width: 20%;
     word-break: keep-all;
+    padding:10px 5px;
 }
 
 main table tr td:nth-child(3){
-    /* width: 60%; */
     word-break: break-all;
-}
-
-
-
-main table tr td:nth-child(3){
     letter-spacing:2px;
     line-height: 1.4;
 }
+
 
 .circle {
     /* touch-action: none; */
@@ -103,7 +85,7 @@ main table tr td:nth-child(3){
     border-radius: 5px;
     background: rgb(0, 0, 0, 0);
     border: 50px solid rgba(189, 174, 116, 0.7);
-    position: absolute;
+    position: fixed;
     left: calc(50vw - 25px);
     top: calc(50vh - 25px);
 }

@@ -358,8 +358,8 @@
         var deltaX = (0 < input.centerX) ? input.centerX - _prevInput.centerX : 0;
         var deltaY = (0 < input.centerY) ? input.centerY - _prevInput.centerY : 0;
         if (COMPUTE_INTERVAL < deltaTime) {
-            velocityX = Math.abs(deltaX / deltaTime);
-            velocityY = Math.abs(deltaY / deltaTime);
+            velocityX = Math.round(Math.abs(deltaX / deltaTime) * 100) / 100;
+            velocityY = Math.round(Math.abs(deltaY / deltaTime) * 100) / 100;
             direction = getDirection(deltaX, deltaY);
             _prevVelocityX = velocityX;
             _prevVelocityY = velocityY;
@@ -463,8 +463,6 @@
             return;
         var abs = Math.abs, max = Math.max;
         var computed = {
-            pointers: [],
-            changedPointers: [],
             pointerLength: input.pointerLength,
             changedPointerLength: input.changedPointerLength,
             displacementX: 0,
