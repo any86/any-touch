@@ -1,0 +1,149 @@
+:root {
+    --bg: rgb(255, 255, 255);
+    --primary: rgb(189, 174, 116);
+
+}
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+html,
+body {
+    width: 100%;
+    min-height: 100vh;
+    padding: 0;
+    overflow-x: hidden;
+    background: var(--bg);
+}
+
+
+main {
+    overflow-x: hidden;
+    touch-action: manipulation;
+    background: var(--bg);
+    min-height: calc(100vh - 20px);
+    margin-top: 60px;
+}
+
+main header{
+    position: fixed;
+    top:0;left:0;width:100%;
+    background: rgba(255,255,255,0.7);
+    padding:15px;
+    box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.1);
+    font-size:20px;
+}
+
+main h1{
+    font-size: 14px;display: inline-block;
+    padding:5px;background:var(--primary);color:#fff;
+}
+
+main table{border-collapse: collapse;table-layout:fixed;}
+main table tr{border-bottom: 1px solid #eee}
+
+main table tr th{
+    font-size: 14px;    
+    word-break: keep-all;
+    padding: 10px;
+    color:var(--primary);
+    text-align: left;
+}
+main table tr td{
+    font-size: 12px;
+    color: var(--primary);
+    padding:10px;
+    text-align: left;
+    
+}
+
+
+main table tr td:nth-child(1){
+    word-break: break-word;
+}
+
+main table tr td:nth-child(2){
+    word-break: keep-all;
+    padding:10px 5px;
+}
+
+main table tr td:nth-child(3){
+    word-break: break-all;
+    letter-spacing:2px;
+    line-height: 1.4;
+}
+
+
+.circle {
+    /* touch-action: none; */
+    box-sizing: content-box;
+    width: 30px;
+    height: 30px;
+    border-radius: 5px;
+    background: rgb(0, 0, 0, 0);
+    border: 50px solid rgba(189, 174, 116, 0.7);
+    position: fixed;
+    left: calc(50vw - 25px);
+    top: calc(50vh - 25px);
+}
+
+
+.tap {
+    animation: tap 500ms;
+}
+
+@keyframes tap {
+    from {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    50% {
+        transform: scale(.9);
+        opacity: .8;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+
+.doubletap {
+    animation: doubletap 500ms;
+}
+
+@keyframes doubletap {
+    from {
+        transform: scaleY(1);
+    }
+
+    50% {
+        transform: scaleY(.6);
+    }
+
+    to {
+        transform: scaleY(1);
+    }
+}
+
+.fixed-bottom {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    background: rgba(255, 255, 255, .7);
+    width: 100%;
+    box-shadow: -1px -2px 3px rgba(0, 0, 0, 0.1);
+}
+
+.fixed-bottom>a {
+    display: inline-block;
+    padding: 15px;
+    color: var(--primary);
+    border-right: 1px solid rgba(189, 174, 116, 0.3);
+    text-decoration: none;
+}

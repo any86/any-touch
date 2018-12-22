@@ -89,7 +89,6 @@
     var INPUT_MOVE = 'move';
     var INPUT_CANCEL = 'cancel';
     var INPUT_END = 'end';
-    //# sourceMappingURL=const.js.map
 
     var EventBus = (function () {
         function EventBus(targetElement) {
@@ -142,7 +141,6 @@
         };
         return EventBus;
     }());
-    //# sourceMappingURL=EventBus.js.map
 
     var round = Math.round;
     var getVLength = function (v) {
@@ -201,11 +199,16 @@
             return 0 < displacementY ? 'down' : 'up';
         }
     };
-    //# sourceMappingURL=vector.js.map
 
     var touchAdapter = (function (event) {
-        var pointers = event.touches;
-        var changedPointers = event.changedTouches;
+        var pointers = Array.from(event.touches).map(function (_a) {
+            var clientX = _a.clientX, clientY = _a.clientY;
+            return ({ clientX: clientX, clientY: clientY });
+        });
+        var changedPointers = Array.from(event.changedTouches).map(function (_a) {
+            var clientX = _a.clientX, clientY = _a.clientY;
+            return ({ clientX: clientX, clientY: clientY });
+        });
         var inputStatus = event.type.replace('touch', '');
         return {
             inputStatus: inputStatus,
@@ -214,7 +217,6 @@
             nativeEvent: event
         };
     });
-    //# sourceMappingURL=touch.js.map
 
     var prevPointers = undefined;
     var isPressed = false;
@@ -251,7 +253,6 @@
             nativeEvent: event
         };
     });
-    //# sourceMappingURL=mouse.js.map
 
     var centerX;
     var centerY;
@@ -301,7 +302,6 @@
             target: target,
             currentTarget: currentTarget, nativeEvent: event });
     });
-    //# sourceMappingURL=create.js.map
 
     var startInput;
     var prevInput;
@@ -337,7 +337,6 @@
             input: input
         };
     });
-    //# sourceMappingURL=inputManage.js.map
 
     var _prevInput;
     var _prevVelocityX;
@@ -352,8 +351,8 @@
         var deltaX = (0 < input.centerX) ? input.centerX - _prevInput.centerX : 0;
         var deltaY = (0 < input.centerY) ? input.centerY - _prevInput.centerY : 0;
         if (COMPUTE_INTERVAL < deltaTime) {
-            velocityX = Math.abs(deltaX / deltaTime);
-            velocityY = Math.abs(deltaY / deltaTime);
+            velocityX = Math.round(Math.abs(deltaX / deltaTime) * 100) / 100;
+            velocityY = Math.round(Math.abs(deltaY / deltaTime) * 100) / 100;
             direction = getDirection(deltaX, deltaY);
             _prevVelocityX = velocityX;
             _prevVelocityY = velocityY;
@@ -368,7 +367,6 @@
         var maxVelocity = Math.max(velocityX, velocityY);
         return { velocity: maxVelocity, velocityX: velocityX, velocityY: velocityY, direction: direction };
     });
-    //# sourceMappingURL=computeLast.js.map
 
     var prevDisplacementX = 0;
     var prevDisplacementY = 0;
@@ -398,7 +396,6 @@
             displacementX: displacementX, displacementY: displacementY, distanceX: distanceX, distanceY: distanceY, distance: distance
         };
     }
-    //# sourceMappingURL=computeDistance.js.map
 
     function computeDeltaXY (_a) {
         var prevInput = _a.prevInput, input = _a.input;
@@ -414,13 +411,11 @@
         }
         return { deltaX: deltaX, deltaY: deltaY };
     }
-    //# sourceMappingURL=computeDeltaXY.js.map
 
     var computeVector = (function (input) { return ({
         x: input.pointers[1][propX] - input.pointers[0][propX],
         y: input.pointers[1][propY] - input.pointers[0][propY]
     }); });
-    //# sourceMappingURL=computeVector.js.map
 
     function computeScale (_a) {
         var startV = _a.startV, prevV = _a.prevV, activeV = _a.activeV;
@@ -428,7 +423,6 @@
         var scale = getVLength(activeV) / getVLength(startV);
         return { scale: scale, deltaScale: deltaScale };
     }
-    //# sourceMappingURL=computeScale.js.map
 
     function computeAngle (_a) {
         var startV = _a.startV, prevV = _a.prevV, activeV = _a.activeV;
@@ -436,7 +430,6 @@
         var angle = getAngle(activeV, startV);
         return { angle: angle, deltaAngle: deltaAngle };
     }
-    //# sourceMappingURL=computeAngle.js.map
 
     var maxLength = 0;
     var computeMaxLength = (function (_a) {
@@ -449,7 +442,6 @@
         }
         return maxLength;
     });
-    //# sourceMappingURL=computeMaxLength.js.map
 
     function compute (_a) {
         var startInput = _a.startInput, prevInput = _a.prevInput, startMutliInput = _a.startMutliInput, input = _a.input;
@@ -457,8 +449,6 @@
             return;
         var abs = Math.abs, max = Math.max;
         var computed = {
-            pointers: [],
-            changedPointers: [],
             pointerLength: input.pointerLength,
             changedPointerLength: input.changedPointerLength,
             displacementX: 0,
@@ -523,7 +513,6 @@
         var maxPointerLength = computeMaxLength(input);
         return __assign({}, input, { maxPointerLength: maxPointerLength }, computed);
     }
-    //# sourceMappingURL=index.js.map
 
     var computeTouchAction = (function (touchActions) {
         var e_1, _a;
@@ -564,7 +553,6 @@
         }
         return touchActionCSSArray.join(' ');
     });
-    //# sourceMappingURL=computeTouchAction.js.map
 
     var STATUS_POSSIBLE = 'possible';
     var STATUS_START = 'start';
@@ -573,7 +561,6 @@
     var STATUS_CANCELLED = 'cancel';
     var STATUS_FAILED = 'failed';
     var STATUS_RECOGNIZED = 'recognized';
-    //# sourceMappingURL=recognizerStatus.js.map
 
     var Recognizer = (function () {
         function Recognizer(options) {
@@ -696,7 +683,6 @@
     Recognizer.$inject = function (key, method) {
         Recognizer.prototype.$root[key] = method;
     };
-    //# sourceMappingURL=Base.js.map
 
     var setTimeout = window.setTimeout, clearTimeout$1 = window.clearTimeout;
     var TapRecognizer = (function (_super) {
@@ -762,7 +748,6 @@
         taps: 1,
         interval: 300
     };
-    //# sourceMappingURL=Tap.js.map
 
     var PressRecognizer = (function (_super) {
         __extends(PressRecognizer, _super);
@@ -815,7 +800,6 @@
         threshold: 9,
         minPressTime: 251
     };
-    //# sourceMappingURL=Press.js.map
 
     var getHV = (function (directions) {
         var e_1, _a;
@@ -848,7 +832,6 @@
         }
         return { hasHorizontal: hasHorizontal, hasVertical: hasVertical };
     });
-    //# sourceMappingURL=getHV.js.map
 
     var PanRecognizer = (function (_super) {
         __extends(PanRecognizer, _super);
@@ -888,7 +871,6 @@
         pointerLength: 1,
         directions: ['up', 'right', 'down', 'left']
     };
-    //# sourceMappingURL=Pan.js.map
 
     var SwipeRecognizer = (function (_super) {
         __extends(SwipeRecognizer, _super);
@@ -929,7 +911,6 @@
         pointerLength: 1,
         directions: ['up', 'right', 'down', 'left']
     };
-    //# sourceMappingURL=Swipe.js.map
 
     var PinchRecognizer = (function (_super) {
         __extends(PinchRecognizer, _super);
@@ -961,7 +942,6 @@
         threshold: 0,
         pointerLength: 2
     };
-    //# sourceMappingURL=Pinch.js.map
 
     var RotateRecognizer = (function (_super) {
         __extends(RotateRecognizer, _super);
@@ -984,7 +964,6 @@
         threshold: 0,
         pointerLength: 2
     };
-    //# sourceMappingURL=Rotate.js.map
 
     var DEFAULT_OPTIONS = {
         touchAction: 'compute',
@@ -993,7 +972,7 @@
     var AnyTouch = (function () {
         function AnyTouch(el, options) {
             if (options === void 0) { options = DEFAULT_OPTIONS; }
-            this.version = '0.0.11';
+            this.version = '0.0.12';
             this.el = el;
             this.isMobile = IS_MOBILE;
             this.eventBus = new EventBus(el);
@@ -1132,7 +1111,6 @@
         AnyTouch.RotateRecognizer = RotateRecognizer;
         return AnyTouch;
     }());
-    //# sourceMappingURL=main.js.map
 
     return AnyTouch;
 

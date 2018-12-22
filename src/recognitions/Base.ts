@@ -50,7 +50,7 @@ export default abstract class Recognizer {
 
     /**
      * 对emit进行封装
-     * @param type 
+    * @param type 
      * @param payload 
      */
     public emit(type: string, payload: { [propName: string]: any }) {

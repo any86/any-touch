@@ -29,6 +29,9 @@ export const COMPUTE_INTERVAL = 25;
 // 计算时候取touchs.clientX | clientY
 export const propX = 'clientX';
 export const propY = 'clientY';
+export const CLIENT_X = 'clientX';
+export const CLIENT_Y = 'clientY';
+
 
 // 识别器状态码
 export const RECOGNIZER_STATUS_POSSIBLE = 1;
