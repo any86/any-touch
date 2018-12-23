@@ -10,6 +10,9 @@
 [downloads-image]: https://img.shields.io/npm/dm/any-touch.svg
 [downloads-url]: https://npmjs.org/package/any-touch
 
+## 演示
+[查看](https://383514580.github.io/any-touch/example/)
+
 ## 安装
 
 ```javascript
