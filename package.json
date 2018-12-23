@@ -10,7 +10,7 @@
     "build": "rimraf dist && rollup -c",
     "dev": "rimraf dist && rollup -c --watch",
     "test": "jest",
-    "demo": "node script/demo.js"
+    "demo": "node ./script/demo.js"
   },
   "repository": {
     "type": "git",

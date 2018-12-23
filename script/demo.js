@@ -1,14 +1,20 @@
 var ghpages = require('gh-pages');
 const shell = require('shelljs');
 
-let dest = 'demo';
-// shell.exec(`mkdir ${dest}`);
-// shell.exec(`mv dist/* ${dest}`);
-// shell.exec(`mv example/* ${dest}`);
+shell.exec(`rm -rf "./demo"`);
+shell.exec(`mkdir "./demo/dist"`);
+shell.exec(`cp dist/* "./demo/dist`);
+shell.exec(`mkdir "./demo/example"`);
+shell.exec(`cp example/* "./demo/example"`);
 
 // 发布
-ghpages.publish(dest, {
+ghpages.publish('./demo', {
     branch: 'gh-pages',
-}, function(err) {
-  console.log('demo同步gh-pages完成!');
+}, (err) => {
+    if(err) {
+        console.log(err);
+    } else {
+        shell.exec(`rm -rf "./demo"`);
+        console.log('gh-pages同步完成!');
+    }
 });
