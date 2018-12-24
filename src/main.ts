@@ -199,7 +199,7 @@ export default class AnyTouch {
     };
 
     handler(event: TouchEvent | MouseEvent): void {
-        // event.preventDefault();
+        event.preventDefault();
         // 记录各个阶段的input
         let inputs = inputManage(event);
         if (undefined !== inputs) {

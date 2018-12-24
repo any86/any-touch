@@ -214,8 +214,10 @@
             doubletap: 'doubletap' === message.type,
         }"
             :style="{
-            transform: `scale(${scale}) translate(${x/scale}px, ${y/scale}px) rotate(${angle}deg)`,
-            transformOrigin: `//${centerX}px ${centerY}px`
+                top:`${y-65}px`,
+                left:`${x-65}px`,
+            transform: `scale(${scale}) rotate(${angle}deg)`
+            
         }"></div>
         <!-- <p class="text">scale: {{scale}}</p>
         <p class="text">angle: {{angle}}</p> -->

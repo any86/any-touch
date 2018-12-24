@@ -7,8 +7,8 @@ new Vue({
         return {
             angle: 0,
             scale: 1,
-            x: 0,
-            y: 0,
+            x: window.innerWidth/2,
+            y: window.innerHeight/2,
             centerX: 0,
             centerY: 0,
             message: 'AnyTouch'
