@@ -67,7 +67,7 @@ new Vue({
             if (e.nativeEvent.cancelable && 'down' === e.direction) {
                 e.preventDefault();
             }
-            // e.preventDefault();
+            e.preventDefault();
             log(`%c ${e.type} `, 'background-color:#69c;color:#fff;');
             this.message = e;
             this.x += e.deltaX;
