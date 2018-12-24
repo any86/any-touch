@@ -14,7 +14,7 @@
 
     <script>
         // if (!!window.location.search) {
-        //     var vConsole = new VConsole();
+            var vConsole = new VConsole();
         // }
     </script>
 </head>
@@ -29,7 +29,7 @@
         <table>
             <tr>
                 <th width="105">键值</th>
-                <th width="110">当前值</th>
+                <th width="130">当前值</th>
                 <th>说明</th>
             </tr>
             
@@ -45,17 +45,7 @@
                 <td>触点离开/减少值为end | 触点离开/减少值为end</td>
             </tr>
 
-            <tr>
-                <td>pointerLength</td>
-                <td>{{message.pointerLength}}</td>
-                <td>触点数</td>
-            </tr>
-
-            <tr style="height:60px;">
-                <td>pointers</td>
-                <td>{{message.pointers}}</td>
-                <td>触点信息</td>
-            </tr>
+            
 
             <tr >
                 <td>maxPointerLength</td>
@@ -197,7 +187,17 @@
                 <td>()=>void</td>
                 <td>阻止事件冒泡</td>
             </tr>
-            
+            <tr>
+                <td>pointerLength</td>
+                <td>{{message.pointerLength}}</td>
+                <td>触点数</td>
+            </tr>
+
+            <tr style="min-height:60px;">
+                <td>pointers</td>
+                <td>{{message.pointers}}</td>
+                <td>触点信息</td>
+            </tr>
             
         </table>
 
@@ -215,7 +215,7 @@
         }"
             :style="{
             transform: `scale(${scale}) translate(${x/scale}px, ${y/scale}px) rotate(${angle}deg)`,
-            transformOrigin: `${centerX}px ${centerY}px`
+            transformOrigin: `//${centerX}px ${centerY}px`
         }"></div>
         <!-- <p class="text">scale: {{scale}}</p>
         <p class="text">angle: {{angle}}</p> -->
