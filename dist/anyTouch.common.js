@@ -1104,6 +1104,7 @@ var AnyTouch = (function () {
     };
     AnyTouch.prototype.handler = function (event) {
         var _this = this;
+        event.preventDefault();
         var inputs = inputManage(event);
         if (undefined !== inputs) {
             var computed_1 = compute(inputs);

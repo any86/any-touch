@@ -7,8 +7,8 @@ new Vue({
         return {
             angle: 0,
             scale: 1,
-            x: 0,
-            y: 0,
+            x: window.innerWidth/2,
+            y: window.innerHeight/2,
             centerX: 0,
             centerY: 0,
             message: 'AnyTouch'
@@ -25,6 +25,7 @@ new Vue({
             pointer: 1,
             taps: 3
         })
+        
         const anyTouch = new AnyTouch(this.$refs.circle);
         const pan = anyTouch.get('pan');
         pan.set({ threshold: 0 });
@@ -36,6 +37,11 @@ new Vue({
         tap1.requireFailure(tap2);
         tap1.requireFailure(tap3);
         tap2.requireFailure(tap3);
+        // this.$refs.circle.addEventListener('touchstart', ev=>{ev.preventDefault()})
+        // this.$refs.circle.addEventListener('touchmove', ev=>{ev.preventDefault()})
+        // this.$refs.circle.addEventListener('touchend', ev=>{ev.preventDefault()})
+
+
         /**
          * =========================== pan ===========================
          */
@@ -63,7 +69,7 @@ new Vue({
         anyTouch.on('pan', e => {
             this.centerX = e.centerX;
             this.centerY = e.centerY;
-            console.log(e)
+            // console.log(e)
             log(e.direction);
             if (e.nativeEvent.cancelable && 'down' === e.direction) {
                 e.preventDefault();
@@ -122,7 +128,7 @@ new Vue({
         });
 
         anyTouch.on('pinch', e => {
-            e.preventDefault();
+            // e.preventDefault();
             this.message = e;
             this.scale *= e.deltaScale;
             // console.log(e.deltaScale);
