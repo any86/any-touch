@@ -30,7 +30,7 @@ export default (event: TouchEvent | MouseEvent): Input => {
     const changedPointerLength: number = changedPointers.length;
     const isFirst = (INPUT_START === inputStatus) && (0 === changedPointerLength - pointerLength);
     const isFinal = (INPUT_END === inputStatus) && (0 === pointerLength);
-
+    console.log({isFinal});
     // 中心坐标
     if (0 < pointerLength) {
         const { x, y } = getCenter(input.pointers);
