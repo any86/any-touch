@@ -137,11 +137,13 @@ export default abstract class Recognizer {
      * @param {Computed} 计算数据 
      */
     recognize(computed: Computed) {
+
         if (this.options.disabled) return;
         // this.beforeRecognize(computed);
         let { inputStatus } = computed;
         // 是否识别成功
         let isVaild = this.test(computed);
+
         // 如果识别结束, 那么重置状态
         if (-1 < [STATUS_END, STATUS_CANCELLED, STATUS_FAILED, STATUS_RECOGNIZED].indexOf(this.status)) {
             this.status = STATUS_POSSIBLE;
@@ -155,7 +157,7 @@ export default abstract class Recognizer {
             this.status = STATUS_START;
         } else if (this.isRecognized && INPUT_MOVE === inputStatus) {
             this.status = STATUS_MOVE;
-        } else if (this.isRecognized && INPUT_END === inputStatus && computed.isFinal) {
+        } else if (this.isRecognized && INPUT_END === inputStatus) {
             this.status = STATUS_END;
         } else if (this.isRecognized && INPUT_CANCEL === inputStatus) {
             this.status = STATUS_CANCELLED;
@@ -167,6 +169,7 @@ export default abstract class Recognizer {
         if (isVaild) {
             this.emit(this.options.name, computed);
         }
+        // if(this.options.name == 'pan2') console.log(this.status);
 
         // if (this.options.name == 'pinch') {
         //     console.log({ 
