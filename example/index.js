@@ -28,7 +28,7 @@ new Vue({
         
         const anyTouch = new AnyTouch(this.$refs.circle);
         const pan = anyTouch.get('pan');
-        pan.set({ threshold: 0,disabled:true });
+        // pan.set({ threshold: 0,disabled:true });
         const pinch = anyTouch.get('pinch');
         pinch.set({ threshold: 1.4 });
         anyTouch.add(tap2);
