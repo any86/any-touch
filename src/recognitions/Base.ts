@@ -4,6 +4,8 @@
 * 未知 => 取消(已知的任意阶段)
 * */
 import { Computed } from '../interface';
+import { Options } from '../../types/recognition';
+
 import { INPUT_CANCEL, INPUT_END, INPUT_MOVE, INPUT_START } from '../const';
 import {
     STATUS_POSSIBLE,
@@ -29,9 +31,9 @@ export default abstract class Recognizer {
     // 注入外部方法到识别器原型上
     public static $inject: (key: string, method: (...args: any[]) => void) => void;
     // 默认参数
-    public defaultOptions: { [propName: string]: any };
+    public defaultOptions: Options;
 
-    constructor(options: { [propName: string]: any } = {}) {
+    constructor(options: Options = { disabled: false }) {
         this.options = { ...this.defaultOptions, ...options };
         this.status = STATUS_POSSIBLE;
         this.isRecognized = false;
@@ -135,6 +137,7 @@ export default abstract class Recognizer {
      * @param {Computed} 计算数据 
      */
     recognize(computed: Computed) {
+        if (this.options.disabled) return;
         // this.beforeRecognize(computed);
         let { inputStatus } = computed;
         // 是否识别成功
@@ -152,7 +155,7 @@ export default abstract class Recognizer {
             this.status = STATUS_START;
         } else if (this.isRecognized && INPUT_MOVE === inputStatus) {
             this.status = STATUS_MOVE;
-        } else if (this.isRecognized && INPUT_END === inputStatus && computed.isFinal) {
+        } else if (this.isRecognized && INPUT_END === inputStatus) {
             this.status = STATUS_END;
         } else if (this.isRecognized && INPUT_CANCEL === inputStatus) {
             this.status = STATUS_CANCELLED;
