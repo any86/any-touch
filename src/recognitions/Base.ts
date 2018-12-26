@@ -155,7 +155,7 @@ export default abstract class Recognizer {
             this.status = STATUS_START;
         } else if (this.isRecognized && INPUT_MOVE === inputStatus) {
             this.status = STATUS_MOVE;
-        } else if (this.isRecognized && INPUT_END === inputStatus) {
+        } else if (this.isRecognized && INPUT_END === inputStatus && computed.isFinal) {
             this.status = STATUS_END;
         } else if (this.isRecognized && INPUT_CANCEL === inputStatus) {
             this.status = STATUS_CANCELLED;
