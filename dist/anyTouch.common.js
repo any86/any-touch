@@ -660,7 +660,7 @@ var Recognizer = (function () {
         else if (this.isRecognized && INPUT_MOVE === inputStatus) {
             this.status = STATUS_MOVE;
         }
-        else if (this.isRecognized && INPUT_END === inputStatus && computed.isFinal) {
+        else if (this.isRecognized && INPUT_END === inputStatus) {
             this.status = STATUS_END;
         }
         else if (this.isRecognized && INPUT_CANCEL === inputStatus) {

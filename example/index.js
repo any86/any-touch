@@ -7,8 +7,8 @@ new Vue({
         return {
             angle: 0,
             scale: 1,
-            x: window.innerWidth/2,
-            y: window.innerHeight/2,
+            x: window.innerWidth / 2 - 100,
+            y: window.innerHeight / 2 - 100,
             centerX: 0,
             centerY: 0,
             message: 'AnyTouch'
@@ -25,12 +25,23 @@ new Vue({
             pointer: 1,
             taps: 3
         })
-        
+
+        const pan2 = new AnyTouch.PanRecognizer({
+            name: 'pan2',
+            pointerLength: 2
+        })
+
+
         const anyTouch = new AnyTouch(this.$refs.circle);
         const pan = anyTouch.get('pan');
+        anyTouch.add(pan2);
         // pan.set({ threshold: 0,disabled:true });
+        // pan.set({disabled:false });
+
         const pinch = anyTouch.get('pinch');
-        pinch.set({ threshold: 1.4 });
+        pinch.set({
+            threshold: 1.4
+        });
         anyTouch.add(tap2);
         anyTouch.add(tap3);
         const tap1 = anyTouch.get('tap');
@@ -67,14 +78,21 @@ new Vue({
         });
 
         anyTouch.on('pan', e => {
+            console.log('pan');
+            this.message = e;
+        });
+
+
+        anyTouch.on('pan2', e => {
+            console.log('pan2');
             this.centerX = e.centerX;
             this.centerY = e.centerY;
             // console.log(e)
-            log(e.direction);
-            if (e.nativeEvent.cancelable && 'down' === e.direction) {
-                e.preventDefault();
-            }
-            e.preventDefault();
+            log(e.deltaX, e.deltaY);
+            // if (e.nativeEvent.cancelable && 'down' === e.direction) {
+            //     e.preventDefault();
+            // }
+            // e.preventDefault();
             log(`%c ${e.type} `, 'background-color:#69c;color:#fff;');
             this.message = e;
             this.x += e.deltaX;
