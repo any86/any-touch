@@ -25,13 +25,10 @@ new Vue({
             pointer: 1,
             taps: 3
         })
-
         const pan2 = new AnyTouch.PanRecognizer({
             name: 'pan2',
-            pointerLength: 2
+            pointerLength: 2,
         })
-
-
         const anyTouch = new AnyTouch(this.$refs.circle);
         const pan = anyTouch.get('pan');
         anyTouch.add(pan2);
@@ -39,9 +36,8 @@ new Vue({
         // pan.set({disabled:false });
 
         const pinch = anyTouch.get('pinch');
-        pinch.set({
-            threshold: 1.4
-        });
+        pinch.set({ threshold: 1.4 });
+        anyTouch.add(pan2);
         anyTouch.add(tap2);
         anyTouch.add(tap3);
         const tap1 = anyTouch.get('tap');

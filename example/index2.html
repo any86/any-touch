@@ -44,9 +44,12 @@
         mc.get('pan2').requireFailure('pan');
         // listen to events...
         mc.on("pan pan2", function (ev) {
+            console.log(ev);
             myElement.textContent = ev.isFinal + '/' + ev.type + " gesture detected.";
         });
-        pan2.dropRecognizeWith(pan)
+
+
+        // pan2.dropRecognizeWith(pan)
 
     </script>
 </body>
