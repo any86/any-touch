@@ -31,12 +31,11 @@ new Vue({
         })
         const anyTouch = new AnyTouch(this.$refs.circle);
         const pan = anyTouch.get('pan');
-        anyTouch.add(pan2);
         // pan.set({ threshold: 0,disabled:true });
         // pan.set({disabled:false });
 
         const pinch = anyTouch.get('pinch');
-        pinch.set({ threshold: 1.4 });
+        pinch.set({ threshold: 1.1 });
         anyTouch.add(pan2);
         anyTouch.add(tap2);
         anyTouch.add(tap3);
@@ -73,22 +72,10 @@ new Vue({
             log(e.type);
         });
 
-        anyTouch.on('pan', e => {
-            console.log('pan');
-            this.message = e;
-        });
-
 
         anyTouch.on('pan2', e => {
+            console.log(e.scale, e.deltaScale)
             console.log('pan2');
-            this.centerX = e.centerX;
-            this.centerY = e.centerY;
-            // console.log(e)
-            log(e.deltaX, e.deltaY);
-            // if (e.nativeEvent.cancelable && 'down' === e.direction) {
-            //     e.preventDefault();
-            // }
-            // e.preventDefault();
             log(`%c ${e.type} `, 'background-color:#69c;color:#fff;');
             this.message = e;
             this.x += e.deltaX;
@@ -142,6 +129,7 @@ new Vue({
         });
 
         anyTouch.on('pinch', e => {
+            
             // e.preventDefault();
             this.message = e;
             this.scale *= e.deltaScale;
