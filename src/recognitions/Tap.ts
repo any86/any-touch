@@ -1,10 +1,10 @@
 import { Computed } from '../interface';
+import { Options } from '../../types/recognition';
 import {
     STATUS_RECOGNIZED,
     STATUS_POSSIBLE,
     STATUS_FAILED
 } from '../const/recognizerStatus';
-interface Options { name?: string, pointer?: number, taps?: number, interval?: number };
 const { setTimeout, clearTimeout } = window;
 import Recognizer from './Base';
 import { INPUT_END } from '../const';
@@ -16,7 +16,7 @@ export default class TapRecognizer extends Recognizer {
     private _prevY: number;
     public options: Options;
     public defaultOptions: Options;
-    constructor(options: Options={}) {
+    constructor(options: Options = {}) {
         super(options);
         this.tapTimeoutId = null;
         this.tapCount = 0;
@@ -31,6 +31,7 @@ export default class TapRecognizer extends Recognizer {
      * @param {Computed} 计算数据 
      */
     public recognize(computed: Computed): void {
+        if (this.options.disabled) return;
         this.status = STATUS_POSSIBLE;
         // this.cancel();
         if (this.test(computed)) {
@@ -97,5 +98,6 @@ TapRecognizer.prototype.defaultOptions = {
     name: 'tap',
     pointer: 1,
     taps: 1,
-    interval: 300
+    interval: 300,
+    disabled:false
 };

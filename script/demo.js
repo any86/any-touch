@@ -3,7 +3,7 @@ const shell = require('shelljs');
 
 shell.exec(`rm -rf "./demo"`);
 shell.exec(`mkdir "./demo/dist"`);
-shell.exec(`cp dist/* "./demo/dist`);
+shell.exec(`cp dist/* "./demo/dist`);a
 shell.exec(`mkdir "./demo/example"`);
 shell.exec(`cp example/* "./demo/example"`);
 

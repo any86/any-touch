@@ -29,7 +29,8 @@ export default class PinchRecognizer extends Recognizer {
     test({ pointerLength, scale }: Computed): boolean {
         // 如果触碰点数要大于指定
         // 如果缩放超过阈值, 或者已识别
-        return this.isValidPointerLength(pointerLength) && (this.options.threshold < Math.abs(scale - 1) || this.isRecognized);
+        // console.log({scale})
+        return this.isValidPointerLength(pointerLength) && (this.options.threshold < Math.abs(scale-1) || this.isRecognized);
     };
 };
 

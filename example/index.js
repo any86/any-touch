@@ -7,8 +7,8 @@ new Vue({
         return {
             angle: 0,
             scale: 1,
-            x: 0,
-            y: 0,
+            x: window.innerWidth / 2 - 100,
+            y: window.innerHeight / 2 - 100,
             centerX: 0,
             centerY: 0,
             message: 'AnyTouch'
@@ -25,15 +25,29 @@ new Vue({
             pointer: 1,
             taps: 3
         })
+        const pan2 = new AnyTouch.PanRecognizer({
+            name: 'pan2',
+            pointerLength: 2,
+        })
         const anyTouch = new AnyTouch(this.$refs.circle);
         const pan = anyTouch.get('pan');
-        pan.set({ threshold: 0 });
+        // pan.set({ threshold: 0,disabled:true });
+        // pan.set({disabled:false });
+
+        const pinch = anyTouch.get('pinch');
+        pinch.set({ threshold: 1.1 });
+        anyTouch.add(pan2);
         anyTouch.add(tap2);
         anyTouch.add(tap3);
         const tap1 = anyTouch.get('tap');
         tap1.requireFailure(tap2);
         tap1.requireFailure(tap3);
         tap2.requireFailure(tap3);
+        // this.$refs.circle.addEventListener('touchstart', ev=>{ev.preventDefault()})
+        // this.$refs.circle.addEventListener('touchmove', ev=>{ev.preventDefault()})
+        // this.$refs.circle.addEventListener('touchend', ev=>{ev.preventDefault()})
+
+
         /**
          * =========================== pan ===========================
          */
@@ -54,20 +68,13 @@ new Vue({
         });
 
         anyTouch.on('panend', e => {
+            console.warn(e.direction);
             this.message = e;
             log(e.type);
         });
 
-        anyTouch.on('pan', e => {
-            this.centerX = e.centerX;
-            this.centerY = e.centerY;
 
-            console.log(e)
-            log(e.direction);
-            if (e.nativeEvent.cancelable && 'down' === e.direction) {
-                e.preventDefault();
-            }
-            // e.preventDefault();
+        anyTouch.on('pan', e => {
             log(`%c ${e.type} `, 'background-color:#69c;color:#fff;');
             this.message = e;
             this.x += e.deltaX;
@@ -121,6 +128,7 @@ new Vue({
         });
 
         anyTouch.on('pinch', e => {
+            
             // e.preventDefault();
             this.message = e;
             this.scale *= e.deltaScale;

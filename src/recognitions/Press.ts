@@ -1,4 +1,5 @@
 import { Computed } from '../interface';
+import { Options } from '../../types/recognition';
 import {
     STATUS_POSSIBLE,
     STATUS_CANCELLED,
@@ -8,7 +9,7 @@ import { INPUT_CANCEL, INPUT_END, INPUT_MOVE, INPUT_START } from '../const';
 import Recognizer from './Base';
 export default class PressRecognizer extends Recognizer {
     protected _timeoutId: number;
-    constructor(options: any = {}) {
+    constructor(options: Options = {}) {
         super(options);
         this._timeoutId = null;
     };
@@ -18,6 +19,7 @@ export default class PressRecognizer extends Recognizer {
     };
 
     recognize(computed: Computed): void {
+        if (this.options.disabled) return;
         const { inputStatus, distance, duration } = computed;
         // 手指一直按住屏幕
         if (this.test(computed)) {
@@ -58,5 +60,6 @@ PressRecognizer.prototype.defaultOptions = {
     name: 'press',
     pointerLength: 1,
     threshold:9,
-    minPressTime: 251
+    minPressTime: 251,
+    disabled: false
 };

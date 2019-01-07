@@ -10,11 +10,11 @@
     </link>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="https://res.wx.qq.com/mmbizwap/zh_CN/htmledition/js/vconsole/3.0.0/vconsole.min.js"></script>
-    <script src="../../dist/anyTouch.umd.js"></script>
+    <script src="../dist/anyTouch.umd.js"></script>
 
     <script>
         // if (!!window.location.search) {
-        //     var vConsole = new VConsole();
+            var vConsole = new VConsole();
         // }
     </script>
 </head>
@@ -29,7 +29,7 @@
         <table>
             <tr>
                 <th width="105">键值</th>
-                <th width="110">当前值</th>
+                <th width="130">当前值</th>
                 <th>说明</th>
             </tr>
             
@@ -45,17 +45,7 @@
                 <td>触点离开/减少值为end | 触点离开/减少值为end</td>
             </tr>
 
-            <tr>
-                <td>pointerLength</td>
-                <td>{{message.pointerLength}}</td>
-                <td>触点数</td>
-            </tr>
-
-            <tr style="height:60px;">
-                <td>pointers</td>
-                <td>{{message.pointers}}</td>
-                <td>触点信息</td>
-            </tr>
+            
 
             <tr >
                 <td>maxPointerLength</td>
@@ -65,13 +55,13 @@
             
             <tr>
                 <td>centerX / centerY</td>
-                <td>{{message.centerX}}</td>
+                <td>{{message.centerX}} / {{message.centerY}}</td>
                 <td>触点X坐标, 如果触点有多个, 那么centerX / centerY为多点的中心点坐标</td>
             </tr>
 
             <tr>
                 <td>x / y</td>
-                <td>{{message.centerY}}</td>
+                <td>{{message.x}} / {{message.y}}</td>
                 <td>同centerX / centerY</td>
             </tr>
 
@@ -197,7 +187,17 @@
                 <td>()=>void</td>
                 <td>阻止事件冒泡</td>
             </tr>
-            
+            <tr>
+                <td>pointerLength</td>
+                <td>{{message.pointerLength}}</td>
+                <td>触点数</td>
+            </tr>
+
+            <tr style="min-height:60px;">
+                <td>pointers</td>
+                <td>{{message.pointers}}</td>
+                <td>触点信息</td>
+            </tr>
             
         </table>
 
@@ -214,8 +214,10 @@
             doubletap: 'doubletap' === message.type,
         }"
             :style="{
-            transform: `scale(${scale}) translate(${x/scale}px, ${y/scale}px) rotate(${angle}deg)`,
-            transformOrigin: `${centerX}px ${centerY}px`
+                top:`${y}px`,
+                left:`${x}px`,
+            transform: `scale(${scale}) rotate(${angle}deg)`
+            
         }"></div>
         <!-- <p class="text">scale: {{scale}}</p>
         <p class="text">angle: {{angle}}</p> -->

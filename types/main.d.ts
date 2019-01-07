@@ -2,7 +2,6 @@ interface Options {
     touchAction?: 'compute' | 'auto' | 'manipulation' | 'pan-x' | 'pan-y' | 'none';
     domEvents?: boolean;
 }
-
 declare class AnyTouch {
     static TapRecognizer:any;
     static PressRecognizer:any;
