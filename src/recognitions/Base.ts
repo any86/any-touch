@@ -3,6 +3,7 @@
 * 未知 => 识别失败 
 * 未知 => 取消(已知的任意阶段)
 * */
+import AnyEvent from 'any-event';
 import { Computed } from '../interface';
 import { Options } from '../../types/recognition';
 
@@ -33,8 +34,11 @@ export default abstract class Recognizer {
     // 默认参数
     public defaultOptions: Options;
 
+    public eventBus: any;
+
     constructor(options: Options = { disabled: false }) {
         this.options = { ...this.defaultOptions, ...options };
+        this.name = this.options.name;
         this.status = STATUS_POSSIBLE;
         this.isRecognized = false;
         this.requireFailureRecognizers = [];
@@ -51,13 +55,31 @@ export default abstract class Recognizer {
     };
 
     /**
-     * 对emit进行封装
-    * @param type 
+     * 对eventBus进行封装
+     * @param type 
      * @param payload 
      */
-    public emit(type: string, payload: { [propName: string]: any }) {
+    public emit(type: string, payload: any) {
         payload.type = type;
-        Recognizer.prototype.$root.emit(type, payload);
+        this.eventBus.emit(type, payload);
+    };
+
+    /**
+     * 对eventBus进行封装
+     * @param type 
+     * @param payload 
+     */
+    public on(type: string, listener: ((data: any) => void)) {
+        this.eventBus.on(type, listener);
+    };
+
+    /**
+     * 对eventBus进行封装
+     * @param type 
+     * @param payload 
+     */
+    public off(type: string, listener: ((data: any) => void)) {
+        this.eventBus.off(type, listener);
     };
 
     /**
@@ -207,7 +229,7 @@ export default abstract class Recognizer {
 
 // 外部的方法的载体
 Recognizer.prototype.$root = {};
-
+Recognizer.prototype.eventBus = new AnyEvent();
 /**
  * 注入AnyTouch上的方法到识别器原型上
  * @param {String} 方法名
@@ -216,3 +238,5 @@ Recognizer.prototype.$root = {};
 Recognizer.$inject = (key, method) => {
     Recognizer.prototype.$root[key] = method;
 };
+
+

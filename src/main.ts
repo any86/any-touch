@@ -16,14 +16,11 @@
  * ==================== 流程 ====================
  * 格式化Event成统一的pointer格式 => 通过pointer数据计算 => 用计算结果去识别手势
  */
-import AnyEvent from 'any-event';
-
 import { EventHandler, Computed } from './interface';
 import {
     SUPPORT_ONLY_TOUCH,
     IS_MOBILE,
 } from './const';
-import EventBus from './EventBus';
 import inputManage from './inputManage';
 import compute from './compute/index';
 import computeTouchAction from './untils/computeTouchAction'
@@ -54,9 +51,6 @@ export default class AnyTouch {
     // 目标元素
     el: HTMLElement;
 
-    // 各个手势对应的handle集合
-    eventBus: any;
-
     recognizers: { [propName: string]: any, name: string }[];
 
     unbinders: any[];
@@ -66,7 +60,7 @@ export default class AnyTouch {
     isMobile: boolean;
 
     options: Options;
-    
+
     /**
      * @param {Element} el
      * @param {Object} param1
@@ -75,7 +69,6 @@ export default class AnyTouch {
         this.version = '0.0.12';
         this.el = el;
         this.isMobile = IS_MOBILE;
-        this.eventBus = new EventBus(el);
         this.options = { ...DEFAULT_OPTIONS, ...options };
         this.recognizers = [
             new TapRecognizer(),
@@ -88,19 +81,6 @@ export default class AnyTouch {
 
         // 识别器注入update方法
         Recognizer.$inject('update', this.update.bind(this));
-
-        // 识别器注入emit方法
-        function _emit(type: string, payload: { [propName: string]: any }){
-            this.eventBus.emit(type, payload);
-            if (this.options.domEvents) {
-                let event: any = new Event(type, payload);
-                // Object.assign(event, payload)
-                event.computed = payload;
-                this.el.dispatchEvent(event);
-            }
-        }
-
-        Recognizer.$inject('emit', (_emit.bind(this)));
 
         // 应用设置
         this.update();
@@ -208,7 +188,7 @@ export default class AnyTouch {
             // 当是鼠标事件的时候, mouseup阶段的input和computed为空
             this.recognizers.forEach(recognizer => {
                 recognizer.recognize(computed);
-                this.eventBus.emit('input', { ...computed, type: 'input' });
+                recognizer.emit('input', { ...computed, type: 'input' });
             });
         }
     };
@@ -218,8 +198,15 @@ export default class AnyTouch {
      * @param {String} 事件名
      * @param {Function} 回调函数
      */
-    on(eventName: string, callback: EventHandler): void {
-        this.eventBus.on(eventName, callback);
+    on(type: string, listener: EventHandler): void {
+        Recognizer.prototype.on(type, listener);
+
+        //         if (this.options.domEvents) {
+        //             let event: any = new Event(type, computed);
+        //             // Object.assign(event, computed)
+        //             event.computed = computed;
+        //             this.el.dispatchEvent(event);
+        //         }
     };
 
     /**
@@ -227,8 +214,8 @@ export default class AnyTouch {
      * @param {String} 事件名 
      * @param {Function} 事件回调
      */
-    off(eventName: string, handler?: any): void {
-        this.eventBus.off(eventName, handler);
+    off(type: string, listener?: EventHandler): void {
+        Recognizer.prototype.on(type, listener);
     };
 
     /**

@@ -68,14 +68,13 @@ new Vue({
         });
 
         anyTouch.on('panend', e => {
+            console.warn(e.direction);
             this.message = e;
             log(e.type);
         });
 
 
-        anyTouch.on('pan2', e => {
-            console.log(e.scale, e.deltaScale)
-            console.log('pan2');
+        anyTouch.on('pan', e => {
             log(`%c ${e.type} `, 'background-color:#69c;color:#fff;');
             this.message = e;
             this.x += e.deltaX;

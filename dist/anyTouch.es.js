@@ -83,58 +83,7 @@ var INPUT_START = 'start';
 var INPUT_MOVE = 'move';
 var INPUT_CANCEL = 'cancel';
 var INPUT_END = 'end';
-
-var EventBus = (function () {
-    function EventBus(targetElement) {
-        if (targetElement === void 0) { targetElement = document; }
-        this._stack = {};
-        this.targetElement = targetElement;
-    }
-    EventBus.prototype.el = function (targetElement) {
-        if (targetElement === void 0) { targetElement = document; }
-        this.targetElement = targetElement;
-        return this;
-    };
-    EventBus.prototype.emit = function (eventName, payload) {
-        if (undefined !== this._stack[eventName]) {
-            var callbacks = this._stack[eventName];
-            callbacks.forEach(function (callback) {
-                callback(payload);
-            });
-            var event = new CustomEvent(eventName, {
-                detail: payload,
-                bubbles: true,
-                cancelable: true
-            });
-            this.targetElement.dispatchEvent(event);
-        }
-    };
-    EventBus.prototype.on = function (eventName, callback) {
-        if (undefined === this._stack[eventName]) {
-            this._stack[eventName] = [];
-        }
-        this._stack[eventName].push(callback);
-    };
-    EventBus.prototype.off = function (eventName, callback) {
-        var events = this._stack[eventName];
-        if (undefined === callback) {
-            this._stack[eventName] = [];
-        }
-        else {
-            for (var i = 0, len = events.length; i < len; i++) {
-                var existCallback = events[i];
-                if (existCallback === callback) {
-                    events.splice(i, 1);
-                    break;
-                }
-            }
-        }
-    };
-    EventBus.prototype.has = function (eventName) {
-        return undefined !== this._stack[eventName];
-    };
-    return EventBus;
-}());
+//# sourceMappingURL=const.js.map
 
 var round = Math.round;
 var getVLength = function (v) {
@@ -193,6 +142,7 @@ var getDirection = function (displacementX, displacementY) {
         return 0 < displacementY ? 'down' : 'up';
     }
 };
+//# sourceMappingURL=vector.js.map
 
 var touchAdapter = (function (event) {
     var pointers = Array.from(event.touches).map(function (_a) {
@@ -211,6 +161,7 @@ var touchAdapter = (function (event) {
         nativeEvent: event
     };
 });
+//# sourceMappingURL=touch.js.map
 
 var prevPointers = undefined;
 var isPressed = false;
@@ -247,6 +198,7 @@ var mouseAdapter = (function (event) {
         nativeEvent: event
     };
 });
+//# sourceMappingURL=mouse.js.map
 
 var centerX;
 var centerY;
@@ -296,6 +248,7 @@ var createInput = (function (event) {
         target: target,
         currentTarget: currentTarget, nativeEvent: event });
 });
+//# sourceMappingURL=create.js.map
 
 var startInput;
 var prevInput;
@@ -331,6 +284,7 @@ var inputManage = (function (event) {
         input: input
     };
 });
+//# sourceMappingURL=inputManage.js.map
 
 var _prevInput;
 var _prevVelocityX;
@@ -361,6 +315,7 @@ var computeLast = (function (input) {
     var maxVelocity = Math.max(velocityX, velocityY);
     return { velocity: maxVelocity, velocityX: velocityX, velocityY: velocityY, direction: direction };
 });
+//# sourceMappingURL=computeLast.js.map
 
 var prevDisplacementX = 0;
 var prevDisplacementY = 0;
@@ -390,6 +345,7 @@ function computeDistance (_a) {
         displacementX: displacementX, displacementY: displacementY, distanceX: distanceX, distanceY: distanceY, distance: distance
     };
 }
+//# sourceMappingURL=computeDistance.js.map
 
 function computeDeltaXY (_a) {
     var prevInput = _a.prevInput, input = _a.input;
@@ -405,11 +361,13 @@ function computeDeltaXY (_a) {
     }
     return { deltaX: deltaX, deltaY: deltaY };
 }
+//# sourceMappingURL=computeDeltaXY.js.map
 
 var computeVector = (function (input) { return ({
     x: input.pointers[1][propX] - input.pointers[0][propX],
     y: input.pointers[1][propY] - input.pointers[0][propY]
 }); });
+//# sourceMappingURL=computeVector.js.map
 
 function computeScale (_a) {
     var startV = _a.startV, prevV = _a.prevV, activeV = _a.activeV;
@@ -417,6 +375,7 @@ function computeScale (_a) {
     var scale = getVLength(activeV) / getVLength(startV);
     return { scale: scale, deltaScale: deltaScale };
 }
+//# sourceMappingURL=computeScale.js.map
 
 function computeAngle (_a) {
     var startV = _a.startV, prevV = _a.prevV, activeV = _a.activeV;
@@ -424,6 +383,7 @@ function computeAngle (_a) {
     var angle = getAngle(activeV, startV);
     return { angle: angle, deltaAngle: deltaAngle };
 }
+//# sourceMappingURL=computeAngle.js.map
 
 var maxLength = 0;
 var computeMaxLength = (function (_a) {
@@ -436,6 +396,7 @@ var computeMaxLength = (function (_a) {
     }
     return maxLength;
 });
+//# sourceMappingURL=computeMaxLength.js.map
 
 function compute (_a) {
     var startInput = _a.startInput, prevInput = _a.prevInput, startMutliInput = _a.startMutliInput, input = _a.input;
@@ -507,6 +468,7 @@ function compute (_a) {
     var maxPointerLength = computeMaxLength(input);
     return __assign({}, input, { maxPointerLength: maxPointerLength }, computed);
 }
+//# sourceMappingURL=index.js.map
 
 var computeTouchAction = (function (touchActions) {
     var e_1, _a;
@@ -547,6 +509,125 @@ var computeTouchAction = (function (touchActions) {
     }
     return touchActionCSSArray.join(' ');
 });
+//# sourceMappingURL=computeTouchAction.js.map
+
+/*! *****************************************************************************
+Copyright (c) Microsoft Corporation. All rights reserved.
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use
+this file except in compliance with the License. You may obtain a copy of the
+License at http://www.apache.org/licenses/LICENSE-2.0
+
+THIS CODE IS PROVIDED ON AN *AS IS* BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, EITHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION ANY IMPLIED
+WARRANTIES OR CONDITIONS OF TITLE, FITNESS FOR A PARTICULAR PURPOSE,
+MERCHANTABLITY OR NON-INFRINGEMENT.
+
+See the Apache Version 2.0 License for specific language governing permissions
+and limitations under the License.
+***************************************************************************** */
+
+function __values$1(o) {
+    var m = typeof Symbol === "function" && o[Symbol.iterator], i = 0;
+    if (m) return m.call(o);
+    return {
+        next: function () {
+            if (o && i >= o.length) o = void 0;
+            return { value: o && o[i++], done: !o };
+        }
+    };
+}
+
+function __read$1(o, n) {
+    var m = typeof Symbol === "function" && o[Symbol.iterator];
+    if (!m) return o;
+    var i = m.call(o), r, ar = [], e;
+    try {
+        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
+    }
+    catch (error) { e = { error: error }; }
+    finally {
+        try {
+            if (r && !r.done && (m = i["return"])) m.call(i);
+        }
+        finally { if (e) throw e.error; }
+    }
+    return ar;
+}
+
+function __spread$1() {
+    for (var ar = [], i = 0; i < arguments.length; i++)
+        ar = ar.concat(__read$1(arguments[i]));
+    return ar;
+}
+
+var EventEmitter = (function () {
+    function EventEmitter() {
+        this._listenersMap = {};
+    }
+    EventEmitter.prototype.on = function (eventName, listener) {
+        if (undefined === this._listenersMap[eventName]) {
+            this._listenersMap[eventName] = [];
+        }
+        this._listenersMap[eventName].push(listener);
+        return this;
+    };
+    EventEmitter.prototype.once = function (eventName, listener) {
+        listener.isOnce = true;
+        this.on(eventName, listener);
+        return this;
+    };
+    EventEmitter.prototype.off = function (eventName, listener) {
+        var listeners = this._listenersMap[eventName];
+        if (undefined !== listeners) {
+            if (undefined === listener) {
+                delete this._listenersMap[eventName];
+            }
+            else {
+                var index = listeners.findIndex(function (fn) { return fn === listener; });
+                listeners.splice(index, 1);
+            }
+        }
+        return this;
+    };
+    EventEmitter.prototype.emit = function (eventName) {
+        var payload = [];
+        for (var _i = 1; _i < arguments.length; _i++) {
+            payload[_i - 1] = arguments[_i];
+        }
+        var e_1, _a;
+        var listeners = this._listenersMap[eventName];
+        if (undefined !== listeners && 0 < listeners.length) {
+            try {
+                for (var _b = __values$1(listeners.entries()), _c = _b.next(); !_c.done; _c = _b.next()) {
+                    var _d = __read$1(_c.value, 2), index = _d[0], listener = _d[1];
+                    if (listener.isOnce) {
+                        var listenerClone = listener;
+                        listeners.splice(index, 1);
+                        listenerClone.apply(void 0, __spread$1(payload));
+                    }
+                    else {
+                        listener.apply(void 0, __spread$1(payload));
+                    }
+                }
+            }
+            catch (e_1_1) { e_1 = { error: e_1_1 }; }
+            finally {
+                try {
+                    if (_c && !_c.done && (_a = _b["return"])) _a.call(_b);
+                }
+                finally { if (e_1) throw e_1.error; }
+            }
+            return true;
+        }
+        else {
+            return false;
+        }
+    };
+    EventEmitter.prototype.destroy = function () {
+        this._listenersMap = {};
+    };
+    return EventEmitter;
+}());
 
 var STATUS_POSSIBLE = 'possible';
 var STATUS_START = 'start';
@@ -555,11 +636,13 @@ var STATUS_END = 'end';
 var STATUS_CANCELLED = 'cancel';
 var STATUS_FAILED = 'failed';
 var STATUS_RECOGNIZED = 'recognized';
+//# sourceMappingURL=recognizerStatus.js.map
 
 var Recognizer = (function () {
     function Recognizer(options) {
         if (options === void 0) { options = { disabled: false }; }
         this.options = __assign({}, this.defaultOptions, options);
+        this.name = this.options.name;
         this.status = STATUS_POSSIBLE;
         this.isRecognized = false;
         this.requireFailureRecognizers = [];
@@ -570,7 +653,13 @@ var Recognizer = (function () {
     };
     Recognizer.prototype.emit = function (type, payload) {
         payload.type = type;
-        Recognizer.prototype.$root.emit(type, payload);
+        this.eventBus.emit(type, payload);
+    };
+    Recognizer.prototype.on = function (type, listener) {
+        this.eventBus.on(type, listener);
+    };
+    Recognizer.prototype.off = function (type, listener) {
+        this.eventBus.off(type, listener);
     };
     Recognizer.prototype.requireFailure = function (recognizer) {
         if (!this.requireFailureRecognizers.includes(recognizer)) {
@@ -676,9 +765,11 @@ var Recognizer = (function () {
     return Recognizer;
 }());
 Recognizer.prototype.$root = {};
+Recognizer.prototype.eventBus = new EventEmitter();
 Recognizer.$inject = function (key, method) {
     Recognizer.prototype.$root[key] = method;
 };
+//# sourceMappingURL=Base.js.map
 
 var setTimeout = window.setTimeout, clearTimeout$1 = window.clearTimeout;
 var TapRecognizer = (function (_super) {
@@ -747,6 +838,7 @@ TapRecognizer.prototype.defaultOptions = {
     interval: 300,
     disabled: false
 };
+//# sourceMappingURL=Tap.js.map
 
 var PressRecognizer = (function (_super) {
     __extends(PressRecognizer, _super);
@@ -802,6 +894,7 @@ PressRecognizer.prototype.defaultOptions = {
     minPressTime: 251,
     disabled: false
 };
+//# sourceMappingURL=Press.js.map
 
 var getHV = (function (directions) {
     var e_1, _a;
@@ -834,6 +927,7 @@ var getHV = (function (directions) {
     }
     return { hasHorizontal: hasHorizontal, hasVertical: hasVertical };
 });
+//# sourceMappingURL=getHV.js.map
 
 var PanRecognizer = (function (_super) {
     __extends(PanRecognizer, _super);
@@ -873,6 +967,7 @@ PanRecognizer.prototype.defaultOptions = {
     pointerLength: 1,
     directions: ['up', 'right', 'down', 'left']
 };
+//# sourceMappingURL=Pan.js.map
 
 var SwipeRecognizer = (function (_super) {
     __extends(SwipeRecognizer, _super);
@@ -913,6 +1008,7 @@ SwipeRecognizer.prototype.defaultOptions = {
     pointerLength: 1,
     directions: ['up', 'right', 'down', 'left']
 };
+//# sourceMappingURL=Swipe.js.map
 
 var PinchRecognizer = (function (_super) {
     __extends(PinchRecognizer, _super);
@@ -944,6 +1040,7 @@ PinchRecognizer.prototype.defaultOptions = {
     threshold: 0,
     pointerLength: 2
 };
+//# sourceMappingURL=Pinch.js.map
 
 var RotateRecognizer = (function (_super) {
     __extends(RotateRecognizer, _super);
@@ -966,6 +1063,7 @@ RotateRecognizer.prototype.defaultOptions = {
     threshold: 0,
     pointerLength: 2
 };
+//# sourceMappingURL=Rotate.js.map
 
 var DEFAULT_OPTIONS = {
     touchAction: 'compute',
@@ -977,7 +1075,6 @@ var AnyTouch = (function () {
         this.version = '0.0.12';
         this.el = el;
         this.isMobile = IS_MOBILE;
-        this.eventBus = new EventBus(el);
         this.options = __assign({}, DEFAULT_OPTIONS, options);
         this.recognizers = [
             new TapRecognizer(),
@@ -988,15 +1085,6 @@ var AnyTouch = (function () {
             new RotateRecognizer(),
         ];
         Recognizer.$inject('update', this.update.bind(this));
-        function _emit(type, payload) {
-            this.eventBus.emit(type, payload);
-            if (this.options.domEvents) {
-                var event = new Event(type, payload);
-                event.computed = payload;
-                this.el.dispatchEvent(event);
-            }
-        }
-        Recognizer.$inject('emit', (_emit.bind(this)));
         this.update();
         this.unbinders = this._bindRecognizers(this.el);
     }
@@ -1084,22 +1172,21 @@ var AnyTouch = (function () {
         }
     };
     AnyTouch.prototype.handler = function (event) {
-        var _this = this;
         event.preventDefault();
         var inputs = inputManage(event);
         if (undefined !== inputs) {
             var computed_1 = compute(inputs);
             this.recognizers.forEach(function (recognizer) {
                 recognizer.recognize(computed_1);
-                _this.eventBus.emit('input', __assign({}, computed_1, { type: 'input' }));
+                recognizer.emit('input', __assign({}, computed_1, { type: 'input' }));
             });
         }
     };
-    AnyTouch.prototype.on = function (eventName, callback) {
-        this.eventBus.on(eventName, callback);
+    AnyTouch.prototype.on = function (type, listener) {
+        Recognizer.prototype.on(type, listener);
     };
-    AnyTouch.prototype.off = function (eventName, handler) {
-        this.eventBus.off(eventName, handler);
+    AnyTouch.prototype.off = function (type, listener) {
+        Recognizer.prototype.on(type, listener);
     };
     AnyTouch.prototype.destroy = function () {
         this.unbinders.forEach(function (unbinder) {
