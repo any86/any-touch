@@ -215,7 +215,7 @@ export default class AnyTouch {
      * @param {Function} 事件回调
      */
     off(type: string, listener?: EventHandler): void {
-        Recognizer.prototype.on(type, listener);
+        Recognizer.prototype.off(type, listener);
     };
 
     /**
