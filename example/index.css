@@ -80,14 +80,12 @@ main table tr td:nth-child(3){
 .circle {
     /* touch-action: none; */
     box-sizing: content-box;
-    width: 30px;
-    height: 30px;
+    width: 100px;
+    height: 100px;
     border-radius: 5px;
     background: rgb(0, 0, 0, 0);
     border: 50px solid rgba(189, 174, 116, 0.7);
     position: fixed;
-    left: calc(50vw - 25px);
-    top: calc(50vh - 25px);
 }
 
 

@@ -7,8 +7,8 @@ new Vue({
         return {
             angle: 0,
             scale: 1,
-            x: window.innerWidth/2,
-            y: window.innerHeight/2,
+            x: window.innerWidth / 2 - 100,
+            y: window.innerHeight / 2 - 100,
             centerX: 0,
             centerY: 0,
             message: 'AnyTouch'
@@ -32,8 +32,10 @@ new Vue({
         const anyTouch = new AnyTouch(this.$refs.circle);
         const pan = anyTouch.get('pan');
         // pan.set({ threshold: 0,disabled:true });
+        // pan.set({disabled:false });
+
         const pinch = anyTouch.get('pinch');
-        pinch.set({ threshold: 1.4 });
+        pinch.set({ threshold: 1.1 });
         anyTouch.add(pan2);
         anyTouch.add(tap2);
         anyTouch.add(tap3);
@@ -70,15 +72,10 @@ new Vue({
             log(e.type);
         });
 
+
         anyTouch.on('pan2', e => {
-            this.centerX = e.centerX;
-            this.centerY = e.centerY;
-            // console.log(e)
-            log(e.direction);
-            if (e.nativeEvent.cancelable && 'down' === e.direction) {
-                e.preventDefault();
-            }
-            e.preventDefault();
+            console.log(e.scale, e.deltaScale)
+            console.log('pan2');
             log(`%c ${e.type} `, 'background-color:#69c;color:#fff;');
             this.message = e;
             this.x += e.deltaX;
@@ -132,6 +129,7 @@ new Vue({
         });
 
         anyTouch.on('pinch', e => {
+            
             // e.preventDefault();
             this.message = e;
             this.scale *= e.deltaScale;
