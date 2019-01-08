@@ -34,11 +34,11 @@ import PinchRecognizer from './recognitions/Pinch';
 import RotateRecognizer from './recognitions/Rotate';
 interface Options {
     touchAction?: 'compute' | 'auto' | 'manipulation' | 'pan-x' | 'pan-y' | 'none';
-    domEvents?: boolean;
+    hasDomEvents?: boolean;
 };
 const DEFAULT_OPTIONS: Options = {
     touchAction: 'compute',
-    domEvents: true
+    hasDomEvents: true
 };
 export default class AnyTouch {
     static TapRecognizer = TapRecognizer;
@@ -78,7 +78,10 @@ export default class AnyTouch {
             new PinchRecognizer(),
             new RotateRecognizer(),
         ];
-
+        // 注入el到识别器原型
+        // 后面模拟浏览器时间需要用到el
+        Recognizer.prototype.el = el;
+        Recognizer.prototype.hasDomEvents = this.options.hasDomEvents;
         // 识别器注入update方法
         Recognizer.$inject('update', this.update.bind(this));
 
@@ -188,7 +191,7 @@ export default class AnyTouch {
             // 当是鼠标事件的时候, mouseup阶段的input和computed为空
             this.recognizers.forEach(recognizer => {
                 recognizer.recognize(computed);
-                recognizer.emit('input', { ...computed, type: 'input' });
+                // recognizer.emit('input', { ...computed, type: 'input' });
             });
         }
     };
@@ -200,13 +203,6 @@ export default class AnyTouch {
      */
     on(type: string, listener: EventHandler): void {
         Recognizer.prototype.on(type, listener);
-
-        //         if (this.options.domEvents) {
-        //             let event: any = new Event(type, computed);
-        //             // Object.assign(event, computed)
-        //             event.computed = computed;
-        //             this.el.dispatchEvent(event);
-        //         }
     };
 
     /**

@@ -17,6 +17,10 @@ import {
     STATUS_FAILED, STATUS_RECOGNIZED
 } from '../const/recognizerStatus';
 export default abstract class Recognizer {
+    // 关联元素
+    public el: HTMLElement | HTMLDocument | Window;
+    // 是否构造原生事件(new Event())
+    public hasDomEvents: boolean;
     // 手势名
     public name: string;
     // 识别状态
@@ -62,6 +66,15 @@ export default abstract class Recognizer {
     public emit(type: string, payload: any) {
         payload.type = type;
         this.eventBus.emit(type, payload);
+        if (this.hasDomEvents) {
+            let event: any = new Event(type, payload);
+            delete payload.target;
+            delete payload.currentTarget;
+            delete payload.type;
+            Object.assign(event, payload)
+            // event.computed = payload;
+            this.el.dispatchEvent(event);
+        }
     };
 
     /**

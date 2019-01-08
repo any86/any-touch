@@ -656,6 +656,14 @@ var Recognizer = (function () {
     Recognizer.prototype.emit = function (type, payload) {
         payload.type = type;
         this.eventBus.emit(type, payload);
+        if (this.hasDomEvents) {
+            var event = new Event(type, payload);
+            delete payload.target;
+            delete payload.currentTarget;
+            delete payload.type;
+            Object.assign(event, payload);
+            this.el.dispatchEvent(event);
+        }
     };
     Recognizer.prototype.on = function (type, listener) {
         this.eventBus.on(type, listener);
@@ -1069,7 +1077,7 @@ RotateRecognizer.prototype.defaultOptions = {
 
 var DEFAULT_OPTIONS = {
     touchAction: 'compute',
-    domEvents: true
+    hasDomEvents: true
 };
 var AnyTouch = (function () {
     function AnyTouch(el, options) {
@@ -1086,6 +1094,8 @@ var AnyTouch = (function () {
             new PinchRecognizer(),
             new RotateRecognizer(),
         ];
+        Recognizer.prototype.el = el;
+        Recognizer.prototype.hasDomEvents = this.options.hasDomEvents;
         Recognizer.$inject('update', this.update.bind(this));
         this.update();
         this.unbinders = this._bindRecognizers(this.el);
@@ -1180,7 +1190,6 @@ var AnyTouch = (function () {
             var computed_1 = compute(inputs);
             this.recognizers.forEach(function (recognizer) {
                 recognizer.recognize(computed_1);
-                recognizer.emit('input', __assign({}, computed_1, { type: 'input' }));
             });
         }
     };
@@ -1188,7 +1197,7 @@ var AnyTouch = (function () {
         Recognizer.prototype.on(type, listener);
     };
     AnyTouch.prototype.off = function (type, listener) {
-        Recognizer.prototype.on(type, listener);
+        Recognizer.prototype.off(type, listener);
     };
     AnyTouch.prototype.destroy = function () {
         this.unbinders.forEach(function (unbinder) {
@@ -1203,5 +1212,6 @@ var AnyTouch = (function () {
     AnyTouch.RotateRecognizer = RotateRecognizer;
     return AnyTouch;
 }());
+//# sourceMappingURL=main.js.map
 
 module.exports = AnyTouch;
