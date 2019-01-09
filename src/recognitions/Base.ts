@@ -68,7 +68,7 @@ export default abstract class Recognizer {
         this.eventBus.emit(type, payload);
         if (this.hasDomEvents) {
             // 过滤掉几个Event上保留的字段
-            let {target,currentTarget, type,...data} = payload;
+            let { target, currentTarget, type, ...data } = payload;
             let event: any = new Event(type, payload);
             Object.assign(event, data);
             this.el.dispatchEvent(event);
@@ -167,10 +167,17 @@ export default abstract class Recognizer {
 
     /**
      * 适用于大部分移动类型的手势
+     * 如果是STATUS_END, STATUS_CANCELLED, STATUS_FAILED, STATUS_RECOGNIZED状态下, 
+     * 那么重置状态到STATUS_POSSIBLE.
+     * 在move阶段如果识别了, 那么是被识别为 STATUS_START(用来识别pan/pinch/rotate/swipe等事件).
+     * 之后如果继续发生move, 那么是被识别为 STATUS_MOVE.
+     * 直到发生end, 这时如果是 STATUS_START || STATUS_MOVE, 那么识别为 STATUS_END, 
+     * 如果刚刚被识别那么标记为 STATUS_RECOGNIZED(可以用来识别tap类事件).
+     * 如果仍旧未被识别那么标记为 STATUS_FAILED.
+     * 如果在 STATUS_FAILED之前 && STATUS_START之后发生了cancel事件, 那么识别为 STATUS_CANCELLED.
      * @param {Computed} 计算数据 
      */
     recognize(computed: Computed) {
-
         if (this.options.disabled) return;
         // this.beforeRecognize(computed);
         let { inputStatus } = computed;
@@ -182,20 +189,25 @@ export default abstract class Recognizer {
             this.status = STATUS_POSSIBLE;
         };
 
-        if (!this.isRecognized && !isVaild && STATUS_POSSIBLE === this.status && INPUT_END === inputStatus) {
+        if (!isVaild && STATUS_POSSIBLE === this.status && INPUT_END === inputStatus) {
             this.status = STATUS_FAILED;
         } else if (STATUS_POSSIBLE === this.status && INPUT_END === inputStatus && isVaild) {
             this.status = STATUS_RECOGNIZED;
-        } else if (STATUS_POSSIBLE === this.status && isVaild) {
+        } else if (STATUS_POSSIBLE === this.status && INPUT_MOVE === inputStatus && isVaild) {
             this.status = STATUS_START;
-        } else if (this.isRecognized && INPUT_MOVE === inputStatus) {
+        } else if (STATUS_START === this.status && INPUT_MOVE === inputStatus) {
             this.status = STATUS_MOVE;
-        } else if (this.isRecognized && INPUT_END === inputStatus) {
+        } else if (STATUS_MOVE === this.status && INPUT_END === inputStatus) {
             this.status = STATUS_END;
-        } else if (this.isRecognized && INPUT_CANCEL === inputStatus) {
+        } else if ((STATUS_START === this.status || STATUS_MOVE === this.status) && INPUT_CANCEL === inputStatus || !isVaild) {
             this.status = STATUS_CANCELLED;
         }
 
+        console.log(
+            `%c ${this.options.name} `, 'background-color:#66c;color:#fff;',
+            this.status,
+            `${inputStatus} `
+        );
         // 是否已识别
         this.isRecognized = -1 < [STATUS_START, STATUS_MOVE].indexOf(this.status);
 

@@ -38,6 +38,16 @@ var __assign = function() {
     return __assign.apply(this, arguments);
 };
 
+function __rest(s, e) {
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) if (e.indexOf(p[i]) < 0)
+            t[p[i]] = s[p[i]];
+    return t;
+}
+
 function __values(o) {
     var m = typeof Symbol === "function" && o[Symbol.iterator], i = 0;
     if (m) return m.call(o);
@@ -655,11 +665,9 @@ var Recognizer = (function () {
         payload.type = type;
         this.eventBus.emit(type, payload);
         if (this.hasDomEvents) {
-            var event = new Event(type, payload);
-            delete payload.target;
-            delete payload.currentTarget;
-            delete payload.type;
-            Object.assign(event, payload);
+            var target = payload.target, currentTarget = payload.currentTarget, type_1 = payload.type, data = __rest(payload, ["target", "currentTarget", "type"]);
+            var event = new Event(type_1, payload);
+            Object.assign(event, data);
             this.el.dispatchEvent(event);
         }
     };
@@ -743,24 +751,25 @@ var Recognizer = (function () {
         if (-1 < [STATUS_END, STATUS_CANCELLED, STATUS_FAILED, STATUS_RECOGNIZED].indexOf(this.status)) {
             this.status = STATUS_POSSIBLE;
         }
-        if (!this.isRecognized && !isVaild && STATUS_POSSIBLE === this.status && INPUT_END === inputStatus) {
+        if (!isVaild && STATUS_POSSIBLE === this.status && INPUT_END === inputStatus) {
             this.status = STATUS_FAILED;
         }
         else if (STATUS_POSSIBLE === this.status && INPUT_END === inputStatus && isVaild) {
             this.status = STATUS_RECOGNIZED;
         }
-        else if (STATUS_POSSIBLE === this.status && isVaild) {
+        else if (STATUS_POSSIBLE === this.status && INPUT_MOVE === inputStatus && isVaild) {
             this.status = STATUS_START;
         }
-        else if (this.isRecognized && INPUT_MOVE === inputStatus) {
+        else if (STATUS_START === this.status && INPUT_MOVE === inputStatus) {
             this.status = STATUS_MOVE;
         }
-        else if (this.isRecognized && INPUT_END === inputStatus) {
+        else if (STATUS_MOVE === this.status && INPUT_END === inputStatus) {
             this.status = STATUS_END;
         }
-        else if (this.isRecognized && INPUT_CANCEL === inputStatus) {
+        else if ((STATUS_START === this.status || STATUS_MOVE === this.status) && INPUT_CANCEL === inputStatus || !isVaild) {
             this.status = STATUS_CANCELLED;
         }
+        console.log("%c " + this.options.name + " ", 'background-color:#66c;color:#fff;', this.status, inputStatus + " ");
         this.isRecognized = -1 < [STATUS_START, STATUS_MOVE].indexOf(this.status);
         if (isVaild) {
             this.emit(this.options.name, computed);
