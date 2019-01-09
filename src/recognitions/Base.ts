@@ -67,12 +67,10 @@ export default abstract class Recognizer {
         payload.type = type;
         this.eventBus.emit(type, payload);
         if (this.hasDomEvents) {
+            // 过滤掉几个Event上保留的字段
+            let {target,currentTarget, type,...data} = payload;
             let event: any = new Event(type, payload);
-            delete payload.target;
-            delete payload.currentTarget;
-            delete payload.type;
-            Object.assign(event, payload)
-            // event.computed = payload;
+            Object.assign(event, data);
             this.el.dispatchEvent(event);
         }
     };
