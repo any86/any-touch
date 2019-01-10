@@ -775,7 +775,6 @@
             else if ((STATUS_START === this.status || STATUS_MOVE === this.status) && INPUT_CANCEL === inputStatus || !isVaild) {
                 this.status = STATUS_CANCELLED;
             }
-            console.log("%c " + this.options.name + " ", 'background-color:#66c;color:#fff;', this.status, inputStatus + " ");
             this.isRecognized = -1 < [STATUS_START, STATUS_MOVE].indexOf(this.status);
             if (isVaild) {
                 this.emit(this.options.name, computed);
@@ -869,6 +868,7 @@
             if (options === void 0) { options = {}; }
             var _this = _super.call(this, options) || this;
             _this._timeoutId = null;
+            _this._isPressing = false;
             return _this;
         }
         PressRecognizer.prototype.getTouchAction = function () {
@@ -878,34 +878,40 @@
             var _this = this;
             if (this.options.disabled)
                 return;
-            var inputStatus = computed.inputStatus, distance = computed.distance, duration = computed.duration;
-            if (this.test(computed)) {
-                if (this.options.threshold < distance) {
-                    this.cancel();
-                }
-                else {
+            var inputStatus = computed.inputStatus;
+            if (STATUS_RECOGNIZED !== this.status) {
+                var IS_VALID = this.test(computed);
+                if (!this._isPressing && IS_VALID) {
+                    this._isPressing = true;
                     this._timeoutId = window.setTimeout(function () {
                         _this.status = STATUS_RECOGNIZED;
                         _this.emit(_this.options.name, computed);
                     }, this.options.minPressTime);
                 }
-            }
-            else if (STATUS_RECOGNIZED === this.status && INPUT_END === inputStatus) {
-                this.emit(this.options.name + "up", computed);
-                this.status = STATUS_POSSIBLE;
+                else {
+                    if (!IS_VALID) {
+                        this.cancel();
+                    }
+                }
             }
             else {
-                this.cancel();
-                this.status = STATUS_FAILED;
+                if (INPUT_END === inputStatus) {
+                    this.emit(this.options.name + "up", computed);
+                    this.status = STATUS_POSSIBLE;
+                    this._isPressing = false;
+                }
             }
         };
         PressRecognizer.prototype.test = function (_a) {
-            var pointerLength = _a.pointerLength;
-            return this.isValidPointerLength(pointerLength);
+            var pointerLength = _a.pointerLength, inputStatus = _a.inputStatus, distance = _a.distance;
+            var IS_VALID_INPUT = 'start' === inputStatus || 'move' === inputStatus;
+            var IS_VLIAD_DISTANCE = this.options.threshold > distance;
+            return this.isValidPointerLength(pointerLength) && IS_VALID_INPUT && IS_VLIAD_DISTANCE;
         };
         PressRecognizer.prototype.cancel = function () {
             clearTimeout(this._timeoutId);
             this.status = STATUS_FAILED;
+            this._isPressing = false;
         };
         PressRecognizer.prototype.afterRecognized = function () { };
         return PressRecognizer;

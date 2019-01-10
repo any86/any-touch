@@ -203,11 +203,11 @@ export default abstract class Recognizer {
             this.status = STATUS_CANCELLED;
         }
 
-        console.log(
-            `%c ${this.options.name} `, 'background-color:#66c;color:#fff;',
-            this.status,
-            `${inputStatus} `
-        );
+        // console.log(
+        //     `%c ${this.options.name} `, 'background-color:#66c;color:#fff;',
+        //     this.status,
+        //     `${inputStatus} `
+        // );
         // 是否已识别
         this.isRecognized = -1 < [STATUS_START, STATUS_MOVE].indexOf(this.status);
 

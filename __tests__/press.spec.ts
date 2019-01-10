@@ -3,10 +3,11 @@ import sleep from './utils/sleep';
 import AnyTouch from '../src/main'
 document.body.innerHTML = '<div id="box">box</div>';
 const el = document.getElementById('box');
-const at = new AnyTouch(el);
+
 const MIN_PRESS_TIME = 251;
 
 test('press|pressup事件是否正确?', async(done) => {
+    const at = new AnyTouch(el);
     let lastTime: number;
     at.on('press', ({ type, timestamp }) => {
         lastTime = timestamp;
@@ -16,7 +17,7 @@ test('press|pressup事件是否正确?', async(done) => {
     at.on('pressup', ({ type, timestamp }) => {
         expect(timestamp - lastTime).toBeGreaterThanOrEqual(MIN_PRESS_TIME);
         expect(type).toBe('pressup');
-        done();
+        
     });
 
     // 模拟touch触碰
@@ -25,15 +26,14 @@ test('press|pressup事件是否正确?', async(done) => {
     ts.dispatchTouchMove([{ x: 3, y: 3 }]);
     await sleep(MIN_PRESS_TIME);
     ts.dispatchTouchEnd();
+    done();
     
 });
 
 
 test('移动距离过大press事件失败,流程是否正确?', async (done) => {
     const mockCallback = jest.fn();
-    at.off('press');
-    at.off('pressup');
-
+    const at = new AnyTouch(el);
     at.on('press', ({ type }) => {
         mockCallback();
     });
