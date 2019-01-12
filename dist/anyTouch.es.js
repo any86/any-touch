@@ -1177,6 +1177,9 @@ var AnyTouch = (function () {
         }
     };
     AnyTouch.prototype.handler = function (event) {
+        if (!event.cancelable) {
+            Recognizer.prototype.emit('error', { code: 0, message: '页面滚动的时候, 请暂时不要操作元素!' });
+        }
         if (this.options.isPreventDefault) {
             event.preventDefault();
         }

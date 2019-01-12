@@ -182,6 +182,10 @@ export default class AnyTouch {
     };
 
     handler(event: TouchEvent | MouseEvent): void {
+        if (!event.cancelable) {
+            Recognizer.prototype.emit('error', { code: 0, message: '页面滚动的时候, 请暂时不要操作元素!' });
+        }
+
         if (this.options.isPreventDefault) {
             event.preventDefault();
         }

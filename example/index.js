@@ -58,6 +58,9 @@ new Vue({
         //     this.message = e;
         //     log(e, e.type);
         // });
+        anyTouch.on('error', e => {
+            console.warn(e);
+        });
 
         anyTouch.on('panstart', e => {
             this.message = e;
