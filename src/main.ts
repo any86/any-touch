@@ -35,10 +35,7 @@ import RotateRecognizer from './recognitions/Rotate';
 interface Options {
     touchAction?: 'compute' | 'auto' | 'manipulation' | 'pan-x' | 'pan-y' | 'none';
     hasDomEvents?: boolean;
-};
-const DEFAULT_OPTIONS: Options = {
-    touchAction: 'compute',
-    hasDomEvents: true
+    isPreventDefault?: boolean;
 };
 export default class AnyTouch {
     static TapRecognizer = TapRecognizer;
@@ -50,6 +47,8 @@ export default class AnyTouch {
 
     // 目标元素
     el: HTMLElement;
+
+    default: Options;
 
     recognizers: { [propName: string]: any, name: string }[];
 
@@ -65,11 +64,11 @@ export default class AnyTouch {
      * @param {Element} el
      * @param {Object} param1
      */
-    constructor(el: HTMLElement, options: Options = DEFAULT_OPTIONS) {
+    constructor(el: HTMLElement, options?: Options) {
         this.version = '0.0.12';
         this.el = el;
         this.isMobile = IS_MOBILE;
-        this.options = { ...DEFAULT_OPTIONS, ...options };
+        this.options = { ...this.default, ...options };
         this.recognizers = [
             new TapRecognizer(),
             new PressRecognizer(),
@@ -164,8 +163,8 @@ export default class AnyTouch {
      * 设置
      * @param {Options} 选项 
      */
-    set(options: Options = DEFAULT_OPTIONS): void {
-        this.options = { ...DEFAULT_OPTIONS, ...options };
+    set(options: Options): void {
+        this.options = { ...this.default, ...options };
         this.update();
     };
 
@@ -183,7 +182,9 @@ export default class AnyTouch {
     };
 
     handler(event: TouchEvent | MouseEvent): void {
-        event.preventDefault();
+        if (this.options.isPreventDefault) {
+            event.preventDefault();
+        }
         // 记录各个阶段的input
         let inputs = inputManage(event);
         if (undefined !== inputs) {
@@ -223,4 +224,10 @@ export default class AnyTouch {
             unbinder();
         });
     };
-}
+};
+
+AnyTouch.prototype.default = {
+    touchAction: 'compute',
+    hasDomEvents: true,
+    isPreventDefault: true
+};
