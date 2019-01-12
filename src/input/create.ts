@@ -43,30 +43,11 @@ export default (event: TouchEvent | MouseEvent): Input => {
     // 原生属性/方法
     const { target, currentTarget } = event;
 
-    // 阻止冒泡
-    const stopPropagation = () => {
-        event.stopPropagation();
-    };
-
-    // 阻止默认默认事件
-    const preventDefault = () => {
-        if (event.cancelable) {
-            event.preventDefault();
-        }
-    };
-
-    // 阻止其他事件
-    const stopImmediatePropagation = () => {
-        event.stopImmediatePropagation();
-    }
 
     return {
         ...input,
         isFirst,
         isFinal,
-        stopPropagation,
-        preventDefault,
-        stopImmediatePropagation,
         pointerLength,
         changedPointerLength,
         centerX,

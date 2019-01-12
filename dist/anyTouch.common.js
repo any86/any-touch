@@ -237,22 +237,8 @@ var createInput = (function (event) {
     }
     var timestamp = Date.now();
     var target = event.target, currentTarget = event.currentTarget;
-    var stopPropagation = function () {
-        event.stopPropagation();
-    };
-    var preventDefault = function () {
-        if (event.cancelable) {
-            event.preventDefault();
-        }
-    };
-    var stopImmediatePropagation = function () {
-        event.stopImmediatePropagation();
-    };
     return __assign({}, input, { isFirst: isFirst,
         isFinal: isFinal,
-        stopPropagation: stopPropagation,
-        preventDefault: preventDefault,
-        stopImmediatePropagation: stopImmediatePropagation,
         pointerLength: pointerLength,
         changedPointerLength: changedPointerLength,
         centerX: centerX,
@@ -1090,17 +1076,12 @@ RotateRecognizer.prototype.defaultOptions = {
 };
 //# sourceMappingURL=Rotate.js.map
 
-var DEFAULT_OPTIONS = {
-    touchAction: 'compute',
-    hasDomEvents: true
-};
 var AnyTouch = (function () {
     function AnyTouch(el, options) {
-        if (options === void 0) { options = DEFAULT_OPTIONS; }
         this.version = '0.0.12';
         this.el = el;
         this.isMobile = IS_MOBILE;
-        this.options = __assign({}, DEFAULT_OPTIONS, options);
+        this.options = __assign({}, this["default"], options);
         this.recognizers = [
             new TapRecognizer(),
             new PressRecognizer(),
@@ -1175,8 +1156,7 @@ var AnyTouch = (function () {
         return this.recognizers.find(function (recognizer) { return name === recognizer.options.name; });
     };
     AnyTouch.prototype.set = function (options) {
-        if (options === void 0) { options = DEFAULT_OPTIONS; }
-        this.options = __assign({}, DEFAULT_OPTIONS, options);
+        this.options = __assign({}, this["default"], options);
         this.update();
     };
     AnyTouch.prototype.remove = function (recognizerName) {
@@ -1199,7 +1179,9 @@ var AnyTouch = (function () {
         }
     };
     AnyTouch.prototype.handler = function (event) {
-        event.preventDefault();
+        if (this.options.isPreventDefault) {
+            event.preventDefault();
+        }
         var inputs = inputManage(event);
         if (undefined !== inputs) {
             var computed_1 = compute(inputs);
@@ -1227,6 +1209,11 @@ var AnyTouch = (function () {
     AnyTouch.RotateRecognizer = RotateRecognizer;
     return AnyTouch;
 }());
+AnyTouch.prototype["default"] = {
+    touchAction: 'compute',
+    hasDomEvents: true,
+    isPreventDefault: true
+};
 //# sourceMappingURL=main.js.map
 
 module.exports = AnyTouch;

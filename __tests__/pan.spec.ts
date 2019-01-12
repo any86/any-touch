@@ -16,9 +16,7 @@ const el = document.getElementById('box');
         });
 
         at.on('panend', ev=>{
-            ev.preventDefault();
-            ev.stopImmediatePropagation();
-            ev.stopPropagation();
+
         });
 
         // 模拟事件
