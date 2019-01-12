@@ -36,12 +36,12 @@ export default abstract class Recognizer {
     // 注入外部方法到识别器原型上
     public static $inject: (key: string, method: (...args: any[]) => void) => void;
     // 默认参数
-    public defaultOptions: Options;
+    public default: Options;
 
     public eventBus: any;
 
     constructor(options: Options = { disabled: false }) {
-        this.options = { ...this.defaultOptions, ...options };
+        this.options = { ...this.default, ...options };
         this.name = this.options.name;
         this.status = STATUS_POSSIBLE;
         this.isRecognized = false;
@@ -162,7 +162,32 @@ export default abstract class Recognizer {
      * @param {String} 方向 
      */
     public isVaildDirection(direction: string) {
+        // if('pan' === this.options.name) console.log(this.options.directions, direction, -1 < this.options.directions.indexOf(direction));
         return -1 < this.options.directions.indexOf(direction);
+    };
+
+    /**
+     * 移除限制方向的deltaX/Y
+     * @param {Computed} computed 
+     */
+    public lockDirection(computed:Computed):Computed{
+        if(undefined ===this.options.directions || 0 === this.options.directions.length) return computed;
+        let deltaX = 0;
+        let deltaY = 0;
+        this.options.directions.forEach((direction:string) => {
+            if ('left' === direction && 0 > computed.deltaX) {
+                deltaX = computed.deltaX;
+            } else if ('right' === direction && 0 < computed.deltaX) {
+                deltaX = computed.deltaX;
+            } else if ('down' === direction && 0 < computed.deltaY) {
+                deltaY = computed.deltaY;
+            } else if ('up' === direction && 0 > computed.deltaY) {
+                deltaY = computed.deltaY;
+            }
+        });
+        computed.deltaX = deltaX;
+        computed.deltaY = deltaY;
+        return computed;
     };
 
     /**
@@ -183,6 +208,7 @@ export default abstract class Recognizer {
         let { inputStatus } = computed;
         // 是否识别成功
         let isVaild = this.test(computed);
+        // console.log({direction:computed.direction, isVaild:isVaild&&'OK'});
 
         // 如果识别结束, 那么重置状态
         if (-1 < [STATUS_END, STATUS_CANCELLED, STATUS_FAILED, STATUS_RECOGNIZED].indexOf(this.status)) {
@@ -211,23 +237,17 @@ export default abstract class Recognizer {
         // 是否已识别
         this.isRecognized = -1 < [STATUS_START, STATUS_MOVE].indexOf(this.status);
 
-        if (isVaild) {
+        // 识别后触发的事件
+        if (this.isRecognized) {
+
+            computed = this.lockDirection(computed);
+
             this.emit(this.options.name, computed);
-        }
-        // if(this.options.name == 'pan2') console.log(this.status);
-
-        // if (this.options.name == 'pinch') {
-        //     console.log({ 
-        //         status: this.status, 
-        //         scale:computed.scale,
-        //         isVaild, 
-        //         isRecognized: this.isRecognized });
-        // }
-
-        if (-1 < ['start', 'move', 'end', 'recognized'].indexOf(this.status)) {
-            // panstart | panmove | panend
-            this.emit(this.options.name + this.status, computed);
-            this.afterRecognized(computed);
+            if (-1 < [STATUS_START, STATUS_MOVE, STATUS_END, STATUS_RECOGNIZED].indexOf(this.status)) {
+                // panstart | panmove | panend
+                this.emit(this.options.name + this.status, computed);
+                this.afterRecognized(computed);
+            }
         }
     };
 

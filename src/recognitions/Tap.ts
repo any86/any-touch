@@ -15,7 +15,7 @@ export default class TapRecognizer extends Recognizer {
     private _prevX: number;
     private _prevY: number;
     public options: Options;
-    public defaultOptions: Options;
+    public default: Options;
     constructor(options: Options = {}) {
         super(options);
         this.tapTimeoutId = null;
@@ -94,7 +94,7 @@ export default class TapRecognizer extends Recognizer {
 };
 
 // 默认参数
-TapRecognizer.prototype.defaultOptions = {
+TapRecognizer.prototype.default = {
     name: 'tap',
     pointer: 1,
     taps: 1,

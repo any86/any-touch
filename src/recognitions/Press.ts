@@ -68,7 +68,7 @@ export default class PressRecognizer extends Recognizer {
 };
 
 // 默认参数
-PressRecognizer.prototype.defaultOptions = {
+PressRecognizer.prototype.default = {
     name: 'press',
     pointerLength: 1,
     threshold: 9,

@@ -83,6 +83,7 @@ function __spread() {
 }
 
 var MOBILE_REGEX = /mobile|tablet|ip(ad|hone|od)|android/i;
+console.log('ua', navigator.userAgent);
 var IS_MOBILE = MOBILE_REGEX.test(navigator.userAgent);
 var SUPPORT_TOUCH = ('ontouchstart' in window);
 var SUPPORT_ONLY_TOUCH = SUPPORT_TOUCH && MOBILE_REGEX.test(navigator.userAgent);
@@ -637,7 +638,7 @@ var STATUS_RECOGNIZED = 'recognized';
 var Recognizer = (function () {
     function Recognizer(options) {
         if (options === void 0) { options = { disabled: false }; }
-        this.options = __assign({}, this.defaultOptions, options);
+        this.options = __assign({}, this["default"], options);
         this.name = this.options.name;
         this.status = STATUS_POSSIBLE;
         this.isRecognized = false;
@@ -729,6 +730,27 @@ var Recognizer = (function () {
     Recognizer.prototype.isVaildDirection = function (direction) {
         return -1 < this.options.directions.indexOf(direction);
     };
+    Recognizer.prototype.lockDirection = function (computed) {
+        var deltaX = 0;
+        var deltaY = 0;
+        this.options.directions.forEach(function (direction) {
+            if ('left' === direction && 0 > computed.deltaX) {
+                deltaX = computed.deltaX;
+            }
+            else if ('right' === direction && 0 < computed.deltaX) {
+                deltaX = computed.deltaX;
+            }
+            else if ('down' === direction && 0 < computed.deltaY) {
+                deltaY = computed.deltaY;
+            }
+            else if ('up' === direction && 0 > computed.deltaY) {
+                deltaY = computed.deltaY;
+            }
+        });
+        computed.deltaX = deltaX;
+        computed.deltaY = deltaY;
+        return computed;
+    };
     Recognizer.prototype.recognize = function (computed) {
         if (this.options.disabled)
             return;
@@ -756,12 +778,12 @@ var Recognizer = (function () {
             this.status = STATUS_CANCELLED;
         }
         this.isRecognized = -1 < [STATUS_START, STATUS_MOVE].indexOf(this.status);
-        if (isVaild) {
+        if (this.isRecognized) {
             this.emit(this.options.name, computed);
-        }
-        if (-1 < ['start', 'move', 'end', 'recognized'].indexOf(this.status)) {
-            this.emit(this.options.name + this.status, computed);
-            this.afterRecognized(computed);
+            if (-1 < [STATUS_START, STATUS_MOVE, STATUS_END, STATUS_RECOGNIZED].indexOf(this.status)) {
+                this.emit(this.options.name + this.status, computed);
+                this.afterRecognized(computed);
+            }
         }
     };
     return Recognizer;
@@ -833,7 +855,7 @@ var TapRecognizer = (function (_super) {
     TapRecognizer.prototype.afterRecognized = function (computed) { };
     return TapRecognizer;
 }(Recognizer));
-TapRecognizer.prototype.defaultOptions = {
+TapRecognizer.prototype["default"] = {
     name: 'tap',
     pointer: 1,
     taps: 1,
@@ -896,7 +918,7 @@ var PressRecognizer = (function (_super) {
     PressRecognizer.prototype.afterRecognized = function () { };
     return PressRecognizer;
 }(Recognizer));
-PressRecognizer.prototype.defaultOptions = {
+PressRecognizer.prototype["default"] = {
     name: 'press',
     pointerLength: 1,
     threshold: 9,
@@ -959,18 +981,18 @@ var PanRecognizer = (function (_super) {
         return touchActions;
     };
     PanRecognizer.prototype.test = function (_a) {
-        var distance = _a.distance, direction = _a.direction, inputStatus = _a.inputStatus, pointerLength = _a.pointerLength;
-        var isValidDirection = -1 !== this.options.directions.indexOf(direction);
+        var distance = _a.distance, lastDirection = _a.lastDirection, inputStatus = _a.inputStatus, pointerLength = _a.pointerLength;
+        var isValidDirection = this.isVaildDirection(lastDirection);
         var isValidThreshold = this.options.threshold < distance;
         return this.isValidPointerLength(pointerLength) && isValidDirection &&
             (this.isRecognized || isValidThreshold) && INPUT_MOVE === inputStatus;
     };
     PanRecognizer.prototype.afterRecognized = function (computed) {
-        this.emit(this.options.name + computed.direction, computed);
+        this.emit(this.options.name + computed.lastDirection, computed);
     };
     return PanRecognizer;
 }(Recognizer));
-PanRecognizer.prototype.defaultOptions = {
+PanRecognizer.prototype["default"] = {
     name: 'pan',
     threshold: 10,
     pointerLength: 1,
@@ -1005,12 +1027,11 @@ var SwipeRecognizer = (function (_super) {
             this.options.threshold < distance &&
             INPUT_END === inputStatus &&
             this.isVaildDirection(lastDirection) &&
-            this.isVaildDirection(lastDirection) &&
             this.options.velocity < vaildVelocity;
     };
     return SwipeRecognizer;
 }(Recognizer));
-SwipeRecognizer.prototype.defaultOptions = {
+SwipeRecognizer.prototype["default"] = {
     name: 'swipe',
     threshold: 10,
     velocity: 0.3,
@@ -1044,7 +1065,7 @@ var PinchRecognizer = (function (_super) {
     };
     return PinchRecognizer;
 }(Recognizer));
-PinchRecognizer.prototype.defaultOptions = {
+PinchRecognizer.prototype["default"] = {
     name: 'pinch',
     threshold: 0,
     pointerLength: 2
@@ -1067,7 +1088,7 @@ var RotateRecognizer = (function (_super) {
     };
     return RotateRecognizer;
 }(Recognizer));
-RotateRecognizer.prototype.defaultOptions = {
+RotateRecognizer.prototype["default"] = {
     name: 'rotate',
     threshold: 0,
     pointerLength: 2

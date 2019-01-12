@@ -1,5 +1,5 @@
 import { Computed, directionString } from '../interface';
-import {INPUT_MOVE} from '../const';
+import { INPUT_MOVE } from '../const';
 import Recognizer from './Base';
 import getHV from '../untils/getHV';
 interface Options {
@@ -13,7 +13,7 @@ export default class PanRecognizer extends Recognizer {
     public name: string;
     public options: Options;
 
-    constructor(options: Options={}) {
+    constructor(options: Options = {}) {
         super(options);
     };
 
@@ -36,8 +36,8 @@ export default class PanRecognizer extends Recognizer {
      * @param {Computed} 计算数据
      * @return {Boolean}} .是否是当前手势 
      */
-    test({ distance, direction, inputStatus, pointerLength }: Computed): boolean {
-        const isValidDirection = -1 !== this.options.directions.indexOf(direction);
+    test({ distance, lastDirection, inputStatus, pointerLength }: Computed): boolean {
+        const isValidDirection = this.isVaildDirection(lastDirection);
         const isValidThreshold = this.options.threshold < distance;
         return this.isValidPointerLength(pointerLength) && isValidDirection &&
             (this.isRecognized || isValidThreshold) && INPUT_MOVE === inputStatus;
@@ -48,12 +48,14 @@ export default class PanRecognizer extends Recognizer {
      * @param {Computed} 计算数据
      */
     afterRecognized(computed: Computed) {
-        this.emit(this.options.name + computed.direction, computed);
+
+        // console.log({deltaX, deltaY});
+        this.emit(this.options.name + computed.lastDirection, computed);
     }
 };
 
 // 默认参数
-PanRecognizer.prototype.defaultOptions = {
+PanRecognizer.prototype.default = {
     name: 'pan',
     threshold: 10,
     pointerLength: 1,

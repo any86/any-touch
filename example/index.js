@@ -31,8 +31,7 @@ new Vue({
         })
         const anyTouch = new AnyTouch(this.$refs.circle, {touchAction:'auto'});
         const pan = anyTouch.get('pan');
-        // pan.set({ threshold: 0,disabled:true });
-        // pan.set({disabled:false });
+        pan.set({ threshold: 0,disabled:false,directions:['left', 'right'] });
 
         const pinch = anyTouch.get('pinch');
         pinch.set({
@@ -82,6 +81,7 @@ new Vue({
         anyTouch.on('pan', e => {
             log(`%c ${e.type} `, 'background-color:#69c;color:#fff;');
             this.message = e;
+            console.log( e.deltaX, e.deltaY);
             this.x += e.deltaX;
             this.y += e.deltaY;
         });

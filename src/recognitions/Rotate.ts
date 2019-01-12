@@ -27,7 +27,7 @@ export default class RotateRecognizer extends Base {
 };
 
 // 默认参数
-RotateRecognizer.prototype.defaultOptions = {
+RotateRecognizer.prototype.default = {
     name: 'rotate',
     // 触发事件所需要的最小角度
     threshold: 0,

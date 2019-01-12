@@ -35,7 +35,7 @@ export default class PinchRecognizer extends Recognizer {
 };
 
 // 默认参数
-PinchRecognizer.prototype.defaultOptions = {
+PinchRecognizer.prototype.default = {
     name: 'pinch',
     // 触发事件所需要的最小缩放比例
     threshold: 0,

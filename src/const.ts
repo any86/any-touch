@@ -1,6 +1,6 @@
 // 简单判断是否手机设备
 export const MOBILE_REGEX = /mobile|tablet|ip(ad|hone|od)|android/i;
-
+// console.log('ua', navigator.userAgent);
 // 是否手机设备
 export const IS_MOBILE = MOBILE_REGEX.test(navigator.userAgent);
 

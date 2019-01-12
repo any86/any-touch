@@ -40,13 +40,12 @@ export default class SwipeRecognizer extends Recognizer {
             this.options.threshold < distance &&
             INPUT_END === inputStatus &&
             this.isVaildDirection(lastDirection) &&
-            this.isVaildDirection(lastDirection) &&
             this.options.velocity < vaildVelocity;
     };
 };
 
 // 默认参数
-SwipeRecognizer.prototype.defaultOptions = {
+SwipeRecognizer.prototype.default = {
     name: 'swipe',
     threshold: 10,
     velocity: 0.3,
