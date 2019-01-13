@@ -89,7 +89,6 @@
     }
 
     var MOBILE_REGEX = /mobile|tablet|ip(ad|hone|od)|android/i;
-    console.log('ua', navigator.userAgent);
     var IS_MOBILE = MOBILE_REGEX.test(navigator.userAgent);
     var SUPPORT_TOUCH = ('ontouchstart' in window);
     var SUPPORT_ONLY_TOUCH = SUPPORT_TOUCH && MOBILE_REGEX.test(navigator.userAgent);
@@ -737,6 +736,8 @@
             return -1 < this.options.directions.indexOf(direction);
         };
         Recognizer.prototype.lockDirection = function (computed) {
+            if (undefined === this.options.directions || 0 === this.options.directions.length)
+                return computed;
             var deltaX = 0;
             var deltaY = 0;
             this.options.directions.forEach(function (direction) {
@@ -783,8 +784,9 @@
             else if ((STATUS_START === this.status || STATUS_MOVE === this.status) && INPUT_CANCEL === inputStatus || !isVaild) {
                 this.status = STATUS_CANCELLED;
             }
-            this.isRecognized = -1 < [STATUS_START, STATUS_MOVE].indexOf(this.status);
+            this.isRecognized = -1 < [STATUS_START, STATUS_MOVE, STATUS_RECOGNIZED].indexOf(this.status);
             if (this.isRecognized) {
+                computed = this.lockDirection(computed);
                 this.emit(this.options.name, computed);
                 if (-1 < [STATUS_START, STATUS_MOVE, STATUS_END, STATUS_RECOGNIZED].indexOf(this.status)) {
                     this.emit(this.options.name + this.status, computed);

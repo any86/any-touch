@@ -208,7 +208,6 @@ export default abstract class Recognizer {
         let { inputStatus } = computed;
         // 是否识别成功
         let isVaild = this.test(computed);
-        // console.log({direction:computed.direction, isVaild:isVaild&&'OK'});
 
         // 如果识别结束, 那么重置状态
         if (-1 < [STATUS_END, STATUS_CANCELLED, STATUS_FAILED, STATUS_RECOGNIZED].indexOf(this.status)) {
@@ -228,14 +227,13 @@ export default abstract class Recognizer {
         } else if ((STATUS_START === this.status || STATUS_MOVE === this.status) && INPUT_CANCEL === inputStatus || !isVaild) {
             this.status = STATUS_CANCELLED;
         }
-
         // console.log(
         //     `%c ${this.options.name} `, 'background-color:#66c;color:#fff;',
         //     this.status,
         //     `${inputStatus} `
         // );
         // 是否已识别
-        this.isRecognized = -1 < [STATUS_START, STATUS_MOVE].indexOf(this.status);
+        this.isRecognized = -1 < [STATUS_START, STATUS_MOVE, STATUS_RECOGNIZED].indexOf(this.status);
 
         // 识别后触发的事件
         if (this.isRecognized) {
