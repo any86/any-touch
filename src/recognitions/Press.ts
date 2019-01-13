@@ -64,7 +64,7 @@ export default class PressRecognizer extends Recognizer {
         this._isPressing = false;
     }
 
-    afterRecognized() { }
+    afterEmit() { }
 };
 
 // 默认参数

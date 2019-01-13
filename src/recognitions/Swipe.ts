@@ -14,7 +14,7 @@ export default class SwipeRecognizer extends Recognizer {
      * 识别后发布swipeleft等事件
      * @param {Computed} 计算数据
      */
-    afterRecognized(computed: Computed) {
+    afterEmit(computed: Computed) {
         this.emit(this.options.name + computed.lastDirection, computed);
     };
 

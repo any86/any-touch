@@ -47,11 +47,42 @@ export default class PanRecognizer extends Recognizer {
      * 识别后发布panleft等事件
      * @param {Computed} 计算数据
      */
-    afterRecognized(computed: Computed) {
-
+    afterEmit(computed: Computed) {
         // console.log({deltaX, deltaY});
         this.emit(this.options.name + computed.lastDirection, computed);
+    };
+    
+    afterRecognized(computed: Computed){
+        this.lockDirection(computed);
     }
+
+    /**
+     * 移除限制方向的deltaX/Y
+     * @param {Computed} computed 
+     */
+    public lockDirection(computed: Computed): Computed {
+        if (undefined === this.options.directions || 0 === this.options.directions.length) return computed;
+        let deltaX = 0;
+        let deltaY = 0;
+        this.options.directions.forEach((direction: string) => {
+            if ('left' === direction && 0 > computed.deltaX) {
+                deltaX = computed.deltaX;
+            } else if ('right' === direction && 0 < computed.deltaX) {
+                deltaX = computed.deltaX;
+            } else if ('down' === direction && 0 < computed.deltaY) {
+                deltaY = computed.deltaY;
+            } else if ('up' === direction && 0 > computed.deltaY) {
+                deltaY = computed.deltaY;
+            }
+        });
+        computed.deltaX = deltaX;
+        computed.deltaY = deltaY;
+        return computed;
+    };
+
+
+
+    
 };
 
 // 默认参数

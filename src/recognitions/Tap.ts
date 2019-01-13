@@ -90,7 +90,7 @@ export default class TapRecognizer extends Recognizer {
         return INPUT_END === inputStatus && 1 === maxPointerLength && 2 > distance && 250 > duration && !hasMove
     };
 
-    afterRecognized(computed: Computed): void { }
+    afterEmit(computed: Computed): void { }
 };
 
 // 默认参数

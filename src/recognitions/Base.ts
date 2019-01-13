@@ -166,29 +166,7 @@ export default abstract class Recognizer {
         return -1 < this.options.directions.indexOf(direction);
     };
 
-    /**
-     * 移除限制方向的deltaX/Y
-     * @param {Computed} computed 
-     */
-    public lockDirection(computed:Computed):Computed{
-        if(undefined ===this.options.directions || 0 === this.options.directions.length) return computed;
-        let deltaX = 0;
-        let deltaY = 0;
-        this.options.directions.forEach((direction:string) => {
-            if ('left' === direction && 0 > computed.deltaX) {
-                deltaX = computed.deltaX;
-            } else if ('right' === direction && 0 < computed.deltaX) {
-                deltaX = computed.deltaX;
-            } else if ('down' === direction && 0 < computed.deltaY) {
-                deltaY = computed.deltaY;
-            } else if ('up' === direction && 0 > computed.deltaY) {
-                deltaY = computed.deltaY;
-            }
-        });
-        computed.deltaX = deltaX;
-        computed.deltaY = deltaY;
-        return computed;
-    };
+
 
     /**
      * 适用于大部分移动类型的手势
@@ -237,14 +215,13 @@ export default abstract class Recognizer {
 
         // 识别后触发的事件
         if (this.isRecognized) {
-
-            computed = this.lockDirection(computed);
-
+            this.afterRecognized(computed);
+            // computed = this.lockDirection(computed);
             this.emit(this.options.name, computed);
             if (-1 < [STATUS_START, STATUS_MOVE, STATUS_END, STATUS_RECOGNIZED].indexOf(this.status)) {
                 // panstart | panmove | panend
                 this.emit(this.options.name + this.status, computed);
-                this.afterRecognized(computed);
+                this.afterEmit(computed);
             }
         }
     };
@@ -258,9 +235,18 @@ export default abstract class Recognizer {
 
     /**
      * 识别成功后执行
+     * 这个阶段可以对computed数据做些处理
+     * 比如pan可以针对不支持的方向吧deltaX/Y调整为0
+     * swipe可以把不支持的方向上的速率调整为0
      * @param {Computed} 计算数据 
      */
-    abstract afterRecognized(computed: Computed): void;
+    public afterRecognized(computed: Computed): void { };
+
+    /**
+     * 基类的所有emit触发后执行
+     * @param {Computed} computed 
+     */
+    public afterEmit(computed: Computed): void { };
 
     /**
      * 计算当前手势的touch-action

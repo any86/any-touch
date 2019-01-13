@@ -11,7 +11,7 @@ export default class PinchRecognizer extends Recognizer {
         return ['none'];
     };
 
-    afterRecognized(computed: Computed) {
+    afterEmit(computed: Computed) {
         // pinchin | pinchout
         const { scale } = computed;
         if (1 !== scale) {

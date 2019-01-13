@@ -12,7 +12,7 @@ export default class RotateRecognizer extends Base {
     /**
      * 无特殊事件要触发
      */
-    afterRecognized(computed: Computed) { };
+    afterEmit(computed: Computed) { };
 
     /**
      * 识别条件
