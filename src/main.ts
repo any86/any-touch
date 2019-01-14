@@ -32,6 +32,8 @@ import PanRecognizer from './recognitions/Pan';
 import SwipeRecognizer from './recognitions/Swipe';
 import PinchRecognizer from './recognitions/Pinch';
 import RotateRecognizer from './recognitions/Rotate';
+
+import * as Vector from './vector';
 interface Options {
     touchAction?: 'compute' | 'auto' | 'manipulation' | 'pan-x' | 'pan-y' | 'none';
     hasDomEvents?: boolean;
@@ -44,7 +46,7 @@ export default class AnyTouch {
     static SwipeRecognizer = SwipeRecognizer;
     static PinchRecognizer = PinchRecognizer;
     static RotateRecognizer = RotateRecognizer;
-
+    static Vector = Vector;
     // 目标元素
     el: HTMLElement;
 

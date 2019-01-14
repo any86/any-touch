@@ -152,7 +152,16 @@ var getDirection = function (displacementX, displacementY) {
         return 0 < displacementY ? 'down' : 'up';
     }
 };
-//# sourceMappingURL=vector.js.map
+
+var Vector = /*#__PURE__*/Object.freeze({
+    getDirection: getDirection,
+    getVLength: getVLength,
+    getDotProduct: getDotProduct,
+    getRadian: getRadian,
+    getCross: getCross,
+    getAngle: getAngle,
+    getCenter: getCenter
+});
 
 var touchAdapter = (function (event) {
     var pointers = Array.from(event.touches).map(function (_a) {
@@ -422,7 +431,8 @@ function compute (_a) {
         deltaScale: 1,
         lastVelocity: undefined,
         lastVelocityY: undefined,
-        lastVelocityX: undefined
+        lastVelocityX: undefined,
+        getRadian: getRadian
     };
     var _b = computeDistance({
         startInput: startInput,
@@ -1236,6 +1246,7 @@ var AnyTouch = (function () {
     AnyTouch.SwipeRecognizer = SwipeRecognizer;
     AnyTouch.PinchRecognizer = PinchRecognizer;
     AnyTouch.RotateRecognizer = RotateRecognizer;
+    AnyTouch.Vector = Vector;
     return AnyTouch;
 }());
 AnyTouch.prototype["default"] = {

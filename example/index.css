@@ -1,6 +1,6 @@
 :root {
     --bg: rgb(255, 255, 255);
-    --primary: rgb(189, 174, 116);
+    --primary: rgb(189, 174, 116,0.8);
 
 }
 
@@ -53,11 +53,10 @@ main table tr th{
     text-align: left;
 }
 main table tr td{
-    font-size: 12px;
+    font-size: 13px;
     color: var(--primary);
     padding:10px;
     text-align: left;
-    
 }
 
 
@@ -73,18 +72,17 @@ main table tr td:nth-child(2){
 main table tr td:nth-child(3){
     word-break: break-all;
     letter-spacing:2px;
-    line-height: 1.4;
+    line-height: 1.8;
 }
 
 
 .circle {
-    /* touch-action: none; */
     box-sizing: content-box;
-    width: 50px;
-    height: 50px;
-    border-radius: 5px;
+    width: 100px;
+    height: 100px;
+    border-radius: 10%;
     background: rgb(0, 0, 0, 0);
-    border: 50px solid rgba(189, 174, 116, 0.7);
+    border: 50px solid var(--primary);
     position: fixed;
 }
 
@@ -142,6 +140,6 @@ main table tr td:nth-child(3){
     display: inline-block;
     padding: 15px;
     color: var(--primary);
-    border-right: 1px solid rgba(189, 174, 116, 0.3);
+    border-right: 1px solid var(--primary);
     text-decoration: none;
 }

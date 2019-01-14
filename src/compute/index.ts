@@ -1,6 +1,6 @@
 
-import { Computed, directionString } from '../interface';
-import { getDirection } from '../vector';
+import { Computed, directionString,Vector } from '../interface';
+import { getDirection,getRadian } from '../vector';
 import computeLast from './computeLast';
 import computeDistance from './computeDistance';
 import computeDeltaXY from './computeDeltaXY';
@@ -55,7 +55,8 @@ export default function ({
         deltaScale: 1,
         lastVelocity: undefined,
         lastVelocityY: undefined,
-        lastVelocityX: undefined
+        lastVelocityX: undefined,
+        getRadian
     };
 
     // 滑动距离

@@ -15,6 +15,15 @@ new Vue({
         };
     },
     mounted() {
+        // let a = AnyTouch.Vector.getAngle({
+        //     x: 0,
+        //     y: 10
+        // }, {
+        //     x: 10,
+        //     y: 0
+        // });
+        // console.log(a);
+
         const tap2 = new AnyTouch.TapRecognizer({
             name: 'doubletap',
             pointer: 1,
@@ -29,13 +38,24 @@ new Vue({
             name: 'pan2',
             pointerLength: 2,
         })
-        const anyTouch = new AnyTouch(this.$refs.circle, {touchAction:'auto'});
+        // 初始化
+        const anyTouch = new AnyTouch(this.$refs.circle, {
+            touchAction: 'auto',
+            isPreventDefault: true
+        });
+        // const anyTouch = new AnyTouch(this.$refs.circle, {isPreventDefault:false});
+
+
         const pan = anyTouch.get('pan');
-        pan.set({ threshold: 0,disabled:false,directions:['left', 'right'] });
+        pan.set({
+            threshold: 0,
+            disabled: false,
+            directions: ['left', 'right', 'up', 'down']
+        });
 
         const pinch = anyTouch.get('pinch');
         pinch.set({
-            threshold: 1.1
+            threshold: 0.1
         });
         anyTouch.add(pan2);
         anyTouch.add(tap2);
@@ -47,8 +67,6 @@ new Vue({
         // this.$refs.circle.addEventListener('touchstart', ev=>{ev.preventDefault()})
         // this.$refs.circle.addEventListener('touchmove', ev=>{ev.preventDefault()})
         // this.$refs.circle.addEventListener('touchend', ev=>{ev.preventDefault()})
-
-
         /**
          * =========================== pan ===========================
          */
@@ -62,11 +80,14 @@ new Vue({
         });
 
         anyTouch.on('panstart', e => {
+            // e.nativeEvent.preventDefault()
+            // anyTouch.set({touchAction:'auto',isPreventDefault:false});
             this.message = e;
             log(e.type);
         });
 
         anyTouch.on('panmove', e => {
+            // e.nativeEvent.preventDefault()
             this.message = e;
             log(e.type);
         });
@@ -79,6 +100,7 @@ new Vue({
 
 
         anyTouch.on('pan', e => {
+            console.log(e);
             log(`%c ${e.type} `, 'background-color:#69c;color:#fff;');
             this.message = e;
             this.x += e.deltaX;

@@ -17,9 +17,7 @@ export interface Input {
     currentTarget?: EventTarget;
     centerX?: number;
     centerY?: number;
-    stopPropagation?: () => void;
-    preventDefault?: () => void;
-    stopImmediatePropagation?: () => void;
+    // functions?: { [k: string]: (...args: any[]) => any };
 }
 // input的计算结果
 export interface Computed extends Input {
@@ -53,6 +51,7 @@ export interface Computed extends Input {
     // 2次input的时间差
     deltaTime?: number;
     tapCount?: number;
+    getRadian:(v1: Vector, v2: Vector)=>number;
 }
 
 // 识别器中recognize方法返回的数据格式
