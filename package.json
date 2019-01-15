@@ -11,6 +11,7 @@
     "build": "rimraf dist && rollup -c",
     "dev": "rimraf dist && rollup -c --watch",
     "test": "jest",
+    "test-no-cache": "jest --no-cache",
     "demo": "node ./script/demo.js"
   },
   "repository": {
