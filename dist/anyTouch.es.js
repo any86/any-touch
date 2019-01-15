@@ -357,14 +357,12 @@ function computeDistance (_a) {
 }
 //# sourceMappingURL=computeDistance.js.map
 
-var lastDeltaXAngle = 0;
-var lastDeltaYAngle = 0;
+var lastDeltaXYAngle = 0;
 function computeDeltaXY (_a) {
     var prevInput = _a.prevInput, input = _a.input;
     var deltaX;
     var deltaY;
-    var deltaXAngle = 0;
-    var deltaYAngle = 0;
+    var deltaXYAngle = 0;
     if ('end' === input.inputStatus || 'start' === input.inputStatus) {
         deltaX = 0;
         deltaY = 0;
@@ -375,16 +373,13 @@ function computeDeltaXY (_a) {
     }
     if (0 !== deltaX || 0 !== deltaY) {
         var deltaXY = Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2));
-        deltaXAngle = Math.round(radianToAngle(Math.acos(deltaX / deltaXY)));
-        deltaYAngle = Math.round(radianToAngle(Math.acos(deltaY / deltaXY)));
-        lastDeltaXAngle = deltaXAngle;
-        lastDeltaYAngle = deltaYAngle;
+        deltaXYAngle = Math.round(radianToAngle(Math.acos(Math.abs(deltaX) / deltaXY)));
+        lastDeltaXYAngle = deltaXYAngle;
     }
     else {
-        deltaXAngle = lastDeltaXAngle;
-        deltaYAngle = lastDeltaYAngle;
+        deltaXYAngle = lastDeltaXYAngle;
     }
-    return { deltaX: deltaX, deltaY: deltaY, deltaXAngle: deltaXAngle, deltaYAngle: deltaYAngle };
+    return { deltaX: deltaX, deltaY: deltaY, deltaXYAngle: deltaXYAngle };
 }
 //# sourceMappingURL=computeDeltaXY.js.map
 
@@ -465,11 +460,10 @@ function compute (_a) {
     computed.lastVelocityY = lastComputed.velocityY;
     computed.lastVelocity = lastComputed.velocity;
     computed.lastDirection = lastComputed.direction;
-    var _c = computeDeltaXY({ input: input, prevInput: prevInput }), deltaX = _c.deltaX, deltaY = _c.deltaY, deltaXAngle = _c.deltaXAngle, deltaYAngle = _c.deltaYAngle;
+    var _c = computeDeltaXY({ input: input, prevInput: prevInput }), deltaX = _c.deltaX, deltaY = _c.deltaY, deltaXYAngle = _c.deltaXYAngle;
     computed.deltaX = deltaX;
     computed.deltaY = deltaY;
-    computed.deltaXAngle = deltaXAngle;
-    computed.deltaYAngle = deltaYAngle;
+    computed.deltaXYAngle = deltaXYAngle;
     if (undefined !== prevInput) {
         computed.deltaTime = input.timestamp - prevInput.timestamp;
     }

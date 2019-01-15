@@ -39,8 +39,7 @@ export interface Computed extends Input {
     centerY?: number;
     deltaX: number;
     deltaY: number;
-    deltaXAngle:number;
-    deltaYAngle:number;
+    deltaXYAngle:number;
     displacementX: number;
     displacementY: number;
     distanceX: number;

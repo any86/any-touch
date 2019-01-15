@@ -78,11 +78,10 @@ export default function ({
     computed.lastDirection = <directionString>lastComputed.direction;
 
     // 中心点位移增量
-    let { deltaX, deltaY,deltaXAngle, deltaYAngle } = computeDeltaXY({ input, prevInput });
+    let { deltaX, deltaY,deltaXYAngle } = computeDeltaXY({ input, prevInput });
     computed.deltaX = deltaX;
     computed.deltaY = deltaY;
-    computed.deltaXAngle = deltaXAngle;
-    computed.deltaYAngle = deltaYAngle;
+    computed.deltaXYAngle = deltaXYAngle;
 
     // 时间增量
     if (undefined !== prevInput) {

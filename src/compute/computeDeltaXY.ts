@@ -1,16 +1,14 @@
 import { radianToAngle } from '../vector';
-let lastDeltaXAngle = 0;
-let lastDeltaYAngle = 0;
+let lastDeltaXYAngle = 0;
 export default function ({
     prevInput,
     input
-}: any): { deltaX: number, deltaY: number, deltaXAngle: number, deltaYAngle: number } {
+}: any): { deltaX: number, deltaY: number, deltaXYAngle: number} {
     // 每次事件触发时位移的变化
     let deltaX: number;
     let deltaY: number;
     // deltaX/Y与2者合位移的角度
-    let deltaXAngle: number = 0;
-    let deltaYAngle: number = 0;
+    let deltaXYAngle: number = 0;
 
     // 计算deltaX/Y
     if ('end' === input.inputStatus || 'start' === input.inputStatus) {
@@ -25,14 +23,11 @@ export default function ({
     // 计算deltaXAngle / deltaYAngle
     if (0 !== deltaX || 0 !== deltaY) {
         const deltaXY = Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2));
-        deltaXAngle = Math.round(radianToAngle(Math.acos(deltaX / deltaXY)));
-        deltaYAngle = Math.round(radianToAngle(Math.acos(deltaY / deltaXY)));
-        lastDeltaXAngle = deltaXAngle;
-        lastDeltaYAngle = deltaYAngle;
+        deltaXYAngle = Math.round(radianToAngle(Math.acos(Math.abs(deltaX) / deltaXY)));
+        lastDeltaXYAngle = deltaXYAngle;
     } else {
-        deltaXAngle = lastDeltaXAngle;
-        deltaYAngle = lastDeltaYAngle;
+        deltaXYAngle = lastDeltaXYAngle;
     }
 
-    return { deltaX, deltaY, deltaXAngle, deltaYAngle };
+    return { deltaX, deltaY, deltaXYAngle };
 };
