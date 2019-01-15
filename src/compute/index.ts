@@ -1,6 +1,6 @@
 
-import { Computed, directionString,Vector } from '../interface';
-import { getDirection,getRadian } from '../vector';
+import { Computed, directionString } from '../interface';
+import { getDirection } from '../vector';
 import computeLast from './computeLast';
 import computeDistance from './computeDistance';
 import computeDeltaXY from './computeDeltaXY';
@@ -56,7 +56,6 @@ export default function ({
         lastVelocity: undefined,
         lastVelocityY: undefined,
         lastVelocityX: undefined,
-        getRadian
     };
 
     // 滑动距离
@@ -79,9 +78,11 @@ export default function ({
     computed.lastDirection = <directionString>lastComputed.direction;
 
     // 中心点位移增量
-    let { deltaX, deltaY } = computeDeltaXY({ input, prevInput });
+    let { deltaX, deltaY,deltaXAngle, deltaYAngle } = computeDeltaXY({ input, prevInput });
     computed.deltaX = deltaX;
     computed.deltaY = deltaY;
+    computed.deltaXAngle = deltaXAngle;
+    computed.deltaYAngle = deltaYAngle;
 
     // 时间增量
     if (undefined !== prevInput) {

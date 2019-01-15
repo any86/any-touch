@@ -100,7 +100,8 @@ new Vue({
 
 
         anyTouch.on('pan', e => {
-            console.log(e);
+            const {deltaXAngle, deltaYAngle,deltaX, deltaY} = e;
+            console.log({deltaXAngle,deltaYAngle,deltaX, deltaY});
             log(`%c ${e.type} `, 'background-color:#69c;color:#fff;');
             this.message = e;
             this.x += e.deltaX;
