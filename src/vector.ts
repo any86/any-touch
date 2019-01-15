@@ -5,7 +5,7 @@ const { round } = Math;
  * 获取向量长度(向量模)
  * @param {Object} 向 量
  */
-const getVLength = (v: Vector): number => {
+export const getVLength = (v: Vector): number => {
     return Math.sqrt(v.x * v.x + v.y * v.y);
 }
 
@@ -14,7 +14,7 @@ const getVLength = (v: Vector): number => {
  * @param {Object} v1
  * @param {Object} v2
  */
-const getDotProduct = (v1: Vector, v2: Vector) => {
+export const getDotProduct = (v1: Vector, v2: Vector) => {
     return v1.x * v2.x + v1.y * v2.y;
 }
 
@@ -23,7 +23,7 @@ const getDotProduct = (v1: Vector, v2: Vector) => {
  * @param {Object} v1
  * @param {Object} v2
  */
-const getRadian = (v1: Vector, v2: Vector) => {
+export const getRadian = (v1: Vector, v2: Vector) => {
     var mr = getVLength(v1) * getVLength(v2);
     if (mr === 0) return 0;
     var r = getDotProduct(v1, v2) / mr;
@@ -35,7 +35,7 @@ const getRadian = (v1: Vector, v2: Vector) => {
  * 求旋转方向
  * 顺时针/逆时针
  */
-const getCross = (v1: Vector, v2: Vector) => {
+export const getCross = (v1: Vector, v2: Vector) => {
     return v1.x * v2.y - v2.x * v1.y;
 }
 
@@ -44,19 +44,31 @@ const getCross = (v1: Vector, v2: Vector) => {
  * @param {Object} v1
  * @param {Object} v2
  */
-const getAngle = (v1: Vector, v2: Vector) => {
+export const getAngle = (v1: Vector, v2: Vector) => {
     var angle = getRadian(v1, v2);
     if (getCross(v1, v2) > 0) {
         angle *= -1;
     }
-    return angle * 180 / Math.PI;
-}
+    return radianToAngle(angle);
+};
+
+/**
+ * 弧度转角度
+ * @param {Number} 弧度 
+ */
+export const radianToAngle = (radian: number): number => radian / Math.PI * 180;
+
+/**
+ * 角度转弧度
+ * @param {Number} 角度 
+ */
+export const angleToRadian = (angle: number): number => angle / 180 * Math.PI;
 
 /**
  * 获取多点之间的中心坐标
  * @param {Array} 触碰点 
  */
-const getCenter = (points: any) => {
+export const getCenter = (points: any) => {
     const pointLength = points.length;
     if (1 < pointLength) {
         let x = 0;
@@ -82,7 +94,7 @@ const getCenter = (points: any) => {
  * @param {Number} 事件开始到结束的X位移 
  * @param {Number} 事件开始到结束的Y位移 
  */
-const getDirection = (displacementX: number, displacementY: number): string => {
+export const getDirection = (displacementX: number, displacementY: number): string => {
     if (displacementX === displacementY) {
         return 'none';
     } else if (Math.abs(displacementX) > Math.abs(displacementY)) {
@@ -90,14 +102,4 @@ const getDirection = (displacementX: number, displacementY: number): string => {
     } else {
         return 0 < displacementY ? 'down' : 'up';
     }
-};
-
-export {
-    getDirection,
-    getVLength,
-    getDotProduct,
-    getRadian,
-    getCross,
-    getAngle,
-    getCenter
 };
