@@ -34,8 +34,8 @@ export default function ({
         distance: 0,
 
         // 方向
-        direction: 'none',
-        lastDirection: 'none',
+        direction: undefined,
+        lastDirection: undefined,
 
         // 位移变化量
         deltaX: undefined,

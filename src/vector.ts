@@ -96,7 +96,7 @@ export const getCenter = (points: any) => {
  */
 export const getDirection = (displacementX: number, displacementY: number): string => {
     if (displacementX === displacementY) {
-        return 'none';
+        return undefined;
     } else if (Math.abs(displacementX) > Math.abs(displacementY)) {
         return 0 < displacementX ? 'right' : 'left';
     } else {
