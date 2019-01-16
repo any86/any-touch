@@ -196,10 +196,12 @@ export default class AnyTouch {
         if (undefined !== inputs) {
             const computed: Computed = compute(inputs);
             // 当是鼠标事件的时候, mouseup阶段的input和computed为空
-            this.recognizers.forEach(recognizer => {
+            for(let recognizer of this.recognizers) {
+                const isValidEvent = Recognizer.prototype.eventBus.has(recognizer.name);
+                if(!isValidEvent) continue;
                 recognizer.recognize(computed);
                 // recognizer.emit('input', { ...computed, type: 'input' });
-            });
+            }
         }
     };
 

@@ -21,9 +21,9 @@
 
 <body>
     <main id="app">
-        <header>
+        <!-- <header>
             已识别: {{message.type}}
-        </header>
+        </header> -->
 
         <h1>返回数据说明</h1>
         <table>
@@ -198,16 +198,13 @@
         </section> -->
 
 
-        <div class="circle" id="circle" ref="circle" @animationend="animationend" :class="{
-            tap: 'tap' === message.type,
-            doubletap: 'doubletap' === message.type,
-        }"
+        <div class="circle" id="circle" ref="circle" @animationend="animationend" :class="[activeType]"
             :style="{
                 top:`${y}px`,
                 left:`${x}px`,
             transform: `scale(${scale}) rotate(${angle}deg)`
             
-        }"></div>
+        }">{{message.type||activeType}}</div>
         <!-- <p class="text">scale: {{scale}}</p>
         <p class="text">angle: {{angle}}</p> -->
 

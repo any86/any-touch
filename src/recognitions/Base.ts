@@ -6,7 +6,6 @@
 import AnyEvent from 'any-event';
 import { Computed } from '../interface';
 import { Options } from '../../types/recognition';
-
 import { INPUT_CANCEL, INPUT_END, INPUT_MOVE, INPUT_START } from '../const';
 import {
     STATUS_POSSIBLE,
@@ -16,6 +15,7 @@ import {
     STATUS_CANCELLED,
     STATUS_FAILED, STATUS_RECOGNIZED
 } from '../const/recognizerStatus';
+
 export default abstract class Recognizer {
     // 关联元素
     public el: HTMLElement | HTMLDocument | Window;

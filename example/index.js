@@ -5,24 +5,21 @@ new Vue({
 
     data() {
         return {
+            activeType: 'AnyTouch',
             angle: 0,
             scale: 1,
             x: window.innerWidth / 2 - 100,
             y: window.innerHeight / 2 - 100,
             centerX: 0,
             centerY: 0,
-            message: 'AnyTouch'
+            message: {}
         };
     },
     mounted() {
-        // let a = AnyTouch.Vector.getAngle({
-        //     x: 0,
-        //     y: 10
-        // }, {
-        //     x: 10,
-        //     y: 0
-        // });
-        // console.log(a);
+
+        this.$refs.circle.addEventListener('animationend', e=>{
+            this.activeType = 'AnyTouch';
+        });
 
         const tap2 = new AnyTouch.TapRecognizer({
             name: 'doubletap',
@@ -33,6 +30,12 @@ new Vue({
             name: 'threetap',
             pointer: 1,
             taps: 3
+        })
+
+        const tap4 = new AnyTouch.TapRecognizer({
+            name: 'fourtap',
+            pointer: 1,
+            taps: 4
         })
         const pan2 = new AnyTouch.PanRecognizer({
             name: 'pan2',
@@ -48,7 +51,7 @@ new Vue({
 
         const pan = anyTouch.get('pan');
         pan.set({
-            threshold: 0,
+            threshold: 10,
             disabled: false,
             directions: ['left', 'right', 'up', 'down']
         });
@@ -57,13 +60,22 @@ new Vue({
         pinch.set({
             threshold: 0.1
         });
+
+        const rotate = anyTouch.get('rotate');
+        rotate.set({
+            threshold: 15
+        });
+
         anyTouch.add(pan2);
         anyTouch.add(tap2);
         anyTouch.add(tap3);
+        anyTouch.add(tap4);
         const tap1 = anyTouch.get('tap');
         tap1.requireFailure(tap2);
         tap1.requireFailure(tap3);
         tap2.requireFailure(tap3);
+        tap3.requireFailure(tap4);
+
         // this.$refs.circle.addEventListener('touchstart', ev=>{ev.preventDefault()})
         // this.$refs.circle.addEventListener('touchmove', ev=>{ev.preventDefault()})
         // this.$refs.circle.addEventListener('touchend', ev=>{ev.preventDefault()})
@@ -139,11 +151,6 @@ new Vue({
             this.message = e;
         });
 
-        anyTouch.on('fourtap', e => {
-            log(`%c ${e.type} `, 'background-color:#847;color:#fff;');
-            this.message = e;
-        });
-
         /**
          * =========================== pinch ===========================
          */
@@ -155,7 +162,6 @@ new Vue({
         });
 
         anyTouch.on('pinch', e => {
-
             this.message = e;
             this.scale *= e.deltaScale;
             // console.log(e.deltaScale);
@@ -187,31 +193,6 @@ new Vue({
         ['swipeup', 'swipeleft', 'swiperight', 'swipedown'].forEach(name => {
             anyTouch.on(name, e => {
                 log(e.type);
-                // switch (name) {
-                //     case 'swipeup':
-                //         {
-                //             this.y = this.y - 200;
-                //             break;
-                //         };
-
-                //     case 'swipedown':
-                //         {
-                //             this.y = this.y + 200;
-                //             break;
-                //         };
-                //     case 'swipeleft':
-                //         {
-                //             this.x = this.x - 200;
-                //             break;
-                //         };
-
-                //     case 'swiperight':
-                //         {
-                //             this.x = this.x + 200;
-                //             break;
-                //         };
-                // };
-
                 this.message = e;
             })
         });
@@ -220,7 +201,6 @@ new Vue({
             log(`%c ${e.type} `, 'background-color:#444;color:#fff;');
             this.message = e;
         });
-
     },
 
     methods: {
@@ -283,5 +263,11 @@ new Vue({
         // tap() {
         //     log('native tap')
         // }
+    },
+
+    watch:{
+        message(){
+            this.activeType = this.message.type;
+        }
     }
 });

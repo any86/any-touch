@@ -38,7 +38,8 @@ export default (input: Input): { velocity: number, velocityX: number, velocityY:
     } else {
         velocityX = _prevVelocityX || 0;
         velocityY = _prevVelocityY || 0;
-        direction = _prevDirection || 'none';
+        // direction = _prevDirection || 'none';
+        direction = _prevDirection;
     }
 
     // 取xy方向2者的最大值

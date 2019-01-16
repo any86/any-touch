@@ -3,9 +3,16 @@
   "version": "0.0.18",
   "description": "一个手势库",
   "unpkg": "dist/anyTouch.umd.js",
+  "jsdelivr": "dist/anyTouch.umd.js",
   "main": "dist/anyTouch.common.js",
   "module": "dist/anyTouch.es.js",
   "types": "types/main.d.ts",
+  "files": [
+      "src",
+      "lib/*",
+      "dist/*.js",
+      "types/*.d.ts"
+  ],
   "scripts": {
     "release": "npm run build && npm run test && npm pub && git push",
     "build": "rimraf dist && rollup -c",
@@ -41,6 +48,6 @@
     "typescript": "^3.0.1"
   },
   "dependencies": {
-    "any-event": "^0.2.1"
+    "any-event": "^0.3.4"
   }
 }
