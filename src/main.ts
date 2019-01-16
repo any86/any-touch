@@ -32,7 +32,6 @@ import PanRecognizer from './recognitions/Pan';
 import SwipeRecognizer from './recognitions/Swipe';
 import PinchRecognizer from './recognitions/Pinch';
 import RotateRecognizer from './recognitions/Rotate';
-
 import * as Vector from './vector';
 interface Options {
     touchAction?: 'compute' | 'auto' | 'manipulation' | 'pan-x' | 'pan-y' | 'none';
@@ -197,8 +196,8 @@ export default class AnyTouch {
             const computed: Computed = compute(inputs);
             // 当是鼠标事件的时候, mouseup阶段的input和computed为空
             for(let recognizer of this.recognizers) {
-                const isValidEvent = Recognizer.prototype.eventBus.has(recognizer.name);
-                if(!isValidEvent) continue;
+                // const isValidEvent = Recognizer.prototype.eventBus.has(recognizer.name);
+                if(recognizer.disabled) continue;
                 recognizer.recognize(computed);
                 // recognizer.emit('input', { ...computed, type: 'input' });
             }

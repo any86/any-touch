@@ -31,7 +31,6 @@ export default class TapRecognizer extends Recognizer {
      * @param {Computed} 计算数据 
      */
     public recognize(computed: Computed): void {
-        if (this.options.disabled) return;
         this.status = STATUS_POSSIBLE;
         // this.cancel();
         if (this.test(computed)) {

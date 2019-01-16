@@ -1,8 +1,9 @@
 import Recognizer from './Base';
 import { Computed } from '../interface';
+import { Options } from '../../types/recognition';
 import {INPUT_END} from '../const';
 export default class SwipeRecognizer extends Recognizer {
-    constructor(options: any={}) {
+    constructor(options: Options={}) {
         super(options);
     };
 

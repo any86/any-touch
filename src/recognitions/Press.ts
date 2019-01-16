@@ -21,7 +21,6 @@ export default class PressRecognizer extends Recognizer {
     };
 
     recognize(computed: Computed): void {
-        if (this.options.disabled) return;
         const { inputStatus } = computed;
         // 手指一直按住屏幕
         if (STATUS_RECOGNIZED !== this.status) {

@@ -13,7 +13,7 @@ export default class PanRecognizer extends Recognizer {
     public name: string;
     public options: Options;
 
-    constructor(options: Options = {}) {
+    constructor(options: Options={}) {
         super(options);
     };
 
@@ -37,6 +37,7 @@ export default class PanRecognizer extends Recognizer {
      * @return {Boolean}} .是否是当前手势 
      */
     test({ distance, lastDirection, inputStatus, pointerLength }: Computed): boolean {
+        // console.log({lastDirection});
         const isValidDirection = this.isVaildDirection(lastDirection);
         const isValidThreshold = this.options.threshold < distance;
         return this.isValidPointerLength(pointerLength) && isValidDirection &&
@@ -73,6 +74,7 @@ export default class PanRecognizer extends Recognizer {
                 deltaY = computed.deltaY;
             } else if ('up' === direction && 0 > computed.deltaY) {
                 deltaY = computed.deltaY;
+                // console.log(321321312);
             }
         });
         computed.deltaX = deltaX;

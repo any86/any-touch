@@ -23,6 +23,8 @@ export default abstract class Recognizer {
     public hasDomEvents: boolean;
     // 手势名
     public name: string;
+    // 是否禁止
+    public disabled:boolean;
     // 识别状态
     public status: string;
     // 是否已识别
@@ -43,6 +45,7 @@ export default abstract class Recognizer {
     constructor(options: Options = { disabled: false }) {
         this.options = { ...this.default, ...options };
         this.name = this.options.name;
+        this.disabled = this.options.disabled;
         this.status = STATUS_POSSIBLE;
         this.isRecognized = false;
         this.requireFailureRecognizers = [];
@@ -181,12 +184,10 @@ export default abstract class Recognizer {
      * @param {Computed} 计算数据 
      */
     recognize(computed: Computed) {
-        if (this.options.disabled) return;
         // this.beforeRecognize(computed);
         let { inputStatus } = computed;
         // 是否识别成功
         let isVaild = this.test(computed);
-
         // 如果识别结束, 那么重置状态
         if (-1 < [STATUS_END, STATUS_CANCELLED, STATUS_FAILED, STATUS_RECOGNIZED].indexOf(this.status)) {
             this.status = STATUS_POSSIBLE;
@@ -211,13 +212,14 @@ export default abstract class Recognizer {
         //     `${inputStatus} `
         // );
         // 是否已识别
-        this.isRecognized = -1 < [STATUS_START, STATUS_MOVE, STATUS_RECOGNIZED].indexOf(this.status);
-
+        this.isRecognized = -1 < [STATUS_START, STATUS_MOVE, STATUS_END, STATUS_RECOGNIZED].indexOf(this.status);
         // 识别后触发的事件
         if (this.isRecognized) {
             this.afterRecognized(computed);
             // computed = this.lockDirection(computed);
             this.emit(this.options.name, computed);
+            
+
             if (-1 < [STATUS_START, STATUS_MOVE, STATUS_END, STATUS_RECOGNIZED].indexOf(this.status)) {
                 // panstart | panmove | panend
                 this.emit(this.options.name + this.status, computed);
