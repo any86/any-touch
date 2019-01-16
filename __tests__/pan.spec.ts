@@ -1,4 +1,3 @@
-import TouchSimulator from './utils/TouchSimulator';
 import panSimulator from './utils/Gesture/panSimulator';
 
 import AnyTouch from '../src/main'
@@ -12,15 +11,14 @@ const el = document.getElementById('box');
         const panRecognizer = at.get('pan');
         panRecognizer.set({ directions: [direction] });
         at.on(`pan${direction}`, (ev) => {
-            direction = ev.direction;
+            expect(ev.direction).toBe(direction);
         });
 
-        at.on('panend', ev=>{
-
+        at.on(`panend`, (ev) => {
+            // at.destroy();
+            done();
         });
-
         // 模拟事件
         panSimulator(el, { direction });
-        done();
     });
 });

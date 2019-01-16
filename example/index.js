@@ -105,7 +105,7 @@ new Vue({
         });
 
         anyTouch.on('panend', e => {
-            // console.warn(e.direction);
+            console.warn('panend',e.direction);
             this.message = e;
             log(e.type);
         });
@@ -113,7 +113,6 @@ new Vue({
 
         anyTouch.on('pan', e => {
             const {deltaXYAngle,deltaX, deltaY} = e;
-            console.log({deltaXYAngle,deltaX, deltaY});
             log(`%c ${e.type} `, 'background-color:#69c;color:#fff;');
             this.message = e;
             this.x += e.deltaX;
@@ -151,6 +150,11 @@ new Vue({
             this.message = e;
         });
 
+        anyTouch.on('fourtap', e => {
+            log(`%c ${e.type} `, 'background-color:#99c;color:#fff;');
+            this.message = e;
+        });
+        
         /**
          * =========================== pinch ===========================
          */

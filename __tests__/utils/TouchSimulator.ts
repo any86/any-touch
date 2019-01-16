@@ -1,9 +1,10 @@
+import sleep from './sleep';
 interface Pointer {
     x: number;
     y: number;
 };
 interface Options {
-    device: 'touch' | 'mouse'
+    device: 'touch' | 'mouse';
 };
 const CLIENT_X = 'clientX';
 const CLIENT_Y = 'clientY';
@@ -16,7 +17,7 @@ export default class TouchSimulator {
     public el: Element | Document;
     public device: 'touch' | 'mouse';
 
-    constructor(el: Element | Document, { device = 'touch' }: Options = <Options>{}) {
+    constructor(el: Element | Document, { device = 'touch'}: Options = <Options>{}) {
         this.el = el;
         this.device = device;
     };
