@@ -34,9 +34,9 @@ export default abstract class Recognizer {
     // 需要对应手势失败才能识别成功
     public requireFailureRecognizers: any[];
     // 存储外部注入方法的容器
-    public $root: { [k: string]: (...args: any[]) => void };
-    // 注入外部方法到识别器原型上
-    public static $inject: (key: string, method: (...args: any[]) => void) => void;
+    // public $root: { [k: string]: (...args: any[]) => void };
+    public $root: any;
+
     // 默认参数
     public default: Options;
 
@@ -49,16 +49,19 @@ export default abstract class Recognizer {
         this.status = STATUS_POSSIBLE;
         this.isRecognized = false;
         this.requireFailureRecognizers = [];
+        // 这里面不能直接调用$root等, 
+        // 因为rollup生成的代码构造函数并不是该constructor
+        // 而是构造函数中又嵌套了一个同名构造函数
     };
 
     /**
      * 设置识别器
      * @param {Object} 选项 
      */
-    public set(options: { [propName: string]: any }) {
+    public set(options: Options) {
         this.options = { ...this.options, ...options };
         // 刷新anyTouch
-        Recognizer.prototype.$root.update();
+        this.$root.update();
     };
 
     /**
@@ -256,16 +259,4 @@ export default abstract class Recognizer {
     abstract getTouchAction(): string[];
 };
 
-// 外部的方法的载体
-Recognizer.prototype.$root = {};
 Recognizer.prototype.eventBus = new AnyEvent();
-/**
- * 注入AnyTouch上的方法到识别器原型上
- * @param {String} 方法名
- * @param {Function} 对应AnyTouch上方法
- */
-Recognizer.$inject = (key, method) => {
-    Recognizer.prototype.$root[key] = method;
-};
-
-

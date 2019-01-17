@@ -23,6 +23,8 @@ export default class TapRecognizer extends Recognizer {
     };
 
     getTouchAction() {
+        // 单击auto, 多击manipulation=pan + pinch-zoom(禁用了默认双击)
+        // console.log({taps: this.options.taps});
         return (1 < this.options.taps) ? ['manipulation'] : ['auto'];
     };
 

@@ -81,10 +81,15 @@ export default class AnyTouch {
         // 注入el到识别器原型
         // 后面模拟浏览器时间需要用到el
         Recognizer.prototype.el = el;
+        Recognizer.prototype.$root = this;
         Recognizer.prototype.hasDomEvents = this.options.hasDomEvents;
         // 识别器注入update方法
-        Recognizer.$inject('update', this.update.bind(this));
+        
+        // Object.setPrototypeOf(Recognizer, {$root:AnyTouch})
 
+        // console.log(Object.getPrototypeOf(Recognizer).$root);
+        // Recognizer.prototype.$root = 123;
+        // Recognizer.pro('update', this.update.bind(this));
         // 应用设置
         this.update();
 
@@ -100,6 +105,7 @@ export default class AnyTouch {
         if ('compute' === this.options.touchAction) {
             let touchActions = [];
             for (let recognizer of this.recognizers) {
+                // console.log(recognizer.options);
                 touchActions.push(...recognizer.getTouchAction());
             };
             el.style.touchAction = computeTouchAction(touchActions);
@@ -149,6 +155,7 @@ export default class AnyTouch {
      */
     add(recognizer: any): void {
         this.recognizers.push(recognizer);
+        this.update();
     };
 
     /**

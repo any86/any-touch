@@ -43,7 +43,7 @@ new Vue({
         })
         // 初始化
         const anyTouch = new AnyTouch(this.$refs.circle, {
-            touchAction: 'auto',
+            touchAction: 'compute',
             isPreventDefault: true
         });
         // const anyTouch = new AnyTouch(this.$refs.circle, {isPreventDefault:false});
@@ -66,7 +66,7 @@ new Vue({
             threshold: 15
         });
 
-        anyTouch.add(pan2);
+        // anyTouch.add(pan2);
         anyTouch.add(tap2);
         anyTouch.add(tap3);
         anyTouch.add(tap4);
@@ -179,6 +179,9 @@ new Vue({
          */
         ['rotatestart', 'rotatemove', 'rotateend'].forEach(name => {
             anyTouch.on(name, e => {
+                if('rotateend' === name) {
+                    alert(12)
+                }
                 log(e.type);
                 // this.message = e;
             })

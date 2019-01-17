@@ -4,3 +4,4 @@ coverage
 .cache
 dist
 false
+lib
