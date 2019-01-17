@@ -21,6 +21,7 @@ npm i -S any-touch
 
 ## 使用
 
+### 基础
 ```javascript
 import AnyTouch from 'any-touch';
 
@@ -40,8 +41,32 @@ at.off('pan')
 at.destory();
 ```
 
+### 自定义识别器
+``` javascript
+// 自定义一个双击识别器
+const tap2 = new AnyTouch.TapRecognizer({
+    name: 'doubletap',
+    pointer: 1,
+    taps: 2
+});
+
+// 添加自定义手势 
+const el = doucument.getElementById('gesture-box');
+const at = new AnyTouch(el);
+at.add(tap2);
+at.on('tap2', ev=>{
+  console.log(ev);
+});
+
+// 一般情况下不期望双击时触发单击, 
+// 所以要声明单击的触发一定要等待(一段时间内)双击没有触发(失败)才可以
+const tap1 = anyTouch.get('tap');
+tap1.requireFailure(tap2);
+```
+
 ## 支持
 
 - [x] 支持手势: tap | doubletap | pan | swipe | pinch | rotate.
 - [x] 支持鼠标(mouse)
 - [x] 手势互斥(requireFailure)
+- [x] 自定义识别器(Recognizer)
