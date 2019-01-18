@@ -23,13 +23,13 @@ export default {
     ],
     output: [{
         format: 'cjs',
-        file: 'dist/anyTouch.common.js',
+        file: 'dist/AnyTouch.common.js',
     }, {
         format: 'es',
-        file: 'dist/anyTouch.es.js',
+        file: 'dist/AnyTouch.es.js',
     }, {
         format: 'umd',
         name: 'AnyTouch',
-        file: 'dist/anyTouch.umd.js',
+        file: 'dist/AnyTouch.umd.js',
     }]
 };
