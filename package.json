@@ -8,10 +8,10 @@
   "module": "dist/anyTouch.es.js",
   "types": "types/main.d.ts",
   "files": [
-      "src",
-      "lib/*",
-      "dist/*.js",
-      "types/*.d.ts"
+    "src",
+    "lib/*",
+    "dist/*.js",
+    "types/*.d.ts"
   ],
   "scripts": {
     "release": "npm run build && npm run test && npm pub && git push",
@@ -19,7 +19,8 @@
     "dev": "rimraf dist && rollup -c --watch",
     "test": "jest --no-cache",
     "test-cache": "jest",
-    "demo": "node ./script/demo.js"
+    "demo": "node ./script/demo.js",
+    "removeAll": "rimraf ./node_modules"
   },
   "repository": {
     "type": "git",
@@ -33,6 +34,7 @@
   "homepage": "https://github.com/383514580/any-touch#readme",
   "devDependencies": {
     "@types/jest": "^23.3.5",
+    "chalk": "^2.4.2",
     "gh-pages": "^2.0.1",
     "jest": "^23.6.0",
     "jest-environment-jsdom": "^23.4.0",
