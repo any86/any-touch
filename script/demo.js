@@ -6,6 +6,8 @@ shell.rm('-rf', './demo');
 shell.mkdir('-p','./demo/dist');
 shell.mkdir('-p','./demo/example');
 shell.cp('-Rf', './example/*', './demo/example');
+shell.cp('-Rf', './dist/*', './demo/dist');
+
 
 // 发布
 ghpages.publish('./demo', {
