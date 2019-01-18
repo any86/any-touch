@@ -95,7 +95,6 @@ var INPUT_START = 'start';
 var INPUT_MOVE = 'move';
 var INPUT_CANCEL = 'cancel';
 var INPUT_END = 'end';
-//# sourceMappingURL=const.js.map
 
 var round = Math.round;
 var getVLength = function (v) {
@@ -147,7 +146,7 @@ var getCenter = function (points) {
 };
 var getDirection = function (displacementX, displacementY) {
     if (displacementX === displacementY) {
-        return 'none';
+        return undefined;
     }
     else if (Math.abs(displacementX) > Math.abs(displacementY)) {
         return 0 < displacementX ? 'right' : 'left';
@@ -156,7 +155,6 @@ var getDirection = function (displacementX, displacementY) {
         return 0 < displacementY ? 'down' : 'up';
     }
 };
-//# sourceMappingURL=vector.js.map
 
 var Vector = /*#__PURE__*/Object.freeze({
     getVLength: getVLength,
@@ -187,7 +185,6 @@ var touchAdapter = (function (event) {
         nativeEvent: event
     };
 });
-//# sourceMappingURL=touch.js.map
 
 var prevPointers = undefined;
 var isPressed = false;
@@ -224,7 +221,6 @@ var mouseAdapter = (function (event) {
         nativeEvent: event
     };
 });
-//# sourceMappingURL=mouse.js.map
 
 var centerX;
 var centerY;
@@ -260,7 +256,6 @@ var createInput = (function (event) {
         target: target,
         currentTarget: currentTarget, nativeEvent: event });
 });
-//# sourceMappingURL=create.js.map
 
 var startInput;
 var prevInput;
@@ -296,7 +291,6 @@ var inputManage = (function (event) {
         input: input
     };
 });
-//# sourceMappingURL=inputManage.js.map
 
 var _prevInput;
 var _prevVelocityX;
@@ -322,12 +316,11 @@ var computeLast = (function (input) {
     else {
         velocityX = _prevVelocityX || 0;
         velocityY = _prevVelocityY || 0;
-        direction = _prevDirection;
+        direction = getDirection(deltaX, deltaY) || _prevDirection;
     }
     var maxVelocity = Math.max(velocityX, velocityY);
     return { velocity: maxVelocity, velocityX: velocityX, velocityY: velocityY, direction: direction };
 });
-//# sourceMappingURL=computeLast.js.map
 
 var prevDisplacementX = 0;
 var prevDisplacementY = 0;
@@ -357,7 +350,6 @@ function computeDistance (_a) {
         displacementX: displacementX, displacementY: displacementY, distanceX: distanceX, distanceY: distanceY, distance: distance
     };
 }
-//# sourceMappingURL=computeDistance.js.map
 
 var lastDeltaXYAngle = 0;
 function computeDeltaXY (_a) {
@@ -383,13 +375,11 @@ function computeDeltaXY (_a) {
     }
     return { deltaX: deltaX, deltaY: deltaY, deltaXYAngle: deltaXYAngle };
 }
-//# sourceMappingURL=computeDeltaXY.js.map
 
 var computeVector = (function (input) { return ({
     x: input.pointers[1][propX] - input.pointers[0][propX],
     y: input.pointers[1][propY] - input.pointers[0][propY]
 }); });
-//# sourceMappingURL=computeVector.js.map
 
 function computeScale (_a) {
     var startV = _a.startV, prevV = _a.prevV, activeV = _a.activeV;
@@ -397,7 +387,6 @@ function computeScale (_a) {
     var scale = getVLength(activeV) / getVLength(startV);
     return { scale: scale, deltaScale: deltaScale };
 }
-//# sourceMappingURL=computeScale.js.map
 
 function computeAngle (_a) {
     var startV = _a.startV, prevV = _a.prevV, activeV = _a.activeV;
@@ -405,7 +394,6 @@ function computeAngle (_a) {
     var angle = getAngle(activeV, startV);
     return { angle: angle, deltaAngle: deltaAngle };
 }
-//# sourceMappingURL=computeAngle.js.map
 
 var maxLength = 0;
 var computeMaxLength = (function (_a) {
@@ -418,7 +406,6 @@ var computeMaxLength = (function (_a) {
     }
     return maxLength;
 });
-//# sourceMappingURL=computeMaxLength.js.map
 
 function compute (_a) {
     var startInput = _a.startInput, prevInput = _a.prevInput, startMutliInput = _a.startMutliInput, input = _a.input;
@@ -433,8 +420,8 @@ function compute (_a) {
         distanceX: 0,
         distanceY: 0,
         distance: 0,
-        direction: 'none',
-        lastDirection: 'none',
+        direction: undefined,
+        lastDirection: undefined,
         deltaX: undefined,
         deltaY: undefined,
         velocityX: 0,
@@ -491,7 +478,6 @@ function compute (_a) {
     var maxPointerLength = computeMaxLength(input);
     return __assign({}, input, { maxPointerLength: maxPointerLength }, computed);
 }
-//# sourceMappingURL=index.js.map
 
 var computeTouchAction = (function (touchActions) {
     var e_1, _a;
@@ -532,7 +518,6 @@ var computeTouchAction = (function (touchActions) {
     }
     return touchActionCSSArray.join(' ');
 });
-//# sourceMappingURL=computeTouchAction.js.map
 
 /*! *****************************************************************************
 Copyright (c) Microsoft Corporation. All rights reserved.
@@ -662,20 +647,20 @@ var STATUS_END = 'end';
 var STATUS_CANCELLED = 'cancel';
 var STATUS_FAILED = 'failed';
 var STATUS_RECOGNIZED = 'recognized';
-//# sourceMappingURL=recognizerStatus.js.map
 
 var Recognizer = (function () {
     function Recognizer(options) {
         if (options === void 0) { options = { disabled: false }; }
         this.options = __assign({}, this["default"], options);
         this.name = this.options.name;
+        this.disabled = this.options.disabled;
         this.status = STATUS_POSSIBLE;
         this.isRecognized = false;
         this.requireFailureRecognizers = [];
     }
     Recognizer.prototype.set = function (options) {
         this.options = __assign({}, this.options, options);
-        Recognizer.prototype.$root.update();
+        this.$root.update();
     };
     Recognizer.prototype.emit = function (type, payload) {
         payload.type = type;
@@ -760,8 +745,6 @@ var Recognizer = (function () {
         return -1 < this.options.directions.indexOf(direction);
     };
     Recognizer.prototype.recognize = function (computed) {
-        if (this.options.disabled)
-            return;
         var inputStatus = computed.inputStatus;
         var isVaild = this.test(computed);
         if (-1 < [STATUS_END, STATUS_CANCELLED, STATUS_FAILED, STATUS_RECOGNIZED].indexOf(this.status)) {
@@ -785,7 +768,7 @@ var Recognizer = (function () {
         else if ((STATUS_START === this.status || STATUS_MOVE === this.status) && INPUT_CANCEL === inputStatus || !isVaild) {
             this.status = STATUS_CANCELLED;
         }
-        this.isRecognized = -1 < [STATUS_START, STATUS_MOVE, STATUS_RECOGNIZED].indexOf(this.status);
+        this.isRecognized = -1 < [STATUS_START, STATUS_MOVE, STATUS_END, STATUS_RECOGNIZED].indexOf(this.status);
         if (this.isRecognized) {
             this.afterRecognized(computed);
             this.emit(this.options.name, computed);
@@ -799,12 +782,7 @@ var Recognizer = (function () {
     Recognizer.prototype.afterEmit = function (computed) { };
     return Recognizer;
 }());
-Recognizer.prototype.$root = {};
 Recognizer.prototype.eventBus = new EventEmitter();
-Recognizer.$inject = function (key, method) {
-    Recognizer.prototype.$root[key] = method;
-};
-//# sourceMappingURL=Base.js.map
 
 var setTimeout = window.setTimeout, clearTimeout$1 = window.clearTimeout;
 var TapRecognizer = (function (_super) {
@@ -821,8 +799,6 @@ var TapRecognizer = (function (_super) {
     };
     TapRecognizer.prototype.recognize = function (computed) {
         var _this = this;
-        if (this.options.disabled)
-            return;
         this.status = STATUS_POSSIBLE;
         if (this.test(computed)) {
             this.tapCount++;
@@ -873,7 +849,6 @@ TapRecognizer.prototype["default"] = {
     interval: 300,
     disabled: false
 };
-//# sourceMappingURL=Tap.js.map
 
 var PressRecognizer = (function (_super) {
     __extends(PressRecognizer, _super);
@@ -889,8 +864,6 @@ var PressRecognizer = (function (_super) {
     };
     PressRecognizer.prototype.recognize = function (computed) {
         var _this = this;
-        if (this.options.disabled)
-            return;
         var inputStatus = computed.inputStatus;
         if (STATUS_RECOGNIZED !== this.status) {
             var IS_VALID = this.test(computed);
@@ -936,7 +909,6 @@ PressRecognizer.prototype["default"] = {
     minPressTime: 251,
     disabled: false
 };
-//# sourceMappingURL=Press.js.map
 
 var getHV = (function (directions) {
     var e_1, _a;
@@ -969,7 +941,6 @@ var getHV = (function (directions) {
     }
     return { hasHorizontal: hasHorizontal, hasVertical: hasVertical };
 });
-//# sourceMappingURL=getHV.js.map
 
 var PanRecognizer = (function (_super) {
     __extends(PanRecognizer, _super);
@@ -1035,7 +1006,6 @@ PanRecognizer.prototype["default"] = {
     pointerLength: 1,
     directions: ['up', 'right', 'down', 'left']
 };
-//# sourceMappingURL=Pan.js.map
 
 var SwipeRecognizer = (function (_super) {
     __extends(SwipeRecognizer, _super);
@@ -1075,7 +1045,6 @@ SwipeRecognizer.prototype["default"] = {
     pointerLength: 1,
     directions: ['up', 'right', 'down', 'left']
 };
-//# sourceMappingURL=Swipe.js.map
 
 var PinchRecognizer = (function (_super) {
     __extends(PinchRecognizer, _super);
@@ -1107,7 +1076,6 @@ PinchRecognizer.prototype["default"] = {
     threshold: 0,
     pointerLength: 2
 };
-//# sourceMappingURL=Pinch.js.map
 
 var RotateRecognizer = (function (_super) {
     __extends(RotateRecognizer, _super);
@@ -1130,7 +1098,6 @@ RotateRecognizer.prototype["default"] = {
     threshold: 0,
     pointerLength: 2
 };
-//# sourceMappingURL=Rotate.js.map
 
 var AnyTouch = (function () {
     function AnyTouch(el, options) {
@@ -1147,8 +1114,8 @@ var AnyTouch = (function () {
             new RotateRecognizer(),
         ];
         Recognizer.prototype.el = el;
+        Recognizer.prototype.$root = this;
         Recognizer.prototype.hasDomEvents = this.options.hasDomEvents;
-        Recognizer.$inject('update', this.update.bind(this));
         this.update();
         this.unbinders = this._bindRecognizers(this.el);
     }
@@ -1207,6 +1174,7 @@ var AnyTouch = (function () {
     };
     AnyTouch.prototype.add = function (recognizer) {
         this.recognizers.push(recognizer);
+        this.update();
     };
     AnyTouch.prototype.get = function (name) {
         return this.recognizers.find(function (recognizer) { return name === recognizer.options.name; });
@@ -1248,8 +1216,7 @@ var AnyTouch = (function () {
             try {
                 for (var _b = __values(this.recognizers), _c = _b.next(); !_c.done; _c = _b.next()) {
                     var recognizer = _c.value;
-                    var isValidEvent = Recognizer.prototype.eventBus.has(recognizer.name);
-                    if (!isValidEvent)
+                    if (recognizer.disabled)
                         continue;
                     recognizer.recognize(computed);
                 }
@@ -1288,6 +1255,5 @@ AnyTouch.prototype["default"] = {
     hasDomEvents: true,
     isPreventDefault: true
 };
-//# sourceMappingURL=main.js.map
 
 module.exports = AnyTouch;
