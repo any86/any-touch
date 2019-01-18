@@ -1,6 +1,6 @@
 :root {
-    --bg: rgb(255, 255, 255);
-    --primary: rgb(189, 174, 116);
+    --bg: rgba(255, 255, 255);
+    --primary: rgba(189, 174, 116, 0.7);
 
 }
 
@@ -25,111 +25,86 @@ main {
     touch-action: manipulation;
     background: var(--bg);
     min-height: calc(100vh - 20px);
-    margin-top: 60px;
+    /* margin-top: 60px; */
 }
 
-main header{
+main header {
     position: fixed;
-    top:0;left:0;width:100%;
-    background: rgba(255,255,255,0.7);
-    padding:15px;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.7);
+    padding: 15px;
     box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.1);
-    font-size:20px;
+    font-size: 20px;
 }
 
-main h1{
-    font-size: 14px;display: inline-block;
-    padding:5px;background:var(--primary);color:#fff;
+main h1 {
+    font-size: 16px;
+    font-weight: 100;
+    display: inline-block;
+    padding: 5px;
+    background: var(--primary);
+    color: #fff;
 }
 
-main table{border-collapse: collapse;table-layout:fixed;}
-main table tr{border-bottom: 1px solid #eee}
+main table {
+    border-collapse: collapse;
+    table-layout: fixed;
+}
 
-main table tr th{
-    font-size: 14px;    
+main table tr {
+    border-bottom: 1px solid #eee
+}
+
+main table tr th {
+    font-size: 14px;
     word-break: keep-all;
     padding: 10px;
-    color:var(--primary);
-    text-align: left;
-}
-main table tr td{
-    font-size: 12px;
     color: var(--primary);
-    padding:10px;
     text-align: left;
-    
+}
+
+main table tr td {
+    font-size: 13px;
+    color: var(--primary);
+    padding: 10px;
+    text-align: left;
 }
 
 
-main table tr td:nth-child(1){
+main table tr td:nth-child(1) {
     word-break: break-word;
 }
 
-main table tr td:nth-child(2){
+main table tr td:nth-child(2) {
     word-break: keep-all;
-    padding:10px 5px;
+    padding: 10px 5px;
 }
 
-main table tr td:nth-child(3){
+main table tr td:nth-child(3) {
     word-break: break-all;
-    letter-spacing:2px;
-    line-height: 1.4;
+    letter-spacing: 2px;
+    line-height: 1.8;
 }
 
 
 .circle {
-    /* touch-action: none; */
     box-sizing: content-box;
-    width: 30px;
-    height: 30px;
-    border-radius: 5px;
-    background: rgb(0, 0, 0, 0);
-    border: 50px solid rgba(189, 174, 116, 0.7);
+    width: 150px;
+    height: 150px;
+    border-radius: 10%;
+    background: var(--primary);
     position: fixed;
-    left: calc(50vw - 25px);
-    top: calc(50vh - 25px);
+    line-height: 150px;
+    text-align: center;
+    color: #fff;
+    font-size: 24px;
+    font-weight: 100;
+    /* box-shadow: 1px 2px 30px var(--primary) */
 }
 
 
-.tap {
-    animation: tap 500ms;
-}
-
-@keyframes tap {
-    from {
-        transform: scale(1);
-        opacity: 1;
-    }
-
-    50% {
-        transform: scale(.9);
-        opacity: .8;
-    }
-
-    to {
-        transform: scale(1);
-        opacity: 1;
-    }
-}
-
-
-.doubletap {
-    animation: doubletap 500ms;
-}
-
-@keyframes doubletap {
-    from {
-        transform: scaleY(1);
-    }
-
-    50% {
-        transform: scaleY(.6);
-    }
-
-    to {
-        transform: scaleY(1);
-    }
-}
 
 .fixed-bottom {
     position: fixed;
@@ -144,6 +119,116 @@ main table tr td:nth-child(3){
     display: inline-block;
     padding: 15px;
     color: var(--primary);
-    border-right: 1px solid rgba(189, 174, 116, 0.3);
+    border-right: 1px solid var(--primary);
     text-decoration: none;
+}
+
+
+/* 动画 */
+.press {
+    transition: transform 500ms;
+    transform: scale(0.7) !important;opacity: 0.7;
+}
+
+.pressup {
+    transition: transform 500ms;
+}
+
+
+.tap {
+    animation: tap 500ms;
+}
+
+@keyframes tap {
+    50% {
+        transform: scale(.9);
+        opacity: .8;
+    }
+}
+
+
+.doubletap {
+    animation: doubletap 1000ms;
+}
+
+@keyframes doubletap {
+    25%{
+        transform: scale(0.6) ;
+        opacity: .7;
+    }
+
+    50% {
+        transform: scale(1);
+    }
+
+
+    75% {
+        transform: scale(.6);opacity: .7;
+    }
+}
+
+
+.threetap {
+    animation: threetap 500ms;
+}
+
+@keyframes threetap {
+    from {
+        transform: scale(-.5) skew(-15deg);
+        opacity: 0.5;
+    }
+
+    50% {
+        transform: scale(-.3) skew(15deg);
+    }
+
+    to {
+        transform: scale(1) ;
+    }
+}
+
+.swipeup {
+    animation: swipeUp 300ms ease-out;
+}
+
+@keyframes swipeUp {
+    50% {
+        opacity:0.5;
+        transform: translateY(-300px);
+    }
+}
+
+
+.swipedown {
+    animation: swipeDown 300ms ease-in-out;
+}
+
+@keyframes swipeDown {
+    50% {
+        opacity:0.5;
+        transform: translateY(300px);
+    }
+}
+
+
+.swiperight {
+    animation: swipeRight 300ms ease-in-out;
+}
+
+@keyframes swipeRight {
+    50% {
+        opacity:0.5;
+        transform: translateX(300px);
+    }
+}
+
+.swipeleft {
+    animation: swipeLeft 300ms ease-in-out;
+}
+
+@keyframes swipeLeft {
+    50% {
+        opacity:0.5;
+        transform: translateX(-300px);
+    }
 }
