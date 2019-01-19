@@ -1,14 +1,17 @@
 {
     "compilerOptions": {
-        "esModuleInterop":true,
-        "target": "es3",
-        "module": "commonjs",
+        "esModuleInterop": true,
+        "target": "es5",
+        "module": "es6",
         "noImplicitAny": true,
         "removeComments": true,
         "preserveConstEnums": false,
         "sourceMap": true,
         "outDir": "./lib",
-        "lib": ["dom", "es2017"],
+        "lib": [
+            "dom",
+            "es7"
+        ],
         "downlevelIteration": true,
         "declaration": true,
         "declarationDir": "./lib",
