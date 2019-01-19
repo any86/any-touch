@@ -26,10 +26,10 @@ export default (input: Input): { velocity: number, velocityX: number, velocityY:
     const deltaX = (0 < input.centerX) ? input.centerX - _prevInput.centerX : 0;
     const deltaY = (0 < input.centerY) ? input.centerY - _prevInput.centerY : 0;
     // 每25ms刷新速度数据
-    if (COMPUTE_INTERVAL < deltaTime) {
+    if (COMPUTE_INTERVAL < deltaTime || undefined === _prevDirection) {
         velocityX = Math.round(Math.abs(deltaX / deltaTime)*100)/100;
         velocityY = Math.round(Math.abs(deltaY / deltaTime)*100)/100;
-        direction = getDirection(deltaX, deltaY);
+        direction = getDirection(deltaX, deltaY) || _prevDirection;
         // 存储状态
         _prevVelocityX = velocityX;
         _prevVelocityY = velocityY;
@@ -38,13 +38,14 @@ export default (input: Input): { velocity: number, velocityX: number, velocityY:
     } else {
         velocityX = _prevVelocityX || 0;
         velocityY = _prevVelocityY || 0;
+// console.log({_prevDirection,deltaX, deltaY});
         // direction = getDirection(deltaX, deltaY) || _prevDirection || 'none';
-        direction = getDirection(deltaX, deltaY) || _prevDirection;
+        direction = _prevDirection;
+        // console.log({direction})
     }
 
     // 取xy方向2者的最大值
     const maxVelocity = Math.max(velocityX, velocityY);
-// console.log({deltaX,deltaY,direction,time:Date.now()});
 
     return { velocity: maxVelocity, velocityX, velocityY, direction };
 };
