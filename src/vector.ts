@@ -92,14 +92,14 @@ export const getCenter = (points: any) => {
 /**
  * 
  * @param {Number} 事件开始到结束的X位移 
- * @param {Number} 事件开始到结束的Y位移 
+* @param {Number} 事件开始到结束的Y位移 
  */
-export const getDirection = (displacementX: number, displacementY: number): string => {
-    if (displacementX === displacementY) {
+export const getDirection = (x: number, y: number): string => {
+    if (x === y) {
         return undefined;
-    } else if (Math.abs(displacementX) > Math.abs(displacementY)) {
-        return 0 < displacementX ? 'right' : 'left';
+    } else if (Math.abs(x) > Math.abs(y)) {
+        return 0 < x ? 'right' : 'left';
     } else {
-        return 0 < displacementY ? 'down' : 'up';
+        return 0 < y ? 'down' : 'up';
     }
 };

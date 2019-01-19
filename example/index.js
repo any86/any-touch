@@ -105,7 +105,7 @@ new Vue({
         });
 
         anyTouch.on('panend', e => {
-            console.warn('panend',e.direction);
+            console.warn('panend',e.lastDirection);
             this.message = e;
             log(e.type);
         });

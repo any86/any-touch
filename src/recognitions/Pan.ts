@@ -45,11 +45,11 @@ export default class PanRecognizer extends Recognizer {
     };
 
     /**
-     * 识别后发布panleft等事件
+     * 识别后发布panleft等事件g
      * @param {Computed} 计算数据
      */
     afterEmit(computed: Computed) {
-        // console.log({deltaX, deltaY});
+        // console.log(computed.lastDirection, computed);
         this.emit(this.options.name + computed.lastDirection, computed);
     };
     

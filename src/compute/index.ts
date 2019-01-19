@@ -76,7 +76,6 @@ export default function ({
     computed.lastVelocityY = lastComputed.velocityY;
     computed.lastVelocity = lastComputed.velocity;
     computed.lastDirection = <directionString>lastComputed.direction;
-
     // 中心点位移增量
     let { deltaX, deltaY,deltaXYAngle } = computeDeltaXY({ input, prevInput });
     computed.deltaX = deltaX;
