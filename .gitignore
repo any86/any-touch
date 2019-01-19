@@ -4,3 +4,4 @@ coverage
 .cache
 false
 lib
+dist
