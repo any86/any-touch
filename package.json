@@ -1,6 +1,6 @@
 {
   "name": "any-touch",
-  "version": "0.0.22",
+  "version": "0.0.23",
   "description": "一个手势库",
   "unpkg": "dist/AnyTouch.umd.js",
   "jsdelivr": "dist/AnyTouch.umd.js",
@@ -21,7 +21,8 @@
     "test-cache": "jest",
     "demo": "node ./script/demo.js",
     "removeAll": "rimraf ./node_modules",
-    "commit" : "git-cz"
+    "commit": "git-cz",
+    "version": "standard-version"
   },
   "repository": {
     "type": "git",
@@ -48,6 +49,7 @@
     "rollup-plugin-node-resolve": "^3.4.0",
     "rollup-plugin-typescript": "^1.0.0",
     "shelljs": "^0.8.3",
+    "standard-version": "^4.4.0",
     "ts-jest": "^23.10.4",
     "tslib": "^1.9.3",
     "typescript": "^3.0.1"
