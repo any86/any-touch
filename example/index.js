@@ -104,6 +104,12 @@ new Vue({
             log(e.type);
         });
 
+        anyTouch.on('pancancel', e => {
+            // e.nativeEvent.preventDefault()
+            this.message = e;
+            log(e.type);
+        });
+
         anyTouch.on('panend', e => {
             console.warn('panend',e.lastDirection);
             this.message = e;

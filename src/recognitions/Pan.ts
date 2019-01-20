@@ -81,10 +81,6 @@ export default class PanRecognizer extends Recognizer {
         computed.deltaY = deltaY;
         return computed;
     };
-
-
-
-    
 };
 
 // 默认参数

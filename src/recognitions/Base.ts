@@ -206,9 +206,14 @@ export default abstract class Recognizer {
             this.status = STATUS_MOVE;
         } else if (STATUS_MOVE === this.status && INPUT_END === inputStatus) {
             this.status = STATUS_END;
-        } else if ((STATUS_START === this.status || STATUS_MOVE === this.status) && INPUT_CANCEL === inputStatus || !isVaild) {
+        } else if ((STATUS_START === this.status || STATUS_MOVE === this.status) && INPUT_CANCEL === inputStatus) {
             this.status = STATUS_CANCELLED;
+            this.emit(this.options.name+'cancel', computed);
+            return;
         }
+
+
+
         // console.log(
         //     `%c ${this.options.name} `, 'background-color:#66c;color:#fff;',
         //     this.status,
