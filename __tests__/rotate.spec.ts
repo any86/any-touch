@@ -7,7 +7,7 @@ const at = new AnyTouch(el);
 const ROTATE = 'rotate';
 
 test('rotate旋转角度是否计算正确?', (done) => {
-    const ANGLES_TEST = [5, 15];
+    const ANGLES_TEST = [5, 15,-10];
     let times = 0;
     at.on('rotate', ({ type, angle }) => {
         let receiveAngle = Math.round(angle);

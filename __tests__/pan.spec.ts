@@ -10,8 +10,7 @@ const el = document.getElementById('box');
 test('测试pancancel', (done) => {
     const at = new AnyTouch(el);
     at.on(`pancancel`, (ev) => {
-        console.log(ev);
-        
+        expect(ev.type).toBe('pancancel')
     });
     // 模拟事件
     const ts = new TouchSimulator(el);
