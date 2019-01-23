@@ -3,7 +3,6 @@
 * 未知 => 识别失败 
 * 未知 => 取消(已知的任意阶段)
 * */
-import AnyEvent from 'any-event';
 import { Computed } from '../interface';
 import { Options } from '../../types/recognition';
 import { INPUT_CANCEL, INPUT_END, INPUT_MOVE, INPUT_START } from '../const';
@@ -82,7 +81,7 @@ export default abstract class Recognizer {
     };
 
     /**
-     * 对eventBus进行封装
+     * 对$root.进行封装
      * @param type 
      * @param payload 
      */
@@ -264,4 +263,3 @@ export default abstract class Recognizer {
     abstract getTouchAction(): string[];
 };
 
-Recognizer.prototype.eventBus = new AnyEvent();

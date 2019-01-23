@@ -46,6 +46,17 @@ new Vue({
             touchAction: 'compute',
             isPreventDefault: true
         });
+
+//         const anyTouch2 = new AnyTouch(this.$refs.circle2, {
+//             touchAction: 'compute',
+//             isPreventDefault: true
+//         });
+
+        
+// anyTouch2.on('pan', ev=>{
+//     console.log('at2');
+// })
+
         // const anyTouch = new AnyTouch(this.$refs.circle, {isPreventDefault:false});
 
 
