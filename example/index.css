@@ -104,6 +104,20 @@ main table tr td:nth-child(3) {
     /* box-shadow: 1px 2px 30px var(--primary) */
 }
 
+.circle2 {
+    top:0;left:0;
+    box-sizing: content-box;
+    width: 150px;
+    height: 150px;
+    border-radius: 10%;
+    background: rgba(0, 0, 0, 0.7);
+    position: fixed;
+    line-height: 150px;
+    text-align: center;
+    color: #fff;
+    font-size: 24px;
+    font-weight: 100;
+}
 
 
 .fixed-bottom {

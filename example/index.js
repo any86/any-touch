@@ -46,6 +46,17 @@ new Vue({
             touchAction: 'compute',
             isPreventDefault: true
         });
+
+//         const anyTouch2 = new AnyTouch(this.$refs.circle2, {
+//             touchAction: 'compute',
+//             isPreventDefault: true
+//         });
+
+        
+// anyTouch2.on('pan', ev=>{
+//     console.log('at2');
+// })
+
         // const anyTouch = new AnyTouch(this.$refs.circle, {isPreventDefault:false});
 
 
@@ -104,8 +115,14 @@ new Vue({
             log(e.type);
         });
 
+        anyTouch.on('pancancel', e => {
+            // e.nativeEvent.preventDefault()
+            this.message = e;
+            log(e.type);
+        });
+
         anyTouch.on('panend', e => {
-            console.warn('panend',e.direction);
+            console.warn('panend',e.lastDirection);
             this.message = e;
             log(e.type);
         });
