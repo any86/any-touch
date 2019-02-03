@@ -4,7 +4,6 @@
 * 未知 => 取消(已知的任意阶段)
 * */
 import { Computed,directionString } from '../interface';
-import { Options } from '../../types/recognition';
 import { INPUT_CANCEL, INPUT_END, INPUT_MOVE, INPUT_START } from '../const';
 import {
     STATUS_POSSIBLE,
@@ -49,7 +48,7 @@ export default abstract class Recognizer {
      * 设置识别器
      * @param {Object} 选项 
      */
-    public set(options: Options) {
+    public set(options={}) {
         this.options = { ...this.options, ...options };
         // 刷新anyTouch
         this.$root.update();
