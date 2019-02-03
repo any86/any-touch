@@ -1,5 +1,8 @@
-import { Vector } from './interface';
 import { propX, propY } from './const';
+interface Vector{
+    x: number;
+    y: number;
+}
 const { round } = Math;
 /**
  * 获取向量长度(向量模)

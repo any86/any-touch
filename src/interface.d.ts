@@ -1,19 +1,21 @@
 
 export type directionString = 'up' | 'right' | 'down' | 'left';
-export type inputStatus = 'start' | 'move' | 'end' | 'cancel';
 export type RecognizerStatus = 'possible' | 'recognized' | 'began' | 'changed' | 'ended' | 'failed' | 'cancelled';
 
 export interface Input {
+    // 新一轮手势识别的开始
     isFirst: boolean;
     isFinal: boolean;
-    inputStatus?: inputStatus;
-    nativeEvent?: any;
-    pointers?: { clientX: number, clientY: number }[];
+    inputStatus: 'start' | 'move' | 'end' | 'cancel'; 
+    nativeEvent: Event;
+    pointer: { clientX: number, clientY: number }[];
     pointerLength: number;
-    changedPointers?: { clientX: number, clientY: number }[];
+    // 发生改变的触点数据
+    changedPointers: { clientX: number, clientY: number }[];
     changedPointerLength: number;
+    // 当前时间
     timestamp: number;
-    target?: EventTarget;
+    target: EventTarget;
     currentTarget?: EventTarget;
     centerX: number;
     centerY: number;
@@ -21,11 +23,11 @@ export interface Input {
 }
 // input的计算结果
 export interface Computed extends Input {
-    type?: string;
-    inputStatus?: inputStatus; //start | move | end | cancel
-    length?: number;
+    // 手势类型名: pan/panstart/panleft...
+    type: string;
+    // 一次识别周期中出现的最大触点数
     maxPointerLength?: number;
-    lastVelocit: number;
+    lastVelocity: number;
     lastVelocityX: number;
     lastVelocityY: number;
     velocityX: number;
@@ -44,32 +46,11 @@ export interface Computed extends Input {
     distanceY: number;
     distance: number;
     duration: number;
+    // 与起始点的偏移方向
     direction?: directionString;
     // 最近的方向
     lastDirection?: directionString;
     // 2次input的时间差
     deltaTime?: number;
     tapCount?: number;
-}
-
-// 识别器中recognize方法返回的数据格式
-export interface RecognizerCallbackPaylod extends Computed {
-    type: string;
-}
-
-export interface RecognizerCallback {
-    (paylod: RecognizerCallbackPaylod): void
-}
-
-
-// 事件触发函数
-export interface EventHandler {
-    (event: Computed): void;
-}
-
-
-// 向量
-export interface Vector {
-    x: number;
-    y: number;
 }

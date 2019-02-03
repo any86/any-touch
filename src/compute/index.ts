@@ -21,42 +21,7 @@ export default function ({
 
     const { abs, max } = Math;
 
-    let computed:any = {
-        // pointers: [],
-        // changedPointers: [],
-        pointerLength: input.pointerLength,
-        changedPointerLength: input.changedPointerLength,
-        // 起始到结束的偏移
-        displacementX: 0,
-        displacementY: 0,
-        distanceX: 0,
-        distanceY: 0,
-        distance: 0,
-
-        // 方向
-        direction: undefined,
-        lastDirection: undefined,
-
-        // 位移变化量
-        deltaX: undefined,
-        deltaY: undefined,
-
-        //  速率
-        velocityX: 0,
-        velocityY: 0,
-        maxVelocity: 0,
-        // 时间
-        duration: 0,
-        timestamp: Date.now(),
-        // 旋转和缩放
-        angle: 0,
-        deltaAngle: 0,
-        scale: undefined,
-        deltaScale: 1,
-        lastVelocity: undefined,
-        lastVelocityY: undefined,
-        lastVelocityX: undefined,
-    };
+    let computed = <Computed>{};
 
     // 滑动距离
     const { displacementX, displacementY, distanceX, distanceY, distance } = computeDistance({
@@ -118,6 +83,6 @@ export default function ({
     // 最大触点数
     const maxPointerLength = computeMaxLength(input);
 
-    computed = {...computed, ...input, maxPointerLength};
+    computed = { ...computed, ...input, maxPointerLength };
     return computed;
 };

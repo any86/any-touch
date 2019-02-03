@@ -2,7 +2,7 @@ let prevPointers: any[];
 let isPressed = false;
 export default (event: MouseEvent): any => {
     const { clientX, clientY, type } = event;
-    const changedPointers = prevPointers;
+    const changedPointers = prevPointers || [{ clientX, clientY }];
     let pointers = [{ clientX, clientY }];
     prevPointers = [{ clientX, clientY }];
     if ('mousedown' === type) {

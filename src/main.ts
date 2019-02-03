@@ -17,7 +17,7 @@
  * 格式化Event成统一的pointer格式 => 通过pointer数据计算 => 用计算结果去识别手势
  */
 import AnyEvent from 'any-event';
-import { EventHandler, Computed } from './interface';
+import { Computed } from './interface';
 import {
     SUPPORT_ONLY_TOUCH, SUPPORT_TOUCH,
     IS_MOBILE,
@@ -216,7 +216,7 @@ export default class AnyTouch {
      * @param {String} 事件名
      * @param {Function} 回调函数
      */
-    on(type: string, listener: EventHandler): void {
+    on(type: string, listener: (event: Computed) => void): void {
         this.eventBus.on(type, listener);
     };
 
@@ -225,7 +225,7 @@ export default class AnyTouch {
      * @param {String} 事件名 
      * @param {Function} 事件回调
      */
-    off(type: string, listener?: EventHandler): void {
+    off(type: string, listener?: (event: Computed) => void): void {
         this.eventBus.off(type, listener);
     };
 
