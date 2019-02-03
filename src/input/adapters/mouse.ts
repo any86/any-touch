@@ -1,4 +1,4 @@
-let prevPointers: any[] = undefined;
+let prevPointers: any[];
 let isPressed = false;
 export default (event: MouseEvent): any => {
     const { clientX, clientY, type } = event;

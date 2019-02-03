@@ -15,13 +15,13 @@ export default function ({
     prevInput,
     startMutliInput,
     input
-}: any): Computed {
+}: any): Computed | void {
     // 如果输入为空, 那么就计算了, 鼠标模式下, 点击了非元素部分, mouseup阶段会初选input为undefined
     if (undefined === input) return;
 
     const { abs, max } = Math;
 
-    let computed = <Computed>{
+    let computed:any = {
         // pointers: [],
         // changedPointers: [],
         pointerLength: input.pointerLength,
@@ -77,7 +77,7 @@ export default function ({
     computed.lastVelocity = lastComputed.velocity;
     computed.lastDirection = <directionString>lastComputed.direction;
     // 中心点位移增量
-    let { deltaX, deltaY,deltaXYAngle } = computeDeltaXY({ input, prevInput });
+    let { deltaX, deltaY, deltaXYAngle } = computeDeltaXY({ input, prevInput });
     computed.deltaX = deltaX;
     computed.deltaY = deltaY;
     computed.deltaXYAngle = deltaXYAngle;
@@ -118,9 +118,6 @@ export default function ({
     // 最大触点数
     const maxPointerLength = computeMaxLength(input);
 
-    return {
-        ...input,
-        maxPointerLength,
-        ...computed
-    };
+    computed = {...computed, ...input, maxPointerLength};
+    return computed;
 };

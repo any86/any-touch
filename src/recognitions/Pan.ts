@@ -2,18 +2,15 @@ import { Computed, directionString } from '../interface';
 import { INPUT_MOVE } from '../const';
 import Recognizer from './Base';
 import getHV from '../untils/getHV';
-interface Options {
-    name?: string;
-    threshold?: number;
-    pointerLength?: number;
-    directions?: [directionString?, directionString?, directionString?, directionString?];
-};
 
 export default class PanRecognizer extends Recognizer {
-    public name: string;
-    public options: Options;
-
-    constructor(options: Options={}) {
+    static DEFAULT_OPTIONS = {
+        name: 'pan',
+        threshold: 10,
+        pointerLength: 1,
+        directions: ['up', 'right', 'down', 'left']
+    };
+    constructor(options = {}) {
         super(options);
     };
 
@@ -45,15 +42,15 @@ export default class PanRecognizer extends Recognizer {
     };
 
     /**
-     * 识别后发布panleft等事件g
+     * 识别后发布panleft等事件
      * @param {Computed} 计算数据
      */
     afterEmit(computed: Computed) {
         // console.log(computed.lastDirection, computed);
         this.emit(this.options.name + computed.lastDirection, computed);
     };
-    
-    afterRecognized(computed: Computed){
+
+    afterRecognized(computed: Computed) {
         this.lockDirection(computed);
     }
 
@@ -81,12 +78,4 @@ export default class PanRecognizer extends Recognizer {
         computed.deltaY = deltaY;
         return computed;
     };
-};
-
-// 默认参数
-PanRecognizer.prototype.default = {
-    name: 'pan',
-    threshold: 10,
-    pointerLength: 1,
-    directions: ['up', 'right', 'down', 'left']
 };

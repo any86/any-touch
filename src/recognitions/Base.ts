@@ -3,7 +3,7 @@
 * 未知 => 识别失败 
 * 未知 => 取消(已知的任意阶段)
 * */
-import { Computed } from '../interface';
+import { Computed,directionString } from '../interface';
 import { Options } from '../../types/recognition';
 import { INPUT_CANCEL, INPUT_END, INPUT_MOVE, INPUT_START } from '../const';
 import {
@@ -16,14 +16,10 @@ import {
 } from '../const/recognizerStatus';
 
 export default abstract class Recognizer {
-    // 关联元素
-    public el: HTMLElement | HTMLDocument | Window;
-    // 是否构造原生事件(new Event())
-    public hasDomEvents: boolean;
     // 手势名
     public name: string;
     // 是否禁止
-    public disabled:boolean;
+    public disabled: boolean;
     // 识别状态
     public status: string;
     // 是否已识别
@@ -33,16 +29,12 @@ export default abstract class Recognizer {
     // 需要对应手势失败才能识别成功
     public requireFailureRecognizers: any[];
     // 存储外部注入方法的容器
-    // public $root: { [k: string]: (...args: any[]) => void };
     public $root: any;
-
-    // 默认参数
-    public default: Options;
 
     public eventBus: any;
 
-    constructor(options: Options = { disabled: false }) {
-        this.options = { ...this.default, ...options };
+    constructor(options: { name?: string, [k: string]: any }) {
+        this.options = {...(<any>this.constructor).DEFAULT_OPTIONS, disabled: false,  ...options };
         this.name = this.options.name;
         this.disabled = this.options.disabled;
         this.status = STATUS_POSSIBLE;
@@ -63,6 +55,11 @@ export default abstract class Recognizer {
         this.$root.update();
     };
 
+    public $injectRoot($root: any) {
+        this.$root = $root;
+        return this;
+    }
+
     /**
      * 对eventBus进行封装
      * @param type 
@@ -70,33 +67,33 @@ export default abstract class Recognizer {
      */
     public emit(type: string, payload: any) {
         payload.type = type;
-        this.eventBus.emit(type, payload);
-        if (this.hasDomEvents) {
+        this.$root.eventBus.emit(type, payload);
+        if (this.$root.options.hasDomEvents) {
             // 过滤掉几个Event上保留的字段
             let { target, currentTarget, type, ...data } = payload;
             let event: any = new Event(type, payload);
             Object.assign(event, data);
-            this.el.dispatchEvent(event);
+            this.$root.el.dispatchEvent(event);
         }
     };
 
-    /**
-     * 对$root.进行封装
-     * @param type 
-     * @param payload 
-     */
-    public on(type: string, listener: ((data: any) => void)) {
-        this.eventBus.on(type, listener);
-    };
+    // /**
+    //  * 对$root.进行封装
+    //  * @param type 
+    //  * @param payload 
+    //  */
+    // public on(type: string, listener: ((data: any) => void)) {
+    //     this.eventBus.on(type, listener);
+    // };
 
-    /**
-     * 对eventBus进行封装
-     * @param type 
-     * @param payload 
-     */
-    public off(type: string, listener: ((data: any) => void)) {
-        this.eventBus.off(type, listener);
-    };
+    // /**
+    //  * 对eventBus进行封装
+    //  * @param type 
+    //  * @param payload 
+    //  */
+    // public off(type: string, listener: ((data: any) => void)) {
+    //     this.eventBus.off(type, listener);
+    // };
 
     /**
      * 前者需要后者识别失败才能触发
@@ -166,7 +163,7 @@ export default abstract class Recognizer {
      * 是否支持该方向
      * @param {String} 方向 
      */
-    public isVaildDirection(direction: string) {
+    public isVaildDirection(direction?: directionString) {
         // if('pan' === this.options.name) console.log(this.options.directions, direction, -1 < this.options.directions.indexOf(direction));
         return -1 < this.options.directions.indexOf(direction);
     };
@@ -207,11 +204,9 @@ export default abstract class Recognizer {
             this.status = STATUS_END;
         } else if ((STATUS_START === this.status || STATUS_MOVE === this.status) && INPUT_CANCEL === inputStatus) {
             this.status = STATUS_CANCELLED;
-            this.emit(this.options.name+'cancel', computed);
+            this.emit(this.options.name + 'cancel', computed);
             return;
         }
-
-
 
         // console.log(
         //     `%c ${this.options.name} `, 'background-color:#66c;color:#fff;',
@@ -225,7 +220,7 @@ export default abstract class Recognizer {
             this.afterRecognized(computed);
             // computed = this.lockDirection(computed);
             this.emit(this.options.name, computed);
-            
+
 
             if (-1 < [STATUS_START, STATUS_MOVE, STATUS_END, STATUS_RECOGNIZED].indexOf(this.status)) {
                 // panstart | panmove | panend

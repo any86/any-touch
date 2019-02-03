@@ -19,7 +19,7 @@
 import AnyEvent from 'any-event';
 import { EventHandler, Computed } from './interface';
 import {
-    SUPPORT_ONLY_TOUCH,
+    SUPPORT_ONLY_TOUCH, SUPPORT_TOUCH,
     IS_MOBILE,
 } from './const';
 import inputManage from './inputManage';
@@ -47,18 +47,19 @@ export default class AnyTouch {
     static PinchRecognizer = PinchRecognizer;
     static RotateRecognizer = RotateRecognizer;
     static Vector = Vector;
+
     // 目标元素
     el: HTMLElement;
 
     default: Options;
+
+    inputType: string;
 
     recognizers: { [propName: string]: any, name: string }[];
 
     unbinders: any[];
 
     version: string;
-
-    isMobile: boolean;
 
     options: Options;
 
@@ -70,32 +71,28 @@ export default class AnyTouch {
      */
     constructor(el: HTMLElement, options?: Options) {
         this.version = '0.0.25';
+        this.default = {
+            touchAction: 'compute',
+            hasDomEvents: true,
+            isPreventDefault: true
+        };
         this.el = el;
-        this.isMobile = IS_MOBILE;
+        this.inputType = SUPPORT_TOUCH ? 'touch' : 'mouse';
         this.options = { ...this.default, ...options };
         // eventBus
         this.eventBus = new AnyEvent();
         // 识别器
         this.recognizers = [
-            new TapRecognizer(),
-            new PressRecognizer(),
-            new PanRecognizer(),
-            new SwipeRecognizer(),
-            new PinchRecognizer(),
-            new RotateRecognizer(),
+            new TapRecognizer().$injectRoot(this),
+            new PressRecognizer().$injectRoot(this),
+            new PanRecognizer().$injectRoot(this),
+            new SwipeRecognizer().$injectRoot(this),
+            new PinchRecognizer().$injectRoot(this),
+            new RotateRecognizer().$injectRoot(this),
         ];
 
-        // 注入el
-        // 后面模拟浏览器时间需要用到el
-        this.recognizers.forEach(recognizer => {
-            recognizer.eventBus = this.eventBus;
-            recognizer.el = el;
-            recognizer.$root = this;
-            recognizer.hasDomEvents = this.options.hasDomEvents;
-        });
-
         // 应用设置
-        this.update();
+        // this.update();
 
         // 绑定事件
         this.unbinders = this._bindRecognizers(this.el);
@@ -114,7 +111,7 @@ export default class AnyTouch {
             };
             el.style.touchAction = computeTouchAction(touchActions);
         } else {
-            el.style.touchAction = this.options.touchAction;
+            el.style.touchAction = this.options.touchAction || 'auto';
         }
     };
 
@@ -128,7 +125,7 @@ export default class AnyTouch {
      */
     private _bindRecognizers(el: Element) {
         const boundFn = this.handler.bind(this);
-        if (this.isMobile) {
+        if ('touch' === this.inputType) {
             return ['touchstart', 'touchmove', 'touchend', 'touchcancel'].map(eventName => {
                 el.addEventListener(eventName, boundFn, { passive: false });
                 return () => {
@@ -158,11 +155,7 @@ export default class AnyTouch {
      * @param recognizer 识别器
      */
     add(recognizer: any): void {
-        recognizer.eventBus = this.eventBus;
-        recognizer.el = this.el;
-        recognizer.$root = this;
-        recognizer.hasDomEvents = this.options.hasDomEvents;
-
+        recognizer.$injectRoot(this);
         this.recognizers.push(recognizer);
         this.update();
     };
@@ -198,7 +191,7 @@ export default class AnyTouch {
         }
     };
 
-    handler(event: TouchEvent | MouseEvent): void {
+    handler(event: Event): void {
         if (!event.cancelable) {
             this.eventBus.emit('error', { code: 0, message: '页面滚动的时候, 请暂时不要操作元素!' });
         }
@@ -209,13 +202,11 @@ export default class AnyTouch {
         // 记录各个阶段的input
         let inputs = inputManage(event);
         if (undefined !== inputs) {
-            const computed: Computed = compute(inputs);
+            const computed = compute(inputs);
             // 当是鼠标事件的时候, mouseup阶段的input和computed为空
             for (let recognizer of this.recognizers) {
-                // const isValidEvent = Recognizer.prototype.eventBus.has(recognizer.name);
                 if (recognizer.disabled) continue;
                 recognizer.recognize(computed);
-                // recognizer.emit('input', { ...computed, type: 'input' });
             }
         }
     };
@@ -247,10 +238,4 @@ export default class AnyTouch {
             unbinder();
         });
     };
-};
-
-AnyTouch.prototype.default = {
-    touchAction: 'compute',
-    hasDomEvents: true,
-    isPreventDefault: true
 };

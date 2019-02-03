@@ -1,13 +1,19 @@
 import Recognizer from './Base';
 import { Computed } from '../interface';
-import { Options } from '../../types/recognition';
-import {INPUT_END} from '../const';
+import { INPUT_END } from '../const';
 export default class SwipeRecognizer extends Recognizer {
-    constructor(options: Options={}) {
+    static DEFAULT_OPTIONS = {
+        name: 'swipe',
+        threshold: 10,
+        velocity: 0.3,
+        pointerLength: 1,
+        directions: ['up', 'right', 'down', 'left']
+    };
+    constructor(options = {}) {
         super(options);
     };
 
-    getTouchAction(){
+    getTouchAction() {
         return ['none'];
     };
 
@@ -43,13 +49,4 @@ export default class SwipeRecognizer extends Recognizer {
             this.isVaildDirection(lastDirection) &&
             this.options.velocity < vaildVelocity;
     };
-};
-
-// 默认参数
-SwipeRecognizer.prototype.default = {
-    name: 'swipe',
-    threshold: 10,
-    velocity: 0.3,
-    pointerLength: 1,
-    directions: ['up', 'right', 'down', 'left']
 };

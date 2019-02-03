@@ -8,10 +8,10 @@ export default (directions: [directionString?, directionString?, directionString
     let hasHorizontal = false;
     let hasVertical = false;
     for (let direction of directions) {
-        if (-1 < ['left', 'right'].indexOf(direction)) {
+        if (-1 < ['left', 'right'].indexOf(<string>direction)) {
             hasHorizontal = true;
             if (hasVertical) break;
-        } else if (-1 < ['up', 'down'].indexOf(direction)) {
+        } else if (-1 < ['up', 'down'].indexOf(<string>direction)) {
             hasVertical = true;
             if (hasHorizontal) break;
         } else {

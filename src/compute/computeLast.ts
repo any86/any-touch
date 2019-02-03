@@ -13,7 +13,7 @@ let _prevVelocityY: number;
 // 上次采集的方向
 let _prevDirection: string;
 
-export default (input: Input): { velocity: number, velocityX: number, velocityY: number, direction: string } => {
+export default (input: Input): { velocity: number, velocityX: number, velocityY: number, direction?: string } => {
     // 速率
     let velocityX: number;
     let velocityY: number;

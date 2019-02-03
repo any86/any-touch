@@ -1,5 +1,4 @@
 import { Computed } from '../interface';
-import { Options } from '../../types/recognition';
 import {
     STATUS_POSSIBLE,
     STATUS_CANCELLED,
@@ -8,10 +7,16 @@ import {
 import { INPUT_CANCEL, INPUT_END, INPUT_MOVE, INPUT_START } from '../const';
 import Recognizer from './Base';
 export default class PressRecognizer extends Recognizer {
-    protected _timeoutId: number;
-    constructor(options: Options = {}) {
+    protected _timeoutId?: number;
+    static DEFAULT_OPTIONS = {
+        name: 'press',
+        pointerLength: 1,
+        threshold: 9,
+        minPressTime: 251,
+        disabled: false
+    };
+    constructor(options = {}) {
         super(options);
-        this._timeoutId = null;
     };
 
     getTouchAction() {
@@ -24,7 +29,7 @@ export default class PressRecognizer extends Recognizer {
             this.status = STATUS_POSSIBLE;
         }
 
-        if(STATUS_FAILED === this.status) return;
+        if (STATUS_FAILED === this.status) return;
 
 
         // 开始识别
@@ -32,28 +37,28 @@ export default class PressRecognizer extends Recognizer {
             // console.log(this.status, computed.distance);
             // 如果未开始按住屏幕 && 限制条件已经通过
             // 那么延迟触发press
-                const IS_VALID = this.test(computed)
-                // console.log({IS_VALID});
-                if (IS_VALID) {
-                    // 延迟触发
-                    this.cancel();
-                    this._timeoutId = window.setTimeout(() => {
-                        this.status = STATUS_RECOGNIZED;
-                        this.emit(this.options.name, computed);
-                    }, this.options.minPressTime);
-                    // console.log('_timeoutId', this._timeoutId);
-                } else {
-                    this.cancel();
-                    this.status = STATUS_FAILED;
-                }
+            const IS_VALID = this.test(computed)
+            // console.log({IS_VALID});
+            if (IS_VALID) {
+                // 延迟触发
+                this.cancel();
+                this._timeoutId = window.setTimeout(() => {
+                    this.status = STATUS_RECOGNIZED;
+                    this.emit(this.options.name, computed);
+                }, this.options.minPressTime);
+                // console.log('_timeoutId', this._timeoutId);
+            } else {
+                this.cancel();
+                this.status = STATUS_FAILED;
+            }
 
-            if(INPUT_END === inputStatus) {
+            if (INPUT_END === inputStatus) {
                 this.status = STATUS_FAILED;
                 // console.log(this.status);
             }
         }
         // 已识别 
-        else{
+        else {
             // end阶段触发pressup
             if (INPUT_END === inputStatus) {
                 this.emit(`${this.options.name}up`, computed);
@@ -75,13 +80,4 @@ export default class PressRecognizer extends Recognizer {
     }
 
     afterEmit() { }
-};
-
-// 默认参数
-PressRecognizer.prototype.default = {
-    name: 'press',
-    pointerLength: 1,
-    threshold: 9,
-    minPressTime: 251,
-    disabled: false
 };

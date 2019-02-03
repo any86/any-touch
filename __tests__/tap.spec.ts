@@ -1,13 +1,12 @@
 import TouchSimulator from './utils/TouchSimulator';
 import sleep from './utils/sleep';
 import AnyTouch from '../src/main'
-document.body.innerHTML = '<div id="box">box</div>';
-const el = document.getElementById('box');
-
+const el = document.createElement('div');
+el.setAttribute('id', 'box');
 test('仅有tap识别, 事件是否触发', async (done) => {
     const at = new AnyTouch(el);
-    let type = '';
-    at.on('tap', (e) => {
+    let type:string;
+    at.on('tap', (e:any) => {
         type = e.type;
         expect(type).toBe('tap');
         done();

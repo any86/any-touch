@@ -1,14 +1,14 @@
 import { Input } from './interface';
 import createInput from './input/create';
 // 起点(单点|多点)
-let startInput: Input;
+let startInput: Input | undefined;
 // 前一次的触电
-let prevInput: Input;
+let prevInput: Input | undefined;
 // 当前触点
-let activeInput: Input;
+let activeInput: Input | undefined;
 // 多点触碰的起点
-let startMutliInput: Input;
-export default (event: TouchEvent | MouseEvent): any => {
+let startMutliInput: Input | undefined;
+export default (event: Event): any => {
     // 格式化不同设备输入数据
     const input = createInput(event);
 

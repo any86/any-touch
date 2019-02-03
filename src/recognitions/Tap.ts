@@ -1,5 +1,4 @@
 import { Computed } from '../interface';
-import { Options } from '../../types/recognition';
 import {
     STATUS_RECOGNIZED,
     STATUS_POSSIBLE,
@@ -10,15 +9,16 @@ import Recognizer from './Base';
 import { INPUT_END } from '../const';
 export default class TapRecognizer extends Recognizer {
     tapCount: number;
-    tapTimeoutId: number;
-    // 上一次tap的点击坐标
-    private _prevX: number;
-    private _prevY: number;
-    public options: Options;
-    public default: Options;
-    constructor(options: Options = {}) {
+    tapTimeoutId?: number;
+    static DEFAULT_OPTIONS = {
+        name: 'tap',
+        pointer: 1,
+        taps: 1,
+        interval: 300,
+        disabled: false
+    };
+    constructor(options = {}) {
         super(options);
-        this.tapTimeoutId = null;
         this.tapCount = 0;
     };
 
@@ -81,24 +81,11 @@ export default class TapRecognizer extends Recognizer {
     public test(computed: Computed): boolean {
         const { abs, max } = Math;
         // 判断是否发生大的位置变化
-        const { inputStatus, distance, duration, maxPointerLength, centerX, centerY } = computed;
-        this._prevX = centerX;
-        this._prevY = centerY;
+        const { inputStatus, distance, duration, maxPointerLength, centerX, centerY, displacementX, displacementY } = computed;
         // 产生的位移
-        let offsetX = abs(centerX - this._prevX);
-        let offsetY = abs(centerY - this._prevY);
-        const hasMove = 2 < max(offsetX, offsetY);
+        const hasMove = 2 < max(displacementX, displacementY);
         return INPUT_END === inputStatus && 1 === maxPointerLength && 2 > distance && 250 > duration && !hasMove
     };
 
     afterEmit(computed: Computed): void { }
-};
-
-// 默认参数
-TapRecognizer.prototype.default = {
-    name: 'tap',
-    pointer: 1,
-    taps: 1,
-    interval: 300,
-    disabled:false
 };

@@ -9,7 +9,7 @@ import mouseAdapter from './adapters/mouse';
 let centerX: number;
 let centerY: number;
 
-export default (event: TouchEvent | MouseEvent): Input => {
+export default (event: Event): Input|undefined => {
     let input: any = {};
     // Touch
     if (IS_MOBILE) {

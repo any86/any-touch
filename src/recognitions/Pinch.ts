@@ -1,8 +1,16 @@
 import { Computed } from '../interface';
 import Recognizer from './Base';
+
+
 export default class PinchRecognizer extends Recognizer {
     private _prevScale: number;
-    constructor(options: any={}) {
+    static DEFAULT_OPTIONS = {
+        name: 'pinch',
+        // 触发事件所需要的最小缩放比例
+        threshold: 0,
+        pointerLength: 2,
+    };
+    constructor(options={}) {
         super(options);
         this._prevScale = 1;
     };
@@ -32,12 +40,4 @@ export default class PinchRecognizer extends Recognizer {
         // console.log({scale})
         return this.isValidPointerLength(pointerLength) && (this.options.threshold < Math.abs(scale-1) || this.isRecognized);
     };
-};
-
-// 默认参数
-PinchRecognizer.prototype.default = {
-    name: 'pinch',
-    // 触发事件所需要的最小缩放比例
-    threshold: 0,
-    pointerLength: 2,
 };

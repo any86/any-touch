@@ -9,7 +9,7 @@ interface Options {
 const CLIENT_X = 'clientX';
 const CLIENT_Y = 'clientY';
 export default class TouchSimulator {
-    public prevTouches: {
+    public prevTouches?: {
         clientX: number;
         clientY: number;
     }[];
@@ -46,7 +46,9 @@ export default class TouchSimulator {
         let event: any = new Event(type, {});
         // 对应点不同就放进changedTouches;
         event.changedTouches = pointers.filter(({ x, y }, index) => {
-            return (this.prevTouches[index][CLIENT_X] !== x || this.prevTouches[index][CLIENT_Y] !== y);
+            if(!!this.prevTouches && !!this.prevTouches[index]) {
+                return (this.prevTouches[index][CLIENT_X] !== x || this.prevTouches[index][CLIENT_Y] !== y);
+            }
         });
         event.touches = pointers.map(({ x, y }) => ({ [CLIENT_X]: x, [CLIENT_Y]: y }));
         this.prevTouches = event.touches;
@@ -62,7 +64,9 @@ export default class TouchSimulator {
     public dispatchTouchEnd(pointerIndex?: number, pointerNumber?: number) {
         let type = 'touch' === this.device ? 'touchend' : 'mouseup';
         let event: any = new Event(type, {});
-        event.changedTouches = this.prevTouches.splice(pointerIndex || 0, pointerNumber || this.prevTouches.length);
+        if(!!this.prevTouches) {
+            event.changedTouches = this.prevTouches.splice(pointerIndex || 0, pointerNumber || this.prevTouches.length);
+        }
         // 当前的this.prevTouches已经是减去了变化点后的数组
         event.touches = this.prevTouches;
         this.el.dispatchEvent(event);

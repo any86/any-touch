@@ -6,7 +6,6 @@ export const IS_MOBILE = MOBILE_REGEX.test(navigator.userAgent);
 
 // 是否支持touch事件
 export const SUPPORT_TOUCH = ('ontouchstart' in window);
-
 // 是否是移动设备
 export const SUPPORT_ONLY_TOUCH = SUPPORT_TOUCH && MOBILE_REGEX.test(navigator.userAgent);
 

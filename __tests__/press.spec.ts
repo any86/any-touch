@@ -1,9 +1,8 @@
 import TouchSimulator from './utils/TouchSimulator';
 import sleep from './utils/sleep';
 import AnyTouch from '../src/main'
-document.body.innerHTML = '<div id="box">box</div>';
-const el = document.getElementById('box');
-
+const el = document.createElement('div');
+el.setAttribute('id', 'box');
 const MIN_PRESS_TIME = 251;
 
 test('press|pressup事件是否正确?', async(done) => {

@@ -1,14 +1,20 @@
 import Base from './Base';
 import { Computed } from '../interface';
 export default class RotateRecognizer extends Base {
-    constructor(options: any={}) {
+    static DEFAULT_OPTIONS = {
+        name: 'rotate',
+        // 触发事件所需要的最小角度
+        threshold: 0,
+        pointerLength: 2,
+    };
+    constructor(options = {}) {
         super(options);
     };
 
-    getTouchAction(){
+    getTouchAction() {
         return ['none'];
     };
-    
+
     /**
      * 无特殊事件要触发
      */
@@ -24,12 +30,4 @@ export default class RotateRecognizer extends Base {
         // 如果缩放超过阈值, 或者已识别
         return this.isValidPointerLength(pointerLength) && (this.options.threshold < Math.abs(angle) || this.isRecognized);
     };
-};
-
-// 默认参数
-RotateRecognizer.prototype.default = {
-    name: 'rotate',
-    // 触发事件所需要的最小角度
-    threshold: 0,
-    pointerLength: 2,
 };
