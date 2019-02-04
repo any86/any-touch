@@ -1,6 +1,12 @@
 let prevPointers: any[];
 let isPressed = false;
-export default (event: MouseEvent): any => {
+// 默认MouseEvent中对type声明仅为string
+export default (event: MouseEvent): {
+    inputStatus: string,
+    changedPointers: { clientX: number, clientY: number }[],
+    pointers: { clientX: number, clientY: number }[],
+    nativeEvent: Event
+} | void => {
     const { clientX, clientY, type } = event;
     const changedPointers = prevPointers || [{ clientX, clientY }];
     let pointers = [{ clientX, clientY }];
@@ -18,17 +24,14 @@ export default (event: MouseEvent): any => {
         isPressed = false;
     }
 
-    const MAP: {
-        [propName: string]: string;
-    } = {
+    const MAP = {
         mousedown: 'start',
         mousemove: 'move',
         mouseup: 'end'
     };
 
     return {
-        // type: `input-${MAP[type]}`,
-        inputStatus: MAP[type],
+        inputStatus: MAP[<'mousedown' | 'mousemove' | 'mouseup'>type],
         changedPointers,
         pointers,
         nativeEvent: event

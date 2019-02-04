@@ -2,7 +2,7 @@
  * 构造统一的touchEvent格式
  */
 import { Input } from '../interface';
-import { SUPPORT_ONLY_TOUCH, IS_MOBILE, INPUT_CANCEL, INPUT_END, INPUT_MOVE, INPUT_START } from '../const';
+import { SUPPORT_TOUCH, IS_MOBILE, INPUT_CANCEL, INPUT_END, INPUT_MOVE, INPUT_START } from '../const';
 import { getCenter } from '../vector';
 import touchAdapter from './adapters/touch'
 import mouseAdapter from './adapters/mouse';
@@ -12,7 +12,7 @@ let centerY: number;
 export default (event: Event): Input|undefined => {
     let input: any = {};
     // Touch
-    if (IS_MOBILE) {
+    if (SUPPORT_TOUCH) {
         input = touchAdapter(<TouchEvent>event);
     }
     // Mouse

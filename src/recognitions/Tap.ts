@@ -35,7 +35,8 @@ export default class TapRecognizer extends Recognizer {
     public recognize(computed: Computed): void {
         this.status = STATUS_POSSIBLE;
         // this.cancel();
-        if (this.test(computed)) {
+        const isValid = this.test(computed);
+        if (isValid) {
             // 累加点击
             this.tapCount++;
             const isValidTapCount = this.options.taps === this.tapCount;
