@@ -1,7 +1,7 @@
 import TouchSimulator from './utils/TouchSimulator';
 import AnyTouch from '../src/main'
 const el = document.createElement('div');
-el.setAttribute('id', 'box');
+
 const at = new AnyTouch(el);
 /**
  * 模拟向下滑动

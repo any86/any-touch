@@ -52,5 +52,4 @@ export interface Computed extends Input {
     lastDirection?: directionString;
     // 2次input的时间差
     deltaTime?: number;
-    tapCount?: number;
 }

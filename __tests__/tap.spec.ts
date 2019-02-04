@@ -2,13 +2,11 @@ import TouchSimulator from './utils/TouchSimulator';
 import sleep from './utils/sleep';
 import AnyTouch from '../src/main'
 const el = document.createElement('div');
-el.setAttribute('id', 'box');
+
 test('仅有tap识别, 事件是否触发', async (done) => {
     const at = new AnyTouch(el);
-    let type:string;
     at.on('tap', (e:any) => {
-        type = e.type;
-        expect(type).toBe('tap');
+        expect(e.type).toBe('tap');
         done();
     });
     const ts = new TouchSimulator(el);
@@ -17,6 +15,33 @@ test('仅有tap识别, 事件是否触发', async (done) => {
     await sleep(100);
     ts.dispatchTouchEnd();
 });
+
+
+test('mouse下, 仅有tap识别, 事件是否触发', async (done) => {
+    const ts = new TouchSimulator(el, {device:'mouse'});
+    el.addEventListener('mousedown', ev=>{
+        expect(ev.type).toBe('mousedown');
+    })
+
+    // window.addEventListener('mousemove', ev=>{
+    //     console.log('mousemove');
+    // })
+
+    window.addEventListener('mouseup', ev=>{
+        console.log('mouseup');
+        done();
+    })
+    const at = new AnyTouch(el);
+    at.on('tap', (e:any) => {
+        expect(e.type).toBe('tap');
+    });
+    // 模拟touch触碰
+    ts.dispatchTouchStart([{ x: 0, y: 0 }]);
+    await sleep(100);
+    ts.dispatchTouchEnd();
+    
+});
+
 
 
 test('tap与doubletap之间的requireFailure是否生效?', async (done) => {

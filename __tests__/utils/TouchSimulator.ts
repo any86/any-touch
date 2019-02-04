@@ -52,7 +52,11 @@ export default class TouchSimulator {
         });
         event.touches = pointers.map(({ x, y }) => ({ [CLIENT_X]: x, [CLIENT_Y]: y }));
         this.prevTouches = event.touches;
-        this.el.dispatchEvent(event);
+        if('touch' === this.device) {
+            this.el.dispatchEvent(event);
+        } else {
+            window.dispatchEvent(event);
+        }
     };
 
     /**
@@ -69,7 +73,11 @@ export default class TouchSimulator {
         }
         // 当前的this.prevTouches已经是减去了变化点后的数组
         event.touches = this.prevTouches;
-        this.el.dispatchEvent(event);
+        if('touch' === this.device) {
+            this.el.dispatchEvent(event);
+        } else {
+            window.dispatchEvent(event);
+        }
     };
 
     /**

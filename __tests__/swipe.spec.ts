@@ -2,7 +2,7 @@ import swipeSimulator from './utils/Gesture/swipeSimulator';
 import sleep from './utils/sleep';
 import AnyTouch from '../src/main';
 const el = document.createElement('div');
-el.setAttribute('id', 'box');
+
 ['up', 'right', 'down', 'left'].forEach(direction => {
     test(`swipe${direction}是否触发?`, async (done) => {
         const at = new AnyTouch(el);

@@ -3,7 +3,7 @@ import pan2Simulator from './utils/Gesture/pan2Simulator';
 import TouchSimulator from './utils/TouchSimulator';
 import AnyTouch from '../src/main'
 const el = document.createElement('div');
-el.setAttribute('id', 'box');
+
 
 test('测试pancancel', (done) => {
     const at = new AnyTouch(el);

@@ -12,7 +12,7 @@ test('当前是否移动设备?', () => {
     // // console.log(jsdom.window);
     // Object.defineProperty(jsdom.window.navigator, 'userAgent', {value:"Mellblomenator/9000"})
     const el = document.createElement('div');
-    el.setAttribute('id', 'box');
+    
     const at = new AnyTouch(el);
     expect(at.inputType).toBe('touch');
 });
