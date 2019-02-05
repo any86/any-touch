@@ -105,7 +105,8 @@ main table tr td:nth-child(3) {
 }
 
 .circle2 {
-    top:0;left:0;
+    top: 0;
+    left: 0;
     box-sizing: content-box;
     width: 150px;
     height: 150px;
@@ -141,7 +142,8 @@ main table tr td:nth-child(3) {
 /* 动画 */
 .press {
     transition: transform 500ms;
-    transform: scale(0.7) !important;opacity: 0.7;
+    transform: scale(0.7) !important;
+    opacity: 0.7;
 }
 
 .pressup {
@@ -160,14 +162,13 @@ main table tr td:nth-child(3) {
     }
 }
 
-
 .doubletap {
     animation: doubletap 1000ms;
 }
 
 @keyframes doubletap {
-    25%{
-        transform: scale(0.6) ;
+    25% {
+        transform: scale(0.6);
         opacity: .7;
     }
 
@@ -177,16 +178,50 @@ main table tr td:nth-child(3) {
 
 
     75% {
-        transform: scale(.6);opacity: .7;
+        transform: scale(.6);
+        opacity: .7;
     }
 }
 
-
 .threetap {
-    animation: threetap 500ms;
+    animation: threetap 1000ms;
 }
 
 @keyframes threetap {
+    10% {
+        transform: scale(0.6) translateY(100%);
+        opacity: .7;
+    }
+
+    30% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(.6) translateX(-30%);;
+        opacity: .7;
+    }
+
+    70% {
+        transform: scale(1);
+    }
+
+    90% {
+        transform: scale(.6) translateX(30%);;
+        opacity: .7;
+    }
+
+    to {
+        transform: scale(1);
+    }
+
+}
+
+.fourtap {
+    animation: fourtap 500ms;
+}
+
+@keyframes fourtap {
     from {
         transform: scale(-.5) skew(-15deg);
         opacity: 0.5;
@@ -197,7 +232,7 @@ main table tr td:nth-child(3) {
     }
 
     to {
-        transform: scale(1) ;
+        transform: scale(1);
     }
 }
 
@@ -207,7 +242,7 @@ main table tr td:nth-child(3) {
 
 @keyframes swipeUp {
     50% {
-        opacity:0.5;
+        opacity: 0.5;
         transform: translateY(-300px);
     }
 }
@@ -219,7 +254,7 @@ main table tr td:nth-child(3) {
 
 @keyframes swipeDown {
     50% {
-        opacity:0.5;
+        opacity: 0.5;
         transform: translateY(300px);
     }
 }
@@ -231,7 +266,7 @@ main table tr td:nth-child(3) {
 
 @keyframes swipeRight {
     50% {
-        opacity:0.5;
+        opacity: 0.5;
         transform: translateX(300px);
     }
 }
@@ -242,7 +277,7 @@ main table tr td:nth-child(3) {
 
 @keyframes swipeLeft {
     50% {
-        opacity:0.5;
+        opacity: 0.5;
         transform: translateX(-300px);
     }
 }
