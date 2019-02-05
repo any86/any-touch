@@ -153,7 +153,7 @@ new Vue({
          * =========================== tap ===========================
          */
         anyTouch.on('tap', e => {
-            log(`%c ${e.type} `, 'background-color:#f10;color:#fff;');
+            console.log(`%c ${e.type} `, 'background-color:#f10;color:#fff;');
             this.message = e;
         });
 

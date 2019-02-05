@@ -17,7 +17,7 @@ export default class TouchSimulator {
     public el: Element | Document;
     public device: 'touch' | 'mouse';
 
-    constructor(el: Element | Document, { device = 'touch'}: Options = <Options>{}) {
+    constructor(el: Element | Document, { device = 'touch' }: Options = <Options>{}) {
         this.el = el;
         this.device = device;
     };
@@ -30,10 +30,16 @@ export default class TouchSimulator {
     public dispatchTouchStart(pointers: Pointer[]) {
         let type = 'touch' === this.device ? 'touchstart' : 'mousedown';
         let event: any = new Event(type, {});
-        event.touches = pointers.map(({ x, y }) => ({ [CLIENT_X]: x, [CLIENT_Y]: y }));
-        event.changedTouches = pointers.map(({ x, y }) => ({ [CLIENT_X]: x, [CLIENT_Y]: y }));
+        if ('touch' === this.device) {
+            event.touches = pointers.map(({ x, y }) => ({ [CLIENT_X]: x, [CLIENT_Y]: y }));
+            event.changedTouches = pointers.map(({ x, y }) => ({ [CLIENT_X]: x, [CLIENT_Y]: y }));
+        } else {
+            event[CLIENT_X] = pointers[0].x;
+            event[CLIENT_Y] = pointers[0].y;
+        }
         this.prevTouches = event.touches;
         this.el.dispatchEvent(event);
+        return event;
     };
 
     /**
@@ -44,19 +50,23 @@ export default class TouchSimulator {
     public dispatchTouchMove(pointers: Pointer[]) {
         let type = 'touch' === this.device ? 'touchmove' : 'mousemove';
         let event: any = new Event(type, {});
-        // 对应点不同就放进changedTouches;
-        event.changedTouches = pointers.filter(({ x, y }, index) => {
-            if(!!this.prevTouches && !!this.prevTouches[index]) {
-                return (this.prevTouches[index][CLIENT_X] !== x || this.prevTouches[index][CLIENT_Y] !== y);
-            }
-        });
-        event.touches = pointers.map(({ x, y }) => ({ [CLIENT_X]: x, [CLIENT_Y]: y }));
-        this.prevTouches = event.touches;
-        if('touch' === this.device) {
+
+        if ('touch' === this.device) {
+            // 对应点不同就放进changedTouches;
+            event.changedTouches = pointers.filter(({ x, y }, index) => {
+                if (!!this.prevTouches && !!this.prevTouches[index]) {
+                    return (this.prevTouches[index][CLIENT_X] !== x || this.prevTouches[index][CLIENT_Y] !== y);
+                }
+            });
+            event.touches = pointers.map(({ x, y }) => ({ [CLIENT_X]: x, [CLIENT_Y]: y }));
+            this.prevTouches = event.touches;
             this.el.dispatchEvent(event);
         } else {
+            event[CLIENT_X] = pointers[0].x;
+            event[CLIENT_Y] = pointers[0].y;
             window.dispatchEvent(event);
         }
+        return event;
     };
 
     /**
@@ -68,16 +78,17 @@ export default class TouchSimulator {
     public dispatchTouchEnd(pointerIndex?: number, pointerNumber?: number) {
         let type = 'touch' === this.device ? 'touchend' : 'mouseup';
         let event: any = new Event(type, {});
-        if(!!this.prevTouches) {
-            event.changedTouches = this.prevTouches.splice(pointerIndex || 0, pointerNumber || this.prevTouches.length);
-        }
-        // 当前的this.prevTouches已经是减去了变化点后的数组
-        event.touches = this.prevTouches;
-        if('touch' === this.device) {
+        if ('touch' === this.device) {
+            if (!!this.prevTouches) {
+                event.changedTouches = this.prevTouches.splice(pointerIndex || 0, pointerNumber || this.prevTouches.length);
+            }
+            // 当前的this.prevTouches已经是减去了变化点后的数组
+            event.touches = this.prevTouches;
             this.el.dispatchEvent(event);
         } else {
             window.dispatchEvent(event);
         }
+        return event;
     };
 
     /**
@@ -89,5 +100,6 @@ export default class TouchSimulator {
         event.changedTouches = [];
         event.touches = [];
         this.el.dispatchEvent(event);
+        return event;
     };
 }

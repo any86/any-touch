@@ -1,44 +1,29 @@
 delete window.ontouchstart;
 import TouchSimulator from './utils/TouchSimulator';
 import sleep from './utils/sleep';
-import AnyTouch from '../src/main'
-const el = document.createElement('div');
+import mouse from '../src/input/adapters/mouse';
 
-test('mouse下, 仅有tap识别, 事件是否触发', async (done) => {
-    const at = new AnyTouch(el);
-    at.on('tap', (e:any) => {
-        expect(e.type).toBe('tap');
-        done();
-    });
+test('mouseup后紧接着mousedown, 是否之后的mousemove会返回input为undefined', async (done) => {
+    const el = document.createElement('div');
     const ts = new TouchSimulator(el, {device:'mouse'});
-    // 模拟touch触碰
-    ts.dispatchTouchStart([{ x: 0, y: 0 }]);
+    // mousedown
+    let event = ts.dispatchTouchStart([{ x: 0, y: 0 }]);
+    let input:any = mouse(event);
+    expect(input.inputStatus).toBe('start');
+    expect(input.changedPointers).toEqual([{ clientX: 0, clientY: 0 }]);
+    expect(input.pointers).toEqual([{ clientX: 0, clientY: 0 }]);
     await sleep(100);
-    ts.dispatchTouchEnd();
+    // mouseup
+    event = ts.dispatchTouchEnd();
+    input = mouse(event);
+    expect(input.inputStatus).toBe('end');
+    expect(input.changedPointers).toEqual([{ clientX: 0, clientY: 0 }]);
+    expect(input.pointers).toEqual([]);
+
+    // mousemove
+    event = ts.dispatchTouchMove([{ x: 100, y: 100 }]);
+    input = mouse(event);
+    expect(input).toBeUndefined();
+
+    done();
 });
-
-// test('mouse下,tap与doubletap之间的requireFailure是否生效?', async (done) => {
-//     const tap2 = new AnyTouch.TapRecognizer({ name: 'doubletap', pointer: 1, taps: 2 })
-//     const tap3 = new AnyTouch.TapRecognizer({ name: 'threetap', pointer: 1, taps: 3 })
-//     const at = new AnyTouch(el);
-//     at.add(tap2);
-//     at.add(tap3);
-//     const tap1 = at.get('tap');
-//     tap1.requireFailure(tap2);
-//     tap1.requireFailure(tap3);
-//     tap2.requireFailure(tap3);
-
-//     at.on('doubletap', (e) => {
-//         expect(e.type).toBe('doubletap');
-//         done();
-//     });
-
-//     const ts = new TouchSimulator(el);
-//     // 模拟touch触碰
-//     ts.dispatchTouchStart([{ x: 0, y: 0 }]);
-//     ts.dispatchTouchEnd();
-
-//     await sleep(10);
-//     ts.dispatchTouchStart([{ x: 0, y: 0 }]);
-//     ts.dispatchTouchEnd();
-// });
