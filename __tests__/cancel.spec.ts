@@ -8,9 +8,6 @@ test('测试pancancel', async(done) => {
     at.on(`pancancel`, (ev) => {
         expect(ev.type).toBe('pancancel')
     });
-    el.addEventListener('touchcancel', ev=>{
-        console.log('cancel');
-    })
 
     // 模拟事件
     const ts = new TouchSimulator(el);

@@ -19,6 +19,7 @@ export interface Input {
     currentTarget?: EventTarget;
     centerX: number;
     centerY: number;
+
     // functions?: { [k: string]: (...args: any[]) => any };
 }
 // input的计算结果
@@ -52,4 +53,7 @@ export interface Computed extends Input {
     lastDirection?: directionString;
     // 2次input的时间差
     deltaTime?: number;
+    // 同centerX/Y
+    x: number;
+    y: number;
 }

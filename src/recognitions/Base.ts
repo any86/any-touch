@@ -3,7 +3,7 @@
 * 未知 => 识别失败 
 * 未知 => 取消(已知的任意阶段)
 * */
-import { Computed,directionString } from '../interface';
+import { Computed, directionString } from '../interface';
 import { INPUT_CANCEL, INPUT_END, INPUT_MOVE, INPUT_START } from '../const';
 import {
     STATUS_POSSIBLE,
@@ -33,7 +33,7 @@ export default abstract class Recognizer {
     public eventBus: any;
 
     constructor(options: { name?: string, [k: string]: any }) {
-        this.options = {...(<any>this.constructor).DEFAULT_OPTIONS, disabled: false,  ...options };
+        this.options = { ...(<any>this.constructor).DEFAULT_OPTIONS, disabled: false, ...options };
         this.name = this.options.name;
         this.disabled = this.options.disabled;
         this.status = STATUS_POSSIBLE;
@@ -48,7 +48,7 @@ export default abstract class Recognizer {
      * 设置识别器
      * @param {Object} 选项 
      */
-    public set(options={}) {
+    public set(options = {}) {
         this.options = { ...this.options, ...options };
         // 刷新anyTouch
         this.$root.update();

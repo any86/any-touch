@@ -3,7 +3,7 @@ import AnyTouch from '../src/main';
 import sleep from './utils/sleep';
 const el = document.createElement('div');
 
-test('tap与doubletap间隔过长的时候, doubletap是否不会触发?', async (done) => {
+test('doubletap识别失败, tap应该触发2次', async (done) => {
     const mockTapCallback = jest.fn();
     const mockDoubletapCallback = jest.fn();
 
@@ -26,8 +26,8 @@ test('tap与doubletap间隔过长的时候, doubletap是否不会触发?', async
     ts.dispatchTouchStart([{ x: 0, y: 0 }]);
     ts.dispatchTouchEnd();
 
-    await sleep(500);
-    ts.dispatchTouchStart([{ x: 0, y: 0 }]);
+    await sleep(30);
+    ts.dispatchTouchStart([{ x: 100, y: 100 }]);
     ts.dispatchTouchEnd();
     await sleep(500);
     expect(mockDoubletapCallback.mock.calls.length).toBe(0);
