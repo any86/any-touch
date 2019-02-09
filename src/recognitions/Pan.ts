@@ -46,8 +46,9 @@ export default class PanRecognizer extends Recognizer {
      * @param {Computed} 计算数据
      */
     afterEmit(computed: Computed) {
-        // console.log(computed.lastDirection, computed);
-        this.emit(this.options.name + computed.lastDirection, computed);
+        if('none' !== computed.lastDirection){
+            this.emit(this.options.name + computed.lastDirection, computed);
+        }
     };
 
     afterRecognized(computed: Computed) {
@@ -71,7 +72,6 @@ export default class PanRecognizer extends Recognizer {
                 deltaY = computed.deltaY;
             } else if ('up' === direction && 0 > computed.deltaY) {
                 deltaY = computed.deltaY;
-                // console.log(321321312);
             }
         });
         computed.deltaX = deltaX;

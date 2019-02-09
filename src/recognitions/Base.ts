@@ -163,8 +163,7 @@ export default abstract class Recognizer {
      * @param {String} 方向 
      */
     public isVaildDirection(direction?: directionString) {
-        // if('pan' === this.options.name) console.log(this.options.directions, direction, -1 < this.options.directions.indexOf(direction));
-        return -1 < this.options.directions.indexOf(direction);
+        return -1 !== this.options.directions.indexOf(direction) || 'none' === direction;
     };
 
 
@@ -182,12 +181,12 @@ export default abstract class Recognizer {
      * @param {Computed} 计算数据 
      */
     recognize(computed: Computed) {
-        // this.beforeRecognize(computed);
+        // if(this.name === 'pan')    console.log(this.name,this.status);
         let { inputStatus } = computed;
         // 是否识别成功
         let isVaild = this.test(computed);
         // 如果识别结束, 那么重置状态
-        if (-1 < [STATUS_END, STATUS_CANCELLED, STATUS_FAILED, STATUS_RECOGNIZED].indexOf(this.status)) {
+        if (-1 !== [STATUS_END, STATUS_CANCELLED, STATUS_FAILED, STATUS_RECOGNIZED].indexOf(this.status)) {
             this.status = STATUS_POSSIBLE;
         };
 
@@ -217,12 +216,11 @@ export default abstract class Recognizer {
         // 识别后触发的事件
         if (this.isRecognized) {
             this.afterRecognized(computed);
-            // computed = this.lockDirection(computed);
+            // computed = this.lockDirection(computed);d
             this.emit(this.options.name, computed);
 
-
             if (-1 < [STATUS_START, STATUS_MOVE, STATUS_END, STATUS_RECOGNIZED].indexOf(this.status)) {
-                // panstart | panmove | panend
+                // panstart | panmove | panend等
                 this.emit(this.options.name + this.status, computed);
                 this.afterEmit(computed);
             }

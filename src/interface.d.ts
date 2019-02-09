@@ -1,5 +1,5 @@
 
-export type directionString = 'up' | 'right' | 'down' | 'left';
+export type directionString = 'up' | 'right' | 'down' | 'left'|'none';
 export type RecognizerStatus = 'possible' | 'recognized' | 'began' | 'changed' | 'ended' | 'failed' | 'cancelled';
 
 export interface Input {

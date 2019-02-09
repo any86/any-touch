@@ -22,7 +22,9 @@ export default class SwipeRecognizer extends Recognizer {
      * @param {Computed} 计算数据
      */
     afterEmit(computed: Computed) {
-        this.emit(this.options.name + computed.lastDirection, computed);
+        if('none' !== computed.lastDirection){
+            this.emit(this.options.name + computed.lastDirection, computed);
+        }
     };
 
     /**
