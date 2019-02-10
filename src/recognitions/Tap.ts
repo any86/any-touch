@@ -107,9 +107,9 @@ export default class TapRecognizer extends Recognizer {
                 }, this.options.interval)
             }
         } else {
-            if (this.options.taps !== this.tapCount) {
-                clearTimeout(this.tapTimeoutId);
-            }
+            // if (this.options.taps !== this.tapCount) {
+            //     clearTimeout(this.tapTimeoutId);
+            // }
             this.reset();
             this.status = STATUS_FAILED;
         }
@@ -136,7 +136,7 @@ export default class TapRecognizer extends Recognizer {
         const isValidDuration = 250 > duration;
         // 与上一次点击的距离在合理范围内
 
-        return 1 === maxPointerLength &&
+        return maxPointerLength === this.options.pointer &&
             isValidDuration && isValidMovementTap;
     };
 
