@@ -1,6 +1,6 @@
 {
   "name": "any-touch",
-  "version": "0.0.25",
+  "version": "0.0.26",
   "description": "一个手势库",
   "unpkg": "dist/AnyTouch.umd.js",
   "jsdelivr": "dist/AnyTouch.umd.js",
@@ -46,6 +46,7 @@
     "rimraf": "^2.6.2",
     "rollup": "^0.67.1",
     "rollup-plugin-commonjs": "^9.2.0",
+    "rollup-plugin-json": "^3.1.0",
     "rollup-plugin-node-resolve": "^3.4.0",
     "rollup-plugin-typescript": "^1.0.0",
     "shelljs": "^0.8.3",

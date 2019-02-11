@@ -34,6 +34,7 @@ import SwipeRecognizer from './recognitions/Swipe';
 import PinchRecognizer from './recognitions/Pinch';
 import RotateRecognizer from './recognitions/Rotate';
 import * as Vector from './vector';
+const pkg = require('../package.json');
 interface Options {
     touchAction?: 'compute' | 'auto' | 'manipulation' | 'pan-x' | 'pan-y' | 'none';
     hasDomEvents?: boolean;
@@ -70,7 +71,7 @@ export default class AnyTouch {
      * @param {Object} param1
      */
     constructor(el: HTMLElement, options?: Options) {
-        this.version = '0.0.25';
+        this.version = pkg.version;
         this.default = {
             touchAction: 'compute',
             hasDomEvents: true,
