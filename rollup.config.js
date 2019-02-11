@@ -3,8 +3,7 @@ import commonjs from 'rollup-plugin-commonjs';
 import nodeResolve from 'rollup-plugin-node-resolve';
 import typescript from 'rollup-plugin-typescript';
 import json from 'rollup-plugin-json';
-
-// const pkg = require('./package.json');
+import {version} from './package.json';
 
 
 export default {
@@ -30,6 +29,7 @@ export default {
     output: [{
             format: 'cjs',
             file: 'dist/AnyTouch.common.js',
+            intro: `var __VERSION__ =${version}`
         },
         {
             format: 'es',
