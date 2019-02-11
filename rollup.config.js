@@ -31,18 +31,18 @@ export default {
     output: [{
             format: 'cjs',
             file: 'dist/AnyTouch.common.js',
-            intro: `var __VERSION__ = ${version}`,
+            // intro: `var __VERSION__ = '${version}'`,
         },
         {
             format: 'es',
             file: 'dist/AnyTouch.es.js',
-            intro: `var __VERSION__ = ${version}`,
+            // intro: `var __VERSION__ = '${version}'`,
         },
         {
             format: 'umd',
             name: 'AnyTouch',
             file: 'dist/AnyTouch.umd.js',
-            intro: `var __VERSION__ = ${version}`,
+            // intro: `var __VERSION__ = '${version}'`,
         }
     ]
 };

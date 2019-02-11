@@ -1,5 +1,6 @@
 {
     "compilerOptions": {
+        "allowUnreachableCode": true,
         "strict": true,
         "esModuleInterop": true,
         "target": "es5",

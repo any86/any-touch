@@ -70,8 +70,6 @@ export default class AnyTouch {
 
     unbinders: any[];
 
-    version: string;
-
     options: Options;
 
     eventBus: any;
@@ -81,7 +79,6 @@ export default class AnyTouch {
      * @param {Options} 选项
      */
     constructor(el: HTMLElement, options?: Options) {
-        this.version = __VERSION__;
         // this.set也会用到this.default
         this.default = {
             touchAction: 'compute',
