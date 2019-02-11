@@ -32,7 +32,10 @@ export default class SwipeRecognizer extends Recognizer {
      * @param {Computed} 计算数据
      */
     test(computed: Computed): boolean {
-        const { inputStatus, lastDirection, direction, lastVelocityX, lastVelocityY, maxPointerLength, distance } = computed;
+        if(INPUT_END !== computed.inputStatus) return false;
+
+        // 非end阶段, 开始校验数据
+        const {lastDirection, direction, lastVelocityX, lastVelocityY, maxPointerLength, distance } = computed;
         // 如果只支持水平或垂直, 那么其他方向速率为0;
         // 有效速率
         let vaildVelocityX: number = lastVelocityX;
@@ -47,7 +50,6 @@ export default class SwipeRecognizer extends Recognizer {
 
         return 1 === maxPointerLength &&
             this.options.threshold < distance &&
-            INPUT_END === inputStatus &&
             this.isVaildDirection(lastDirection) &&
             this.options.velocity < vaildVelocity;
     };
