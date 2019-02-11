@@ -1,12 +1,12 @@
 
-export type directionString = 'up' | 'right' | 'down' | 'left'|'none';
+export type directionString = 'up' | 'right' | 'down' | 'left' | 'none';
 export type RecognizerStatus = 'possible' | 'recognized' | 'began' | 'changed' | 'ended' | 'failed' | 'cancelled';
 
 export interface Input {
     // 新一轮手势识别的开始
     isFirst: boolean;
     isFinal: boolean;
-    inputStatus: 'start' | 'move' | 'end' | 'cancel'; 
+    inputStatus: 'start' | 'move' | 'end' | 'cancel';
     nativeEvent: Event;
     pointer: { clientX: number, clientY: number }[];
     pointerLength: number;
@@ -46,13 +46,11 @@ export interface Computed extends Input {
     distanceX: number;
     distanceY: number;
     distance: number;
-    duration: number;
+    deltaTime: number;
     // 与起始点的偏移方向
     direction?: directionString;
     // 最近的方向
     lastDirection?: directionString;
-    // 2次input的时间差
-    deltaTime?: number;
     // 同centerX/Y
     x: number;
     y: number;

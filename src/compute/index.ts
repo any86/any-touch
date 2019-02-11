@@ -34,7 +34,7 @@ export default function ({
     computed.direction = <directionString>getDirection(displacementX, displacementY);
 
     // 已消耗时间
-    computed.duration = input.timestamp - startInput.timestamp;
+    computed.deltaTime = input.timestamp - startInput.timestamp;
     // 最近25ms内计算数据
     const lastComputed = computeLast(input);
     computed.lastVelocityX = lastComputed.velocityX;
@@ -55,8 +55,8 @@ export default function ({
     }
 
     // 速率
-    computed.velocityX = abs(computed.distanceX / computed.duration) || 0;
-    computed.velocityY = abs(computed.distanceY / computed.duration) || 0;
+    computed.velocityX = abs(computed.distanceX / computed.deltaTime) || 0;
+    computed.velocityY = abs(computed.distanceY / computed.deltaTime) || 0;
     computed.maxVelocity = max(computed.velocityX, computed.velocityY);
 
     // 多点计算

@@ -68,7 +68,7 @@ export default class TapRecognizer extends Recognizer {
             // 取消当前识别
             clearTimeout(this.tapTimeout2Id);
             // 对符合要求的点击进行累加
-            if(this.isValidMovementFromPrevTap) {
+            if (this.isValidMovementFromPrevTap) {
                 this.tapCount++;
             }
             // 是否满足点击次数要求
@@ -129,15 +129,15 @@ export default class TapRecognizer extends Recognizer {
     public test(computed: Computed): boolean {
 
         // 判断是否发生大的位置变化
-        const { distance, duration, maxPointerLength } = computed;
+        const { distance, deltaTime, maxPointerLength } = computed;
 
         // 每次单击流程中, 是否没有发生大的移动
         const isValidMovementTap = 2 >= distance;
-        const isValidDuration = 250 > duration;
+        const isValidDeltaTime = 250 > deltaTime;
         // 与上一次点击的距离在合理范围内
 
         return maxPointerLength === this.options.pointer &&
-            isValidDuration && isValidMovementTap;
+            isValidDeltaTime && isValidMovementTap;
     };
 
     public afterEmit(computed: Computed): void { }
