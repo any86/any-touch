@@ -3,14 +3,24 @@ import commonjs from 'rollup-plugin-commonjs';
 import nodeResolve from 'rollup-plugin-node-resolve';
 import typescript from 'rollup-plugin-typescript';
 import json from 'rollup-plugin-json';
-import {
-    version
-} from './package.json';
-
+import replace from 'rollup-plugin-replace';
+import pkg from './package.json';
+const banner =
+`/*!
+ * AnyTouch.js v${pkg.version}
+ * (c) 2018-${new Date().getFullYear()} Russell
+ * https://github.com/383514580/any-touch
+ * Released under the MIT License.
+ */`
 
 export default {
     input: './src/main.ts',
-    plugins: [typescript({
+    plugins: [
+        replace({
+            __VERSION__: pkg.version
+        }),
+
+        typescript({
             exclude: 'node_modules/**',
             typescript: require('typescript'),
 
@@ -30,19 +40,19 @@ export default {
     ],
     output: [{
             format: 'cjs',
-            file: 'dist/AnyTouch.common.js',
-            // intro: `var __VERSION__ = '${version}'`,
+            file: pkg.main,
+            banner
         },
         {
             format: 'es',
-            file: 'dist/AnyTouch.es.js',
-            // intro: `var __VERSION__ = '${version}'`,
+            file: pkg.module,
+            banner
         },
         {
             format: 'umd',
             name: 'AnyTouch',
-            file: 'dist/AnyTouch.umd.js',
-            // intro: `var __VERSION__ = '${version}'`,
+            file: pkg.browser,
+            banner
         }
     ]
 };

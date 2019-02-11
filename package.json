@@ -6,6 +6,7 @@
   "jsdelivr": "dist/AnyTouch.umd.js",
   "main": "dist/AnyTouch.common.js",
   "module": "dist/AnyTouch.es.js",
+  "browser": "dist/AnyTouch.umd.js",
   "types": "lib/main.d.ts",
   "files": [
     "src",
@@ -48,6 +49,7 @@
     "rollup-plugin-commonjs": "^9.2.0",
     "rollup-plugin-json": "^3.1.0",
     "rollup-plugin-node-resolve": "^3.4.0",
+    "rollup-plugin-replace": "^2.1.0",
     "rollup-plugin-typescript": "^1.0.0",
     "shelljs": "^0.8.3",
     "standard-version": "^4.4.0",
