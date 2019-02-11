@@ -182,14 +182,16 @@ export default abstract class Recognizer {
      */
     recognize(computed: Computed) {
         // if(this.name === 'pan')    console.log(this.name,this.status);
-        let { inputStatus } = computed;
         // 是否识别成功
         let isVaild = this.test(computed);
+        
         // 如果识别结束, 那么重置状态
         if (-1 !== [STATUS_END, STATUS_CANCELLED, STATUS_FAILED, STATUS_RECOGNIZED].indexOf(this.status)) {
             this.status = STATUS_POSSIBLE;
         };
 
+        // 状态变化流程
+        let { inputStatus } = computed;
         if (!isVaild && STATUS_POSSIBLE === this.status && INPUT_END === inputStatus) {
             this.status = STATUS_FAILED;
         } else if (STATUS_POSSIBLE === this.status && INPUT_END === inputStatus && isVaild) {
