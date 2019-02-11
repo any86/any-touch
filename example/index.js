@@ -77,7 +77,7 @@ new Vue({
             threshold: 15
         });
 
-        // anyTouch.add(pan2);
+        anyTouch.add(pan2);
         anyTouch.add(tap2);
         anyTouch.add(tap3);
         anyTouch.add(tap4);
@@ -153,22 +153,22 @@ new Vue({
          * =========================== tap ===========================
          */
         anyTouch.on('tap', e => {
-            log(`%c ${e.type} `, 'background-color:#f10;color:#fff;');
+            console.log(`%c ${e.type} `, 'background-color:#f10;color:#fff;');
             this.message = e;
         });
 
         anyTouch.on('doubletap', e => {
-            log(`%c ${e.type} `, 'background-color:#9c3;color:#fff;');
+            console.log(`%c ${e.type} `, 'background-color:#9c3;color:#fff;');
             this.message = e;
         });
 
         anyTouch.on('threetap', e => {
-            log(`%c ${e.type} `, 'background-color:#99c;color:#fff;');
+            console.log(`%c ${e.type} `, 'background-color:#99c;color:#fff;');
             this.message = e;
         });
 
         anyTouch.on('fourtap', e => {
-            log(`%c ${e.type} `, 'background-color:#99c;color:#fff;');
+            console.log(`%c ${e.type} `, 'background-color:#19c;color:#fff;');
             this.message = e;
         });
         
