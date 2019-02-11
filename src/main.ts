@@ -77,11 +77,12 @@ export default class AnyTouch {
     eventBus: any;
 
     /**
-     * @param {Element} el
-     * @param {Object} param1
+     * @param {Element} 目标元素
+     * @param {Options} 选项
      */
     constructor(el: HTMLElement, options?: Options) {
         this.version = __VERSION__;
+        // this.set也会用到this.default
         this.default = {
             touchAction: 'compute',
             hasDomEvents: true,
