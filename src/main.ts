@@ -34,29 +34,19 @@ import SwipeRecognizer from './recognitions/Swipe';
 import PinchRecognizer from './recognitions/Pinch';
 import RotateRecognizer from './recognitions/Rotate';
 import * as Vector from './vector';
+const pkg = require('../package.json');
 interface Options {
     touchAction?: 'compute' | 'auto' | 'manipulation' | 'pan-x' | 'pan-y' | 'none';
     hasDomEvents?: boolean;
     isPreventDefault?: boolean;
 };
 export default class AnyTouch {
-    // 识别器
     static TapRecognizer = TapRecognizer;
     static PressRecognizer = PressRecognizer;
     static PanRecognizer = PanRecognizer;
     static SwipeRecognizer = SwipeRecognizer;
     static PinchRecognizer = PinchRecognizer;
     static RotateRecognizer = RotateRecognizer;
-
-    // 缩写
-    static Tap = TapRecognizer;
-    static Press = PressRecognizer;
-    static Pan = PanRecognizer;
-    static Swipe = SwipeRecognizer;
-    static Pinch = PinchRecognizer;
-    static Rotate = RotateRecognizer;
-
-    // 向量计算
     static Vector = Vector;
 
     // 目标元素
@@ -70,9 +60,9 @@ export default class AnyTouch {
 
     unbinders: any[];
 
-    version: string;
-
     options: Options;
+
+    version: string;
 
     eventBus: any;
 
