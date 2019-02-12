@@ -36,6 +36,7 @@ export default class TouchSimulator {
         } else {
             event[CLIENT_X] = pointers[0].x;
             event[CLIENT_Y] = pointers[0].y;
+            event.button = 0;
         }
         this.prevTouches = event.touches;
         this.el.dispatchEvent(event);
