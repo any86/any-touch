@@ -34,7 +34,6 @@ import SwipeRecognizer from './recognitions/Swipe';
 import PinchRecognizer from './recognitions/Pinch';
 import RotateRecognizer from './recognitions/Rotate';
 import * as Vector from './vector';
-const pkg = require('../package.json');
 interface Options {
     touchAction?: 'compute' | 'auto' | 'manipulation' | 'pan-x' | 'pan-y' | 'none';
     hasDomEvents?: boolean;
