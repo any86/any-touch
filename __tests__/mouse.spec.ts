@@ -3,7 +3,18 @@ import TouchSimulator from './utils/TouchSimulator';
 import sleep from './utils/sleep';
 import mouse from '../src/input/adapters/mouse';
 
-test('mouseup后紧接着mousedown, 是否之后的mousemove会返回input为undefined', async (done) => {
+test('鼠标非左键点击, 手势识别不会开始',  () => {
+    const el = document.createElement('div');
+    const ts = new TouchSimulator(el, {device:'mouse'});
+    // mousedown
+    let event = ts.dispatchTouchStart([{ x: 0, y: 0 }]);
+    event.button = 1;
+    let input:any = mouse(event);
+    expect(input).toBeUndefined();
+
+});
+
+test('mousedown后直接mouseup, 是否之后的mousemove会返回input为undefined', async () => {
     const el = document.createElement('div');
     const ts = new TouchSimulator(el, {device:'mouse'});
     // mousedown
@@ -24,6 +35,4 @@ test('mouseup后紧接着mousedown, 是否之后的mousemove会返回input为und
     event = ts.dispatchTouchMove([{ x: 100, y: 100 }]);
     input = mouse(event);
     expect(input).toBeUndefined();
-
-    done();
 });

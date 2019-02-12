@@ -7,8 +7,8 @@ export default (event: MouseEvent): {
     pointers: { clientX: number, clientY: number }[],
     nativeEvent: Event
 } | void => {
-    const { clientX, clientY, type } = event;
-    
+    let { clientX, clientY, type, button } = event;
+
     // changedPointers = prevPointers其实并不能完全等于touch下的changedPointers
     // 但是由于鼠标没有多点输入的需求, 
     // 所以暂时如此实现
@@ -17,10 +17,22 @@ export default (event: MouseEvent): {
 
     let pointers = [{ clientX, clientY }];
     prevPointers = [{ clientX, clientY }];
+
+    // 必须左键
     if ('mousedown' === type) {
-        isPressed = true;
-    } else if ('mousemove' === type) {
+        if (0 === button) {
+            isPressed = true;
+        } else {
+            return;
+        }
+    }
+
+    if ('mousemove' === type) {
         if (!isPressed) return;
+        // 确保移动过程中, 一直按住的都是左键,
+        // if(1 !== event.which) {
+        //     type = 'mouseup'
+        // }
     } else if ('mouseup' === type) {
         if (isPressed) {
             pointers = [];
