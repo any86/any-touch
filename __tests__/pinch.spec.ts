@@ -38,7 +38,7 @@ test('pinch缩放计算是否正确?', (done) => {
     });
 
     at.on('pinchend', ({ scale }) => {
-        expect(scale).toBeUndefined();
+        expect(scale).toBe(1);
     });
 
     // 模拟缩放

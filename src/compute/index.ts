@@ -78,6 +78,11 @@ export default function ({
         const { angle, deltaAngle } = computeAngle({ startV, prevV, activeV });
         computed.angle = angle;
         computed.deltaAngle = deltaAngle;
+    } else {
+        computed.scale = 1;
+        computed.deltaScale = 0;
+        computed.angle = 0;
+        computed.deltaAngle = 0;
     }
 
     // 最大触点数
