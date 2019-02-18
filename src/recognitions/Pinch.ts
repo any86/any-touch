@@ -20,6 +20,7 @@ export default class PinchRecognizer extends Recognizer {
     };
 
     afterEmit(computed: Computed) {
+        if('end' === computed.inputStatus) return;
         // pinchin | pinchout
         const { scale } = computed;
         if (1 !== scale) {

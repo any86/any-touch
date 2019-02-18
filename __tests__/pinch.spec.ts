@@ -18,12 +18,16 @@ test('pinch缩放计算是否正确?', (done) => {
 
     });
 
+    // 放大
     at.on('pinchout', ({ scale }) => {
         expect(scale).toBe(expectScales[index]);
         index++;
     });
 
+
+    // 缩小
     at.on('pinchin', ({ scale }) => {
+        console.log({scale});
         expect(scale).toBe(expectScales[index]);
         index++;
     });
@@ -38,7 +42,7 @@ test('pinch缩放计算是否正确?', (done) => {
     });
 
     at.on('pinchend', ({ scale }) => {
-        expect(scale).toBeUndefined();
+        expect(scale).toBe(expectScales[expectScales.length-1]);
     });
 
     // 模拟缩放
