@@ -21,6 +21,8 @@ new Vue({
             this.activeType = 'AnyTouch';
         });
 
+        
+
         const tap2 = new AnyTouch.TapRecognizer({
             name: 'doubletap',
             pointer: 1,
@@ -46,7 +48,8 @@ new Vue({
             touchAction: 'compute',
             isPreventDefault: true
         });
-
+        const tap = anyTouch.get('tap').set({pointer:1})
+        console.log(tap);
 //         const anyTouch2 = new AnyTouch(this.$refs.circle2, {
 //             touchAction: 'compute',
 //             isPreventDefault: true
@@ -77,7 +80,7 @@ new Vue({
             threshold: 15
         });
 
-        anyTouch.add(pan2);
+        // anyTouch.add(pan2);
         anyTouch.add(tap2);
         anyTouch.add(tap3);
         anyTouch.add(tap4);
@@ -196,15 +199,13 @@ new Vue({
          */
         ['rotatestart', 'rotatemove', 'rotateend'].forEach(name => {
             anyTouch.on(name, e => {
-                if('rotateend' === name) {
-                    alert(12)
-                }
                 log(e.type);
                 // this.message = e;
             })
         });
 
         anyTouch.on('rotate', e => {
+            console.log(e.deltaAngle, e.deltaX,e.deltaY);
             this.message = e;
             this.angle += e.deltaAngle;
             this.centerX = e.centerX;

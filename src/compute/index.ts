@@ -8,6 +8,8 @@ import computeVector from './computeVector';
 import computeScale from './computeScale';
 import computeAngle from './computeAngle';
 import computeMaxLength from './computeMaxLength';
+let prevScale = 1;
+let prevAngle = 0;
 
 // 最大触点数
 export default function ({
@@ -78,6 +80,13 @@ export default function ({
         const { angle, deltaAngle } = computeAngle({ startV, prevV, activeV });
         computed.angle = angle;
         computed.deltaAngle = deltaAngle;
+        prevAngle = angle;
+        prevScale = scale;
+    } else {
+        computed.scale = prevScale;
+        computed.deltaScale = 1;
+        computed.angle = prevAngle;
+        computed.deltaAngle = 0;
     }
 
     // 最大触点数
