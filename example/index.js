@@ -106,7 +106,7 @@ new Vue({
         });
 
         anyTouch.on('input', e => {
-            console.warn('input', e);
+            // console.warn('input', e);
         });
 
 
@@ -114,13 +114,14 @@ new Vue({
             // e.nativeEvent.preventDefault()
             // anyTouch.set({touchAction:'auto',isPreventDefault:false});
             this.message = e;
-            log(e.type);
+            console.log(e.type);
+            
         });
 
         anyTouch.on('panmove', e => {
             // e.nativeEvent.preventDefault()
             this.message = e;
-            log(e.type);
+            console.log(e.type);
         });
 
         anyTouch.on('pancancel', e => {
@@ -129,7 +130,7 @@ new Vue({
             log(e.type);
         });
 
-        anyTouch.on('panend', e => {
+        anyTouch.on('panend', e => {            
             console.warn('panend',e.lastDirection);
             this.message = e;
             log(e.type);
@@ -228,7 +229,7 @@ new Vue({
         });
 
         anyTouch.on('swipe', e => {
-            log(`%c ${e.type} `, 'background-color:#444;color:#fff;');
+            console.log(`%c ${e.type} `, 'background-color:#444;color:#fff;');
             this.message = e;
         });
     },

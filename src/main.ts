@@ -76,6 +76,9 @@ export default class AnyTouch {
 
     eventBus: any;
 
+    // 是否阻止后面的识别器运行
+    private _isStopped: boolean;
+
     /**
      * @param {Element} 目标元素
      * @param {Object} 选项
@@ -92,16 +95,16 @@ export default class AnyTouch {
         this.options = { ...this.default, ...options };
         // eventBus
         this.eventBus = new AnyEvent();
+        this._isStopped = false;
         // 识别器
         this.recognizers = [
-            new TapRecognizer().$injectRoot(this),
-            new PressRecognizer().$injectRoot(this),
+            new RotateRecognizer().$injectRoot(this),
+            new PinchRecognizer().$injectRoot(this),
             new PanRecognizer().$injectRoot(this),
             new SwipeRecognizer().$injectRoot(this),
-            new PinchRecognizer().$injectRoot(this),
-            new RotateRecognizer().$injectRoot(this),
+            new TapRecognizer().$injectRoot(this),
+            new PressRecognizer().$injectRoot(this),
         ];
-
         // 应用设置
         // this.update();
 
@@ -190,6 +193,13 @@ export default class AnyTouch {
     };
 
     /**
+     * 停止识别
+     */
+    stop() {
+        this._isStopped = true;
+    }
+
+    /**
      * 删除识别器
      * @param {String} 识别器name
      */
@@ -214,14 +224,24 @@ export default class AnyTouch {
         if (this.options.isPreventDefault) {
             event.preventDefault();
         }
+
+
         // 记录各个阶段的input
         let inputs = inputManage(event);
         if (undefined !== inputs) {
             const computed = compute(inputs);
+            if((<Computed>computed).isFirst) {
+                this._isStopped = false;
+            }
             this.eventBus.emit('input', computed);
             // 当是鼠标事件的时候, mouseup阶段的input和computed为空
             for (let recognizer of this.recognizers) {
                 if (recognizer.disabled) continue;
+                console.log(this._isStopped);
+                if (this._isStopped) {
+                    break;
+                }
+
                 recognizer.recognize(computed);
             }
         }
