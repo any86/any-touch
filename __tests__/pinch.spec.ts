@@ -27,7 +27,6 @@ test('pinch缩放计算是否正确?', (done) => {
 
     // 缩小
     at.on('pinchin', ({ scale }) => {
-        console.log({scale});
         expect(scale).toBe(expectScales[index]);
         index++;
     });

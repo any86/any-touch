@@ -135,7 +135,7 @@ export default class AnyTouch {
      * @param {Element} 待绑定手势元素
      */
     private _bindRecognizers(el: Element) {
-        const boundFn = this.handler.bind(this);
+        const boundFn = this.inputListener.bind(this);
         if ('touch' === this.inputType) {
             return ['touchstart', 'touchmove', 'touchend', 'touchcancel'].map(eventName => {
                 el.addEventListener(eventName, boundFn, { passive: false });
@@ -202,7 +202,11 @@ export default class AnyTouch {
         }
     };
 
-    handler(event: Event): void {
+    /**
+     * 监听input变化
+     * @param {Event}
+     */
+    inputListener(event: Event): void {
         if (!event.cancelable) {
             this.eventBus.emit('error', { code: 0, message: '页面滚动的时候, 请暂时不要操作元素!' });
         }
@@ -214,6 +218,7 @@ export default class AnyTouch {
         let inputs = inputManage(event);
         if (undefined !== inputs) {
             const computed = compute(inputs);
+            this.eventBus.emit('input', computed);
             // 当是鼠标事件的时候, mouseup阶段的input和computed为空
             for (let recognizer of this.recognizers) {
                 if (recognizer.disabled) continue;

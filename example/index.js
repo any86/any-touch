@@ -105,6 +105,11 @@ new Vue({
             console.warn(e);
         });
 
+        anyTouch.on('input', e => {
+            console.warn('input', e);
+        });
+
+
         anyTouch.on('panstart', e => {
             // e.nativeEvent.preventDefault()
             // anyTouch.set({touchAction:'auto',isPreventDefault:false});
