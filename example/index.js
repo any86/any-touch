@@ -21,8 +21,6 @@ new Vue({
             this.activeType = 'AnyTouch';
         });
 
-        
-
         const tap2 = new AnyTouch.TapRecognizer({
             name: 'doubletap',
             pointer: 1,

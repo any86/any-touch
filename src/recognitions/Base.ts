@@ -52,6 +52,7 @@ export default abstract class Recognizer {
         this.options = { ...this.options, ...options };
         // 刷新anyTouch
         this.$root.update();
+        return this;
     };
 
     public $injectRoot($root: any) {

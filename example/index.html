@@ -3,9 +3,10 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta data-n-head="true" name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" />
+    <meta data-n-head="true" name="viewport"
+        content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Demo</title>
+    <title>AnyTouch</title>
     <link rel="stylesheet" href="index.css">
     </link>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
@@ -13,9 +14,9 @@
     <script src="../dist/AnyTouch.umd.js"></script>
 
     <script>
-        // if (!!window.location.search) {
-            var vConsole = new VConsole();
-        // }
+        var MOBILE_REGEX = /mobile|tablet|ip(ad|hone|od)|android/i;
+        var IS_MOBILE = MOBILE_REGEX.test(navigator.userAgent);
+        if (IS_MOBILE) var vConsole = new VConsole();
     </script>
 </head>
 
@@ -32,27 +33,27 @@
                 <th width="130">当前值</th>
                 <th>说明</th>
             </tr>
-            
+
             <tr>
                 <td>type</td>
                 <td>{{message.type}}</td>
                 <td>事件名称</td>
             </tr>
-            
+
             <tr>
                 <td>inputStatus</td>
                 <td>{{message.inputStatus}}</td>
                 <td>触点离开/减少值为end | 触点离开/减少值为end</td>
             </tr>
 
-            
 
-            <tr >
+
+            <tr>
                 <td>maxPointerLength</td>
                 <td>{{message.maxPointerLength}}</td>
                 <td>出现过的最大触点数</td>
             </tr>
-            
+
             <tr>
                 <td>centerX / centerY</td>
                 <td>{{message.centerX}} / {{message.centerY}}</td>
@@ -89,7 +90,7 @@
                 <td>{{message.deltaXYAngle}}</td>
                 <td>x/y位移变化的夹角</td>
             </tr>
-            
+
 
             <tr>
                 <td>angle</td>
@@ -120,7 +121,7 @@
                 <td>{{message.timestamp}}</td>
                 <td>当前时间戳</td>
             </tr>
-            
+
 
             <tr>
                 <td>direction</td>
@@ -139,7 +140,7 @@
                 <td>{{message.lastVelocity}}</td>
                 <td>最近25ms内触点移动速率, 标量</td>
             </tr>
-            
+
             <tr>
                 <td>deltaTime</td>
                 <td>{{message.deltaTime}}</td>
@@ -151,7 +152,7 @@
                 <td>{{message.deltaTime}}</td>
                 <td>每次发生移动或者离开动作之间的时间间隔, 比如可以用来判断距离上次移动经历了多长时间</td>
             </tr>
-            
+
             <tr>
                 <td>isFirst</td>
                 <td>{{message.isFinal}}</td>
@@ -163,7 +164,7 @@
                 <td>{{message.isFinal}}</td>
                 <td>是否所有触点都离开了屏幕</td>
             </tr>
-            
+
             <tr>
                 <td>target</td>
                 <td>ElementTarget</td>
@@ -193,7 +194,7 @@
                 <td>{{message.pointers}}</td>
                 <td>触点信息</td>
             </tr>
-            
+
         </table>
 
 
@@ -204,8 +205,7 @@
         </section> -->
 
 
-        <div class="circle" id="circle" ref="circle" @animationend="animationend" :class="[activeType]"
-            :style="{
+        <div class="circle" id="circle" ref="circle" @animationend="animationend" :class="[activeType]" :style="{
                 top:`${y}px`,
                 left:`${x}px`,
             transform: `scale(${scale}) rotate(${angle}deg)`

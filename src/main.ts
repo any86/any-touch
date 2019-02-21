@@ -237,11 +237,9 @@ export default class AnyTouch {
             // 当是鼠标事件的时候, mouseup阶段的input和computed为空
             for (let recognizer of this.recognizers) {
                 if (recognizer.disabled) continue;
-                console.log(this._isStopped);
                 if (this._isStopped) {
                     break;
                 }
-
                 recognizer.recognize(computed);
             }
         }
