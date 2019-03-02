@@ -23,12 +23,12 @@ export default (input: Input): { velocity: number, velocityX: number, velocityY:
     // _prevInput || input用来保证deltaX等不会有undefined参与计算
     _prevInput = _prevInput || input;
     const deltaTime = input.timestamp - _prevInput.timestamp;
-    const deltaX = (0 < input.centerX) ? input.centerX - _prevInput.centerX : 0;
-    const deltaY = (0 < input.centerY) ? input.centerY - _prevInput.centerY : 0;
+    const deltaX = (0 < input.x) ? input.x - _prevInput.x : 0;
+    const deltaY = (0 < input.y) ? input.y - _prevInput.y : 0;
     // 每25ms刷新速度数据
     if (INPUT_CANCEL !== input.inputStatus && COMPUTE_INTERVAL < deltaTime || undefined === _prevDirection) {
-        velocityX = Math.round(Math.abs(deltaX / deltaTime)*100)/100;
-        velocityY = Math.round(Math.abs(deltaY / deltaTime)*100)/100;
+        velocityX = Math.round(Math.abs(deltaX / deltaTime) * 100) / 100;
+        velocityY = Math.round(Math.abs(deltaY / deltaTime) * 100) / 100;
         direction = getDirection(deltaX, deltaY) || _prevDirection;
         // 存储状态
         _prevVelocityX = velocityX;
@@ -38,7 +38,7 @@ export default (input: Input): { velocity: number, velocityX: number, velocityY:
     } else {
         velocityX = _prevVelocityX || 0;
         velocityY = _prevVelocityY || 0;
-// console.log({_prevDirection,deltaX, deltaY});
+        // console.log({_prevDirection,deltaX, deltaY});
         // direction = getDirection(deltaX, deltaY) || _prevDirection || 'none';
         direction = _prevDirection;
         // console.log({direction})

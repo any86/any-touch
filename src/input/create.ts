@@ -1,23 +1,24 @@
 /**
- * 构造统一的touchEvent格式
+ * 构造统一的Input格式
  */
-import { Input } from '../interface';
-import { SUPPORT_TOUCH, IS_MOBILE, INPUT_CANCEL, INPUT_END, INPUT_MOVE, INPUT_START } from '../const';
+import { Input, BaseInput, Point } from '../interface';
+import { SUPPORT_TOUCH, INPUT_END, INPUT_START } from '../const';
 import { getCenter } from '../vector';
 import touchAdapter from './adapters/touch'
 import mouseAdapter from './adapters/mouse';
-let centerX: number;
-let centerY: number;
 
-export default (event: Event): Input|undefined => {
-    let input: any = {};
+// 缓存每次变化, 当变化为undefined的时候
+let center: Point | undefined;
+export default (event: Event): Input | void => {
+    let input: BaseInput;
+
     // Touch
     if (SUPPORT_TOUCH) {
         input = touchAdapter(<TouchEvent>event);
     }
     // Mouse
     else {
-        input = mouseAdapter(<MouseEvent>event);
+        input = <BaseInput>mouseAdapter(<MouseEvent>event);
         if (undefined === input) {
             return;
         }
@@ -28,13 +29,12 @@ export default (event: Event): Input|undefined => {
 
     // 变化前触点数
     const changedPointerLength: number = changedPointers.length;
+    // 识别流程的开始和结束标记
     const isFirst = (INPUT_START === inputStatus) && (0 === changedPointerLength - pointerLength);
     const isFinal = (INPUT_END === inputStatus) && (0 === pointerLength);
     // 中心坐标
     if (0 < pointerLength) {
-        const { x, y } = getCenter(input.pointers);
-        centerX = x;
-        centerY = y;
+        center = getCenter(input.pointers);
     }
 
     // 当前时间
@@ -42,18 +42,15 @@ export default (event: Event): Input|undefined => {
 
     // 原生属性/方法
     const { target, currentTarget } = event;
-
-
+    const { x, y } = <Point>(center || {});
     return {
         ...input,
         isFirst,
         isFinal,
         pointerLength,
         changedPointerLength,
-        centerX,
-        centerY,
-        x: centerX,
-        y: centerY,
+        center,
+        x, y,
         timestamp,
         target,
         currentTarget,

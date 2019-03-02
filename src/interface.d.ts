@@ -2,28 +2,39 @@
 export type directionString = 'up' | 'right' | 'down' | 'left' | 'none';
 export type RecognizerStatus = 'possible' | 'recognized' | 'began' | 'changed' | 'ended' | 'failed' | 'cancelled';
 
-export interface Input {
-    // 新一轮手势识别的开始
+export type inputStatus = 'start' | 'move' | 'end' | 'cancel';
+
+export interface Point {
+    x:number;
+    y:number;
+}
+
+export interface BaseInput {
+    inputStatus: inputStatus;
+    changedPointers: { clientX: number, clientY: number }[];
+    pointers: { clientX: number, clientY: number }[];
+    nativeEvent: Event
+}
+export interface Input extends BaseInput {
+    // 新一轮手势识别的开始和结束
     isFirst: boolean;
     isFinal: boolean;
-    inputStatus: 'start' | 'move' | 'end' | 'cancel';
-    nativeEvent: Event;
-    pointer: { clientX: number, clientY: number }[];
     pointerLength: number;
     // 发生改变的触点数据
-    changedPointers: { clientX: number, clientY: number }[];
     changedPointerLength: number;
     // 当前时间
     timestamp: number;
-    target: EventTarget;
-    currentTarget?: EventTarget;
-    centerX: number;
-    centerY: number;
-
+    target: EventTarget | null;
+    currentTarget: EventTarget | null;
+    center?: Point;
+    // 同centerX/Y
+    x: number;
+    y: number;
     // functions?: { [k: string]: (...args: any[]) => any };
 }
 // input的计算结果
 export interface Computed extends Input {
+
     // 手势类型名: pan/panstart/panleft...
     type: string;
     // 一次识别周期中出现的最大触点数
@@ -51,7 +62,5 @@ export interface Computed extends Input {
     direction?: directionString;
     // 最近的方向
     lastDirection?: directionString;
-    // 同centerX/Y
-    x: number;
-    y: number;
+
 }

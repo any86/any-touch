@@ -1,6 +1,6 @@
 
 import { Computed, directionString } from '../interface';
-import { getDirection } from '../vector';
+import { getDirection ,getCenter} from '../vector';
 import computeLast from './computeLast';
 import computeDistance from './computeDistance';
 import computeDeltaXY from './computeDeltaXY';
@@ -8,6 +8,7 @@ import computeVector from './computeVector';
 import computeScale from './computeScale';
 import computeAngle from './computeAngle';
 import computeMaxLength from './computeMaxLength';
+
 let prevScale = 1;
 let prevAngle = 0;
 
@@ -20,9 +21,7 @@ export default function ({
 }: any): Computed | void {
     // 如果输入为空, 那么就计算了, 鼠标模式下, 点击了非元素部分, mouseup阶段会初选input为undefined
     if (undefined === input) return;
-
     const { abs, max } = Math;
-
     let computed = <Computed>{};
 
     // 滑动距离
@@ -30,6 +29,7 @@ export default function ({
         startInput,
         input
     });
+
     computed = { ...computed, displacementX, displacementY, distanceX, distanceY, distance };
 
     // 计算方向
@@ -91,7 +91,6 @@ export default function ({
 
     // 最大触点数
     const maxPointerLength = computeMaxLength(input);
-
     computed = { ...computed, ...input, maxPointerLength };
     return computed;
 };

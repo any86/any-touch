@@ -230,7 +230,7 @@ export default class AnyTouch {
         let inputs = inputManage(event);
         if (undefined !== inputs) {
             const computed = compute(inputs);
-            if((<Computed>computed).isFirst) {
+            if ((<Computed>computed).isFirst) {
                 this._isStopped = false;
             }
             this.eventBus.emit('input', computed);

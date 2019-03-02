@@ -193,8 +193,8 @@ new Vue({
             this.message = e;
             this.scale *= e.deltaScale;
             // console.log(e.deltaScale);
-            this.centerX = e.centerX;
-            this.centerY = e.centerY;
+            this.centerX = e.center.x;
+            this.centerY = e.center.y;
             log(`%c ${e.type} `, 'background-color:#f90;color:#fff;');
         });
 
@@ -212,8 +212,8 @@ new Vue({
             console.log(e.deltaAngle, e.deltaX,e.deltaY);
             this.message = e;
             this.angle += e.deltaAngle;
-            this.centerX = e.centerX;
-            this.centerY = e.centerY;
+            this.centerX = e.center.x;
+            this.centerY = e.center.y;
         });
 
         /**

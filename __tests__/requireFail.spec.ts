@@ -23,11 +23,11 @@ test('doubletap识别失败, tap应该触发2次', async (done) => {
     
     const ts = new TouchSimulator(el);
     // 模拟touch触碰
-    ts.dispatchTouchStart([{ x: 0, y: 0 }]);
+    ts.dispatchTouchStart([{ x: 100, y: 100 }]);
     ts.dispatchTouchEnd();
 
     await sleep(30);
-    ts.dispatchTouchStart([{ x: 100, y: 100 }]);
+    ts.dispatchTouchStart([{ x: 200, y: 200 }]);
     ts.dispatchTouchEnd();
     await sleep(500);
     expect(mockDoubletapCallback.mock.calls.length).toBe(0);

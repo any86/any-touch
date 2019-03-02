@@ -1,19 +1,14 @@
+import { BaseInput, inputStatus } from '../../interface';
 let prevPointers: { clientX: number, clientY: number }[];
 let isPressed = false;
 // 默认MouseEvent中对type声明仅为string
-export default (event: MouseEvent): {
-    inputStatus: string,
-    changedPointers: { clientX: number, clientY: number }[],
-    pointers: { clientX: number, clientY: number }[],
-    nativeEvent: Event
-} | void => {
+export default (event: MouseEvent): BaseInput | void => {
     let { clientX, clientY, type, button } = event;
 
     // changedPointers = prevPointers其实并不能完全等于touch下的changedPointers
     // 但是由于鼠标没有多点输入的需求, 
     // 所以暂时如此实现
     const changedPointers = prevPointers || [{ clientX, clientY }];
-    // console.log(prevPointers, [{ clientX, clientY }],changedPointers);
 
     let pointers = [{ clientX, clientY }];
     prevPointers = [{ clientX, clientY }];
@@ -49,7 +44,7 @@ export default (event: MouseEvent): {
     };
 
     return {
-        inputStatus: MAP[<'mousedown' | 'mousemove' | 'mouseup'>type],
+        inputStatus: <inputStatus>MAP[<'mousedown' | 'mousemove' | 'mouseup'>type],
         changedPointers,
         pointers,
         nativeEvent: event

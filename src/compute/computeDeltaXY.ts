@@ -3,7 +3,7 @@ let lastDeltaXYAngle = 0;
 export default function ({
     prevInput,
     input
-}: any): { deltaX: number, deltaY: number, deltaXYAngle: number} {
+}: any): { deltaX: number, deltaY: number, deltaXYAngle: number } {
     // 每次事件触发时位移的变化
     let deltaX: number;
     let deltaY: number;
@@ -15,10 +15,9 @@ export default function ({
         deltaX = 0;
         deltaY = 0;
     } else {
-        deltaX = input.centerX - prevInput.centerX;
-        deltaY = input.centerY - prevInput.centerY;
+        deltaX = input.x - prevInput.x;
+        deltaY = input.y - prevInput.y;
     }
-
 
     // 计算deltaXAngle / deltaYAngle
     if (0 !== deltaX || 0 !== deltaY) {
