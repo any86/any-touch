@@ -1,4 +1,8 @@
 import sleep from './sleep';
+import differenceWith from 'lodash/differenceWith';
+import isEqual from 'lodash/isEqual';
+
+
 interface Pointer {
     x: number;
     y: number;
@@ -9,7 +13,7 @@ interface Options {
 const CLIENT_X = 'clientX';
 const CLIENT_Y = 'clientY';
 export default class TouchSimulator {
-    public prevTouches?: {
+    public prevTouches: {
         clientX: number;
         clientY: number;
     }[];
@@ -20,7 +24,9 @@ export default class TouchSimulator {
     constructor(el: Element | Document, { device = 'touch' }: Options = <Options>{}) {
         this.el = el;
         this.device = device;
+        this.prevTouches = [];
     };
+
 
     /**
      * 模拟touchstart
@@ -32,7 +38,7 @@ export default class TouchSimulator {
         let event: any = new Event(type, {});
         if ('touch' === this.device) {
             event.touches = pointers.map(({ x, y }) => ({ [CLIENT_X]: x, [CLIENT_Y]: y }));
-            event.changedTouches = pointers.map(({ x, y }) => ({ [CLIENT_X]: x, [CLIENT_Y]: y }));
+            event.changedTouches = differenceWith(event.touches, this.prevTouches, isEqual);
         } else {
             event[CLIENT_X] = pointers[0].x;
             event[CLIENT_Y] = pointers[0].y;
@@ -54,12 +60,9 @@ export default class TouchSimulator {
 
         if ('touch' === this.device) {
             // 对应点不同就放进changedTouches;
-            event.changedTouches = pointers.filter(({ x, y }, index) => {
-                if (!!this.prevTouches && !!this.prevTouches[index]) {
-                    return (this.prevTouches[index][CLIENT_X] !== x || this.prevTouches[index][CLIENT_Y] !== y);
-                }
-            });
             event.touches = pointers.map(({ x, y }) => ({ [CLIENT_X]: x, [CLIENT_Y]: y }));
+            event.changedTouches = differenceWith(event.touches, this.prevTouches, isEqual);
+
             this.prevTouches = event.touches;
             this.el.dispatchEvent(event);
         } else {
@@ -76,15 +79,13 @@ export default class TouchSimulator {
      * @param {Number} 删除点在touchs中的索引起始索引
      * @param {Number} 删除多少个点
      */
-    public dispatchTouchEnd(pointerIndex?: number, pointerNumber?: number) {
+    public dispatchTouchEnd(pointerIndex = 0, pointerNumber?: number) {
         let type = 'touch' === this.device ? 'touchend' : 'mouseup';
         let event: any = new Event(type, {});
         if ('touch' === this.device) {
-            if (!!this.prevTouches) {
-                event.changedTouches = this.prevTouches.splice(pointerIndex || 0, pointerNumber || this.prevTouches.length);
-            }
-            // 当前的this.prevTouches已经是减去了变化点后的数组
+            event.changedTouches = this.prevTouches.splice(pointerIndex, pointerNumber);
             event.touches = this.prevTouches;
+            this.prevTouches = event.touches;
             this.el.dispatchEvent(event);
         } else {
             window.dispatchEvent(event);
@@ -98,8 +99,9 @@ export default class TouchSimulator {
      */
     public dispatchTouchCancel() {
         let event: any = new Event('touchcancel', {});
-        event.changedTouches = [];
+        event.changedTouches = differenceWith(event.touches, this.prevTouches, isEqual);
         event.touches = [];
+        this.prevTouches = event.touches;
         this.el.dispatchEvent(event);
         return event;
     };

@@ -2,20 +2,22 @@
 export type directionString = 'up' | 'right' | 'down' | 'left' | 'none';
 export type RecognizerStatus = 'possible' | 'recognized' | 'began' | 'changed' | 'ended' | 'failed' | 'cancelled';
 
-export type inputStatus = 'start' | 'move' | 'end' | 'cancel';
+export type eventType = 'start' | 'move' | 'end' | 'cancel';
 
 export interface Point {
-    x:number;
-    y:number;
+    x: number;
+    y: number;
 }
 
 export interface BaseInput {
-    inputStatus: inputStatus;
+    eventType: eventType;
     changedPointers: { clientX: number, clientY: number }[];
     pointers: { clientX: number, clientY: number }[];
-    nativeEvent: Event
+    nativeEvent: Event;
 }
+
 export interface Input extends BaseInput {
+    preventDefault: ()=>void;
     // 新一轮手势识别的开始和结束
     isFirst: boolean;
     isFinal: boolean;
@@ -62,5 +64,4 @@ export interface Computed extends Input {
     direction?: directionString;
     // 最近的方向
     lastDirection?: directionString;
-
 }

@@ -43,11 +43,10 @@ new Vue({
         })
         // 初始化
         const anyTouch = new AnyTouch(this.$refs.circle, {
-            touchAction: 'compute',
+            // touchAction: 'auto',
             isPreventDefault: true
         });
         const tap = anyTouch.get('tap').set({pointer:1})
-        console.log(tap);
 //         const anyTouch2 = new AnyTouch(this.$refs.circle2, {
 //             touchAction: 'compute',
 //             isPreventDefault: true
@@ -103,13 +102,18 @@ new Vue({
             console.warn(e);
         });
 
+        anyTouch.on('inputstart', e => {
+            e.preventDefault();
+        });
+
+
         anyTouch.on('input', e => {
             // console.warn('input', e);
         });
 
 
         anyTouch.on('panstart', e => {
-            // e.nativeEvent.preventDefault()
+            e.nativeEvent.preventDefault();
             // anyTouch.set({touchAction:'auto',isPreventDefault:false});
             this.message = e;
             console.log(e.type);
@@ -117,7 +121,7 @@ new Vue({
         });
 
         anyTouch.on('panmove', e => {
-            // e.nativeEvent.preventDefault()
+            e.nativeEvent.preventDefault();
             this.message = e;
             console.log(e.type);
         });
@@ -160,10 +164,13 @@ new Vue({
          * =========================== tap ===========================
          */
         anyTouch.on('tap', e => {
+            e.preventDefault();
             console.log(`%c ${e.type} `, 'background-color:#f10;color:#fff;');
             this.message = e;
         });
-
+        this.$refs.circle.addEventListener('click', ev=>{
+            console.log(ev);
+        })
         anyTouch.on('doubletap', e => {
             console.log(`%c ${e.type} `, 'background-color:#9c3;color:#fff;');
             this.message = e;

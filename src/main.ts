@@ -88,7 +88,7 @@ export default class AnyTouch {
         this.default = {
             touchAction: 'compute',
             hasDomEvents: true,
-            isPreventDefault: true
+            isPreventDefault: false
         };
         this.el = el;
         this.inputType = SUPPORT_TOUCH ? 'touch' : 'mouse';
@@ -225,7 +225,6 @@ export default class AnyTouch {
             event.preventDefault();
         }
 
-
         // 记录各个阶段的input
         let inputs = inputManage(event);
         if (undefined !== inputs) {
@@ -233,7 +232,27 @@ export default class AnyTouch {
             if ((<Computed>computed).isFirst) {
                 this._isStopped = false;
             }
-            this.eventBus.emit('input', computed);
+            // input事件
+            this.emit('input', computed);
+            if (computed.isFirst) {
+                this.emit('inputstart', computed);
+            } else if (computed.isFinal) {
+                if ('cancel' === computed.eventType) {
+                    this.emit('inputcancel', computed);
+                } else {
+                    this.emit('inputend', computed);
+                }
+            } else {
+                if (inputs.prevInput.pointerLength > inputs.input.pointerLength) {
+                    this.emit('inputreduce', computed);
+                } else if (inputs.prevInput.pointerLength < inputs.input.pointerLength) {
+
+                    this.emit('inputadd', computed);
+                } else {
+                    this.emit('inputmove', computed);
+                }
+            };
+
             // 当是鼠标事件的时候, mouseup阶段的input和computed为空
             for (let recognizer of this.recognizers) {
                 if (recognizer.disabled) continue;
@@ -261,6 +280,16 @@ export default class AnyTouch {
      */
     off(type: string, listener?: (event: Computed) => void): void {
         this.eventBus.off(type, listener);
+    };
+
+    /**
+     * 触发事件, 同时type会作为payload的一个键值
+     * @param {String} 类型名
+     * @param {Object} 数据
+     */
+    emit(type: string, payload: any) {
+        payload.type = type;
+        this.eventBus.emit(type, payload);
     };
 
     /**

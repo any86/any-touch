@@ -26,7 +26,7 @@ export default (input: Input): { velocity: number, velocityX: number, velocityY:
     const deltaX = (0 < input.x) ? input.x - _prevInput.x : 0;
     const deltaY = (0 < input.y) ? input.y - _prevInput.y : 0;
     // 每25ms刷新速度数据
-    if (INPUT_CANCEL !== input.inputStatus && COMPUTE_INTERVAL < deltaTime || undefined === _prevDirection) {
+    if (INPUT_CANCEL !== input.eventType && COMPUTE_INTERVAL < deltaTime || undefined === _prevDirection) {
         velocityX = Math.round(Math.abs(deltaX / deltaTime) * 100) / 100;
         velocityY = Math.round(Math.abs(deltaY / deltaTime) * 100) / 100;
         direction = getDirection(deltaX, deltaY) || _prevDirection;

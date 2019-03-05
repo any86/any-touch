@@ -20,14 +20,14 @@ test('mousedown后直接mouseup, 是否之后的mousemove会返回input为undefi
     // mousedown
     let event = ts.dispatchTouchStart([{ x: 0, y: 0 }]);
     let input:any = mouse(event);
-    expect(input.inputStatus).toBe('start');
+    expect(input.eventType).toBe('start');
     expect(input.changedPointers).toEqual([{ clientX: 0, clientY: 0 }]);
     expect(input.pointers).toEqual([{ clientX: 0, clientY: 0 }]);
     await sleep(100);
     // mouseup
     event = ts.dispatchTouchEnd();
     input = mouse(event);
-    expect(input.inputStatus).toBe('end');
+    expect(input.eventType).toBe('end');
     expect(input.changedPointers).toEqual([{ clientX: 0, clientY: 0 }]);
     expect(input.pointers).toEqual([]);
 

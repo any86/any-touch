@@ -32,7 +32,7 @@ export default class SwipeRecognizer extends Recognizer {
      * @param {Computed} 计算数据
      */
     test(computed: Computed): boolean {
-        if(INPUT_END !== computed.inputStatus) return false;
+        if(INPUT_END !== computed.eventType) return false;
 
         // 非end阶段, 开始校验数据
         const {lastDirection, direction, lastVelocityX, lastVelocityY, maxPointerLength, distance } = computed;

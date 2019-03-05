@@ -1,6 +1,6 @@
 
 import { Computed, directionString } from '../interface';
-import { getDirection ,getCenter} from '../vector';
+import { getDirection, getCenter } from '../vector';
 import computeLast from './computeLast';
 import computeDistance from './computeDistance';
 import computeDeltaXY from './computeDeltaXY';
@@ -18,9 +18,7 @@ export default function ({
     prevInput,
     startMutliInput,
     input
-}: any): Computed | void {
-    // 如果输入为空, 那么就计算了, 鼠标模式下, 点击了非元素部分, mouseup阶段会初选input为undefined
-    if (undefined === input) return;
+}: any): Computed{
     const { abs, max } = Math;
     let computed = <Computed>{};
 
@@ -74,7 +72,6 @@ export default function ({
         });
         computed.scale = scale;
         computed.deltaScale = deltaScale;
-        // console.log({scale, deltaScale});
 
         // 计算旋转角度
         const { angle, deltaAngle } = computeAngle({ startV, prevV, activeV });

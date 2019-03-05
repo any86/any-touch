@@ -4,7 +4,7 @@ import AnyTouch from '../src/main'
 const el = document.createElement('div');
 
 test('通过多点pan, 测试Pan构造函数是否正确?', (done) => {
-    const at = new AnyTouch(el);
+    const at = new AnyTouch(el, {isPreventDefault:true});
     const pan2 = new AnyTouch.PanRecognizer({
         name: 'pan2',
         pointerLength: 2,

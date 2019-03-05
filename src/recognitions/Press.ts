@@ -24,8 +24,8 @@ export default class PressRecognizer extends Recognizer {
     };
 
     recognize(computed: Computed): void {
-        const { inputStatus } = computed;
-        if (INPUT_START === inputStatus) {
+        const { eventType } = computed;
+        if (INPUT_START === eventType) {
             this.status = STATUS_POSSIBLE;
         }
 
@@ -52,7 +52,7 @@ export default class PressRecognizer extends Recognizer {
                 this.status = STATUS_FAILED;
             }
 
-            if (INPUT_END === inputStatus) {
+            if (INPUT_END === eventType) {
                 this.status = STATUS_FAILED;
                 // console.log(this.status);
             }
@@ -60,14 +60,14 @@ export default class PressRecognizer extends Recognizer {
         // 已识别 
         else {
             // end阶段触发pressup
-            if (INPUT_END === inputStatus) {
+            if (INPUT_END === eventType) {
                 this.emit(`${this.options.name}up`, computed);
             }
         }
     };
 
-    public test({ pointerLength, inputStatus, distance }: Computed): boolean {
-        // const IS_VALID_INPUT = 'start' === inputStatus || 'move' === inputStatus;
+    public test({ pointerLength, eventType, distance }: Computed): boolean {
+        // const IS_VALID_INPUT = 'start' === eventType || 'move' === eventType;
         const IS_VLIAD_DISTANCE = this.options.threshold > distance;
         return this.isValidPointerLength(pointerLength) && IS_VLIAD_DISTANCE;
 

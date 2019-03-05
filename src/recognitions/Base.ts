@@ -4,7 +4,7 @@
 * 未知 => 取消(已知的任意阶段)
 * */
 import { Computed, directionString } from '../interface';
-import { INPUT_CANCEL, INPUT_END, INPUT_MOVE, INPUT_START } from '../const';
+import { INPUT_CANCEL, INPUT_END, INPUT_MOVE } from '../const';
 import {
     STATUS_POSSIBLE,
     STATUS_START,
@@ -76,24 +76,6 @@ export default abstract class Recognizer {
             this.$root.el.dispatchEvent(event);
         }
     };
-
-    // /**
-    //  * 对$root.进行封装
-    //  * @param type 
-    //  * @param payload 
-    //  */
-    // public on(type: string, listener: ((data: any) => void)) {
-    //     this.eventBus.on(type, listener);
-    // };
-
-    // /**
-    //  * 对eventBus进行封装
-    //  * @param type 
-    //  * @param payload 
-    //  */
-    // public off(type: string, listener: ((data: any) => void)) {
-    //     this.eventBus.off(type, listener);
-    // };
 
     /**
      * 前者需要后者识别失败才能触发
@@ -167,8 +149,6 @@ export default abstract class Recognizer {
         return -1 !== this.options.directions.indexOf(direction) || 'none' === direction;
     };
 
-
-
     /**
      * 适用于大部分移动类型的手势
      * 如果是STATUS_END, STATUS_CANCELLED, STATUS_FAILED, STATUS_RECOGNIZED状态下, 
@@ -185,25 +165,25 @@ export default abstract class Recognizer {
         // if(this.name === 'pan')    console.log(this.name,this.status);
         // 是否识别成功
         let isVaild = this.test(computed);
-        
+
         // 如果识别结束, 那么重置状态
         if (-1 !== [STATUS_END, STATUS_CANCELLED, STATUS_FAILED, STATUS_RECOGNIZED].indexOf(this.status)) {
             this.status = STATUS_POSSIBLE;
         };
 
         // 状态变化流程
-        let { inputStatus } = computed;
-        if (!isVaild && STATUS_POSSIBLE === this.status && INPUT_END === inputStatus) {
+        let { eventType } = computed;
+        if (!isVaild && STATUS_POSSIBLE === this.status && INPUT_END === eventType) {
             this.status = STATUS_FAILED;
-        } else if (STATUS_POSSIBLE === this.status && INPUT_END === inputStatus && isVaild) {
+        } else if (STATUS_POSSIBLE === this.status && INPUT_END === eventType && isVaild) {
             this.status = STATUS_RECOGNIZED;
-        } else if (STATUS_POSSIBLE === this.status && INPUT_MOVE === inputStatus && isVaild) {
+        } else if (STATUS_POSSIBLE === this.status && INPUT_MOVE === eventType && isVaild) {
             this.status = STATUS_START;
-        } else if (STATUS_START === this.status && INPUT_MOVE === inputStatus) {
+        } else if (STATUS_START === this.status && INPUT_MOVE === eventType) {
             this.status = STATUS_MOVE;
-        } else if (STATUS_MOVE === this.status && INPUT_END === inputStatus) {
+        } else if (STATUS_MOVE === this.status && INPUT_END === eventType) {
             this.status = STATUS_END;
-        } else if ((STATUS_START === this.status || STATUS_MOVE === this.status) && INPUT_CANCEL === inputStatus) {
+        } else if ((STATUS_START === this.status || STATUS_MOVE === this.status) && INPUT_CANCEL === eventType) {
             this.status = STATUS_CANCELLED;
             this.emit(this.options.name + 'cancel', computed);
             return;
@@ -212,7 +192,7 @@ export default abstract class Recognizer {
         // console.log(
         //     `%c ${this.options.name} `, 'background-color:#66c;color:#fff;',
         //     this.status,
-        //     `${inputStatus} `
+        //     `${eventType} `
         // );
         // 是否已识别
         this.isRecognized = -1 < [STATUS_START, STATUS_MOVE, STATUS_END, STATUS_RECOGNIZED].indexOf(this.status);

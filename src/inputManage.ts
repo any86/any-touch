@@ -16,9 +16,9 @@ export default (event: Event): any => {
     if (undefined === input) return;
 
     // 当前输入状态
-    const { inputStatus } = input;
+    const { eventType } = input;
     // [Start]
-    if ('start' === inputStatus) {
+    if ('start' === eventType) {
         // 上一步的触点
         // prevInput = undefined;
         // 当前点
@@ -32,11 +32,11 @@ export default (event: Event): any => {
             // 如果出现了单点, 那么之前的多点起点记录失效
             startMutliInput = undefined;
         }
-    } else if ('move' === inputStatus) {
+    } else if ('move' === eventType) {
         // 读取上一点
         prevInput = activeInput;
         activeInput = input;
-    } else if ('end' === inputStatus) {
+    } else if ('end' === eventType) {
         prevInput = activeInput;
         activeInput = input;
     }

@@ -42,7 +42,7 @@ export default class TapRecognizer extends Recognizer {
      */
     public recognize(computed: Computed): void {
         // 只在end阶段去识别
-        if (INPUT_END !== computed.inputStatus) return;
+        if (INPUT_END !== computed.eventType) return;
 
         // 如果识别结束, 那么重置状态
         if (-1 < [STATUS_FAILED, STATUS_RECOGNIZED].indexOf(this.status)) {

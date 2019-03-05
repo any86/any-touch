@@ -1,4 +1,4 @@
-import { BaseInput, inputStatus } from '../../interface';
+import { BaseInput, eventType } from '../../interface';
 let prevPointers: { clientX: number, clientY: number }[];
 let isPressed = false;
 // 默认MouseEvent中对type声明仅为string
@@ -44,7 +44,7 @@ export default (event: MouseEvent): BaseInput | void => {
     };
 
     return {
-        inputStatus: <inputStatus>MAP[<'mousedown' | 'mousemove' | 'mouseup'>type],
+        eventType: <eventType>MAP[<'mousedown' | 'mousemove' | 'mouseup'>type],
         changedPointers,
         pointers,
         nativeEvent: event

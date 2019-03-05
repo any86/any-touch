@@ -11,7 +11,7 @@ export default function ({
     let deltaXYAngle: number = 0;
 
     // 计算deltaX/Y
-    if ('end' === input.inputStatus || 'start' === input.inputStatus) {
+    if ('end' === input.eventType || 'start' === input.eventType) {
         deltaX = 0;
         deltaY = 0;
     } else {
