@@ -13,7 +13,7 @@ let _prevVelocityY: number;
 // 上次采集的方向
 let _prevDirection: string;
 
-export default (input: Input): { velocity: number, velocityX: number, velocityY: number, direction?: string } => {
+export default (input: Input): { velocityX: number, velocityY: number, direction?: string } => {
     // 速率
     let velocityX: number;
     let velocityY: number;
@@ -38,14 +38,8 @@ export default (input: Input): { velocity: number, velocityX: number, velocityY:
     } else {
         velocityX = _prevVelocityX || 0;
         velocityY = _prevVelocityY || 0;
-        // console.log({_prevDirection,deltaX, deltaY});
-        // direction = getDirection(deltaX, deltaY) || _prevDirection || 'none';
         direction = _prevDirection;
-        // console.log({direction})
     }
 
-    // 取xy方向2者的最大值
-    const maxVelocity = Math.max(velocityX, velocityY);
-
-    return { velocity: maxVelocity, velocityX, velocityY, direction };
+    return {velocityX, velocityY, direction };
 };

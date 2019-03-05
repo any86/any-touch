@@ -22,7 +22,7 @@ export default class SwipeRecognizer extends Recognizer {
      * @param {Computed} 计算数据
      */
     afterEmit(computed: Computed) {
-        if('none' !== computed.lastDirection){
+        if ('none' !== computed.lastDirection) {
             this.emit(this.options.name + computed.lastDirection, computed);
         }
     };
@@ -32,14 +32,14 @@ export default class SwipeRecognizer extends Recognizer {
      * @param {Computed} 计算数据
      */
     test(computed: Computed): boolean {
-        if(INPUT_END !== computed.eventType) return false;
+        if (INPUT_END !== computed.eventType) return false;
 
         // 非end阶段, 开始校验数据
-        const {lastDirection, direction, lastVelocityX, lastVelocityY, maxPointerLength, distance } = computed;
+        const { lastDirection, direction, velocityX, velocityY, maxPointerLength, distance } = computed;
         // 如果只支持水平或垂直, 那么其他方向速率为0;
         // 有效速率
-        let vaildVelocityX: number = lastVelocityX;
-        let vaildVelocityY: number = lastVelocityY;
+        let vaildVelocityX: number = velocityX;
+        let vaildVelocityY: number = velocityY;
         if (this.isOnlyHorizontal()) {
             vaildVelocityY = 0;
         } else if (this.isOnlyVertical()) {

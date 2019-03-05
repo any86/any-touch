@@ -37,9 +37,8 @@ export default function ({
     computed.deltaTime = input.timestamp - startInput.timestamp;
     // 最近25ms内计算数据
     const lastComputed = computeLast(input);
-    computed.lastVelocityX = lastComputed.velocityX;
-    computed.lastVelocityY = lastComputed.velocityY;
-    computed.lastVelocity = lastComputed.velocity;
+    computed.velocityX = lastComputed.velocityX;
+    computed.velocityY = lastComputed.velocityY;
     computed.lastDirection = <directionString>lastComputed.direction;
     // 中心点位移增量
     let { deltaX, deltaY, deltaXYAngle } = computeDeltaXY({ input, prevInput });
@@ -53,11 +52,6 @@ export default function ({
     } else {
         computed.deltaTime = 0;
     }
-
-    // 速率
-    computed.velocityX = abs(computed.distanceX / computed.deltaTime) || 0;
-    computed.velocityY = abs(computed.distanceY / computed.deltaTime) || 0;
-    computed.maxVelocity = max(computed.velocityX, computed.velocityY);
 
     // 多点计算
     // 上一触点数大于1, 当前触点大于1

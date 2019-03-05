@@ -1,7 +1,6 @@
 
 export type directionString = 'up' | 'right' | 'down' | 'left' | 'none';
 export type RecognizerStatus = 'possible' | 'recognized' | 'began' | 'changed' | 'ended' | 'failed' | 'cancelled';
-
 export type eventType = 'start' | 'move' | 'end' | 'cancel';
 
 export interface Point {
@@ -41,12 +40,8 @@ export interface Computed extends Input {
     type: string;
     // 一次识别周期中出现的最大触点数
     maxPointerLength?: number;
-    lastVelocity: number;
-    lastVelocityX: number;
-    lastVelocityY: number;
     velocityX: number;
     velocityY: number;
-    maxVelocity: number;
     scale: number;
     deltaScale: number;
     angle: number;

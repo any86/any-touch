@@ -43,15 +43,13 @@
             <tr>
                 <td>eventType</td>
                 <td>{{message.eventType}}</td>
-                <td>触点离开/减少值为end | 触点离开/减少值为end</td>
+                <td>对应原生事件的type字段</td>
             </tr>
-
-
 
             <tr>
                 <td>maxPointerLength</td>
                 <td>{{message.maxPointerLength}}</td>
-                <td>出现过的最大触点数</td>
+                <td>本轮识别周期出现过的最大触点数</td>
             </tr>
 
             <tr>
@@ -133,12 +131,6 @@
                 <td>lastDirection</td>
                 <td>{{message.lastDirection}}</td>
                 <td>最近25ms内手势产生的方向</td>
-            </tr>
-
-            <tr>
-                <td>lastVelocityX/lastVelocityY</td>
-                <td>{{message.lastVelocity}}</td>
-                <td>最近25ms内触点移动速率, 标量</td>
             </tr>
 
             <tr>
