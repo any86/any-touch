@@ -18,70 +18,79 @@ export default function ({
     prevInput,
     startMutliInput,
     input
-}: any): Computed{
-    const { abs, max } = Math;
-    let computed = <Computed>{};
-
-    // 滑动距离
+}: any): Computed {
+    // ========= 整体距离/位移=========
     const { displacementX, displacementY, distanceX, distanceY, distance } = computeDistance({
         startInput,
         input
     });
 
-    computed = { ...computed, displacementX, displacementY, distanceX, distanceY, distance };
+    // ========= 方向 =========
+    const overallDirection = <directionString>getDirection(displacementX, displacementY);
 
-    // 计算方向
-    computed.direction = <directionString>getDirection(displacementX, displacementY);
+    // ========= 已消耗时间 =========
+    const deltaTime = input.timestamp - startInput.timestamp;
 
-    // 已消耗时间
-    computed.deltaTime = input.timestamp - startInput.timestamp;
-    // 最近25ms内计算数据
+    // ========= 最近25ms内计算数据, 瞬时数据 =========
     const lastComputed = computeLast(input);
-    computed.velocityX = lastComputed.velocityX;
-    computed.velocityY = lastComputed.velocityY;
-    computed.lastDirection = <directionString>lastComputed.direction;
-    // 中心点位移增量
+    const velocityX = lastComputed.velocityX;
+    const velocityY = lastComputed.velocityY;
+    const direction = <directionString>lastComputed.direction;
+
+
+    // ========= 中心点位移增量 =========
     let { deltaX, deltaY, deltaXYAngle } = computeDeltaXY({ input, prevInput });
-    computed.deltaX = deltaX;
-    computed.deltaY = deltaY;
-    computed.deltaXYAngle = deltaXYAngle;
 
-    // 时间增量
-    if (undefined !== prevInput) {
-        computed.deltaTime = input.timestamp - prevInput.timestamp;
-    } else {
-        computed.deltaTime = 0;
-    }
 
-    // 多点计算
+    // ========= 多点计算 =========
     // 上一触点数大于1, 当前触点大于1
+    let scale = 1;
+    let deltaScale = 0;
+    let angle = 0;
+    let deltaAngle = 0;
     if (undefined !== prevInput && 1 < prevInput.pointers.length && 1 < input.pointers.length) {
         // 2指形成的向量
         const startV = computeVector(startMutliInput);
         const prevV = computeVector(prevInput);
         const activeV = computeVector(input);
         // 计算缩放
-        const { deltaScale, scale } = computeScale({
+        const scaling = computeScale({
             startV, activeV, prevV
         });
-        computed.scale = scale;
-        computed.deltaScale = deltaScale;
+        scale = scaling.scale;
+        deltaScale = scaling.deltaScale;
 
-        // 计算旋转角度
-        const { angle, deltaAngle } = computeAngle({ startV, prevV, activeV });
-        computed.angle = angle;
-        computed.deltaAngle = deltaAngle;
+        // ========= 计算旋转角度 =========
+        const rotation = computeAngle({ startV, prevV, activeV });
+        angle = rotation.angle;
+        deltaAngle = rotation.deltaAngle;
         prevAngle = angle;
         prevScale = scale;
     } else {
-        computed.scale = prevScale;
-        computed.deltaScale = 1;
-        computed.angle = prevAngle;
-        computed.deltaAngle = 0;
+        scale = prevScale;
+        deltaScale = 1;
+        angle = prevAngle;
+        deltaAngle = 0;
     }
 
-    // 最大触点数
-    const maxPointerLength = computeMaxLength(input);
-    computed = { ...computed, ...input, maxPointerLength };
-    return computed;
+    // ========= 最大触点数 =========
+    return {
+        ...input,
+        velocityX,
+        velocityY,
+        deltaTime,
+        overallDirection,
+        direction,
+        deltaX, deltaY, deltaXYAngle,
+        displacementX,
+        displacementY,
+        distanceX,
+        distanceY,
+        distance,
+        scale,
+        deltaScale,
+        angle,
+        deltaAngle,
+        maxPointerLength: computeMaxLength(input)
+    };
 };

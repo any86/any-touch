@@ -40,6 +40,7 @@ export interface Computed extends Input {
     type: string;
     // 一次识别周期中出现的最大触点数
     maxPointerLength?: number;
+    
     velocityX: number;
     velocityY: number;
     scale: number;
@@ -51,12 +52,13 @@ export interface Computed extends Input {
     deltaXYAngle: number;
     displacementX: number;
     displacementY: number;
+    
     distanceX: number;
     distanceY: number;
     distance: number;
     deltaTime: number;
     // 与起始点的偏移方向
+    overallDirection:directionString;
+    // 瞬时方向
     direction?: directionString;
-    // 最近的方向
-    lastDirection?: directionString;
 }
