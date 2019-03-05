@@ -11,20 +11,21 @@ import mouseAdapter from './adapters/mouse';
 let _center: Point;
 
 export default (event: Event): Input | void => {
-    let input: BaseInput;
+    // 通过TouchEvent|MouseEvent获取的直接数据
+    let baseInput: BaseInput;
 
     // Touch
     if (SUPPORT_TOUCH) {
-        input = touchAdapter(<TouchEvent>event);
+        baseInput = touchAdapter(<TouchEvent>event);
     }
     // Mouse
     else {
-        input = <BaseInput>mouseAdapter(<MouseEvent>event);
-        if (undefined === input) {
+        baseInput = <BaseInput>mouseAdapter(<MouseEvent>event);
+        if (undefined === baseInput) {
             return;
         }
     }
-    const { eventType, pointers, changedPointers } = input;
+    const { eventType, pointers, changedPointers } = baseInput;
     // 当前触点数
     const pointerLength: number = pointers.length;
 
@@ -36,7 +37,7 @@ export default (event: Event): Input | void => {
 
     // 中心坐标
     if (0 < pointerLength) {
-        _center = getCenter(input.pointers);
+        _center = getCenter(baseInput.pointers);
     }
 
     // 当前时间
@@ -46,7 +47,7 @@ export default (event: Event): Input | void => {
     const { target, currentTarget } = event;
     const { x, y } = <Point>(_center || {});
     return {
-        ...input,
+        ...baseInput,
         preventDefault: ()=>{
             event.preventDefault();
         },
