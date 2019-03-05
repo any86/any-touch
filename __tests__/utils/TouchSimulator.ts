@@ -1,8 +1,26 @@
 import sleep from './sleep';
-import differenceWith from 'lodash/differenceWith';
-import isEqual from 'lodash/isEqual';
+function isEqual(a: any, b: any) {
+    return a.clientX === b.clientX && a.clientY === b.clientY;
+};
 
-
+function diff(a: any, b: any) {
+    let arrDiff = [];
+    for (let i in a) {
+        let hasSame = false;
+        for (let j in b) {
+            if (null !== b[j] && !isEqual(a[i], b[j])) {
+                hasSame = false;
+                
+            } else {
+                b[j] = null;
+                hasSame = true;
+                break;
+            }
+        }
+        if(!hasSame) arrDiff.push(a[i]);
+    }
+    return [...arrDiff, ...b.filter((item:any)=> null !== item)];
+}
 interface Pointer {
     x: number;
     y: number;
@@ -27,7 +45,6 @@ export default class TouchSimulator {
         this.prevTouches = [];
     };
 
-
     /**
      * 模拟touchstart
      * @param {ELement} dom元素
@@ -38,7 +55,7 @@ export default class TouchSimulator {
         let event: any = new Event(type, {});
         if ('touch' === this.device) {
             event.touches = pointers.map(({ x, y }) => ({ [CLIENT_X]: x, [CLIENT_Y]: y }));
-            event.changedTouches = differenceWith(event.touches, this.prevTouches, isEqual);
+            event.changedTouches = diff(event.touches, this.prevTouches);
         } else {
             event[CLIENT_X] = pointers[0].x;
             event[CLIENT_Y] = pointers[0].y;
@@ -61,7 +78,7 @@ export default class TouchSimulator {
         if ('touch' === this.device) {
             // 对应点不同就放进changedTouches;
             event.touches = pointers.map(({ x, y }) => ({ [CLIENT_X]: x, [CLIENT_Y]: y }));
-            event.changedTouches = differenceWith(event.touches, this.prevTouches, isEqual);
+            event.changedTouches = diff(event.touches, this.prevTouches);
 
             this.prevTouches = event.touches;
             this.el.dispatchEvent(event);
@@ -99,7 +116,7 @@ export default class TouchSimulator {
      */
     public dispatchTouchCancel() {
         let event: any = new Event('touchcancel', {});
-        event.changedTouches = differenceWith(event.touches, this.prevTouches, isEqual);
+        event.changedTouches = diff(event.touches, this.prevTouches);
         event.touches = [];
         this.prevTouches = event.touches;
         this.el.dispatchEvent(event);
