@@ -43,10 +43,10 @@ new Vue({
         })
         // 初始化
         const anyTouch = new AnyTouch(this.$refs.circle, {
-            touchAction: 'compute',
+            // touchAction: 'auto',
             isPreventDefault: true
         });
-
+        const tap = anyTouch.get('tap').set({pointer:1})
 //         const anyTouch2 = new AnyTouch(this.$refs.circle2, {
 //             touchAction: 'compute',
 //             isPreventDefault: true
@@ -77,7 +77,7 @@ new Vue({
             threshold: 15
         });
 
-        anyTouch.add(pan2);
+        // anyTouch.add(pan2);
         anyTouch.add(tap2);
         anyTouch.add(tap3);
         anyTouch.add(tap4);
@@ -102,17 +102,28 @@ new Vue({
             console.warn(e);
         });
 
+        anyTouch.on('inputstart', e => {
+            e.preventDefault();
+        });
+
+
+        anyTouch.on('input', e => {
+            // console.warn('input', e);
+        });
+
+
         anyTouch.on('panstart', e => {
-            // e.nativeEvent.preventDefault()
+            e.nativeEvent.preventDefault();
             // anyTouch.set({touchAction:'auto',isPreventDefault:false});
             this.message = e;
-            log(e.type);
+            console.log(e.type);
+            
         });
 
         anyTouch.on('panmove', e => {
-            // e.nativeEvent.preventDefault()
+            e.nativeEvent.preventDefault();
             this.message = e;
-            log(e.type);
+            console.log(e.type);
         });
 
         anyTouch.on('pancancel', e => {
@@ -121,7 +132,7 @@ new Vue({
             log(e.type);
         });
 
-        anyTouch.on('panend', e => {
+        anyTouch.on('panend', e => {            
             console.warn('panend',e.lastDirection);
             this.message = e;
             log(e.type);
@@ -153,10 +164,13 @@ new Vue({
          * =========================== tap ===========================
          */
         anyTouch.on('tap', e => {
+            e.preventDefault();
             console.log(`%c ${e.type} `, 'background-color:#f10;color:#fff;');
             this.message = e;
         });
-
+        this.$refs.circle.addEventListener('click', ev=>{
+            console.log(ev);
+        })
         anyTouch.on('doubletap', e => {
             console.log(`%c ${e.type} `, 'background-color:#9c3;color:#fff;');
             this.message = e;
@@ -186,8 +200,8 @@ new Vue({
             this.message = e;
             this.scale *= e.deltaScale;
             // console.log(e.deltaScale);
-            this.centerX = e.centerX;
-            this.centerY = e.centerY;
+            this.centerX = e.center.x;
+            this.centerY = e.center.y;
             log(`%c ${e.type} `, 'background-color:#f90;color:#fff;');
         });
 
@@ -196,19 +210,17 @@ new Vue({
          */
         ['rotatestart', 'rotatemove', 'rotateend'].forEach(name => {
             anyTouch.on(name, e => {
-                if('rotateend' === name) {
-                    alert(12)
-                }
                 log(e.type);
                 // this.message = e;
             })
         });
 
         anyTouch.on('rotate', e => {
+            console.log(e.deltaAngle, e.deltaX,e.deltaY);
             this.message = e;
             this.angle += e.deltaAngle;
-            this.centerX = e.centerX;
-            this.centerY = e.centerY;
+            this.centerX = e.center.x;
+            this.centerY = e.center.y;
         });
 
         /**
@@ -222,7 +234,7 @@ new Vue({
         });
 
         anyTouch.on('swipe', e => {
-            log(`%c ${e.type} `, 'background-color:#444;color:#fff;');
+            console.log(`%c ${e.type} `, 'background-color:#444;color:#fff;');
             this.message = e;
         });
     },

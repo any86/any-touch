@@ -1,3 +1,9 @@
+/*!
+ * AnyTouch.js v0.0.32
+ * (c) 2018-2019 Russell
+ * https://github.com/383514580/any-touch
+ * Released under the MIT License.
+ */
 (function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
     typeof define === 'function' && define.amd ? define(factory) :
@@ -272,7 +278,7 @@
     };
     var getDirection = function (x, y) {
         if (x === y) {
-            return;
+            return 'none';
         }
         else if (Math.abs(x) > Math.abs(y)) {
             return 0 < x ? 'right' : 'left';
@@ -304,9 +310,9 @@
             var clientX = _a.clientX, clientY = _a.clientY;
             return ({ clientX: clientX, clientY: clientY });
         });
-        var inputStatus = event.type.replace('touch', '');
+        var eventType = event.type.replace('touch', '');
         return {
-            inputStatus: inputStatus,
+            eventType: eventType,
             changedPointers: changedPointers,
             pointers: pointers,
             nativeEvent: event,
@@ -317,14 +323,19 @@
     var prevPointers;
     var isPressed = false;
     var mouseAdapter = (function (event) {
-        var clientX = event.clientX, clientY = event.clientY, type = event.type;
+        var clientX = event.clientX, clientY = event.clientY, type = event.type, button = event.button;
         var changedPointers = prevPointers || [{ clientX: clientX, clientY: clientY }];
         var pointers = [{ clientX: clientX, clientY: clientY }];
         prevPointers = [{ clientX: clientX, clientY: clientY }];
         if ('mousedown' === type) {
-            isPressed = true;
+            if (0 === button) {
+                isPressed = true;
+            }
+            else {
+                return;
+            }
         }
-        else if ('mousemove' === type) {
+        if ('mousemove' === type) {
             if (!isPressed)
                 return;
         }
@@ -343,17 +354,17 @@
             mouseup: 'end'
         };
         return {
-            inputStatus: MAP[type],
+            eventType: MAP[type],
             changedPointers: changedPointers,
             pointers: pointers,
             nativeEvent: event
         };
     });
+    //# sourceMappingURL=mouse.js.map
 
-    var centerX;
-    var centerY;
+    var _center;
     var createInput = (function (event) {
-        var input = {};
+        var input;
         if (SUPPORT_TOUCH) {
             input = touchAdapter(event);
         }
@@ -363,24 +374,24 @@
                 return;
             }
         }
-        var inputStatus = input.inputStatus, pointers = input.pointers, changedPointers = input.changedPointers;
+        var eventType = input.eventType, pointers = input.pointers, changedPointers = input.changedPointers;
         var pointerLength = pointers.length;
         var changedPointerLength = changedPointers.length;
-        var isFirst = (INPUT_START === inputStatus) && (0 === changedPointerLength - pointerLength);
-        var isFinal = (INPUT_END === inputStatus) && (0 === pointerLength);
+        var isFirst = (INPUT_START === eventType) && (0 === changedPointerLength - pointerLength);
+        var isFinal = (INPUT_END === eventType || INPUT_CANCEL === eventType) && (0 === pointerLength);
         if (0 < pointerLength) {
-            var _a = getCenter(input.pointers), x = _a.x, y = _a.y;
-            centerX = x;
-            centerY = y;
+            _center = getCenter(input.pointers);
         }
         var timestamp = Date.now();
         var target = event.target, currentTarget = event.currentTarget;
-        return __assign({}, input, { isFirst: isFirst,
+        var _a = (_center || {}), x = _a.x, y = _a.y;
+        return __assign({}, input, { preventDefault: function () {
+                event.preventDefault();
+            }, isFirst: isFirst,
             isFinal: isFinal,
             pointerLength: pointerLength,
-            changedPointerLength: changedPointerLength,
-            centerX: centerX,
-            centerY: centerY, x: centerX, y: centerY, timestamp: timestamp,
+            changedPointerLength: changedPointerLength, center: _center, x: x, y: y,
+            timestamp: timestamp,
             target: target,
             currentTarget: currentTarget, nativeEvent: event });
     });
@@ -394,8 +405,8 @@
         var input = createInput(event);
         if (undefined === input)
             return;
-        var inputStatus = input.inputStatus;
-        if ('start' === inputStatus) {
+        var eventType = input.eventType;
+        if ('start' === eventType) {
             activeInput = input;
             startInput = input;
             if (1 < input.pointerLength) {
@@ -405,11 +416,11 @@
                 startMutliInput = undefined;
             }
         }
-        else if ('move' === inputStatus) {
+        else if ('move' === eventType) {
             prevInput = activeInput;
             activeInput = input;
         }
-        else if ('end' === inputStatus) {
+        else if ('end' === eventType) {
             prevInput = activeInput;
             activeInput = input;
         }
@@ -432,9 +443,9 @@
         var direction;
         _prevInput = _prevInput || input;
         var deltaTime = input.timestamp - _prevInput.timestamp;
-        var deltaX = (0 < input.centerX) ? input.centerX - _prevInput.centerX : 0;
-        var deltaY = (0 < input.centerY) ? input.centerY - _prevInput.centerY : 0;
-        if (INPUT_CANCEL !== input.inputStatus && COMPUTE_INTERVAL < deltaTime || undefined === _prevDirection) {
+        var deltaX = (0 < input.x) ? input.x - _prevInput.x : 0;
+        var deltaY = (0 < input.y) ? input.y - _prevInput.y : 0;
+        if (INPUT_CANCEL !== input.eventType && COMPUTE_INTERVAL < deltaTime || undefined === _prevDirection) {
             velocityX = Math.round(Math.abs(deltaX / deltaTime) * 100) / 100;
             velocityY = Math.round(Math.abs(deltaY / deltaTime) * 100) / 100;
             direction = getDirection(deltaX, deltaY) || _prevDirection;
@@ -457,20 +468,20 @@
     var prevDisplacementY = 0;
     function computeDistance (_a) {
         var startInput = _a.startInput, input = _a.input;
-        var inputStatus = input.inputStatus;
+        var eventType = input.eventType;
         var round = Math.round, abs = Math.abs;
         var displacementX = 0;
         var displacementY = 0;
-        if ('start' === inputStatus) {
+        if ('start' === eventType) {
             prevDisplacementX = prevDisplacementY = 0;
         }
-        else if ('move' === inputStatus) {
+        else if ('move' === eventType) {
             displacementX = round(input.pointers[0][propX] - startInput.pointers[0][propX]);
             displacementY = round(input.pointers[0][propY] - startInput.pointers[0][propY]);
             prevDisplacementX = displacementX;
             prevDisplacementY = displacementY;
         }
-        else if ('end' === inputStatus) {
+        else if ('end' === eventType) {
             displacementX = prevDisplacementX;
             displacementY = prevDisplacementY;
         }
@@ -489,13 +500,13 @@
         var deltaX;
         var deltaY;
         var deltaXYAngle = 0;
-        if ('end' === input.inputStatus || 'start' === input.inputStatus) {
+        if ('end' === input.eventType || 'start' === input.eventType) {
             deltaX = 0;
             deltaY = 0;
         }
         else {
-            deltaX = input.centerX - prevInput.centerX;
-            deltaY = input.centerY - prevInput.centerY;
+            deltaX = input.x - prevInput.x;
+            deltaY = input.y - prevInput.y;
         }
         if (0 !== deltaX || 0 !== deltaY) {
             var deltaXY = Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2));
@@ -544,10 +555,10 @@
     });
     //# sourceMappingURL=computeMaxLength.js.map
 
+    var prevScale = 1;
+    var prevAngle = 0;
     function compute (_a) {
         var startInput = _a.startInput, prevInput = _a.prevInput, startMutliInput = _a.startMutliInput, input = _a.input;
-        if (undefined === input)
-            return;
         var abs = Math.abs, max = Math.max;
         var computed = {};
         var _b = computeDistance({
@@ -556,7 +567,7 @@
         }), displacementX = _b.displacementX, displacementY = _b.displacementY, distanceX = _b.distanceX, distanceY = _b.distanceY, distance = _b.distance;
         computed = __assign({}, computed, { displacementX: displacementX, displacementY: displacementY, distanceX: distanceX, distanceY: distanceY, distance: distance });
         computed.direction = getDirection(displacementX, displacementY);
-        computed.duration = input.timestamp - startInput.timestamp;
+        computed.deltaTime = input.timestamp - startInput.timestamp;
         var lastComputed = computeLast(input);
         computed.lastVelocityX = lastComputed.velocityX;
         computed.lastVelocityY = lastComputed.velocityY;
@@ -572,8 +583,8 @@
         else {
             computed.deltaTime = 0;
         }
-        computed.velocityX = abs(computed.distanceX / computed.duration) || 0;
-        computed.velocityY = abs(computed.distanceY / computed.duration) || 0;
+        computed.velocityX = abs(computed.distanceX / computed.deltaTime) || 0;
+        computed.velocityY = abs(computed.distanceY / computed.deltaTime) || 0;
         computed.maxVelocity = max(computed.velocityX, computed.velocityY);
         if (undefined !== prevInput && 1 < prevInput.pointers.length && 1 < input.pointers.length) {
             var startV = computeVector(startMutliInput);
@@ -587,6 +598,14 @@
             var _e = computeAngle({ startV: startV, prevV: prevV, activeV: activeV }), angle = _e.angle, deltaAngle = _e.deltaAngle;
             computed.angle = angle;
             computed.deltaAngle = deltaAngle;
+            prevAngle = angle;
+            prevScale = scale;
+        }
+        else {
+            computed.scale = prevScale;
+            computed.deltaScale = 1;
+            computed.angle = prevAngle;
+            computed.deltaAngle = 0;
         }
         var maxPointerLength = computeMaxLength(input);
         computed = __assign({}, computed, input, { maxPointerLength: maxPointerLength });
@@ -657,6 +676,7 @@
             if (options === void 0) { options = {}; }
             this.options = __assign({}, this.options, options);
             this.$root.update();
+            return this;
         };
         Recognizer.prototype.$injectRoot = function ($root) {
             this.$root = $root;
@@ -736,30 +756,30 @@
             return isOnlyVertical;
         };
         Recognizer.prototype.isVaildDirection = function (direction) {
-            return -1 < this.options.directions.indexOf(direction);
+            return -1 !== this.options.directions.indexOf(direction) || 'none' === direction;
         };
         Recognizer.prototype.recognize = function (computed) {
-            var inputStatus = computed.inputStatus;
             var isVaild = this.test(computed);
-            if (-1 < [STATUS_END, STATUS_CANCELLED, STATUS_FAILED, STATUS_RECOGNIZED].indexOf(this.status)) {
+            if (-1 !== [STATUS_END, STATUS_CANCELLED, STATUS_FAILED, STATUS_RECOGNIZED].indexOf(this.status)) {
                 this.status = STATUS_POSSIBLE;
             }
-            if (!isVaild && STATUS_POSSIBLE === this.status && INPUT_END === inputStatus) {
+            var eventType = computed.eventType;
+            if (!isVaild && STATUS_POSSIBLE === this.status && INPUT_END === eventType) {
                 this.status = STATUS_FAILED;
             }
-            else if (STATUS_POSSIBLE === this.status && INPUT_END === inputStatus && isVaild) {
+            else if (STATUS_POSSIBLE === this.status && INPUT_END === eventType && isVaild) {
                 this.status = STATUS_RECOGNIZED;
             }
-            else if (STATUS_POSSIBLE === this.status && INPUT_MOVE === inputStatus && isVaild) {
+            else if (STATUS_POSSIBLE === this.status && INPUT_MOVE === eventType && isVaild) {
                 this.status = STATUS_START;
             }
-            else if (STATUS_START === this.status && INPUT_MOVE === inputStatus) {
+            else if (STATUS_START === this.status && INPUT_MOVE === eventType) {
                 this.status = STATUS_MOVE;
             }
-            else if (STATUS_MOVE === this.status && INPUT_END === inputStatus) {
+            else if (STATUS_MOVE === this.status && INPUT_END === eventType) {
                 this.status = STATUS_END;
             }
-            else if ((STATUS_START === this.status || STATUS_MOVE === this.status) && INPUT_CANCEL === inputStatus) {
+            else if ((STATUS_START === this.status || STATUS_MOVE === this.status) && INPUT_CANCEL === eventType) {
                 this.status = STATUS_CANCELLED;
                 this.emit(this.options.name + 'cancel', computed);
                 return;
@@ -778,6 +798,7 @@
         Recognizer.prototype.afterEmit = function (computed) { };
         return Recognizer;
     }());
+    //# sourceMappingURL=Base.js.map
 
     var setTimeout = window.setTimeout, clearTimeout$1 = window.clearTimeout;
     var TapRecognizer = (function (_super) {
@@ -793,7 +814,7 @@
         };
         TapRecognizer.prototype.recognize = function (computed) {
             var _this = this;
-            if (INPUT_END !== computed.inputStatus)
+            if (INPUT_END !== computed.eventType)
                 return;
             if (-1 < [STATUS_FAILED, STATUS_RECOGNIZED].indexOf(this.status)) {
                 this.status = STATUS_POSSIBLE;
@@ -841,9 +862,6 @@
                 }
             }
             else {
-                if (this.options.taps !== this.tapCount) {
-                    clearTimeout$1(this.tapTimeoutId);
-                }
                 this.reset();
                 this.status = STATUS_FAILED;
             }
@@ -854,11 +872,11 @@
             this.prevTapY = undefined;
         };
         TapRecognizer.prototype.test = function (computed) {
-            var distance = computed.distance, duration = computed.duration, maxPointerLength = computed.maxPointerLength;
+            var distance = computed.distance, deltaTime = computed.deltaTime, maxPointerLength = computed.maxPointerLength;
             var isValidMovementTap = 2 >= distance;
-            var isValidDuration = 250 > duration;
-            return 1 === maxPointerLength &&
-                isValidDuration && isValidMovementTap;
+            var isValidDeltaTime = 250 > deltaTime;
+            return maxPointerLength === this.options.pointer &&
+                isValidDeltaTime && isValidMovementTap;
         };
         TapRecognizer.prototype.afterEmit = function (computed) { };
         TapRecognizer.DEFAULT_OPTIONS = {
@@ -870,6 +888,7 @@
         };
         return TapRecognizer;
     }(Recognizer));
+    //# sourceMappingURL=Tap.js.map
 
     var PressRecognizer = (function (_super) {
         __extends(PressRecognizer, _super);
@@ -882,8 +901,8 @@
         };
         PressRecognizer.prototype.recognize = function (computed) {
             var _this = this;
-            var inputStatus = computed.inputStatus;
-            if (INPUT_START === inputStatus) {
+            var eventType = computed.eventType;
+            if (INPUT_START === eventType) {
                 this.status = STATUS_POSSIBLE;
             }
             if (STATUS_FAILED === this.status)
@@ -901,18 +920,18 @@
                     this.cancel();
                     this.status = STATUS_FAILED;
                 }
-                if (INPUT_END === inputStatus) {
+                if (INPUT_END === eventType) {
                     this.status = STATUS_FAILED;
                 }
             }
             else {
-                if (INPUT_END === inputStatus) {
+                if (INPUT_END === eventType) {
                     this.emit(this.options.name + "up", computed);
                 }
             }
         };
         PressRecognizer.prototype.test = function (_a) {
-            var pointerLength = _a.pointerLength, inputStatus = _a.inputStatus, distance = _a.distance;
+            var pointerLength = _a.pointerLength, eventType = _a.eventType, distance = _a.distance;
             var IS_VLIAD_DISTANCE = this.options.threshold > distance;
             return this.isValidPointerLength(pointerLength) && IS_VLIAD_DISTANCE;
         };
@@ -985,14 +1004,16 @@
             return touchActions;
         };
         PanRecognizer.prototype.test = function (_a) {
-            var distance = _a.distance, lastDirection = _a.lastDirection, inputStatus = _a.inputStatus, pointerLength = _a.pointerLength;
+            var distance = _a.distance, lastDirection = _a.lastDirection, eventType = _a.eventType, pointerLength = _a.pointerLength;
             var isValidDirection = this.isVaildDirection(lastDirection);
             var isValidThreshold = this.options.threshold < distance;
             return this.isValidPointerLength(pointerLength) && isValidDirection &&
-                (this.isRecognized || isValidThreshold) && INPUT_MOVE === inputStatus;
+                (this.isRecognized || isValidThreshold) && INPUT_MOVE === eventType;
         };
         PanRecognizer.prototype.afterEmit = function (computed) {
-            this.emit(this.options.name + computed.lastDirection, computed);
+            if ('none' !== computed.lastDirection) {
+                this.emit(this.options.name + computed.lastDirection, computed);
+            }
         };
         PanRecognizer.prototype.afterRecognized = function (computed) {
             this.lockDirection(computed);
@@ -1040,10 +1061,14 @@
             return ['none'];
         };
         SwipeRecognizer.prototype.afterEmit = function (computed) {
-            this.emit(this.options.name + computed.lastDirection, computed);
+            if ('none' !== computed.lastDirection) {
+                this.emit(this.options.name + computed.lastDirection, computed);
+            }
         };
         SwipeRecognizer.prototype.test = function (computed) {
-            var inputStatus = computed.inputStatus, lastDirection = computed.lastDirection, direction = computed.direction, lastVelocityX = computed.lastVelocityX, lastVelocityY = computed.lastVelocityY, maxPointerLength = computed.maxPointerLength, distance = computed.distance;
+            if (INPUT_END !== computed.eventType)
+                return false;
+            var lastDirection = computed.lastDirection, direction = computed.direction, lastVelocityX = computed.lastVelocityX, lastVelocityY = computed.lastVelocityY, maxPointerLength = computed.maxPointerLength, distance = computed.distance;
             var vaildVelocityX = lastVelocityX;
             var vaildVelocityY = lastVelocityY;
             if (this.isOnlyHorizontal()) {
@@ -1055,7 +1080,6 @@
             var vaildVelocity = Math.sqrt(vaildVelocityX * vaildVelocityX + vaildVelocityY * vaildVelocityY);
             return 1 === maxPointerLength &&
                 this.options.threshold < distance &&
-                INPUT_END === inputStatus &&
                 this.isVaildDirection(lastDirection) &&
                 this.options.velocity < vaildVelocity;
         };
@@ -1082,6 +1106,8 @@
             return ['none'];
         };
         PinchRecognizer.prototype.afterEmit = function (computed) {
+            if ('end' === computed.eventType)
+                return;
             var scale = computed.scale;
             if (1 !== scale) {
                 var inOrOut = scale > this._prevScale ? 'out' : 'in';
@@ -1127,23 +1153,24 @@
 
     var AnyTouch = (function () {
         function AnyTouch(el, options) {
-            this.version = '0.0.25';
+            this.version = '0.0.32';
             this.default = {
                 touchAction: 'compute',
                 hasDomEvents: true,
-                isPreventDefault: true
+                isPreventDefault: false
             };
             this.el = el;
             this.inputType = SUPPORT_TOUCH ? 'touch' : 'mouse';
             this.options = __assign({}, this.default, options);
             this.eventBus = new EventEmitter();
+            this._isStopped = false;
             this.recognizers = [
-                new TapRecognizer().$injectRoot(this),
-                new PressRecognizer().$injectRoot(this),
+                new RotateRecognizer().$injectRoot(this),
+                new PinchRecognizer().$injectRoot(this),
                 new PanRecognizer().$injectRoot(this),
                 new SwipeRecognizer().$injectRoot(this),
-                new PinchRecognizer().$injectRoot(this),
-                new RotateRecognizer().$injectRoot(this),
+                new TapRecognizer().$injectRoot(this),
+                new PressRecognizer().$injectRoot(this),
             ];
             this.unbinders = this._bindRecognizers(this.el);
         }
@@ -1174,7 +1201,7 @@
             this.updateTouchAction(this.el);
         };
         AnyTouch.prototype._bindRecognizers = function (el) {
-            var boundFn = this.handler.bind(this);
+            var boundFn = this.inputListener.bind(this);
             if ('touch' === this.inputType) {
                 return ['touchstart', 'touchmove', 'touchend', 'touchcancel'].map(function (eventName) {
                     el.addEventListener(eventName, boundFn, { passive: false });
@@ -1212,6 +1239,9 @@
             this.options = __assign({}, this.default, options);
             this.update();
         };
+        AnyTouch.prototype.stop = function () {
+            this._isStopped = true;
+        };
         AnyTouch.prototype.remove = function (recognizerName) {
             var e_2, _a;
             try {
@@ -1231,7 +1261,7 @@
                 finally { if (e_2) throw e_2.error; }
             }
         };
-        AnyTouch.prototype.handler = function (event) {
+        AnyTouch.prototype.inputListener = function (event) {
             var e_3, _a;
             if (!event.cancelable) {
                 this.eventBus.emit('error', { code: 0, message: '页面滚动的时候, 请暂时不要操作元素!' });
@@ -1242,11 +1272,40 @@
             var inputs = inputManage(event);
             if (undefined !== inputs) {
                 var computed = compute(inputs);
+                if (computed.isFirst) {
+                    this._isStopped = false;
+                }
+                this.emit('input', computed);
+                if (computed.isFirst) {
+                    this.emit('inputstart', computed);
+                }
+                else if (computed.isFinal) {
+                    if ('cancel' === computed.eventType) {
+                        this.emit('inputcancel', computed);
+                    }
+                    else {
+                        this.emit('inputend', computed);
+                    }
+                }
+                else {
+                    if (inputs.prevInput.pointerLength > inputs.input.pointerLength) {
+                        this.emit('inputreduce', computed);
+                    }
+                    else if (inputs.prevInput.pointerLength < inputs.input.pointerLength) {
+                        this.emit('inputadd', computed);
+                    }
+                    else {
+                        this.emit('inputmove', computed);
+                    }
+                }
                 try {
                     for (var _b = __values(this.recognizers), _c = _b.next(); !_c.done; _c = _b.next()) {
                         var recognizer = _c.value;
                         if (recognizer.disabled)
                             continue;
+                        if (this._isStopped) {
+                            break;
+                        }
                         recognizer.recognize(computed);
                     }
                 }
@@ -1265,6 +1324,10 @@
         AnyTouch.prototype.off = function (type, listener) {
             this.eventBus.off(type, listener);
         };
+        AnyTouch.prototype.emit = function (type, payload) {
+            payload.type = type;
+            this.eventBus.emit(type, payload);
+        };
         AnyTouch.prototype.destroy = function () {
             this.unbinders.forEach(function (unbinder) {
                 unbinder();
@@ -1276,6 +1339,12 @@
         AnyTouch.SwipeRecognizer = SwipeRecognizer;
         AnyTouch.PinchRecognizer = PinchRecognizer;
         AnyTouch.RotateRecognizer = RotateRecognizer;
+        AnyTouch.Tap = TapRecognizer;
+        AnyTouch.Press = PressRecognizer;
+        AnyTouch.Pan = PanRecognizer;
+        AnyTouch.Swipe = SwipeRecognizer;
+        AnyTouch.Pinch = PinchRecognizer;
+        AnyTouch.Rotate = RotateRecognizer;
         AnyTouch.Vector = Vector;
         return AnyTouch;
     }());
