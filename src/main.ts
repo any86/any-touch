@@ -26,7 +26,6 @@ import inputManage from './inputManage';
 import compute from './compute/index';
 import computeTouchAction from './untils/computeTouchAction'
 // 识别器
-import Recognizer from './recognitions/Base';
 import TapRecognizer from './recognitions/Tap';
 import PressRecognizer from './recognitions/Press';
 import PanRecognizer from './recognitions/Pan';
@@ -58,6 +57,9 @@ export default class AnyTouch {
 
     // 向量计算
     static Vector = Vector;
+
+    // mini的事件触发器
+    static EventEmitter = AnyEvent;
 
     // 目标元素
     el: HTMLElement;
