@@ -47,17 +47,8 @@ new Vue({
             isPreventDefault: true
         });
         const tap = anyTouch.get('tap').set({pointer:1})
-//         const anyTouch2 = new AnyTouch(this.$refs.circle2, {
-//             touchAction: 'compute',
-//             isPreventDefault: true
-//         });
 
-        
-// anyTouch2.on('pan', ev=>{
-//     console.log('at2');
-// })
-
-        // const anyTouch = new AnyTouch(this.$refs.circle, {isPreventDefault:false});
+        console.log(anyTouch);
 
 
         const pan = anyTouch.get('pan');
@@ -133,7 +124,7 @@ new Vue({
         });
 
         anyTouch.on('panend', e => {            
-            console.warn('panend',e.lastDirection);
+            console.warn('panend',e.direction);
             this.message = e;
             log(e.type);
         });

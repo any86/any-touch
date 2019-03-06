@@ -10,6 +10,10 @@
 [downloads-image]: https://img.shields.io/npm/dm/any-touch.svg
 [downloads-url]: https://npmjs.org/package/any-touch
 
+## 核心功能
+- [x] 支持手势: 点击(tap) | 拖拽(pan) | 快速划(swipe) | 捏合缩放(pinch) | 旋转(rotate).
+- [x] 支持鼠标(mouse)和移动设备(touch)
+
 ## 演示
 [查看](https://383514580.github.io/any-touch/example/)
 
@@ -64,9 +68,19 @@ const tap1 = anyTouch.get('tap');
 tap1.requireFailure(tap2);
 ```
 
-## 支持
+## API
+### stop
+阻止后续的识别器(tap/pan/rotate等)进行识别.
+```javascript
 
-- [x] 支持手势: tap | doubletap | pan | swipe | pinch | rotate.
-- [x] 支持鼠标(mouse)
-- [x] 手势互斥(requireFailure)
-- [x] 自定义识别器(Recognizer)
+// 通过recognizers属性, 我们可以知道识别器的顺序.
+// 默认pinch在rotate后面
+console.log(at.recognizers);
+at.on('rotate', ()=>{
+  // 后面的识别器就不会运行了.
+  // 注意stop方法在实例上.
+  at.stop();
+});
+```
+
+

@@ -30,7 +30,7 @@ export default abstract class Recognizer {
     // 存储外部注入方法的容器
     public $root: any;
 
-    public eventBus: any;
+    public eventEmitter: any;
 
     constructor(options: { name?: string, [k: string]: any }) {
         this.options = { ...(<any>this.constructor).DEFAULT_OPTIONS, disabled: false, ...options };
@@ -61,13 +61,13 @@ export default abstract class Recognizer {
     }
 
     /**
-     * 对eventBus进行封装
+     * 对eventEmitter进行封装
      * @param type 
      * @param payload 
      */
     public emit(type: string, payload: any) {
         payload.type = type;
-        this.$root.eventBus.emit(type, payload);
+        this.$root.eventEmitter.emit(type, payload);
         if (this.$root.options.hasDomEvents) {
             // 过滤掉几个Event上保留的字段
             let { target, currentTarget, type, ...data } = payload;
