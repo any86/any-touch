@@ -26,6 +26,8 @@ import inputManage from './inputManage';
 import compute from './compute/index';
 import computeTouchAction from './untils/computeTouchAction'
 // 识别器
+import Recognizer from './recognitions/Base';
+
 import TapRecognizer from './recognitions/Tap';
 import PressRecognizer from './recognitions/Press';
 import PanRecognizer from './recognitions/Pan';
@@ -76,7 +78,7 @@ export default class AnyTouch {
 
     version: string;
 
-    eventBus: any;
+    eventEmitter: any;
 
     // 是否阻止后面的识别器运行
     private _isStopped: boolean;
@@ -95,10 +97,11 @@ export default class AnyTouch {
         this.el = el;
         this.inputType = SUPPORT_TOUCH ? 'touch' : 'mouse';
         this.options = { ...this.default, ...options };
-        // eventBus
-        this.eventBus = new AnyEvent();
+        // eventEmitter
+        this.eventEmitter = new AnyEvent();
         this._isStopped = false;
         // 识别器
+        // 注入当前方法和属性, 方便在识别器中调用类上的方法和属性
         this.recognizers = [
             new RotateRecognizer().$injectRoot(this),
             new PinchRecognizer().$injectRoot(this),
@@ -122,7 +125,6 @@ export default class AnyTouch {
         if ('compute' === this.options.touchAction) {
             let touchActions = [];
             for (let recognizer of this.recognizers) {
-                // console.log(recognizer.options);
                 touchActions.push(...recognizer.getTouchAction());
             };
             el.style.touchAction = computeTouchAction(touchActions);
@@ -172,8 +174,13 @@ export default class AnyTouch {
      */
     add(recognizer: any): void {
         recognizer.$injectRoot(this);
-        this.recognizers.push(recognizer);
-        this.update();
+        const hasSameName = this.recognizers.some((theRecognizer: any) => recognizer.name === theRecognizer.name);
+        if (hasSameName) {
+            this.eventEmitter.emit('error', { code: 1, message: `${recognizer.name}识别器已经存在!` })
+        } else {
+            this.recognizers.push(recognizer);
+            this.update();
+        }
     };
 
     /**
@@ -219,19 +226,22 @@ export default class AnyTouch {
      * @param {Event}
      */
     inputListener(event: Event): void {
-        if (!event.cancelable) {
-            this.eventBus.emit('error', { code: 0, message: '页面滚动的时候, 请暂时不要操作元素!' });
-        }
-
         if (this.options.isPreventDefault) {
             event.preventDefault();
         }
 
-        // 记录各个阶段的input
+        if (!event.cancelable) {
+            this.eventEmitter.emit('error', { code: 0, message: '页面滚动的时候, 请暂时不要操作元素!' });
+        }
+
+        // 管理历史input
         let inputs = inputManage(event);
+
+        // 当是鼠标事件的时候, mouseup阶段的input为undefined
         if (undefined !== inputs) {
             const computed = compute(inputs);
-            if ((<Computed>computed).isFirst) {
+            // 重置停止标记
+            if (computed.isFirst) {
                 this._isStopped = false;
             }
             // input事件
@@ -255,13 +265,14 @@ export default class AnyTouch {
                 }
             };
 
-            // 当是鼠标事件的时候, mouseup阶段的input和computed为空
+
             for (let recognizer of this.recognizers) {
                 if (recognizer.disabled) continue;
+                // 如果遇到停止标记, 立即停止运行后面的识别器
+                recognizer.recognize(computed);
                 if (this._isStopped) {
                     break;
                 }
-                recognizer.recognize(computed);
             }
         }
     };
@@ -272,7 +283,7 @@ export default class AnyTouch {
      * @param {Function} 回调函数
      */
     on(type: string, listener: (event: Computed) => void): void {
-        this.eventBus.on(type, listener);
+        this.eventEmitter.on(type, listener);
     };
 
     /**
@@ -281,7 +292,7 @@ export default class AnyTouch {
      * @param {Function} 事件回调
      */
     off(type: string, listener?: (event: Computed) => void): void {
-        this.eventBus.off(type, listener);
+        this.eventEmitter.off(type, listener);
     };
 
     /**
@@ -291,7 +302,7 @@ export default class AnyTouch {
      */
     emit(type: string, payload: any) {
         payload.type = type;
-        this.eventBus.emit(type, payload);
+        this.eventEmitter.emit(type, payload);
     };
 
     /**

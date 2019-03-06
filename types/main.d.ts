@@ -14,7 +14,7 @@ declare class AnyTouch {
     el: HTMLElement;
 
     // 各个手势对应的handle集合
-    eventBus: any;
+    eventEmitter: any;
 
     recognizers: { [propName: string]: any, name: string }[];
 
