@@ -17,6 +17,6 @@ ghpages.publish('./demo', {
         console.log(chalk.red(err));
     } else {
         shell.rm('-rf', './demo');
-        console.log(chalk.green('gh-pages同步完成!'));
+        console.log(chalk.green('demo同步完成!'));
     }
 });
