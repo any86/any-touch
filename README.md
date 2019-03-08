@@ -25,7 +25,8 @@ npm i -S any-touch
 
 ## 使用
 
-### 基础[预览](https://codepen.io/russell2015/pen/rRmQaw#)
+### 基础
+[预览](https://codepen.io/russell2015/pen/rRmQaw#)
 ```javascript
 import AnyTouch from 'any-touch';
 
