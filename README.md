@@ -14,19 +14,23 @@
 - [x] 支持手势: 点击(tap) | 拖拽(pan) | 快速划(swipe) | 捏合缩放(pinch) | 旋转(rotate).
 - [x] 支持鼠标(mouse)和移动设备(touch)
 
-## 演示
-[查看](https://383514580.github.io/any-touch/example/)
+## 例子
+[基础](https://codepen.io/russell2015/pen/rRmQaw#)
+
+[自定义手势-双击](https://codepen.io/russell2015/pen/xBrgjJ)
+
+[全部手势展示](https://383514580.github.io/any-touch/example/)
+
 
 ## 安装
-
 ```javascript
 npm i -S any-touch
 ```
 
-## 使用
+## CDN
+https://unpkg.com/any-touch
 
-### 基础
-[预览](https://codepen.io/russell2015/pen/rRmQaw#)
+## 开始
 ```javascript
 import AnyTouch from 'any-touch';
 
@@ -34,16 +38,31 @@ import AnyTouch from 'any-touch';
 const el = doucument.getElementById('gesture-box');
 const at = new AnyTouch(el);
 
-// 绑定手势
+// 单击
+at.on('tap', ev=>{
+  console.log(ev);
+});
+
+// 拖拽
 at.on('pan', ev=>{
-  console.log(ev.deltaX);
-})
+  console.log(ev);
+});
 
-// 解除绑定
-at.off('pan')
+// 快速划
+at.on('swipe', ev=>{
+  console.log(ev);
+});
 
-// 销毁
-at.destory();
+// 缩放
+at.on('pinch', ev=>{
+  console.log(ev);
+});
+
+// 旋转
+at.on('rotate', ev=>{
+  console.log(ev);
+});
+
 ```
 
 ### 自定义识别器
