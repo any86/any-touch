@@ -34,11 +34,10 @@ export default class PanRecognizer extends Recognizer {
      * @return {Boolean}} .是否是当前手势 
      */
     test({ distance, direction, eventType, pointerLength }: Computed): boolean {
-        // console.log({direction});
-        const isValidDirection = this.isVaildDirection(direction);
-        const isValidThreshold = this.options.threshold < distance;
-        return this.isValidPointerLength(pointerLength) && isValidDirection &&
-            (this.isRecognized || isValidThreshold) && INPUT_MOVE === eventType;
+        return INPUT_MOVE === eventType &&
+            (this.isRecognized || this.options.threshold < distance) &&
+            this.isValidPointerLength(pointerLength) &&
+            this.isVaildDirection(direction);
     };
 
     /**
@@ -46,7 +45,7 @@ export default class PanRecognizer extends Recognizer {
      * @param {Computed} 计算数据
      */
     afterEmit(computed: Computed) {
-        if('none' !== computed.direction){
+        if ('none' !== computed.direction) {
             this.emit(this.options.name + computed.direction, computed);
         }
     };
