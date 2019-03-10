@@ -149,6 +149,53 @@ export default abstract class Recognizer {
         return -1 !== this.options.directions.indexOf(direction) || 'none' === direction;
     };
 
+    flow(isVaild: boolean, activeState: string, inputType: string): string | undefined {
+        // if(this.name ==='swipe' ) {
+        //     console.log(isVaild, activeState, inputType);
+        // }
+        const STATE_MAP: { [k: number]: any } = {
+            // isVaild === true,
+            // Number(true) === 1
+            // 这个分支不会出现STATUS_FAILED
+            // STATUS_END在上面的代码中也会被重置为STATUS_POSSIBLE, 从而进行重新识别
+            1: {
+                [STATUS_POSSIBLE]: {
+                    [INPUT_MOVE]: STATUS_START,
+                    [INPUT_END]: STATUS_RECOGNIZED,
+                    [INPUT_CANCEL]: STATUS_CANCELLED
+                },
+                [STATUS_START]: {
+                    [INPUT_MOVE]: STATUS_MOVE,
+                    [INPUT_END]: STATUS_END,
+                    [INPUT_CANCEL]: STATUS_CANCELLED
+                },
+                [STATUS_MOVE]: {
+                    [INPUT_MOVE]: STATUS_MOVE,
+                    [INPUT_END]: STATUS_END,
+                }
+            },
+            // isVaild === false
+            // 这个分支有STATUS_FAILED
+            0: {
+                [STATUS_START]: {
+                    [INPUT_MOVE]: STATUS_CANCELLED,
+                    [INPUT_END]: STATUS_END,
+                    [INPUT_CANCEL]: STATUS_CANCELLED
+                },
+                [STATUS_MOVE]: {
+                    [INPUT_MOVE]: STATUS_CANCELLED,
+                    [INPUT_END]: STATUS_END,
+                    [INPUT_CANCEL]: STATUS_CANCELLED
+                }
+            }
+        };
+        // console.warn(Number(isVaild),activeState, STATE_MAP[Number(isVaild)][activeState]);
+        if (undefined !== STATE_MAP[Number(isVaild)][activeState]) {
+            return STATE_MAP[Number(isVaild)][activeState][inputType] || activeState;
+        }
+
+    };
+
     /**
      * 适用于大部分移动类型的手势
      * 如果是STATUS_END, STATUS_CANCELLED, STATUS_FAILED, STATUS_RECOGNIZED状态下, 
@@ -173,27 +220,14 @@ export default abstract class Recognizer {
 
         // 状态变化流程
         let { eventType } = computed;
-        if (!isVaild && STATUS_POSSIBLE === this.status && INPUT_END === eventType) {
-            this.status = STATUS_FAILED;
-        } else if (STATUS_POSSIBLE === this.status && INPUT_END === eventType && isVaild) {
-            this.status = STATUS_RECOGNIZED;
-        } else if (STATUS_POSSIBLE === this.status && INPUT_MOVE === eventType && isVaild) {
-            this.status = STATUS_START;
-        } else if (STATUS_START === this.status && INPUT_MOVE === eventType) {
-            this.status = STATUS_MOVE;
-        } else if (STATUS_MOVE === this.status && INPUT_END === eventType) {
-            this.status = STATUS_END;
-        } else if ((STATUS_START === this.status || STATUS_MOVE === this.status) && INPUT_CANCEL === eventType) {
-            this.status = STATUS_CANCELLED;
+
+        this.status = this.flow(isVaild, this.status, eventType) || this.status;
+
+        if (STATUS_CANCELLED === this.status) {
             this.emit(this.options.name + 'cancel', computed);
             return;
         }
 
-        // console.log(
-        //     `%c ${this.options.name} `, 'background-color:#66c;color:#fff;',
-        //     this.status,
-        //     `${eventType} `
-        // );
         // 是否已识别
         this.isRecognized = -1 < [STATUS_START, STATUS_MOVE, STATUS_END, STATUS_RECOGNIZED].indexOf(this.status);
         // 识别后触发的事件
@@ -201,7 +235,7 @@ export default abstract class Recognizer {
             this.afterRecognized(computed);
             // computed = this.lockDirection(computed);d
             this.emit(this.options.name, computed);
-
+            // console.log(this.options.name, computed);
             if (-1 < [STATUS_START, STATUS_MOVE, STATUS_END, STATUS_RECOGNIZED].indexOf(this.status)) {
                 // panstart | panmove | panend等
                 this.emit(this.options.name + this.status, computed);
