@@ -1,8 +1,3 @@
-/*
-* 未知 => 识别成功 => 已知(开始|结束) => 已知(移动变化中) => 已知(结束)
-* 未知 => 识别失败 
-* 未知 => 取消(已知的任意阶段)
-* */
 import { Computed, directionString } from '../interface';
 import { INPUT_CANCEL, INPUT_END, INPUT_MOVE } from '../const';
 import {
@@ -149,9 +144,9 @@ export default abstract class Recognizer {
         return -1 !== this.options.directions.indexOf(direction) || 'none' === direction;
     };
 
-    flow(isVaild: boolean, activeState: string, inputType: string): string | undefined {
+    flow(isVaild: boolean, activeStatus: string, inputType: string): string {
         // if(this.name ==='swipe' ) {
-        //     console.log(isVaild, activeState, inputType);
+        //     console.log(isVaild, activeStatus, inputType);
         // }
         const STATE_MAP: { [k: number]: any } = {
             // isVaild === true,
@@ -189,23 +184,18 @@ export default abstract class Recognizer {
                 }
             }
         };
-        // console.warn(Number(isVaild),activeState, STATE_MAP[Number(isVaild)][activeState]);
-        if (undefined !== STATE_MAP[Number(isVaild)][activeState]) {
-            return STATE_MAP[Number(isVaild)][activeState][inputType] || activeState;
+        // console.warn(Number(isVaild),activeStatus, STATE_MAP[Number(isVaild)][activeStatus]);
+        if (undefined !== STATE_MAP[Number(isVaild)][activeStatus]) {
+            return STATE_MAP[Number(isVaild)][activeStatus][inputType] || activeStatus;
+        } else {
+            return activeStatus;
         }
 
     };
 
     /**
-     * 适用于大部分移动类型的手势
-     * 如果是STATUS_END, STATUS_CANCELLED, STATUS_FAILED, STATUS_RECOGNIZED状态下, 
-     * 那么重置状态到STATUS_POSSIBLE.
-     * 在move阶段如果识别了, 那么是被识别为 STATUS_START(用来识别pan/pinch/rotate/swipe等事件).
-     * 之后如果继续发生move, 那么是被识别为 STATUS_MOVE.
-     * 直到发生end, 这时如果是 STATUS_START || STATUS_MOVE, 那么识别为 STATUS_END, 
-     * 如果刚刚被识别那么标记为 STATUS_RECOGNIZED(可以用来识别tap类事件).
-     * 如果仍旧未被识别那么标记为 STATUS_FAILED.
-     * 如果在 STATUS_FAILED之前 && STATUS_START之后发生了cancel事件, 那么识别为 STATUS_CANCELLED.
+     * 适用于大部分移动类型的手势, 
+     * 如pan/rotate/pinch/swipe
      * @param {Computed} 计算数据 
      */
     recognize(computed: Computed) {
@@ -221,7 +211,7 @@ export default abstract class Recognizer {
         // 状态变化流程
         let { eventType } = computed;
 
-        this.status = this.flow(isVaild, this.status, eventType) || this.status;
+        this.status = this.flow(isVaild, this.status, eventType);
 
         if (STATUS_CANCELLED === this.status) {
             this.emit(this.options.name + 'cancel', computed);
