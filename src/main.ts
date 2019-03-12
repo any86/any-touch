@@ -36,9 +36,10 @@ import PinchRecognizer from './recognitions/Pinch';
 import RotateRecognizer from './recognitions/Rotate';
 import * as Vector from './vector';
 interface Options {
-    touchAction?: 'compute' | 'auto' | 'manipulation' | 'pan-x' | 'pan-y' | 'none';
-    hasDomEvents?: boolean;
-    isPreventDefault?: boolean;
+    touchAction: 'compute' | 'auto' | 'manipulation' | 'pan-x' | 'pan-y' | 'none';
+    hasDomEvents: boolean;
+    isPreventDefault: boolean;
+    style: { [key:string]: string };
 };
 export default class AnyTouch {
     // 识别器
@@ -92,7 +93,26 @@ export default class AnyTouch {
         this.default = {
             touchAction: 'compute',
             hasDomEvents: true,
-            isPreventDefault: false
+            isPreventDefault: false,
+            style: {
+                // 禁用选择文字
+                '-moz-user-select': 'none',
+                ' -webkit-user-select': 'none',
+                '-ms-user-select': 'none',
+                'user-select': 'none',
+                // https://developer.mozilla.org/en-US/docs/Web/CSS/-ms-touch-select
+                // 禁用选择文字, 在winphone下
+                '-ms-touch-select': 'none',
+                // 点击元素的高亮颜色配置
+                '-webkit-tap-highlight-color': 'rgba(0,0,0,0)',
+                ' -webkit-user-drag': 'none',
+                // 当你触摸并按住触摸目标时候，
+                // 禁止或显示系统默认菜单。
+                // 在iOS上，当你触摸并按住触摸的目标，
+                // 比如一个链接，Safari浏览器将显示链接有关的系统默认菜单。
+                // 这个属性可以让你禁用系统默认菜单。
+                '-webkit-touch-callout': 'none'
+            }
         };
         this.el = el;
         this.inputType = SUPPORT_TOUCH ? 'touch' : 'mouse';
@@ -133,7 +153,15 @@ export default class AnyTouch {
         }
     };
 
+    public updateStyle(){
+        for(let key in this.options.style) {
+            let value = this.options.style[key];
+            (this.el.style as any)[key] = value;
+        }
+    };
+
     public update() {
+        this.updateStyle();
         this.updateTouchAction(this.el);
     };
 

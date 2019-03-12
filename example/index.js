@@ -43,8 +43,8 @@ new Vue({
         })
         // 初始化
         const anyTouch = new AnyTouch(this.$refs.circle, {
-            // touchAction: 'auto',
-            isPreventDefault: true
+            touchAction: 'auto',
+            isPreventDefault: false
         });
         const tap = anyTouch.get('tap').set({pointer:1})
 
@@ -68,7 +68,7 @@ new Vue({
             threshold: 15
         });
 
-        // anyTouch.add(pan2);
+        anyTouch.add(pan2);
         anyTouch.add(tap2);
         anyTouch.add(tap3);
         anyTouch.add(tap4);
@@ -93,8 +93,14 @@ new Vue({
             console.warn(e);
         });
 
+        // anyTouch.on('pan2', e => {
+        //     e.nativeEvent.preventDefault();
+        //     this.message = e;
+        //     console.warn(e);
+        // });
+
         anyTouch.on('inputstart', e => {
-            e.preventDefault();
+            // e.preventDefault();
         });
 
 
@@ -104,7 +110,7 @@ new Vue({
 
 
         anyTouch.on('panstart', e => {
-            e.nativeEvent.preventDefault();
+            // e.nativeEvent.preventDefault();
             // anyTouch.set({touchAction:'auto',isPreventDefault:false});
             this.message = e;
             console.log(e.type);
@@ -112,7 +118,7 @@ new Vue({
         });
 
         anyTouch.on('panmove', e => {
-            e.nativeEvent.preventDefault();
+            // e.nativeEvent.preventDefault();
             this.message = e;
             console.log(e.type);
         });
@@ -193,7 +199,7 @@ new Vue({
             // console.log(e.deltaScale);
             this.centerX = e.center.x;
             this.centerY = e.center.y;
-            log(`%c ${e.type} `, 'background-color:#f90;color:#fff;');
+            console.log(`%c ${e.type} `, 'background-color:#f90;color:#fff;');
         });
 
         /**
