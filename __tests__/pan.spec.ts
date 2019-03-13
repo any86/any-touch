@@ -5,7 +5,7 @@ const el = document.createElement('div');
 
 test('通过多点pan, 测试Pan构造函数是否正确?', (done) => {
     const at = new AnyTouch(el, {isPreventDefault:true});
-    const pan2 = new AnyTouch.PanRecognizer({
+    const pan2 = new AnyTouch.Pan({
         name: 'pan2',
         pointerLength: 2,
     })
@@ -25,8 +25,8 @@ test('通过多点pan, 测试Pan构造函数是否正确?', (done) => {
 ['up', 'right', 'down', 'left'].forEach(direction => {
     test('panup|panright|pandown|panleft是否正确?', (done) => {
         const at = new AnyTouch(el);
-        const panRecognizer = at.get('pan');
-        panRecognizer.set({ directions: [direction] });
+        const pan = at.get('pan');
+        pan.set({ directions: [direction] });
         at.on(`pan${direction}`, (ev) => {
             expect(ev.direction).toBe(direction);
         });

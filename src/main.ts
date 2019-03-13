@@ -18,45 +18,32 @@
  */
 import AnyEvent from 'any-event';
 import { Computed } from './interface';
-import {
-    SUPPORT_ONLY_TOUCH, SUPPORT_TOUCH,
-    IS_MOBILE,
-} from './const';
+import { SUPPORT_TOUCH } from './const';
 import inputManage from './inputManage';
 import compute from './compute/index';
 import computeTouchAction from './untils/computeTouchAction'
 // 识别器
-import Recognizer from './recognitions/Base';
-
-import TapRecognizer from './recognitions/Tap';
-import PressRecognizer from './recognitions/Press';
-import PanRecognizer from './recognitions/Pan';
-import SwipeRecognizer from './recognitions/Swipe';
-import PinchRecognizer from './recognitions/Pinch';
-import RotateRecognizer from './recognitions/Rotate';
+import Tap from './recognitions/Tap';
+import Press from './recognitions/Press';
+import Pan from './recognitions/Pan';
+import Swipe from './recognitions/Swipe';
+import Pinch from './recognitions/Pinch';
+import Rotate from './recognitions/Rotate';
 import * as Vector from './vector';
 interface Options {
-    touchAction: 'compute' | 'auto' | 'manipulation' | 'pan-x' | 'pan-y' | 'none';
-    hasDomEvents: boolean;
-    isPreventDefault: boolean;
-    style: { [key:string]: string };
+    touchAction?: 'compute' | 'auto' | 'manipulation' | 'pan-x' | 'pan-y' | 'none';
+    hasDomEvents?: boolean;
+    isPreventDefault?: boolean;
+    style?: { [key: string]: string };
 };
 export default class AnyTouch {
     // 识别器
-    static TapRecognizer = TapRecognizer;
-    static PressRecognizer = PressRecognizer;
-    static PanRecognizer = PanRecognizer;
-    static SwipeRecognizer = SwipeRecognizer;
-    static PinchRecognizer = PinchRecognizer;
-    static RotateRecognizer = RotateRecognizer;
-
-    // 缩写
-    static Tap = TapRecognizer;
-    static Press = PressRecognizer;
-    static Pan = PanRecognizer;
-    static Swipe = SwipeRecognizer;
-    static Pinch = PinchRecognizer;
-    static Rotate = RotateRecognizer;
+    static Tap = Tap;
+    static Press = Press;
+    static Pan = Pan;
+    static Swipe = Swipe;
+    static Pinch = Pinch;
+    static Rotate = Rotate;
 
     // 向量计算
     static Vector = Vector;
@@ -123,15 +110,15 @@ export default class AnyTouch {
         // 识别器
         // 注入当前方法和属性, 方便在识别器中调用类上的方法和属性
         this.recognizers = [
-            new RotateRecognizer().$injectRoot(this),
-            new PinchRecognizer().$injectRoot(this),
-            new PanRecognizer().$injectRoot(this),
-            new SwipeRecognizer().$injectRoot(this),
-            new TapRecognizer().$injectRoot(this),
-            new PressRecognizer().$injectRoot(this),
+            new Rotate().$injectRoot(this),
+            new Pinch().$injectRoot(this),
+            new Pan().$injectRoot(this),
+            new Swipe().$injectRoot(this),
+            new Tap().$injectRoot(this),
+            new Press().$injectRoot(this),
         ];
         // 应用设置
-        // this.update();
+        this.update();
 
         // 绑定事件
         this.unbinders = this._bindRecognizers(this.el);
@@ -141,28 +128,35 @@ export default class AnyTouch {
      * 计算touch-action
      * @param {HTMLElement} 目标元素 
      */
-    public updateTouchAction(el: HTMLElement) {
+    private _updateTouchAction() {
         if ('compute' === this.options.touchAction) {
             let touchActions = [];
             for (let recognizer of this.recognizers) {
                 touchActions.push(...recognizer.getTouchAction());
             };
-            el.style.touchAction = computeTouchAction(touchActions);
+            this.el.style.touchAction = computeTouchAction(touchActions);
         } else {
-            el.style.touchAction = this.options.touchAction || 'auto';
+            this.el.style.touchAction = this.options.touchAction || 'auto';
         }
     };
 
-    public updateStyle(){
-        for(let key in this.options.style) {
+    /**
+     * 应用几个提高体验的样式
+     * 如: 禁止选择文字/透明点击高亮颜色等
+     */
+    private _updateStyle() {
+        for (let key in this.options.style) {
             let value = this.options.style[key];
             (this.el.style as any)[key] = value;
         }
     };
 
+    /**
+     * 更新设置
+     */
     public update() {
-        this.updateStyle();
-        this.updateTouchAction(this.el);
+        this._updateStyle();
+        this._updateTouchAction();
     };
 
     /**

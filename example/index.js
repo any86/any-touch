@@ -21,23 +21,23 @@ new Vue({
             this.activeType = 'AnyTouch';
         });
 
-        const tap2 = new AnyTouch.TapRecognizer({
+        const tap2 = new AnyTouch.Tap({
             name: 'doubletap',
             pointer: 1,
             taps: 2
         })
-        const tap3 = new AnyTouch.TapRecognizer({
+        const tap3 = new AnyTouch.Tap({
             name: 'threetap',
             pointer: 1,
             taps: 3
         })
 
-        const tap4 = new AnyTouch.TapRecognizer({
+        const tap4 = new AnyTouch.Tap({
             name: 'fourtap',
             pointer: 1,
             taps: 4
         })
-        const pan2 = new AnyTouch.PanRecognizer({
+        const pan2 = new AnyTouch.Pan({
             name: 'pan2',
             pointerLength: 2,
         })

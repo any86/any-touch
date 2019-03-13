@@ -68,7 +68,7 @@ at.on('rotate', ev=>{
 ### 自定义识别器
 ``` javascript
 // 自定义一个双击识别器
-const tap2 = new AnyTouch.TapRecognizer({
+const tap2 = new AnyTouch.Tap({
     name: 'doubletap',
     pointer: 1,
     taps: 2

@@ -18,8 +18,8 @@ test('mouse下, 仅有tap识别, 事件是否触发', async (done) => {
 
 test('mouse下,tap与doubletap之间的requireFailure是否生效?', async (done) => {
     const el = document.createElement('div');
-    const tap2 = new AnyTouch.TapRecognizer({ name: 'doubletap', pointer: 1, taps: 2 })
-    const tap3 = new AnyTouch.TapRecognizer({ name: 'threetap', pointer: 1, taps: 3 })
+    const tap2 = new AnyTouch.Tap({ name: 'doubletap', pointer: 1, taps: 2 })
+    const tap3 = new AnyTouch.Tap({ name: 'threetap', pointer: 1, taps: 3 })
     const at = new AnyTouch(el);
     at.add(tap2);
     at.add(tap3);
