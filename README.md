@@ -11,7 +11,7 @@
 [downloads-url]: https://npmjs.org/package/any-touch
 
 ## 核心功能
-- [x] 支持手势: 点击(tap) | 拖拽(pan) | 快速划(swipe) | 捏合缩放(pinch) | 旋转(rotate).
+- [x] 支持手势: 点击(tap) | 拖拽(pan) | 划过(swipe) | 捏合缩放(pinch) | 旋转(rotate).
 - [x] 支持鼠标(mouse)和移动设备(touch)
 
 ## 例子
