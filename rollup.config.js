@@ -5,8 +5,10 @@ import typescript from 'rollup-plugin-typescript';
 import json from 'rollup-plugin-json';
 import replace from 'rollup-plugin-replace';
 import pkg from './package.json';
+import sourceMaps from 'rollup-plugin-sourcemaps'
+
 const banner =
-`/*!
+    `/*!
  * AnyTouch.js v${pkg.version}
  * (c) 2018-${new Date().getFullYear()} Russell
  * https://github.com/383514580/any-touch
@@ -35,24 +37,29 @@ export default {
             // non-CommonJS modules will be ignored, but you can also
             // specifically include/exclude files
             include: 'node_modules/**', // Default: undefined
-        })
+        }),
+
+        sourceMaps()
 
     ],
     output: [{
             format: 'cjs',
             file: pkg.main,
-            banner
+            banner,
+            sourcemap: true
         },
         {
             format: 'es',
             file: pkg.module,
-            banner
+            banner,
+            sourcemap: true
         },
         {
             format: 'umd',
             name: 'AnyTouch',
             file: pkg.browser,
-            banner
+            banner,
+            sourcemap: true
         }
     ]
 };
