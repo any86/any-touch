@@ -7,7 +7,7 @@ export default class PanRecognizer extends Recognizer {
     static DEFAULT_OPTIONS = {
         name: 'pan',
         threshold: 10,
-        pointerLength: 1,
+        pointLength: 1,
         directions: ['up', 'right', 'down', 'left']
     };
     constructor(options = {}) {
@@ -33,10 +33,10 @@ export default class PanRecognizer extends Recognizer {
      * @param {Computed} 计算数据
      * @return {Boolean}} .是否是当前手势 
      */
-    test({ distance, direction, eventType, pointerLength }: Computed): boolean {
+    test({ distance, direction, eventType, pointLength }: Computed): boolean {
         return INPUT_MOVE === eventType &&
             (this.isRecognized || this.options.threshold < distance) &&
-            this.isValidPointerLength(pointerLength) &&
+            this.isValidpointLength(pointLength) &&
             this.isVaildDirection(direction);
     };
 

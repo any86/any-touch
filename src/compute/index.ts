@@ -91,6 +91,6 @@ export default function ({
         deltaScale,
         angle,
         deltaAngle,
-        maxPointerLength: computeMaxLength(input)
+        maxpointLength: computeMaxLength(input)
     };
 };

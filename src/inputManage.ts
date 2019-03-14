@@ -26,7 +26,7 @@ export default (event: Event): any => {
         // 起点(单点|多点)
         startInput = input;
         // 起点(多点)
-        if (1 < input.pointerLength) {
+        if (1 < input.pointLength) {
             startMutliInput = input;
         } else {
             // 如果出现了单点, 那么之前的多点起点记录失效

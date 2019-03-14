@@ -39,7 +39,7 @@ new Vue({
         })
         const pan2 = new AnyTouch.Pan({
             name: 'pan2',
-            pointerLength: 2,
+            pointLength: 2,
         })
         // 初始化
         const anyTouch = new AnyTouch(this.$refs.circle, {

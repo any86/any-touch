@@ -27,16 +27,16 @@ export default (event: Event): Input | void => {
     }
     const { eventType, pointers, changedPointers } = baseInput;
     // 当前触点数
-    const pointerLength: number = pointers.length;
+    const pointLength: number = pointers.length;
 
     // 变化前触点数
-    const changedPointerLength: number = changedPointers.length;
+    const changedpointLength: number = changedPointers.length;
     // 识别流程的开始和结束标记
-    const isFirst = (INPUT_START === eventType) && (0 === changedPointerLength - pointerLength);
-    const isFinal = (INPUT_END === eventType || INPUT_CANCEL === eventType) && (0 === pointerLength);
+    const isFirst = (INPUT_START === eventType) && (0 === changedpointLength - pointLength);
+    const isFinal = (INPUT_END === eventType || INPUT_CANCEL === eventType) && (0 === pointLength);
 
     // 中心坐标
-    if (0 < pointerLength) {
+    if (0 < pointLength) {
         _center = getCenter(baseInput.pointers);
     }
 
@@ -53,8 +53,8 @@ export default (event: Event): Input | void => {
         },
         isFirst,
         isFinal,
-        pointerLength,
-        changedPointerLength,
+        pointLength,
+        changedpointLength,
         center: _center,
         x, y,
         timestamp,

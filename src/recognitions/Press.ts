@@ -10,7 +10,7 @@ export default class PressRecognizer extends Recognizer {
     protected _timeoutId?: number;
     static DEFAULT_OPTIONS = {
         name: 'press',
-        pointerLength: 1,
+        pointLength: 1,
         threshold: 9,
         minPressTime: 251,
         disabled: false
@@ -66,12 +66,12 @@ export default class PressRecognizer extends Recognizer {
         }
     };
 
-    public test({ pointerLength, eventType, distance }: Computed): boolean {
+    public test({ pointLength, eventType, distance }: Computed): boolean {
         // const IS_VALID_INPUT = 'start' === eventType || 'move' === eventType;
         const IS_VLIAD_DISTANCE = this.options.threshold > distance;
-        return this.isValidPointerLength(pointerLength) && IS_VLIAD_DISTANCE;
+        return this.isValidpointLength(pointLength) && IS_VLIAD_DISTANCE;
 
-        // return this.isValidPointerLength(pointerLength) && IS_VALID_INPUT && IS_VLIAD_DISTANCE;
+        // return this.isValidpointLength(pointLength) && IS_VALID_INPUT && IS_VLIAD_DISTANCE;
     };
 
     public cancel() {

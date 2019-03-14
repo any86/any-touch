@@ -20,7 +20,7 @@ export default class TapRecognizer extends Recognizer {
     isValidMovementFromPrevTap?: boolean;
     static DEFAULT_OPTIONS = {
         name: 'tap',
-        pointer: 1,
+        pointLength: 1,
         taps: 1,
         interval: 300,
         disabled: false
@@ -129,14 +129,14 @@ export default class TapRecognizer extends Recognizer {
     public test(computed: Computed): boolean {
 
         // 判断是否发生大的位置变化
-        const { distance, deltaTime, maxPointerLength } = computed;
+        const { distance, deltaTime, maxpointLength } = computed;
 
         // 每次单击流程中, 是否没有发生大的移动
         const isValidMovementTap = 2 >= distance;
         const isValidDeltaTime = 250 > deltaTime;
         // 与上一次点击的距离在合理范围内
 
-        return maxPointerLength === this.options.pointer &&
+        return maxpointLength === this.options.pointLength &&
             isValidDeltaTime && isValidMovementTap;
     };
 

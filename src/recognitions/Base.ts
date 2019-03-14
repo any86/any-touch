@@ -104,8 +104,8 @@ export default abstract class Recognizer {
      * 验证触点
      * @param {Number} 触点数
      */
-    public isValidPointerLength(pointerLength: number): boolean {
-        return 0 === this.options.pointerLength || this.options.pointerLength === pointerLength
+    public isValidpointLength(pointLength: number): boolean {
+        return 0 === this.options.pointLength || this.options.pointLength === pointLength
     };
 
     /**

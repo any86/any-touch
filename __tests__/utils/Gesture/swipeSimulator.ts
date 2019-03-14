@@ -1,6 +1,6 @@
 import TouchSimulator from '../TouchSimulator';
 interface Options {
-    pointerLength?: number;
+    pointLength?: number;
     direction?: string;
 };
 const MIN_INTERVAL_TIME = 25;
@@ -46,7 +46,7 @@ export const swipeLeft = (el: Element) => {
 
 
 
-export default function (el: Element, { direction = 'up', pointerLength = 1 }: Options = <Options>{}) {
+export default function (el: Element, { direction = 'up', pointLength = 1 }: Options = <Options>{}) {
     // MIN_INTERVAL_TIME秒后, swipe才能得到非0的计算值
     const FN_MAP: any = {
         up: swipeUp,

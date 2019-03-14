@@ -8,7 +8,7 @@ export default class PinchRecognizer extends Recognizer {
         name: 'pinch',
         // 触发事件所需要的最小缩放比例
         threshold: 0,
-        pointerLength: 2,
+        pointLength: 2,
     };
     constructor(options={}) {
         super(options);
@@ -35,10 +35,10 @@ export default class PinchRecognizer extends Recognizer {
      * @param {Computed} 计算数据
      * @param {(isRecognized: boolean) => void}} 接收是否识别状态
      */
-    test({ pointerLength, scale }: Computed): boolean {
+    test({ pointLength, scale }: Computed): boolean {
         // 如果触碰点数要大于指定
         // 如果缩放超过阈值, 或者已识别
         // console.log({scale})
-        return this.isValidPointerLength(pointerLength) && (this.options.threshold < Math.abs(scale-1) || this.isRecognized);
+        return this.isValidpointLength(pointLength) && (this.options.threshold < Math.abs(scale-1) || this.isRecognized);
     };
 };

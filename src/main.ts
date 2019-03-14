@@ -277,9 +277,9 @@ export default class AnyTouch {
                     this.emit('inputend', computed);
                 }
             } else {
-                if (inputs.prevInput.pointerLength > inputs.input.pointerLength) {
+                if (inputs.prevInput.pointLength > inputs.input.pointLength) {
                     this.emit('inputreduce', computed);
-                } else if (inputs.prevInput.pointerLength < inputs.input.pointerLength) {
+                } else if (inputs.prevInput.pointLength < inputs.input.pointLength) {
 
                     this.emit('inputadd', computed);
                 } else {
@@ -304,7 +304,7 @@ export default class AnyTouch {
      * @param {String} 事件名
      * @param {Function} 回调函数
      */
-    on(type: string, listener: (event: Computed) => void): void {
+    on(type: string, listener: (event: Computed) => void, options: { [k: string]: boolean } | boolean = false): void {
         this.eventEmitter.on(type, listener);
     };
 

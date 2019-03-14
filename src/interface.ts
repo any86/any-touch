@@ -20,9 +20,9 @@ export interface Input extends BaseInput {
     // 新一轮手势识别的开始和结束
     isFirst: boolean;
     isFinal: boolean;
-    pointerLength: number;
+    pointLength: number;
     // 发生改变的触点数据
-    changedPointerLength: number;
+    changedpointLength: number;
     // 当前时间
     timestamp: number;
     target: EventTarget | null;
@@ -39,7 +39,7 @@ export interface Computed extends Input {
     // 手势类型名: pan/panstart/panleft...
     type: string;
     // 一次识别周期中出现的最大触点数
-    maxPointerLength?: number;
+    maxpointLength?: number;
     
     velocityX: number;
     velocityY: number;

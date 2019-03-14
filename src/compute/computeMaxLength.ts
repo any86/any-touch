@@ -1,10 +1,10 @@
 import { Input } from '../interface';
 let maxLength = 0;
-export default ({ pointerLength, isFirst, isFinal }: Input): number => {
+export default ({ pointLength, isFirst, isFinal }: Input): number => {
     if (isFirst) {
-        maxLength = pointerLength;
+        maxLength = pointLength;
     } else {
-        maxLength = Math.max(maxLength, pointerLength);
+        maxLength = Math.max(maxLength, pointLength);
     }
     return maxLength;
 };
