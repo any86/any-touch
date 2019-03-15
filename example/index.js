@@ -77,6 +77,8 @@ new Vue({
         tap1.requireFailure(tap3);
         tap2.requireFailure(tap3);
         tap3.requireFailure(tap4);
+tap1.removeRequireFailure(tap2);
+tap1.removeRequireFailure(tap3);
 
         // this.$refs.circle.addEventListener('touchstart', ev=>{ev.preventDefault()})
         // this.$refs.circle.addEventListener('touchmove', ev=>{ev.preventDefault()})

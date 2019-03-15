@@ -76,9 +76,22 @@ export default abstract class Recognizer {
      * 前者需要后者识别失败才能触发
      * @param {Recognizer} 识别器实例 
      */
-    public requireFailure(recognizer: any) {
+    public requireFailure(recognizer: this) {
         if (!this.requireFailureRecognizers.includes(recognizer)) {
             this.requireFailureRecognizers.push(recognizer);
+        }
+    };
+
+    /**
+     * 移除识别器之间的"需要失败"关系
+     *  @param {Recognizer} 识别器实例 
+     */
+    public removeRequireFailure(recognizer:this){
+        for(let [index,requireFailureRecognizer] of this.requireFailureRecognizers.entries()) {
+            if(requireFailureRecognizer.name === recognizer.name) {
+                this.requireFailureRecognizers.splice(index,1);
+                break;
+            }
         }
     };
 
