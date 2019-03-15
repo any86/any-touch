@@ -66,7 +66,7 @@ export default abstract class Recognizer {
         if (this.$root.options.hasDomEvents) {
             // 过滤掉几个Event上保留的字段
             let { target, currentTarget, type, ...data } = payload;
-            let event: any = new Event(type, payload);
+            let event = new Event(type, payload);
             Object.assign(event, data);
             this.$root.el.dispatchEvent(event);
         }
@@ -111,7 +111,7 @@ export default abstract class Recognizer {
     /**
      * 是否只支持水平方向
      */
-    public isOnlyHorizontal() {
+    public isOnlyHorizontal() { 
         let isOnlyHorizontal = true;
         for (let direction of this.options.directions) {
             isOnlyHorizontal = -1 < ['left', 'right'].indexOf(direction);

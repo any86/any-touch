@@ -6,19 +6,19 @@
  * 
  * ==================== 支持的手势 ====================
  * rotate 旋转
- * pinch : Function,
+ * pinch 捏合,
  * tap 单机
  * doubleTap 双击
  * press 按压
  * pan 拖拽
- * swipe 快速划过
+ * swipe 快划
  * 
  * ==================== 流程 ====================
  * 格式化Event成统一的pointer格式 => 通过pointer数据计算 => 用计算结果去识别手势
  */
 import AnyEvent from 'any-event';
 import { Computed } from './interface';
-import { SUPPORT_TOUCH } from './const';
+import { SUPPORT_TOUCH } from './const'; ``
 import inputManage from './inputManage';
 import compute from './compute/index';
 import computeTouchAction from './untils/computeTouchAction'
@@ -59,8 +59,6 @@ export default class AnyTouch {
     inputType: string;
 
     recognizers: { [propName: string]: any, name: string }[];
-
-    unbinders: any[];
 
     options: Options;
 
@@ -121,8 +119,9 @@ export default class AnyTouch {
         this.update();
 
         // 绑定事件
-        this.unbinders = this._bindRecognizers(this.el);
+        this.unbind = this._bindRecognizers(this.el).unbind;
     };
+
 
     /**
      * 计算touch-action
@@ -161,32 +160,42 @@ export default class AnyTouch {
 
     /**
      * 绑定手势到指定元素
+     * 暂时只支持事件冒泡阶段触发, 
+     * 改为捕获阶段需要对inputListener进行编号, 
+     * 产生大量事件绑定,
+     * 而非在一次触发事件中执行所有手势判断
      * @param {Element} 待绑定手势元素
      */
     private _bindRecognizers(el: Element) {
-        const boundFn = this.inputListener.bind(this);
+        const boundInputListener = this.inputListener.bind(this);
+        // Touch
         if ('touch' === this.inputType) {
-            return ['touchstart', 'touchmove', 'touchend', 'touchcancel'].map(eventName => {
-                el.addEventListener(eventName, boundFn, { passive: false });
-                return () => {
-                    el.removeEventListener(eventName, boundFn);
-                }
+            const events = ['touchstart', 'touchmove', 'touchend', 'touchcancel'];
+            events.forEach(eventName => {
+                el.addEventListener(eventName, boundInputListener);
             });
-        } else {
-            el.addEventListener('mousedown', boundFn);
-            window.addEventListener('mousemove', boundFn);
-            window.addEventListener('mouseup', boundFn);
-            return [
-                () => {
-                    el.removeEventListener('mousedown', boundFn);
-                },
-                () => {
-                    window.removeEventListener('mousemove', boundFn);
-                },
-                () => {
-                    window.removeEventListener('mouseup', boundFn);
+            return {
+                unbind: () => {
+                    events.forEach(eventName => {
+                        el.removeEventListener(eventName, boundInputListener);
+                    });
                 }
-            ]
+            }
+
+
+        }
+        // Mouse
+        else {
+            el.addEventListener('mousedown', boundInputListener);
+            window.addEventListener('mousemove', boundInputListener);
+            window.addEventListener('mouseup', boundInputListener);
+            return {
+                unbind: () => {
+                    el.removeEventListener('mousedown', boundInputListener);
+                    window.removeEventListener('mousemove', boundInputListener);
+                    window.removeEventListener('mouseup', boundInputListener);
+                }
+            };
         }
     };
 
@@ -328,12 +337,16 @@ export default class AnyTouch {
     };
 
     /**
+     * 解绑所有触摸事件
+     */
+    public unbind(): void { };
+
+    /**
      * 销毁
      */
     destroy() {
         // 解绑事件
-        this.unbinders.forEach(unbinder => {
-            unbinder();
-        });
+        this.unbind();
+        this.eventEmitter.destroy();
     };
 };
