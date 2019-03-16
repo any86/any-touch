@@ -157,7 +157,7 @@ export default abstract class Recognizer {
         return -1 !== this.options.directions.indexOf(direction) || 'none' === direction;
     };
 
-    flow(isVaild: boolean, activeStatus: string, inputType: string): string {
+    public flow(isVaild: boolean, activeStatus: string, inputType: string): string {
         // if(this.name ==='swipe' ) {
         //     console.log(isVaild, activeStatus, inputType);
         // }
@@ -207,6 +207,16 @@ export default abstract class Recognizer {
     };
 
     /**
+     * 如果识别结束, 那么重置状态
+     */
+    protected _resetStatus(){
+        //STATUS_RECOGNIZED === STATUS_END
+        if (-1 !== [STATUS_END, STATUS_CANCELLED, STATUS_FAILED].indexOf(this.status)) {
+            this.status = STATUS_POSSIBLE;
+        };
+    };
+
+    /**
      * 适用于大部分移动类型的手势, 
      * 如pan/rotate/pinch/swipe
      * @param {Computed} 计算数据 
@@ -216,10 +226,8 @@ export default abstract class Recognizer {
         // 是否识别成功
         let isVaild = this.test(computed);
 
-        // 如果识别结束, 那么重置状态
-        if (-1 !== [STATUS_END, STATUS_CANCELLED, STATUS_FAILED, STATUS_RECOGNIZED].indexOf(this.status)) {
-            this.status = STATUS_POSSIBLE;
-        };
+        // 重置status
+        this._resetStatus();
 
         // 状态变化流程
         let { eventType } = computed;
