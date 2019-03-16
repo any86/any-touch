@@ -1,32 +1,36 @@
-import { Computed } from '../interface';
+import { Computed, Point } from '../interface';
 import {
     STATUS_RECOGNIZED,
-    STATUS_POSSIBLE,
     STATUS_FAILED,
     STATUS_START,
-    STATUS_CANCELLED
 } from '../const/recognizerStatus';
 const { setTimeout, clearTimeout } = window;
 import Recognizer from './Base';
-import { INPUT_END, INPUT_START } from '../const';
+import { INPUT_END } from '../const';
+import { getVLength } from '../vector';
 export default class TapRecognizer extends Recognizer {
-    tapCount: number;
-    tapTimeoutId?: number;
-    tapTimeout2Id?: number;
+    public tapCount: number;
+    public tapTimeoutId?: number;
+    public tapTimeout2Id?: number;
 
     // 记录每次单击完成时的坐标
-    prevTapX?: number;
-    prevTapY?: number;
+    public prevTapPoint?: Point;
     // 多次tap之间的距离是否满足要求
-    isValidMovementFromPrevTap?: boolean;
+    public isValidDistanceFromPrevTap?: boolean;
+
     static DEFAULT_OPTIONS = {
         name: 'tap',
         pointLength: 1,
         tapTimes: 1,
-        // 每次询问failture的时间间隔
-        interval: 300,
+        // 等待下一次tap的时间, 
+        // 超过该事件就立即判断当前点击数量
+        waitNextTapTime: 300,
         disabled: false,
-        tolerance: 2,
+        // 从接触到离开允许产生的最大距离
+        positionTolerance: 2,
+        // 2次tap之间允许的最大位移
+        tapsPositionTolerance: 9,
+        // 从接触到离开屏幕的最大时间
         maxPressTime: 250,
     };
     constructor(options = {}) {
@@ -34,10 +38,27 @@ export default class TapRecognizer extends Recognizer {
         this.tapCount = 0;
     };
 
-    getTouchAction() {
+    public getTouchAction() {
         // 单击auto, 多击manipulation=pan + pinch-zoom(禁用了默认双击)
-        // console.log({taps: this.options.tapTimes});
         return (1 < this.options.tapTimes) ? ['manipulation'] : ['auto'];
+    };
+
+    /**
+     * 判断前后2次点击的距离是否超过阈值
+     * @param {Point} 当前触点
+     * @return {Boolean} 前后2次点击的距离是否超过阈值
+     */
+    private _isValidDistanceFromPrevTap(point: Point): boolean {
+        // 判断2次点击的距离
+        if (undefined !== this.prevTapPoint) {
+            const distanceFromPreviousTap = getVLength({ x: point.x - this.prevTapPoint.x, y: point.y - this.prevTapPoint.y });
+            // 缓存当前点, 作为下次点击的上一点
+            this.prevTapPoint = point;
+            return this.options.tapsPositionTolerance >= distanceFromPreviousTap;
+        } else {
+            this.prevTapPoint = point;
+            return true;
+        }
     };
 
     /**
@@ -50,38 +71,32 @@ export default class TapRecognizer extends Recognizer {
 
         // 如果识别结束, 那么重置状态
         this._resetStatus();
+        // 判断2次点击之间的距离是否过大
+        const { x, y } = computed;
 
         // 每一次点击是否符合要求
-        const isValidEachTap = this.test(computed);
-
-        // 判断2次点击之间的距离是否过大
-        const { max, pow, sqrt } = Math;
-        const { x, y } = computed;
-        if (undefined === this.prevTapX || undefined === this.prevTapY) {
-            this.isValidMovementFromPrevTap = true;
-        } else {
-            this.isValidMovementFromPrevTap = 10 > sqrt(max(pow(x - this.prevTapX, 2), pow(y - this.prevTapY, 2)));
-        }
-        this.prevTapX = x;
-        this.prevTapY = y;
-        // console.log(this.name, this.options.tapTimes, this.isValidMovementFromPrevTap);
-
-        if (isValidEachTap) {
+        if (this.test(computed)) {
             // 取消当前识别
             clearTimeout(this.tapTimeout2Id);
             // 对符合要求的点击进行累加
-            if (this.isValidMovementFromPrevTap) {
+            if (this._isValidDistanceFromPrevTap({ x, y })) {
                 this.tapCount++;
             }
+
             // 是否满足点击次数要求
             if (this.options.tapTimes === this.tapCount) {
+                // 仅仅为了不让状态为possible和failed
+                // 这样isTheOtherFailed才不会错误的触发其他还没有符合条件的tap
+                // 因为isTheOtherFailed方法会监测possible和failed俩种状态
+                // 这里的STATUS_START可以想成在等待failture前的等待状态
+
                 this.status = STATUS_START;
                 // 如果需要其他手势失败
                 // 等待(300ms)其他手势失败后触发
                 if (this.hasRequireFailure()) {
                     this.tapTimeoutId = setTimeout(() => {
-                        // 检查指定手势是否识别为Fail
-                        if (this.isTheOtherFail()) {
+                        // 检查指定手势是否识别为Failed
+                        if (this.isTheOtherFailed()) {
                             this.status = STATUS_RECOGNIZED;
                             this.emit(this.options.name, { ...computed, tapCount: this.tapCount });
                         } else {
@@ -89,7 +104,7 @@ export default class TapRecognizer extends Recognizer {
                         };
                         // 不论成功失败都要重置tap计数
                         this.reset();
-                    }, this.options.interval);
+                    }, this.options.waitNextTapTime);
                 }
                 // 如果不需要等待其他手势失败
                 // 那么立即执行
@@ -102,11 +117,13 @@ export default class TapRecognizer extends Recognizer {
             // 不满足次数要求(过多或者过少), 
             // 间隔时间后都要重置计数,
             // 不然会出现如下:
-            // 慢慢的点击n次, 会触发nTap
+            // 慢慢的点击n次, 会触发tapN事件
             else {
+                // 取消等待failture,
+                // 因为已经不符合了tapTimes的限制
                 this.tapTimeout2Id = setTimeout(() => {
                     this.reset();
-                }, this.options.interval)
+                }, this.options.waitNextTapTime);
             }
         } else {
             // if (this.options.tapTimes !== this.tapCount) {
@@ -119,8 +136,7 @@ export default class TapRecognizer extends Recognizer {
 
     public reset() {
         this.tapCount = 0;
-        this.prevTapX = undefined;
-        this.prevTapY = undefined;
+        this.prevTapPoint = undefined;
     }
 
     /**
@@ -136,7 +152,8 @@ export default class TapRecognizer extends Recognizer {
         // 2. 移动距离
         // 3. start至end的事件, 区分tap和press
         return maxpointLength === this.options.pointLength &&
-            this.options.tolerance >= distance && this.options.maxPressTime > deltaTime;
+            this.options.positionTolerance >= distance &&
+            this.options.maxPressTime > deltaTime;
     };
 
     public afterEmit(computed: Computed): void { }

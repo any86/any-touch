@@ -26,7 +26,11 @@ export default class PressRecognizer extends Recognizer {
     recognize(computed: Computed): void {
         const { eventType } = computed;
         // 重置状态
-        this._resetStatus();
+        if (INPUT_START === eventType) {
+            this.status = STATUS_POSSIBLE;
+        }
+
+        if (STATUS_FAILED === this.status) return;
 
         // 开始识别
         if (STATUS_RECOGNIZED !== this.status) {

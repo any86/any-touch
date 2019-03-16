@@ -7,7 +7,7 @@ test('doubletap识别失败, tap应该触发2次', async (done) => {
     const mockTapCallback = jest.fn();
     const mockDoubletapCallback = jest.fn();
 
-    const tap2 = new AnyTouch.Tap({ name: 'doubletap', pointer: 1, tapTimes: 2 })
+    const tap2 = new AnyTouch.Tap({ name: 'doubletap', pointLength: 1, tapTimes: 2 })
     const at = new AnyTouch(el);
     at.add(tap2);
     at.get('tap').requireFailure(tap2);

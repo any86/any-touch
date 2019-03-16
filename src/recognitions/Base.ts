@@ -102,7 +102,7 @@ export default abstract class Recognizer {
     /**
      * 是否要求注册时指定失败的选择器是失败状态
      */
-    public isTheOneFailed(): boolean {
+    public isTheOtherFailed(): boolean {
         for (let recognizer of this.requireFailureRecognizers) {
             if (STATUS_FAILED !== recognizer.status && STATUS_POSSIBLE !== recognizer.status) {
                 return false;
@@ -206,7 +206,7 @@ export default abstract class Recognizer {
      * 如果识别结束, 那么重置状态
      */
     protected _resetStatus() {
-        if (this.name === 'tap') console.log('@', this.status);
+        // if (this.name === 'tap') console.log('@', this.status);
         //STATUS_RECOGNIZED === STATUS_END
         if (-1 !== [STATUS_END, STATUS_CANCELLED, STATUS_RECOGNIZED, STATUS_FAILED].indexOf(this.status)) {
 
