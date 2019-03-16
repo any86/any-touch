@@ -3,7 +3,8 @@ import {
     STATUS_RECOGNIZED,
     STATUS_POSSIBLE,
     STATUS_FAILED,
-    STATUS_START
+    STATUS_START,
+    STATUS_CANCELLED
 } from '../const/recognizerStatus';
 const { setTimeout, clearTimeout } = window;
 import Recognizer from './Base';
@@ -21,9 +22,12 @@ export default class TapRecognizer extends Recognizer {
     static DEFAULT_OPTIONS = {
         name: 'tap',
         pointLength: 1,
-        taps: 1,
+        tapTimes: 1,
+        // 每次询问failture的时间间隔
         interval: 300,
-        disabled: false
+        disabled: false,
+        tolerance: 2,
+        maxPressTime: 250,
     };
     constructor(options = {}) {
         super(options);
@@ -32,8 +36,8 @@ export default class TapRecognizer extends Recognizer {
 
     getTouchAction() {
         // 单击auto, 多击manipulation=pan + pinch-zoom(禁用了默认双击)
-        // console.log({taps: this.options.taps});
-        return (1 < this.options.taps) ? ['manipulation'] : ['auto'];
+        // console.log({taps: this.options.tapTimes});
+        return (1 < this.options.tapTimes) ? ['manipulation'] : ['auto'];
     };
 
     /**
@@ -45,9 +49,7 @@ export default class TapRecognizer extends Recognizer {
         if (INPUT_END !== computed.eventType) return;
 
         // 如果识别结束, 那么重置状态
-        if (-1 < [STATUS_FAILED, STATUS_RECOGNIZED].indexOf(this.status)) {
-            this.status = STATUS_POSSIBLE;
-        };
+        this._resetStatus();
 
         // 每一次点击是否符合要求
         const isValidEachTap = this.test(computed);
@@ -62,7 +64,7 @@ export default class TapRecognizer extends Recognizer {
         }
         this.prevTapX = x;
         this.prevTapY = y;
-        // console.log(this.name, this.options.taps, this.isValidMovementFromPrevTap);
+        // console.log(this.name, this.options.tapTimes, this.isValidMovementFromPrevTap);
 
         if (isValidEachTap) {
             // 取消当前识别
@@ -72,7 +74,7 @@ export default class TapRecognizer extends Recognizer {
                 this.tapCount++;
             }
             // 是否满足点击次数要求
-            if (this.options.taps === this.tapCount) {
+            if (this.options.tapTimes === this.tapCount) {
                 this.status = STATUS_START;
                 // 如果需要其他手势失败
                 // 等待(300ms)其他手势失败后触发
@@ -107,7 +109,7 @@ export default class TapRecognizer extends Recognizer {
                 }, this.options.interval)
             }
         } else {
-            // if (this.options.taps !== this.tapCount) {
+            // if (this.options.tapTimes !== this.tapCount) {
             //     clearTimeout(this.tapTimeoutId);
             // }
             this.reset();
@@ -127,17 +129,14 @@ export default class TapRecognizer extends Recognizer {
       * @return {Boolean} 是否验证成功
       */
     public test(computed: Computed): boolean {
-
         // 判断是否发生大的位置变化
         const { distance, deltaTime, maxpointLength } = computed;
-
-        // 每次单击流程中, 是否没有发生大的移动
-        const isValidMovementTap = 2 >= distance;
-        const isValidDeltaTime = 250 > deltaTime;
-        // 与上一次点击的距离在合理范围内
-
+        // 检查
+        // 1. 触点数
+        // 2. 移动距离
+        // 3. start至end的事件, 区分tap和press
         return maxpointLength === this.options.pointLength &&
-            isValidDeltaTime && isValidMovementTap;
+            this.options.tolerance >= distance && this.options.maxPressTime > deltaTime;
     };
 
     public afterEmit(computed: Computed): void { }
