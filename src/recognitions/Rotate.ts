@@ -28,6 +28,6 @@ export default class RotateRecognizer extends Base {
     test({ pointLength, angle }: Computed): boolean {
         // 如果触碰点数要大于指定
         // 如果缩放超过阈值, 或者已识别
-        return this.isValidpointLength(pointLength) && (this.options.threshold < Math.abs(angle) || this.isRecognized);
+        return this.isValidPointLength(pointLength) && (this.options.threshold < Math.abs(angle) || this.isRecognized);
     };
 };

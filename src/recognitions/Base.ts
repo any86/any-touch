@@ -86,10 +86,10 @@ export default abstract class Recognizer {
      * 移除识别器之间的"需要失败"关系
      *  @param {Recognizer} 识别器实例 
      */
-    public removeRequireFailure(recognizer:this){
-        for(let [index,requireFailureRecognizer] of this.requireFailureRecognizers.entries()) {
-            if(requireFailureRecognizer.name === recognizer.name) {
-                this.requireFailureRecognizers.splice(index,1);
+    public removeRequireFailure(recognizer: this) {
+        for (let [index, requireFailureRecognizer] of this.requireFailureRecognizers.entries()) {
+            if (requireFailureRecognizer.name === recognizer.name) {
+                this.requireFailureRecognizers.splice(index, 1);
                 break;
             }
         }
@@ -102,29 +102,26 @@ export default abstract class Recognizer {
     /**
      * 是否要求注册时指定失败的选择器是失败状态
      */
-    public isTheOtherFail(): boolean {
-        const { length } = this.requireFailureRecognizers;
-        for (let index = 0; index < length; index++) {
-            const recognizer = this.requireFailureRecognizers[index];
-            // console.log(recognizer.status);
+    public isTheOneFailed(): boolean {
+        for (let recognizer of this.requireFailureRecognizers) {
             if (STATUS_FAILED !== recognizer.status && STATUS_POSSIBLE !== recognizer.status) {
                 return false;
             }
-        };
+        }
         return true;
     };
     /**
      * 验证触点
      * @param {Number} 触点数
      */
-    public isValidpointLength(pointLength: number): boolean {
+    public isValidPointLength(pointLength: number): boolean {
         return 0 === this.options.pointLength || this.options.pointLength === pointLength
     };
 
     /**
      * 是否只支持水平方向
      */
-    public isOnlyHorizontal() { 
+    public isOnlyHorizontal() {
         let isOnlyHorizontal = true;
         for (let direction of this.options.directions) {
             isOnlyHorizontal = -1 < ['left', 'right'].indexOf(direction);
@@ -203,15 +200,16 @@ export default abstract class Recognizer {
         } else {
             return activeStatus;
         }
-
     };
 
     /**
      * 如果识别结束, 那么重置状态
      */
-    protected _resetStatus(){
+    protected _resetStatus() {
+        if (this.name === 'tap') console.log('@', this.status);
         //STATUS_RECOGNIZED === STATUS_END
-        if (-1 !== [STATUS_END, STATUS_CANCELLED, STATUS_FAILED].indexOf(this.status)) {
+        if (-1 !== [STATUS_END, STATUS_CANCELLED, STATUS_RECOGNIZED, STATUS_FAILED].indexOf(this.status)) {
+
             this.status = STATUS_POSSIBLE;
         };
     };

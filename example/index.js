@@ -23,19 +23,19 @@ new Vue({
 
         const tap2 = new AnyTouch.Tap({
             name: 'doubletap',
-            pointer: 1,
-            taps: 2
+            pointLength: 1,
+            tapTimes: 2
         })
         const tap3 = new AnyTouch.Tap({
             name: 'threetap',
-            pointer: 1,
-            taps: 3
+            pointLength: 1,
+            tapTimes: 3
         })
 
         const tap4 = new AnyTouch.Tap({
             name: 'fourtap',
-            pointer: 1,
-            taps: 4
+            pointLength: 1,
+            tapTimes: 4
         })
         const pan2 = new AnyTouch.Pan({
             name: 'pan2',
@@ -46,7 +46,7 @@ new Vue({
             touchAction: 'auto',
             isPreventDefault: false
         });
-        const tap = anyTouch.get('tap').set({pointer:1})
+        const tap = anyTouch.get('tap').set({pointLength:1})
 
         console.log(anyTouch);
 
@@ -75,11 +75,10 @@ new Vue({
         const tap1 = anyTouch.get('tap');
         tap1.requireFailure(tap2);
         tap1.requireFailure(tap3);
+        tap1.requireFailure(tap4);
         tap2.requireFailure(tap3);
+        tap2.requireFailure(tap4);
         tap3.requireFailure(tap4);
-tap1.removeRequireFailure(tap2);
-tap1.removeRequireFailure(tap3);
-
         // this.$refs.circle.addEventListener('touchstart', ev=>{ev.preventDefault()})
         // this.$refs.circle.addEventListener('touchmove', ev=>{ev.preventDefault()})
         // this.$refs.circle.addEventListener('touchend', ev=>{ev.preventDefault()})
@@ -168,7 +167,7 @@ tap1.removeRequireFailure(tap3);
             this.message = e;
         });
         this.$refs.circle.addEventListener('click', ev=>{
-            console.log(ev);
+            console.log('click');
         })
         anyTouch.on('doubletap', e => {
             console.log(`%c ${e.type} `, 'background-color:#9c3;color:#fff;');

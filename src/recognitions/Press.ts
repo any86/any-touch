@@ -65,9 +65,9 @@ export default class PressRecognizer extends Recognizer {
     public test({ pointLength, eventType, distance }: Computed): boolean {
         // const IS_VALID_INPUT = 'start' === eventType || 'move' === eventType;
         const IS_VLIAD_DISTANCE = this.options.threshold > distance;
-        return this.isValidpointLength(pointLength) && IS_VLIAD_DISTANCE;
+        return this.isValidPointLength(pointLength) && IS_VLIAD_DISTANCE;
 
-        // return this.isValidpointLength(pointLength) && IS_VALID_INPUT && IS_VLIAD_DISTANCE;
+        // return this.isValidPointLength(pointLength) && IS_VALID_INPUT && IS_VLIAD_DISTANCE;
     };
 
     public cancel() {

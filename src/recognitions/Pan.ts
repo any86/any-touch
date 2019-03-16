@@ -36,7 +36,7 @@ export default class PanRecognizer extends Recognizer {
     test({ distance, direction, eventType, pointLength }: Computed): boolean {
         return INPUT_MOVE === eventType &&
             (this.isRecognized || this.options.threshold < distance) &&
-            this.isValidpointLength(pointLength) &&
+            this.isValidPointLength(pointLength) &&
             this.isVaildDirection(direction);
     };
 
