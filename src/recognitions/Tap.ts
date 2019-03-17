@@ -10,13 +10,18 @@ import { INPUT_END } from '../const';
 import { getVLength } from '../vector';
 export default class TapRecognizer extends Recognizer {
     public tapCount: number;
-    public tapTimeoutId?: number;
-    public tapTimeout2Id?: number;
+
 
     // 记录每次单击完成时的坐标
     public prevTapPoint?: Point;
+    public prevTapTime?: number;
+
     // 多次tap之间的距离是否满足要求
     public isValidDistanceFromPrevTap?: boolean;
+
+    // timer
+    private _delayFailTimer?: number;
+    private _waitOtherFailedTimer?: number;
 
     static DEFAULT_OPTIONS = {
         name: 'tap',
@@ -62,6 +67,22 @@ export default class TapRecognizer extends Recognizer {
     };
 
     /**
+     * 校验2次tap的时间间隔是否满足
+     * @return {Boolean} 是否满足
+     */
+    private _isValidInterval(): boolean {
+        const now = Date.now();
+        if (undefined === this.prevTapTime) {
+            this.prevTapTime = now;
+            return true;
+        } else {
+            const interval = now - this.prevTapTime;
+            this.prevTapTime = now;
+            return interval < this.options.waitNextTapTime;
+        }
+    };
+
+    /**
      * 识别后执行
      * @param {Computed} 计算数据 
      */
@@ -71,30 +92,39 @@ export default class TapRecognizer extends Recognizer {
 
         // 如果识别结束, 那么重置状态
         this._resetStatus();
-        // 判断2次点击之间的距离是否过大
-        const { x, y } = computed;
 
         // 每一次点击是否符合要求
         if (this.test(computed)) {
-            // 取消当前识别
-            clearTimeout(this.tapTimeout2Id);
+            // 一旦每次tap识别成功, 那么一段时间后如果不符合多次点击条件, 设置状态为faile
+            this._resetDelayFail();
+
+
+
+            // 判断2次点击之间的距离是否过大
             // 对符合要求的点击进行累加
-            if (this._isValidDistanceFromPrevTap({ x, y })) {
+            if (this._isValidDistanceFromPrevTap(computed) && this._isValidInterval()) {
                 this.tapCount++;
+            }
+            //  不满足条件, 那么当前的点击作为单击tap触发
+            else {
+                this.tapCount = 1;
             }
 
             // 是否满足点击次数要求
             if (this.options.tapTimes === this.tapCount) {
+                // 如果符合点击次数的要求
+                // 那么取消延迟失败的定时器
+                this._cancelDelayFail();
+
                 // 仅仅为了不让状态为possible和failed
                 // 这样isTheOtherFailed才不会错误的触发其他还没有符合条件的tap
                 // 因为isTheOtherFailed方法会监测possible和failed俩种状态
                 // 这里的STATUS_START可以想成在等待failture前的等待状态
-
                 this.status = STATUS_START;
                 // 如果需要其他手势失败
                 // 等待(300ms)其他手势失败后触发
                 if (this.hasRequireFailure()) {
-                    this.tapTimeoutId = setTimeout(() => {
+                    this._waitOtherFailedTimer = setTimeout(() => {
                         // 检查指定手势是否识别为Failed
                         if (this.isTheOtherFailed()) {
                             this.status = STATUS_RECOGNIZED;
@@ -119,15 +149,17 @@ export default class TapRecognizer extends Recognizer {
             // 不然会出现如下:
             // 慢慢的点击n次, 会触发tapN事件
             else {
+                // 取消等待其他手势失败的定时器
+                // this._cancelWaitOtherFailed();
                 // 取消等待failture,
                 // 因为已经不符合了tapTimes的限制
-                this.tapTimeout2Id = setTimeout(() => {
+                this._delayFail(() => {
                     this.reset();
-                }, this.options.waitNextTapTime);
+                });
             }
         } else {
             // if (this.options.tapTimes !== this.tapCount) {
-            //     clearTimeout(this.tapTimeoutId);
+            //     clearTimeout(this._waitOtherFailedTimer);
             // }
             this.reset();
             this.status = STATUS_FAILED;
@@ -137,7 +169,37 @@ export default class TapRecognizer extends Recognizer {
     public reset() {
         this.tapCount = 0;
         this.prevTapPoint = undefined;
-    }
+        this.prevTapTime = undefined;
+    };
+
+    /**
+     * 指定时间后, 设置状态为失败
+     */
+    private _delayFail(cb: () => void = () => { }) {
+        this._delayFailTimer = setTimeout(() => {
+            this.status = STATUS_FAILED;
+            cb();
+        }, this.options.waitNextTapTime);
+    };
+
+    /**
+     * 取消延迟失败定时
+     */
+    private _cancelDelayFail() {
+        clearTimeout(this._delayFailTimer);
+    };
+
+    private _resetDelayFail() {
+        this._cancelDelayFail();
+        this._delayFail();
+    };
+
+    /**
+     * 取消等待其他手势失败的定时
+     */
+    // private _cancelWaitOtherFailed() {
+    //     clearTimeout(this._waitOtherFailedTimer);
+    // };
 
     /**
       * 识别条件
