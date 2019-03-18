@@ -95,10 +95,11 @@ export default class TapRecognizer extends Recognizer {
 
         // 每一次点击是否符合要求
         if (this.test(computed)) {
-            // 一旦每次tap识别成功, 那么一段时间后如果不符合多次点击条件, 设置状态为faile
-            this._resetDelayFail();
 
 
+            // 一旦每次tap识别成功, 那么一段时间后如果不符合多次点击条件, 设置状态为failed
+            this._cancelDelayFail();
+            this._delayFail();
 
             // 判断2次点击之间的距离是否过大
             // 对符合要求的点击进行累加
@@ -111,11 +112,10 @@ export default class TapRecognizer extends Recognizer {
             }
 
             // 是否满足点击次数要求
-            if (this.options.tapTimes === this.tapCount) {
+            if (0 === this.tapCount % this.options.tapTimes ) {
                 // 如果符合点击次数的要求
                 // 那么取消延迟失败的定时器
                 this._cancelDelayFail();
-
                 // 仅仅为了不让状态为possible和failed
                 // 这样isTheOtherFailed才不会错误的触发其他还没有符合条件的tap
                 // 因为isTheOtherFailed方法会监测possible和failed俩种状态
@@ -143,19 +143,6 @@ export default class TapRecognizer extends Recognizer {
                     this.emit(this.options.name, { ...computed, tapCount: this.tapCount });
                     this.reset();
                 }
-            }
-            // 不满足次数要求(过多或者过少), 
-            // 间隔时间后都要重置计数,
-            // 不然会出现如下:
-            // 慢慢的点击n次, 会触发tapN事件
-            else {
-                // 取消等待其他手势失败的定时器
-                // this._cancelWaitOtherFailed();
-                // 取消等待failture,
-                // 因为已经不符合了tapTimes的限制
-                this._delayFail(() => {
-                    this.reset();
-                });
             }
         } else {
             // if (this.options.tapTimes !== this.tapCount) {
@@ -188,18 +175,6 @@ export default class TapRecognizer extends Recognizer {
     private _cancelDelayFail() {
         clearTimeout(this._delayFailTimer);
     };
-
-    private _resetDelayFail() {
-        this._cancelDelayFail();
-        this._delayFail();
-    };
-
-    /**
-     * 取消等待其他手势失败的定时
-     */
-    // private _cancelWaitOtherFailed() {
-    //     clearTimeout(this._waitOtherFailedTimer);
-    // };
 
     /**
       * 识别条件
