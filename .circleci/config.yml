@@ -16,6 +16,8 @@ jobs:
 
         working_directory: ~/repo
 
+        parallelism: 4
+
         steps:
         - checkout
 
