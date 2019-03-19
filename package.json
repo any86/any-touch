@@ -10,9 +10,8 @@
   "types": "lib/main.d.ts",
   "files": [
     "src",
-    "lib/*",
-    "dist/*.js",
-    "types/*.d.ts"
+    "lib",
+    "dist"
   ],
   "scripts": {
     "release": "npm run build && npm run test && standard-version && npm pub && git push",

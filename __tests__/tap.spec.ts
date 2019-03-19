@@ -5,7 +5,7 @@ const el = document.createElement('div');
 
 test('仅有tap识别, 事件是否触发', async (done) => {
     const at = new AnyTouch(el);
-    at.on('tap', (e:any) => {
+    at.on('tap', (e: any) => {
         expect(e.type).toBe('tap');
     });
     const ts = new TouchSimulator(el);

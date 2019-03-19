@@ -7,13 +7,15 @@ test('mouse下, 仅有tap识别, 事件是否触发', async (done) => {
     const at = new AnyTouch(el);
     at.on('tap', (e:any) => {
         expect(e.type).toBe('tap');
-        done();
+        
     });
     const ts = new TouchSimulator(el, {device:'mouse'});
     // 模拟touch触碰
     ts.dispatchTouchStart([{ x: 0, y: 0 }]);
     await sleep(100);
     ts.dispatchTouchEnd();
+    await sleep(100);
+    done();
 });
 
 test('mouse下,tap与doubletap之间的requireFailure是否生效?', async (done) => {
