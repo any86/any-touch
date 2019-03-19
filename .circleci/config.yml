@@ -33,7 +33,6 @@ jobs:
         - save_cache:
             paths:
                 - node_modules
-                - ~/.cache/yarn
             key: dependencies-{{ checksum "package.json" }}
             
         # run tests!  
