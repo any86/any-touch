@@ -21,43 +21,34 @@ new Vue({
             this.activeType = 'AnyTouch';
         });
 
-        const tap2 = new AnyTouch.TapRecognizer({
+        const tap2 = new AnyTouch.Tap({
             name: 'doubletap',
-            pointer: 1,
-            taps: 2
+            pointLength: 1,
+            tapTimes: 2
         })
-        const tap3 = new AnyTouch.TapRecognizer({
+        const tap3 = new AnyTouch.Tap({
             name: 'threetap',
-            pointer: 1,
-            taps: 3
+            pointLength: 1,
+            tapTimes: 3
         })
 
-        const tap4 = new AnyTouch.TapRecognizer({
+        const tap4 = new AnyTouch.Tap({
             name: 'fourtap',
-            pointer: 1,
-            taps: 4
+            pointLength: 1,
+            tapTimes: 4
         })
-        const pan2 = new AnyTouch.PanRecognizer({
+        const pan2 = new AnyTouch.Pan({
             name: 'pan2',
-            pointerLength: 2,
+            pointLength: 2,
         })
         // 初始化
         const anyTouch = new AnyTouch(this.$refs.circle, {
-            // touchAction: 'auto',
-            isPreventDefault: true
+            touchAction: 'auto',
+            isPreventDefault: false
         });
-        const tap = anyTouch.get('tap').set({pointer:1})
-//         const anyTouch2 = new AnyTouch(this.$refs.circle2, {
-//             touchAction: 'compute',
-//             isPreventDefault: true
-//         });
+        const tap = anyTouch.get('tap').set({pointLength:1})
 
-        
-// anyTouch2.on('pan', ev=>{
-//     console.log('at2');
-// })
-
-        // const anyTouch = new AnyTouch(this.$refs.circle, {isPreventDefault:false});
+        console.log(anyTouch);
 
 
         const pan = anyTouch.get('pan');
@@ -77,16 +68,17 @@ new Vue({
             threshold: 15
         });
 
-        // anyTouch.add(pan2);
+        anyTouch.add(pan2);
         anyTouch.add(tap2);
         anyTouch.add(tap3);
         anyTouch.add(tap4);
         const tap1 = anyTouch.get('tap');
         tap1.requireFailure(tap2);
         tap1.requireFailure(tap3);
+        tap1.requireFailure(tap4);
         tap2.requireFailure(tap3);
+        tap2.requireFailure(tap4);
         tap3.requireFailure(tap4);
-
         // this.$refs.circle.addEventListener('touchstart', ev=>{ev.preventDefault()})
         // this.$refs.circle.addEventListener('touchmove', ev=>{ev.preventDefault()})
         // this.$refs.circle.addEventListener('touchend', ev=>{ev.preventDefault()})
@@ -102,6 +94,12 @@ new Vue({
             console.warn(e);
         });
 
+        // anyTouch.on('pan2', e => {
+        //     e.nativeEvent.preventDefault();
+        //     this.message = e;
+        //     console.warn(e);
+        // });
+
         anyTouch.on('inputstart', e => {
             e.preventDefault();
         });
@@ -113,7 +111,7 @@ new Vue({
 
 
         anyTouch.on('panstart', e => {
-            e.nativeEvent.preventDefault();
+            // e.nativeEvent.preventDefault();
             // anyTouch.set({touchAction:'auto',isPreventDefault:false});
             this.message = e;
             console.log(e.type);
@@ -121,7 +119,7 @@ new Vue({
         });
 
         anyTouch.on('panmove', e => {
-            e.nativeEvent.preventDefault();
+            // e.nativeEvent.preventDefault();
             this.message = e;
             console.log(e.type);
         });
@@ -133,7 +131,7 @@ new Vue({
         });
 
         anyTouch.on('panend', e => {            
-            console.warn('panend',e.lastDirection);
+            console.warn('panend',e.direction);
             this.message = e;
             log(e.type);
         });
@@ -151,6 +149,7 @@ new Vue({
          * =========================== press ===========================
          */
         anyTouch.on('press', e => {
+            
             log(`%c ${e.type} `, 'background-color:#fa0;color:#fff;');
             this.message = e;
         });
@@ -169,7 +168,7 @@ new Vue({
             this.message = e;
         });
         this.$refs.circle.addEventListener('click', ev=>{
-            console.log(ev);
+            console.log('click');
         })
         anyTouch.on('doubletap', e => {
             console.log(`%c ${e.type} `, 'background-color:#9c3;color:#fff;');
@@ -202,7 +201,7 @@ new Vue({
             // console.log(e.deltaScale);
             this.centerX = e.center.x;
             this.centerY = e.center.y;
-            log(`%c ${e.type} `, 'background-color:#f90;color:#fff;');
+            console.log(`%c ${e.type} `, 'background-color:#f90;color:#fff;');
         });
 
         /**
