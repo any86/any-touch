@@ -101,7 +101,7 @@ new Vue({
         // });
 
         anyTouch.on('inputstart', e => {
-            // e.preventDefault();
+            e.preventDefault();
         });
 
 
@@ -149,6 +149,7 @@ new Vue({
          * =========================== press ===========================
          */
         anyTouch.on('press', e => {
+            
             log(`%c ${e.type} `, 'background-color:#fa0;color:#fff;');
             this.message = e;
         });
