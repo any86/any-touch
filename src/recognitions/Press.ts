@@ -7,7 +7,7 @@ import {
 import { INPUT_CANCEL, INPUT_END, INPUT_MOVE, INPUT_START } from '../const';
 import Recognizer from './Base';
 export default class PressRecognizer extends Recognizer {
-    protected _timeoutId?: number;
+    private _timeoutId?: number;
     static DEFAULT_OPTIONS = {
         name: 'press',
         pointLength: 1,
@@ -19,64 +19,53 @@ export default class PressRecognizer extends Recognizer {
         super(options);
     };
 
-    getTouchAction() {
+    getTouchAction(): string[] {
         return ['auto'];
     };
 
     recognize(computed: Computed): void {
-        const { eventType } = computed;
-        // 重置状态
-        if (INPUT_START === eventType) {
-            this.status = STATUS_POSSIBLE;
+        const { eventType, pointLength, distance, deltaTime } = computed;
+
+        // 1. start阶段
+        // 2. 触点数符合
+        // 那么等待minPressTime时间后触发press
+        if (INPUT_START === eventType && this.isValidPointLength(pointLength)) {
+            // 重置状态
+            this._resetStatus();
+            // 延迟触发
+            this.cancel();
+            this._timeoutId = window.setTimeout(() => {
+                this.status = STATUS_RECOGNIZED;
+                this.emit(this.options.name, computed);
+            }, this.options.minPressTime);
         }
 
-        if (STATUS_FAILED === this.status) return;
-
-        // 开始识别
-        if (STATUS_RECOGNIZED !== this.status) {
-            // console.log(this.status, computed.distance);
-            // 如果未开始按住屏幕 && 限制条件已经通过
-            // 那么延迟触发press
-            const IS_VALID = this.test(computed)
-            // console.log({IS_VALID});
-            if (IS_VALID) {
-                // 延迟触发
-                this.cancel();
-                this._timeoutId = window.setTimeout(() => {
-                    this.status = STATUS_RECOGNIZED;
-                    this.emit(this.options.name, computed);
-                }, this.options.minPressTime);
-                // console.log('_timeoutId', this._timeoutId);
-            } else {
-                this.cancel();
-                this.status = STATUS_FAILED;
-            }
-
-            if (INPUT_END === eventType) {
-                this.status = STATUS_FAILED;
-                // console.log(this.status);
-            }
+        // 触发pressup条件:
+        // 1. end阶段
+        // 2. 已识别
+        else if (INPUT_END === eventType && STATUS_RECOGNIZED === this.status) {
+            this.emit(`${this.options.name}up`, computed);
         }
-        // 已识别 
-        else {
-            // end阶段触发pressup
-            if (INPUT_END === eventType) {
-                this.emit(`${this.options.name}up`, computed);
-            }
+
+        // 一旦不满足必要条件, 触发失败
+        // 对应cancel和end阶段
+        else if (!this.test(computed) || (this.options.minPressTime > deltaTime && -1 !== [INPUT_END, INPUT_CANCEL].indexOf(eventType) )) {
+            this.cancel();
+            this.status = STATUS_FAILED;
         }
+
     };
 
-    public test({ pointLength, eventType, distance }: Computed): boolean {
-        // const IS_VALID_INPUT = 'start' === eventType || 'move' === eventType;
-        const IS_VLIAD_DISTANCE = this.options.threshold > distance;
-        return this.isValidPointLength(pointLength) && IS_VLIAD_DISTANCE;
-
-        // return this.isValidPointLength(pointLength) && IS_VALID_INPUT && IS_VLIAD_DISTANCE;
+    /**
+     * 是否满足:
+     * 移动距离不大
+     */
+    test({ distance}: Computed): boolean {
+        return this.options.threshold > distance;
     };
 
-    public cancel() {
+    cancel(): void {
         clearTimeout(this._timeoutId);
-        // console.warn('cancel',this._timeoutId);
     }
 
     afterEmit() { }
