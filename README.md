@@ -28,7 +28,9 @@ npm i -S any-touch
 ```
 
 ## CDN
+```
 https://unpkg.com/any-touch
+```
 
 ## 开始
 ```javascript
@@ -40,17 +42,17 @@ const at = new AnyTouch(el);
 
 // 单击
 at.on('tap', ev=>{
-  console.log(ev);
+    console.log(ev);
 });
 
 // 拖拽
 at.on('pan', ev=>{
-  console.log(ev);
+    console.log(ev);
 });
 
 // 快速划
 at.on('swipe', ev=>{
-  console.log(ev);
+    console.log(ev);
 });
 
 // 缩放
@@ -60,10 +62,24 @@ at.on('pinch', ev=>{
 
 // 旋转
 at.on('rotate', ev=>{
-  console.log(ev);
+    console.log(ev);
 });
-
 ```
+
+### 手势扩展
+根据状态和方向的不同, 还有如下事件可用.
+#### press
+pressup: press触发后, 触点移开触发.
+
+#### pan
+panstart/panmove/panend/panleft/panright/panup/pandown
+
+#### pinch
+pinchstart/pinchmove/pinchend
+
+#### rotate
+rotatestart/rotatemove/rotateend
+
 
 ### 自定义识别器
 ``` javascript

@@ -1,4 +1,5 @@
 // 识别器状态码
+// 注意: 此处的值会直接被事件名所用, 如panstart/panmove等等
 export const STATUS_POSSIBLE = 'possible';
 export const STATUS_START = 'start';
 export const STATUS_MOVE = 'move';
