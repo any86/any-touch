@@ -110,7 +110,7 @@ rotatestart/rotatemove/rotateend
 |target|`EventTarget`|绑定事件的元素|
 |currentTarget|`EventTarget`|实际触发绑定事件的元素|
 |timestamp|`Number`|当前时间|
-|**nativeEvent**|TouchEvent|MouseEvent`|原生事件对象|
+|**nativeEvent**|`TouchEvent`|MouseEvent`|原生事件对象|
 
 ### 自定义识别器
 ``` javascript
