@@ -1,8 +1,8 @@
 # 用TypeScript开发手势库 - (2)tsconfig.json & rollup.config.js & npx
 
-![https://github.com/383514580/any-touch](https://segmentfault.com/img/bVbp3B0?w=936&h=246)
+![https://github.com/383514580/any-touch](https://ww1.sinaimg.cn/large/005IQkzXly1g1as0lsa1hj30m805ugmp.jpg)
 
- [:wave:any-touch](https://github.com/383514580/any-touch) 一个手势库
+ [any-touch](https://github.com/383514580/any-touch) 一个手势库
 
 ## 往期目录
 [用 TypeScript 开发手势库 - (1)web开发常用手势有哪些?](https://juejin.im/post/5c8fc2105188252d72550acf)
@@ -94,7 +94,7 @@ export default {
 ```
 [源码](https://github.com/383514580/any-touch/blob/master/rollup.config.js)
 
-### tsconfig.js
+## tsconfig.js
 
 ``` Javascript
 {
@@ -142,7 +142,7 @@ export default {
 ```
 [源码](https://github.com/383514580/any-touch/blob/master/tsconfig.json)
 
-### 运行命令
+## 运行命令
 好了文件配置好了, 我们可以把我们的ts代码转成js, 就差在package.json中加一条命令了: 
 ```javscript
 // package.json
@@ -158,26 +158,27 @@ export default {
 
 [源码](https://github.com/383514580/any-touch/blob/master/package.json)
 
-### 彩蛋
+## 彩蛋
 其实**npx**并不是本文主角,但是**如果**你的tsc不是全局安装的, 那么你在命令行运行tsc会提示找不到他, 但是如果你用`npx tsc`那么他就会**运行你本地的node_modules中的tsc命令**, 惊不惊喜.
 
-### 为啥还没到写代码?
-2期了都还没有讲到代码, 估计大家都着急, 莫着急,下一期开始咱们就讲代码了, 平时上班工作实在是忙, 都是晚上更新文章, 这个周末我会多写点, 如果实在迫不及待也可以先看看我写好的代码预热下: https://github.com/383514580/any-touch
+## 为啥还没到写代码?
+2期了都还没有讲到代码, 估计大家都着急, 莫着急,下一期开始咱们就讲代码了, 平时上班工作实在是忙, 都是晚上更新文章, 这个周末我会多写点, 如果实在迫不及待也可以先看看我写好的代码预热下: 
+[https://github.com/383514580/any-touch](https://github.com/383514580/any-touch)
 
-### 补充说明
+## 补充说明
 如果你了解webpack和rollup的不同下面内容可以跳过.
 
-#### 为什么不用webpack
+### 为什么不用webpack
 一说到打包工具大家想到的肯定是webpack, 他有各种loader, 当然也有ts-loader, 但是他生成代码有很多是非我们所写的逻辑代码, 比如一些他自有的模块加载功能:
 
-![webpack](http://ww1.sinaimg.cn/large/005IQkzXly1g1apvg17axj30pu0fpab4.jpg)
+![webpack](https://ww1.sinaimg.cn/large/005IQkzXly1g1apvg17axj30pu0fpab4.jpg)
 
-#### rollup更适合开发插件?
-是的, rollup生成代码只是把我们的代码转码成目标js并无其他, 同使如果需要,他可以同时帮我们生成支持umd的js代码, **vue** / **react** /**angular**都在用他作为打包工具.
+### rollup更适合开发插件?
+是的, rollup生成代码只是把我们的代码转码成目标js并无其他, 同使如果需要,他可以同时帮我们生成支持umd/commonjs/es的js代码, **vue** / **react** /**angular**都在用他作为打包工具.
 
 **vue**
-![vue](http://ww1.sinaimg.cn/large/005IQkzXly1g1aq723deej30iu05vgm4.jpg)
+![vue](https://ww1.sinaimg.cn/large/005IQkzXly1g1aq723deej30iu05vgm4.jpg)
 **react**
-![react](http://ww1.sinaimg.cn/large/005IQkzXly1g1aq6udkhfj30fr02ijrd.jpg)
+![react](https://ww1.sinaimg.cn/large/005IQkzXly1g1aq6udkhfj30fr02ijrd.jpg)
 **angular**
-![angular](http://ww1.sinaimg.cn/large/005IQkzXly1g1aq6g16hkj30dk048q2y.jpg)
+![angular](https://ww1.sinaimg.cn/large/005IQkzXly1g1aq6g16hkj30dk048q2y.jpg)
