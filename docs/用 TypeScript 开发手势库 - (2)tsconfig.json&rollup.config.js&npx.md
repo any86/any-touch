@@ -45,6 +45,7 @@ const banner =
 export default {
     input: './src/main.ts',
     plugins: [
+        // 代码中的__VERSION__字符串会被package.json中的version字段所替代
         replace({
             __VERSION__: pkg.version
         }),
