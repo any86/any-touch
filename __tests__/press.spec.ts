@@ -9,13 +9,11 @@ test('press|pressup事件是否正确?', async(done) => {
     const at = new AnyTouch(el);
     let lastTime: number;
     at.on('press', ({ type, timestamp }) => {
-        console.log('press');
         lastTime = timestamp;
         expect(type).toBe('press');
     });
 
     at.on('pressup', ({ type, timestamp }) => {
-        console.log('pressup');
         expect(timestamp - lastTime).toBeGreaterThanOrEqual(MIN_PRESS_TIME);
         expect(type).toBe('pressup');
         
