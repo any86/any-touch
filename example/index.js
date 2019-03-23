@@ -48,10 +48,9 @@ new Vue({
         });
         const tap = anyTouch.get('tap').set({pointLength:1})
 
-        console.log(anyTouch);
-
 
         const pan = anyTouch.get('pan');
+
         pan.set({
             threshold: 10,
             disabled: false,
