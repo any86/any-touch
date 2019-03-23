@@ -9,14 +9,20 @@
 [downloads-image]: https://img.shields.io/npm/dm/any-touch.svg
 [downloads-url]: https://npmjs.org/package/any-touch
 
+
 :wave:  一个手势库, 支持mouse和touch, 支持自定义手势.
 
 ## 快速到达
 [例子](#例子)
+
 [安装](#安装)
+
 [CDN](#CDN)
+
 [开始](#开始)
+
 [用法](#用法)
+
 [事件对象ev](#事件对象)
 
 
