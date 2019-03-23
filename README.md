@@ -13,7 +13,7 @@
 :wave:  一个手势库, 支持mouse和touch, 支持自定义手势.
 
 ## 直达
-[demo](#demo)
+[例子](#例子)
 
 [安装](#安装)
 
@@ -24,8 +24,6 @@
 [用法](#用法)
 
 
-
-
 ## 概念
 
 ### 识别器
@@ -34,7 +32,7 @@
 ### requireFailure
 如果你需要某2个手势的触发条件是互斥的, 那么就需要通过requireFailure来标记他们, 当一个"识别失败"另一个才能触发, 如[单击和双击](#requireFailure)就是互斥关系的2个手势.
 
-## demo
+## 例子
 [基础](https://codepen.io/russell2015/pen/rRmQaw#)
 
 [自定义手势-双击](https://codepen.io/russell2015/pen/xBrgjJ)
@@ -112,6 +110,9 @@ rotatestart/rotatemove/rotateend
 
 
 ## 用法
+
+
+
 ### 初始化设置
 ```javascript
 // 设置
