@@ -1,6 +1,5 @@
 # any-touch  [![NPM Version][npm-image]][npm-url] [![NPM Downloads][downloads-image]][downloads-url] [![npm bundle size (minified + gzip)][size-image]][size-url] [![codecov](https://codecov.io/gh/383514580/any-touch/branch/develop/graph/badge.svg)](https://codecov.io/gh/383514580/any-touch)  [![CircleCI](https://circleci.com/gh/383514580/any-touch.svg?style=svg)](https://circleci.com/gh/383514580/any-touch)
 
-:wave:    一个手势库
 
 [size-image]: https://img.shields.io/bundlephobia/minzip/any-touch.svg
 [size-url]: https://bundlephobia.com/result?p=any-touch
@@ -10,9 +9,24 @@
 [downloads-image]: https://img.shields.io/npm/dm/any-touch.svg
 [downloads-url]: https://npmjs.org/package/any-touch
 
-## 核心功能
-- [x] 支持手势: 点击(tap) | 拖拽(pan) | 划过(swipe) | 捏合缩放(pinch) | 旋转(rotate).
-- [x] 支持鼠标(mouse)和移动设备(touch)
+:wave:  一个手势库, 支持mouse和touch, 支持自定义手势.
+
+## 快速到达
+[例子](#例子)
+[安装](#安装)
+[CDN](#CDN)
+[开始](#开始)
+[用法](#用法)
+[事件对象ev](#事件对象)
+
+
+## 需知概念
+
+### 识别器
+**识别器**就是识别如下手势的代码逻辑: 点击(tap) | 拖拽(pan) | 划(swipe) | 捏合缩放(pinch) | 旋转(rotate).
+
+### requireFailure
+如果你需要某2个手势的触发条件是互斥的, 那么就需要通过requireFailure来标记他们, 当一个"识别失败"另一个才能触发, 如[单击和双击](#requireFailure)就是互斥关系的2个手势.
 
 ## 例子
 [基础](https://codepen.io/russell2015/pen/rRmQaw#)
@@ -35,38 +49,16 @@ https://unpkg.com/any-touch
 ## 开始
 ```javascript
 import AnyTouch from 'any-touch';
-
-// 初始化
-const el = doucument.getElementById('gesture-box');
+const el = doucument.getElementById('box');
 const at = new AnyTouch(el);
-
 // 单击
 at.on('tap', ev=>{
-    console.log(ev);
-});
-
-// 拖拽
-at.on('pan', ev=>{
-    console.log(ev);
-});
-
-// 快速划
-at.on('swipe', ev=>{
-    console.log(ev);
-});
-
-// 缩放
-at.on('pinch', ev=>{
-    console.log(ev);
-});
-
-// 旋转
-at.on('rotate', ev=>{
-    console.log(ev);
+    // 阻止默认事件触发, 比如click
+    ev.preventDefault();
 });
 ```
 
-### 手势扩展
+## 还有哪些手势?
 根据状态和方向的不同, 还有更具体的事件.
 #### press
 pressup: press触发后, 触点移开触发.
@@ -80,7 +72,7 @@ pinchstart/pinchmove/pinchend
 #### rotate
 rotatestart/rotatemove/rotateend
 
-### 事件对象(ev)
+## 事件对象(ev)
 |名称|数据类型|说明
 |---|---|---|
 |type|`String`|事件名, 如tap/pan等|
@@ -112,7 +104,37 @@ rotatestart/rotatemove/rotateend
 |timestamp|`Number`|当前时间|
 |**nativeEvent**|`TouchEvent`|MouseEvent`|原生事件对象|
 
-### 自定义识别器
+
+## 用法
+### 初始化设置
+```javascript
+// 设置
+const options = {
+    touchAction: 'compute',
+    hasDomEvents: true,
+    isPreventDefault: false,
+    style: {}
+};
+// 初始化
+const el = doucument.getElementById('box');
+const at = new AnyTouch(el, options);
+```
+|名称|类型|默认值|说明|
+|---|---|---|---|
+|touchAction|`String`|'compute'|元素css的**touch-action**属性, compute代表由系统根据加载的手势计算, 其他值为为不同css设置.|
+|hasDomEvents|`Boolean`|true|是否触发dom事件|
+|isPreventDefault|`Boolean`|false|是否阻止默认事件|
+|style|`Object`|[查看更多]()|一些提高操作流程体验的样式|
+
+### 删除识别器
+```javascript
+at.remove('pan');
+at.on('pan', ev=>{
+    // 不会执行到这里的代码
+});
+```
+
+### requireFailure
 ``` javascript
 // 自定义一个双击识别器
 const tap2 = new AnyTouch.Tap({
@@ -135,7 +157,6 @@ const tap1 = anyTouch.get('tap');
 tap1.requireFailure(tap2);
 ```
 
-## API
 ### stop
 阻止后续的识别器(tap/pan/rotate等)进行识别.
 ```javascript
