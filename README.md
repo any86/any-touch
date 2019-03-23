@@ -101,7 +101,7 @@ rotatestart/rotatemove/rotateend
 |isFinal|`Boolean`|是否当前识别周期的结束|
 |target|`EventTarget`|绑定事件的元素|
 |currentTarget|`EventTarget`|实际触发绑定事件的元素|
-|timestamp|`Number`|当前时间|
+|timestamp|`Number`|**当前时间**|
 |**nativeEvent**|`TouchEvent`|MouseEvent`|原生事件对象|
 
 

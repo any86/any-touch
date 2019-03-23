@@ -162,10 +162,6 @@ export default {
 ## 彩蛋
 其实**npx**并不是本文主角,但是**如果**你的tsc不是全局安装的, 那么你在命令行运行tsc会提示找不到他, 但是如果你用`npx tsc`那么他就会**运行你本地的node_modules中的tsc命令**, 惊不惊喜.
 
-## 为啥还没到写代码?
-2期了都还没有讲到代码, 估计大家都着急, 莫着急,下一期开始咱们就讲代码了, 平时上班工作实在是忙, 都是晚上更新文章, 这个周末我会多写点, 如果实在迫不及待也可以先看看我写好的代码预热下: 
-[https://github.com/383514580/any-touch](https://github.com/383514580/any-touch)
-
 ## 补充说明
 如果你了解webpack和rollup的不同下面内容可以跳过.
 
@@ -183,3 +179,8 @@ export default {
 ![react](https://ww1.sinaimg.cn/large/005IQkzXly1g1aq6udkhfj30fr02ijrd.jpg)
 **angular**
 ![angular](https://ww1.sinaimg.cn/large/005IQkzXly1g1aq6g16hkj30dk048q2y.jpg)
+
+## 为什么还没到写代码?
+2期了都还没有讲到代码, 估计大家都着急, 莫着急,下一期开始咱们就讲代码了, 平时上班工作实在是忙, 都是晚上更新文章, 这个周末我会多写点, 如果实在迫不及待也可以先看看我写好的代码预热下: 
+
+[https://github.com/383514580/any-touch](https://github.com/383514580/any-touch)
