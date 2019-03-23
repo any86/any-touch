@@ -13,7 +13,7 @@
 :wave:  一个手势库, 支持mouse和touch, 支持自定义手势.
 
 ## 直达
-[例子](#例子)
+[demo](#demo)
 
 [安装](#安装)
 
@@ -26,7 +26,7 @@
 
 
 
-## 需知概念
+## 概念
 
 ### 识别器
 **识别器**就是识别如下手势的代码逻辑: 点击(tap) | 拖拽(pan) | 划(swipe) | 捏合缩放(pinch) | 旋转(rotate).
@@ -34,7 +34,7 @@
 ### requireFailure
 如果你需要某2个手势的触发条件是互斥的, 那么就需要通过requireFailure来标记他们, 当一个"识别失败"另一个才能触发, 如[单击和双击](#requireFailure)就是互斥关系的2个手势.
 
-## 例子
+## demo
 [基础](https://codepen.io/russell2015/pen/rRmQaw#)
 
 [自定义手势-双击](https://codepen.io/russell2015/pen/xBrgjJ)
@@ -164,7 +164,7 @@ tap1.requireFailure(tap2);
 ```
 
 ### stop
-阻止后续的识别器(tap/pan/rotate等)进行识别.
+阻止后续的识别器执行.
 ```javascript
 
 // 通过recognizers属性, 我们可以知道识别器的顺序.
@@ -176,5 +176,3 @@ at.on('rotate', ()=>{
   at.stop();
 });
 ```
-
-
