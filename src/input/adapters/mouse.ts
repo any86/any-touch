@@ -10,7 +10,7 @@ export default (event: MouseEvent): BaseInput | void => {
     // 所以暂时如此实现
     const changedPointers = prevPointers || [{ clientX, clientY }];
 
-    let pointers = [{ clientX, clientY }];
+    let points = [{ clientX, clientY }];
     prevPointers = [{ clientX, clientY }];
 
     // 必须左键
@@ -30,7 +30,7 @@ export default (event: MouseEvent): BaseInput | void => {
         // }
     } else if ('mouseup' === type) {
         if (isPressed) {
-            pointers = [];
+            points = [];
         } else {
             return;
         };
@@ -46,7 +46,7 @@ export default (event: MouseEvent): BaseInput | void => {
     return {
         eventType: <eventType>MAP[<'mousedown' | 'mousemove' | 'mouseup'>type],
         changedPointers,
-        pointers,
+        points,
         nativeEvent: event
     };
 }; 

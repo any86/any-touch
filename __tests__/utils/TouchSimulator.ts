@@ -50,15 +50,15 @@ export default class TouchSimulator {
      * @param {ELement} dom元素
      * @param {Pointer[]} 触点
      */
-    public dispatchTouchStart(pointers: Pointer[]) {
+    public dispatchTouchStart(points: Pointer[]) {
         let type = 'touch' === this.device ? 'touchstart' : 'mousedown';
         let event: any = new Event(type, {});
         if ('touch' === this.device) {
-            event.touches = pointers.map(({ x, y }) => ({ [CLIENT_X]: x, [CLIENT_Y]: y }));
+            event.touches = points.map(({ x, y }) => ({ [CLIENT_X]: x, [CLIENT_Y]: y }));
             event.changedTouches = diff(event.touches, this.prevTouches);
         } else {
-            event[CLIENT_X] = pointers[0].x;
-            event[CLIENT_Y] = pointers[0].y;
+            event[CLIENT_X] = points[0].x;
+            event[CLIENT_Y] = points[0].y;
             event.button = 0;
         }
         this.prevTouches = event.touches;
@@ -71,20 +71,20 @@ export default class TouchSimulator {
      * @param {ELement} dom元素
      * @param {Pointer[]} 触点
      */
-    public dispatchTouchMove(pointers: Pointer[]) {
+    public dispatchTouchMove(points: Pointer[]) {
         let type = 'touch' === this.device ? 'touchmove' : 'mousemove';
         let event: any = new Event(type, {});
 
         if ('touch' === this.device) {
             // 对应点不同就放进changedTouches;
-            event.touches = pointers.map(({ x, y }) => ({ [CLIENT_X]: x, [CLIENT_Y]: y }));
+            event.touches = points.map(({ x, y }) => ({ [CLIENT_X]: x, [CLIENT_Y]: y }));
             event.changedTouches = diff(event.touches, this.prevTouches);
 
             this.prevTouches = event.touches;
             this.el.dispatchEvent(event);
         } else {
-            event[CLIENT_X] = pointers[0].x;
-            event[CLIENT_Y] = pointers[0].y;
+            event[CLIENT_X] = points[0].x;
+            event[CLIENT_Y] = points[0].y;
             window.dispatchEvent(event);
         }
         return event;

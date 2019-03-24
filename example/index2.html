@@ -36,7 +36,7 @@
         // create a simple instance
         // by default, it only adds horizontal recognizers
         var mc = new Hammer(myElement);
-        var pan2 = new Hammer.Pan({ event: 'pan2', pointers: 2 });
+        var pan2 = new Hammer.Pan({ event: 'pan2', points: 2 });
         mc.get('pinch').set({enable:true,threshold:0.1})
         mc.add(pan2)
         // let the pan gesture support all directions.
