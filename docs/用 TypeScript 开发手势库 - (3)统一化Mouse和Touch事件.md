@@ -5,6 +5,7 @@
 
 ## 往期目录
 [用 TypeScript 开发手势库 - (1)web开发常用手势有哪些?](https://juejin.im/post/5c8fc2105188252d72550acf)
+
 [用 TypeScript 开发手势库 - (2)web开发常用手势有哪些?](https://juejin.im/post/5c939c956fb9a0710a1bc90c)
 
 ## 简单看下架构
@@ -126,9 +127,16 @@ export default (event: MouseEvent): BaseInput | void => {
 #### isFinal
 是否本轮识别周期的结束, 如果当前的**eventType**为end或者cancel阶段, 且所有触点均离开, 那么判定为结束.
 
+#### preventDefault
+nativeEvent上的preventDefault, 阻止默认事件.
+
+
 扩展字段的源码比较长, 请移步至[仓库](https://github.com/383514580/any-touch/blob/master/src/input/create.ts).
 
 ## 下期预告
 下期我们会讲解computed, 计算阶段比较复杂, 设计到input的开始/前一个/当前状态的计算, 大家可以提前预热.
 
+![compute](https://ws1.sinaimg.cn/large/005IQkzXly1g1ea8jzk45j307j07pq2w.jpg)
+
 [compute部分源码](https://github.com/383514580/any-touch/tree/master/src/compute)
+
