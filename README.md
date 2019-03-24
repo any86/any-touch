@@ -181,7 +181,7 @@ at.on('rotate', ()=>{
 #### AnyTouch.Tap.constructor([options])
 |名称|数据类型|默认值|说明|
 |---|---|---|---|
-|name|`String`|'tap'|识别器名称,可供其他方法快捷调用, 如: `anyTouch.remove('tap)`|
+|name|`String`|'tap'|识别器名称,可供其他方法快捷调用, 如: `anyTouch.remove('tap')`|
 |pointLength|`Number`|支持的触点数|'tap'|过滤非pointLength个数的触点输入|
 |tapTimes|`Number`| 1 | 过滤非tapTimes次数的点击的输入|
 |waitNextTapTime|`Number`|300| 等待下一次点击的时间, 单位ms|
@@ -195,8 +195,8 @@ at.on('rotate', ()=>{
 #### AnyTouch.Press.constructor([options])
 |名称|数据类型|默认值|说明|
 |---|---|---|---|
-|name|`String`|'tap'|识别器名称,可供其他方法快捷调用, 如: `anyTouch.remove('tap)`|
-|pointLength|`Number`|支持的触点数|'tap'|过滤非pointLength个数的触点输入|
+|name|`String`|'press'|识别器名称,可供其他方法快捷调用, 如: `anyTouch.remove('press')`|
+|pointLength|`Number`|支持的触点数|'press'|过滤非pointLength个数的触点输入|
 |positionTolerance| `Number`|2|触点发生位移的最大容差|
 |minPressTime| `Number`|251|按住屏幕超过251ms才算识别成功|
 
@@ -205,8 +205,8 @@ at.on('rotate', ()=>{
 #### AnyTouch.Pan.constructor([options])
 |名称|数据类型|默认值|说明|
 |---|---|---|---|
-|name|`String`|'tap'|识别器名称,可供其他方法快捷调用, 如: `anyTouch.remove('tap)`|
-|pointLength|`Number`|支持的触点数|'tap'|过滤非pointLength个数的触点输入|
+|name|`String`|'pan'|识别器名称,可供其他方法快捷调用, 如: `anyTouch.remove('pan')`|
+|pointLength|`Number`|支持的触点数|'pan'|过滤非pointLength个数的触点输入|
 |threshold| `Number`|10|超过10px, 才开始识别|
 |directions| `Array`|['up', 'right', 'down', 'left']|支持的方向|
 
@@ -215,31 +215,31 @@ at.on('rotate', ()=>{
 #### AnyTouch.Swipe.constructor([options])
 |名称|数据类型|默认值|说明|
 |---|---|---|---|
-|name|`String`|'tap'|识别器名称,可供其他方法快捷调用, 如: `anyTouch.remove('tap)`|
-|pointLength|`Number`|支持的触点数|'tap'|过滤非pointLength个数的触点输入|
+|name|`String`|'swipe'|识别器名称,可供其他方法快捷调用, 如: `anyTouch.remove('swipe')`|
+|pointLength|`Number`|支持的触点数|过滤非pointLength个数的触点输入|
 |velocity|`Number`|0.3|速度超过0.3px/ms, 才可开始识别|
-|threshold| `Number`|10|超过10px, 才开始识别|
+|threshold| `Number`|10|滑动距离超过10px, 才开始识别|
 |directions| `Array`|['up', 'right', 'down', 'left']|支持的方向|
 
 ### AnyTouch.Pinch
-**啮合**识别器
+**缩放**识别器
 #### AnyTouch.Pinch.constructor([options])
 |名称|数据类型|默认值|说明|
 |---|---|---|---|
-|name|`String`|'tap'|识别器名称,可供其他方法快捷调用, 如: `anyTouch.remove('tap)`|
-|pointLength|`Number`|支持的触点数|'tap'|过滤非pointLength个数的触点输入|
+|name|`String`|'pinch'|识别器名称,可供其他方法快捷调用, 如: `anyTouch.remove('pinch')`|
+|pointLength|`Number`|支持的触点数|过滤非pointLength个数的触点输入|
 |threshold|`Number`|0|触发事件所需要的最小缩放比例|
 
 ### AnyTouch.Rotate
-**啮合**识别器
+**旋转**识别器
 #### AnyTouch.Rotate.constructor([options])
 |名称|数据类型|默认值|说明|
 |---|---|---|---|
-|name|`String`|'tap'|识别器名称,可供其他方法快捷调用, 如: `anyTouch.remove('tap)`|
-|pointLength|`Number`|支持的触点数|'tap'|过滤非pointLength个数的触点输入|
+|name|`String`|'rotate'|识别器名称,可供其他方法快捷调用, 如: `anyTouch.remove('rotate')`|
+|pointLength|`Number`|支持的触点数|过滤非pointLength个数的触点输入|
 |threshold|`Number`|0|触发事件所需要的最小角度|
 
-### 识别器通用方法和属性
+### 识别器公有方法和属性
 Rotate/ Pinch/ Pan/ Swipe/ Tap/ Press上均存在下列方法和属性.
 
 #### requireFailure(recognizer)
