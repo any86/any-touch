@@ -30,9 +30,9 @@ export default (event: Event): Input | void => {
     const pointLength: number = points.length;
 
     // 变化前触点数
-    const changedpointLength: number = changedPoints.length;
+    const changedPointLength: number = changedPoints.length;
     // 识别流程的开始和结束标记
-    const isFirst = (INPUT_START === eventType) && (0 === changedpointLength - pointLength);
+    const isFirst = (INPUT_START === eventType) && (0 === changedPointLength - pointLength);
     const isFinal = (INPUT_END === eventType || INPUT_CANCEL === eventType) && (0 === pointLength);
 
     // 中心坐标
@@ -54,7 +54,7 @@ export default (event: Event): Input | void => {
         isFirst,
         isFinal,
         pointLength,
-        changedpointLength,
+        changedPointLength,
         center: _center,
         x, y,
         timestamp,

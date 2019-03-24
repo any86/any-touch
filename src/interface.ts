@@ -22,7 +22,7 @@ export interface Input extends BaseInput {
     isFinal: boolean;
     pointLength: number;
     // 发生改变的触点数据
-    changedpointLength: number;
+    changedPointLength: number;
     // 当前时间
     timestamp: number;
     target: EventTarget | null;
