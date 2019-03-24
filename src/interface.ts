@@ -10,11 +10,7 @@ export interface Point {
 
 export interface BaseInput {
     eventType: eventType;
-<<<<<<< HEAD
-    changedPointers: { clientX: number, clientY: number }[];
-=======
     changedPoints: { clientX: number, clientY: number }[];
->>>>>>> 1f3d19f9952b09ef36ab60d28555708334016a3c
     points: { clientX: number, clientY: number }[];
     nativeEvent: Event;
 }

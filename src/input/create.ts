@@ -25,11 +25,7 @@ export default (event: Event): Input | void => {
             return;
         }
     }
-<<<<<<< HEAD
-    const { eventType, points, changedPointers } = baseInput;
-=======
     const { eventType, points, changedPoints } = baseInput;
->>>>>>> 1f3d19f9952b09ef36ab60d28555708334016a3c
     // 当前触点数
     const pointLength: number = points.length;
 
