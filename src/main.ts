@@ -117,7 +117,6 @@ export default class AnyTouch {
         ];
         // 应用设置
         this.update();
-
         // 绑定事件
         this.unbind = this._bindRecognizers(this.el).unbind;
     };

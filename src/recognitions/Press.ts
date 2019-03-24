@@ -11,9 +11,8 @@ export default class PressRecognizer extends Recognizer {
     static DEFAULT_OPTIONS = {
         name: 'press',
         pointLength: 1,
-        threshold: 9,
+        positionTolerance: 9,
         minPressTime: 251,
-        disabled: false
     };
     constructor(options = {}) {
         super(options);
@@ -61,7 +60,7 @@ export default class PressRecognizer extends Recognizer {
      * 移动距离不大
      */
     test({ distance}: Computed): boolean {
-        return this.options.threshold > distance;
+        return this.options.positionTolerance > distance;
     };
 
     cancel(): void {
