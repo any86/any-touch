@@ -1,17 +1,17 @@
 import { BaseInput, eventType } from '../../interface';
-let prevPointers: { clientX: number, clientY: number }[];
+let prevPoints: { clientX: number, clientY: number }[];
 let isPressed = false;
 // 默认MouseEvent中对type声明仅为string
 export default (event: MouseEvent): BaseInput | void => {
     let { clientX, clientY, type, button } = event;
 
-    // changedPointers = prevPointers其实并不能完全等于touch下的changedPointers
+    // changedPoints = prevPoints其实并不能完全等于touch下的changedPoints
     // 但是由于鼠标没有多点输入的需求, 
     // 所以暂时如此实现
-    const changedPointers = prevPointers || [{ clientX, clientY }];
+    const changedPoints = prevPoints || [{ clientX, clientY }];
 
-    let pointers = [{ clientX, clientY }];
-    prevPointers = [{ clientX, clientY }];
+    let points = [{ clientX, clientY }];
+    prevPoints = [{ clientX, clientY }];
 
     // 必须左键
     if ('mousedown' === type) {
@@ -30,7 +30,7 @@ export default (event: MouseEvent): BaseInput | void => {
         // }
     } else if ('mouseup' === type) {
         if (isPressed) {
-            pointers = [];
+            points = [];
         } else {
             return;
         };
@@ -45,8 +45,8 @@ export default (event: MouseEvent): BaseInput | void => {
 
     return {
         eventType: <eventType>MAP[<'mousedown' | 'mousemove' | 'mouseup'>type],
-        changedPointers,
-        pointers,
+        changedPoints,
+        points,
         nativeEvent: event
     };
 }; 

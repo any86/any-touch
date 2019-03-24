@@ -48,7 +48,7 @@ export default function ({
     let deltaScale = 0;
     let angle = 0;
     let deltaAngle = 0;
-    if (undefined !== prevInput && 1 < prevInput.pointers.length && 1 < input.pointers.length) {
+    if (undefined !== prevInput && 1 < prevInput.points.length && 1 < input.points.length) {
         // 2指形成的向量
         const startV = computeVector(startMutliInput);
         const prevV = computeVector(prevInput);

@@ -14,8 +14,8 @@ export default function ({
     if ('start' === eventType) {
         prevDisplacementX = prevDisplacementY = 0;
     } else if ('move' === eventType) {
-        displacementX = round(input.pointers[0][propX] - startInput.pointers[0][propX]);
-        displacementY = round(input.pointers[0][propY] - startInput.pointers[0][propY]);
+        displacementX = round(input.points[0][propX] - startInput.points[0][propX]);
+        displacementY = round(input.points[0][propY] - startInput.points[0][propY]);
 
         // 记录本次位移
         prevDisplacementX = displacementX;
