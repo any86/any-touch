@@ -25,7 +25,7 @@ jobs:
         - restore_cache:
             keys:
             - dependencies-{{ checksum "package.json" }}
-            - dependencies-
+            # - dependencies-
 
         - run: yarn install
         - run: yarn add codecov
