@@ -25,12 +25,16 @@ export default (event: Event): Input | void => {
             return;
         }
     }
+<<<<<<< HEAD
     const { eventType, points, changedPointers } = baseInput;
+=======
+    const { eventType, points, changedPoints } = baseInput;
+>>>>>>> 1f3d19f9952b09ef36ab60d28555708334016a3c
     // 当前触点数
     const pointLength: number = points.length;
 
     // 变化前触点数
-    const changedpointLength: number = changedPointers.length;
+    const changedpointLength: number = changedPoints.length;
     // 识别流程的开始和结束标记
     const isFirst = (INPUT_START === eventType) && (0 === changedpointLength - pointLength);
     const isFinal = (INPUT_END === eventType || INPUT_CANCEL === eventType) && (0 === pointLength);
