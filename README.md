@@ -145,7 +145,7 @@ at.on('tap', ev=>{
 #### set(options)
 改变设置
 ```javascript
-at.set({isPreventDefault: true'});
+at.set({isPreventDefault: true});
 ```
 
 #### remove(recognizerName)
