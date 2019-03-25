@@ -5,6 +5,11 @@
 
 ![https://github.com/383514580/any-touch](https://segmentfault.com/img/bVbp3B0?w=936&h=246)
 
+## 往期目录
+[用 TypeScript 开发手势库 - (2)web开发常用手势有哪些?](https://juejin.im/post/5c939c956fb9a0710a1bc90c)
+
+[用 TypeScript 开发手势库 - (3)统一化Mouse和Touch事件](https://juejin.im/post/5c979cd56fb9a070f8407363)
+
 ## 今天我们先不写代码
 今天的文章里我们先不讲代码, 我们讲一下都有哪些手势以及手势的逻辑, 理解了逻辑再写代码就简单了.
 

@@ -7,6 +7,7 @@
 ## 往期目录
 [用 TypeScript 开发手势库 - (1)web开发常用手势有哪些?](https://juejin.im/post/5c8fc2105188252d72550acf)
 
+[用 TypeScript 开发手势库 - (3)统一化Mouse和Touch事件](https://juejin.im/post/5c979cd56fb9a070f8407363)
 
 ## 标题有点长
 今天的标题有点长, 但不难, 讲的都是工具配置和使用, 就3个知识点:
