@@ -16,7 +16,17 @@ new Vue({
         };
     },
     mounted() {
+        // const atBox = new AnyTouch(this.$refs.box, {
+        //     touchAction: 'auto',
+        //     isPreventDefault: false
+        // });
 
+        // atBox.on('panmove', ev => {
+        //     console.log('atBox');
+        // })
+
+
+        
         this.$refs.circle.addEventListener('animationend', e=>{
             this.activeType = 'AnyTouch';
         });
