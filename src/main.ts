@@ -19,7 +19,7 @@
 import AnyEvent from 'any-event';
 import { Computed } from './interface';
 import { SUPPORT_TOUCH } from './const'; ``
-import inputManage from './inputManage';
+import InputManage from './InputManage';
 import compute from './compute/index';
 import computeTouchAction from './untils/computeTouchAction'
 // 识别器
@@ -66,6 +66,8 @@ export default class AnyTouch {
 
     eventEmitter: any;
 
+    inputManage: any;
+
     // 是否阻止后面的识别器运行
     private _isStopped: boolean;
 
@@ -75,6 +77,7 @@ export default class AnyTouch {
      */
     constructor(el: HTMLElement, options?: Options) {
         this.version = '__VERSION__';
+        
         this.default = {
             touchAction: 'compute',
             hasDomEvents: true,
@@ -100,6 +103,7 @@ export default class AnyTouch {
             }
         };
         this.el = el;
+        this.inputManage = new InputManage();
         this.inputType = SUPPORT_TOUCH ? 'touch' : 'mouse';
         this.options = { ...this.default, ...options };
         // eventEmitter
@@ -265,10 +269,13 @@ export default class AnyTouch {
         }
 
         // 管理历史input
-        let inputs = inputManage(event);
 
+        // let inputs = inputManage(event);
+        let inputs = this.inputManage.load(event);
         // 当是鼠标事件的时候, mouseup阶段的input为undefined
         if (undefined !== inputs) {
+            // console.warn(inputs.startInput);
+
             const computed = compute(inputs);
             // 重置停止标记
             if (computed.isFirst) {

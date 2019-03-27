@@ -2,7 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
-## [0.2.4](https://github.com/383514580/a-touch/compare/v0.2.3...v0.2.4) (2019-03-26)
+## [0.2.5](https://github.com/383514580/a-touch/compare/v0.2.4...v0.2.5) (2019-03-27)
+
+
+### Bug Fixes
+
+* 所有适配器改为class模块, 解决在多个实例下, mouse适配器因为isPressed变量会被共享造成的程序错乱 ([63bcc14](https://github.com/383514580/a-touch/commit/63bcc14))
 
 
 
