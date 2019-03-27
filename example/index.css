@@ -281,3 +281,6 @@ main table tr td:nth-child(3) {
         transform: translateX(-300px);
     }
 }
+
+
+.box{padding:50px;position: fixed;top:20%;left:20%;background:#f50;}
