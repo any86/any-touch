@@ -39,6 +39,9 @@
 
 [全部手势展示](https://383514580.github.io/any-touch/example/)
 
+[drawer效果](https://codepen.io/russell2015/pen/jJRbgp?editors=0010)
+
+
 
 ## 安装
 ```javascript
