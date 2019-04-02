@@ -25,17 +25,11 @@ new Vue({
         //     console.log('atBox');
         // })
 
-
         
         this.$refs.circle.addEventListener('animationend', e=>{
             this.activeType = 'AnyTouch';
         });
 
-        const tap2 = new AnyTouch.Tap({
-            name: 'doubletap',
-            pointLength: 1,
-            tapTimes: 2
-        })
         const tap3 = new AnyTouch.Tap({
             name: 'threetap',
             pointLength: 1,
@@ -56,8 +50,8 @@ new Vue({
             touchAction: 'auto',
             isPreventDefault: false
         });
-        const tap = anyTouch.get('tap').set({pointLength:1})
-
+        const tap2 = anyTouch.get('doubletap');
+        tap2.disabled = false;
 
         const pan = anyTouch.get('pan');
 

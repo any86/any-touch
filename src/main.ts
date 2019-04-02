@@ -77,7 +77,7 @@ export default class AnyTouch {
      */
     constructor(el: HTMLElement, options?: Options) {
         this.version = '__VERSION__';
-        
+
         this.default = {
             touchAction: 'compute',
             hasDomEvents: true,
@@ -117,6 +117,12 @@ export default class AnyTouch {
             new Pan().$injectRoot(this),
             new Swipe().$injectRoot(this),
             new Tap().$injectRoot(this),
+            new Tap({
+                name: 'doubletap',
+                pointLength: 1,
+                tapTimes: 2,
+                disabled:true
+            }).$injectRoot(this),
             new Press().$injectRoot(this),
         ];
         // 应用设置

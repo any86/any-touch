@@ -18,9 +18,11 @@ test('仅有tap识别, 事件是否触发', async (done) => {
 });
 
 test('tap与doubletap之间的requireFailure是否生效?', async (done) => {
-    const tap2 = new AnyTouch.Tap({ name: 'doubletap', pointer: 1, tapTimes: 2 })
-    const tap3 = new AnyTouch.Tap({ name: 'threetap', pointer: 1, tapTimes: 3 })
+    
     const at = new AnyTouch(el);
+    const tap2 = at.get('doubletap');
+    tap2.disabled = false;
+    const tap3 = new AnyTouch.Tap({ name: 'threetap', pointerLength: 1, tapTimes: 3 })
     at.add(tap2);
     at.add(tap3);
     const tap1 = at.get('tap');
