@@ -8,7 +8,7 @@
 本文代码非常简单, 请不要被系统预估的阅读时间误导.
 
 **iscroll**其实代码量挺大的(近2100行, 还有另一个类似的库**betterScroll**他的代码量和iscroll差不多, 因为原理都是一样的), 阅读他们的代码
-发现里面很多逻辑**其实都是在做手势判断**, 比如多拽(pan), 和划(swipe), 还有部分元素(表单元素等)需要单独判断点击(tap), 这部分代码接近1/3, 所以我决定用自己开发的手势库(any-touch)实现一个iscroll, 同时配合文字让大家**最终都可以以最少的代码实现一个iscroll**. 
+发现里面很多逻辑**其实都是在做手势判断**, 比如拖拽(pan), 和划(swipe), 还有部分元素(表单元素等)需要单独判断点击(tap), 这部分代码接近1/3, 所以我决定用自己开发的手势库(any-touch)实现一个iscroll, 同时配合文字让大家**最终都可以以最少的代码实现一个iscroll**. 
 
 ## vue
 观察了一段时间推荐排行, 发现大家都对**vue**感兴趣, 所以本次的"iscroll"将以vue组件的形式实现, 同时我也希望借助vue强大的抽象能力, **让最终代码控制在500行以内**, 希望大家喜欢.
@@ -35,7 +35,7 @@
 .any-scroll-view {
     position: relative;
     width: 100%;
-    height: 90vh;
+    height: 90vh; 
     overflow: hidden;
 
     &__body {
@@ -125,7 +125,7 @@ export default {
 
         /**
          * 移动body
-         * @param {Object} 多拽产生的数据
+         * @param {Object} 拖拽产生的数据
          *  @param {Number} deltaX: x轴位移变化
          *  @param {Number} deltaY: y轴位移变化
          */
@@ -182,7 +182,9 @@ export default {
 };
 ```
 
-
+## 下一期
+大家也发现了, 只有页面在滚动, 没有滚动条, 所以下期我们讲如何给scroll-view加上滚动条.
 
 ## 有不明白的地方
-请留言, 知无不言, 言无不尽. 如觉得本文对您有帮助, 就请给[any-touch](https://github.com/383514580/any-touch)一个star吧, 谢谢
+请留言, 知无不言, 言无不尽. 如觉得本文对您有帮助, 就请给[any-touch](https://github.com/383514580/any-touch)一个star吧, 谢谢.
+
