@@ -1,26 +1,9 @@
-import sleep from './sleep';
+import arrayDiff from './arrayDiff';
+
 function isEqual(a: any, b: any) {
     return a.clientX === b.clientX && a.clientY === b.clientY;
 };
 
-function diff(a: any, b: any) {
-    let arrDiff = [];
-    for (let i in a) {
-        let hasSame = false;
-        for (let j in b) {
-            if (null !== b[j] && !isEqual(a[i], b[j])) {
-                hasSame = false;
-                
-            } else {
-                b[j] = null;
-                hasSame = true;
-                break;
-            }
-        }
-        if(!hasSame) arrDiff.push(a[i]);
-    }
-    return [...arrDiff, ...b.filter((item:any)=> null !== item)];
-}
 interface Pointer {
     x: number;
     y: number;
@@ -55,7 +38,7 @@ export default class TouchSimulator {
         let event: any = new Event(type, {});
         if ('touch' === this.device) {
             event.touches = points.map(({ x, y }) => ({ [CLIENT_X]: x, [CLIENT_Y]: y }));
-            event.changedTouches = diff(event.touches, this.prevTouches);
+            event.changedTouches = arrayDiff(event.touches, this.prevTouches, isEqual);
         } else {
             event[CLIENT_X] = points[0].x;
             event[CLIENT_Y] = points[0].y;
@@ -78,7 +61,7 @@ export default class TouchSimulator {
         if ('touch' === this.device) {
             // 对应点不同就放进changedTouches;
             event.touches = points.map(({ x, y }) => ({ [CLIENT_X]: x, [CLIENT_Y]: y }));
-            event.changedTouches = diff(event.touches, this.prevTouches);
+            event.changedTouches = arrayDiff(event.touches, this.prevTouches,isEqual);
 
             this.prevTouches = event.touches;
             this.el.dispatchEvent(event);
@@ -116,7 +99,7 @@ export default class TouchSimulator {
      */
     public dispatchTouchCancel() {
         let event: any = new Event('touchcancel', {});
-        event.changedTouches = diff(event.touches, this.prevTouches);
+        event.changedTouches = arrayDiff(event.touches, this.prevTouches, isEqual);
         event.touches = [];
         this.prevTouches = event.touches;
         this.el.dispatchEvent(event);

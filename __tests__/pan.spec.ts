@@ -32,7 +32,6 @@ test('通过多点pan, 测试Pan构造函数是否正确?', (done) => {
         });
 
         at.on(`panend`, (ev) => {
-            // at.destroy();
             done();
         });
         // 模拟事件
