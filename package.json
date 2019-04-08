@@ -56,7 +56,8 @@
     "standard-version": "^4.4.0",
     "ts-jest": "^23.10.4",
     "tslib": "^1.9.3",
-    "typescript": "^3.0.1"
+    "typescript": "^3.0.1",
+    "vue": "^2.6.10"
   },
   "dependencies": {
     "any-event": "^0.3.4"
