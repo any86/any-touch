@@ -17,6 +17,7 @@
  * 格式化Event成统一的pointer格式 => 通过pointer数据计算 => 用计算结果去识别手势
  */
 import AnyEvent from 'any-event';
+import VueDirective from './vueDirective';
 import { Computed } from './interface';
 import { SUPPORT_TOUCH } from './const'; ``
 import InputManage from './InputManage';
@@ -44,6 +45,9 @@ export default class AnyTouch {
     static Swipe = Swipe;
     static Pinch = Pinch;
     static Rotate = Rotate;
+
+    // vue指令版
+    static vTouch = VueDirective;
 
     // 向量计算
     static Vector = Vector;
@@ -351,7 +355,7 @@ export default class AnyTouch {
     /**
      * 解绑所有触摸事件
      */
-    public unbind(): void { };
+    unbind(): void { };
 
     /**
      * 销毁

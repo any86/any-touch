@@ -24,8 +24,9 @@ new Vue({
         // atBox.on('panmove', ev => {
         //     console.log('atBox');
         // })
+console.log(AnyTouch.vTouch);
 
-        
+
         this.$refs.circle.addEventListener('animationend', e=>{
             this.activeType = 'AnyTouch';
         });

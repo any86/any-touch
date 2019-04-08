@@ -16,7 +16,7 @@
   "scripts": {
     "release": "npm run test && standard-version && npm run build && npm pub && git push",
     "release-no-test": "standard-version && npm run build && npm pub && git push",
-    "build": "rimraf dist && rimraf lib && tsc && rollup -c",
+    "build": "rimraf dist && rimraf lib && tsc && rollup -c a.js",
     "dev": "rimraf dist && rollup -c --watch",
     "test": "jest",
     "test-no-cache": "jest --no-cache",
@@ -37,6 +37,7 @@
   "homepage": "https://github.com/383514580/any-touch#readme",
   "devDependencies": {
     "@types/jest": "^23.3.5",
+    "any-touch": "^0.2.8",
     "chalk": "^2.4.2",
     "commitizen": "^3.0.5",
     "cz-conventional-changelog": "^2.1.0",
