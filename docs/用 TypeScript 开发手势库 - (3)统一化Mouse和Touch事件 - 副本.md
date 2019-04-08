@@ -33,7 +33,7 @@ eventType可以理解为输入状态, 如touchstart/mousedown对应**start**, to
 如果是touch设备, 那么对应touchEvent, 鼠标对应MouseEvent.
 
 **处理touchEvent**
-```typescript
+```javascript
 export default (event: TouchEvent): any => {
     const point = Array.from(event.touches).map(({clientX,clientY})=>({clientX,clientY}));
     const changedPoints = Array.from(event.changedTouches).map(({clientX,clientY})=>({clientX,clientY}));
@@ -47,7 +47,7 @@ export default (event: TouchEvent): any => {
 }; 
 ```
 **处理mouseEvent**
-```typescript
+```javascript
 let prevPoints: { clientX: number, clientY: number }[];
 let isPressed = false;
 // 默认MouseEvent中对type声明仅为string
