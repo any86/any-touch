@@ -1,4 +1,3 @@
-import AnyTouch from 'any-touch';
 import { Computed } from '../interface';
 import { VueConstructor } from 'Vue/types/vue';
 import InstanceManage from './InstanceManage';
@@ -9,7 +8,7 @@ const plugin = {
     install(Vue: VueConstructor) {
         const _bindEvent = (el: HTMLElement, binding: any) => {
             let instance = iManage.getOrCreateInstanceByEl(el);
-
+            
             // 绑定事件
             instance.on(binding.arg, (ev: Computed) => {
                 if (!!binding.modifiers.preventDefault) {
@@ -51,8 +50,8 @@ const plugin = {
 };
 
 // 自动加载插件
-if (typeof <any>window !== 'undefined' && (<any>window).Vue) {
-    (<any>window).Vue.use(plugin);
-};
+// if (typeof <any>window !== 'undefined' && (<any>window).Vue) {
+//     (<any>window).Vue.use(plugin);
+// };
 
 export default plugin;

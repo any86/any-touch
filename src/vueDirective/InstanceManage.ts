@@ -1,4 +1,4 @@
-import AnyTouch from 'any-touch';
+import AnyTouch from '../AnyTouch';
 interface Manage { el: HTMLElement, instance: AnyTouch };
 /**
  * 管理实例和元素的映射关系
@@ -13,7 +13,7 @@ export default class {
     /**
     * 获取元素在_manages中的索引
     * @param {Element} 元素 
-    * @returns {Number} 元素索引
+    * @returns {Number} 元素索引 
     */
     getManageIndex(el: HTMLElement): number {
         for (let i = 0, len = this.manages.length; i < len; i++) {
