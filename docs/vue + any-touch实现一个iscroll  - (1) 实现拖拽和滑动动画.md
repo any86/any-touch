@@ -6,10 +6,11 @@
 ## 先看demo
 [demo](https://jsrun.net/WFXKp)
 
-## 说点湿的
-![](https://ws1.sinaimg.cn/large/005IQkzXly1g1talg166jj30dw0cqjrq.jpg)
-本文代码非常简单, 请不要被系统预估的阅读时间误导.
+**本次文章先实现内容拖拽, 后续文章一步一步增加功能, 比如滚动条/ 下拉加载等功能.**
 
+![](https://user-gold-cdn.xitu.io/2019/4/7/169f5d0406d46d1b?w=640&h=489&f=gif&s=1397496)
+
+## 说点湿的
 **iscroll**其实代码量挺大的(近2100行, 还有另一个类似的库**betterScroll**他的代码量和iscroll差不多, 因为原理都是一样的), 阅读他们的代码
 发现里面很多逻辑**其实都是在做手势判断**, 比如拖拽(pan), 和划(swipe), 还有部分元素(表单元素等)需要单独判断点击(tap), 这部分代码接近1/3, 所以我决定用自己开发的手势库(any-touch)实现一个iscroll, 同时配合文字让大家**最终都可以以最少的代码实现一个iscroll**. 
 
