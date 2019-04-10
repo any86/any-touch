@@ -8,7 +8,11 @@ const plugin = {
     install(Vue: VueConstructor) {
         const _bindEvent = (el: HTMLElement, binding: any) => {
             let instance = iManage.getOrCreateInstanceByEl(el);
-            
+            const CONFIG_REGEXP = /\-config$/;
+            // 不包含"-"
+            const GESTURE_REGEXP = /^((?!-).)*$/
+
+
             // 绑定事件
             instance.on(binding.arg, (ev: Computed) => {
                 if (!!binding.modifiers.preventDefault) {
@@ -17,7 +21,7 @@ const plugin = {
                 // if (binding.modifiers.self && el !== e.target) return;
                 binding.value(ev);
             });
-            console.log(iManage.manages);
+            console.log(binding.arg);
         };
 
         /**

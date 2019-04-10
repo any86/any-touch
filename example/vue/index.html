@@ -5,13 +5,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Vue版本</title>
+    <title>v-touch</title>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="https://res.wx.qq.com/mmbizwap/zh_CN/htmledition/js/vconsole/3.0.0/vconsole.min.js"></script>
     <script src="../../dist/AnyTouch.umd.js"></script>
     <style>
+        body{margin:0;}
         .box {
             padding: 100px;
+            margin:30px;
             background: #ccc;
         }
     </style>
@@ -20,8 +22,10 @@
 <body>
     <main id="app">
         <div 
+            v-touch:pan-config="{abc:123}"
             v-touch:pan="panHandler" 
             v-touch:tap="tapHandler"
+            v-touch:swipe="swipeHandler"
             class="box">{{msg}}</div>
     </main>
     <script>
@@ -35,6 +39,10 @@
                 };
             },
             methods: {
+                swipeHandler(ev){
+                    console.log(ev.type);
+                },
+
                 panHandler(ev) {
                     console.log(ev.type);
                 },

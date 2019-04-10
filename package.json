@@ -60,7 +60,7 @@
     "vue": "^2.6.10"
   },
   "dependencies": {
-    "any-event": "^0.3.4"
+    "any-event": "^0.3.5"
   },
   "config": {
     "commitizen": {
