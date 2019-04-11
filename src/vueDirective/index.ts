@@ -1,3 +1,5 @@
+// 注意: 由于vue指令没办法对指令进行优先级设置, 所以指令版本并不能实现AnyTouch所有的功能,
+// 比如新建手势. 所以指令版只支持tap/doubletap/pan/swipe/rotate/pinch等默认手势
 import { Computed } from '../interface';
 import { VueConstructor } from 'Vue/types/vue';
 import InstanceManage from './InstanceManage';
@@ -8,20 +10,32 @@ const plugin = {
     install(Vue: VueConstructor) {
         const _bindEvent = (el: HTMLElement, binding: any) => {
             let instance = iManage.getOrCreateInstanceByEl(el);
-            const CONFIG_REGEXP = /\-config$/;
-            // 不包含"-"
-            const GESTURE_REGEXP = /^((?!-).)*$/
 
-
-            // 绑定事件
-            instance.on(binding.arg, (ev: Computed) => {
-                if (!!binding.modifiers.preventDefault) {
-                    ev.preventDefault();
-                }
-                // if (binding.modifiers.self && el !== e.target) return;
-                binding.value(ev);
-            });
-            console.log(binding.arg);
+            // 匹配AnyTouch设置
+            if ('config' === binding.arg) {
+                instance.set(binding.value);
+            }
+            // 匹配手势, 无"-""
+            else if (/^((?!-).)*$/.test(binding.arg)) {
+                // 绑定事件
+                instance.on(binding.arg, (ev: Computed) => {
+                    if (!!binding.modifiers.preventDefault) {
+                        ev.preventDefault();
+                    }
+                    // if (binding.modifiers.self && el !== e.target) return;
+                    binding.value(ev);
+                });
+            }
+            // 匹配手势设置
+            else if (/\-config$/.test(binding.arg)) {
+                const gestureName = binding.arg.replace('-config', '');
+                instance.get(gestureName).set(binding.value)
+            }
+            // 匹配requireFailure
+            else if (/\-require-failure/.test(binding.arg)) {
+                const gestureNames = binding.arg.split('-require-failure-');
+                instance.get(gestureNames[0]).requireFailure(gestureNames[1]);
+            }
         };
 
         /**
