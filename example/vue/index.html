@@ -23,8 +23,9 @@
     <main id="app">
         <div 
             v-touch:pan-config="{abc:123}"
-            v-touch:pan="panHandler" 
-            v-touch:tap="tapHandler"
+            v-touch:pan.prevent="panHandler" 
+            @tap.prevent="tapHandler"
+            @click="clickHandler"
             v-touch:swipe="swipeHandler"
             class="box">{{msg}}</div>
     </main>
@@ -35,10 +36,17 @@
             el: '#app',
             data() {
                 return {
+                    anyTouch:null,
                     msg: 1234567890
                 };
             },
+            mounted(){
+
+            },
             methods: {
+                clickHandler(){
+                    console.log('click');
+                },
                 swipeHandler(ev){
                     console.log(ev.type);
                 },

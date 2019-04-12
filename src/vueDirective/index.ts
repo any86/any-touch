@@ -17,10 +17,13 @@ const plugin = {
             }
             // 匹配手势, 无"-""
             else if (/^((?!-).)*$/.test(binding.arg)) {
+                console.log(binding.modifiers);
                 // 绑定事件
                 instance.on(binding.arg, (ev: Computed) => {
                     if (!!binding.modifiers.preventDefault) {
-                        ev.preventDefault();
+                        if(binding.modifiers.prevent) {
+                            ev.preventDefault();
+                        }
                     }
                     // if (binding.modifiers.self && el !== e.target) return;
                     binding.value(ev);
@@ -68,8 +71,8 @@ const plugin = {
 };
 
 // 自动加载插件
-// if (typeof <any>window !== 'undefined' && (<any>window).Vue) {
-//     (<any>window).Vue.use(plugin);
-// };
+if (typeof <any>window !== 'undefined' && (<any>window).Vue) {
+    (<any>window).Vue.use(plugin);
+};
 
 export default plugin;
