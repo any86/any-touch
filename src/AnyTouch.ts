@@ -45,7 +45,7 @@ export default class {
     static Swipe = Swipe;
     static Pinch = Pinch;
     static Rotate = Rotate;
-
+    static version = '__VERSION__';
 
     // 向量计算
     static Vector = Vector;
@@ -64,7 +64,6 @@ export default class {
 
     options: Options;
 
-    version: string;
 
     eventEmitter: any;
 
@@ -78,8 +77,6 @@ export default class {
      * @param {Object} 选项
      */
     constructor(el: HTMLElement, options?: Options) {
-        this.version = '__VERSION__';
-
         this.default = {
             touchAction: 'compute',
             hasDomEvents: true,
