@@ -37,7 +37,7 @@ interface Options {
     isPreventDefault?: boolean;
     style?: { [key: string]: string };
 };
-export default class {
+export class AnyTouch{
     // 识别器
     static Tap = Tap;
     static Press = Press;

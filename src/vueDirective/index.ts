@@ -3,25 +3,27 @@
 import { Computed } from '../interface';
 import { VueConstructor } from 'Vue/types/vue';
 import InstanceManage from './InstanceManage';
+import { AnyTouch } from '../AnyTouch';
+
 // 管理实例和元素的映射关系
-const iManage = new InstanceManage();
+const iManage = new InstanceManage(AnyTouch);
 // 导出指令
 const plugin = {
     install(Vue: VueConstructor) {
         const _bindEvent = (el: HTMLElement, binding: any) => {
             let instance = iManage.getOrCreateInstanceByEl(el);
-
             // 匹配AnyTouch设置
             if ('config' === binding.arg) {
                 instance.set(binding.value);
             }
+
             // 匹配手势, 无"-""
             else if (/^((?!-).)*$/.test(binding.arg)) {
-                console.log(binding.modifiers);
+                // console.log(binding.modifiers);
                 // 绑定事件
                 instance.on(binding.arg, (ev: Computed) => {
                     if (!!binding.modifiers.preventDefault) {
-                        if(binding.modifiers.prevent) {
+                        if (binding.modifiers.prevent) {
                             ev.preventDefault();
                         }
                     }
@@ -46,11 +48,11 @@ const plugin = {
          * @param {Element} 关联元素 
          */
         const _unbindEvent = (el: HTMLElement) => {
-            const manageIndex = iManage.getManageIndex(el);
+            const index = iManage.getIndexByEl(el);
             // 防止一个元素上的多个手势指令会重复触发删除
-            if (-1 !== manageIndex && undefined !== iManage.manages[manageIndex]) {
-                iManage.getInstanceByIndex(manageIndex).destroy();
-                iManage.removeInstanceByIndex(manageIndex);
+            if (-1 !== index && undefined !== iManage.getInstanceByIndex(index)) {
+                iManage.getInstanceByIndex(index).destroy();
+                iManage.removeInstanceByIndex(index);
             }
         };
 
