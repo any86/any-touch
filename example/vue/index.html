@@ -10,10 +10,13 @@
     <script src="https://res.wx.qq.com/mmbizwap/zh_CN/htmledition/js/vconsole/3.0.0/vconsole.min.js"></script>
     <script src="../../dist/AnyTouch.umd.js"></script>
     <style>
-        body{margin:0;}
+        body {
+            margin: 0;
+        }
+
         .box {
             padding: 100px;
-            margin:30px;
+            margin: 30px;
             background: #ccc;
         }
     </style>
@@ -21,42 +24,55 @@
 
 <body>
     <main id="app">
-        <div 
-            v-touch:pan-config="{abc:123}"
-            v-touch:pan.prevent="panHandler" 
-            @tap.prevent="tapHandler"
-            @click="clickHandler"
-            v-touch:swipe="swipeHandler"
-            class="box">{{msg}}</div>
+        <div v-touch:pan-config="{abc:123}" v-touch:pan.prevent="panHandler" @tap.prevent="tapHandler" @click="clickHandler" v-touch:swipe="swipeHandler" class="box">{{msg}}</div>
     </main>
     <script>
         // console.dir(AnyTouch.vTouch);
         Vue.use(AnyTouch.vTouch)
         new Vue({
             el: '#app',
+            render(h) {
+                return h('div', {
+                    ref: 'box',
+                    class: 'box',
+                    directives: [{
+                        name: 'touch',
+                        value(ev) {
+                            console.log('@', ev.type);
+                            this.msg = ev.type;
+                        },
+                        arg: 'tap',
+                    }]
+                });
+            },
             data() {
                 return {
-                    anyTouch:null,
-                    msg: 1234567890
+                    anyTouch: null,
+                    msg: 'AnyTouch'
                 };
             },
-            mounted(){
-
+            mounted() {
+                console.dir(this.$refs.box);
             },
             methods: {
-                clickHandler(){
-                    console.log('click');
-                },
-                swipeHandler(ev){
+                clickHandler(ev) {
                     console.log(ev.type);
+                    this.msg = 'click';
+                },
+                swipeHandler(ev) {
+                    console.log(ev.type);
+                    this.msg = ev.type;
                 },
 
                 panHandler(ev) {
                     console.log(ev.type);
+                    this.msg = ev.type;
                 },
 
-                tapHandler(ev){
+                tapHandler(ev) {
+                    ev.preventDefault();
                     console.log(ev.type);
+                    this.msg = ev.type;
                 }
             }
         })
