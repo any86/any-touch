@@ -95,8 +95,18 @@ export default abstract class Recognizer {
         }
     };
 
+    /**
+     * 是否需要其他手势失败才能触发
+     */
     public hasRequireFailure() {
         return 0 < this.requireFailureRecognizers.length;
+    };
+
+    /**
+     * 是否所有"需要失败"的手势都是disabled的
+     */
+    public isAllRequireFailureRecognizersDisabled(){
+        return this.requireFailureRecognizers.every((recognizer:any)=>recognizer.disabled);
     };
 
     /**
