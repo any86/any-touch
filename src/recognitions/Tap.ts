@@ -123,7 +123,7 @@ export default class TapRecognizer extends Recognizer {
                 this.status = STATUS_START;
                 // 如果需要其他手势失败
                 // 等待(300ms)其他手势失败后触发
-                if (this.hasRequireFailure()) {
+                if (this.hasRequireFailure() && !this.isAllRequireFailureRecognizersDisabled()) {
                     this._waitOtherFailedTimer = setTimeout(() => {
                         // 检查指定手势是否识别为Failed
                         if (this.isAllRequiresFailedOrPossible()) {
