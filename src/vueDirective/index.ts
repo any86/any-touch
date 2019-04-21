@@ -12,34 +12,9 @@ const plugin = {
     install(Vue: VueConstructor) {
         const _bindEvent = (el: HTMLElement, binding: any) => {
             let instance = iManage.getOrCreateInstanceByEl(el);
-            // 匹配AnyTouch设置
-            if ('config' === binding.arg) {
-                instance.set(binding.value);
-            }
-
-            // 匹配手势, 无"-""
-            else if (/^((?!-).)*$/.test(binding.arg)) {
-                // console.log(binding.modifiers);
-                // 绑定事件
-                instance.on(binding.arg, (ev: Computed) => {
-                    if (!!binding.modifiers.preventDefault) {
-                        if (binding.modifiers.prevent) {
-                            ev.preventDefault();
-                        }
-                    }
-                    // if (binding.modifiers.self && el !== e.target) return;
-                    binding.value(ev);
-                });
-            }
-            // 匹配手势设置
-            else if (/\-config$/.test(binding.arg)) {
-                const gestureName = binding.arg.replace('-config', '');
-                instance.get(gestureName).set(binding.value)
-            }
-            // 匹配requireFailure
-            else if (/\-require-failure/.test(binding.arg)) {
-                const gestureNames = binding.arg.split('-require-failure-');
-                instance.get(gestureNames[0]).requireFailure(gestureNames[1]);
+            // 导入AnyTouch实例
+            if (undefined !== binding.value) {
+                binding.value(instance);
             }
         };
 
@@ -72,9 +47,12 @@ const plugin = {
     }
 };
 
+// if('test' !== process.env.NODE_ENV){
+    
+// }
 // 自动加载插件
-if (typeof <any>window !== 'undefined' && (<any>window).Vue) {
-    (<any>window).Vue.use(plugin);
-};
+// if (typeof <any>window !== 'undefined' && (<any>window).Vue) {
+//     (<any>window).Vue.use(plugin);
+// };
 
 export default plugin;

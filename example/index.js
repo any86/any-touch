@@ -16,17 +16,6 @@ new Vue({
         };
     },
     mounted() {
-        // const atBox = new AnyTouch(this.$refs.box, {
-        //     touchAction: 'auto',
-        //     isPreventDefault: false
-        // });
-
-        // atBox.on('panmove', ev => {
-        //     console.log('atBox');
-        // })
-// console.log(AnyTouch.vTouch);
-
-
         this.$refs.circle.addEventListener('animationend', e=>{
             this.activeType = 'AnyTouch';
         });
@@ -72,17 +61,17 @@ new Vue({
             threshold: 15
         });
 
-        anyTouch.add(pan2);
-        anyTouch.add(tap2);
-        anyTouch.add(tap3);
-        anyTouch.add(tap4);
-        const tap1 = anyTouch.get('tap');
-        tap1.requireFailure(tap2);
-        tap1.requireFailure(tap3);
-        tap1.requireFailure(tap4);
-        tap2.requireFailure(tap3);
-        tap2.requireFailure(tap4);
-        tap3.requireFailure(tap4);
+        // anyTouch.add(pan2);
+        // anyTouch.add(tap2);
+        // anyTouch.add(tap3);
+        // anyTouch.add(tap4);
+        // const tap1 = anyTouch.get('tap');
+        // tap1.requireFailure(tap2);
+        // tap1.requireFailure(tap3);
+        // tap1.requireFailure(tap4);
+        // tap2.requireFailure(tap3);
+        // tap2.requireFailure(tap4);
+        // tap3.requireFailure(tap4);
         // this.$refs.circle.addEventListener('touchstart', ev=>{ev.preventDefault()})
         // this.$refs.circle.addEventListener('touchmove', ev=>{ev.preventDefault()})
         // this.$refs.circle.addEventListener('touchend', ev=>{ev.preventDefault()})
