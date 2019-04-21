@@ -124,6 +124,8 @@ export class AnyTouch{
             }).$injectRoot(this),
             new Press().$injectRoot(this),
         ];
+        // 默认单击需要双击识别失败后触发
+        this.recognizers[4].requireFailure(this.recognizers[5]);
         // 应用设置
         this.update();
         // 绑定事件
