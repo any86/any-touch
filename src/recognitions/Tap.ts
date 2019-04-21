@@ -117,8 +117,8 @@ export default class TapRecognizer extends Recognizer {
                 // 那么取消延迟失败的定时器
                 this._cancelDelayFail();
                 // 仅仅为了不让状态为possible和failed
-                // 这样isTheOtherFailed才不会错误的触发其他还没有符合条件的tap
-                // 因为isTheOtherFailed方法会监测possible和failed俩种状态
+                // 这样isAllRequiresFailedOrPossible才不会错误的触发其他还没有符合条件的tap
+                // 因为isAllRequiresFailedOrPossible方法会监测possible和failed俩种状态
                 // 这里的STATUS_START可以想成在等待failture前的等待状态
                 this.status = STATUS_START;
                 // 如果需要其他手势失败
@@ -126,7 +126,7 @@ export default class TapRecognizer extends Recognizer {
                 if (this.hasRequireFailure()) {
                     this._waitOtherFailedTimer = setTimeout(() => {
                         // 检查指定手势是否识别为Failed
-                        if (this.isTheOtherFailed()) {
+                        if (this.isAllRequiresFailedOrPossible()) {
                             this.status = STATUS_RECOGNIZED;
                             this.emit(this.options.name, { ...computed, tapCount: this.tapCount });
                         } else {

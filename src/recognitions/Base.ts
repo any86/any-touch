@@ -102,7 +102,7 @@ export default abstract class Recognizer {
     /**
      * 是否要求注册时指定失败的选择器是失败状态
      */
-    public isTheOtherFailed(): boolean {
+    public isAllRequiresFailedOrPossible(): boolean {
         for (let recognizer of this.requireFailureRecognizers) {
             if (STATUS_FAILED !== recognizer.status && STATUS_POSSIBLE !== recognizer.status) {
                 return false;
