@@ -52,7 +52,6 @@
                     msg: 'AnyTouch'
                 };
             },
-<<<<<<< HEAD
 
             methods: {
                 importAT(at) {
@@ -66,25 +65,12 @@
                 },
                 swipeHandler(ev) {
                     console.log(ev.type);
-=======
-            mounted() {
-                console.dir(this.$refs.box);
-            },
-            methods: {
-                clickHandler(ev) {
-                    console.log(ev.type);
-                    this.msg = 'click';
-                },
-                swipeHandler(ev) {
-                    console.log(ev.type);
->>>>>>> 3b5bdf3bc45f9aa5f7a9989bb1ea3c740e2aa1d0
                     this.msg = ev.type;
                 },
 
                 panHandler(ev) {
                     console.log(ev.type);
                     this.msg = ev.type;
-<<<<<<< HEAD
                 },
 
                 tapHandler(ev) {
@@ -94,11 +80,6 @@
                 },
 
                 doubletapHandler(ev) {
-=======
-                },
-
-                tapHandler(ev) {
->>>>>>> 3b5bdf3bc45f9aa5f7a9989bb1ea3c740e2aa1d0
                     ev.preventDefault();
                     console.log(ev.type);
                     this.msg = ev.type;
