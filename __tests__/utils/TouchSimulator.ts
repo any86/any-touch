@@ -1,10 +1,4 @@
-import arrayDiff from './arrayDiff';
-
-function isEqual(a: any, b: any) {
-    return a.clientX === b.clientX && a.clientY === b.clientY;
-};
-
-interface Pointer {
+interface Input {
     x: number;
     y: number;
 };
@@ -21,27 +15,34 @@ export default class TouchSimulator {
 
     public el: Element | Document;
     public device: 'touch' | 'mouse';
+    public index: number;
 
     constructor(el: Element | Document, { device = 'touch' }: Options = <Options>{}) {
         this.el = el;
         this.device = device;
         this.prevTouches = [];
+        this.index = 1;
     };
+
+
+    public input2Points(input: Input[]) {
+        return input.map(({ x, y }: any) => ({ [CLIENT_X]: x, [CLIENT_Y]: y }));
+    }
 
     /**
      * 模拟touchstart
-     * @param {ELement} dom元素
-     * @param {Pointer[]} 触点
+     * @param {Input[]} 新增触点
      */
-    public dispatchTouchStart(points: Pointer[]) {
+    public dispatchTouchStart(input: Input[]) {
         let type = 'touch' === this.device ? 'touchstart' : 'mousedown';
         let event: any = new Event(type, {});
         if ('touch' === this.device) {
-            event.touches = points.map(({ x, y }) => ({ [CLIENT_X]: x, [CLIENT_Y]: y }));
-            event.changedTouches = arrayDiff(event.touches, this.prevTouches, isEqual);
+            event.touches = [...this.prevTouches, ...this.input2Points(input)];
+            event.changedTouches = this.input2Points(input);
+            event.identifier = this.index++;
         } else {
-            event[CLIENT_X] = points[0].x;
-            event[CLIENT_Y] = points[0].y;
+            event[CLIENT_X] = input[0].x;
+            event[CLIENT_Y] = input[0].y;
             event.button = 0;
         }
         this.prevTouches = event.touches;
@@ -52,22 +53,30 @@ export default class TouchSimulator {
     /**
      * 模拟touchmove
      * @param {ELement} dom元素
-     * @param {Pointer[]} 触点
+     * @param {Input[]} 触点
      */
-    public dispatchTouchMove(points: Pointer[]) {
+    public dispatchTouchMove(input: Input[]) {
+        const points = this.input2Points(input);
         let type = 'touch' === this.device ? 'touchmove' : 'mousemove';
         let event: any = new Event(type, {});
 
         if ('touch' === this.device) {
+            if(points.length !== this.prevTouches.length) {
+                throw new Error(`dispatchTouchMove控制的点的数量必须和prevTouches中的点数量一致! ${points.length} : ${this.prevTouches.length}`)
+            }
             // 对应点不同就放进changedTouches;
-            event.touches = points.map(({ x, y }) => ({ [CLIENT_X]: x, [CLIENT_Y]: y }));
-            event.changedTouches = arrayDiff(event.touches, this.prevTouches,isEqual);
+            event.touches = points;
+            event.changedTouches = this.prevTouches.filter((prevTouchItem: any, index: number) => {
+                const isXChanged = prevTouchItem[CLIENT_X] != points[index][CLIENT_X];
+                const hasChanged = isXChanged || (prevTouchItem[CLIENT_Y] != points[index][CLIENT_Y]);
+                return hasChanged && points[index];
+            });
 
             this.prevTouches = event.touches;
             this.el.dispatchEvent(event);
         } else {
-            event[CLIENT_X] = points[0].x;
-            event[CLIENT_Y] = points[0].y;
+            event[CLIENT_X] = points[0][CLIENT_X];
+            event[CLIENT_Y] = points[0][CLIENT_Y];
             window.dispatchEvent(event);
         }
         return event;
@@ -83,7 +92,8 @@ export default class TouchSimulator {
         let type = 'touch' === this.device ? 'touchend' : 'mouseup';
         let event: any = new Event(type, {});
         if ('touch' === this.device) {
-            event.changedTouches = this.prevTouches.splice(pointerIndex, pointerNumber);
+            const { length } = this.prevTouches;
+            event.changedTouches = this.prevTouches.splice(pointerIndex, pointerNumber || length);
             event.touches = this.prevTouches;
             this.prevTouches = event.touches;
             this.el.dispatchEvent(event);
@@ -99,7 +109,7 @@ export default class TouchSimulator {
      */
     public dispatchTouchCancel() {
         let event: any = new Event('touchcancel', {});
-        event.changedTouches = arrayDiff(event.touches, this.prevTouches, isEqual);
+        event.changedTouches = this.prevTouches;
         event.touches = [];
         this.prevTouches = event.touches;
         this.el.dispatchEvent(event);

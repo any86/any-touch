@@ -107,14 +107,14 @@ new Vue({
             // e.nativeEvent.preventDefault();
             // anyTouch.set({touchAction:'auto',isPreventDefault:false});
             this.message = e;
-            console.log(e.type);
+            log(e.type);
             
         });
 
         anyTouch.on('panmove', e => {
             // e.nativeEvent.preventDefault();
             this.message = e;
-            console.log(e.type);
+            log(e.type);
         });
 
         anyTouch.on('pancancel', e => {
@@ -157,24 +157,24 @@ new Vue({
          */
         anyTouch.on('tap', e => {
             e.preventDefault();
-            console.log(`%c ${e.type} `, 'background-color:#f10;color:#fff;');
+            log(`%c ${e.type} `, 'background-color:#f10;color:#fff;');
             this.message = e;
         });
         this.$refs.circle.addEventListener('click', ev=>{
-            console.log('click');
+            log('click');
         })
         anyTouch.on('doubletap', e => {
-            console.log(`%c ${e.type} `, 'background-color:#9c3;color:#fff;');
+            log(`%c ${e.type} `, 'background-color:#9c3;color:#fff;');
             this.message = e;
         });
 
         anyTouch.on('threetap', e => {
-            console.log(`%c ${e.type} `, 'background-color:#99c;color:#fff;');
+            log(`%c ${e.type} `, 'background-color:#99c;color:#fff;');
             this.message = e;
         });
 
         anyTouch.on('fourtap', e => {
-            console.log(`%c ${e.type} `, 'background-color:#19c;color:#fff;');
+            log(`%c ${e.type} `, 'background-color:#19c;color:#fff;');
             this.message = e;
         });
         
@@ -191,10 +191,10 @@ new Vue({
         anyTouch.on('pinch', e => {
             this.message = e;
             this.scale *= e.deltaScale;
-            // console.log(e.deltaScale);
+            // log(e.deltaScale);
             this.centerX = e.center.x;
             this.centerY = e.center.y;
-            console.log(`%c ${e.type} `, 'background-color:#f90;color:#fff;');
+            log(`%c ${e.type} `, 'background-color:#f90;color:#fff;');
         });
 
         /**
@@ -208,7 +208,7 @@ new Vue({
         });
 
         anyTouch.on('rotate', e => {
-            console.log(e.deltaAngle, e.deltaX,e.deltaY);
+            log(e.deltaAngle, e.deltaX,e.deltaY);
             this.message = e;
             this.angle += e.deltaAngle;
             this.centerX = e.center.x;
@@ -226,7 +226,7 @@ new Vue({
         });
 
         anyTouch.on('swipe', e => {
-            console.log(`%c ${e.type} `, 'background-color:#444;color:#fff;');
+            log(`%c ${e.type} `, 'background-color:#444;color:#fff;');
             this.message = e;
         });
     },

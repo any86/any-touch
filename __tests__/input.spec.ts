@@ -10,10 +10,10 @@ const simulatorPan = () => {
     const ts = new TouchSimulator(el, { device: 'touch' });
     ts.dispatchTouchStart([{ x: 30, y: 0 }]);
     ts.dispatchTouchMove([{ x: 30, y: 15 }]);
-    ts.dispatchTouchStart([{ x: 30, y: 15 }, { x: 130, y: 10 }]);
+    ts.dispatchTouchStart([{ x: 130, y: 10 }]);
     ts.dispatchTouchEnd(0, 1);
     ts.dispatchTouchMove([{ x: 30, y: 5 }]);
-    ts.dispatchTouchStart([{ x: 30, y: 5 }, { x: 100, y: 0 }]);
+    ts.dispatchTouchStart([{ x: 30, y: 5 }]);
     ts.dispatchTouchMove([{ x: 30, y: 90 }, { x: 100, y: 10 }]);
     ts.dispatchTouchCancel();
 };

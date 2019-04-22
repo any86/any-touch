@@ -4,8 +4,6 @@ const el = document.createElement('div');
 
 const at = new AnyTouch(el);
 
-const ROTATE = 'rotate';
-
 test('rotate旋转角度是否计算正确?', (done) => {
     const ANGLES_TEST = [5, 15,-10];
     let times = 0;
