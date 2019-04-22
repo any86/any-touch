@@ -24,7 +24,7 @@ jobs:
         # Download and cache dependencies
         - restore_cache:
             keys:
-            - dependencies-{{ checksum "package.json" }}
+            - dependencies-{{ checksum "./package.json" }}
             # - dependencies-
 
         - run: yarn install
@@ -33,7 +33,7 @@ jobs:
         - save_cache:
             paths:
                 - node_modules
-            key: dependencies-{{ checksum "package.json" }}
+            key: dependencies-{{ checksum "./package.json" }}
             
         # run tests!  
         - run: npm run test
