@@ -9,7 +9,8 @@ module.exports = {
     collectCoverage: true,
     coverageDirectory: "./coverage/",
     verbose: false,
-    testPathIgnorePatterns: ["<rootDir>/node_modules/", "<rootDir>/__tests__/utils"],
+    testPathIgnorePatterns: ["<rootDir>/node_modules/", "<rootDir>/__tests__/utils/"],
+    coveragePathIgnorePatterns: ["<rootDir>/node_modules/", "<rootDir>/__tests__/utils/"],
     globals: {
         __TEST__: true,
         ontouchstart: null
