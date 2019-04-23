@@ -36,5 +36,5 @@ jobs:
             key: dependencies-{{ .Branch }}-{{ checksum "yarn.lock"}}
             
         # run tests!  
-        - run: yarn test
+        - run: yarn test --runInBand
         - run: ./node_modules/.bin/codecov
