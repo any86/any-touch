@@ -21,20 +21,16 @@ jobs:
         steps:
         - checkout
 
-        # Download and cache dependencies
-        - restore_cache:
-            keys:
-                - dependencies-{{ .Branch }}-{{ checksum "yarn.lock" }}
-            # - dependencies-
+        - restore_cache: 
+            key: dependency-cache-{{ checksum "package.json" }}
 
         - run: yarn install
         - run: yarn add codecov
 
         - save_cache:
+            key: dependency-cache-{{ checksum "package.json" }}
             paths:
-                - node_modules
-            key: dependencies-{{ .Branch }}-{{ checksum "yarn.lock" }}
-            
+                - ./node_modules
         # run tests!  
         - run: yarn test --runInBand
         - run: ./node_modules/.bin/codecov
