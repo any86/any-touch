@@ -1,6 +1,6 @@
 {
   "name": "any-touch",
-  "version": "0.2.9",
+  "version": "0.4.1",
   "description": "一个手势库",
   "unpkg": "dist/AnyTouch.umd.js",
   "jsdelivr": "dist/AnyTouch.umd.js",
@@ -16,7 +16,7 @@
   "scripts": {
     "release": "npm run test && standard-version && npm run build && npm pub && git push",
     "release-no-test": "standard-version && npm run build && npm pub && git push",
-    "build": "rimraf dist && rimraf lib && tsc && rollup -c a.js",
+    "build": "rimraf dist && rimraf lib && tsc && rollup -c",
     "dev": "rimraf dist && rollup -c --watch",
     "test": "jest",
     "test-no-cache": "jest --no-cache",
