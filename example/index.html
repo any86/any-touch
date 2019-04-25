@@ -16,7 +16,7 @@
     <script>
         var MOBILE_REGEX = /mobile|tablet|ip(ad|hone|od)|android/i;
         var IS_MOBILE = MOBILE_REGEX.test(navigator.userAgent);
-        if (IS_MOBILE) var vConsole = new VConsole();
+        // if (IS_MOBILE) var vConsole = new VConsole();
     </script>
 </head>
 
@@ -182,8 +182,8 @@
             </tr>
 
             <tr style="min-height:60px;">
-                <td>pointers</td>
-                <td>{{message.pointers}}</td>
+                <td>points</td>
+                <td>{{message.points}}</td>
                 <td>触点信息</td>
             </tr>
 
@@ -195,7 +195,7 @@
             <a href="?debug">vconsole</a>
             <a href="?">vconsole off</a>
         </section> -->
-
+        <!-- <div class="box" id="box" ref="box">BOX</div> -->
 
         <div class="circle" id="circle" ref="circle" @animationend="animationend" :class="[activeType]" :style="{
                 top:`${y}px`,

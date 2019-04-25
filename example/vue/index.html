@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>v-touch</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://res.wx.qq.com/mmbizwap/zh_CN/htmledition/js/vconsole/3.0.0/vconsole.min.js"></script>
+    <script src="../../dist/AnyTouch.umd.js"></script>
+    <style>
+        body {
+            margin: 0;
+        }
+
+        .box {
+            padding: 100px;
+            margin: 30px;
+            background: #ccc;
+        }
+    </style>
+</head>
+
+<body>
+    <main id="app">
+        <div v-touch="importAT" @tap="tapHandler" @doubletap="doubletapHandler" @click="clickHandler"
+            class="box">{{msg}}</div>
+    </main>
+    <script>
+        // console.dir(AnyTouch.vTouch);
+        Vue.use(AnyTouch.vTouch)
+        new Vue({
+            el: '#app',
+            render(h) {
+                return h('div', {
+                    ref: 'box',
+                    class: 'box',
+                    directives: [{
+                        name: 'touch',
+                        value(ev) {
+                            console.log('@', ev.type);
+                            this.msg = ev.type;
+                        },
+                        arg: 'tap',
+                    }]
+                });
+            },
+            data() {
+                return {
+                    anyTouch: null,
+                    msg: 'AnyTouch'
+                };
+            },
+
+            methods: {
+                importAT(at) {
+                    const dt = at.get('doubletap')
+                    dt.disabled = false
+                },
+
+                clickHandler(ev) {
+                    console.log(ev.type);
+                    this.msg = 'click';
+                },
+                swipeHandler(ev) {
+                    console.log(ev.type);
+                    this.msg = ev.type;
+                },
+
+                panHandler(ev) {
+                    console.log(ev.type);
+                    this.msg = ev.type;
+                },
+
+                tapHandler(ev) {
+                    ev.preventDefault();
+                    console.log(ev.type);
+                    this.msg = ev.type;
+                },
+
+                doubletapHandler(ev) {
+                    ev.preventDefault();
+                    console.log(ev.type);
+                    this.msg = ev.type;
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>
