@@ -37,8 +37,6 @@ import VueDirective from './vueDirective';
 // // extends {new (...args:any):any}
 // type K = Parameters<(s:string,n:number)=>void>
 // type L = ConstructorParameters<TestClass>
-
-
 export default class extends AnyTouch {
     // vue指令版
     static vTouch = VueDirective;

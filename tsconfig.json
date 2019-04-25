@@ -1,7 +1,8 @@
 {
     "compilerOptions": {
-        // 允许未执行的代码不报错
+        // 不报告执行不到的代码错误。
         "allowUnreachableCode": true,
+        "strictNullChecks": true,
         // 严格模式, 强烈建议开启
         "strict": true,
         // 支持别名导入:

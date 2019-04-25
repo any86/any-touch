@@ -20,7 +20,9 @@ const el = document.createElement('div');
 
 test(`swipe垂直是否触发?`, async (done) => {
     const at = new AnyTouch(el);
-    at.get('swipe').set({directions: ['left']});
+    const swipe = at.get('swipe')
+    if(undefined === swipe) return;
+    swipe.set({directions: ['left']});
     at.on('swipe', ev=>{
         expect(ev.type).toBe(`swipe`);
     });
@@ -33,7 +35,9 @@ test(`swipe垂直是否触发?`, async (done) => {
 
 test(`swipe水平是否触发?`, async (done) => {
     const at = new AnyTouch(el);
-    at.get('swipe').set({directions: ['up']});
+    const swipe = at.get('swipe')
+    if(undefined === swipe) return;
+    swipe.set({directions: ['up']});
     at.on('swipe', ev=>{
         expect(ev.type).toBe(`swipe`);
     });

@@ -26,6 +26,9 @@ test('mouse下,tap与doubletap之间的requireFailure是否生效?', async (done
     at.add(tap2);
     at.add(tap3);
     const tap1 = at.get('tap');
+    if(undefined === tap1) {
+        return 
+    }
     tap1.requireFailure(tap2);
     tap1.requireFailure(tap3);
     tap2.requireFailure(tap3);
