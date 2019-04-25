@@ -2,6 +2,7 @@
 // 比如新建手势. 所以指令版只支持tap/doubletap/pan/swipe/rotate/pinch等默认手势
 import { Computed } from '../interface';
 import { VueConstructor } from 'vue/types/vue';
+import { DirectiveBinding } from 'vue/types/options';
 import InstanceManage from './InstanceManage';
 import { AnyTouch } from '../AnyTouch';
 
@@ -10,7 +11,7 @@ const iManage = new InstanceManage(AnyTouch);
 // 导出指令
 const plugin = {
     install(Vue: VueConstructor) {
-        const _bindEvent = (el: HTMLElement, binding: any) => {
+        const _bindEvent = (el: HTMLElement, binding: DirectiveBinding) => {
             let instance = iManage.getOrCreateInstanceByEl(el);
             // 导入AnyTouch实例
             if (undefined !== binding.value) {

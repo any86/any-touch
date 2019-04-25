@@ -10,12 +10,12 @@ import Mouse from './adapters/mouse';
 export default class {
     // 缓存触点中心
     private _center?: Point;
-    adapter: any;
+    public adapter: any;
     constructor() {
         this.adapter = SUPPORT_TOUCH ? new Touch() : new Mouse();
     };
 
-    load(event: Event): Input | void {
+    public load(event: Event): Input | void {
         // 通过TouchEvent|MouseEvent获取的直接数据
         let baseInput = this.adapter.load(event);
         if (undefined === baseInput) {

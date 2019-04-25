@@ -1,5 +1,5 @@
 import { Input } from './interface';
-import createInput from './input/create';
+import InputFactory from './input/InputFactory';
 export default class {
     // 起点(单点|多点)
     startInput?: Input;
@@ -10,10 +10,10 @@ export default class {
     // 多点触碰的起点
     startMutliInput?: Input;
 
-    inputFactory: any;
+    inputFactory: InputFactory;
 
     constructor() {
-        this.inputFactory = new createInput();
+        this.inputFactory = new InputFactory();
     };
 
 

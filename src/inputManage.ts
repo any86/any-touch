@@ -10,7 +10,7 @@ export default class {
     // 多点触碰的起点
     startMutliInput?: Input;
 
-    inputFactory: any;
+    inputFactory: InputFactory;
 
     constructor() {
         this.inputFactory = new InputFactory();
