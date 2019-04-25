@@ -86,7 +86,7 @@ export default abstract class Recognizer {
      * 移除识别器之间的"需要失败"关系
      *  @param {Recognizer} 识别器实例 
      */
-    public removeRequireFailure(recognizer: this) {
+    public removeRequireFailure(recognizer: Recognizer) {
         for (let [index, requireFailureRecognizer] of this.requireFailureRecognizers.entries()) {
             if (requireFailureRecognizer.name === recognizer.name) {
                 this.requireFailureRecognizers.splice(index, 1);

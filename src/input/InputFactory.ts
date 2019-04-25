@@ -1,7 +1,7 @@
 /**
  * 构造统一的Input格式
  */
-import { Input, BaseInput, Point } from '../interface';
+import { Input, Point } from '../interface';
 import { SUPPORT_TOUCH, INPUT_END, INPUT_START, INPUT_CANCEL } from '../const';
 import { getCenter } from '../vector';
 import Touch from './adapters/Touch';
@@ -29,6 +29,7 @@ export default class {
         const changedPointLength: number = changedPoints.length;
         // 识别流程的开始和结束标记
         const isFirst = (INPUT_START === eventType) && (0 === changedPointLength - pointLength);
+        // 所有触点都离开算作"final", 这和hammer.js不一样
         const isFinal = (INPUT_END === eventType || INPUT_CANCEL === eventType) && (0 === pointLength);
 
         // 中心坐标

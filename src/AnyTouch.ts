@@ -16,14 +16,14 @@
  * ==================== 流程 ====================
  * 格式化Event成统一的pointer格式 => 通过pointer数据计算 => 用计算结果去识别手势
  */
-import AnyEvent from 'any-event';
-import VueDirective from './vueDirective';
 import { Computed } from './interface';
+import AnyEvent from 'any-event';
 import { SUPPORT_TOUCH } from './const'; ``
 import InputManage from './InputManage';
 import compute from './compute/index';
 import computeTouchAction from './untils/computeTouchAction'
 // 识别器
+import Recognizer from './recognitions/Base';
 import Tap from './recognitions/Tap';
 import Press from './recognitions/Press';
 import Pan from './recognitions/Pan';
@@ -60,14 +60,14 @@ export class AnyTouch{
 
     inputType: string;
 
-    recognizers: { [propName: string]: any, name: string }[];
+    recognizers: Recognizer[];
 
     options: Options;
 
 
-    eventEmitter: any;
+    eventEmitter: AnyEvent;
 
-    inputManage: any;
+    inputManage: InputManage;
 
     // 是否阻止后面的识别器运行
     private _isStopped: boolean;
@@ -213,9 +213,9 @@ export class AnyTouch{
      * 添加识别器
      * @param recognizer 识别器
      */
-    add(recognizer: any): void {
+    add(recognizer: Recognizer): void {
         recognizer.$injectRoot(this);
-        const hasSameName = this.recognizers.some((theRecognizer: any) => recognizer.name === theRecognizer.name);
+        const hasSameName = this.recognizers.some((theRecognizer: Recognizer) => recognizer.name === theRecognizer.name);
         if (hasSameName) {
             this.eventEmitter.emit('error', { code: 1, message: `${recognizer.name}识别器已经存在!` })
         } else {
@@ -229,7 +229,7 @@ export class AnyTouch{
      * @param {String} 识别器的名字
      * @return {Recognizer} 返回识别器
      */
-    get(name: string): any {
+    get(name: string): Recognizer|undefined {
         return this.recognizers.find(recognizer => name === recognizer.options.name);
     };
 
@@ -276,13 +276,9 @@ export class AnyTouch{
         }
 
         // 管理历史input
-
-        // let inputs = inputManage(event);
         let inputs = this.inputManage.load(event);
         // 当是鼠标事件的时候, mouseup阶段的input为undefined
         if (undefined !== inputs) {
-            // console.warn(inputs.startInput);
-
             const computed = compute(inputs);
             // 重置停止标记
             if (computed.isFirst) {
@@ -299,10 +295,10 @@ export class AnyTouch{
                     this.emit('inputend', computed);
                 }
             } else {
-                if (inputs.prevInput.pointLength > inputs.input.pointLength) {
+                // prevInput和input一定不为空
+                if (inputs.prevInput!.pointLength > inputs.input!.pointLength) {
                     this.emit('inputreduce', computed);
-                } else if (inputs.prevInput.pointLength < inputs.input.pointLength) {
-
+                } else if (inputs.prevInput!.pointLength < inputs.input!.pointLength) {
                     this.emit('inputadd', computed);
                 } else {
                     this.emit('inputmove', computed);
@@ -344,7 +340,7 @@ export class AnyTouch{
      * @param {String} 类型名
      * @param {Object} 数据
      */
-    emit(type: string, payload: any) {
+    emit(type: string, payload: Pick<any, 'type'>) {
         payload.type = type;
         this.eventEmitter.emit(type, payload);
     };

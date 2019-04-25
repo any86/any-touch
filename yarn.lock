@@ -436,10 +436,10 @@ ansi-styles@^3.2.0, ansi-styles@^3.2.1:
   dependencies:
     color-convert "^1.9.0"
 
-any-event@^0.3.5:
-  version "0.3.5"
-  resolved "https://registry.npmjs.org/any-event/-/any-event-0.3.5.tgz#8ec45ef3c0ecd7fd801844bb50f7ae5b3cd73805"
-  integrity sha512-cjtVYVaPdAxco4Xmpj5jkCGPH+bSZKr18MuE80wyczUKV/JhSQ0QkbwAKVOxCpv6W1ZNqcbncxME2CupNapf8Q==
+any-event@^0.3.6:
+  version "0.3.6"
+  resolved "https://registry.npmjs.org/any-event/-/any-event-0.3.6.tgz#daf6e95bf0c934591c1c2c38a6700e7c5833ffc7"
+  integrity sha512-qiPa/guOsQG0e1HmRMWFheVUMfa8ql70W9il0uX3zCMKTCpAf82lkOEdWfD6ye4YCI9Zbb+Lr+7dA1E1/v373w==
 
 anymatch@^2.0.0:
   version "2.0.0"
