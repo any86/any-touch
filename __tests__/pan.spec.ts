@@ -26,6 +26,7 @@ test('通过多点pan, 测试Pan构造函数是否正确?', (done) => {
     test('panup|panright|pandown|panleft是否正确?', (done) => {
         const at = new AnyTouch(el);
         const pan = at.get('pan');
+        if(undefined === pan) return
         pan.set({ directions: [direction] });
         at.on(`pan${direction}`, (ev) => {
             expect(ev.direction).toBe(direction);

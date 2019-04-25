@@ -21,11 +21,13 @@ test('tap与doubletap之间的requireFailure是否生效?', async (done) => {
     
     const at = new AnyTouch(el);
     const tap2 = at.get('doubletap');
+    if(undefined === tap2) return
     tap2.disabled = false;
     const tap3 = new AnyTouch.Tap({ name: 'threetap', pointerLength: 1, tapTimes: 3 })
     at.add(tap2);
     at.add(tap3);
     const tap1 = at.get('tap');
+    if(undefined === tap1) return
     tap1.requireFailure(tap2);
     tap1.requireFailure(tap3);
     tap2.requireFailure(tap3);

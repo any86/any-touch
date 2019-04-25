@@ -37,7 +37,7 @@ interface Options {
     isPreventDefault?: boolean;
     style?: { [key: string]: string };
 };
-export class AnyTouch{
+export class AnyTouch {
     // 识别器
     static Tap = Tap;
     static Press = Press;
@@ -227,9 +227,9 @@ export class AnyTouch{
     /**
      * 获取识别器通过名字
      * @param {String} 识别器的名字
-     * @return {Recognizer} 返回识别器
+     * @return {Recognizer|undefined} 返回识别器
      */
-    get(name: string): Recognizer|undefined {
+    get(name: string): Recognizer | undefined {
         return this.recognizers.find(recognizer => name === recognizer.options.name);
     };
 

@@ -10,8 +10,10 @@ test('doubletap识别失败, tap应该触发2次', async (done) => {
     const tap2 = new AnyTouch.Tap({ name: 'doubletap', pointLength: 1, tapTimes: 2 })
     const at = new AnyTouch(el);
     at.add(tap2);
-    at.get('tap').requireFailure(tap2);
-    at.get('tap').removeRequireFailure(tap2);
+    const tap1 = at.get('tap')
+    if(undefined === tap1) return;
+    tap1.requireFailure(tap2);
+    tap1.removeRequireFailure(tap2);
 
     at.on('tap', (e) => {
         mockTapCallback();
