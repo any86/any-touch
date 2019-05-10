@@ -7,16 +7,25 @@ import { COMPUTE_INTERVAL, INPUT_CANCEL } from '../const';
 import { getDirection } from '../vector';
 // 上次采集的input
 let _prevInput: Input;
-// 上次采集时的瞬时速度
+// 上次采集时的瞬时速率
 let _prevVelocityX: number;
 let _prevVelocityY: number;
 // 上次采集的方向
 let _prevDirection: string;
+// 上次采集的瞬时速度(矢量)
+let _prevSpeedX: number;
+let _prevSpeedY: number;
 
-export default (input: Input): { velocityX: number, velocityY: number, direction?: string } => {
+
+export default (input: Input): {speedX:number, speedY: number, velocityX: number, velocityY: number, direction?: string } => {
     // 速率
     let velocityX: number;
     let velocityY: number;
+
+    // 速度
+    let speedX: number;
+    let speedY: number;
+
     // 方向
     let direction: string;
 
@@ -27,19 +36,25 @@ export default (input: Input): { velocityX: number, velocityY: number, direction
     const deltaY = (0 < input.y) ? input.y - _prevInput.y : 0;
     // 每25ms刷新速度数据
     if (INPUT_CANCEL !== input.eventType && COMPUTE_INTERVAL < deltaTime || undefined === _prevDirection) {
-        velocityX = Math.round(Math.abs(deltaX / deltaTime) * 100) / 100;
-        velocityY = Math.round(Math.abs(deltaY / deltaTime) * 100) / 100;
+        speedX = Math.round(deltaX / deltaTime * 100) / 100;
+        speedY = Math.round(deltaY / deltaTime * 100) / 100;
+        velocityX = Math.abs(speedX);
+        velocityY = Math.abs(speedY);
         direction = getDirection(deltaX, deltaY) || _prevDirection;
         // 存储状态
+        _prevSpeedX = speedX;
+        _prevSpeedY = speedY;
         _prevVelocityX = velocityX;
         _prevVelocityY = velocityY;
         _prevDirection = direction;
         _prevInput = input;
     } else {
+        speedX = _prevSpeedX || 0;
+        speedY = _prevSpeedY || 0;
         velocityX = _prevVelocityX || 0;
         velocityY = _prevVelocityY || 0;
         direction = _prevDirection;
     }
 
-    return {velocityX, velocityY, direction };
+    return {velocityX, velocityY,speedX,speedY, direction };
 };

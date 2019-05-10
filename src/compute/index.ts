@@ -33,10 +33,8 @@ export default function ({
 
     // ========= 最近25ms内计算数据, 瞬时数据 =========
     const lastComputed = computeLast(input);
-    const velocityX = lastComputed.velocityX;
-    const velocityY = lastComputed.velocityY;
+    const {velocityX,velocityY, speedX, speedY} = lastComputed;
     const direction = <directionString>lastComputed.direction;
-
 
     // ========= 中心点位移增量 =========
     let { deltaX, deltaY, deltaXYAngle } = computeDeltaXY({ input, prevInput });
@@ -78,6 +76,8 @@ export default function ({
         ...input,
         velocityX,
         velocityY,
+        speedX,
+        speedY,
         deltaTime,
         overallDirection,
         direction,

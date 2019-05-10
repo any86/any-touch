@@ -63,7 +63,22 @@
                 <td>{{message.x}} / {{message.y}}</td>
                 <td>同centerX / centerY</td>
             </tr>
+            
+            <tr>
+                <td>velocityX / velocityY</td>
+                <td>{{message.velocityX}} / {{message.velocityY}}</td>
+                <td>速率</td>
+            </tr>
 
+
+            <tr>
+                <td>speedX / speedY</td>
+                <td>{{message.speedX}} / {{message.speedY}}</td>
+                <td>速度</td>
+            </tr>
+
+
+            
 
             <tr>
                 <td>distanceX / distanceY</td>
@@ -211,7 +226,7 @@
     <script>
         let circle = document.getElementById('circle');
         circle.addEventListener('pan', ev => {
-            // console.log(ev);
+            console.log(ev);
         });
     </script>
 </body>
