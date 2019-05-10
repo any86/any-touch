@@ -22,7 +22,7 @@ export const DIRECTION_VERTICAL = DIRECTION_UP | DIRECTION_DOWN; // 24
 export const DIRECTION_ALL = DIRECTION_HORIZONTAL | DIRECTION_VERTICAL; // 30
 
 // 计算触发时间间隔, 防止事件触发就一直计算
-export const COMPUTE_INTERVAL = 25;
+export const COMPUTE_INTERVAL = 16;
 
 
 // 计算时候取touchs.clientX | clientY

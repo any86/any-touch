@@ -42,6 +42,8 @@ export interface Computed extends Input {
     
     velocityX: number;
     velocityY: number;
+    speedX: number;
+    speedY: number;
     scale: number;
     deltaScale: number;
     angle: number;
