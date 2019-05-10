@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.3.2"></a>
+## [0.3.2](https://github.com/383514580/any-touch/compare/v0.3.1...v0.3.2) (2019-05-10)
+
+
+### Bug Fixes
+
+* 修改pkg中错误的主页地址 ([7c0fb9d](https://github.com/383514580/any-touch/commit/7c0fb9d))
+
+
+
 <a name="0.3.1"></a>
 ## [0.3.1](https://github.com/383514580/a-touch/compare/v0.3.0...v0.3.1) (2019-05-10)
 
