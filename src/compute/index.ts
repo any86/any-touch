@@ -1,6 +1,6 @@
 
 import { Computed, directionString } from '../interface';
-import { getDirection, getCenter } from '../vector';
+import { getDirection } from '../vector';
 import computeLast from './computeLast';
 import computeDistance from './computeDistance';
 import computeDeltaXY from './computeDeltaXY';

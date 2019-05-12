@@ -3,7 +3,7 @@
 // 让end阶段读取上一步的计算数据, 比如方向, 速率等...
 // 防止快速滑动到慢速滑动的手势识别成swipe
 import { Input } from '../interface';
-import { COMPUTE_INTERVAL, INPUT_CANCEL } from '../const';
+import { COMPUTE_INTERVAL, INPUT_CANCEL,INPUT_END } from '../const';
 import { getDirection } from '../vector';
 // 上次采集的input
 let _prevInput: Input;
@@ -32,10 +32,12 @@ export default (input: Input): {speedX:number, speedY: number, velocityX: number
     // _prevInput || input用来保证deltaX等不会有undefined参与计算
     _prevInput = _prevInput || input;
     const deltaTime = input.timestamp - _prevInput.timestamp;
-    const deltaX = (0 < input.x) ? input.x - _prevInput.x : 0;
-    const deltaY = (0 < input.y) ? input.y - _prevInput.y : 0;
+    // console.log({deltaTime})
     // 每25ms刷新速度数据
-    if (INPUT_CANCEL !== input.eventType && COMPUTE_INTERVAL < deltaTime || undefined === _prevDirection) {
+    if (-1 === [INPUT_CANCEL, INPUT_END].indexOf(input.eventType) && (COMPUTE_INTERVAL < deltaTime || undefined === _prevDirection)) {
+        const deltaX = input.x - _prevInput.x;
+        const deltaY =input.y - _prevInput.y;
+// console.log({deltaX,deltaY})
         speedX = Math.round(deltaX / deltaTime * 100) / 100;
         speedY = Math.round(deltaY / deltaTime * 100) / 100;
         velocityX = Math.abs(speedX);
@@ -55,6 +57,6 @@ export default (input: Input): {speedX:number, speedY: number, velocityX: number
         velocityY = _prevVelocityY || 0;
         direction = _prevDirection;
     }
-
+    // console.log({velocityX,velocityY})
     return {velocityX, velocityY,speedX,speedY, direction };
 };
