@@ -38,7 +38,7 @@ export interface Computed extends Input {
     // 手势类型名: pan/panstart/panleft...
     type: string;
     // 一次识别周期中出现的最大触点数
-    maxpointLength?: number;
+    maxPointLength?: number;
     
     velocityX: number;
     velocityY: number;

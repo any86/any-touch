@@ -11,14 +11,14 @@ export default function ({
     let displacementX = 0;
     let displacementY = 0;
     if ('start' === eventType) {
-        cache.set({displacementX});
-        cache.set({displacementY});
+        cache.set({ displacementX });
+        cache.set({ displacementY });
     } else if ('move' === eventType) {
         displacementX = round(input.points[0][propX] - startInput.points[0][propX]);
         displacementY = round(input.points[0][propY] - startInput.points[0][propY]);
         // 记录本次位移
-        cache.set({displacementX});
-        cache.set({displacementY});
+        cache.set({ displacementX });
+        cache.set({ displacementY });
     } else if ('end' === eventType) {
         displacementX = cache.get('displacementX', 0);
         displacementY = cache.get('displacementY', 0);

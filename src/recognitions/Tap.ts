@@ -183,12 +183,12 @@ export default class TapRecognizer extends Recognizer {
       */
     public test(computed: Computed): boolean {
         // 判断是否发生大的位置变化
-        const { distance, deltaTime, maxpointLength } = computed;
+        const { distance, deltaTime, maxPointLength } = computed;
         // 检查
         // 1. 触点数
         // 2. 移动距离
         // 3. start至end的事件, 区分tap和press
-        return maxpointLength === this.options.pointLength &&
+        return maxPointLength === this.options.pointLength &&
             this.options.positionTolerance >= distance &&
             this.options.maxPressTime > deltaTime;
     };

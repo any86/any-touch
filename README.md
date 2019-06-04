@@ -103,7 +103,7 @@ rotatestart/rotatemove/rotateend
 |deltaAngle|`Number`|多点触摸时, **前触点**与**当前触点**的旋转角度|
 |scale|`Number`|多点触摸时, **起始触点**与**当前触点**的缩放比例|
 |deltaScale|`Number`|多点触摸时, **前触点**与**当前触点**的缩放比例|
-|maxpointLength|`Number`|本轮识别周期出现过的最大触点数|
+|maxPointLength|`Number`|本轮识别周期出现过的最大触点数|
 |isFirst|`Boolean`|是否当前识别周期的开始|
 |isFinal|`Boolean`|是否当前识别周期的结束|
 |target|`EventTarget`|绑定事件的元素|
