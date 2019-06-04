@@ -4,7 +4,7 @@ import { getDirection } from '../vector';
 import intervalCompute from './intervalCompute';
 import computeDistance from './computeDistance';
 import computeDeltaXY from './computeDeltaXY';
-`import computeMaxLength from './computeMaxLength';
+import computeMaxLength from './computeMaxLength';
 import computMulti from './computeMulti';
 
 // 最大触点数
