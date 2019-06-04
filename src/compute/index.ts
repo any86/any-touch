@@ -1,16 +1,14 @@
 
 import { Computed, directionString } from '../interface';
 import { getDirection } from '../vector';
-import computeLast from './computeLast';
+import computeLast from './intervalCompute';
 import computeDistance from './computeDistance';
 import computeDeltaXY from './computeDeltaXY';
 import computeVector from './computeVector';
 import computeScale from './computeScale';
 import computeAngle from './computeAngle';
 import computeMaxLength from './computeMaxLength';
-
-let prevScale = 1;
-let prevAngle = 0;
+import cache from '../$_cache';
 
 // 最大触点数
 export default function ({
@@ -19,6 +17,7 @@ export default function ({
     startMutliInput,
     input
 }: any): Computed {
+    
     // ========= 整体距离/位移=========
     const { displacementX, displacementY, distanceX, distanceY, distance } = computeDistance({
         startInput,
@@ -32,7 +31,7 @@ export default function ({
     const deltaTime = input.timestamp - startInput.timestamp;
 
     // ========= 最近25ms内计算数据, 瞬时数据 =========
-    const lastComputed = computeLast(input);
+    const lastComputed = computeLast({input, prevInput});
     const {velocityX,velocityY, speedX, speedY} = lastComputed;
     const direction = <directionString>lastComputed.direction;
 
@@ -62,12 +61,12 @@ export default function ({
         const rotation = computeAngle({ startV, prevV, activeV });
         angle = rotation.angle;
         deltaAngle = rotation.deltaAngle;
-        prevAngle = angle;
-        prevScale = scale;
+        cache.set({angle});
+        cache.set({scale});
     } else {
-        scale = prevScale;
+        scale = cache.get('scale', 1);
         deltaScale = 1;
-        angle = prevAngle;
+        angle = cache.get('angle', 0);
         deltaAngle = 0;
     }
 

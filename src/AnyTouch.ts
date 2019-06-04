@@ -18,10 +18,12 @@
  */
 import { Computed } from './interface';
 import AnyEvent from 'any-event';
-import { SUPPORT_TOUCH } from './const'; ``
+import { SUPPORT_TOUCH } from './const'; 
 import InputManage from './InputManage';
 import compute from './compute/index';
-import computeTouchAction from './untils/computeTouchAction'
+import computeTouchAction from './untils/computeTouchAction';
+import cache from './$_cache';
+
 // 识别器
 import Recognizer from './recognitions/Base';
 import Tap from './recognitions/Tap';
@@ -68,6 +70,7 @@ export class AnyTouch {
     eventEmitter: AnyEvent;
 
     inputManage: InputManage;
+
 
     // 是否阻止后面的识别器运行
     private _isStopped: boolean;
@@ -279,6 +282,7 @@ export class AnyTouch {
         let inputs = this.inputManage.load(event);
         // 当是鼠标事件的时候, mouseup阶段的input为undefined
         if (undefined !== inputs) {
+
             const computed = compute(inputs);
             // 重置停止标记
             if (computed.isFirst) {
@@ -354,6 +358,7 @@ export class AnyTouch {
      * 销毁
      */
     destroy() {
+    cache.reset();
         // 解绑事件
         this.unbind();
         this.eventEmitter.destroy();

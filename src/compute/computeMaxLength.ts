@@ -1,10 +1,15 @@
 import { Input } from '../interface';
-let maxLength = 0;
-export default ({ pointLength, isFirst, isFinal }: Input): number => {
+import cache from '../$_cache';
+
+export default ({ pointLength, isFirst }: Input): number => {
     if (isFirst) {
-        maxLength = pointLength;
+        cache.set({maxPointLength:pointLength});
+        return pointLength;
     } else {
-        maxLength = Math.max(maxLength, pointLength);
+        const maxLength = cache.get('maxPointLength', 0);
+        if (pointLength > maxLength) {
+            cache.set({maxPointLength:pointLength});
+        }
+        return cache.get('maxPointLength', 0)
     }
-    return maxLength;
 };

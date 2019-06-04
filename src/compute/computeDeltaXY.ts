@@ -1,5 +1,6 @@
 import { radianToAngle } from '../vector';
-let lastDeltaXYAngle = 0;
+import cache from '../$_cache';
+
 export default function ({
     prevInput,
     input
@@ -23,9 +24,9 @@ export default function ({
     if (0 !== deltaX || 0 !== deltaY) {
         const deltaXY = Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2));
         deltaXYAngle = Math.round(radianToAngle(Math.acos(Math.abs(deltaX) / deltaXY)));
-        lastDeltaXYAngle = deltaXYAngle;
+        cache.set({deltaXYAngle});
     } else {
-        deltaXYAngle = lastDeltaXYAngle;
+        deltaXYAngle = cache.get('deltaXYAngle', 0);
     }
 
     return { deltaX, deltaY, deltaXYAngle };
