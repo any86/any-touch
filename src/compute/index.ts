@@ -1,39 +1,34 @@
 
 import { Computed, directionString } from '../interface';
 import { getDirection } from '../vector';
-import computeLast from './intervalCompute';
+import intervalCompute from './intervalCompute';
 import computeDistance from './computeDistance';
 import computeDeltaXY from './computeDeltaXY';
-import computeVector from './computeVector';
-import computeScale from './computeScale';
-import computeAngle from './computeAngle';
-import computeMaxLength from './computeMaxLength';
-import cache from '../$_cache';
+`import computeMaxLength from './computeMaxLength';
+import computMulti from './computeMulti';
 
 // 最大触点数
 export default function ({
     startInput,
     prevInput,
-    startMutliInput,
+    startMultiInput,
     input
 }: any): Computed {
-    
+
     // ========= 整体距离/位移=========
     const { displacementX, displacementY, distanceX, distanceY, distance } = computeDistance({
         startInput,
         input
     });
 
-    // ========= 方向 =========
+    // ========= 从isStart到isFinal为止的方向 =========
     const overallDirection = <directionString>getDirection(displacementX, displacementY);
 
     // ========= 已消耗时间 =========
     const deltaTime = input.timestamp - startInput.timestamp;
 
     // ========= 最近25ms内计算数据, 瞬时数据 =========
-    const lastComputed = computeLast({input, prevInput});
-    const {velocityX,velocityY, speedX, speedY} = lastComputed;
-    const direction = <directionString>lastComputed.direction;
+    const { velocityX, velocityY, speedX, speedY, direction } = intervalCompute({ input, prevInput });
 
     // ========= 中心点位移增量 =========
     let { deltaX, deltaY, deltaXYAngle } = computeDeltaXY({ input, prevInput });
@@ -41,36 +36,17 @@ export default function ({
 
     // ========= 多点计算 =========
     // 上一触点数大于1, 当前触点大于1
-    let scale = 1;
-    let deltaScale = 0;
-    let angle = 0;
-    let deltaAngle = 0;
-    if (undefined !== prevInput && 1 < prevInput.points.length && 1 < input.points.length) {
-        // 2指形成的向量
-        const startV = computeVector(startMutliInput);
-        const prevV = computeVector(prevInput);
-        const activeV = computeVector(input);
-        // 计算缩放
-        const scaling = computeScale({
-            startV, activeV, prevV
-        });
-        scale = scaling.scale;
-        deltaScale = scaling.deltaScale;
+    // 连续第二次出现多点, 才能开始计算
+    const { scale,
+        deltaScale,
+        angle,
+        deltaAngle } = computMulti({
+            startMultiInput,
+            prevInput,
+            input
+        })
 
-        // ========= 计算旋转角度 =========
-        const rotation = computeAngle({ startV, prevV, activeV });
-        angle = rotation.angle;
-        deltaAngle = rotation.deltaAngle;
-        cache.set({angle});
-        cache.set({scale});
-    } else {
-        scale = cache.get('scale', 1);
-        deltaScale = 1;
-        angle = cache.get('angle', 0);
-        deltaAngle = 0;
-    }
 
-    // ========= 最大触点数 =========
     return {
         ...input,
         velocityX,

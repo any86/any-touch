@@ -8,7 +8,7 @@ export default class {
     // 当前触点
     activeInput?: Input;
     // 多点触碰的起点
-    startMutliInput?: Input;
+    startMultiInput?: Input;
 
     inputFactory: InputFactory;
 
@@ -21,7 +21,7 @@ export default class {
         startInput?: Input,
         prevInput?: Input,
         input?: Input,
-        startMutliInput?: Input
+        startMultiInput?: Input
     } | void {
         // 格式化不同设备输入数据
         const input = this.inputFactory.load(event);
@@ -42,10 +42,10 @@ export default class {
             this.startInput = input;
             // 起点(多点)
             if (1 < input.pointLength) {
-                this.startMutliInput = input;
+                this.startMultiInput = input;
             } else {
                 // 如果出现了单点, 那么之前的多点起点记录失效
-                this.startMutliInput = undefined;
+                this.startMultiInput = undefined;
             }
         } else if ('move' === eventType) {
             // 读取上一点
@@ -57,7 +57,7 @@ export default class {
             // console.log(this.startInput, this.el.id);
         }
         return {
-            startMutliInput: this.startMutliInput,
+            startMultiInput: this.startMultiInput,
             startInput: this.startInput,
             prevInput: this.prevInput,
             input
