@@ -34,7 +34,7 @@ export interface Input extends BaseInput {
 }
 // input的计算结果
 export interface Computed extends Input {
-
+    type: string;
     // 一次识别周期中出现的最大触点数
     maxPointLength?: number;
 
@@ -57,9 +57,9 @@ export interface Computed extends Input {
     distance: number;
     deltaTime: number;
     // 与起始点的偏移方向
-    overallDirection?: string;
+    overallDirection?: directionString;
     // 瞬时方向
-    direction?: string;
+    direction?: directionString;
 }
 
 export interface AnyTouchEvent extends Computed {

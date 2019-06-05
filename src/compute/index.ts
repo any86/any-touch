@@ -38,6 +38,7 @@ export default function (inputs: Inputs): Computed {
 
     const maxPointLength = computeMaxLength(input);
     return {
+        type: '',
         ...input,
         velocityX,
         velocityY,

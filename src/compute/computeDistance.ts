@@ -1,5 +1,5 @@
 
-import { Input } from '../interface';
+import { Input,directionString } from '../interface';
 import cache from '../$_cache';
 import { propX, propY } from '../const';
 import { getVLength, getDirection } from '../vector';
@@ -9,7 +9,7 @@ export default function ({
 }: {
     startInput: Input,
     input: Input
-}): { displacementX: number, displacementY: number, distanceX: number, distanceY: number, distance: number, overallDirection: string } {
+}): { displacementX: number, displacementY: number, distanceX: number, distanceY: number, distance: number, overallDirection: directionString } {
     const { eventType } = input;
     let displacementX = 0;
     let displacementY = 0;

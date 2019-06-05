@@ -2,12 +2,12 @@
 // 默认间隔25ms做一次计算, 让数据更新,
 // 让end阶段读取上一步的计算数据, 比如方向, 速率等...
 // 防止快速滑动到慢速滑动的手势识别成swipe
-import { Input } from '../interface';
+import { Input,directionString } from '../interface';
 import { COMPUTE_INTERVAL, INPUT_CANCEL, INPUT_END } from '../const';
 import { getDirection } from '../vector';
 import cache from '../$_cache';
 
-export default ({ prevInput, input }: { prevInput?: Input, input?: Input }): { speedX: number, speedY: number, velocityX: number, velocityY: number, direction?: string } => {
+export default ({ prevInput, input }: { prevInput?: Input, input?: Input }): { speedX: number, speedY: number, velocityX: number, velocityY: number, direction?: directionString } => {
 
     // 速率
     let velocityX = 0;
@@ -18,7 +18,7 @@ export default ({ prevInput, input }: { prevInput?: Input, input?: Input }): { s
     let speedY = 0;
 
     // 方向
-    let direction: string|undefined;
+    let direction: directionString = 'none';
 
     // 点击鼠标左键, 会出现undefined
     if (undefined !== input) {
@@ -33,7 +33,7 @@ export default ({ prevInput, input }: { prevInput?: Input, input?: Input }): { s
             speedY = Math.round(deltaY / deltaTime * 100) / 100;
             velocityX = Math.abs(speedX);
             velocityY = Math.abs(speedY);
-            direction = getDirection(deltaX, deltaY) || cache.get('direction');
+            direction = getDirection(deltaX, deltaY) || <directionString>(cache.get('direction'));
             // 存储状态
             cache.set({ speedX });
             cache.set({ speedY });
