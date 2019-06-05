@@ -1,10 +1,8 @@
 import { Computed } from '../interface';
 import {
-    STATUS_POSSIBLE,
-    STATUS_CANCELLED,
     STATUS_FAILED, STATUS_RECOGNIZED
 } from '../const/recognizerStatus';
-import { INPUT_CANCEL, INPUT_END, INPUT_MOVE, INPUT_START } from '../const';
+import { INPUT_CANCEL, INPUT_END, INPUT_START } from '../const';
 import Recognizer from './Base';
 export default class PressRecognizer extends Recognizer {
     private _timeoutId?: number;

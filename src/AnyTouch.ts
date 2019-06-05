@@ -18,7 +18,7 @@
  */
 import { Computed } from './interface';
 import AnyEvent from 'any-event';
-import { SUPPORT_TOUCH } from './const'; 
+import { SUPPORT_TOUCH } from './const';
 import InputManage from './InputManage';
 import compute from './compute/index';
 import computeTouchAction from './untils/computeTouchAction';
@@ -111,6 +111,8 @@ export class AnyTouch {
         // eventEmitter
         this.eventEmitter = new AnyEvent();
         this._isStopped = false;
+        // 初始化cache
+        cache.reset();
         // 识别器
         // 注入当前方法和属性, 方便在识别器中调用类上的方法和属性
         this.recognizers = [
@@ -280,17 +282,17 @@ export class AnyTouch {
 
         // 管理历史input
         let inputs = this.inputManage.load(event);
-        // 当是鼠标事件的时候, mouseup阶段的input为undefined
+        // 跳过无效输入
+        // 如: 当是鼠标事件的时候, mouseup阶段的input为undefined
         if (undefined !== inputs) {
-
-            const computed = compute(inputs);
-            // 重置停止标记
-            if (computed.isFirst) {
-                this._isStopped = false;
-            }
+            // inputs !== undefined 说明input不为undefined,
+            // 因为inputManage中如果input为undefined的时候, inputs才为undefined
+            const computed = compute(<any>inputs);
             // input事件
             this.emit('input', computed);
             if (computed.isFirst) {
+                // cache.reset();
+                this._isStopped = false;
                 this.emit('inputstart', computed);
             } else if (computed.isFinal) {
                 if ('cancel' === computed.eventType) {
@@ -344,9 +346,8 @@ export class AnyTouch {
      * @param {String} 类型名
      * @param {Object} 数据
      */
-    emit(type: string, payload: Pick<any, 'type'>) {
-        payload.type = type;
-        this.eventEmitter.emit(type, payload);
+    emit(type: string, payload: Computed) {
+        this.eventEmitter.emit(type, { ...payload, type });
     };
 
     /**
@@ -358,7 +359,7 @@ export class AnyTouch {
      * 销毁
      */
     destroy() {
-    cache.reset();
+        cache.reset();
         // 解绑事件
         this.unbind();
         this.eventEmitter.destroy();

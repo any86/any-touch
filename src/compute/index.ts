@@ -1,37 +1,31 @@
 
-import { Computed, directionString } from '../interface';
+import { Computed, Input, directionString } from '../interface';
 import { getDirection } from '../vector';
 import intervalCompute from './intervalCompute';
 import computeDistance from './computeDistance';
 import computeDeltaXY from './computeDeltaXY';
 import computeMaxLength from './computeMaxLength';
 import computMulti from './computeMulti';
-
+type Inputs = {
+    input: Input;
+    startInput: Input;
+    prevInput?: Input;
+    startMultiInput?: Input;
+}
 // 最大触点数
-export default function ({
-    startInput,
-    prevInput,
-    startMultiInput,
-    input
-}: any): Computed {
-
+export default function (inputs: Inputs): Computed {
+    const { input } = inputs;
     // ========= 整体距离/位移=========
-    const { displacementX, displacementY, distanceX, distanceY, distance } = computeDistance({
-        startInput,
-        input
-    });
-
-    // ========= 从isStart到isFinal为止的方向 =========
-    const overallDirection = <directionString>getDirection(displacementX, displacementY);
+    const { displacementX, displacementY, distanceX, distanceY, distance, overallDirection } = computeDistance(inputs);
 
     // ========= 已消耗时间 =========
-    const deltaTime = input.timestamp - startInput.timestamp;
+    const deltaTime = inputs.input.timestamp - inputs.startInput.timestamp;
 
     // ========= 最近25ms内计算数据, 瞬时数据 =========
-    const { velocityX, velocityY, speedX, speedY, direction } = intervalCompute({ input, prevInput });
+    const { velocityX, velocityY, speedX, speedY, direction } = intervalCompute(inputs);
 
     // ========= 中心点位移增量 =========
-    let { deltaX, deltaY, deltaXYAngle } = computeDeltaXY({ input, prevInput });
+    const { deltaX, deltaY, deltaXYAngle } = computeDeltaXY(inputs);
 
 
     // ========= 多点计算 =========
@@ -40,13 +34,9 @@ export default function ({
     const { scale,
         deltaScale,
         angle,
-        deltaAngle } = computMulti({
-            startMultiInput,
-            prevInput,
-            input
-        })
+        deltaAngle } = computMulti(inputs);
 
-
+    const maxPointLength = computeMaxLength(input);
     return {
         ...input,
         velocityX,
@@ -66,6 +56,6 @@ export default function ({
         deltaScale,
         angle,
         deltaAngle,
-        maxPointLength: computeMaxLength(input)
+        maxPointLength 
     };
 };

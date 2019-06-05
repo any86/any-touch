@@ -96,8 +96,6 @@ export default class TapRecognizer extends Recognizer {
         // 每一次点击是否符合要求
         if (this.test(computed)) {
 
-
-            // 一旦每次tap识别成功, 那么一段时间后如果不符合多次点击条件, 设置状态为failed
             this._cancelDelayFail();
             this._delayFail();
 

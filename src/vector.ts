@@ -97,7 +97,7 @@ export const getCenter = (points: any) => {
  * @param {Number} 事件开始到结束的X位移 
 * @param {Number} 事件开始到结束的Y位移 
  */
-export const getDirection = (x: number, y: number): string | void => {
+export const getDirection = (x: number, y: number): string => {
     if (x === y) {
         return 'none';
     } else if (Math.abs(x) > Math.abs(y)) {

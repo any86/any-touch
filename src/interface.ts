@@ -15,7 +15,7 @@ export interface BaseInput {
 }
 
 export interface Input extends BaseInput {
-    preventDefault: ()=>void;
+    preventDefault: () => void;
     // 新一轮手势识别的开始和结束
     isFirst: boolean;
     isFinal: boolean;
@@ -35,11 +35,9 @@ export interface Input extends BaseInput {
 // input的计算结果
 export interface Computed extends Input {
 
-    // 手势类型名: pan/panstart/panleft...
-    type: string;
     // 一次识别周期中出现的最大触点数
     maxPointLength?: number;
-    
+
     velocityX: number;
     velocityY: number;
     speedX: number;
@@ -53,13 +51,18 @@ export interface Computed extends Input {
     deltaXYAngle: number;
     displacementX: number;
     displacementY: number;
-    
+
     distanceX: number;
     distanceY: number;
     distance: number;
     deltaTime: number;
     // 与起始点的偏移方向
-    overallDirection:directionString;
+    overallDirection?: string;
     // 瞬时方向
-    direction?: directionString;
+    direction?: string;
+}
+
+export interface AnyTouchEvent extends Computed {
+    // 手势类型名: pan/panstart/panleft...
+    type: string;
 }

@@ -5,10 +5,6 @@ class _Cache {
         this._cache = {};
     }
 
-    // set(key: string, value: any) {
-    //     this._cache[key] = value;
-    // };
-
     set(object:object){
         this._cache = {...this._cache, ...object};
     };

@@ -1,21 +1,24 @@
 
+import { Input } from '../interface';
 import cache from '../$_cache';
 import { propX, propY } from '../const';
-import { getVLength } from '../vector';
+import { getVLength, getDirection } from '../vector';
 export default function ({
     startInput,
     input
-}: any): any {
+}: {
+    startInput: Input,
+    input: Input
+}): { displacementX: number, displacementY: number, distanceX: number, distanceY: number, distance: number, overallDirection: string } {
     const { eventType } = input;
-    const { round, abs } = Math;
     let displacementX = 0;
     let displacementY = 0;
     if ('start' === eventType) {
         cache.set({ displacementX });
         cache.set({ displacementY });
     } else if ('move' === eventType) {
-        displacementX = round(input.points[0][propX] - startInput.points[0][propX]);
-        displacementY = round(input.points[0][propY] - startInput.points[0][propY]);
+        displacementX = Math.round(input!.points[0][propX] - startInput!.points[0][propX]);
+        displacementY = Math.round(input!.points[0][propY] - startInput!.points[0][propY]);
         // 记录本次位移
         cache.set({ displacementX });
         cache.set({ displacementY });
@@ -24,10 +27,11 @@ export default function ({
         displacementY = cache.get('displacementY', 0);
     }
 
-    let distanceX = abs(displacementX);
-    let distanceY = abs(displacementY);
-    let distance = round(getVLength({ x: distanceX, y: distanceY }));
+    const distanceX = Math.abs(displacementX);
+    const distanceY = Math.abs(displacementY);
+    const distance = Math.round(getVLength({ x: distanceX, y: distanceY }));
+    const overallDirection = getDirection(displacementX, displacementY);
     return {
-        displacementX, displacementY, distanceX, distanceY, distance
+        displacementX, displacementY, distanceX, distanceY, distance, overallDirection
     };
 };
