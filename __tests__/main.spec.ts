@@ -9,5 +9,5 @@ test('当前是否移动设备?', () => {
     const el = document.createElement('div');
     
     const at = new AnyTouch(el);
-    expect(at.inputType).toBe('touch');
+    expect(at.touchDevice).toBe('touch');
 });

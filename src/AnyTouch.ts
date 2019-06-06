@@ -60,7 +60,7 @@ export class AnyTouch {
 
     default: Options;
 
-    inputType: string;
+    touchDevice: string;
 
     recognizers: Recognizer[];
 
@@ -106,7 +106,7 @@ export class AnyTouch {
         };
         this.el = el;
         this.inputManage = new InputManage();
-        this.inputType = SUPPORT_TOUCH ? 'touch' : 'mouse';
+        this.touchDevice = SUPPORT_TOUCH ? 'touch' : 'mouse';
         this.options = { ...this.default, ...options };
         // eventEmitter
         this.eventEmitter = new AnyEvent();
@@ -184,7 +184,7 @@ export class AnyTouch {
     private _bindRecognizers(el: Element) {
         const boundInputListener = this.inputListener.bind(this);
         // Touch
-        if ('touch' === this.inputType) {
+        if ('touch' === this.touchDevice) {
             const events = ['touchstart', 'touchmove', 'touchend', 'touchcancel'];
             events.forEach(eventName => {
                 el.addEventListener(eventName, boundInputListener);

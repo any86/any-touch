@@ -164,9 +164,9 @@ export default abstract class Recognizer {
         return -1 !== this.options.directions.indexOf(direction) || 'none' === direction;
     };
 
-    public flow(isVaild: boolean, activeStatus: string, inputType: string): string {
+    public flow(isVaild: boolean, activeStatus: string, touchDevice: string): string {
         // if(this.name ==='swipe' ) {
-        //     console.log(isVaild, activeStatus, inputType);
+        //     console.log(isVaild, activeStatus, touchDevice);
         // }
         const STATE_MAP: { [k: number]: any } = {
             // isVaild === true,
@@ -206,7 +206,7 @@ export default abstract class Recognizer {
         };
         // console.warn(Number(isVaild),activeStatus, STATE_MAP[Number(isVaild)][activeStatus]);
         if (undefined !== STATE_MAP[Number(isVaild)][activeStatus]) {
-            return STATE_MAP[Number(isVaild)][activeStatus][inputType] || activeStatus;
+            return STATE_MAP[Number(isVaild)][activeStatus][touchDevice] || activeStatus;
         } else {
             return activeStatus;
         }

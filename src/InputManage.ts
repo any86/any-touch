@@ -16,7 +16,6 @@ export default class {
         this.inputFactory = new InputFactory();
     };
 
-
     load(event: Event): {
         startInput?: Input,
         prevInput?: Input,
