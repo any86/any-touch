@@ -1,4 +1,4 @@
-import { propX, propY } from './const';
+import { CLIENT_X, CLIENT_Y } from './const';
 import { directionString, Point } from './interface';
 
 interface Vector {
@@ -77,8 +77,8 @@ export const getCenter = (points: { clientX: number, clientY: number }[]): Point
     // 由于是触碰后才运行getCenter, 所以一定至少有一个点(end阶段也有clientX/Y)
     // 所以不做 0 < length 的判断了
     const countPoint = points.reduce((countPoint: Point, point: any) => {
-        countPoint.x += point[propX];
-        countPoint.y += point[propY];
+        countPoint.x += point[CLIENT_X];
+        countPoint.y += point[CLIENT_Y];
         return countPoint;
     }, { x: 0, y: 0 });
     return { x: Math.round(countPoint.x / length), y: Math.round(countPoint.y / length) }
