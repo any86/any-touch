@@ -1,11 +1,10 @@
 import { propX, propY } from './const';
-import { directionString } from './interface';
+import { directionString, Point } from './interface';
 
 interface Vector {
     x: number;
     y: number;
 }
-const { round } = Math;
 /**
  * 获取向量长度(向量模)
  * @param {Object} 向 量
@@ -71,27 +70,18 @@ export const angleToRadian = (angle: number): number => angle / 180 * Math.PI;
 
 /**
  * 获取多点之间的中心坐标
- * @param {Array} 触碰点 
+ * @param {Array} 触碰点 s
  */
-export const getCenter = (points: any) => {
-    const pointLength = points.length;
-    if (1 < pointLength) {
-        let x = 0;
-        let y = 0;
-        let i = 0;
-        while (i < pointLength) {
-            x += points[i][propX];
-            y += points[i][propY];
-            i++;
-        }
-
-        return {
-            x: round(x / pointLength),
-            y: round(y / pointLength)
-        };
-    } else {
-        return { x: round(points[0][propX]), y: round(points[0][propY]) };
-    }
+export const getCenter = (points: { clientX: number, clientY: number }[]): Point | void => {
+    const { length } = points;
+    // 由于是触碰后才运行getCenter, 所以一定至少有一个点(end阶段也有clientX/Y)
+    // 所以不做 0 < length 的判断了
+    const countPoint = points.reduce((countPoint: Point, point: any) => {
+        countPoint.x += point[propX];
+        countPoint.y += point[propY];
+        return countPoint;
+    }, { x: 0, y: 0 });
+    return { x: Math.round(countPoint.x / length), y: Math.round(countPoint.y / length) }
 };
 
 /**
