@@ -1,10 +1,7 @@
 import { CLIENT_X, CLIENT_Y } from './const';
 import { directionString, Point } from './interface';
+type Vector = Point;
 
-interface Vector {
-    x: number;
-    y: number;
-}
 /**
  * 获取向量长度(向量模)
  * @param {Object} 向 量
@@ -72,7 +69,7 @@ export const angleToRadian = (angle: number): number => angle / 180 * Math.PI;
  * 获取多点之间的中心坐标
  * @param {Array} 触碰点 s
  */
-export const getCenter = (points: { clientX: number, clientY: number }[]): Point | void => {
+export const getCenter = (points: { clientX: number, clientY: number }[]): Point => {
     const { length } = points;
     // 由于是触碰后才运行getCenter, 所以一定至少有一个点(end阶段也有clientX/Y)
     // 所以不做 0 < length 的判断了
