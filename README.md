@@ -1,4 +1,4 @@
-# any-touch  [![NPM Version][npm-image]][npm-url] [![NPM Downloads][downloads-image]][downloads-url] [![npm bundle size (minified + gzip)][size-image]][size-url] [![codecov](https://codecov.io/gh/383514580/any-touch/branch/develop/graph/badge.svg)](https://codecov.io/gh/383514580/any-touch)  [![CircleCI](https://circleci.com/gh/383514580/any-touch.svg?style=svg)](https://circleci.com/gh/383514580/any-touch)
+# any-touch  [![NPM Version][npm-image]][npm-url] [![NPM Downloads][downloads-image]][downloads-url] [![npm bundle size (minified + gzip)][size-image]][size-url] [![codecov](https://codecov.io/gh/any86/any-touch/branch/develop/graph/badge.svg)](https://codecov.io/gh/any86/any-touch)  [![CircleCI](https://circleci.com/gh/any86/any-touch.svg?style=svg)](https://circleci.com/gh/any86/any-touch)
 
 
 [size-image]: https://img.shields.io/bundlephobia/minzip/any-touch.svg
@@ -37,7 +37,7 @@
 
 [自定义手势-双击](https://codepen.io/russell2015/pen/xBrgjJ)
 
-[全部手势展示](https://383514580.github.io/any-touch/example/)
+[全部手势展示](https://any86.github.io/any-touch/example/)
 
 [drawer效果](https://codepen.io/russell2015/pen/jJRbgp?editors=0010)
 
