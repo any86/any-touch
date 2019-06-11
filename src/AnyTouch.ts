@@ -2,7 +2,7 @@
  * ==================== 参考 ====================
  * https://segmentfault.com/a/1190000010511484#articleHeader0
  * https://segmentfault.com/a/1190000007448808#articleHeader1
- * hammer.js
+ * hammer.js http://hammerjs.github.io/
  * 
  * ==================== 支持的手势 ====================
  * rotate 旋转
@@ -16,13 +16,12 @@
  * ==================== 流程 ====================
  * 格式化Event成统一的pointer格式 => 通过pointer数据计算 => 用计算结果去识别手势
  */
-import { Computed } from './interface';
+import { AnyTouchEvent, SupportEvent } from './interface';
 import AnyEvent from 'any-event';
 import { SUPPORT_TOUCH } from './const';
 import InputManage from './InputManage';
-import compute from './compute/index';
-import computeTouchAction from './untils/computeTouchAction';
-import cache from './$_cache';
+import computeTouchAction from './utils/computeTouchAction';
+import Store from './Store';
 
 // 识别器
 import Recognizer from './recognitions/Base';
@@ -71,6 +70,7 @@ export class AnyTouch {
 
     inputManage: InputManage;
 
+    $store: Store;
 
     // 是否阻止后面的识别器运行
     private _isStopped: boolean;
@@ -105,14 +105,13 @@ export class AnyTouch {
             }
         };
         this.el = el;
-        this.inputManage = new InputManage();
+        this.$store = new Store();
+        this.inputManage = new InputManage({$store:this.$store});
         this.touchDevice = SUPPORT_TOUCH ? 'touch' : 'mouse';
         this.options = { ...this.default, ...options };
         // eventEmitter
         this.eventEmitter = new AnyEvent();
         this._isStopped = false;
-        // 初始化cache
-        cache.reset();
         // 识别器
         // 注入当前方法和属性, 方便在识别器中调用类上的方法和属性
         this.recognizers = [
@@ -182,7 +181,7 @@ export class AnyTouch {
      * @param {Element} 待绑定手势元素
      */
     private _bindRecognizers(el: Element) {
-        const boundInputListener = this.inputListener.bind(this);
+        const boundInputListener = <EventListener>this.inputListener.bind(this);
         // Touch
         if ('touch' === this.touchDevice) {
             const events = ['touchstart', 'touchmove', 'touchend', 'touchcancel'];
@@ -271,7 +270,7 @@ export class AnyTouch {
      * 监听input变化
      * @param {Event}
      */
-    inputListener(event: Event): void {
+    inputListener(event: SupportEvent): void {
         if (this.options.isPreventDefault) {
             event.preventDefault();
         }
@@ -281,20 +280,18 @@ export class AnyTouch {
         }
 
         // 管理历史input
-        let inputs = this.inputManage.load(event);
+        // 生成AnyTouchEvent
+        const computed = this.inputManage.load(event);
         // 跳过无效输入
-        // 如: 当是鼠标事件的时候, mouseup阶段的input为undefined
-        if (undefined !== inputs) {
-            // inputs !== undefined 说明input不为undefined,
-            // 因为inputManage中如果input为undefined的时候, inputs才为undefined
-            const computed = compute(<any>inputs);
+        // 如: 当是鼠标事件的时候, 会有undefined的时候
+        if (undefined !== computed) {
             // input事件
             this.emit('input', computed);
-            if (computed.isFirst) {
-                // cache.reset();
+            if (computed.isStart) {
+                // $store.reset();
                 this._isStopped = false;
                 this.emit('inputstart', computed);
-            } else if (computed.isFinal) {
+            } else if (computed.isEnd) {
                 if ('cancel' === computed.eventType) {
                     this.emit('inputcancel', computed);
                 } else {
@@ -302,15 +299,14 @@ export class AnyTouch {
                 }
             } else {
                 // prevInput和input一定不为空
-                if (inputs.prevInput!.pointLength > inputs.input!.pointLength) {
+                if (this.inputManage.prevInput!.pointLength > this.inputManage.activeInput!.pointLength) {
                     this.emit('inputreduce', computed);
-                } else if (inputs.prevInput!.pointLength < inputs.input!.pointLength) {
+                } else if (this.inputManage.prevInput!.pointLength < this.inputManage.activeInput!.pointLength) {
                     this.emit('inputadd', computed);
                 } else {
                     this.emit('inputmove', computed);
                 }
             };
-
 
             for (let recognizer of this.recognizers) {
                 if (recognizer.disabled) continue;
@@ -328,7 +324,7 @@ export class AnyTouch {
      * @param {String} 事件名
      * @param {Function} 回调函数
      */
-    on(type: string, listener: (event: Computed) => void, options: { [k: string]: boolean } | boolean = false): void {
+    on(type: string, listener: (event: AnyTouchEvent) => void, options: { [k: string]: boolean } | boolean = false): void {
         this.eventEmitter.on(type, listener);
     };
 
@@ -337,7 +333,7 @@ export class AnyTouch {
      * @param {String} 事件名 
      * @param {Function} 事件回调
      */
-    off(type: string, listener?: (event: Computed) => void): void {
+    off(type: string, listener?: (event: AnyTouchEvent) => void): void {
         this.eventEmitter.off(type, listener);
     };
 
@@ -346,7 +342,7 @@ export class AnyTouch {
      * @param {String} 类型名
      * @param {Object} 数据
      */
-    emit(type: string, payload: Computed) {
+    emit(type: string, payload: AnyTouchEvent) {
         this.eventEmitter.emit(type, { ...payload, type });
     };
 
@@ -359,7 +355,7 @@ export class AnyTouch {
      * 销毁
      */
     destroy() {
-        cache.reset();
+        this.$store.destroy();
         // 解绑事件
         this.unbind();
         this.eventEmitter.destroy();

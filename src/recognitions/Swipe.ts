@@ -1,5 +1,5 @@
 import Recognizer from './Base';
-import { Computed } from '../interface';
+import { AnyTouchEvent } from '../interface';
 import { INPUT_END } from '../const';
 export default class SwipeRecognizer extends Recognizer {
     static DEFAULT_OPTIONS = {
@@ -19,9 +19,9 @@ export default class SwipeRecognizer extends Recognizer {
 
     /**
      * 识别后发布swipeleft等事件
-     * @param {Computed} 计算数据
+     * @param {AnyTouchEvent} 计算数据
      */
-    afterEmit(computed: Computed) {
+    afterEmit(computed: AnyTouchEvent) {
         if ('none' !== computed.direction) {
             this.emit(this.options.name + computed.direction, computed);
         }
@@ -29,9 +29,9 @@ export default class SwipeRecognizer extends Recognizer {
 
     /**
      * 识别条件
-     * @param {Computed} 计算数据
+     * @param {AnyTouchEvent} 计算数据
      */
-    test(computed: Computed): boolean {
+    test(computed: AnyTouchEvent): boolean {
         if (INPUT_END !== computed.eventType) return false;
 
         // 非end阶段, 开始校验数据

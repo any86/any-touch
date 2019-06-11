@@ -1,5 +1,5 @@
 import Base from './Base';
-import { Computed } from '../interface';
+import { AnyTouchEvent } from '../interface';
 export default class RotateRecognizer extends Base {
     static DEFAULT_OPTIONS = {
         name: 'rotate',
@@ -18,14 +18,14 @@ export default class RotateRecognizer extends Base {
     /**
      * 无特殊事件要触发
      */
-    afterEmit(computed: Computed) { };
+    afterEmit(computed: AnyTouchEvent) { };
 
     /**
      * 识别条件
-     * @param {Computed} 计算数据
+     * @param {AnyTouchEvent} 计算数据
      * @return {Boolean} 接收是否识别状态
      */
-    test({ pointLength, angle }: Computed): boolean {
+    test({ pointLength, angle }: AnyTouchEvent): boolean {
         // 如果触碰点数要大于指定
         // 如果缩放超过阈值, 或者已识别
         return this.isValidPointLength(pointLength) && (this.options.threshold < Math.abs(angle) || this.isRecognized);

@@ -1,4 +1,4 @@
-# any-touch  [![NPM Version][npm-image]][npm-url] [![NPM Downloads][downloads-image]][downloads-url] [![npm bundle size (minified + gzip)][size-image]][size-url] [![codecov](https://codecov.io/gh/383514580/any-touch/branch/develop/graph/badge.svg)](https://codecov.io/gh/383514580/any-touch)  [![CircleCI](https://circleci.com/gh/383514580/any-touch.svg?style=svg)](https://circleci.com/gh/383514580/any-touch)
+# any-touch  [![NPM Version][npm-image]][npm-url] [![NPM Downloads][downloads-image]][downloads-url] [![npm bundle size (minified + gzip)][size-image]][size-url] [![codecov](https://codecov.io/gh/any86/any-touch/branch/develop/graph/badge.svg)](https://codecov.io/gh/any86/any-touch)  [![CircleCI](https://circleci.com/gh/any86/any-touch.svg?style=svg)](https://circleci.com/gh/any86/any-touch)
 
 
 [size-image]: https://img.shields.io/bundlephobia/minzip/any-touch.svg
@@ -37,7 +37,7 @@
 
 [自定义手势-双击](https://codepen.io/russell2015/pen/xBrgjJ)
 
-[全部手势展示](https://383514580.github.io/any-touch/example/)
+[全部手势展示](https://any86.github.io/any-touch/example/)
 
 [drawer效果](https://codepen.io/russell2015/pen/jJRbgp?editors=0010)
 
@@ -104,8 +104,8 @@ rotatestart/rotatemove/rotateend
 |scale|`Number`|多点触摸时, **起始触点**与**当前触点**的缩放比例|
 |deltaScale|`Number`|多点触摸时, **前触点**与**当前触点**的缩放比例|
 |maxPointLength|`Number`|本轮识别周期出现过的最大触点数|
-|isFirst|`Boolean`|是否当前识别周期的开始|
-|isFinal|`Boolean`|是否当前识别周期的结束|
+|isStart|`Boolean`|是否当前识别周期的开始|
+|isEnd|`Boolean`|是否当前识别周期的结束|
 |target|`EventTarget`|绑定事件的元素|
 |currentTarget|`EventTarget`|实际触发绑定事件的元素|
 |timestamp|`Number`|**当前时间**|

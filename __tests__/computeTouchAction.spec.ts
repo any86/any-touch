@@ -1,4 +1,4 @@
-import computeTouchAction from '../src/untils/computeTouchAction';
+import computeTouchAction from '../src/utils/computeTouchAction';
 test('touchAction计算是否正确?', () => {
     {
         let css = computeTouchAction(['pan-x', 'auto']);

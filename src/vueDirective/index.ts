@@ -1,6 +1,6 @@
 // 注意: 由于vue指令没办法对指令进行优先级设置, 所以指令版本并不能实现AnyTouch所有的功能,
 // 比如新建手势. 所以指令版只支持tap/doubletap/pan/swipe/rotate/pinch等默认手势
-import { Computed } from '../interface';
+import { AnyTouchEvent } from '../interface';
 import { VueConstructor } from 'vue/types/vue';
 import { DirectiveBinding } from 'vue/types/options';
 import InstanceManage from './InstanceManage';

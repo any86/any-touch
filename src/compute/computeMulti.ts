@@ -1,24 +1,32 @@
 
+import { Input } from '../interface';
 import computeVector from './computeVector';
 import computeScale from './computeScale';
 import computeAngle from './computeAngle';
-import cache from '../$_cache';
+import Store from '../Store';
+type Arg = {
+    startMultiInput?: Input,
+    prevInput?: Input,
+    input: Input
+};
+
+type Ret = {
+    scale: number;
+    deltaScale: number;
+    angle: number;
+    deltaAngle: number
+}
 
 export default function ({
     startMultiInput,
     prevInput,
     input
-}: any): {
-    scale: number;
-    deltaScale: number;
-    angle: number;
-    deltaAngle: number
-} {
+}: Arg, $store: Store): Ret {
     // 上一触点数大于1, 当前触点大于1
     // 连续第二次出现多点, 才能开始计算
     if (undefined !== prevInput && 1 < prevInput.points.length && 1 < input.points.length) {
         // 2指形成的向量
-        const startV = computeVector(startMultiInput);
+        const startV = computeVector(<Input>startMultiInput);
         const prevV = computeVector(prevInput);
         const activeV = computeVector(input);
         // 计算缩放
@@ -28,15 +36,15 @@ export default function ({
 
         // ========= 计算旋转角度 =========
         const { deltaAngle, angle } = computeAngle({ startV, prevV, activeV });
-        cache.set({ angle });
-        cache.set({ scale });
+        $store.set({ angle });
+        $store.set({ scale });
         return { scale, deltaScale, deltaAngle, angle };
     } else {
         return {
-            scale: cache.get('scale', 1),
+            scale: $store.get('scale', 1),
             deltaScale: 1,
             deltaAngle: 0,
-            angle: cache.get('angle', 0)
+            angle: $store.get('angle', 0)
         };
     }
 };
