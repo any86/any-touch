@@ -1,7 +1,7 @@
 
 import { Input,directionString } from '../interface';
 import cache from '../$_cache';
-import { propX, propY } from '../const';
+import { CLIENT_X, CLIENT_Y } from '../const';
 import { getVLength, getDirection } from '../vector';
 export default function ({
     startInput,
@@ -17,8 +17,8 @@ export default function ({
         cache.set({ displacementX });
         cache.set({ displacementY });
     } else if ('move' === eventType) {
-        displacementX = Math.round(input!.points[0][propX] - startInput!.points[0][propX]);
-        displacementY = Math.round(input!.points[0][propY] - startInput!.points[0][propY]);
+        displacementX = Math.round(input!.points[0][CLIENT_X] - startInput!.points[0][CLIENT_X]);
+        displacementY = Math.round(input!.points[0][CLIENT_Y] - startInput!.points[0][CLIENT_Y]);
         // 记录本次位移
         cache.set({ displacementX });
         cache.set({ displacementY });

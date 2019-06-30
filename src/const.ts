@@ -26,8 +26,6 @@ export const COMPUTE_INTERVAL = 16;
 
 
 // 计算时候取touchs.clientX | clientY
-export const propX = 'clientX';
-export const propY = 'clientY';
 export const CLIENT_X = 'clientX';
 export const CLIENT_Y = 'clientY';
 
