@@ -1,6 +1,6 @@
 import { Computed, Point } from '../interface';
 import {
-    STATUS_RECOGNIZED,
+    STATUS_RECOGNIZED, STATUS_POSSIBLE,
     STATUS_FAILED,
     STATUS_START,
 } from '../const/recognizerStatus';
@@ -22,6 +22,7 @@ export default class TapRecognizer extends Recognizer {
     // timer
     private _delayFailTimer?: number;
     private _waitOtherFailedTimer?: number;
+    private _time?: number;
 
     static DEFAULT_OPTIONS = {
         name: 'tap',
@@ -83,15 +84,56 @@ export default class TapRecognizer extends Recognizer {
     };
 
     /**
-     * 识别后执行
+     * function filter(input, include, exclude){
+     *	const rule = new RegExp(`^((?!${exclude}).)*${include}((?!${exclude}).)*$`);
+     *	return rule.test(input);
+     *}
+     * 230106198601300833
+     * /\d{,6}[1-2]\d\/
+     * 识别后执行    
+     *             开始   
+     *              |
+     *         <是否end阶段> - 否 - 结束
+     *              |
+     *          关闭定时器c1和c2
+     *              |
+     *              是
+     *              |
+     *        重置状态为"可能是"
+     *              |
+     *        <是否满足单击条件> - 否 - 结束
+     *              |
+     *              是
+     *              |
+     *       <是否上次点击信息为空 或 与上次点击的位移/时间是否满足约束> - 否 - 结束
+     *              |
+     *              是
+     *              |
+     *           点击次数+1
+     *              |
+     *       <是否到达点击数要求> - 否 - 设置定时器c1(t1毫秒后状态设置为"失败") - 结束
+     *              |
+     *              是
+     *              |
+     *      <是否需要其他手势失败> - 否 - 触发事件, 状态设置为"已识别",重置(点击次数,位置) - 结束
+     *              |
+     *              是
+     *              |
+     *  <设置定时器c2(t1毫秒后检查"需要失败"的手势是否是"失败"状态, 重置(点击次数,位置)> - 否 - 设置状态为"失败" - 结束
+     *              |
+     *              是
+     *              |
+     *       触发, 状态设置为"已识别", 重置(点击次数,位置)
+     *              |
+     *             结束
+     * 
      * @param {Computed} 计算数据 
      */
     public recognize(computed: Computed): void {
         // 只在end阶段去识别
         if (INPUT_END !== computed.eventType) return;
 
-        // 如果识别结束, 那么重置状态
-        this._resetStatus();
+        this.status = STATUS_POSSIBLE;
 
         // 每一次点击是否符合要求
         if (this.test(computed)) {
@@ -110,7 +152,7 @@ export default class TapRecognizer extends Recognizer {
             }
 
             // 是否满足点击次数要求
-            if (0 === this.tapCount % this.options.tapTimes ) {
+            if (0 === this.tapCount % this.options.tapTimes) {
                 // 如果符合点击次数的要求
                 // 那么取消延迟失败的定时器
                 this._cancelDelayFail();
@@ -150,6 +192,13 @@ export default class TapRecognizer extends Recognizer {
             this.status = STATUS_FAILED;
         }
     };
+
+    // public delayTrigger(time: number) {
+    //     clearTimeout(this._time);
+    //     this._time = setTimeout(() => {
+
+    //     }, time);
+    // };
 
     public reset() {
         this.tapCount = 0;
