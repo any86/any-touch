@@ -105,7 +105,7 @@ export default class TapRecognizer extends Recognizer {
      *              |
      *              是
      *              |
-     *       <是否上次点击信息为空 或 与上次点击的位移/时间是否满足约束> - 否 - 结束
+     *       <是否正确连击：是否上次点击信息为空 或 与上次点击的位移/时间是否满足约束> - 否 - 点击次数=1 - 继续(<是否到达点击数要求>)
      *              |
      *              是
      *              |
@@ -129,40 +129,28 @@ export default class TapRecognizer extends Recognizer {
      * 
      * @param {Computed} 计算数据 
      */
+
     public recognize(computed: Computed): void {
         // 只在end阶段去识别
         if (INPUT_END !== computed.eventType) return;
-
+        
         this.status = STATUS_POSSIBLE;
 
         // 每一次点击是否符合要求
         if (this.test(computed)) {
-
-            this._cancelDelayFail();
-            this._delayFail();
-
+            clearTimeout(this._delayFailTimer);
+            clearTimeout(this._waitOtherFailedTimer);
             // 判断2次点击之间的距离是否过大
             // 对符合要求的点击进行累加
             if (this._isValidDistanceFromPrevTap(computed) && this._isValidInterval()) {
                 this.tapCount++;
-            }
-            //  不满足条件, 那么当前的点击作为单击tap触发
-            else {
+            } else {
                 this.tapCount = 1;
             }
+            'tap' === this.name && console.log(this.name, this.tapCount)
 
             // 是否满足点击次数要求
-            if (0 === this.tapCount % this.options.tapTimes) {
-                // 如果符合点击次数的要求
-                // 那么取消延迟失败的定时器
-                this._cancelDelayFail();
-                // 仅仅为了不让状态为possible和failed
-                // 这样isAllRequiresFailedOrPossible才不会错误的触发其他还没有符合条件的tap
-                // 因为isAllRequiresFailedOrPossible方法会监测possible和failed俩种状态
-                // 这里的STATUS_START可以想成在等待failture前的等待状态
-                this.status = STATUS_START;
-                // 如果需要其他手势失败
-                // 等待(300ms)其他手势失败后触发
+            if (this.tapCount === this.options.tapTimes) {
                 if (this.hasRequireFailure() && !this.isAllRequireFailureRecognizersDisabled()) {
                     this._waitOtherFailedTimer = setTimeout(() => {
                         // 检查指定手势是否识别为Failed
@@ -173,7 +161,6 @@ export default class TapRecognizer extends Recognizer {
                             this.status = STATUS_FAILED;
                         };
                         // 不论成功失败都要重置tap计数
-                        this.reset();
                     }, this.options.waitNextTapTime);
                 }
                 // 如果不需要等待其他手势失败
@@ -183,22 +170,17 @@ export default class TapRecognizer extends Recognizer {
                     this.emit(this.options.name, { ...computed, tapCount: this.tapCount });
                     this.reset();
                 }
+            } else {
+                this._delayFailTimer = setTimeout(() => {
+                    this.status = STATUS_FAILED;
+                    this.reset();
+                }, this.options.waitNextTapTime);
             }
         } else {
-            // if (this.options.tapTimes !== this.tapCount) {
-            //     clearTimeout(this._waitOtherFailedTimer);
-            // }
             this.reset();
             this.status = STATUS_FAILED;
         }
     };
-
-    // public delayTrigger(time: number) {
-    //     clearTimeout(this._time);
-    //     this._time = setTimeout(() => {
-
-    //     }, time);
-    // };
 
     public reset() {
         this.tapCount = 0;
