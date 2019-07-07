@@ -47,8 +47,8 @@
             </tr>
 
             <tr>
-                <td>maxpointLength</td>
-                <td>{{message.maxpointLength}}</td>
+                <td>maxPointLength</td>
+                <td>{{message.maxPointLength}}</td>
                 <td>本轮识别周期出现过的最大触点数</td>
             </tr>
 
@@ -63,7 +63,22 @@
                 <td>{{message.x}} / {{message.y}}</td>
                 <td>同centerX / centerY</td>
             </tr>
+            
+            <tr>
+                <td>velocityX / velocityY</td>
+                <td>{{message.velocityX}} / {{message.velocityY}}</td>
+                <td>速率</td>
+            </tr>
 
+
+            <tr>
+                <td>speedX / speedY</td>
+                <td>{{message.speedX}} / {{message.speedY}}</td>
+                <td>速度</td>
+            </tr>
+
+
+            
 
             <tr>
                 <td>distanceX / distanceY</td>
@@ -140,12 +155,6 @@
             </tr>
 
             <tr>
-                <td>deltaTime</td>
-                <td>{{message.deltaTime}}</td>
-                <td>每次发生移动或者离开动作之间的时间间隔, 比如可以用来判断距离上次移动经历了多长时间</td>
-            </tr>
-
-            <tr>
                 <td>isFirst</td>
                 <td>{{message.isFinal}}</td>
                 <td>是否第一次接触屏幕</td>
@@ -211,7 +220,7 @@
     <script>
         let circle = document.getElementById('circle');
         circle.addEventListener('pan', ev => {
-            // console.log(ev);
+            console.log(ev);
         });
     </script>
 </body>

@@ -1,5 +1,5 @@
 let log = console.log;
-log = () => {};
+// log = () => {};
 new Vue({
     el: '#app',
 
@@ -62,16 +62,10 @@ new Vue({
         });
 
         // anyTouch.add(pan2);
-        // anyTouch.add(tap2);
-        // anyTouch.add(tap3);
-        // anyTouch.add(tap4);
-        // const tap1 = anyTouch.get('tap');
-        // tap1.requireFailure(tap2);
-        // tap1.requireFailure(tap3);
-        // tap1.requireFailure(tap4);
-        // tap2.requireFailure(tap3);
-        // tap2.requireFailure(tap4);
-        // tap3.requireFailure(tap4);
+        anyTouch.add(tap3);
+        anyTouch.add(tap4);
+        const tap1 = anyTouch.get('tap');
+        tap1.removeRequireFailure(tap2);
         // this.$refs.circle.addEventListener('touchstart', ev=>{ev.preventDefault()})
         // this.$refs.circle.addEventListener('touchmove', ev=>{ev.preventDefault()})
         // this.$refs.circle.addEventListener('touchend', ev=>{ev.preventDefault()})
@@ -158,6 +152,7 @@ new Vue({
         anyTouch.on('tap', e => {
             e.preventDefault();
             log(`%c ${e.type} `, 'background-color:#f10;color:#fff;');
+            log(e.x,e.y)
             this.message = e;
         });
         this.$refs.circle.addEventListener('click', ev=>{
