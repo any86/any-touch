@@ -148,9 +148,12 @@ export default class TapRecognizer extends Recognizer {
                 this.tapCount = 1;
             }
             'tap' === this.name && console.log(this.name, this.tapCount)
+            'doubletap' === this.name && console.log(this.name, this.tapCount)
+
 
             // 是否满足点击次数要求
-            if (this.tapCount === this.options.tapTimes) {
+            // 之所以用%, 是因为如果连续点击3次, 单击的tapCount会为3, 但是其实tap也应该触发
+            if (0 === this.tapCount % this.options.tapTimes) {
                 if (this.hasRequireFailure() && !this.isAllRequireFailureRecognizersDisabled()) {
                     this._waitOtherFailedTimer = setTimeout(() => {
                         // 检查指定手势是否识别为Failed
