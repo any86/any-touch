@@ -65,7 +65,11 @@ new Vue({
         anyTouch.add(tap3);
         anyTouch.add(tap4);
         const tap1 = anyTouch.get('tap');
-        tap1.removeRequireFailure(tap2);
+        tap1.requireFailure(tap3);
+        tap1.requireFailure(tap4);
+        tap2.requireFailure(tap3);
+        tap2.requireFailure(tap4);
+        tap3.requireFailure(tap4);
         // this.$refs.circle.addEventListener('touchstart', ev=>{ev.preventDefault()})
         // this.$refs.circle.addEventListener('touchmove', ev=>{ev.preventDefault()})
         // this.$refs.circle.addEventListener('touchend', ev=>{ev.preventDefault()})
