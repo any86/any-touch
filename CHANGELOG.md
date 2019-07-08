@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.3.4"></a>
+## [0.3.4](https://github.com/383514580/any-touch/compare/v0.3.3...v0.3.4) (2019-07-08)
+
+
+### Bug Fixes
+
+* 修改demo中的冗余项目 ([bb5e7bf](https://github.com/383514580/any-touch/commit/bb5e7bf))
+* 修改错误的接口 ([da9bb96](https://github.com/383514580/any-touch/commit/da9bb96))
+* 修正文件名大小写 ([c150dd7](https://github.com/383514580/any-touch/commit/c150dd7))
+* 删除错误的类型标注 ([dfee7b9](https://github.com/383514580/any-touch/commit/dfee7b9))
+* 识别器增加"正在等待"状态, 这样可以保证有识别器数组中的识别器的执行顺序不会被requireFailure的执行顺序颠倒 ([51efe81](https://github.com/383514580/any-touch/commit/51efe81))
+* 通过取余判断tap的次数 ([6b2b0df](https://github.com/383514580/any-touch/commit/6b2b0df))
+
+
+
 <a name="0.3.3"></a>
 ## [0.3.3](https://github.com/383514580/any-touch/compare/v0.3.2...v0.3.3) (2019-05-13)
 
