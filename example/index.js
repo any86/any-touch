@@ -1,5 +1,5 @@
 let log = console.log;
-// log = () => {};
+log = () => {};
 new Vue({
     el: '#app',
 
