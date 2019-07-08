@@ -2,7 +2,6 @@ import { Computed, Point } from '../interface';
 import {
     STATUS_RECOGNIZED, STATUS_POSSIBLE,
     STATUS_FAILED,
-    STATUS_START,
 } from '../const/recognizerStatus';
 const { setTimeout, clearTimeout } = window;
 import Recognizer from './Base';
@@ -22,7 +21,6 @@ export default class TapRecognizer extends Recognizer {
     // timer
     private _delayFailTimer?: number;
     private _waitOtherFailedTimer?: number;
-    private _time?: number;
 
     static DEFAULT_OPTIONS = {
         name: 'tap',
@@ -84,18 +82,14 @@ export default class TapRecognizer extends Recognizer {
     };
 
     /**
-     * function filter(input, include, exclude){
-     *	const rule = new RegExp(`^((?!${exclude}).)*${include}((?!${exclude}).)*$`);
-     *	return rule.test(input);
-     *}
-     * 230106198601300833
-     * /\d{,6}[1-2]\d\/
-     * 识别后执行    
+     * 识别后执行, 流程如下:  
      *             开始   
      *              |
      *         <是否end阶段> - 否 - 结束
      *              |
      *          关闭定时器c1和c2
+     *              |
+     *          清除等待状态
      *              |
      *              是
      *              |
@@ -119,7 +113,9 @@ export default class TapRecognizer extends Recognizer {
      *              |
      *              是
      *              |
-     *  <设置定时器c2(t1毫秒后检查"需要失败"的手势是否是"失败"状态, 重置(点击次数,位置)> - 否 - 设置状态为"失败" - 结束
+     *           进入等待状态
+     *              |
+     *  <设置定时器c2(t1毫秒后检查"需要失败"的手势是否是"失败"状态, 重置(点击次数,位置, 等待状态)> - 否 - 设置状态为"失败" - 结束
      *              |
      *              是
      *              |
@@ -129,7 +125,6 @@ export default class TapRecognizer extends Recognizer {
      * 
      * @param {Computed} 计算数据 
      */
-
     public recognize(computed: Computed): void {
         // 只在end阶段去识别
         if (INPUT_END !== computed.eventType) return;
@@ -148,10 +143,6 @@ export default class TapRecognizer extends Recognizer {
             } else {
                 this.tapCount = 1;
             }
-            'tap' === this.name && console.log(this.name, this.tapCount)
-            'doubletap' === this.name && console.log(this.name, this.tapCount)
-
-
             // 是否满足点击次数要求
             // 之所以用%, 是因为如果连续点击3次, 单击的tapCount会为3, 但是其实tap也应该触发
             if (0 === this.tapCount % this.options.tapTimes) {
