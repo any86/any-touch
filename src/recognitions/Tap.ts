@@ -133,13 +133,14 @@ export default class TapRecognizer extends Recognizer {
     public recognize(computed: Computed): void {
         // 只在end阶段去识别
         if (INPUT_END !== computed.eventType) return;
-        
+
         this.status = STATUS_POSSIBLE;
 
         // 每一次点击是否符合要求
         if (this.test(computed)) {
             clearTimeout(this._delayFailTimer);
             clearTimeout(this._waitOtherFailedTimer);
+            this.isWaitingOther = false;
             // 判断2次点击之间的距离是否过大
             // 对符合要求的点击进行累加
             if (this._isValidDistanceFromPrevTap(computed) && this._isValidInterval()) {
@@ -155,6 +156,7 @@ export default class TapRecognizer extends Recognizer {
             // 之所以用%, 是因为如果连续点击3次, 单击的tapCount会为3, 但是其实tap也应该触发
             if (0 === this.tapCount % this.options.tapTimes) {
                 if (this.hasRequireFailure() && !this.isAllRequireFailureRecognizersDisabled()) {
+                    this.isWaitingOther = true;
                     this._waitOtherFailedTimer = setTimeout(() => {
                         // 检查指定手势是否识别为Failed
                         if (this.isAllRequiresFailedOrPossible()) {
@@ -163,6 +165,7 @@ export default class TapRecognizer extends Recognizer {
                         } else {
                             this.status = STATUS_FAILED;
                         };
+                        this.isWaitingOther = false;
                         // 不论成功失败都要重置tap计数
                     }, this.options.waitNextTapTime);
                 }
@@ -189,23 +192,6 @@ export default class TapRecognizer extends Recognizer {
         this.tapCount = 0;
         this.prevTapPoint = undefined;
         this.prevTapTime = undefined;
-    };
-
-    /**
-     * 指定时间后, 设置状态为失败
-     */
-    private _delayFail(cb: () => void = () => { }) {
-        this._delayFailTimer = setTimeout(() => {
-            this.status = STATUS_FAILED;
-            cb();
-        }, this.options.waitNextTapTime);
-    };
-
-    /**
-     * 取消延迟失败定时
-     */
-    private _cancelDelayFail() {
-        clearTimeout(this._delayFailTimer);
     };
 
     /**
