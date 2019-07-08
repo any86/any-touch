@@ -49,10 +49,8 @@ function __rest(s, e) {
     for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
         t[p] = s[p];
     if (s != null && typeof Object.getOwnPropertySymbols === "function")
-        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
-            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
-                t[p[i]] = s[p[i]];
-        }
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) if (e.indexOf(p[i]) < 0)
+            t[p[i]] = s[p[i]];
     return t;
 }
 
@@ -232,7 +230,6 @@ var INPUT_START = 'start';
 var INPUT_MOVE = 'move';
 var INPUT_CANCEL = 'cancel';
 var INPUT_END = 'end';
-//# sourceMappingURL=const.js.map
 
 var getVLength = function (v) {
     return Math.sqrt(v.x * v.x + v.y * v.y);
@@ -281,7 +278,6 @@ var getDirection = function (x, y) {
         return 0 < y ? 'down' : 'up';
     }
 };
-//# sourceMappingURL=vector.js.map
 
 var Vector = /*#__PURE__*/Object.freeze({
     getVLength: getVLength,
@@ -316,7 +312,6 @@ var default_1 = (function () {
     };
     return default_1;
 }());
-//# sourceMappingURL=Touch.js.map
 
 var default_1$1 = (function () {
     function default_1() {
@@ -517,7 +512,6 @@ function computeDistance (_a) {
         displacementX: displacementX, displacementY: displacementY, distanceX: distanceX, distanceY: distanceY, distance: distance, overallDirection: overallDirection
     };
 }
-//# sourceMappingURL=computeDistance.js.map
 
 function computeDeltaXY (_a) {
     var prevInput = _a.prevInput, input = _a.input;
@@ -564,7 +558,6 @@ var computeVector = (function (input) { return ({
     x: input.points[1][CLIENT_X] - input.points[0][CLIENT_X],
     y: input.points[1][CLIENT_Y] - input.points[0][CLIENT_Y]
 }); });
-//# sourceMappingURL=computeVector.js.map
 
 function computeScale (_a) {
     var startV = _a.startV, prevV = _a.prevV, activeV = _a.activeV;
@@ -694,6 +687,7 @@ var Recognizer = (function () {
         this.status = STATUS_POSSIBLE;
         this.isRecognized = false;
         this.requireFailureRecognizers = [];
+        this.isWaitingOther = false;
     }
     Recognizer.prototype.set = function (options) {
         if (options === void 0) { options = {}; }
@@ -750,6 +744,8 @@ var Recognizer = (function () {
         try {
             for (var _b = __values(this.requireFailureRecognizers), _c = _b.next(); !_c.done; _c = _b.next()) {
                 var recognizer = _c.value;
+                if (recognizer.isWaitingOther)
+                    return false;
                 if (STATUS_FAILED !== recognizer.status && STATUS_POSSIBLE !== recognizer.status) {
                     return false;
                 }
@@ -879,7 +875,6 @@ var Recognizer = (function () {
     Recognizer.prototype.afterEmit = function (computed) { };
     return Recognizer;
 }());
-//# sourceMappingURL=Base.js.map
 
 var setTimeout = window.setTimeout, clearTimeout$1 = window.clearTimeout;
 var TapRecognizer = (function (_super) {
@@ -924,15 +919,16 @@ var TapRecognizer = (function (_super) {
         if (this.test(computed)) {
             clearTimeout$1(this._delayFailTimer);
             clearTimeout$1(this._waitOtherFailedTimer);
+            this.isWaitingOther = false;
             if (this._isValidDistanceFromPrevTap(computed) && this._isValidInterval()) {
                 this.tapCount++;
             }
             else {
                 this.tapCount = 1;
             }
-            'tap' === this.name && console.log(this.name, this.tapCount);
-            if (this.tapCount === this.options.tapTimes) {
+            if (0 === this.tapCount % this.options.tapTimes) {
                 if (this.hasRequireFailure() && !this.isAllRequireFailureRecognizersDisabled()) {
+                    this.isWaitingOther = true;
                     this._waitOtherFailedTimer = setTimeout(function () {
                         if (_this.isAllRequiresFailedOrPossible()) {
                             _this.status = STATUS_RECOGNIZED;
@@ -941,6 +937,7 @@ var TapRecognizer = (function (_super) {
                         else {
                             _this.status = STATUS_FAILED;
                         }
+                        _this.isWaitingOther = false;
                     }, this.options.waitNextTapTime);
                 }
                 else {
@@ -966,17 +963,6 @@ var TapRecognizer = (function (_super) {
         this.prevTapPoint = undefined;
         this.prevTapTime = undefined;
     };
-    TapRecognizer.prototype._delayFail = function (cb) {
-        var _this = this;
-        if (cb === void 0) { cb = function () { }; }
-        this._delayFailTimer = setTimeout(function () {
-            _this.status = STATUS_FAILED;
-            cb();
-        }, this.options.waitNextTapTime);
-    };
-    TapRecognizer.prototype._cancelDelayFail = function () {
-        clearTimeout$1(this._delayFailTimer);
-    };
     TapRecognizer.prototype.test = function (computed) {
         var distance = computed.distance, deltaTime = computed.deltaTime, maxPointLength = computed.maxPointLength;
         return maxPointLength === this.options.pointLength &&
@@ -996,7 +982,6 @@ var TapRecognizer = (function (_super) {
     };
     return TapRecognizer;
 }(Recognizer));
-//# sourceMappingURL=Tap.js.map
 
 var PressRecognizer = (function (_super) {
     __extends(PressRecognizer, _super);
