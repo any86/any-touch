@@ -27,6 +27,8 @@ export default abstract class Recognizer {
 
     public eventEmitter: any;
 
+    public isWaitingOther: boolean;
+
     constructor(options: { name?: string, [k: string]: any }) {
         this.options = { ...(<any>this.constructor).DEFAULT_OPTIONS, disabled: false, ...options };
         this.name = this.options.name;
@@ -34,6 +36,7 @@ export default abstract class Recognizer {
         this.status = STATUS_POSSIBLE;
         this.isRecognized = false;
         this.requireFailureRecognizers = [];
+        this.isWaitingOther = false;
         // 这里面不能直接调用$root等, 
         // 因为rollup生成的代码构造函数并不是该constructor
         // 而是构造函数中又嵌套了一个同名构造函数
@@ -105,8 +108,8 @@ export default abstract class Recognizer {
     /**
      * 是否所有"需要失败"的手势都是disabled的
      */
-    public isAllRequireFailureRecognizersDisabled(){
-        return this.requireFailureRecognizers.every((recognizer:any)=>recognizer.disabled);
+    public isAllRequireFailureRecognizersDisabled() {
+        return this.requireFailureRecognizers.every((recognizer: any) => recognizer.disabled);
     };
 
     /**
@@ -114,6 +117,8 @@ export default abstract class Recognizer {
      */
     public isAllRequiresFailedOrPossible(): boolean {
         for (let recognizer of this.requireFailureRecognizers) {
+            // console.log(this.name, this.isWaitingOther)
+            if (recognizer.isWaitingOther) return false;
             if (STATUS_FAILED !== recognizer.status && STATUS_POSSIBLE !== recognizer.status) {
                 return false;
             }
@@ -125,7 +130,7 @@ export default abstract class Recognizer {
      * @param {Number} 触点数
      */
     public isValidPointLength(pointLength: number): boolean {
-        return 0 === this.options.pointLength || this.options.pointLength === pointLength
+        return 0 === this.options.pointLength || this.options.pointLength === pointLength;
     };
 
     /**
