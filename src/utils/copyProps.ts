@@ -12,9 +12,9 @@ export default <O, K extends keyof O>(object: O, keys: K[]): Record<K, any> => {
     return _object;
 }
 
-type O = { a: number, b: string };
-type K = keyof O;
+// type O = { a: number, b: string };
+// type K = keyof O;
 
-type A = K[]
-type B = Record<K, any>
-// let arr:A = ['a']
+// type A = K[]
+// type B = Record<K, any>
+// // let arr:A = ['a']
