@@ -1,7 +1,7 @@
 import { Computed, directionString } from '../interface';
 import { INPUT_MOVE } from '../const';
 import Recognizer from './Base';
-import getHV from '../untils/getHV';
+import getHV from '../utils/getHV';
 
 export default class PanRecognizer extends Recognizer {
     static DEFAULT_OPTIONS = {

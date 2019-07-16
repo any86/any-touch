@@ -1,4 +1,4 @@
-import getHV from '../src/untils/getHV';
+import getHV from '../src/utils/getHV';
 test('对垂直或水平的识别是否正确?', () => {
     expect(getHV(['left', 'right'])).toEqual({hasHorizontal: true, hasVertical: false});
 

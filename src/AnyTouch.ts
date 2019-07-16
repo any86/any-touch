@@ -21,7 +21,7 @@ import AnyEvent from 'any-event';
 import { SUPPORT_TOUCH } from './const';
 import InputManage from './InputManage';
 import compute from './compute/index';
-import computeTouchAction from './untils/computeTouchAction';
+import computeTouchAction from './utils/computeTouchAction';
 import cache from './$_cache';
 
 // 识别器
