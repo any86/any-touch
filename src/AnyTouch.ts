@@ -290,11 +290,11 @@ export class AnyTouch {
             const computed = compute(<any>inputs);
             // input事件
             this.emit('input', computed);
-            if (computed.isFirst) {
+            if (computed.isStart) {
                 // cache.reset();
                 this._isStopped = false;
                 this.emit('inputstart', computed);
-            } else if (computed.isFinal) {
+            } else if (computed.isEnd) {
                 if ('cancel' === computed.eventType) {
                     this.emit('inputcancel', computed);
                 } else {

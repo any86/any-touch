@@ -1,22 +1,22 @@
 /**
  * 构造统一的Input格式
  */
-import { Input, Point } from '../interface';
+import { Input, Point, SupportEvent } from '../interface';
 import { SUPPORT_TOUCH, INPUT_END, INPUT_START, INPUT_CANCEL } from '../const';
 import { getCenter } from '../vector';
 import Touch from './adapters/Touch';
 import Mouse from './adapters/Mouse';
+import Adapter from './adapters/adapter';
 
 export default class {
     // 缓存触点中心
     private _center?: Point;
-    public adapter: any;
+    public adapter: Adapter;
     constructor() {
         this.adapter = SUPPORT_TOUCH ? new Touch() : new Mouse();
     };
 
-    public load(event: Event): Input | void {
-        // 通过TouchEvent|MouseEvent获取的直接数据
+    public load(event: SupportEvent): Input | void {
         let baseInput = this.adapter.load(event);
         if (undefined === baseInput) {
             return;
@@ -28,9 +28,9 @@ export default class {
         // 变化前触点数
         const changedPointLength: number = changedPoints.length;
         // 识别流程的开始和结束标记
-        const isFirst = (INPUT_START === eventType) && (0 === changedPointLength - pointLength);
+        const isStart = (INPUT_START === eventType) && (0 === changedPointLength - pointLength);
         // 所有触点都离开算作"final", 这和hammer.js不一样
-        const isFinal = (INPUT_END === eventType || INPUT_CANCEL === eventType) && (0 === pointLength);
+        const isEnd = (INPUT_END === eventType || INPUT_CANCEL === eventType) && (0 === pointLength);
 
         // 中心坐标
         if (0 < pointLength) {
@@ -48,8 +48,8 @@ export default class {
             preventDefault: () => {
                 event.preventDefault();
             },
-            isFirst,
-            isFinal,
+            isStart,
+            isEnd,
             pointLength,
             changedPointLength,
             center: this._center,

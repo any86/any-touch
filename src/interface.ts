@@ -1,3 +1,6 @@
+// 适配器支持的事件类型
+export type SupportEvent = MouseEvent | TouchEvent;
+
 export type directionString = 'up' | 'right' | 'down' | 'left' | 'none';
 export type RecognizerStatus = 'possible' | 'recognized' | 'began' | 'changed' | 'ended' | 'failed' | 'cancelled';
 export type eventType = 'start' | 'move' | 'end' | 'cancel';
@@ -17,8 +20,8 @@ export interface BaseInput {
 export interface Input extends BaseInput {
     preventDefault: () => void;
     // 新一轮手势识别的开始和结束
-    isFirst: boolean;
-    isFinal: boolean;
+    isStart: boolean;
+    isEnd: boolean;
     pointLength: number;
     // 发生改变的触点数据
     changedPointLength: number;
