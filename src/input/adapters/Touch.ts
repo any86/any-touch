@@ -1,5 +1,5 @@
 import { BaseInput, eventType } from '../../interface';
-import Adapter from './Adapter';
+import Adapter from './Abstract';
 export default class extends Adapter {
     load(event: TouchEvent):BaseInput {
         const points = Array.from(event.touches).map(({ clientX, clientY }) => ({ clientX, clientY }));

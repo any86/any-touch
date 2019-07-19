@@ -6,7 +6,7 @@ import { SUPPORT_TOUCH, INPUT_END, INPUT_START, INPUT_CANCEL } from '../const';
 import { getCenter } from '../vector';
 import Touch from './adapters/Touch';
 import Mouse from './adapters/Mouse';
-import Adapter from './adapters/Adapter';
+import Adapter from './adapters/Abstract';
 
 export default class {
     // 缓存触点中心
@@ -17,11 +17,12 @@ export default class {
     };
 
     public load(event: SupportEvent): Input | void {
-        let baseInput = this.adapter.load(event);
-        if (undefined === baseInput) {
+        // 从event中采集的数据
+        const BASE_INPUT = this.adapter.load(event);
+        if (undefined === BASE_INPUT) {
             return;
         }
-        const { eventType, points, changedPoints } = baseInput;
+        const { eventType, points, changedPoints } = BASE_INPUT;
         // 当前触点数
         const pointLength: number = points.length;
 
@@ -34,7 +35,7 @@ export default class {
 
         // 中心坐标
         if (0 < pointLength) {
-            this._center = getCenter(baseInput.points);
+            this._center = getCenter(BASE_INPUT.points);
         }
 
         // 当前时间
@@ -44,7 +45,7 @@ export default class {
         const { target, currentTarget } = event;
         const { x, y } = <Point>(this._center || {});
         return {
-            ...baseInput,
+            ...BASE_INPUT,
             preventDefault: () => {
                 event.preventDefault();
             },

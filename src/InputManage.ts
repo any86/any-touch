@@ -1,5 +1,5 @@
 import { Input, SupportEvent } from './interface';
-import InputFactory from './input/InputFactory';
+import InputFactory from './Input';
 export default class {
     // 起点(单点|多点)
     startInput?: Input;

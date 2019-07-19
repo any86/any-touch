@@ -281,7 +281,7 @@ export class AnyTouch {
         }
 
         // 管理历史input
-        let inputs = this.inputManage.load(event);
+        const inputs = this.inputManage.load(event);
         // 跳过无效输入
         // 如: 当是鼠标事件的时候, mouseup阶段的input为undefined
         if (undefined !== inputs) {

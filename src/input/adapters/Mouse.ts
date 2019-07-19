@@ -1,6 +1,6 @@
 import { BaseInput, eventType } from '../../interface';
 // 默认MouseEvent中对type声明仅为string
-import Adapter from './Adapter';
+import Adapter from './Abstract';
 export default class extends Adapter {
     prevPoints?: { clientX: number, clientY: number }[];
     isPressed: boolean;

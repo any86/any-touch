@@ -6,18 +6,18 @@ export type RecognizerStatus = 'possible' | 'recognized' | 'began' | 'changed' |
 export type eventType = 'start' | 'move' | 'end' | 'cancel';
 
 export interface Point {
-    x: number;
-    y: number;
+    readonly x: number;
+    readonly y: number;
 }
 
 export interface BaseInput {
-    eventType: eventType;
-    changedPoints: { clientX: number, clientY: number }[];
-    points: { clientX: number, clientY: number }[];
-    nativeEvent: Event;
+    readonly eventType: eventType;
+    readonly changedPoints: { clientX: number, clientY: number }[];
+    readonly points: { clientX: number, clientY: number }[];
+    readonly nativeEvent: Event;
 }
 
-export interface Input extends BaseInput {
+export type Input = Readonly<{
     preventDefault: () => void;
     // 新一轮手势识别的开始和结束
     isStart: boolean;
@@ -33,14 +33,13 @@ export interface Input extends BaseInput {
     // 同centerX/Y
     x: number;
     y: number;
-    // functions?: { [k: string]: (...args: any[]) => any };
-}
+} & BaseInput>
+
 // input的计算结果
-export interface Computed extends Input {
+export type Computed = Readonly<{
     type: string;
     // 一次识别周期中出现的最大触点数
     maxPointLength?: number;
-
     velocityX: number;
     velocityY: number;
     speedX: number;
@@ -63,7 +62,7 @@ export interface Computed extends Input {
     overallDirection?: directionString;
     // 瞬时方向
     direction?: directionString;
-}
+} & Input>
 
 export interface AnyTouchEvent extends Computed {
     // 手势类型名: pan/panstart/panleft...
