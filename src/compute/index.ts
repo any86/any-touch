@@ -1,19 +1,14 @@
 
-import { Computed, Input, directionString } from '../interface';
+import { Computed, Input, directionString,InputRecord } from '../interface';
 import { getDirection } from '../vector';
 import intervalCompute from './intervalCompute';
 import computeDistance from './computeDistance';
 import computeDeltaXY from './computeDeltaXY';
 import computeMaxLength from './computeMaxLength';
 import computMulti from './computeMulti';
-type Inputs = {
-    input: Input;
-    startInput: Input;
-    prevInput?: Input;
-    startMultiInput?: Input;
-}
+
 // 最大触点数
-export default function (inputs: Inputs): Computed {
+export default function (inputs: InputRecord): Computed {
     const { input } = inputs;
     // ========= 整体距离/位移=========
     const { displacementX, displacementY, distanceX, distanceY, distance, overallDirection } = computeDistance(inputs);

@@ -24,10 +24,11 @@ export default class {
         }
         const { eventType, points, changedPoints } = BASE_INPUT;
         // 当前触点数
-        const pointLength: number = points.length;
+        const pointLength = points.length;
 
         // 变化前触点数
-        const changedPointLength: number = changedPoints.length;
+        const changedPointLength = changedPoints.length;
+        
         // 识别流程的开始和结束标记
         const isStart = (INPUT_START === eventType) && (0 === changedPointLength - pointLength);
         // 所有触点都离开算作"final", 这和hammer.js不一样

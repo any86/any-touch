@@ -10,6 +10,14 @@ export interface Point {
     y: number;
 }
 
+// 输入记录
+export type InputRecord = {
+    input: Input;
+    startInput: Input;
+    prevInput: Input;
+    startMultiInput?: Input;
+}
+
 export interface BaseInput {
     readonly eventType: eventType;
     readonly changedPoints: { clientX: number, clientY: number }[];

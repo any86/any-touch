@@ -1,5 +1,6 @@
-import { Input, SupportEvent } from './interface';
+import { Input, SupportEvent, InputRecord, Computed } from './interface';
 import InputFactory from './Input';
+import compute from './compute/index';
 export default class {
     // 起点(单点|多点)
     startInput?: Input;
@@ -18,45 +19,43 @@ export default class {
 
     /**
      * 读取事件对象
-     * 
      * @param {SupportEvent} 支持传入的事件对象 
      */
-    load(event: SupportEvent): {
-        startInput?: Input,
-        prevInput?: Input,
-        input?: Input,
-        startMultiInput?: Input
-    } | void {
+    load(event: SupportEvent): Computed | void {
         // 格式化不同设备输入数据
         const input = this.inputFactory.load(event);
-
         // 过滤无效的输入    
         if (undefined === input) return;
+        const record = this._record(input);
+        return compute(record);
+    };
 
+    /**
+     * 记录计算所需的几个输入
+     * @param {Input} 输入
+     * @return {Object} 输入记录
+     */
+    private _record(input: Input): InputRecord {
         // 当前输入状态
         const { eventType } = input;
 
-        // [Start]
         if ('start' === eventType) {
             this.start(input);
         } else if ('move' === eventType) {
-            this.move(input);
-        } else if ('end' === eventType) {
-            this.end(input);
+            this.move();
+        } else if ('end' === eventType || 'cancel' === eventType) {
+            this.end();
         }
+        this.activeInput = input;
         return {
             startMultiInput: this.startMultiInput,
-            startInput: this.startInput,
-            prevInput: this.prevInput,
+            startInput: <Input>this.startInput,
+            prevInput: <Input>this.prevInput,
             input
         };
     };
 
     start(input: Input) {
-        // 上一步的触点
-        // prevInput = undefined;
-        // 当前点
-        this.activeInput = input;
         // 起点(单点|多点)
         if (input.isStart) {
             this.startInput = input;
@@ -71,15 +70,12 @@ export default class {
         }
     }
 
-    move(input: Input) {
+    move() {
         // 读取上一点
         this.prevInput = this.activeInput;
-        this.activeInput = input;
     }
 
-    end(input: Input) {
+    end() {
         this.prevInput = this.activeInput;
-        this.activeInput = input;
-        // console.log(this.startInput, this.el.id);
     }
 }; 

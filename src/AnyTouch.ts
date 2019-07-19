@@ -281,13 +281,14 @@ export class AnyTouch {
         }
 
         // 管理历史input
-        const inputs = this.inputManage.load(event);
+        const computed = this.inputManage.load(event);
         // 跳过无效输入
         // 如: 当是鼠标事件的时候, mouseup阶段的input为undefined
-        if (undefined !== inputs) {
+        if (undefined !== computed) {
             // inputs !== undefined 说明input不为undefined,
             // 因为inputManage中如果input为undefined的时候, inputs才为undefined
-            const computed = compute(<any>inputs);
+            // const computed = compute(<any>inputs);
+            
             // input事件
             this.emit('input', computed);
             if (computed.isStart) {
@@ -302,13 +303,13 @@ export class AnyTouch {
                 }
             } else {
                 // prevInput和input一定不为空
-                if (inputs.prevInput!.pointLength > inputs.input!.pointLength) {
-                    this.emit('inputreduce', computed);
-                } else if (inputs.prevInput!.pointLength < inputs.input!.pointLength) {
-                    this.emit('inputadd', computed);
-                } else {
-                    this.emit('inputmove', computed);
-                }
+                // if (inputs.prevInput!.pointLength > inputs.input!.pointLength) {
+                //     this.emit('inputreduce', computed);
+                // } else if (inputs.prevInput!.pointLength < inputs.input!.pointLength) {
+                //     this.emit('inputadd', computed);
+                // } else {
+                //     this.emit('inputmove', computed);
+                // }
             };
 
 
