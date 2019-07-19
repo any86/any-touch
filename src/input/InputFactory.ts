@@ -6,7 +6,7 @@ import { SUPPORT_TOUCH, INPUT_END, INPUT_START, INPUT_CANCEL } from '../const';
 import { getCenter } from '../vector';
 import Touch from './adapters/Touch';
 import Mouse from './adapters/Mouse';
-import Adapter from './adapters/adapter';
+import Adapter from './adapters/Adapter';
 
 export default class {
     // 缓存触点中心
