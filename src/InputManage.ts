@@ -1,4 +1,4 @@
-import { Input } from './interface';
+import { Input, SupportEvent } from './interface';
 import InputFactory from './input/InputFactory';
 export default class {
     // 起点(单点|多点)
@@ -16,7 +16,7 @@ export default class {
         this.inputFactory = new InputFactory();
     };
 
-    load(event: Event): {
+    load(event: SupportEvent): {
         startInput?: Input,
         prevInput?: Input,
         input?: Input,
