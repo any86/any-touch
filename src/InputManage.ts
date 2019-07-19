@@ -16,6 +16,11 @@ export default class {
         this.inputFactory = new InputFactory();
     };
 
+    /**
+     * 读取事件对象
+     * 
+     * @param {SupportEvent} 支持传入的事件对象 
+     */
     load(event: SupportEvent): {
         startInput?: Input,
         prevInput?: Input,
@@ -25,7 +30,7 @@ export default class {
         // 格式化不同设备输入数据
         const input = this.inputFactory.load(event);
 
-        // 无效的输入    
+        // 过滤无效的输入    
         if (undefined === input) return;
 
         // 当前输入状态
@@ -38,7 +43,10 @@ export default class {
             // 当前点
             this.activeInput = input;
             // 起点(单点|多点)
-            this.startInput = input;
+            if(input.isStart){
+                this.startInput = input;
+            }
+            
             // 起点(多点)
             if (1 < input.pointLength) {
                 this.startMultiInput = input;
