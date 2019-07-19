@@ -1,7 +1,7 @@
 delete window.ontouchstart;
 import TouchSimulator from './utils/TouchSimulator';
 import sleep from './utils/sleep';
-import Mouse from '../src/input/adapters/Mouse';
+import Mouse from '../src/Input/adapters/Mouse';
 
 
 

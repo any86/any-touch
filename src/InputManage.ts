@@ -38,30 +38,11 @@ export default class {
 
         // [Start]
         if ('start' === eventType) {
-            // 上一步的触点
-            // prevInput = undefined;
-            // 当前点
-            this.activeInput = input;
-            // 起点(单点|多点)
-            if(input.isStart){
-                this.startInput = input;
-            }
-            
-            // 起点(多点)
-            if (1 < input.pointLength) {
-                this.startMultiInput = input;
-            } else {
-                // 如果出现了单点, 那么之前的多点起点记录失效
-                this.startMultiInput = undefined;
-            }
+            this.start(input);
         } else if ('move' === eventType) {
-            // 读取上一点
-            this.prevInput = this.activeInput;
-            this.activeInput = input;
+            this.move(input);
         } else if ('end' === eventType) {
-            this.prevInput = this.activeInput;
-            this.activeInput = input;
-            // console.log(this.startInput, this.el.id);
+            this.end(input);
         }
         return {
             startMultiInput: this.startMultiInput,
@@ -70,4 +51,35 @@ export default class {
             input
         };
     };
+
+    start(input: Input) {
+        // 上一步的触点
+        // prevInput = undefined;
+        // 当前点
+        this.activeInput = input;
+        // 起点(单点|多点)
+        if (input.isStart) {
+            this.startInput = input;
+        }
+
+        // 起点(多点)
+        if (1 < input.pointLength) {
+            this.startMultiInput = input;
+        } else {
+            // 如果出现了单点, 那么之前的多点起点记录失效
+            this.startMultiInput = undefined;
+        }
+    }
+
+    move(input: Input) {
+        // 读取上一点
+        this.prevInput = this.activeInput;
+        this.activeInput = input;
+    }
+
+    end(input: Input) {
+        this.prevInput = this.activeInput;
+        this.activeInput = input;
+        // console.log(this.startInput, this.el.id);
+    }
 }; 
