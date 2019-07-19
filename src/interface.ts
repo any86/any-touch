@@ -6,8 +6,8 @@ export type RecognizerStatus = 'possible' | 'recognized' | 'began' | 'changed' |
 export type eventType = 'start' | 'move' | 'end' | 'cancel';
 
 export interface Point {
-    readonly x: number;
-    readonly y: number;
+    x: number;
+    y: number;
 }
 
 export interface BaseInput {
