@@ -20,6 +20,7 @@ export default class {
     /**
      * 读取事件对象
      * @param {SupportEvent} 支持传入的事件对象 
+     * @returns {AnyTouchEvent} AnyTouchEvent
      */
     load(event: SupportEvent): Computed | void {
         // 格式化不同设备输入数据

@@ -1,6 +1,5 @@
 
 import { Computed, Input, directionString,InputRecord } from '../interface';
-import { getDirection } from '../vector';
 import intervalCompute from './intervalCompute';
 import computeDistance from './computeDistance';
 import computeDeltaXY from './computeDeltaXY';

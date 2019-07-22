@@ -20,7 +20,6 @@ import { Computed, SupportEvent } from './interface';
 import AnyEvent from 'any-event';
 import { SUPPORT_TOUCH } from './const';
 import InputManage from './InputManage';
-import compute from './compute/index';
 import computeTouchAction from './utils/computeTouchAction';
 import cache from './$_cache';
 
@@ -281,14 +280,11 @@ export class AnyTouch {
         }
 
         // 管理历史input
+        // 生成AnyTouchEvent
         const computed = this.inputManage.load(event);
         // 跳过无效输入
-        // 如: 当是鼠标事件的时候, mouseup阶段的input为undefined
+        // 如: 当是鼠标事件的时候, 会有undefined的时候
         if (undefined !== computed) {
-            // inputs !== undefined 说明input不为undefined,
-            // 因为inputManage中如果input为undefined的时候, inputs才为undefined
-            // const computed = compute(<any>inputs);
-            
             // input事件
             this.emit('input', computed);
             if (computed.isStart) {
@@ -303,15 +299,14 @@ export class AnyTouch {
                 }
             } else {
                 // prevInput和input一定不为空
-                // if (inputs.prevInput!.pointLength > inputs.input!.pointLength) {
-                //     this.emit('inputreduce', computed);
-                // } else if (inputs.prevInput!.pointLength < inputs.input!.pointLength) {
-                //     this.emit('inputadd', computed);
-                // } else {
-                //     this.emit('inputmove', computed);
-                // }
+                if (this.inputManage.prevInput!.pointLength > this.inputManage.activeInput!.pointLength) {
+                    this.emit('inputreduce', computed);
+                } else if (this.inputManage.prevInput!.pointLength < this.inputManage.activeInput!.pointLength) {
+                    this.emit('inputadd', computed);
+                } else {
+                    this.emit('inputmove', computed);
+                }
             };
-
 
             for (let recognizer of this.recognizers) {
                 if (recognizer.disabled) continue;
