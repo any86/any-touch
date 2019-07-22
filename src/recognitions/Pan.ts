@@ -1,4 +1,4 @@
-import { AnyTouchEvent, directionString } from '../interface';
+import { AnyTouchEvent, Computed } from '../interface';
 import { INPUT_MOVE } from '../const';
 import Recognizer from './Base';
 import getHV from '../utils/getHV';
@@ -58,7 +58,7 @@ export default class PanRecognizer extends Recognizer {
      * 移除限制方向的deltaX/Y
      * @param {AnyTouchEvent} computed 
      */
-    public lockDirection(computed: AnyTouchEvent): AnyTouchEvent {
+    public lockDirection(computed: Computed): Computed {
         if (undefined === this.options.directions || 0 === this.options.directions.length) return computed;
         let deltaX = 0;
         let deltaY = 0;

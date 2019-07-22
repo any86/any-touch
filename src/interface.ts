@@ -25,27 +25,25 @@ export interface BaseInput {
     readonly nativeEvent: Event;
 }
 
-export type Input = Readonly<{
-    preventDefault: () => void;
+export interface Input extends BaseInput {
+    readonly preventDefault: () => void;
     // 新一轮手势识别的开始和结束
-    isStart: boolean;
-    isEnd: boolean;
-    pointLength: number;
+    readonly isStart: boolean;
+    readonly isEnd: boolean;
+    readonly pointLength: number;
     // 发生改变的触点数据
-    changedPointLength: number;
+    readonly changedPointLength: number;
     // 当前时间
-    timestamp: number;
-    target: EventTarget | null;
-    currentTarget: EventTarget | null;
-    center?: Point;
+    readonly timestamp: number;
+    readonly target: EventTarget | null;
+    readonly currentTarget: EventTarget | null;
+    readonly center?: Point;
     // 同centerX/Y
-    x: number;
-    y: number;
-} & BaseInput>
+    readonly x: number;
+    readonly y: number;
+}
 
-// input的计算结果
-export interface AnyTouchEvent extends Input {
-    type: string;
+export interface Computed {
     // 一次识别周期中出现的最大触点数
     maxPointLength?: number;
     velocityX: number;
@@ -70,4 +68,8 @@ export interface AnyTouchEvent extends Input {
     overallDirection?: directionString;
     // 瞬时方向
     direction?: directionString;
-};
+}
+
+export interface AnyTouchEvent extends Input, Readonly<Computed>{
+    readonly type: string
+}
