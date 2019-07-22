@@ -1,4 +1,4 @@
-import { Input, SupportEvent, InputRecord, Computed } from './interface';
+import { Input, SupportEvent, InputRecord, AnyTouchEvent } from './interface';
 import InputFactory from './Input';
 import compute from './compute/index';
 export default class {
@@ -22,7 +22,7 @@ export default class {
      * @param {SupportEvent} 支持传入的事件对象 
      * @returns {AnyTouchEvent} AnyTouchEvent
      */
-    load(event: SupportEvent): Computed | void {
+    load(event: SupportEvent): AnyTouchEvent | void {
         // 格式化不同设备输入数据
         const input = this.inputFactory.load(event);
         // 过滤无效的输入    

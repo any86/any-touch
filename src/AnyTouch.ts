@@ -16,7 +16,7 @@
  * ==================== 流程 ====================
  * 格式化Event成统一的pointer格式 => 通过pointer数据计算 => 用计算结果去识别手势
  */
-import { Computed, SupportEvent } from './interface';
+import { AnyTouchEvent, SupportEvent } from './interface';
 import AnyEvent from 'any-event';
 import { SUPPORT_TOUCH } from './const';
 import InputManage from './InputManage';
@@ -324,7 +324,7 @@ export class AnyTouch {
      * @param {String} 事件名
      * @param {Function} 回调函数
      */
-    on(type: string, listener: (event: Computed) => void, options: { [k: string]: boolean } | boolean = false): void {
+    on(type: string, listener: (event: AnyTouchEvent) => void, options: { [k: string]: boolean } | boolean = false): void {
         this.eventEmitter.on(type, listener);
     };
 
@@ -333,7 +333,7 @@ export class AnyTouch {
      * @param {String} 事件名 
      * @param {Function} 事件回调
      */
-    off(type: string, listener?: (event: Computed) => void): void {
+    off(type: string, listener?: (event: AnyTouchEvent) => void): void {
         this.eventEmitter.off(type, listener);
     };
 
@@ -342,7 +342,7 @@ export class AnyTouch {
      * @param {String} 类型名
      * @param {Object} 数据
      */
-    emit(type: string, payload: Computed) {
+    emit(type: string, payload: AnyTouchEvent) {
         this.eventEmitter.emit(type, { ...payload, type });
     };
 

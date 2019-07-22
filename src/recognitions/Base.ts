@@ -1,4 +1,4 @@
-import { Computed, directionString } from '../interface';
+import { AnyTouchEvent, directionString } from '../interface';
 import { INPUT_CANCEL, INPUT_END, INPUT_MOVE } from '../const';
 import {
     STATUS_POSSIBLE,
@@ -232,9 +232,9 @@ export default abstract class Recognizer {
     /**
      * 适用于大部分移动类型的手势, 
      * 如pan/rotate/pinch/swipe
-     * @param {Computed} 计算数据 
+     * @param {AnyTouchEvent} 计算数据 
      */
-    recognize(computed: Computed) {
+    recognize(computed: AnyTouchEvent) {
         // if(this.name === 'pan')    console.log(this.name,this.status);
         // 是否识别成功
         let isVaild = this.test(computed);
@@ -270,25 +270,25 @@ export default abstract class Recognizer {
 
     /**
      * 识别条件, 基于异步
-     * @param {Computed} 计算数据
+     * @param {AnyTouchEvent} 计算数据
      * @param {(isRecognized: boolean) => void}} 接收是否识别状态
      */
-    abstract test(computed: Computed): boolean;
+    abstract test(computed: AnyTouchEvent): boolean;
 
     /**
      * 识别成功后执行
      * 这个阶段可以对computed数据做些处理
      * 比如pan可以针对不支持的方向吧deltaX/Y调整为0
      * swipe可以把不支持的方向上的速率调整为0
-     * @param {Computed} 计算数据 
+     * @param {AnyTouchEvent} 计算数据 
      */
-    public afterRecognized(computed: Computed): void { };
+    public afterRecognized(computed: AnyTouchEvent): void { };
 
     /**
      * 基类的所有emit触发后执行
-     * @param {Computed} computed 
+     * @param {AnyTouchEvent} computed 
      */
-    public afterEmit(computed: Computed): void { };
+    public afterEmit(computed: AnyTouchEvent): void { };
 
     /**
      * 计算当前手势的touch-action

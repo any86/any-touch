@@ -44,7 +44,7 @@ export type Input = Readonly<{
 } & BaseInput>
 
 // input的计算结果
-export interface Computed extends Input {
+export interface AnyTouchEvent extends Input {
     type: string;
     // 一次识别周期中出现的最大触点数
     maxPointLength?: number;
@@ -71,8 +71,3 @@ export interface Computed extends Input {
     // 瞬时方向
     direction?: directionString;
 };
-
-export interface AnyTouchEvent extends Computed {
-    // 手势类型名: pan/panstart/panleft...
-    type: string;
-}

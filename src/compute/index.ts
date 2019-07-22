@@ -1,5 +1,5 @@
 
-import { Computed, Input, directionString,InputRecord } from '../interface';
+import { AnyTouchEvent, Input, directionString,InputRecord } from '../interface';
 import intervalCompute from './intervalCompute';
 import computeDistance from './computeDistance';
 import computeDeltaXY from './computeDeltaXY';
@@ -7,7 +7,7 @@ import computeMaxLength from './computeMaxLength';
 import computMulti from './computeMulti';
 
 // 最大触点数
-export default function (inputs: InputRecord): Computed {
+export default function (inputs: InputRecord): AnyTouchEvent {
     const { input } = inputs;
     // ========= 整体距离/位移=========
     const { displacementX, displacementY, distanceX, distanceY, distance, overallDirection } = computeDistance(inputs);

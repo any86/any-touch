@@ -1,4 +1,4 @@
-import { Computed, directionString } from '../interface';
+import { AnyTouchEvent, directionString } from '../interface';
 import { INPUT_MOVE } from '../const';
 import Recognizer from './Base';
 import getHV from '../utils/getHV';
@@ -30,10 +30,10 @@ export default class PanRecognizer extends Recognizer {
     };
 
     /**
-     * @param {Computed} 计算数据
+     * @param {AnyTouchEvent} 计算数据
      * @return {Boolean}} .是否是当前手势 
      */
-    test({ distance, direction, eventType, pointLength }: Computed): boolean {
+    test({ distance, direction, eventType, pointLength }: AnyTouchEvent): boolean {
         return INPUT_MOVE === eventType &&
             (this.isRecognized || this.options.threshold < distance) &&
             this.isValidPointLength(pointLength) &&
@@ -42,23 +42,23 @@ export default class PanRecognizer extends Recognizer {
 
     /**
      * 识别后发布panleft等事件
-     * @param {Computed} 计算数据
+     * @param {AnyTouchEvent} 计算数据
      */
-    afterEmit(computed: Computed) {
+    afterEmit(computed: AnyTouchEvent) {
         if ('none' !== computed.direction) {
             this.emit(this.options.name + computed.direction, computed);
         }
     };
 
-    afterRecognized(computed: Computed) {
+    afterRecognized(computed: AnyTouchEvent) {
         this.lockDirection(computed);
     }
 
     /**
      * 移除限制方向的deltaX/Y
-     * @param {Computed} computed 
+     * @param {AnyTouchEvent} computed 
      */
-    public lockDirection(computed: Computed): Computed {
+    public lockDirection(computed: AnyTouchEvent): AnyTouchEvent {
         if (undefined === this.options.directions || 0 === this.options.directions.length) return computed;
         let deltaX = 0;
         let deltaY = 0;
