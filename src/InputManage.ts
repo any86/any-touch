@@ -1,5 +1,5 @@
 import { Input, SupportEvent, InputRecord, AnyTouchEvent } from './interface';
-import InputFactory from './Input';
+import InputFactory from './input';
 import compute from './compute/index';
 export default class {
     // 起点(单点|多点)
