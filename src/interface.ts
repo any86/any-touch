@@ -14,7 +14,7 @@ export interface Point {
 export type InputRecord = {
     input: Input;
     startInput: Input;
-    prevInput: Input;
+    prevInput?: Input;
     startMultiInput?: Input;
 }
 

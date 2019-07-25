@@ -55,7 +55,7 @@ export default class {
         return {
             startMultiInput: this.startMultiInput,
             startInput: <Input>this.startInput,
-            prevInput: <Input>this.prevInput,
+            prevInput: this.prevInput,
             input
         };
     };

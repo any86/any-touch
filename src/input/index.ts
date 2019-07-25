@@ -19,6 +19,7 @@ export default class {
     public load(event: SupportEvent): Input | void {
         // 从event中采集的数据
         const BASE_INPUT = this.adapter.load(event);
+        
         if (undefined === BASE_INPUT) {
             return;
         }
