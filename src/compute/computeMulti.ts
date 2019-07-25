@@ -2,7 +2,7 @@
 import computeVector from './computeVector';
 import computeScale from './computeScale';
 import computeAngle from './computeAngle';
-import cache from '../$_cache';
+import $store from '../$store';
 
 export default function ({
     startMultiInput,
@@ -28,15 +28,15 @@ export default function ({
 
         // ========= 计算旋转角度 =========
         const { deltaAngle, angle } = computeAngle({ startV, prevV, activeV });
-        cache.set({ angle });
-        cache.set({ scale });
+        $store.set({ angle });
+        $store.set({ scale });
         return { scale, deltaScale, deltaAngle, angle };
     } else {
         return {
-            scale: cache.get('scale', 1),
+            scale: $store.get('scale', 1),
             deltaScale: 1,
             deltaAngle: 0,
-            angle: cache.get('angle', 0)
+            angle: $store.get('angle', 0)
         };
     }
 };

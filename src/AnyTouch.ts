@@ -21,7 +21,7 @@ import AnyEvent from 'any-event';
 import { SUPPORT_TOUCH } from './const';
 import InputManage from './InputManage';
 import computeTouchAction from './utils/computeTouchAction';
-import cache from './$_cache';
+import $store from './$store';
 
 // 识别器
 import Recognizer from './recognitions/Base';
@@ -110,8 +110,8 @@ export class AnyTouch {
         // eventEmitter
         this.eventEmitter = new AnyEvent();
         this._isStopped = false;
-        // 初始化cache
-        cache.reset();
+        // 初始化$store
+        $store.reset();
         // 识别器
         // 注入当前方法和属性, 方便在识别器中调用类上的方法和属性
         this.recognizers = [
@@ -288,7 +288,7 @@ export class AnyTouch {
             // input事件
             this.emit('input', computed);
             if (computed.isStart) {
-                // cache.reset();
+                // $store.reset();
                 this._isStopped = false;
                 this.emit('inputstart', computed);
             } else if (computed.isEnd) {
@@ -355,7 +355,7 @@ export class AnyTouch {
      * 销毁
      */
     destroy() {
-        cache.reset();
+        $store.reset();
         // 解绑事件
         this.unbind();
         this.eventEmitter.destroy();
