@@ -1,7 +1,7 @@
 import { Input } from '../interface';
-import $store from '../$store';
+import Store from '../Store';
 
-export default ({ pointLength, isStart }: { pointLength:number, isStart:boolean}): number => {
+export default ({ pointLength, isStart }: { pointLength:number, isStart:boolean}, $store:Store): number => {
     if (isStart) {
         $store.set({maxPointLength:pointLength});
         return pointLength;

@@ -5,21 +5,21 @@ import computeDistance from './computeDistance';
 import computeDeltaXY from './computeDeltaXY';
 import computeMaxLength from './computeMaxLength';
 import computMulti from './computeMulti';
-
+import Store from '../Store';
 // 最大触点数
-export default function (inputs: InputRecord): AnyTouchEvent {
+export default function (inputs: InputRecord, $store:Store): AnyTouchEvent {
     const { input } = inputs;
     // ========= 整体距离/位移=========
-    const { displacementX, displacementY, distanceX, distanceY, distance, overallDirection } = computeDistance(inputs);
+    const { displacementX, displacementY, distanceX, distanceY, distance, overallDirection } = computeDistance(inputs, $store);
 
     // ========= 已消耗时间 =========
     const deltaTime = inputs.input.timestamp - inputs.startInput.timestamp;
 
     // ========= 最近25ms内计算数据, 瞬时数据 =========
-    const { velocityX, velocityY, speedX, speedY, direction } = intervalCompute(inputs);
+    const { velocityX, velocityY, speedX, speedY, direction } = intervalCompute(inputs, $store);
 
     // ========= 中心点位移增量 =========
-    const { deltaX, deltaY, deltaXYAngle } = computeDeltaXY(inputs);
+    const { deltaX, deltaY, deltaXYAngle } = computeDeltaXY(inputs, $store);
 
 
     // ========= 多点计算 =========
@@ -28,9 +28,9 @@ export default function (inputs: InputRecord): AnyTouchEvent {
     const { scale,
         deltaScale,
         angle,
-        deltaAngle } = computMulti(inputs);
+        deltaAngle } = computMulti(inputs,$store);
 
-    const maxPointLength = computeMaxLength(input);
+    const maxPointLength = computeMaxLength(input,$store);
     return {
         type: '',
         ...input,

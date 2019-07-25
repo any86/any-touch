@@ -1,15 +1,15 @@
 
 import { Input,directionString } from '../interface';
-import $store from '../$store';
 import { CLIENT_X, CLIENT_Y } from '../const';
 import { getVLength, getDirection } from '../vector';
+import Store from '../Store';
 export default function ({
     startInput,
     input
 }: {
     startInput: Input,
     input: Input
-}): { displacementX: number, displacementY: number, distanceX: number, distanceY: number, distance: number, overallDirection: directionString } {
+},$store:Store): { displacementX: number, displacementY: number, distanceX: number, distanceY: number, distance: number, overallDirection: directionString } {
     const { eventType } = input;
     let displacementX = 0;
     let displacementY = 0;

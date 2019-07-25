@@ -1,6 +1,7 @@
 import { Input, SupportEvent, InputRecord, AnyTouchEvent } from './interface';
 import InputFactory from './input';
 import compute from './compute/index';
+import Store from './Store';
 export default class {
     // 起点(单点|多点)
     startInput?: Input;
@@ -13,8 +14,11 @@ export default class {
 
     inputFactory: InputFactory;
 
-    constructor() {
+    $store: Store;
+
+    constructor({$store}:{$store: Store}) {
         this.inputFactory = new InputFactory();
+        this.$store = $store;
     };
 
     /**
@@ -28,7 +32,7 @@ export default class {
         // 过滤无效的输入    
         if (undefined === input) return;
         const record = this._record(input);
-        return compute(record);
+        return compute(record, this.$store);
     };
 
     /**

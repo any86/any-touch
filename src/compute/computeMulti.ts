@@ -2,13 +2,13 @@
 import computeVector from './computeVector';
 import computeScale from './computeScale';
 import computeAngle from './computeAngle';
-import $store from '../$store';
+import Store from '../Store';
 
 export default function ({
     startMultiInput,
     prevInput,
     input
-}: any): {
+}: any, $store:Store): {
     scale: number;
     deltaScale: number;
     angle: number;

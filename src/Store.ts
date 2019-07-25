@@ -1,4 +1,4 @@
-class Store {
+export default class{
     store: Record<string, any>;
 
     constructor() {
@@ -16,6 +16,8 @@ class Store {
     reset() {
         this.store = {};
     }
-}
 
-export default new Store();
+    destroy() {
+        this.reset()
+    }
+}

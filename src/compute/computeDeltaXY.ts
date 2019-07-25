@@ -1,9 +1,9 @@
 import { radianToAngle } from '../vector';
-import $store from '../$store';
+import Store from '../Store';
 export default function ({
     prevInput,
     input
-}: any): { deltaX: number, deltaY: number, deltaXYAngle: number } {
+}: any, $store:Store): { deltaX: number, deltaY: number, deltaXYAngle: number } {
     // 每次事件触发时位移的变化
     let deltaX: number;
     let deltaY: number;

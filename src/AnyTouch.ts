@@ -21,7 +21,8 @@ import AnyEvent from 'any-event';
 import { SUPPORT_TOUCH } from './const';
 import InputManage from './InputManage';
 import computeTouchAction from './utils/computeTouchAction';
-import $store from './$store';
+import Store from './Store';
+
 
 // 识别器
 import Recognizer from './recognitions/Base';
@@ -70,6 +71,7 @@ export class AnyTouch {
 
     inputManage: InputManage;
 
+    $store: Store;
 
     // 是否阻止后面的识别器运行
     private _isStopped: boolean;
@@ -104,14 +106,13 @@ export class AnyTouch {
             }
         };
         this.el = el;
-        this.inputManage = new InputManage();
+        this.$store = new Store();
+        this.inputManage = new InputManage({$store:this.$store});
         this.touchDevice = SUPPORT_TOUCH ? 'touch' : 'mouse';
         this.options = { ...this.default, ...options };
         // eventEmitter
         this.eventEmitter = new AnyEvent();
         this._isStopped = false;
-        // 初始化$store
-        $store.reset();
         // 识别器
         // 注入当前方法和属性, 方便在识别器中调用类上的方法和属性
         this.recognizers = [
@@ -355,7 +356,7 @@ export class AnyTouch {
      * 销毁
      */
     destroy() {
-        $store.reset();
+        this.$store.destroy();
         // 解绑事件
         this.unbind();
         this.eventEmitter.destroy();
