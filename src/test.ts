@@ -1,1 +1,0 @@
-import $store from './$store';
