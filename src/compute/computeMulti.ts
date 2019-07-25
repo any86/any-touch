@@ -1,19 +1,27 @@
 
+import { Input } from '../interface';
 import computeVector from './computeVector';
 import computeScale from './computeScale';
 import computeAngle from './computeAngle';
 import Store from '../Store';
+type Arg = {
+    startMultiInput?: Input,
+    prevInput?: Input,
+    input: Input
+};
+
+type Ret = {
+    scale: number;
+    deltaScale: number;
+    angle: number;
+    deltaAngle: number
+}
 
 export default function ({
     startMultiInput,
     prevInput,
     input
-}: any, $store:Store): {
-    scale: number;
-    deltaScale: number;
-    angle: number;
-    deltaAngle: number
-} {
+}: Arg, $store: Store): Ret {
     // 上一触点数大于1, 当前触点大于1
     // 连续第二次出现多点, 才能开始计算
     if (undefined !== prevInput && 1 < prevInput.points.length && 1 < input.points.length) {

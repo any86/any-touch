@@ -2,7 +2,7 @@
  * ==================== 参考 ====================
  * https://segmentfault.com/a/1190000010511484#articleHeader0
  * https://segmentfault.com/a/1190000007448808#articleHeader1
- * hammer.js
+ * hammer.js http://hammerjs.github.io/
  * 
  * ==================== 支持的手势 ====================
  * rotate 旋转
@@ -22,7 +22,6 @@ import { SUPPORT_TOUCH } from './const';
 import InputManage from './InputManage';
 import computeTouchAction from './utils/computeTouchAction';
 import Store from './Store';
-
 
 // 识别器
 import Recognizer from './recognitions/Base';

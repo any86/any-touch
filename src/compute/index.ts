@@ -1,5 +1,5 @@
 
-import { AnyTouchEvent, Input, directionString,InputRecord } from '../interface';
+import { AnyTouchEvent,InputRecord } from '../interface';
 import intervalCompute from './intervalCompute';
 import computeDistance from './computeDistance';
 import computeDeltaXY from './computeDeltaXY';
@@ -28,7 +28,7 @@ export default function (inputs: InputRecord, $store:Store): AnyTouchEvent {
     const { scale,
         deltaScale,
         angle,
-        deltaAngle } = computMulti(inputs,$store);
+        deltaAngle } = computMulti(inputs, $store);
 
     const maxPointLength = computeMaxLength(input,$store);
     return {
