@@ -121,10 +121,10 @@ export default (event: MouseEvent): BaseInput | void => {
 #### x/y
 对应center.x和center.y
 
-#### isFirst
+#### isStart
 是否本轮识别周期的开始, 如果当前的**eventType**为start阶段, pointLength和changedPointLength的长度相等, 那么可以判定, 当前为开始.
 
-#### isFinal
+#### isEnd
 是否本轮识别周期的结束, 如果当前的**eventType**为end或者cancel阶段, 且所有触点均离开, 那么判定为结束.
 
 #### preventDefault

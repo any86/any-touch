@@ -1,5 +1,6 @@
-import { Input } from './interface';
-import InputFactory from './input/InputFactory';
+import { Input, SupportEvent, InputRecord, AnyTouchEvent,Store } from './interface';
+import InputFactory from './input';
+import compute from './compute/index';
 export default class {
     // 起点(单点|多点)
     startInput?: Input;
@@ -12,33 +13,44 @@ export default class {
 
     inputFactory: InputFactory;
 
-    constructor() {
+    $store: Store;
+
+    constructor({ $store }: { $store: Store }) {
         this.inputFactory = new InputFactory();
+        this.$store = $store;
     };
 
-    load(event: Event): {
-        startInput?: Input,
-        prevInput?: Input,
-        input?: Input,
-        startMultiInput?: Input
-    } | void {
+    /**
+     * 读取事件对象
+     * @param {SupportEvent} 支持传入的事件对象 
+     * @returns {AnyTouchEvent} AnyTouchEvent
+     */
+    load(event: SupportEvent): AnyTouchEvent | void {
         // 格式化不同设备输入数据
         const input = this.inputFactory.load(event);
-
-        // 无效的输入    
+        // 过滤无效的输入    
         if (undefined === input) return;
+        const record = this._record(input);
+        return compute(record, this.$store);
+    };
 
+    /**
+     * 记录计算所需的几个输入
+     * @param {Input} 输入
+     * @return {InputRecord} 输入记录
+     */
+    private _record(input: Input): InputRecord {
         // 当前输入状态
         const { eventType } = input;
+        // 获取上一点
+        this.prevInput = this.activeInput;
 
-        // [Start]
         if ('start' === eventType) {
-            // 上一步的触点
-            // prevInput = undefined;
-            // 当前点
-            this.activeInput = input;
             // 起点(单点|多点)
-            this.startInput = input;
+            if (input.isStart) {
+                this.startInput = input;
+            }
+
             // 起点(多点)
             if (1 < input.pointLength) {
                 this.startMultiInput = input;
@@ -46,18 +58,13 @@ export default class {
                 // 如果出现了单点, 那么之前的多点起点记录失效
                 this.startMultiInput = undefined;
             }
-        } else if ('move' === eventType) {
-            // 读取上一点
-            this.prevInput = this.activeInput;
-            this.activeInput = input;
-        } else if ('end' === eventType) {
-            this.prevInput = this.activeInput;
-            this.activeInput = input;
-            // console.log(this.startInput, this.el.id);
         }
+        // 当前点
+        this.activeInput = input;
+
         return {
             startMultiInput: this.startMultiInput,
-            startInput: this.startInput,
+            startInput: <Input>this.startInput,
             prevInput: this.prevInput,
             input
         };

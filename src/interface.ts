@@ -1,3 +1,11 @@
+import _Store from './Store';
+// export type Store = InstanceType<_Store>;
+export type Store = _Store;
+
+// export 
+// 适配器支持的事件类型
+export type SupportEvent = MouseEvent | TouchEvent;
+
 export type directionString = 'up' | 'right' | 'down' | 'left' | 'none';
 export type RecognizerStatus = 'possible' | 'recognized' | 'began' | 'changed' | 'ended' | 'failed' | 'cancelled';
 export type eventType = 'start' | 'move' | 'end' | 'cancel';
@@ -7,37 +15,44 @@ export interface Point {
     y: number;
 }
 
+export type Vector = Point;
+
+// 输入记录
+export type InputRecord = {
+    input: Input;
+    startInput: Input;
+    prevInput?: Input;
+    startMultiInput?: Input;
+}
+
 export interface BaseInput {
-    eventType: eventType;
-    changedPoints: { clientX: number, clientY: number }[];
-    points: { clientX: number, clientY: number }[];
-    nativeEvent: Event;
+    readonly eventType: eventType;
+    readonly changedPoints: { clientX: number, clientY: number }[];
+    readonly points: { clientX: number, clientY: number }[];
+    readonly nativeEvent: Event;
 }
 
 export interface Input extends BaseInput {
-    preventDefault: () => void;
+    readonly preventDefault: () => void;
     // 新一轮手势识别的开始和结束
-    isFirst: boolean;
-    isFinal: boolean;
-    pointLength: number;
+    readonly isStart: boolean;
+    readonly isEnd: boolean;
+    readonly pointLength: number;
     // 发生改变的触点数据
-    changedPointLength: number;
+    readonly changedPointLength: number;
     // 当前时间
-    timestamp: number;
-    target: EventTarget | null;
-    currentTarget: EventTarget | null;
-    center?: Point;
+    readonly timestamp: number;
+    readonly target: EventTarget | null;
+    readonly currentTarget: EventTarget | null;
+    readonly center?: Point;
     // 同centerX/Y
-    x: number;
-    y: number;
-    // functions?: { [k: string]: (...args: any[]) => any };
+    readonly x: number;
+    readonly y: number;
 }
-// input的计算结果
-export interface Computed extends Input {
-    type: string;
+
+export interface Computed {
     // 一次识别周期中出现的最大触点数
     maxPointLength?: number;
-
     velocityX: number;
     velocityY: number;
     speedX: number;
@@ -62,7 +77,6 @@ export interface Computed extends Input {
     direction?: directionString;
 }
 
-export interface AnyTouchEvent extends Computed {
-    // 手势类型名: pan/panstart/panleft...
-    type: string;
+export interface AnyTouchEvent extends Input, Readonly<Computed>{
+    readonly type: string
 }

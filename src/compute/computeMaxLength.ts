@@ -1,16 +1,15 @@
-import { Input } from '../interface';
-import cache from '../$_cache';
+import Store from '../Store';
 
-export default ({ pointLength, isFirst }: { pointLength:number, isFirst:boolean}): number => {
-    if (isFirst) {
-        cache.set({maxPointLength:pointLength});
+export default ({ pointLength, isStart }: { pointLength:number, isStart:boolean}, $store:Store): number => {
+    if (isStart) {
+        $store.set({maxPointLength:pointLength});
         return pointLength;
     } else {
-        const maxLength = cache.get('maxPointLength', 0);
+        const maxLength = $store.get('maxPointLength', 0);
         if (pointLength > maxLength) {
-            cache.set({maxPointLength:pointLength});
+            $store.set({maxPointLength:pointLength});
         }
 
-        return cache.get('maxPointLength', 0)
+        return $store.get('maxPointLength', 0)
     }
 };

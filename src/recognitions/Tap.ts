@@ -1,4 +1,4 @@
-import { Computed, Point } from '../interface';
+import { AnyTouchEvent, Point } from '../interface';
 import {
     STATUS_RECOGNIZED, STATUS_POSSIBLE,
     STATUS_FAILED,
@@ -123,9 +123,9 @@ export default class TapRecognizer extends Recognizer {
      *              |
      *             结束
      * 
-     * @param {Computed} 计算数据 
+     * @param {AnyTouchEvent} 计算数据 
      */
-    public recognize(computed: Computed): void {
+    public recognize(computed: AnyTouchEvent): void {
         // 只在end阶段去识别
         if (INPUT_END !== computed.eventType) return;
 
@@ -187,10 +187,10 @@ export default class TapRecognizer extends Recognizer {
 
     /**
       * 识别条件
-      * @param {Computed} 计算数据
+      * @param {AnyTouchEvent} 计算数据
       * @return {Boolean} 是否验证成功
       */
-    public test(computed: Computed): boolean {
+    public test(computed: AnyTouchEvent): boolean {
         // 判断是否发生大的位置变化
         const { distance, deltaTime, maxPointLength } = computed;
         // 检查
@@ -202,5 +202,5 @@ export default class TapRecognizer extends Recognizer {
             this.options.maxPressTime > deltaTime;
     };
 
-    public afterEmit(computed: Computed): void { }
+    public afterEmit(computed: AnyTouchEvent): void { }
 };
