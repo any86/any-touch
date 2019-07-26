@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.3.5"></a>
+## [0.3.5](https://github.com/383514580/any-touch/compare/v0.3.4...v0.3.5) (2019-07-26)
+
+
+### Bug Fixes
+
+* 修复SupportEvent报错 ([155c3ea](https://github.com/383514580/any-touch/commit/155c3ea))
+* 修改大小写拼写错误 ([015c1d3](https://github.com/383514580/any-touch/commit/015c1d3))
+* 修改路径 ([2ae77a0](https://github.com/383514580/any-touch/commit/2ae77a0))
+* 取消Point的readonly ([f4fc469](https://github.com/383514580/any-touch/commit/f4fc469))
+
+
+
 <a name="0.3.4"></a>
 ## [0.3.4](https://github.com/383514580/any-touch/compare/v0.3.3...v0.3.4) (2019-07-08)
 
