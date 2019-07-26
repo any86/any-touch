@@ -26,7 +26,7 @@ export default function ({
     // 连续第二次出现多点, 才能开始计算
     if (undefined !== prevInput && 1 < prevInput.points.length && 1 < input.points.length) {
         // 2指形成的向量
-        const startV = computeVector(startMultiInput);
+        const startV = computeVector(<Input>startMultiInput);
         const prevV = computeVector(prevInput);
         const activeV = computeVector(input);
         // 计算缩放

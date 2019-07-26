@@ -4,7 +4,6 @@ export default function ({
     prevInput,
     input
 }: InputRecord, $store: Store): { deltaX: number, deltaY: number, deltaXYAngle: number } {
-    console.log(prevInput);
     // 每次事件触发时位移的变化
     let deltaX: number;
     let deltaY: number;

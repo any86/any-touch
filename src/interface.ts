@@ -15,6 +15,8 @@ export interface Point {
     y: number;
 }
 
+export type Vector = Point;
+
 // 输入记录
 export type InputRecord = {
     input: Input;
