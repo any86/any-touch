@@ -1,7 +1,6 @@
-import { Input, SupportEvent, InputRecord, AnyTouchEvent } from './interface';
+import { Input, SupportEvent, InputRecord, AnyTouchEvent,Store } from './interface';
 import InputFactory from './input';
 import compute from './compute/index';
-import Store from './Store';
 export default class {
     // 起点(单点|多点)
     startInput?: Input;
@@ -16,7 +15,7 @@ export default class {
 
     $store: Store;
 
-    constructor({$store}:{$store: Store}) {
+    constructor({ $store }: { $store: Store }) {
         this.inputFactory = new InputFactory();
         this.$store = $store;
     };
@@ -38,20 +37,31 @@ export default class {
     /**
      * 记录计算所需的几个输入
      * @param {Input} 输入
-     * @return {Object} 输入记录
+     * @return {InputRecord} 输入记录
      */
     private _record(input: Input): InputRecord {
         // 当前输入状态
         const { eventType } = input;
+        // 获取上一点
+        this.prevInput = this.activeInput;
 
         if ('start' === eventType) {
-            this.start(input);
-        } else if ('move' === eventType) {
-            this.move();
-        } else if ('end' === eventType || 'cancel' === eventType) {
-            this.end();
+            // 起点(单点|多点)
+            if (input.isStart) {
+                this.startInput = input;
+            }
+
+            // 起点(多点)
+            if (1 < input.pointLength) {
+                this.startMultiInput = input;
+            } else {
+                // 如果出现了单点, 那么之前的多点起点记录失效
+                this.startMultiInput = undefined;
+            }
         }
+        // 当前点
         this.activeInput = input;
+
         return {
             startMultiInput: this.startMultiInput,
             startInput: <Input>this.startInput,
@@ -59,28 +69,4 @@ export default class {
             input
         };
     };
-
-    start(input: Input) {
-        // 起点(单点|多点)
-        if (input.isStart) {
-            this.startInput = input;
-        }
-
-        // 起点(多点)
-        if (1 < input.pointLength) {
-            this.startMultiInput = input;
-        } else {
-            // 如果出现了单点, 那么之前的多点起点记录失效
-            this.startMultiInput = undefined;
-        }
-    }
-
-    move() {
-        // 读取上一点
-        this.prevInput = this.activeInput;
-    }
-
-    end() {
-        this.prevInput = this.activeInput;
-    }
 }; 

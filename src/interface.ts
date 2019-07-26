@@ -1,3 +1,8 @@
+import _Store from './Store';
+// export type Store = InstanceType<_Store>;
+export type Store = _Store;
+
+// export 
 // 适配器支持的事件类型
 export type SupportEvent = MouseEvent | TouchEvent;
 

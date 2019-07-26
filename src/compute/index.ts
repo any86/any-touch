@@ -1,13 +1,12 @@
 
-import { AnyTouchEvent,InputRecord } from '../interface';
+import { AnyTouchEvent, InputRecord,Store } from '../interface';
 import intervalCompute from './intervalCompute';
 import computeDistance from './computeDistance';
 import computeDeltaXY from './computeDeltaXY';
 import computeMaxLength from './computeMaxLength';
 import computMulti from './computeMulti';
-import Store from '../Store';
-// 最大触点数
-export default function (inputs: InputRecord, $store:Store): AnyTouchEvent {
+
+export default function (inputs: InputRecord, $store: Store): AnyTouchEvent {
     const { input } = inputs;
     // ========= 整体距离/位移=========
     const { displacementX, displacementY, distanceX, distanceY, distance, overallDirection } = computeDistance(inputs, $store);
@@ -30,7 +29,7 @@ export default function (inputs: InputRecord, $store:Store): AnyTouchEvent {
         angle,
         deltaAngle } = computMulti(inputs, $store);
 
-    const maxPointLength = computeMaxLength(input,$store);
+    const maxPointLength = computeMaxLength(input, $store);
     return {
         type: '',
         ...input,
@@ -51,6 +50,6 @@ export default function (inputs: InputRecord, $store:Store): AnyTouchEvent {
         deltaScale,
         angle,
         deltaAngle,
-        maxPointLength 
+        maxPointLength
     };
 };
