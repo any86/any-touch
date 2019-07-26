@@ -1,4 +1,4 @@
-import { Computed } from '../interface';
+import { AnyTouchEvent } from '../interface';
 import Recognizer from './Base';
 
 
@@ -19,7 +19,7 @@ export default class PinchRecognizer extends Recognizer {
         return ['none'];
     };
 
-    afterEmit(computed: Computed) {
+    afterEmit(computed: AnyTouchEvent) {
         if('end' === computed.eventType) return;
         // pinchin | pinchout
         const { scale } = computed;
@@ -32,10 +32,10 @@ export default class PinchRecognizer extends Recognizer {
 
     /**
      * 识别条件
-     * @param {Computed} 计算数据
+     * @param {AnyTouchEvent} 计算数据
      * @param {(isRecognized: boolean) => void}} 接收是否识别状态
      */
-    test({ pointLength, scale }: Computed): boolean {
+    test({ pointLength, scale }: AnyTouchEvent): boolean {
         // 如果触碰点数要大于指定
         // 如果缩放超过阈值, 或者已识别
         // console.log({scale})

@@ -1,10 +1,9 @@
 import { radianToAngle } from '../vector';
-import cache from '../$_cache';
-
+import { Store, InputRecord } from '../interface';
 export default function ({
     prevInput,
     input
-}: any): { deltaX: number, deltaY: number, deltaXYAngle: number } {
+}: InputRecord, $store: Store): { deltaX: number, deltaY: number, deltaXYAngle: number } {
     // 每次事件触发时位移的变化
     let deltaX: number;
     let deltaY: number;
@@ -12,7 +11,8 @@ export default function ({
     let deltaXYAngle: number = 0;
 
     // 计算deltaX/Y
-    if ('end' === input.eventType || 'start' === input.eventType) {
+    // if ('end' === input.eventType || 'start' === input.eventType) {
+    if (undefined === prevInput) {
         deltaX = 0;
         deltaY = 0;
     } else {
@@ -24,9 +24,9 @@ export default function ({
     if (0 !== deltaX || 0 !== deltaY) {
         const deltaXY = Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2));
         deltaXYAngle = Math.round(radianToAngle(Math.acos(Math.abs(deltaX) / deltaXY)));
-        cache.set({deltaXYAngle});
+        $store.set({ deltaXYAngle });
     } else {
-        deltaXYAngle = cache.get('deltaXYAngle', 0);
+        deltaXYAngle = $store.get('deltaXYAngle', 0);
     }
 
     return { deltaX, deltaY, deltaXYAngle };

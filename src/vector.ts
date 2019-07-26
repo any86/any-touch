@@ -1,6 +1,5 @@
 import { CLIENT_X, CLIENT_Y } from './const';
-import { directionString, Point } from './interface';
-type Vector = Point;
+import { directionString, Point,Vector } from './interface';
 
 /**
  * 获取向量长度(向量模)

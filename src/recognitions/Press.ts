@@ -1,4 +1,4 @@
-import { Computed } from '../interface';
+import { AnyTouchEvent } from '../interface';
 import {
     STATUS_FAILED, STATUS_RECOGNIZED
 } from '../const/recognizerStatus';
@@ -20,7 +20,7 @@ export default class PressRecognizer extends Recognizer {
         return ['auto'];
     };
 
-    recognize(computed: Computed): void {
+    recognize(computed: AnyTouchEvent): void {
         const { eventType, pointLength, distance, deltaTime } = computed;
 
         // 1. start阶段
@@ -57,7 +57,7 @@ export default class PressRecognizer extends Recognizer {
      * 是否满足:
      * 移动距离不大
      */
-    test({ distance}: Computed): boolean {
+    test({ distance}: AnyTouchEvent): boolean {
         return this.options.positionTolerance > distance;
     };
 
