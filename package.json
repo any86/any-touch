@@ -27,14 +27,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/383514580/any-touch.git"
+    "url": "git+https://github.com/any86/any-touch.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/383514580/any-touch/issues"
+    "url": "https://github.com/any86/any-touch/issues"
   },
-  "homepage": "https://github.com/383514580/any-touch#readme",
+  "homepage": "https://github.com/any86/any-touch#readme",
   "devDependencies": {
     "@types/jest": "^24.0.11",
     "chalk": "^2.4.2",
