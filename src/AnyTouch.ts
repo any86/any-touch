@@ -16,7 +16,7 @@
  * ==================== 流程 ====================
  * 格式化Event成统一的pointer格式 => 通过pointer数据计算 => 用计算结果去识别手势
  */
-import { AnyTouchEvent, SupportEvent } from './interface';
+import { AnyTouchEvent, SupportEvent} from './interface';
 import AnyEvent from 'any-event';
 import { SUPPORT_TOUCH } from './const';
 import InputManage from './InputManage';
@@ -55,7 +55,7 @@ export class AnyTouch {
     static EventEmitter = AnyEvent;
 
     // 目标元素
-    el: HTMLElement;
+    el: any;
 
     default: Options;
 
@@ -79,7 +79,7 @@ export class AnyTouch {
      * @param {Element} 目标元素
      * @param {Object} 选项
      */
-    constructor(el: HTMLElement, options?: Options) {
+    constructor(el?: HTMLElement, options?: Options) {
         this.default = {
             touchAction: 'compute',
             hasDomEvents: true,
@@ -106,7 +106,7 @@ export class AnyTouch {
         };
         this.el = el;
         this.$store = new Store();
-        this.inputManage = new InputManage({$store:this.$store});
+        this.inputManage = new InputManage({ $store: this.$store });
         this.touchDevice = SUPPORT_TOUCH ? 'touch' : 'mouse';
         this.options = { ...this.default, ...options };
         // eventEmitter
@@ -130,18 +130,20 @@ export class AnyTouch {
         ];
         // 默认单击需要双击识别失败后触发
         this.recognizers[4].requireFailure(this.recognizers[5]);
-        // 应用设置
-        this.update();
-        // 绑定事件
-        this.unbind = this._bindRecognizers(this.el).unbind;
+        if (undefined !== this.el) {
+            // 应用设置
+            this.update();
+            // 绑定事件
+            this.unbind = this._bindEL(this.el).unbind;
+        }
     };
-
 
     /**
      * 计算touch-action
      * @param {HTMLElement} 目标元素 
      */
     private _updateTouchAction() {
+
         if ('compute' === this.options.touchAction) {
             let touchActions = [];
             for (let recognizer of this.recognizers) {
@@ -158,6 +160,7 @@ export class AnyTouch {
      * 如: 禁止选择文字/透明点击高亮颜色等
      */
     private _updateStyle() {
+
         for (let key in this.options.style) {
             let value = this.options.style[key];
             (this.el.style as any)[key] = value;
@@ -168,9 +171,11 @@ export class AnyTouch {
      * 更新设置
      */
     public update() {
+        if (undefined === this.el) return;
         this._updateStyle();
         this._updateTouchAction();
     };
+
 
     /**
      * 绑定手势到指定元素
@@ -180,7 +185,7 @@ export class AnyTouch {
      * 而非在一次触发事件中执行所有手势判断
      * @param {Element} 待绑定手势元素
      */
-    private _bindRecognizers(el: Element) {
+    private _bindEL(el: Element) {
         const boundInputListener = <EventListener>this.inputListener.bind(this);
         // Touch
         if ('touch' === this.touchDevice) {
@@ -195,8 +200,6 @@ export class AnyTouch {
                     });
                 }
             }
-
-
         }
         // Mouse
         else {
@@ -211,6 +214,13 @@ export class AnyTouch {
                 }
             };
         }
+    };
+
+
+    useEvent(event: SupportEvent) {
+        console.log(event);
+        // const names = ['start', 'move', 'end'];
+        this.inputListener(event);
     };
 
     /**

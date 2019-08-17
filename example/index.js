@@ -35,11 +35,29 @@ new Vue({
             name: 'pan2',
             pointLength: 2,
         })
+
+        const el = this.$refs.circle;
         // 初始化
-        const anyTouch = new AnyTouch(this.$refs.circle, {
+        const anyTouch = new AnyTouch(el, {
             touchAction: 'auto',
             isPreventDefault: false
         });
+
+
+        // el.addEventListener('touchstart', ev=>{
+        //     ev.preventDefault();
+        //     anyTouch.useEvent(ev);
+        // })
+
+        // el.addEventListener('touchmove', ev=>{
+        //     anyTouch.useEvent(ev);
+        // })
+
+        // el.addEventListener('touchend', ev=>{
+        //     anyTouch.useEvent(ev);
+        // })
+
+
         const tap2 = anyTouch.get('doubletap');
         tap2.disabled = false;
 
