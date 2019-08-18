@@ -80,3 +80,23 @@ export interface Computed {
 export interface AnyTouchEvent extends Input, Readonly<Computed>{
     readonly type: string
 }
+
+
+// 通过css阻止浏览器默认设置
+export interface CSSPreventMap extends CSSStyleDeclaration {
+    'userSelect': 'none';
+    'mozUserSelect': 'none';
+    'msUserSelect': 'none';
+    'webkitUserSelect': 'none';
+    // https://developer.mozilla.org/en-US/docs/Web/CSS/msTouchSelect
+    // 禁用选择文字, 在winphone下
+    'msTouchSelect': 'none';
+    'webkitTapHighlightColor': 'rgba(0,0,0,0)';
+    'webkitUserDrag': 'none';
+    // 当你触摸并按住触摸目标时候，
+    // 禁止或显示系统默认菜单。
+    // 在iOS上，当你触摸并按住触摸的目标，
+    // 比如一个链接，Safari浏览器将显示链接有关的系统默认菜单。
+    // 这个属性可以让你禁用系统默认菜单。
+    'webkitTouchCallout': 'none';
+}

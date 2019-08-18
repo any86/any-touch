@@ -16,9 +16,9 @@
  * ==================== 流程 ====================
  * 格式化Event成统一的pointer格式 => 通过pointer数据计算 => 用计算结果去识别手势
  */
-import { AnyTouchEvent, SupportEvent} from './interface';
+import { AnyTouchEvent, SupportEvent, CSSPreventMap } from './interface';
 import AnyEvent from 'any-event';
-import { SUPPORT_TOUCH } from './const';
+import { SUPPORT_TOUCH, NONE } from './const';
 import InputManage from './InputManage';
 import computeTouchAction from './utils/computeTouchAction';
 import Store from './Store';
@@ -36,7 +36,16 @@ interface Options {
     touchAction?: 'compute' | 'auto' | 'manipulation' | 'pan-x' | 'pan-y' | 'none';
     hasDomEvents?: boolean;
     isPreventDefault?: boolean;
-    style?: { [key: string]: string };
+    cssPrevent?: {
+        // 阻止触发选择文字
+        selectText?: boolean;
+        // 阻止触发浏览器默认拖拽
+        drag?: boolean;
+        // 隐藏高亮效果
+        tapHighlight?: boolean;
+        // 阻止默认菜单
+        callout?: boolean;
+    }
 };
 export class AnyTouch {
     // 识别器
@@ -65,7 +74,6 @@ export class AnyTouch {
 
     options: Options;
 
-
     eventEmitter: AnyEvent;
 
     inputManage: InputManage;
@@ -84,27 +92,18 @@ export class AnyTouch {
             touchAction: 'compute',
             hasDomEvents: true,
             isPreventDefault: false,
-            style: {
-                // 禁用选择文字
-                '-moz-user-select': 'none',
-                ' -webkit-user-select': 'none',
-                '-ms-user-select': 'none',
-                'user-select': 'none',
-                // https://developer.mozilla.org/en-US/docs/Web/CSS/-ms-touch-select
-                // 禁用选择文字, 在winphone下
-                '-ms-touch-select': 'none',
-                // 点击元素的高亮颜色配置
-                '-webkit-tap-highlight-color': 'rgba(0,0,0,0)',
-                ' -webkit-user-drag': 'none',
-                // 当你触摸并按住触摸目标时候，
-                // 禁止或显示系统默认菜单。
-                // 在iOS上，当你触摸并按住触摸的目标，
-                // 比如一个链接，Safari浏览器将显示链接有关的系统默认菜单。
-                // 这个属性可以让你禁用系统默认菜单。
-                '-webkit-touch-callout': 'none'
+            cssPrevent: {
+                // 阻止触发选择文字
+                selectText: true,
+                // 阻止触发浏览器默认拖拽
+                drag: true,
+                // 隐藏高亮效果
+                tapHighlight: true,
+                // 阻止默认菜单
+                callout: true
             }
         };
-        if(undefined !== el) this.el = el;
+        if (undefined !== el) this.el = el;
         this.$store = new Store();
         this.inputManage = new InputManage({ $store: this.$store });
         this.touchDevice = SUPPORT_TOUCH ? 'touch' : 'mouse';
@@ -142,28 +141,47 @@ export class AnyTouch {
      * 计算touch-action
      * @param {HTMLElement} 目标元素 
      */
-    private _updateTouchAction() {
-        if (undefined === this.el) return;
+    updateTouchAction() {
         if ('compute' === this.options.touchAction) {
             let touchActions = [];
             for (let recognizer of this.recognizers) {
                 touchActions.push(...recognizer.getTouchAction());
             };
-            this.el.style.touchAction = computeTouchAction(touchActions);
+            this.el!.style.touchAction = computeTouchAction(touchActions);
         } else {
-            this.el.style.touchAction = this.options.touchAction || 'auto';
+            this.el!.style.touchAction = this.options.touchAction || 'auto';
         }
     };
 
     /**
-     * 应用几个提高体验的样式
-     * 如: 禁止选择文字/透明点击高亮颜色等
+     * 设置"阻止浏览器默认行为"的css样式
      */
-    private _updateStyle() {
-        if (undefined === this.el) return;
-        for (let key in this.options.style) {
-            let value = this.options.style[key];
-            (this.el.style as any)[key] = value;
+    updateCssPrevent() {
+        const style = <CSSPreventMap>{};
+        const { cssPrevent } = this.options;
+        if (undefined === cssPrevent) return;
+        if (cssPrevent.selectText) {
+            style['mozUserSelect'] = NONE;
+            style['userSelect'] = NONE;
+            style['msUserSelect'] = NONE;
+            style['webkitUserSelect'] = NONE;
+            style['msTouchSelect'] = NONE;
+        }
+
+        if (cssPrevent.drag) {
+            style['webkitUserDrag'] = NONE;
+        }
+
+        if (cssPrevent.tapHighlight) {
+            style['webkitTapHighlightColor'] = 'rgba(0,0,0,0)';
+        }
+
+        if(cssPrevent.callout){
+            style['webkitTouchCallout'] = NONE; 
+        }
+        // 设置
+        for(let k in style) {
+            this.el!.style[k] = style[k];
         }
     };
 
@@ -171,11 +189,10 @@ export class AnyTouch {
      * 更新设置
      */
     public update() {
-       
-        this._updateStyle();
-        this._updateTouchAction();
+        if (undefined === this.el) return;
+        this.updateTouchAction();
+        this.updateCssPrevent();
     };
-
 
     /**
      * 绑定手势到指定元素

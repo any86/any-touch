@@ -44,3 +44,6 @@ export const INPUT_START = 'start';
 export const INPUT_MOVE = 'move';
 export const INPUT_CANCEL = 'cancel';
 export const INPUT_END = 'end';
+
+
+export const NONE = 'none';
