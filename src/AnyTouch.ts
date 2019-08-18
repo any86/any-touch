@@ -55,7 +55,7 @@ export class AnyTouch {
     static EventEmitter = AnyEvent;
 
     // 目标元素
-    el: any;
+    el?: HTMLElement;
 
     default: Options;
 
@@ -104,7 +104,7 @@ export class AnyTouch {
                 '-webkit-touch-callout': 'none'
             }
         };
-        this.el = el;
+        if(undefined !== el) this.el = el;
         this.$store = new Store();
         this.inputManage = new InputManage({ $store: this.$store });
         this.touchDevice = SUPPORT_TOUCH ? 'touch' : 'mouse';
@@ -143,7 +143,7 @@ export class AnyTouch {
      * @param {HTMLElement} 目标元素 
      */
     private _updateTouchAction() {
-
+        if (undefined === this.el) return;
         if ('compute' === this.options.touchAction) {
             let touchActions = [];
             for (let recognizer of this.recognizers) {
@@ -160,7 +160,7 @@ export class AnyTouch {
      * 如: 禁止选择文字/透明点击高亮颜色等
      */
     private _updateStyle() {
-
+        if (undefined === this.el) return;
         for (let key in this.options.style) {
             let value = this.options.style[key];
             (this.el.style as any)[key] = value;
@@ -171,7 +171,7 @@ export class AnyTouch {
      * 更新设置
      */
     public update() {
-        if (undefined === this.el) return;
+       
         this._updateStyle();
         this._updateTouchAction();
     };
