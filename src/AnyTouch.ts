@@ -216,10 +216,12 @@ export class AnyTouch {
         }
     };
 
-
+    /**
+     * 为微信设计的功能
+     * 接收touch事件的event对象
+     * @param {SupportEvent} 事件对象
+     */
     useEvent(event: SupportEvent) {
-        console.log(event);
-        // const names = ['start', 'move', 'end'];
         this.inputListener(event);
     };
 
