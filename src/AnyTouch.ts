@@ -304,9 +304,9 @@ export class AnyTouch {
             event.preventDefault();
         }
 
-        if (!event.cancelable) {
-            this.eventEmitter.emit('error', { code: 0, message: '页面滚动的时候, 请暂时不要操作元素!' });
-        }
+        // if (!event.cancelable) {
+        //     this.eventEmitter.emit('error', { code: 0, message: '页面滚动的时候, 请暂时不要操作元素!' });
+        // }
 
         // 管理历史input
         // 生成AnyTouchEvent

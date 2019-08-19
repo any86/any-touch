@@ -4,8 +4,9 @@ import {
 } from '../const/recognizerStatus';
 import { INPUT_CANCEL, INPUT_END, INPUT_START } from '../const';
 import Recognizer from './Base';
+
 export default class PressRecognizer extends Recognizer {
-    private _timeoutId?: number;
+    private _timeoutId?: any;
     static DEFAULT_OPTIONS = {
         name: 'press',
         pointLength: 1,
@@ -31,7 +32,7 @@ export default class PressRecognizer extends Recognizer {
             this._resetStatus();
             // 延迟触发
             this.cancel();
-            this._timeoutId = window.setTimeout(() => {
+            this._timeoutId = (setTimeout as Window['setTimeout'])(() => {
                 this.status = STATUS_RECOGNIZED;
                 this.emit(this.options.name, computed);
             }, this.options.minPressTime);

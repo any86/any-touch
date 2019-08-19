@@ -3,10 +3,10 @@ import {
     STATUS_RECOGNIZED, STATUS_POSSIBLE,
     STATUS_FAILED,
 } from '../const/recognizerStatus';
-const { setTimeout, clearTimeout } = window;
 import Recognizer from './Base';
 import { INPUT_END } from '../const';
 import { getVLength } from '../vector';
+
 export default class TapRecognizer extends Recognizer {
     public tapCount: number;
 
@@ -148,7 +148,7 @@ export default class TapRecognizer extends Recognizer {
             if (0 === this.tapCount % this.options.tapTimes) {
                 if (this.hasRequireFailure() && !this.isAllRequireFailureRecognizersDisabled()) {
                     this.isWaitingOther = true;
-                    this._waitOtherFailedTimer = setTimeout(() => {
+                    this._waitOtherFailedTimer = (setTimeout as Window['setTimeout'])(() => {
                         // 检查指定手势是否识别为Failed
                         if (this.isAllRequiresFailedOrPossible()) {
                             this.status = STATUS_RECOGNIZED;
@@ -168,7 +168,7 @@ export default class TapRecognizer extends Recognizer {
                     this.reset();
                 }
             } else {
-                this._delayFailTimer = setTimeout(() => {
+                this._delayFailTimer = (setTimeout as Window['setTimeout'])(() => {
                     this.status = STATUS_FAILED;
                     this.reset();
                 }, this.options.waitNextTapTime);
