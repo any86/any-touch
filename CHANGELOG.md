@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.4.0"></a>
+# [0.4.0](https://github.com/any86/any-touch/compare/v0.3.5...v0.4.0) (2019-08-19)
+
+
+### Features
+
+* 支持微信小程序 ([a894aed](https://github.com/any86/any-touch/commit/a894aed))
+
+
+
 <a name="0.3.5"></a>
 ## [0.3.5](https://github.com/383514580/any-touch/compare/v0.3.4...v0.3.5) (2019-07-26)
 
