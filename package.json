@@ -1,6 +1,6 @@
 {
   "name": "any-touch",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "一个手势库",
   "unpkg": "dist/AnyTouch.umd.js",
   "jsdelivr": "dist/AnyTouch.umd.js",
