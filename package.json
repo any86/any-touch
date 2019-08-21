@@ -56,6 +56,6 @@
     "vue": "^2.6.10"
   },
   "dependencies": {
-    "any-event": "^0.3.6"
+    "any-event": "^0.3.7"
   }
 }
