@@ -15,6 +15,8 @@
 ## 直达
 [快速开始](#快速开始)
 
+[:iphone:支持微信小程序](#支持微信小程序)
+
 [更多实例](#更多实例)
 
 [API](docs/API.md)
@@ -91,7 +93,36 @@ at.on('tap', ev=>{
 |**nativeEvent**|`TouchEvent`|MouseEvent`|原生事件对象|
 
 
+## 支持微信小程序
+由于微信小程序中没有dom元素的概念, 所以我们需要通过直接接受touch事件的事件对象
+```xml
+<view @touchstart="touchstartHandler" @touchmove="touchmoveHandler" @touchend="touchendHandler"></view>
+```
 
+```javascript
+const at = new AnyTouch();
+{
+    onload(){
+        at.on('pan', ev=>{
+            // 拖拽
+        });
+    },
+
+    methods:{
+       touchstartHandler(ev){
+           at.useEvent(ev);
+       },
+
+       touchmoveHandler(ev){
+           at.useEvent(ev);
+       },
+
+       touchendHandler(ev){
+           at.useEvent(ev);
+       }
+    }
+}
+```
 
 ## 更多实例
 [基础](https://codepen.io/russell2015/pen/rRmQaw#)
