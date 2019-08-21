@@ -1,6 +1,6 @@
 {
   "name": "any-touch",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "description": "一个手势库",
   "unpkg": "dist/AnyTouch.umd.js",
   "jsdelivr": "dist/AnyTouch.umd.js",
@@ -56,6 +56,6 @@
     "vue": "^2.6.10"
   },
   "dependencies": {
-    "any-event": "^0.3.7"
+    "any-event": "^0.3.8"
   }
 }
