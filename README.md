@@ -10,7 +10,7 @@
 [downloads-url]: https://npmjs.org/package/any-touch
 
 
-:wave:  一个手势库, 支持mouse和touch, 支持自定义手势.
+:wave: 一个手势库, 支持微信小程序 / 鼠标 / touch设备
 
 ## 直达
 [快速开始](#快速开始)
@@ -94,7 +94,7 @@ at.on('tap', ev=>{
 
 
 ## 支持微信小程序
-由于微信小程序中没有dom元素的概念, 所以我们需要通过直接接受touch事件的事件对象
+由于微信小程序中没有dom元素的概念, 所以我们需要通过手动接收touch事件的事件对象来进行识别!
 ```xml
 <view @touchstart="touchstartHandler" @touchmove="touchmoveHandler" @touchend="touchendHandler"></view>
 ```
