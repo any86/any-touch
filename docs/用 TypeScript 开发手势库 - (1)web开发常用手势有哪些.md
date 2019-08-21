@@ -1,9 +1,9 @@
 # 用typescript开发手势库 - (1)web开发常用手势有哪些?
 
 ## 这只是个开头
-说在最前面,本文是一个系列文章的开头, 这个系列里我会讲如何用**typescript**开发一款支持**pc**和**手机端**的手势库[any-touch](https://github.com/383514580/any-touch), 以及通过jest让你的代码测试覆盖率100%.
+说在最前面,本文是一个系列文章的开头, 这个系列里我会讲如何用**typescript**开发一款支持**pc**和**手机端**的手势库[any-touch](https://github.com/any86/any-touch), 以及通过jest让你的代码测试覆盖率100%.
 
-![https://github.com/383514580/any-touch](https://segmentfault.com/img/bVbp3B0?w=936&h=246)
+![https://github.com/any86/any-touch](https://segmentfault.com/img/bVbp3B0?w=936&h=246)
 
 ## 往期目录
 [用 TypeScript 开发手势库 - (2)web开发常用手势有哪些?](https://juejin.im/post/5c939c956fb9a0710a1bc90c)
@@ -21,7 +21,7 @@
 ## 那么常用手势有哪些?
 回到正题, 常见的手势有: **tap(点击)** \ **press(按住)** \ **拖拽(pan)** \ **划过(swipe)** \ **捏合缩放(pinch)** \ **旋转(rotate)**, 所有的手势在移动端其实都是通过**touch事件的不同触发时机**而区分出的(pc端是mouseup/mousemove/mousedown, 关于如何通过鼠标识别手势, 后面的文章会有单独的章节).
 
-这里有个[demo](https://383514580.github.io/any-touch/example/), 我把所有的手势识别放在了里面.
+这里有个[demo](https://any86.github.io/any-touch/example/), 我把所有的手势识别放在了里面.
 
 ## tap(点击)
 众所周知, 移动端的click有300ms延迟(浏览器延迟300ms为了识别双击操作, 因为移动端浏览器默认双击可以缩放页面), 为了避免"点击穿透"我们创建了tap事件, 同时通过preventDefault来禁止click触发. tap在**touchend**阶段触发, 说下识别tap的必要条件: 
@@ -60,7 +60,7 @@ pan是组件开发中最常用的手势.
 2指及以上按住屏幕, 通过2指连接形成的直线和坐标系的x轴的夹角的变化而触发rotate. 常用于图片处理, 用来旋转图片.
 
 ## 源码
-上面关于手势识别的具体逻辑可以看我的仓库, 地址: https://github.com/383514580/any-touch/tree/master/src/recognitions
+上面关于手势识别的具体逻辑可以看我的仓库, 地址: https://github.com/any86/any-touch/tree/master/src/recognitions
 
 ## 未完待续
 本次先讲这么多, 后面的文章具体要讲什么看大家的回复想听什么, 期待大家的回复, 本人热爱前端, 但能力有限, 有讲的不对的请大家多多指点.

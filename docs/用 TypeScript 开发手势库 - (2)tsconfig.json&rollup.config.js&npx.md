@@ -1,8 +1,8 @@
 # 用TypeScript开发手势库 - (2)tsconfig.json & rollup.config.js & npx
 
-![https://github.com/383514580/any-touch](https://ww1.sinaimg.cn/large/005IQkzXly1g1as0lsa1hj30m805ugmp.jpg)
+![https://github.com/any86/any-touch](https://ww1.sinaimg.cn/large/005IQkzXly1g1as0lsa1hj30m805ugmp.jpg)
 
- [any-touch](https://github.com/383514580/any-touch) 一个手势库
+ [any-touch](https://github.com/any86/any-touch) 一个手势库
 
 ## 往期目录
 [用 TypeScript 开发手势库 - (1)web开发常用手势有哪些?](https://juejin.im/post/5c8fc2105188252d72550acf)
@@ -39,7 +39,7 @@ const banner =
     `/*!
  * AnyTouch.js v${pkg.version}
  * (c) 2018-${new Date().getFullYear()} Russell
- * https://github.com/383514580/any-touch
+ * https://github.com/any86/any-touch
  * Released under the MIT License.
  */`
 
@@ -94,7 +94,7 @@ export default {
     ]
 };
 ```
-[源码](https://github.com/383514580/any-touch/blob/master/rollup.config.js)
+[源码](https://github.com/any86/any-touch/blob/master/rollup.config.js)
 
 ## tsconfig.js
 
@@ -142,7 +142,7 @@ export default {
     ]
 }
 ```
-[源码](https://github.com/383514580/any-touch/blob/master/tsconfig.json)
+[源码](https://github.com/any86/any-touch/blob/master/tsconfig.json)
 
 ## 运行命令
 好了文件配置好了, 我们可以把我们的ts代码转成js, 就差在package.json中加一条命令了: 
@@ -158,7 +158,7 @@ export default {
 ```
 这里`tsc`是为了在lib目录生产**声明文件**, `rollup -c`会生成umd/es/commonjs三种模块的代码, "c"是config缩写, 代表读取rollup.config.js
 
-[源码](https://github.com/383514580/any-touch/blob/master/package.json)
+[源码](https://github.com/any86/any-touch/blob/master/package.json)
 
 ## 彩蛋
 其实**npx**并不是本文主角,但是**如果**你的tsc不是全局安装的, 那么你在命令行运行tsc会提示找不到他, 但是如果你用`npx tsc`那么他就会**运行你本地的node_modules中的tsc命令**, 惊不惊喜.
@@ -184,4 +184,4 @@ export default {
 ## 为什么还没到写代码?
 2期了都还没有讲到代码, 估计大家都着急, 莫着急,下一期开始咱们就讲代码了, 平时上班工作实在是忙, 都是晚上更新文章, 这个周末我会多写点, 如果实在迫不及待也可以先看看我写好的代码预热下: 
 
-[https://github.com/383514580/any-touch](https://github.com/383514580/any-touch)
+[https://github.com/any86/any-touch](https://github.com/any86/any-touch)

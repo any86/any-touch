@@ -1,7 +1,7 @@
 # 用TypeScript开发手势库 - (3)统一化Mouse和Touch事件
-![https://github.com/383514580/any-touch](https://ww1.sinaimg.cn/large/005IQkzXly1g1as0lsa1hj30m805ugmp.jpg)
+![https://github.com/any86/any-touch](https://ww1.sinaimg.cn/large/005IQkzXly1g1as0lsa1hj30m805ugmp.jpg)
 
- [any-touch](https://github.com/383514580/any-touch) 一个手势库
+ [any-touch](https://github.com/any86/any-touch) 一个手势库
 
 ## 往期目录
 [用 TypeScript 开发手势库 - (1)web开发常用手势有哪些?](https://juejin.im/post/5c8fc2105188252d72550acf)
@@ -93,7 +93,7 @@ export default (event: MouseEvent): BaseInput | void => {
 }; 
 ```
 
-[源码](https://github.com/383514580/any-touch/tree/master/src/input/adapters)
+[源码](https://github.com/any86/any-touch/tree/master/src/input/adapters)
 
 
 ### 7个快捷字段
@@ -116,7 +116,7 @@ export default (event: MouseEvent): BaseInput | void => {
 触发事件所在元素.
 
 #### center
-触点坐标, 如果是多点, 那么对应多点的中心坐标([getCenter函数源码](https://github.com/383514580/any-touch/blob/master/src/vector.ts#L74)).
+触点坐标, 如果是多点, 那么对应多点的中心坐标([getCenter函数源码](https://github.com/any86/any-touch/blob/master/src/vector.ts#L74)).
 
 #### x/y
 对应center.x和center.y
@@ -131,12 +131,12 @@ export default (event: MouseEvent): BaseInput | void => {
 nativeEvent上的preventDefault, 阻止默认事件.
 
 
-扩展字段的源码比较长, 请移步至[仓库](https://github.com/383514580/any-touch/blob/master/src/input/create.ts).
+扩展字段的源码比较长, 请移步至[仓库](https://github.com/any86/any-touch/blob/master/src/input/create.ts).
 
 ## 下期预告
 下期我们会讲解computed, 计算阶段比较复杂, 设计到input的开始/前一个/当前状态的计算, 大家可以提前预热.
 
 ![compute](https://ws1.sinaimg.cn/large/005IQkzXly1g1ea8jzk45j307j07pq2w.jpg)
 
-[compute部分源码](https://github.com/383514580/any-touch/tree/master/src/compute)
+[compute部分源码](https://github.com/any86/any-touch/tree/master/src/compute)
 
