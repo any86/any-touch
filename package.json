@@ -16,11 +16,12 @@
   "scripts": {
     "release": "npm run test && standard-version && npm run build && npm pub && git push",
     "release-no-test": "standard-version && npm run build && npm pub && git push",
+    "build1": "rimraf dist && rimraf lib && node ./scripts/build",
     "build": "rimraf dist && rimraf lib && tsc && rollup -c",
     "dev": "rimraf dist && rollup -c --watch",
     "test": "jest",
     "test-no-cache": "jest --no-cache",
-    "demo": "node ./script/demo.js",
+    "demo": "node ./scripts/demo.js",
     "removeAll": "rimraf ./node_modules",
     "commit": "git-cz",
     "version": "standard-version"
@@ -56,6 +57,8 @@
     "vue": "^2.6.10"
   },
   "dependencies": {
-    "any-event": "^0.3.8"
-  }
+    "any-event": "^0.3.8",
+    "rollup-plugin-terser": "^5.1.1"
+  },
+  "sideEffects": false
 }
