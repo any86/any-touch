@@ -21,7 +21,7 @@
     "dev": "rimraf dist && rollup -c --watch",
     "test": "jest",
     "test-no-cache": "jest --no-cache",
-    "demo": "node ./scripts/demo.js",
+    "release:demo": "node ./scripts/demo.js",
     "removeAll": "rimraf ./node_modules",
     "commit": "git-cz",
     "version": "standard-version"
