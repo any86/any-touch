@@ -28,7 +28,7 @@ npm i -S any-touch
 ## CDN
 
 ```
-https://unpkg.com/any-touch
+https://unpkg.com/any-touch/dist/AnyTouch.umd.min.js
 ```
 
 ## 快速开始
