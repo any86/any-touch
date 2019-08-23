@@ -453,10 +453,10 @@ ansi-styles@^3.2.0, ansi-styles@^3.2.1:
   dependencies:
     color-convert "^1.9.0"
 
-any-event@^0.3.8:
-  version "0.3.8"
-  resolved "https://registry.npm.taobao.org/any-event/download/any-event-0.3.8.tgz?cache=0&sync_timestamp=1566400639298&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fany-event%2Fdownload%2Fany-event-0.3.8.tgz#7f4ea0d46006d01ae6a93e2f588e6c62f3e2410f"
-  integrity sha1-f06g1GAG0BrmqT4vWI5sYvPiQQ8=
+any-event@^0.4.1:
+  version "0.4.1"
+  resolved "https://registry.npmjs.org/any-event/-/any-event-0.4.1.tgz#538a2c5ae66f587a85cc48c0438c021b2c61d352"
+  integrity sha512-MWCIcDOp2bcIVV+h7hvA/XetUpwx8zTC3GJIAEZ80zfrZ6Ghbio6ZOiKVFkZT4/cBKC0MCeefuqPPsL9Q4S1sQ==
 
 anymatch@^2.0.0:
   version "2.0.0"

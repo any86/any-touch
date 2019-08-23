@@ -9,9 +9,9 @@
         // import * as React from "react"
         "esModuleInterop": true,
         // 目标js的版本
-        "target": "es6",
+        "target": "es5",
         // 目标代码的模块结构版本
-        "module": "es6",
+        // "module": "es6",
         // 在表达式和声明上有隐含的 any类型时报错。
         "noImplicitAny": true,
         // 删除注释

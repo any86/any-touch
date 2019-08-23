@@ -30,47 +30,48 @@ const banner =
 
 module.exports = {
     output: [{
-        format: 'cjs',
-        // 生成的文件名和路径
-        // package.json的main字段, 也就是模块的入口文件
-        file: pkg.main, 
-        banner,
-        sourcemap: true
-    },
-    {
-        format: 'es',
-        // rollup和webpack识别的入口文件, 如果没有该字段, 那么会去读取main字段
-        file: pkg.module,
-        banner,
-        sourcemap: true
-    },
-    {
-        format: 'umd',
-        name: 'AnyTouch',
-        file: pkg.browser,
-        banner,
-        sourcemap: true
-    }],
+            format: 'cjs',
+            // 生成的文件名和路径
+            // package.json的main字段, 也就是模块的入口文件
+            file: pkg.main,
+            banner,
+            sourcemap: true
+        },
+        {
+            format: 'es',
+            // rollup和webpack识别的入口文件, 如果没有该字段, 那么会去读取main字段
+            file: pkg.module,
+            banner,
+            sourcemap: true
+        },
+        {
+            format: 'umd',
+            name: 'AnyTouch',
+            file: pkg.browser,
+            banner,
+            sourcemap: true
+        }
+    ],
     input: './src/main.ts',
 
     plugins: [
         replace({
             __VERSION__: pkg.version,
-            __PKG_NAME__: pkg.name,
         }),
-
-        typescript({
-            exclude: 'node_modules/**',
-            typescript: require('typescript'),
-
-        }),
-        json(),
 
         nodeResolve(),
 
         commonjs({
             include: 'node_modules/**'
         }),
+
+        json(),
+
+        typescript({
+            // exclude: 'node_modules/**',
+            typescript: require('typescript'),
+        }),
+
 
         // terser(),
 
