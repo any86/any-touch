@@ -7,16 +7,17 @@
   "main": "dist/AnyTouch.common.js",
   "module": "dist/AnyTouch.es.js",
   "browser": "dist/AnyTouch.umd.min.js",
-  "types": "lib/main.d.ts",
+  "types": "types/main.d.ts",
   "files": [
     "src",
     "lib",
     "dist"
   ],
   "scripts": {
+    "build:type": "rimraf types && tsc -p ./tsconfig.type.json",
     "release": "npm run test && standard-version && npm run build && npm pub && git push",
     "release-no-test": "standard-version && npm run build && npm pub && git push",
-    "build": "rimraf dist && rimraf lib && node ./scripts/build",
+    "build": "npm run build:type && rimraf dist && node ./scripts/build",
     "dev": "rimraf dist && rollup -c --watch",
     "test": "jest",
     "test-no-cache": "jest --no-cache",
