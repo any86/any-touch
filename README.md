@@ -1,7 +1,7 @@
-# any-touch [![NPM Version][npm-image]][npm-url] [![NPM Downloads][downloads-image]][downloads-url] [![npm bundle size (minified + gzip)][size-image]][size-url] [![codecov](https://codecov.io/gh/any86/any-touch/branch/develop/graph/badge.svg)](https://codecov.io/gh/any86/any-touch) [![CircleCI](https://circleci.com/gh/any86/any-touch.svg?style=svg)](https://circleci.com/gh/any86/any-touch)
+# any-touch [![NPM Version][npm-image]][npm-url] [![NPM Downloads][downloads-image]][downloads-url] [![size-image]][size-url] [![codecov](https://codecov.io/gh/any86/any-touch/branch/develop/graph/badge.svg)](https://codecov.io/gh/any86/any-touch) [![CircleCI](https://circleci.com/gh/any86/any-touch.svg?style=svg)](https://circleci.com/gh/any86/any-touch)
 
-[size-image]: https://img.shields.io/bundlephobia/minzip/any-touch
-[size-url]: https://badgen.net/bundlephobia/minzip/any-touch
+[size-image]: https://badgen.net/bundlephobia/minzip/any-touch
+[size-url]: https://bundlephobia.com/result?p=any-touch
 [npm-image]: https://img.shields.io/npm/v/any-touch.svg
 [npm-url]: https://npmjs.org/package/any-touch
 [downloads-image]: https://badgen.net/npm/dt/any-touch
