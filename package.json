@@ -9,10 +9,10 @@
   "browser": "dist/AnyTouch.umd.min.js",
   "types": "types/main.d.ts",
   "files": [
-    "src",
-    "lib",
-    "dist"
-  ],
+    "dist/**/*",
+    "types/*",
+    "src/**/*"
+],
   "scripts": {
     "build:type": "rimraf types && tsc -p ./tsconfig.type.json",
     "release": "npm run test && standard-version && npm run build && npm pub && git push",
