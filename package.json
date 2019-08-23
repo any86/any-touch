@@ -1,26 +1,27 @@
 {
   "name": "any-touch",
-  "version": "0.4.2",
+  "version": "0.4.4",
   "description": "一个手势库",
   "unpkg": "dist/AnyTouch.umd.js",
   "jsdelivr": "dist/AnyTouch.umd.js",
   "main": "dist/AnyTouch.common.js",
   "module": "dist/AnyTouch.es.js",
-  "browser": "dist/AnyTouch.umd.js",
-  "types": "lib/main.d.ts",
+  "browser": "dist/AnyTouch.umd.min.js",
+  "types": "types/main.d.ts",
   "files": [
-    "src",
-    "lib",
-    "dist"
-  ],
+    "dist/**/*",
+    "types/*",
+    "src/**/*"
+],
   "scripts": {
+    "build:type": "rimraf types && tsc -p ./tsconfig.type.json",
     "release": "npm run test && standard-version && npm run build && npm pub && git push",
     "release-no-test": "standard-version && npm run build && npm pub && git push",
-    "build": "rimraf dist && rimraf lib && tsc && rollup -c",
+    "build": "npm run build:type && rimraf dist && node ./scripts/build",
     "dev": "rimraf dist && rollup -c --watch",
     "test": "jest",
     "test-no-cache": "jest --no-cache",
-    "demo": "node ./script/demo.js",
+    "demo": "node ./scripts/demo.js",
     "removeAll": "rimraf ./node_modules",
     "commit": "git-cz",
     "version": "standard-version"
@@ -47,6 +48,7 @@
     "rollup-plugin-node-resolve": "^3.4.0",
     "rollup-plugin-replace": "^2.1.0",
     "rollup-plugin-sourcemaps": "^0.4.2",
+    "rollup-plugin-terser": "^5.1.1",
     "rollup-plugin-typescript": "^1.0.0",
     "shelljs": "^0.8.3",
     "standard-version": "^4.4.0",
@@ -56,6 +58,7 @@
     "vue": "^2.6.10"
   },
   "dependencies": {
-    "any-event": "^0.3.8"
-  }
+    "any-event": "^0.4.1"
+  },
+  "sideEffects": false
 }

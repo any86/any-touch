@@ -11,7 +11,7 @@
         // 目标js的版本
         "target": "es5",
         // 目标代码的模块结构版本
-        "module": "es6",
+        // "module": "es6",
         // 在表达式和声明上有隐含的 any类型时报错。
         "noImplicitAny": true,
         // 删除注释
@@ -25,7 +25,7 @@
         // 编译过程中需要引入的库文件的列表
         "lib": [
             "dom",
-            "es7"
+            "esnext"
         ],
         // 额外支持解构/forof等功能
         "downlevelIteration": true,
