@@ -217,7 +217,6 @@ export class AnyTouch {
      */
     private _bindEL(el: Element) {
         const boundInputListener = <EventListener>this.inputListener.bind(this);
-        console.log(this.touchDevice);
 
         // Touch
         if ('touch' === this.touchDevice) {
