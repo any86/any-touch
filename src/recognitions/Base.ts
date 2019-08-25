@@ -66,12 +66,18 @@ export default abstract class Recognizer {
     public emit(type: string, payload: any) {
         payload.type = type;
         this.$root.eventEmitter.emit(type, payload);
-        if (undefined !== this.$root.el && this.$root.options.hasDomEvents) {
-            // 过滤掉几个Event上保留的字段
-            let { target, currentTarget, type, ...data } = payload;
-            let event = new Event(type, payload);
-            Object.assign(event, data);
-            this.$root.el.dispatchEvent(event);
+
+        if (undefined !== this.$root.el) {
+            if(this.$root.options.syncToAttr) {
+                this.$root.el.setAttribute('at-gesture', type);
+            }
+            if (this.$root.options.hasDomEvents) {
+                // 过滤掉几个Event上保留的字段
+                let { target, currentTarget, type, ...data } = payload;
+                let event = new Event(type, payload);
+                Object.assign(event, data);
+                this.$root.el.dispatchEvent(event);
+            }
         }
     };
 

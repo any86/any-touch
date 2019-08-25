@@ -36,6 +36,7 @@ interface Options {
     touchAction?: 'compute' | 'auto' | 'manipulation' | 'pan-x' | 'pan-y' | 'none';
     hasDomEvents?: boolean;
     isPreventDefault?: boolean;
+    syncToAttr?: boolean;
     cssPrevent?: {
         // 阻止触发选择文字
         selectText?: boolean;
@@ -92,6 +93,7 @@ export class AnyTouch {
             touchAction: 'compute',
             hasDomEvents: true,
             isPreventDefault: false,
+            syncToAttr: false,
             cssPrevent: {
                 // 阻止触发选择文字
                 selectText: true,
@@ -133,9 +135,20 @@ export class AnyTouch {
             // 应用设置
             this.update();
             // 绑定事件
-            this.unbind = this._bindEL(this.el).unbind;
+            this._unbindEl = this._bindEL(this.el)._unbindEl;
         }
     };
+
+    /**
+     * 刷新设备类型, 一般没什么用, 主要为了模拟器下切换pc/手机可以切换识别器
+     * at.refresh();
+     */
+    // refresh() {
+    //     if (undefined === this.el) return;
+    //     this._unbindEl()
+    //     this.touchDevice = ('ontouchstart' in window) ? 'touch' : 'mouse';
+    //     this._unbindEl = this._bindEL(this.el)._unbindEl;
+    // };
 
     /**
      * 计算touch-action
@@ -176,11 +189,11 @@ export class AnyTouch {
             style['webkitTapHighlightColor'] = 'rgba(0,0,0,0)';
         }
 
-        if(cssPrevent.callout){
-            style['webkitTouchCallout'] = NONE; 
+        if (cssPrevent.callout) {
+            style['webkitTouchCallout'] = NONE;
         }
         // 设置
-        for(let k in style) {
+        for (let k in style) {
             this.el!.style[k] = style[k];
         }
     };
@@ -204,6 +217,8 @@ export class AnyTouch {
      */
     private _bindEL(el: Element) {
         const boundInputListener = <EventListener>this.inputListener.bind(this);
+        console.log(this.touchDevice);
+
         // Touch
         if ('touch' === this.touchDevice) {
             const events = ['touchstart', 'touchmove', 'touchend', 'touchcancel'];
@@ -211,7 +226,7 @@ export class AnyTouch {
                 el.addEventListener(eventName, boundInputListener);
             });
             return {
-                unbind: () => {
+                _unbindEl: () => {
                     events.forEach(eventName => {
                         el.removeEventListener(eventName, boundInputListener);
                     });
@@ -224,7 +239,7 @@ export class AnyTouch {
             window.addEventListener('mousemove', boundInputListener);
             window.addEventListener('mouseup', boundInputListener);
             return {
-                unbind: () => {
+                _unbindEl: () => {
                     el.removeEventListener('mousedown', boundInputListener);
                     window.removeEventListener('mousemove', boundInputListener);
                     window.removeEventListener('mouseup', boundInputListener);
@@ -378,7 +393,7 @@ export class AnyTouch {
     /**
      * 解绑所有触摸事件
      */
-    unbind(): void { };
+    _unbindEl(): void { };
 
     /**
      * 销毁
@@ -386,7 +401,9 @@ export class AnyTouch {
     destroy() {
         this.$store.destroy();
         // 解绑事件
-        this.unbind();
+        if (this.el) {
+            this._unbindEl();
+        }
         this.eventEmitter.destroy();
     };
 };
