@@ -10,8 +10,7 @@
   "types": "types/main.d.ts",
   "files": [
     "dist/**/*",
-    "types/*",
-    "src/**/*"
+    "types/*"
 ],
   "scripts": {
     "build:type": "rimraf types && tsc -p ./tsconfig.type.json",

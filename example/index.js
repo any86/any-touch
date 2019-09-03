@@ -40,7 +40,8 @@ new Vue({
         // 初始化
         const anyTouch = new AnyTouch(el, {
             touchAction: 'auto',
-            isPreventDefault: false
+            isPreventDefault: false,
+            syncToAttr:true
         });
 
 
