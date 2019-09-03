@@ -44,7 +44,7 @@ export default {
             include: 'node_modules/**'
         }),
 
-        sourceMaps()
+        // sourceMaps()
 
     ],
     output: [{
@@ -53,21 +53,21 @@ export default {
             // package.json的main字段, 也就是模块的入口文件
             file: pkg.main, 
             banner,
-            sourcemap: true
+            // sourcemap: true
         },
         {
             format: 'es',
             // rollup和webpack识别的入口文件, 如果没有该字段, 那么会去读取main字段
             file: pkg.module,
             banner,
-            sourcemap: true
+            // sourcemap: true
         },
         {
             format: 'umd',
             name: 'AnyTouch',
-            file: pkg.browser,
+            file: 'dist/AnyTouch.umd.min.js',
             banner,
-            sourcemap: true
+            // sourcemap: true
         }
     ]
 };
