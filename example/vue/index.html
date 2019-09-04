@@ -8,7 +8,7 @@
     <title>v-touch</title>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="https://res.wx.qq.com/mmbizwap/zh_CN/htmledition/js/vconsole/3.0.0/vconsole.min.js"></script>
-    <script src="../../dist/AnyTouch.umd.js"></script>
+    <script src="../../dist/AnyTouch.umd.min.js"></script>
     <style>
         body {
             margin: 0;
@@ -32,20 +32,20 @@
         Vue.use(AnyTouch.vTouch)
         new Vue({
             el: '#app',
-            render(h) {
-                return h('div', {
-                    ref: 'box',
-                    class: 'box',
-                    directives: [{
-                        name: 'touch',
-                        value(ev) {
-                            console.log('@', ev.type);
-                            this.msg = ev.type;
-                        },
-                        arg: 'tap',
-                    }]
-                });
-            },
+            // render(h) {
+            //     return h('div', {
+            //         ref: 'box',
+            //         class: 'box',
+            //         directives: [{
+            //             name: 'touch',
+            //             value(ev) {
+            //                 console.log('@', ev.type);
+            //                 this.msg = ev.type;
+            //             },
+            //             arg: 'tap',
+            //         }]
+            //     });
+            // },
             data() {
                 return {
                     anyTouch: null,

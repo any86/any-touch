@@ -15,6 +15,8 @@
 
 [:iphone:支持微信小程序](#支持微信小程序)
 
+[支持vue指令](#支持vue指令)
+
 [更多实例](#更多实例)
 
 [API](docs/API.md)
@@ -131,6 +133,29 @@ const at = new AnyTouch();
     }
 }
 ```
+
+## 支持vue指令
+AnyTouch上的vTouch是一个vue指令, 初始化后可以在元素上添加`v-touch`进行绑定.
+
+```javascript
+// main.js
+Vue.use(AnyTouch.vTouch);
+```
+
+```html
+<!-- xxx.vue -->
+<div v-touch="importAT" 
+    @tap="tap" 
+    @doubletap="doubletap"
+    @press="press" 
+    @pan="pan" 
+    @pinch="pinch" 
+    @rotate="rotate" 
+    @click="click">touch</div>
+```
+此时`div`上可以通过`@/v-on`进行手势的绑定,和绑定click等原生事件一样.
+
+
 
 ## 更多实例
 
