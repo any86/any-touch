@@ -2,7 +2,7 @@
 
 [size-image]: https://badgen.net/bundlephobia/minzip/any-touch
 [size-url]: https://bundlephobia.com/result?p=any-touch
-[npm-image]: https://img.shields.io/npm/v/any-touch.svg
+[npm-image]: https://badgen.net/npm/v/any-touch
 [npm-url]: https://npmjs.org/package/any-touch
 [downloads-image]: https://badgen.net/npm/dt/any-touch
 [downloads-url]: https://npmjs.org/package/any-touch
