@@ -103,7 +103,7 @@ at.on("tap", ev => {
 
 ## 支持微信小程序
 
-由于微信小程序中没有 dom 元素的概念, 所以我们需要通过手动接收 touch 事件的事件对象来进行识别!
+由于微信小程序中没有 dom 元素的概念, 所以我们需要通过`useEvent`方法手动接收 touch 事件的事件对象来进行识别!
 
 ```xml
 <view @touchstart="touchstartHandler" @touchmove="touchmoveHandler" @touchend="touchendHandler"></view>
@@ -153,9 +153,9 @@ Vue.use(AnyTouch.vTouch);
     @rotate="rotate" 
     @click="click">touch</div>
 ```
-此时`div`上可以通过`@/v-on`进行手势的绑定,和绑定click等原生事件一样.
+此时`div`上可以通过`@/v-on`进行手势的绑定,和绑定click等原生事件一样. 通过`v-touch`我们还可以导出`AnyTouch`的实例.
 
-
+[示例](https://any86.github.io/any-touch/example/vue/)
 
 ## 更多实例
 
