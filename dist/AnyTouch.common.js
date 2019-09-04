@@ -1,5 +1,5 @@
 /*!
- * AnyTouch.js v0.4.4
+ * AnyTouch.js v0.4.5
  * (c) 2018-2019 Russell
  * https://github.com/any86/any-touch
  * Released under the MIT License.
@@ -228,6 +228,7 @@ var AnyEvent = (function () {
     };
     return AnyEvent;
 }());
+//# sourceMappingURL=any-event.esm.js.map
 
 var IS_WX = undefined === window;
 var SUPPORT_TOUCH = IS_WX || ('ontouchstart' in window);
@@ -239,6 +240,7 @@ var INPUT_MOVE = 'move';
 var INPUT_CANCEL = 'cancel';
 var INPUT_END = 'end';
 var NONE = 'none';
+//# sourceMappingURL=const.js.map
 
 var getVLength = function (v) {
     return Math.sqrt(v.x * v.x + v.y * v.y);
@@ -287,6 +289,7 @@ var getDirection = function (x, y) {
         return 0 < y ? 'down' : 'up';
     }
 };
+//# sourceMappingURL=vector.js.map
 
 var Vector = /*#__PURE__*/Object.freeze({
     getVLength: getVLength,
@@ -305,6 +308,7 @@ var default_1 = (function () {
     }
     return default_1;
 }());
+//# sourceMappingURL=Abstract.js.map
 
 var default_1$1 = (function (_super) {
     __extends(default_1$$1, _super);
@@ -329,6 +333,7 @@ var default_1$1 = (function (_super) {
     };
     return default_1$$1;
 }(default_1));
+//# sourceMappingURL=Touch.js.map
 
 var default_1$2 = (function (_super) {
     __extends(default_1$$1, _super);
@@ -377,6 +382,7 @@ var default_1$2 = (function (_super) {
     };
     return default_1$$1;
 }(default_1));
+//# sourceMappingURL=Mouse.js.map
 
 var default_1$3 = (function () {
     function default_1() {
@@ -410,6 +416,7 @@ var default_1$3 = (function () {
     };
     return default_1;
 }());
+//# sourceMappingURL=index.js.map
 
 var intervalCompute = (function (_a, $store) {
     var prevInput = _a.prevInput, input = _a.input;
@@ -445,6 +452,7 @@ var intervalCompute = (function (_a, $store) {
     }
     return { velocityX: velocityX, velocityY: velocityY, speedX: speedX, speedY: speedY, direction: direction };
 });
+//# sourceMappingURL=intervalCompute.js.map
 
 function computeDistance (_a, $store) {
     var startInput = _a.startInput, input = _a.input;
@@ -473,6 +481,7 @@ function computeDistance (_a, $store) {
         displacementX: displacementX, displacementY: displacementY, distanceX: distanceX, distanceY: distanceY, distance: distance, overallDirection: overallDirection
     };
 }
+//# sourceMappingURL=computeDistance.js.map
 
 function computeDeltaXY (_a, $store) {
     var prevInput = _a.prevInput, input = _a.input;
@@ -497,6 +506,7 @@ function computeDeltaXY (_a, $store) {
     }
     return { deltaX: deltaX, deltaY: deltaY, deltaXYAngle: deltaXYAngle };
 }
+//# sourceMappingURL=computeDeltaXY.js.map
 
 var computeMaxLength = (function (_a, $store) {
     var pointLength = _a.pointLength, isStart = _a.isStart;
@@ -512,11 +522,13 @@ var computeMaxLength = (function (_a, $store) {
         return $store.get('maxPointLength', 0);
     }
 });
+//# sourceMappingURL=computeMaxLength.js.map
 
 var computeVector = (function (input) { return ({
     x: input.points[1][CLIENT_X] - input.points[0][CLIENT_X],
     y: input.points[1][CLIENT_Y] - input.points[0][CLIENT_Y]
 }); });
+//# sourceMappingURL=computeVector.js.map
 
 function computeScale (_a) {
     var startV = _a.startV, prevV = _a.prevV, activeV = _a.activeV;
@@ -524,6 +536,7 @@ function computeScale (_a) {
     var scale = getVLength(activeV) / getVLength(startV);
     return { scale: scale, deltaScale: deltaScale };
 }
+//# sourceMappingURL=computeScale.js.map
 
 function computeAngle (_a) {
     var startV = _a.startV, prevV = _a.prevV, activeV = _a.activeV;
@@ -531,6 +544,7 @@ function computeAngle (_a) {
     var angle = getAngle(activeV, startV);
     return { angle: angle, deltaAngle: deltaAngle };
 }
+//# sourceMappingURL=computeAngle.js.map
 
 function computMulti (_a, $store) {
     var startMultiInput = _a.startMultiInput, prevInput = _a.prevInput, input = _a.input;
@@ -555,6 +569,7 @@ function computMulti (_a, $store) {
         };
     }
 }
+//# sourceMappingURL=computeMulti.js.map
 
 function compute (inputs, $store) {
     var input = inputs.input;
@@ -583,6 +598,7 @@ function compute (inputs, $store) {
         deltaAngle: deltaAngle,
         maxPointLength: maxPointLength });
 }
+//# sourceMappingURL=index.js.map
 
 var default_1$4 = (function () {
     function default_1(_a) {
@@ -621,6 +637,7 @@ var default_1$4 = (function () {
     };
     return default_1;
 }());
+//# sourceMappingURL=InputManage.js.map
 
 var computeTouchAction = (function (touchActions) {
     var e_1, _a;
@@ -661,6 +678,7 @@ var computeTouchAction = (function (touchActions) {
     }
     return touchActionCSSArray.join(' ');
 });
+//# sourceMappingURL=computeTouchAction.js.map
 
 var default_1$5 = (function () {
     function default_1() {
@@ -680,6 +698,7 @@ var default_1$5 = (function () {
     };
     return default_1;
 }());
+//# sourceMappingURL=Store.js.map
 
 var STATUS_POSSIBLE = 'possible';
 var STATUS_START = 'start';
@@ -688,6 +707,7 @@ var STATUS_END = 'end';
 var STATUS_CANCELLED = 'cancel';
 var STATUS_FAILED = 'failed';
 var STATUS_RECOGNIZED = 'recognized';
+//# sourceMappingURL=recognizerStatus.js.map
 
 var Recognizer = (function () {
     function Recognizer(options) {
@@ -712,11 +732,16 @@ var Recognizer = (function () {
     Recognizer.prototype.emit = function (type, payload) {
         payload.type = type;
         this.$root.eventEmitter.emit(type, payload);
-        if (undefined !== this.$root.el && this.$root.options.hasDomEvents) {
-            var target = payload.target, currentTarget = payload.currentTarget, type_1 = payload.type, data = __rest(payload, ["target", "currentTarget", "type"]);
-            var event = new Event(type_1, payload);
-            Object.assign(event, data);
-            this.$root.el.dispatchEvent(event);
+        if (undefined !== this.$root.el) {
+            if (this.$root.options.syncToAttr) {
+                this.$root.el.setAttribute('at-gesture', type);
+            }
+            if (this.$root.options.hasDomEvents) {
+                var target = payload.target, currentTarget = payload.currentTarget, type_1 = payload.type, data = __rest(payload, ["target", "currentTarget", "type"]);
+                var event = new Event(type_1, payload);
+                Object.assign(event, data);
+                this.$root.el.dispatchEvent(event);
+            }
         }
     };
     Recognizer.prototype.requireFailure = function (recognizer) {
@@ -885,6 +910,7 @@ var Recognizer = (function () {
     Recognizer.prototype.afterEmit = function (computed) { };
     return Recognizer;
 }());
+//# sourceMappingURL=Base.js.map
 
 var TapRecognizer = (function (_super) {
     __extends(TapRecognizer, _super);
@@ -991,6 +1017,7 @@ var TapRecognizer = (function (_super) {
     };
     return TapRecognizer;
 }(Recognizer));
+//# sourceMappingURL=Tap.js.map
 
 var PressRecognizer = (function (_super) {
     __extends(PressRecognizer, _super);
@@ -1036,6 +1063,7 @@ var PressRecognizer = (function (_super) {
     };
     return PressRecognizer;
 }(Recognizer));
+//# sourceMappingURL=Press.js.map
 
 var getHV = (function (directions) {
     var e_1, _a;
@@ -1068,6 +1096,7 @@ var getHV = (function (directions) {
     }
     return { hasHorizontal: hasHorizontal, hasVertical: hasVertical };
 });
+//# sourceMappingURL=getHV.js.map
 
 var PanRecognizer = (function (_super) {
     __extends(PanRecognizer, _super);
@@ -1135,6 +1164,7 @@ var PanRecognizer = (function (_super) {
     };
     return PanRecognizer;
 }(Recognizer));
+//# sourceMappingURL=Pan.js.map
 
 var SwipeRecognizer = (function (_super) {
     __extends(SwipeRecognizer, _super);
@@ -1177,6 +1207,7 @@ var SwipeRecognizer = (function (_super) {
     };
     return SwipeRecognizer;
 }(Recognizer));
+//# sourceMappingURL=Swipe.js.map
 
 var PinchRecognizer = (function (_super) {
     __extends(PinchRecognizer, _super);
@@ -1210,6 +1241,7 @@ var PinchRecognizer = (function (_super) {
     };
     return PinchRecognizer;
 }(Recognizer));
+//# sourceMappingURL=Pinch.js.map
 
 var RotateRecognizer = (function (_super) {
     __extends(RotateRecognizer, _super);
@@ -1232,6 +1264,7 @@ var RotateRecognizer = (function (_super) {
     };
     return RotateRecognizer;
 }(Recognizer));
+//# sourceMappingURL=Rotate.js.map
 
 var AnyTouch = (function () {
     function AnyTouch(el, options) {
@@ -1239,6 +1272,7 @@ var AnyTouch = (function () {
             touchAction: 'compute',
             hasDomEvents: true,
             isPreventDefault: false,
+            syncToAttr: false,
             cssPrevent: {
                 selectText: true,
                 drag: true,
@@ -1271,7 +1305,7 @@ var AnyTouch = (function () {
         this.recognizers[4].requireFailure(this.recognizers[5]);
         if (undefined !== this.el) {
             this.update();
-            this.unbind = this._bindEL(this.el).unbind;
+            this._unbindEl = this._bindEL(this.el)._unbindEl;
         }
     }
     AnyTouch.prototype.updateTouchAction = function () {
@@ -1336,7 +1370,7 @@ var AnyTouch = (function () {
                 el.addEventListener(eventName, boundInputListener);
             });
             return {
-                unbind: function () {
+                _unbindEl: function () {
                     events_1.forEach(function (eventName) {
                         el.removeEventListener(eventName, boundInputListener);
                     });
@@ -1348,7 +1382,7 @@ var AnyTouch = (function () {
             window.addEventListener('mousemove', boundInputListener);
             window.addEventListener('mouseup', boundInputListener);
             return {
-                unbind: function () {
+                _unbindEl: function () {
                     el.removeEventListener('mousedown', boundInputListener);
                     window.removeEventListener('mousemove', boundInputListener);
                     window.removeEventListener('mouseup', boundInputListener);
@@ -1460,10 +1494,12 @@ var AnyTouch = (function () {
     AnyTouch.prototype.emit = function (type, payload) {
         this.eventEmitter.emit(type, __assign({}, payload, { type: type }));
     };
-    AnyTouch.prototype.unbind = function () { };
+    AnyTouch.prototype._unbindEl = function () { };
     AnyTouch.prototype.destroy = function () {
         this.$store.destroy();
-        this.unbind();
+        if (this.el) {
+            this._unbindEl();
+        }
         this.eventEmitter.destroy();
     };
     AnyTouch.Tap = TapRecognizer;
@@ -1472,11 +1508,12 @@ var AnyTouch = (function () {
     AnyTouch.Swipe = SwipeRecognizer;
     AnyTouch.Pinch = PinchRecognizer;
     AnyTouch.Rotate = RotateRecognizer;
-    AnyTouch.version = '0.4.4';
+    AnyTouch.version = '0.4.5';
     AnyTouch.Vector = Vector;
     AnyTouch.EventEmitter = AnyEvent;
     return AnyTouch;
 }());
+//# sourceMappingURL=AnyTouch.js.map
 
 var default_1$6 = (function () {
     function default_1(ClassObject) {
@@ -1511,6 +1548,7 @@ var default_1$6 = (function () {
     };
     return default_1;
 }());
+//# sourceMappingURL=InstanceManage.js.map
 
 var iManage = new default_1$6(AnyTouch);
 var plugin = {
@@ -1541,6 +1579,7 @@ var plugin = {
         });
     }
 };
+//# sourceMappingURL=index.js.map
 
 var default_1$7 = (function (_super) {
     __extends(default_1, _super);
@@ -1550,6 +1589,6 @@ var default_1$7 = (function (_super) {
     default_1.vTouch = plugin;
     return default_1;
 }(AnyTouch));
+//# sourceMappingURL=main.js.map
 
 module.exports = default_1$7;
-//# sourceMappingURL=AnyTouch.common.js.map
