@@ -10,24 +10,23 @@ const {
     output
 } = config;
 
-
+plugins.push(terser({
+    include: [/^.+\.min\.js$/], 
+}));
 // 非压缩
 output.forEach(eachOutputOptions => {
-    // 压缩umd
-    if ('umd' === eachOutputOptions.format) {
-        plugins.push(terser());
-        // eachOutputOptions.file = eachOutputOptions.file.replace('.js', '.min.js');
-    }
     build(eachOutputOptions);
 });
 
 // 打包开始
 async function build(outputOptions) {
     const IS_UMD = 'umd' === outputOptions.format;
+
+
     const bundle = await rollup.rollup({
         input,
         external: IS_UMD ? undefined : ['any-event'],
-        plugins,
+        plugins
     });
 
     // console.log(bundle.imports); // an array of external dependencies

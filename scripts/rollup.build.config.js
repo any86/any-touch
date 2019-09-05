@@ -38,16 +38,34 @@ module.exports = {
             sourcemap: true
         },
         {
+            format: 'cjs',
+            file: pkg.main.replace('.js', '.min.js'),
+            banner,
+            sourcemap: true
+        },
+        {
             format: 'es',
-            // rollup和webpack识别的入口文件, 如果没有该字段, 那么会去读取main字段
             file: pkg.module,
+            banner,
+            sourcemap: true
+        },
+        {
+            format: 'es',
+            file: pkg.module.replace('.js', '.min.js'),
             banner,
             sourcemap: true
         },
         {
             format: 'umd',
             name: 'AnyTouch',
-            file: pkg.browser,
+            file: 'dist/AnyTouch.umd.js',
+            banner,
+            sourcemap: true
+        },
+        {
+            format: 'umd',
+            name: 'AnyTouch',
+            file: 'dist/AnyTouch.umd.min.js',
             banner,
             sourcemap: true
         }
