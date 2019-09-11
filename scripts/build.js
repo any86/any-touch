@@ -10,7 +10,9 @@ const {
     output
 } = config;
 
-
+plugins.push(terser({
+    include: [/^.+\.min\.js$/], 
+}));
 // 非压缩
 output.forEach(eachOutputOptions => {
     build(eachOutputOptions);
