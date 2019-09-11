@@ -22,12 +22,12 @@ export default class PressRecognizer extends Recognizer {
     };
 
     recognize(computed: AnyTouchEvent): void {
-        const { eventType, pointLength, distance, deltaTime } = computed;
-
+        console.log(this.status);
+        const { eventType, pointLength, deltaTime } = computed;
         // 1. start阶段
         // 2. 触点数符合
         // 那么等待minPressTime时间后触发press
-        if (INPUT_START === eventType && this.isValidPointLength(pointLength)) {
+        if (INPUT_START === eventType && this.test(computed)) {
             // 重置状态
             this._resetStatus();
             // 延迟触发
@@ -47,7 +47,7 @@ export default class PressRecognizer extends Recognizer {
 
         // 一旦不满足必要条件, 触发失败
         // 对应cancel和end阶段
-        else if (!this.test(computed) || (this.options.minPressTime > deltaTime && -1 !== [INPUT_END, INPUT_CANCEL].indexOf(eventType) )) {
+        else if (!this.test(computed) || (this.options.minPressTime > deltaTime && -1 !== [INPUT_END, INPUT_CANCEL].indexOf(eventType))) {
             this.cancel();
             this.status = STATUS_FAILED;
         }
@@ -58,8 +58,8 @@ export default class PressRecognizer extends Recognizer {
      * 是否满足:
      * 移动距离不大
      */
-    test({ distance}: AnyTouchEvent): boolean {
-        return this.options.positionTolerance > distance;
+    test({ distance, pointLength }: AnyTouchEvent): boolean {
+        return this.options.positionTolerance > distance && this.isValidPointLength(pointLength);
     };
 
     cancel(): void {
