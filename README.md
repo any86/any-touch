@@ -153,7 +153,7 @@ Vue.use(AnyTouch.vTouch);
     @rotate="rotate" 
     @click="click">touch</div>
 ```
-此时`div`上可以通过`@/v-on`进行手势的绑定,和绑定click等原生事件一样. 通过`v-touch`我们还可以导出`AnyTouch`的实例.
+此时`div`上可以通过`v-on`进行手势的绑定,和绑定click等原生事件一样. 通过`v-touch`我们还可以导出`AnyTouch`的实例.
 
 [示例](https://any86.github.io/any-touch/example/vue/)
 
