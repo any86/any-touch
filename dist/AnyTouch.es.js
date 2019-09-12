@@ -1436,6 +1436,10 @@ var AnyTouch = (function () {
         if (this.options.isPreventDefault) {
             event.preventDefault();
         }
+        console.log(event.type);
+        if ('touchcancel' === event.type) {
+            alert('cancel');
+        }
         var computed = this.inputManage.load(event);
         if (undefined !== computed) {
             this.emit('input', computed);
