@@ -9,6 +9,11 @@
 
 :wave: 一个手势库, 支持 / 鼠标 / touch/ 微信小程序 / vue
 
+## 演示
+![1568267671](https://user-images.githubusercontent.com/8264787/64757535-fc6da200-d564-11e9-9bf6-1ac40e08b8b7.png)
+
+[链接](https://any86.github.io/any-touch/example/)
+
 ## 直达
 
 [快速开始](#快速开始)
@@ -21,7 +26,7 @@
 
 [API](docs/API.md)
 
-[不要用alert调试](#不要用alert调试)
+[:heavy_exclamation_mark:不要用alert调试](#不要用alert调试)
 
 ## 安装
 
