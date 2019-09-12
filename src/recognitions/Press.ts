@@ -22,8 +22,7 @@ export default class PressRecognizer extends Recognizer {
     };
 
     recognize(computed: AnyTouchEvent): void {
-        console.log(this.status);
-        const { eventType, pointLength, deltaTime } = computed;
+        const { eventType, deltaTime } = computed;
         // 1. start阶段
         // 2. 触点数符合
         // 那么等待minPressTime时间后触发press
