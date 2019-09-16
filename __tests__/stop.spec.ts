@@ -3,24 +3,25 @@ import AnyTouch from '../src/main';
 import sleep from './utils/sleep';
 const el = document.createElement('div');
 let at: AnyTouch, ts: TouchSimulator;
+const mockCallback = jest.fn();
 
 beforeEach(() => {
     at = new AnyTouch(el);
     ts = new TouchSimulator(el);
-})
+});
 
 afterEach(() => {
     at.destroy();
 });
 
 test('panstart中加入stop, 那么panmove不会触发', async (done) => {
-    const mockCallback = jest.fn();
     at.on('panstart', ev => {
         at.stop();
         expect(ev.type).toBe('panstart');
-    })
+    });
 
     at.on(`panmove`, (ev) => {
+        console.warn('stop')
         mockCallback();
     });
 

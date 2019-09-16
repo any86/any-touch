@@ -19,7 +19,7 @@ export default class {
     public load(event: SupportEvent): Input | void {
         // 从event中采集的数据
         const BASE_INPUT = this.adapter.load(event);
-        
+
         if (undefined === BASE_INPUT) {
             return;
         }
@@ -29,11 +29,14 @@ export default class {
 
         // 变化前触点数
         const changedPointLength = changedPoints.length;
-        
+
         // 识别流程的开始和结束标记
-        const isStart = (INPUT_START === eventType) && (0 === changedPointLength - pointLength);
-        // 所有触点都离开算作"final", 这和hammer.js不一样
-        const isEnd = (INPUT_END === eventType || INPUT_CANCEL === eventType) && (0 === pointLength);
+        // 只要触点增加了就是一个识别阶段的"开始"
+        const isStart = (INPUT_START === eventType)
+        // 任意触点离开算作"结束", 这和hammer.js不一样
+        // 注意这个"结束"只能给pan等移动类手势用, tap比较特殊, 不会用到这个属性
+        const isEnd = (INPUT_END === eventType || INPUT_CANCEL === eventType);
+        //  && (0 === pointLength);
 
         // 中心坐标
         if (0 < pointLength) {
@@ -46,6 +49,9 @@ export default class {
         // 原生属性/方法
         const { target, currentTarget } = event;
         const { x, y } = <Point>(this._center || {});
+
+        // console.log(`isStart= ${isStart&& '是'}, isEnd= ${isEnd&& '是'}, ${eventType},${pointLength},${changedPointLength} ,x: ${x} ,y: ${y}`);
+
         return {
             ...BASE_INPUT,
             preventDefault: () => {

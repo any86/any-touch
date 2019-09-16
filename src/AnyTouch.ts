@@ -92,7 +92,7 @@ export class AnyTouch {
         this.default = {
             touchAction: 'compute',
             hasDomEvents: true,
-            isPreventDefault: false,
+            isPreventDefault: true,
             syncToAttr: false,
             cssPrevent: {
                 // 阻止触发选择文字
@@ -331,25 +331,27 @@ export class AnyTouch {
             // input事件
             this.emit('input', computed);
             if (computed.isStart) {
-                // $store.reset();
+                // 重置isStopped
                 this._isStopped = false;
-                this.emit('inputstart', computed);
-            } else if (computed.isEnd) {
-                if ('cancel' === computed.eventType) {
-                    this.emit('inputcancel', computed);
-                } else {
-                    this.emit('inputend', computed);
-                }
-            } else {
-                // prevInput和input一定不为空
-                if (this.inputManage.prevInput!.pointLength > this.inputManage.activeInput!.pointLength) {
-                    this.emit('inputreduce', computed);
-                } else if (this.inputManage.prevInput!.pointLength < this.inputManage.activeInput!.pointLength) {
-                    this.emit('inputadd', computed);
-                } else {
-                    this.emit('inputmove', computed);
-                }
-            };
+            }
+            // if (computed.isStart) {
+            //     // $store.reset();
+            //     this._isStopped = false;
+            //     this.emit('inputstart', computed);
+            // } else if ('cancel' === computed.eventType) {
+            //     this.emit('inputcancel', computed);
+            // } else if (computed.isEnd) {
+            //     this.emit('inputend', computed);
+            // } else {
+            //     // prevInput和input一定不为空
+            //     if (this.inputManage.prevInput!.pointLength > computed.pointLength) {
+            //         this.emit('inputreduce', computed);
+            //     } else if (this.inputManage.prevInput!.pointLength < computed.pointLength) {
+            //         this.emit('inputadd', computed);
+            //     } else {
+            //         this.emit('inputmove', computed);
+            //     }
+            // };
 
             for (let recognizer of this.recognizers) {
                 if (recognizer.disabled) continue;

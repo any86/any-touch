@@ -40,7 +40,6 @@ new Vue({
         // 初始化
         const anyTouch = new AnyTouch(el, {
             touchAction: 'auto',
-            isPreventDefault: false,
             syncToAttr:true
         });
 
@@ -124,7 +123,7 @@ new Vue({
             // e.nativeEvent.preventDefault();
             // anyTouch.set({touchAction:'auto',isPreventDefault:false});
             this.message = e;
-            log(e.type);
+            console.warn(e.type);
             
         });
 
@@ -220,8 +219,7 @@ new Vue({
          */
         ['rotatestart', 'rotatemove', 'rotateend'].forEach(name => {
             anyTouch.on(name, e => {
-                log(e.type);
-                // this.message = e;
+                // console.warn(e.type);
             })
         });
 

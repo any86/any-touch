@@ -68,7 +68,7 @@ export default abstract class Recognizer {
         this.$root.eventEmitter.emit(type, payload);
 
         if (undefined !== this.$root.el) {
-            if(this.$root.options.syncToAttr) {
+            if (this.$root.options.syncToAttr) {
                 this.$root.el.setAttribute('at-gesture', type);
             }
             if (this.$root.options.hasDomEvents) {
@@ -241,6 +241,7 @@ export default abstract class Recognizer {
      * @param {AnyTouchEvent} 计算数据 
      */
     recognize(computed: AnyTouchEvent) {
+        // if(!computed.isStart) return;
         // if(this.name === 'pan')    console.log(this.name,this.status);
         // 是否识别成功
         let isVaild = this.test(computed);
@@ -261,16 +262,19 @@ export default abstract class Recognizer {
         // 是否已识别
         this.isRecognized = -1 < [STATUS_START, STATUS_MOVE, STATUS_END, STATUS_RECOGNIZED].indexOf(this.status);
         // 识别后触发的事件
-        if (this.isRecognized) {
+        if (isVaild) {
             this.afterRecognized(computed);
-            // computed = this.lockDirection(computed);d
+            // computed = this.lockDirection(computed);
             this.emit(this.options.name, computed);
-            // console.log(this.options.name, computed);
-            if (-1 < [STATUS_START, STATUS_MOVE, STATUS_END, STATUS_RECOGNIZED].indexOf(this.status)) {
-                // panstart | panmove | panend等
-                this.emit(this.options.name + this.status, computed);
-                this.afterEmit(computed);
-            }
+
+            // panstart等
+            this.emit(this.options.name + this.status, computed);
+
+            this.afterEmit(computed);
+        } else if (this.isRecognized) {
+            // panmove | panend等
+            this.emit(this.options.name + this.status, computed);
+            
         }
     };
 
