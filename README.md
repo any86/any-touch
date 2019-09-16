@@ -10,6 +10,7 @@
 :wave: 一个手势库, 支持 / 鼠标 / touch/ 微信小程序 / vue
 
 ## 演示
+
 ![1568267671](https://user-images.githubusercontent.com/8264787/64757535-fc6da200-d564-11e9-9bf6-1ac40e08b8b7.png)
 
 [链接](https://any86.github.io/any-touch/example/)
@@ -26,7 +27,7 @@
 
 [API](docs/API.md)
 
-[:heavy_exclamation_mark:不要用alert调试](#不要用alert调试)
+[:heavy_exclamation_mark:不要用 alert 调试](#不要用alert调试)
 
 ## 安装
 
@@ -81,8 +82,8 @@ at.on("tap", ev => {
 | ---------------- | ------------- | ------------------------------------------------------------------------ |
 | type             | `String`      | 事件名, 如 tap/pan 等                                                    |
 | eventType        | `String`      | 事件类型: start                                                          | move | end | cancel |
-| x                | `Number`      | **当前触点中心**x坐标                                                       |
-| y                | `Number`      | **当前触点中心**y 坐标                                                       |
+| x                | `Number`      | **当前触点中心**x 坐标                                                   |
+| y                | `Number`      | **当前触点中心**y 坐标                                                   |
 | deltaX           | `Number`      | **当前触点**和**前触点**的 x 轴偏移距离                                  |
 | deltaY           | `Number`      | **当前触点**和**前触点**的 y 轴偏移距离                                  |
 | deltaXYAngle     | `Number`      | **当前触点**相对**前触点**的角度变化(相对于 x 轴)                        |
@@ -142,7 +143,8 @@ const at = new AnyTouch();
 ```
 
 ## 支持vue指令
-AnyTouch上的vTouch是一个vue指令, 初始化后可以在元素上添加`v-touch`进行绑定.
+
+AnyTouch 上的 vTouch 是一个 vue 指令, 初始化后可以在元素上添加`v-touch`进行绑定.
 
 ```javascript
 // main.js
@@ -151,16 +153,41 @@ Vue.use(AnyTouch.vTouch);
 
 ```html
 <!-- xxx.vue -->
-<div v-touch="importAT" 
-    @tap="tap" 
-    @doubletap="doubletap"
-    @press="press" 
-    @pan="pan" 
-    @pinch="pinch" 
-    @rotate="rotate" 
-    @click="click">touch</div>
+<div
+  v-touch
+  @tap="tap"
+  @doubletap="doubletap"
+  @press="press"
+  @pan="pan"
+  @pinch="pinch"
+  @rotate="rotate"
+  @click="click"
+>
+  touch
+</div>
 ```
-此时`div`上可以通过`v-on`进行手势的绑定,和绑定click等原生事件一样. 通过`v-touch`我们还可以导出`AnyTouch`的实例.
+此时`div`上可以通过`v-on`进行手势的绑定,和绑定 click 等原生事件一样.
+
+### 导出实例, 进行更多设置
+
+```html
+<!-- xxx.vue -->
+<div v-touch="importAT" @tap="tap">touch</div>
+```
+
+通过`v-touch`我们还可以导出`AnyTouch`的实例.
+
+```javascript
+export default {
+  methods: {
+    importAT(at) {
+      const doubletap = at.get("doubletap");
+      // 开启双击
+      doubletap.disabled = false;
+    }
+  }
+};
+```
 
 [示例](https://any86.github.io/any-touch/example/vue/)
 
@@ -184,8 +211,9 @@ Vue.use(AnyTouch.vTouch);
 
 如果你需要某 2 个手势的触发条件是互斥的, 那么就需要通过 requireFailure 来标记他们, 当一个"识别失败"另一个才能触发, 如[单击和双击](#requireFailure)就是互斥关系的 2 个手势.
 
-## 不要用alert调试
-在安卓手机的真机上, 如果`touchstart`或`touchmove`阶段触发了`alert`, 会出现后续的`touchmove/touchend`不触发的bug. 所以请大家务必避免在手势的事件回调中使用`alert`.
+## 不要用 alert 调试
+
+在安卓手机的真机上, 如果`touchstart`或`touchmove`阶段触发了`alert`, 会出现后续的`touchmove/touchend`不触发的 bug. 所以请大家务必避免在手势的事件回调中使用`alert`.
 [测试代码](https://codepen.io/russell2015/pen/vYBjVNe)
 
 如果仅仅是了在移动端调试, 请使用腾讯的[vconsole](https://github.com/Tencent/vConsole)
