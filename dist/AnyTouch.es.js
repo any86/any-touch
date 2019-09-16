@@ -1,9 +1,11 @@
 /*!
- * AnyTouch.js v0.4.5
+ * AnyTouch.js v0.4.6
  * (c) 2018-2019 Russell
  * https://github.com/any86/any-touch
  * Released under the MIT License.
  */
+import AnyEvent from 'any-event';
+
 /*! *****************************************************************************
 Copyright (c) Microsoft Corporation. All rights reserved.
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use
@@ -89,143 +91,6 @@ function __spread() {
         ar = ar.concat(__read(arguments[i]));
     return ar;
 }
-
-/*!
- * AnyEvent.js v0.5.0
- * (c) 2018-2019 Russell
- * https://github.com/any86/any-touch
- * Released under the MIT License.
- */
-/*! *****************************************************************************
-Copyright (c) Microsoft Corporation. All rights reserved.
-Licensed under the Apache License, Version 2.0 (the "License"); you may not use
-this file except in compliance with the License. You may obtain a copy of the
-License at http://www.apache.org/licenses/LICENSE-2.0
-
-THIS CODE IS PROVIDED ON AN *AS IS* BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-KIND, EITHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION ANY IMPLIED
-WARRANTIES OR CONDITIONS OF TITLE, FITNESS FOR A PARTICULAR PURPOSE,
-MERCHANTABLITY OR NON-INFRINGEMENT.
-
-See the Apache Version 2.0 License for specific language governing permissions
-and limitations under the License.
-***************************************************************************** */
-
-function __values$1(o) {
-    var m = typeof Symbol === "function" && o[Symbol.iterator], i = 0;
-    if (m) return m.call(o);
-    return {
-        next: function () {
-            if (o && i >= o.length) o = void 0;
-            return { value: o && o[i++], done: !o };
-        }
-    };
-}
-
-function __read$1(o, n) {
-    var m = typeof Symbol === "function" && o[Symbol.iterator];
-    if (!m) return o;
-    var i = m.call(o), r, ar = [], e;
-    try {
-        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
-    }
-    catch (error) { e = { error: error }; }
-    finally {
-        try {
-            if (r && !r.done && (m = i["return"])) m.call(i);
-        }
-        finally { if (e) throw e.error; }
-    }
-    return ar;
-}
-
-function __spread$1() {
-    for (var ar = [], i = 0; i < arguments.length; i++)
-        ar = ar.concat(__read$1(arguments[i]));
-    return ar;
-}
-
-var AnyEvent = (function () {
-    function AnyEvent() {
-        this._listenersMap = {};
-    }
-    AnyEvent.prototype.on = function (eventName, listener) {
-        if (undefined === this._listenersMap[eventName]) {
-            this._listenersMap[eventName] = [];
-        }
-        this._listenersMap[eventName].push(listener);
-        return this;
-    };
-    AnyEvent.prototype.once = function (eventName, listener) {
-        listener.isOnce = true;
-        this.on(eventName, listener);
-        return this;
-    };
-    AnyEvent.prototype.off = function (eventName, listener) {
-        var listeners = this._listenersMap[eventName];
-        if (undefined !== listeners) {
-            if (undefined === listener) {
-                delete this._listenersMap[eventName];
-            }
-            else {
-                var index = listeners.findIndex(function (fn) { return fn === listener; });
-                listeners.splice(index, 1);
-            }
-        }
-        return this;
-    };
-    AnyEvent.prototype.emit = function (eventName) {
-        var e_1, _a;
-        var payload = [];
-        for (var _i = 1; _i < arguments.length; _i++) {
-            payload[_i - 1] = arguments[_i];
-        }
-        var listeners = this._listenersMap[eventName];
-        if (undefined !== listeners && 0 < listeners.length) {
-            try {
-                for (var _b = __values$1(listeners.entries()), _c = _b.next(); !_c.done; _c = _b.next()) {
-                    var _d = __read$1(_c.value, 2), index = _d[0], listener = _d[1];
-                    if (listener.isOnce) {
-                        var listenerClone = listener;
-                        listeners.splice(index, 1);
-                        listenerClone.apply(void 0, __spread$1(payload));
-                    }
-                    else {
-                        listener.apply(void 0, __spread$1(payload));
-                    }
-                }
-            }
-            catch (e_1_1) { e_1 = { error: e_1_1 }; }
-            finally {
-                try {
-                    if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
-                }
-                finally { if (e_1) throw e_1.error; }
-            }
-            return true;
-        }
-        else {
-            return false;
-        }
-    };
-    AnyEvent.prototype.has = function (eventName) {
-        return undefined !== this._listenersMap[eventName] && 0 < this._listenersMap[eventName].length;
-    };
-    AnyEvent.prototype.getEventNames = function () {
-        var eventNames = [];
-        for (var eventName in this._listenersMap) {
-            eventNames.push(eventName);
-        }
-        return eventNames;
-    };
-    AnyEvent.prototype.eventNames = function () {
-        return this.getEventNames();
-    };
-    AnyEvent.prototype.destroy = function () {
-        this._listenersMap = {};
-    };
-    return AnyEvent;
-}());
 
 var IS_WX = undefined === window;
 var SUPPORT_TOUCH = IS_WX || ('ontouchstart' in window);
@@ -388,8 +253,8 @@ var default_1$3 = (function () {
         var eventType = BASE_INPUT.eventType, points = BASE_INPUT.points, changedPoints = BASE_INPUT.changedPoints;
         var pointLength = points.length;
         var changedPointLength = changedPoints.length;
-        var isStart = (INPUT_START === eventType) && (0 === changedPointLength - pointLength);
-        var isEnd = (INPUT_END === eventType || INPUT_CANCEL === eventType) && (0 === pointLength);
+        var isStart = (INPUT_START === eventType);
+        var isEnd = (INPUT_END === eventType || INPUT_CANCEL === eventType);
         if (0 < pointLength) {
             this._center = getCenter(BASE_INPUT.points);
         }
@@ -499,16 +364,13 @@ function computeDeltaXY (_a, $store) {
 var computeMaxLength = (function (_a, $store) {
     var pointLength = _a.pointLength, isStart = _a.isStart;
     if (isStart) {
-        $store.set({ maxPointLength: pointLength });
-        return pointLength;
-    }
-    else {
         var maxLength = $store.get('maxPointLength', 0);
         if (pointLength > maxLength) {
             $store.set({ maxPointLength: pointLength });
         }
-        return $store.get('maxPointLength', 0);
+        return pointLength;
     }
+    return $store.get('maxPointLength', 0);
 });
 
 var computeVector = (function (input) { return ({
@@ -875,13 +737,14 @@ var Recognizer = (function () {
             return;
         }
         this.isRecognized = -1 < [STATUS_START, STATUS_MOVE, STATUS_END, STATUS_RECOGNIZED].indexOf(this.status);
-        if (this.isRecognized) {
+        if (isVaild) {
             this.afterRecognized(computed);
             this.emit(this.options.name, computed);
-            if (-1 < [STATUS_START, STATUS_MOVE, STATUS_END, STATUS_RECOGNIZED].indexOf(this.status)) {
-                this.emit(this.options.name + this.status, computed);
-                this.afterEmit(computed);
-            }
+            this.emit(this.options.name + this.status, computed);
+            this.afterEmit(computed);
+        }
+        else if (this.isRecognized) {
+            this.emit(this.options.name + this.status, computed);
         }
     };
     Recognizer.prototype.afterRecognized = function (computed) { };
@@ -1241,7 +1104,7 @@ var AnyTouch = (function () {
         this.default = {
             touchAction: 'compute',
             hasDomEvents: true,
-            isPreventDefault: false,
+            isPreventDefault: true,
             syncToAttr: false,
             cssPrevent: {
                 selectText: true,
@@ -1413,26 +1276,6 @@ var AnyTouch = (function () {
             this.emit('input', computed);
             if (computed.isStart) {
                 this._isStopped = false;
-                this.emit('inputstart', computed);
-            }
-            else if (computed.isEnd) {
-                if ('cancel' === computed.eventType) {
-                    this.emit('inputcancel', computed);
-                }
-                else {
-                    this.emit('inputend', computed);
-                }
-            }
-            else {
-                if (this.inputManage.prevInput.pointLength > this.inputManage.activeInput.pointLength) {
-                    this.emit('inputreduce', computed);
-                }
-                else if (this.inputManage.prevInput.pointLength < this.inputManage.activeInput.pointLength) {
-                    this.emit('inputadd', computed);
-                }
-                else {
-                    this.emit('inputmove', computed);
-                }
             }
             try {
                 for (var _b = __values(this.recognizers), _c = _b.next(); !_c.done; _c = _b.next()) {
@@ -1478,7 +1321,7 @@ var AnyTouch = (function () {
     AnyTouch.Swipe = SwipeRecognizer;
     AnyTouch.Pinch = PinchRecognizer;
     AnyTouch.Rotate = RotateRecognizer;
-    AnyTouch.version = '0.4.5';
+    AnyTouch.version = '0.4.6';
     AnyTouch.Vector = Vector;
     AnyTouch.EventEmitter = AnyEvent;
     return AnyTouch;
@@ -1558,3 +1401,4 @@ var default_1$7 = (function (_super) {
 }(AnyTouch));
 
 export default default_1$7;
+//# sourceMappingURL=AnyTouch.es.js.map

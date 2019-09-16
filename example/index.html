@@ -3,20 +3,17 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta data-n-head="true" name="viewport"
-        content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" />
+    <meta data-n-head="true" name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>AnyTouch</title>
     <link rel="stylesheet" href="index.css">
     </link>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-    <script src="https://res.wx.qq.com/mmbizwap/zh_CN/htmledition/js/vconsole/3.0.0/vconsole.min.js"></script>
+    <!-- <script src="https://res.wx.qq.com/mmbizwap/zh_CN/htmledition/js/vconsole/3.0.0/vconsole.min.js"></script> -->
     <script src="../dist/AnyTouch.umd.min.js"></script>
 
     <script>
-        var MOBILE_REGEX = /mobile|tablet|ip(ad|hone|od)|android/i;
-        var IS_MOBILE = MOBILE_REGEX.test(navigator.userAgent);
-        // if (IS_MOBILE) var vConsole = new VConsole();
+        // var vConsole = new VConsole();
     </script>
 </head>
 
@@ -47,6 +44,12 @@
             </tr>
 
             <tr>
+                <td>pointLength</td>
+                <td>{{message.pointLength}}</td>
+                <td>触点数</td>
+            </tr>
+            
+            <tr>
                 <td>maxPointLength</td>
                 <td>{{message.maxPointLength}}</td>
                 <td>本轮识别周期出现过的最大触点数</td>
@@ -63,22 +66,18 @@
                 <td>{{message.x}} / {{message.y}}</td>
                 <td>同centerX / centerY</td>
             </tr>
-            
+
             <tr>
                 <td>velocityX / velocityY</td>
                 <td>{{message.velocityX}} / {{message.velocityY}}</td>
                 <td>速率</td>
             </tr>
 
-
             <tr>
                 <td>speedX / speedY</td>
                 <td>{{message.speedX}} / {{message.speedY}}</td>
                 <td>速度</td>
             </tr>
-
-
-            
 
             <tr>
                 <td>distanceX / distanceY</td>
@@ -184,11 +183,7 @@
                 <td>Mouse/Touch事件数据</td>
             </tr>
 
-            <tr>
-                <td>pointLength</td>
-                <td>{{message.pointLength}}</td>
-                <td>触点数</td>
-            </tr>
+
 
             <tr style="min-height:60px;">
                 <td>points</td>

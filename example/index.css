@@ -68,13 +68,14 @@ main table tr th {
 main table tr td {
     font-size: 13px;
     color: var(--primary);
-    padding: 10px;
+    padding:5px 10px;
     text-align: left;
 }
 
 
 main table tr td:nth-child(1) {
     word-break: break-word;
+    font-weight: 600;
 }
 
 main table tr td:nth-child(2) {
@@ -94,32 +95,15 @@ main table tr td:nth-child(3) {
     width: 150px;
     height: 150px;
     border-radius: 10%;
-    background: var(--primary);
+    background: rgba(255, 255, 255, 0.2);
     position: fixed;
     line-height: 150px;
     text-align: center;
-    color: #fff;
+    color: var(--primary);
     font-size: 24px;
     font-weight: 100;
-    /* box-shadow: 1px 2px 30px var(--primary) */
+    box-shadow: 0 0  30px 5px var(--primary);
 }
-
-.circle2 {
-    top: 0;
-    left: 0;
-    box-sizing: content-box;
-    width: 150px;
-    height: 150px;
-    border-radius: 10%;
-    background: rgba(0, 0, 0, 0.7);
-    position: fixed;
-    line-height: 150px;
-    text-align: center;
-    color: #fff;
-    font-size: 24px;
-    font-weight: 100;
-}
-
 
 .fixed-bottom {
     position: fixed;
