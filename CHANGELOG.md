@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.4.7"></a>
+## [0.4.7](https://github.com/any86/any-touch/compare/v0.4.5...v0.4.7) (2019-09-16)
+
+
+### Bug Fixes
+
+* 修复MaxLength计算错误 ([de7cf91](https://github.com/any86/any-touch/commit/de7cf91))
+* 修复press触点限制 ([6739b76](https://github.com/any86/any-touch/commit/6739b76))
+
+
+
 <a name="0.4.6"></a>
 ## [0.4.6](https://github.com/any86/any-touch/compare/v0.4.5...v0.4.6) (2019-09-16)
 
