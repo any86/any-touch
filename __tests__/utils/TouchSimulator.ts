@@ -38,6 +38,7 @@ export default class TouchSimulator {
         let event: any = new Event(type, {});
         if ('touch' === this.device) {
             event.touches = [...this.prevTouches, ...this.input2Points(input)];
+            event.targetTouches = event.touches;
             event.changedTouches = this.input2Points(input);
             event.identifier = this.index++;
         } else {
@@ -66,6 +67,7 @@ export default class TouchSimulator {
             }
             // 对应点不同就放进changedTouches;
             event.touches = points;
+            event.targetTouches = event.touches;
             event.changedTouches = this.prevTouches.filter((prevTouchItem: any, index: number) => {
                 const isXChanged = prevTouchItem[CLIENT_X] != points[index][CLIENT_X];
                 const hasChanged = isXChanged || (prevTouchItem[CLIENT_Y] != points[index][CLIENT_Y]);
@@ -93,8 +95,10 @@ export default class TouchSimulator {
         let event: any = new Event(type, {});
         if ('touch' === this.device) {
             const { length } = this.prevTouches;
+            
             event.changedTouches = this.prevTouches.splice(pointerIndex, pointerNumber || length);
             event.touches = this.prevTouches;
+            event.targetTouches = event.touches;
             this.prevTouches = event.touches;
             this.el.dispatchEvent(event);
         } else {
@@ -111,6 +115,7 @@ export default class TouchSimulator {
         let event: any = new Event('touchcancel', {});
         event.changedTouches = this.prevTouches;
         event.touches = [];
+        event.targetTouches = [];
         this.prevTouches = event.touches;
         this.el.dispatchEvent(event);
         return event;
