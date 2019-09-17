@@ -1,5 +1,5 @@
 /*!
- * AnyTouch.js v0.4.5
+ * AnyTouch.js v0.4.7
  * (c) 2018-2019 Russell
  * https://github.com/any86/any-touch
  * Released under the MIT License.
@@ -316,7 +316,7 @@ var default_1$1 = (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     default_1$$1.prototype.load = function (event) {
-        var points = Array.from(event.touches).map(function (_a) {
+        var points = Array.from(event.targetTouches).map(function (_a) {
             var clientX = _a.clientX, clientY = _a.clientY;
             return ({ clientX: clientX, clientY: clientY });
         });
@@ -542,7 +542,7 @@ function computeAngle (_a) {
 
 function computMulti (_a, $store) {
     var startMultiInput = _a.startMultiInput, prevInput = _a.prevInput, input = _a.input;
-    if (undefined !== prevInput && 1 < prevInput.points.length && 1 < input.points.length) {
+    if (undefined !== startMultiInput && undefined !== prevInput && 1 < prevInput.points.length && 1 < input.points.length) {
         var startV = computeVector(startMultiInput);
         var prevV = computeVector(prevInput);
         var activeV = computeVector(input);
@@ -886,7 +886,7 @@ var Recognizer = (function () {
         this._resetStatus();
         var eventType = computed.eventType;
         this.status = this.flow(isVaild, this.status, eventType);
-        if (STATUS_CANCELLED === this.status) {
+        if (STATUS_CANCELLED === eventType) {
             this.emit(this.options.name + 'cancel', computed);
             return;
         }
@@ -1012,6 +1012,7 @@ var TapRecognizer = (function (_super) {
     };
     return TapRecognizer;
 }(Recognizer));
+//# sourceMappingURL=Tap.js.map
 
 var PressRecognizer = (function (_super) {
     __extends(PressRecognizer, _super);
@@ -1482,7 +1483,7 @@ var AnyTouch = (function () {
     AnyTouch.Swipe = SwipeRecognizer;
     AnyTouch.Pinch = PinchRecognizer;
     AnyTouch.Rotate = RotateRecognizer;
-    AnyTouch.version = '0.4.5';
+    AnyTouch.version = '0.4.7';
     AnyTouch.Vector = Vector;
     AnyTouch.EventEmitter = AnyEvent;
     return AnyTouch;
