@@ -254,7 +254,7 @@ export default abstract class Recognizer {
 
         this.status = this.flow(isVaild, this.status, eventType);
 
-        if (STATUS_CANCELLED === this.status) {
+        if (STATUS_CANCELLED === eventType) {
             this.emit(this.options.name + 'cancel', computed);
             return;
         }
