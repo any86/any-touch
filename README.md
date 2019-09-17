@@ -81,7 +81,7 @@ at.on("tap", ev => {
 | 名称             | 数据类型      | 说明                                                                     |
 | ---------------- | ------------- | ------------------------------------------------------------------------ |
 | type             | `String`      | 事件名, 如 tap/pan 等                                                    |
-| eventType        | `String`      | 事件类型: start                                                          | move | end | cancel |
+| eventType        | `String`      | 事件类型: start \| move \| end \| cancel |
 | x                | `Number`      | **当前触点中心**x 坐标                                                   |
 | y                | `Number`      | **当前触点中心**y 坐标                                                   |
 | deltaX           | `Number`      | **当前触点**和**前触点**的 x 轴偏移距离                                  |
@@ -211,7 +211,7 @@ export default {
 
 如果你需要某 2 个手势的触发条件是互斥的, 那么就需要通过 requireFailure 来标记他们, 当一个"识别失败"另一个才能触发, 如[单击和双击](#requireFailure)就是互斥关系的 2 个手势.
 
-## 不要用 alert 调试
+## 不要用alert调试
 
 在安卓手机的真机上, 如果`touchstart`或`touchmove`阶段触发了`alert`, 会出现后续的`touchmove/touchend`不触发的 bug. 所以请大家务必避免在手势的事件回调中使用`alert`.
 [测试代码](https://codepen.io/russell2015/pen/vYBjVNe)
