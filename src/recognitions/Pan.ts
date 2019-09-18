@@ -1,5 +1,5 @@
 import { AnyTouchEvent, Computed } from '../interface';
-import { INPUT_MOVE } from '../const';
+import { INPUT_MOVE, PAN_Y, PAN_X,DIRECTION_LEFT, DIRECTION_RIGHT, DIRECTION_DOWN, DIRECTION_UP,DIRECTION_ALL,NONE,AUTO } from '../const';
 import Recognizer from './Base';
 import getHV from '../utils/getHV';
 
@@ -8,23 +8,24 @@ export default class PanRecognizer extends Recognizer {
         name: 'pan',
         threshold: 10,
         pointLength: 1,
-        directions: ['up', 'right', 'down', 'left']
+        directions: DIRECTION_ALL
     };
+
     constructor(options = {}) {
         super(options);
     };
 
     getTouchAction() {
-        let touchActions = ['auto'];
+        let touchActions = [AUTO];
         let { hasHorizontal, hasVertical } = getHV(this.options.directions);
         if (hasHorizontal && hasVertical) {
-            touchActions = ['none'];
+            touchActions = [NONE];
         } else if (!hasHorizontal && hasVertical) {
             // 没有水平移动
-            touchActions = ['pan-x'];
+            touchActions = [PAN_X];
         } else if (!hasVertical && hasHorizontal) {
             // 没有垂直移动
-            touchActions = ['pan-y'];
+            touchActions = [PAN_Y];
         }
         return touchActions;
     };
@@ -45,7 +46,7 @@ export default class PanRecognizer extends Recognizer {
      * @param {AnyTouchEvent} 计算数据
      */
     afterEmit(computed: AnyTouchEvent) {
-        if ('none' !== computed.direction) {
+        if (NONE !== computed.direction) {
             this.emit(this.options.name + computed.direction, computed);
         }
     };
@@ -63,13 +64,13 @@ export default class PanRecognizer extends Recognizer {
         let deltaX = 0;
         let deltaY = 0;
         this.options.directions.forEach((direction: string) => {
-            if ('left' === direction && 0 > computed.deltaX) {
+            if (DIRECTION_LEFT === direction && 0 > computed.deltaX) {
                 deltaX = computed.deltaX;
-            } else if ('right' === direction && 0 < computed.deltaX) {
+            } else if (DIRECTION_RIGHT === direction && 0 < computed.deltaX) {
                 deltaX = computed.deltaX;
-            } else if ('down' === direction && 0 < computed.deltaY) {
+            } else if (DIRECTION_DOWN === direction && 0 < computed.deltaY) {
                 deltaY = computed.deltaY;
-            } else if ('up' === direction && 0 > computed.deltaY) {
+            } else if (DIRECTION_UP === direction && 0 > computed.deltaY) {
                 deltaY = computed.deltaY;
             }
         });

@@ -1,6 +1,9 @@
 import { BaseInput, eventType } from '../../interface';
 // 默认MouseEvent中对type声明仅为string
 import Adapter from './Abstract';
+
+import { INPUT_START,INPUT_MOVE,INPUT_END } from '../../const';
+
 export default class extends Adapter {
     prevPoints?: { clientX: number, clientY: number }[];
     isPressed: boolean;
@@ -45,9 +48,9 @@ export default class extends Adapter {
         }
 
         const MAP = {
-            mousedown: 'start',
-            mousemove: 'move',
-            mouseup: 'end'
+            mousedown: INPUT_START,
+            mousemove: INPUT_MOVE,
+            mouseup: INPUT_END
         };
 
         return {

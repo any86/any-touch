@@ -1,4 +1,5 @@
 import { AnyTouchEvent } from '../interface';
+import {NONE,INPUT_END} from '../const';
 import Recognizer from './Base';
 
 
@@ -16,11 +17,11 @@ export default class PinchRecognizer extends Recognizer {
     };
     
     getTouchAction(){
-        return ['none'];
+        return [NONE];
     };
 
     afterEmit(computed: AnyTouchEvent) {
-        if('end' === computed.eventType) return;
+        if(INPUT_END === computed.eventType) return;
         // pinchin | pinchout
         const { scale } = computed;
         if (1 !== scale) {

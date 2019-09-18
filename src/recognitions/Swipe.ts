@@ -1,20 +1,20 @@
 import Recognizer from './Base';
 import { AnyTouchEvent } from '../interface';
-import { INPUT_END } from '../const';
+import { INPUT_END,DIRECTION_ALL,NONE } from '../const';
 export default class SwipeRecognizer extends Recognizer {
     static DEFAULT_OPTIONS = {
         name: 'swipe',
         threshold: 10,
         velocity: 0.3,
         pointLength: 1,
-        directions: ['up', 'right', 'down', 'left']
+        directions: DIRECTION_ALL
     };
     constructor(options = {}) {
         super(options);
     };
 
     getTouchAction() {
-        return ['none'];
+        return [NONE];
     };
 
     /**
@@ -22,7 +22,7 @@ export default class SwipeRecognizer extends Recognizer {
      * @param {AnyTouchEvent} 计算数据
      */
     afterEmit(computed: AnyTouchEvent) {
-        if ('none' !== computed.direction) {
+        if (NONE !== computed.direction) {
             this.emit(this.options.name + computed.direction, computed);
         }
     };

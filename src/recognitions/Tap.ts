@@ -4,7 +4,7 @@ import {
     STATUS_FAILED,
 } from '../const/recognizerStatus';
 import Recognizer from './Base';
-import { INPUT_END } from '../const';
+import { INPUT_END,AUTO } from '../const';
 import { getVLength } from '../vector';
 
 export default class TapRecognizer extends Recognizer {
@@ -44,7 +44,7 @@ export default class TapRecognizer extends Recognizer {
 
     public getTouchAction() {
         // 单击auto, 多击manipulation=pan + pinch-zoom(禁用了默认双击)
-        return (1 < this.options.tapTimes) ? ['manipulation'] : ['auto'];
+        return (1 < this.options.tapTimes) ? ['manipulation'] : [AUTO];
     };
 
     /**

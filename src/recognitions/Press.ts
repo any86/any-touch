@@ -2,7 +2,7 @@ import { AnyTouchEvent } from '../interface';
 import {
     STATUS_FAILED, STATUS_RECOGNIZED
 } from '../const/recognizerStatus';
-import { INPUT_CANCEL, INPUT_END, INPUT_START } from '../const';
+import { INPUT_CANCEL, INPUT_END, INPUT_START,AUTO,DIRECTION_UP } from '../const';
 import Recognizer from './Base';
 
 export default class PressRecognizer extends Recognizer {
@@ -18,7 +18,7 @@ export default class PressRecognizer extends Recognizer {
     };
 
     getTouchAction(): string[] {
-        return ['auto'];
+        return [AUTO];
     };
 
     recognize(computed: AnyTouchEvent): void {
@@ -41,7 +41,7 @@ export default class PressRecognizer extends Recognizer {
         // 1. end阶段
         // 2. 已识别
         else if (INPUT_END === eventType && STATUS_RECOGNIZED === this.status) {
-            this.emit(`${this.options.name}up`, computed);
+            this.emit(`${this.options.name}${DIRECTION_UP}`, computed);
         }
 
         // 一旦不满足必要条件, 触发失败

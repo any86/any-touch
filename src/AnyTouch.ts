@@ -18,7 +18,7 @@
  */
 import { AnyTouchEvent, SupportEvent, CSSPreventMap } from './interface';
 import AnyEvent from 'any-event';
-import { SUPPORT_TOUCH, NONE } from './const';
+import { TOUCH, MOUSE, SUPPORT_TOUCH, NONE, AUTO, TOUCH_START, TOUCH_MOVE, TOUCH_CANCEL, TOUCH_END, MOUSE_DOWN, MOUSE_MOVE, MOUSE_UP, COMPUTE } from './const';
 import InputManage from './InputManage';
 import computeTouchAction from './utils/computeTouchAction';
 import Store from './Store';
@@ -90,7 +90,7 @@ export class AnyTouch {
      */
     constructor(el?: HTMLElement, options?: Options) {
         this.default = {
-            touchAction: 'compute',
+            touchAction: COMPUTE,
             hasDomEvents: true,
             isPreventDefault: true,
             syncToAttr: false,
@@ -108,7 +108,7 @@ export class AnyTouch {
         if (undefined !== el) this.el = el;
         this.$store = new Store();
         this.inputManage = new InputManage({ $store: this.$store });
-        this.touchDevice = SUPPORT_TOUCH ? 'touch' : 'mouse';
+        this.touchDevice = SUPPORT_TOUCH ? TOUCH : MOUSE;
         this.options = { ...this.default, ...options };
         // eventEmitter
         this.eventEmitter = new AnyEvent();
@@ -155,14 +155,14 @@ export class AnyTouch {
      * @param {HTMLElement} 目标元素 
      */
     updateTouchAction() {
-        if ('compute' === this.options.touchAction) {
+        if (COMPUTE === this.options.touchAction) {
             let touchActions = [];
             for (let recognizer of this.recognizers) {
                 touchActions.push(...recognizer.getTouchAction());
             };
             this.el!.style.touchAction = computeTouchAction(touchActions);
         } else {
-            this.el!.style.touchAction = this.options.touchAction || 'auto';
+            this.el!.style.touchAction = this.options.touchAction || AUTO;
         }
     };
 
@@ -219,8 +219,8 @@ export class AnyTouch {
         const boundInputListener = <EventListener>this.inputListener.bind(this);
 
         // Touch
-        if ('touch' === this.touchDevice) {
-            const events = ['touchstart', 'touchmove', 'touchend', 'touchcancel'];
+        if (TOUCH === this.touchDevice) {
+            const events = [TOUCH_START,TOUCH_MOVE,TOUCH_END,TOUCH_CANCEL];
             events.forEach(eventName => {
                 el.addEventListener(eventName, boundInputListener);
             });
@@ -234,14 +234,14 @@ export class AnyTouch {
         }
         // Mouse
         else {
-            el.addEventListener('mousedown', boundInputListener);
-            window.addEventListener('mousemove', boundInputListener);
-            window.addEventListener('mouseup', boundInputListener);
+            el.addEventListener(MOUSE_DOWN, boundInputListener);
+            window.addEventListener(MOUSE_MOVE, boundInputListener);
+            window.addEventListener(MOUSE_UP, boundInputListener);
             return {
                 _unbindEl: () => {
-                    el.removeEventListener('mousedown', boundInputListener);
-                    window.removeEventListener('mousemove', boundInputListener);
-                    window.removeEventListener('mouseup', boundInputListener);
+                    el.removeEventListener(MOUSE_DOWN, boundInputListener);
+                    window.removeEventListener(MOUSE_MOVE, boundInputListener);
+                    window.removeEventListener(MOUSE_UP, boundInputListener);
                 }
             };
         }

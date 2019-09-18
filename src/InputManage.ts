@@ -1,6 +1,7 @@
 import { Input, SupportEvent, InputRecord, AnyTouchEvent,Store } from './interface';
 import InputFactory from './input';
 import compute from './compute/index';
+import { INPUT_START} from './const';
 export default class {
     // 起点(单点|多点)
     startInput?: Input;
@@ -45,7 +46,7 @@ export default class {
         // 获取上一点
         this.prevInput = this.activeInput;
 
-        if ('start' === eventType) {
+        if (INPUT_START === eventType) {
             // 起点(单点|多点)
             if (input.isStart) {
                 this.startInput = input;

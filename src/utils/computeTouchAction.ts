@@ -1,18 +1,19 @@
+import { PAN_X,PAN_Y, NONE,AUTO, MANIPULATION } from '../const';
 export default (touchActions: string[]): string => {
     // 表示优先级
     const TOUCH_ACTION_PRIORITY: { [propName: string]: number } = {
-        auto: 0,
-        manipulation: 1,
-        'pan-x': 2,
-        'pan-y': 2,
-        none: 3
+        [AUTO]: 0,
+        [MANIPULATION]: 1,
+        [PAN_X]: 2,
+        [PAN_Y]: 2,
+        [NONE]: 3
     };
 
     // 最大优先级
-    const MAX_PRIORITY = TOUCH_ACTION_PRIORITY['none'];
+    const MAX_PRIORITY = TOUCH_ACTION_PRIORITY[NONE];
 
     // 最终的有效的touch-action会放在数组中
-    let touchActionCSSArray: string[] = ['auto'];
+    let touchActionCSSArray: string[] = [AUTO];
     // 上一步计算的touch-action的优先级
     let prevPriority = 0;
     for (let touchAction of touchActions) {

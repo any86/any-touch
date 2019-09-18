@@ -1,4 +1,4 @@
-import { CLIENT_X, CLIENT_Y } from './const';
+import { CLIENT_X, CLIENT_Y,DIRECTION_UP,DIRECTION_DOWN,DIRECTION_RIGHT,DIRECTION_LEFT, NONE } from './const';
 import { directionString, Point,Vector } from './interface';
 
 /**
@@ -87,10 +87,10 @@ export const getCenter = (points: { clientX: number, clientY: number }[]): Point
  */
 export const getDirection = (x: number, y: number): directionString => {
     if (x === y) {
-        return 'none';
+        return NONE;
     } else if (Math.abs(x) > Math.abs(y)) {
-        return 0 < x ? 'right' : 'left';
+        return 0 < x ? DIRECTION_RIGHT : DIRECTION_LEFT;
     } else {
-        return 0 < y ? 'down' : 'up';
+        return 0 < y ? DIRECTION_DOWN : DIRECTION_UP;
     }
 };

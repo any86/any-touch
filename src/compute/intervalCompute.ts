@@ -3,7 +3,7 @@
 // 让end阶段读取上一步的计算数据, 比如方向, 速率等...
 // 防止快速滑动到慢速滑动的手势识别成swipe
 import { Input,directionString } from '../interface';
-import { COMPUTE_INTERVAL, INPUT_CANCEL, INPUT_END } from '../const';
+import { COMPUTE_INTERVAL, NONE,INPUT_CANCEL, INPUT_END } from '../const';
 import { getDirection } from '../vector';
 import Store from '../Store';
 
@@ -18,7 +18,7 @@ export default ({ prevInput, input }: { prevInput?: Input, input?: Input },$stor
     let speedY = 0;
 
     // 方向
-    let direction: directionString = 'none';
+    let direction: directionString = NONE;
 
     // 点击鼠标左键, 会出现undefined
     if (undefined !== input) {

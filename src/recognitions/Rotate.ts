@@ -1,4 +1,5 @@
 import Base from './Base';
+import {NONE} from '../const';
 import { AnyTouchEvent } from '../interface';
 export default class RotateRecognizer extends Base {
     static DEFAULT_OPTIONS = {
@@ -12,7 +13,7 @@ export default class RotateRecognizer extends Base {
     };
 
     getTouchAction() {
-        return ['none'];
+        return [NONE];
     };
 
     /**

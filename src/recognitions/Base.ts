@@ -1,5 +1,5 @@
 import { AnyTouchEvent, directionString } from '../interface';
-import { INPUT_CANCEL, INPUT_END, INPUT_MOVE } from '../const';
+import {INPUT_CANCEL, INPUT_END, INPUT_MOVE,DIRECTION_X, DIRECTION_Y,NONE } from '../const';
 import {
     STATUS_POSSIBLE,
     STATUS_START,
@@ -145,7 +145,7 @@ export default abstract class Recognizer {
     public isOnlyHorizontal() {
         let isOnlyHorizontal = true;
         for (let direction of this.options.directions) {
-            isOnlyHorizontal = -1 < ['left', 'right'].indexOf(direction);
+            isOnlyHorizontal = -1 < DIRECTION_X.indexOf(direction);
             if (!isOnlyHorizontal) {
                 return false;
             }
@@ -159,7 +159,7 @@ export default abstract class Recognizer {
     public isOnlyVertical() {
         let isOnlyVertical = true;
         for (let direction of this.options.directions) {
-            isOnlyVertical = -1 < ['up', 'down'].indexOf(direction);
+            isOnlyVertical = -1 < DIRECTION_Y.indexOf(direction);
             if (!isOnlyVertical) {
                 return false;
             }
@@ -172,7 +172,7 @@ export default abstract class Recognizer {
      * @param {String} 方向 
      */
     public isVaildDirection(direction?: directionString) {
-        return -1 !== this.options.directions.indexOf(direction) || 'none' === direction;
+        return -1 !== this.options.directions.indexOf(direction) || NONE === direction;
     };
 
     public flow(isVaild: boolean, activeStatus: string, touchDevice: string): string {
@@ -255,7 +255,7 @@ export default abstract class Recognizer {
         this.status = this.flow(isVaild, this.status, eventType);
 
         if (STATUS_CANCELLED === eventType) {
-            this.emit(this.options.name + 'cancel', computed);
+            this.emit(this.options.name + INPUT_CANCEL, computed);
             return;
         }
 

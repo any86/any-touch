@@ -11,17 +11,34 @@ export const SUPPORT_TOUCH = IS_WX || ('ontouchstart' in window);
 // 是否是移动设备
 // export const SUPPORT_ONLY_TOUCH = SUPPORT_TOUCH && IS_MOBILE;
 
-// 方向
-export const DIRECTION_NONE = 1; // 0000 0001
-export const DIRECTION_LEFT = 2; //  0000 0010
-export const DIRECTION_RIGHT = 4; // 0000 0100 
-export const DIRECTION_UP = 8; // 0000 1000
-export const DIRECTION_DOWN = 16; // 0001 0000
+// // 方向
+// export const DIRECTION_NONE = 1; // 0000 0001
+// export const DIRECTION_LEFT = 2; //  0000 0010
+// export const DIRECTION_RIGHT = 4; // 0000 0100 
+// export const DIRECTION_UP = 8; // 0000 1000
+// export const DIRECTION_DOWN = 16; // 0001 0000
 
-// 位运算 求值 对上上面的4个方向可以简单理解为"+"
-export const DIRECTION_HORIZONTAL = DIRECTION_LEFT | DIRECTION_RIGHT; // 6
-export const DIRECTION_VERTICAL = DIRECTION_UP | DIRECTION_DOWN; // 24
-export const DIRECTION_ALL = DIRECTION_HORIZONTAL | DIRECTION_VERTICAL; // 30
+// // 位运算 求值 对上上面的4个方向可以简单理解为"+"
+// export const DIRECTION_HORIZONTAL = DIRECTION_LEFT | DIRECTION_RIGHT; // 6
+// export const DIRECTION_VERTICAL = DIRECTION_UP | DIRECTION_DOWN; // 24
+// export const DIRECTION_ALL = DIRECTION_HORIZONTAL | DIRECTION_VERTICAL; // 30
+
+export const AUTO = 'auto';
+export const NONE = 'none';
+export const MANIPULATION = 'manipulation'
+// 方向
+export const DIRECTION_LEFT = 'left';
+export const DIRECTION_RIGHT = 'right';
+export const DIRECTION_UP = 'up';
+export const DIRECTION_DOWN = 'down';
+export const DIRECTION_X = [DIRECTION_LEFT, DIRECTION_RIGHT];
+export const DIRECTION_Y = [DIRECTION_UP, DIRECTION_DOWN];
+export const DIRECTION_ALL = [DIRECTION_LEFT, DIRECTION_RIGHT,DIRECTION_UP, DIRECTION_DOWN];
+
+
+export const PAN_X = 'pan-x';
+export const PAN_Y = 'pan-y';
+export const COMPUTE = 'compute';
 
 // 计算触发时间间隔, 防止事件触发就一直计算
 export const COMPUTE_INTERVAL = 16;
@@ -47,5 +64,16 @@ export const INPUT_MOVE = 'move';
 export const INPUT_CANCEL = 'cancel';
 export const INPUT_END = 'end';
 
+export const TOUCH = 'touch';
+export const MOUSE = 'mouse';
 
-export const NONE = 'none';
+export const TOUCH_START = 'touchstart';
+export const TOUCH_MOVE = 'touchmove';
+export const TOUCH_END = 'touchend';
+export const TOUCH_CANCEL = 'touchcancel';
+
+export const MOUSE_UP = 'mouseup';
+export const MOUSE_MOVE = 'mousemove';
+export const MOUSE_DOWN = 'mousedown';
+
+export const WRONG_DIRECTION = 'wrong direction!';
