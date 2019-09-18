@@ -7,7 +7,7 @@
 [downloads-image]: https://badgen.net/npm/dt/any-touch
 [downloads-url]: https://npmjs.org/package/any-touch
 
-:wave: 一个手势库, 支持 / 鼠标 / touch/ 微信小程序 / vue
+:wave: 一个手势库, 支持 / 鼠标 / touch/ **微信小程序** / **vue**
 
 ## 演示
 
