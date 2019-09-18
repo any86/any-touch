@@ -2,20 +2,20 @@ import TouchSimulator from './utils/TouchSimulator';
 import sleep from './utils/sleep';
 import AnyTouch from '../src/main'
 
-test('用useEvent直接传入实践对象', async (done) => {
+test('用catchEvent直接传入实践对象', async (done) => {
     const el = document.createElement('div');
     const at = new AnyTouch();
 
     el.addEventListener('touchstart', ev=>{
-        at.useEvent(ev);
+        at.catchEvent(ev);
     });
 
     el.addEventListener('touchmove', ev=>{
-        at.useEvent(ev);
+        at.catchEvent(ev);
     });
 
     el.addEventListener('touchend', ev=>{
-        at.useEvent(ev);
+        at.catchEvent(ev);
     });    
 
     at.on('tap', (e: any) => {

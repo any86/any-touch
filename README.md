@@ -107,37 +107,26 @@ at.on("tap", ev => {
 | target           | `EventTarget` | 绑定事件的元素                                                           |
 | currentTarget    | `EventTarget` | 实际触发绑定事件的元素                                                   |
 | timestamp        | `Number`      | **当前时间**                                                             |
-| **nativeEvent**  | `TouchEvent`  | MouseEvent`|原生事件对象                                                 |
+| **nativeEvent**  | `TouchEvent`  | MocatchEvent`|原生事件对象                                                 |
 
 ## 支持微信小程序
 
-由于微信小程序中没有 dom 元素的概念, 所以我们需要通过`useEvent`方法手动接收 touch 事件的事件对象来进行识别!
+由于微信小程序中没有 dom 元素的概念, 所以我们需要通过`catchEvent`方法手动接收 touch 事件的事件对象来进行识别!
 
 ```xml
-<view @touchstart="touchstartHandler" @touchmove="touchmoveHandler" @touchend="touchendHandler"></view>
+<view @touchstart="at.catchEvent" @touchmove="at.catchEvent" @touchend="at.catchEvent"></view>
 ```
 
 ```javascript
-const at = new AnyTouch();
-{
+{ 
+    data:{
+      at:new AnyTouch()
+    },
+
     onload(){
         at.on('pan', ev=>{
             // 拖拽
         });
-    },
-
-    methods:{
-       touchstartHandler(ev){
-           at.useEvent(ev);
-       },
-
-       touchmoveHandler(ev){
-           at.useEvent(ev);
-       },
-
-       touchendHandler(ev){
-           at.useEvent(ev);
-       }
     }
 }
 ```

@@ -252,7 +252,7 @@ export class AnyTouch {
      * 接收touch事件的event对象
      * @param {SupportEvent} 事件对象
      */
-    useEvent(event: SupportEvent) {
+    catchEvent(event: SupportEvent) {
         this.inputListener(event);
     };
 

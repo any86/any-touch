@@ -30,7 +30,7 @@ eventType可以理解为输入状态, 如touchstart/mousedown对应**start**, to
 发生变化的触点信息, 是个数组, 存储着**上一次触点相对当前触点发生变化**的触点(初看有些绕, 如不明可留言.).
 
 #### nativeEvent
-如果是touch设备, 那么对应touchEvent, 鼠标对应MouseEvent.
+如果是touch设备, 那么对应touchEvent, 鼠标对应MocatchEvent.
 
 **处理touchEvent**
 ```javascript
@@ -46,12 +46,12 @@ export default (event: TouchEvent): any => {
     };
 }; 
 ```
-**处理mouseEvent**
+**处理mocatchEvent**
 ```javascript
 let prevPoints: { clientX: number, clientY: number }[];
 let isPressed = false;
-// 默认MouseEvent中对type声明仅为string
-export default (event: MouseEvent): BaseInput | void => {
+// 默认MocatchEvent中对type声明仅为string
+export default (event: MocatchEvent): BaseInput | void => {
     let { clientX, clientY, type, button } = event;
     const changedPoints = prevPoints || [{ clientX, clientY }];
 

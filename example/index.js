@@ -46,15 +46,15 @@ new Vue({
 
         // el.addEventListener('touchstart', ev=>{
         //     ev.preventDefault();
-        //     anyTouch.useEvent(ev);
+        //     anyTouch.catchEvent(ev);
         // })
 
         // el.addEventListener('touchmove', ev=>{
-        //     anyTouch.useEvent(ev);
+        //     anyTouch.catchEvent(ev);
         // })
 
         // el.addEventListener('touchend', ev=>{
-        //     anyTouch.useEvent(ev);
+        //     anyTouch.catchEvent(ev);
         // })
 
 
