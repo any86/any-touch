@@ -13,19 +13,19 @@
 
 ![1568267671](https://user-images.githubusercontent.com/8264787/64757535-fc6da200-d564-11e9-9bf6-1ac40e08b8b7.png)
 
-[链接](https://any86.github.io/any-touch/example/)
+[直接访问](https://any86.github.io/any-touch/example/)
 
 ## 直达
 
 [快速开始](#快速开始)
 
-[:iphone:支持微信小程序](#支持微信小程序)
+[:iphone: 支持微信小程序](#支持微信小程序)
 
-[支持vue指令](#支持vue指令)
+[:rocket: 支持vue指令](#支持vue指令)
 
-[更多实例](#更多实例)
+[:fire: 更多实例](#更多实例)
 
-[API](docs/API.md)
+[:zap: API](docs/API.md)
 
 [:heavy_exclamation_mark:不要用 alert 调试](#不要用alert调试)
 
@@ -157,7 +157,7 @@ Vue.use(AnyTouch.vTouch);
 ```
 此时`div`上可以通过`v-on`进行手势的绑定,和绑定 click 等原生事件一样.
 
-### 导出实例, 进行更多设置
+##### :whale: 导出实例, 进行更多设置
 
 ```html
 <!-- xxx.vue -->
