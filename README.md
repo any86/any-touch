@@ -7,7 +7,11 @@
 [downloads-image]: https://badgen.net/npm/dt/any-touch
 [downloads-url]: https://npmjs.org/package/any-touch
 
-:wave: 一个手势库, 支持 / 鼠标 / touch/ 微信小程序 / vue
+:wave: 一个基于typescript实现的手势库.
+- 支持更多设备: PC端 / 移动端 / [微信小程序](#支持微信小程序).
+- 支持手势更全面: **tap(点击)** / **press(按)** / **pan(拖拽)** / **pinch(捏合)** / **rotate(旋转)** 5大类手势.
+- 更简单: 支持 [vue指令](#支持vue指令).
+- 更放心: 代码测试覆盖率**100%**.
 
 ## 演示
 
@@ -17,19 +21,20 @@
 
 ## 直达
 
-[快速开始](#快速开始)
+[:zap: 快速开始](#快速开始)
+
+[:alien: 名词解释](docs/CONCEPT.md) 
 
 [:iphone: 支持微信小程序](#支持微信小程序)
 
-[:rocket: 支持vue指令](#支持vue指令)
+[:seedling: 支持vue指令](#支持vue指令)
 
-[:fire: 更多实例](#更多实例)
+[:rocket: 更多应用](#更多应用)
 
-[:zap: API](docs/API.md)
+[:bulb: API](docs/API.md)
 
 [:lollipop: 事件对象(event)](docs/EVENT.md)
-
-[:heavy_exclamation_mark:不要用 alert 调试](#不要用alert调试)
+[:heavy_exclamation_mark::heavy_exclamation_mark::heavy_exclamation_mark: 不要用 alert 调试](#不要用alert调试)
 ## 安装
 
 ```javascript
@@ -55,28 +60,13 @@ at.on("tap", ev => {
 });
 ```
 
-## 支持哪些手势?
-
-#### tap(点击)
-
-还支持: **doubletap**(双击), 以及可以自定义任意多击.
-
-#### press(按)
-
-还支持: **pressup**(按后松手)
-
-#### pan(拖拽)
-
-还支持衍生事件: **panstart**(拖拽开始)/**panmove**(拖拽中)/**panend**(拖拽结束)/**panleft**(向左拖拽)/**panright**/**panup**/**pandown**
-
-#### pinch(缩放)
-
-还支持: **pinchstart**(缩放开始)/**pinchmovet**(缩放中)/**pinchend**(缩放结束)/**pinchin**(缩小)/**pinchout**(放大)
-
-#### rotate(旋转)
-
-还支持: **rotatestart**(旋转开始)/**rotatemove**(旋转中)/**rotateend**(旋转结束)
-                                            |
+## 更多手势
+根据手势的运动方向和状态我们还支持panstart / panup / pinchin / pinchout / pressup等更多的手势事件.
+```javascript
+// 旋转中触发
+at.on('roatemove', ev=>{});
+```
+[更多手势说明](/docs/GESTURE.md)
 
 ## 支持微信小程序
 
@@ -102,7 +92,7 @@ at.on("tap", ev => {
 
 ## 支持vue指令
 
-AnyTouch 上的 vTouch 是一个 vue 指令, 初始化后可以在元素上添加`v-touch`进行绑定.
+`AnyTouch.vTouch` 是一个vue指令, 对应`v-touch`指令.
 
 ```javascript
 // main.js
@@ -126,14 +116,12 @@ Vue.use(AnyTouch.vTouch);
 ```
 此时`div`上可以通过`v-on`进行手势的绑定,和绑定 click 等原生事件一样.
 
-##### :whale: 导出实例, 进行更多设置
-
+##### :bulb: v-touch 高级设置
+我们可以通过v-touch导入AnyTouch的实例, 然后进行高级设置.
 ```html
 <!-- xxx.vue -->
 <div v-touch="importAT" @tap="tap">touch</div>
 ```
-
-通过`v-touch`我们还可以导出`AnyTouch`的实例.
 
 ```javascript
 export default {
@@ -149,7 +137,7 @@ export default {
 
 [示例](https://any86.github.io/any-touch/example/vue/)
 
-## 更多实例
+## 更多应用
 
 [基础](https://codepen.io/russell2015/pen/rRmQaw#)
 
@@ -157,21 +145,11 @@ export default {
 
 [全部手势展示](https://any86.github.io/any-touch/example/)
 
-[drawer 效果](https://codepen.io/russell2015/pen/jJRbgp?editors=0010)
-
-## 概念
-
-### 识别器
-
-**识别器**就是识别如下手势的代码逻辑: 点击(tap) | 拖拽(pan) | 划(swipe) | 捏合缩放(pinch) | 旋转(rotate).
-
-### requireFailure
-
-如果你需要某 2 个手势的触发条件是互斥的, 那么就需要通过 requireFailure 来标记他们, 当一个"识别失败"另一个才能触发, 如[单击和双击](#requireFailure)就是互斥关系的 2 个手势.
+[做一个drawer(抽屉)插件](https://codepen.io/russell2015/pen/jJRbgp?editors=0010)
 
 ## 不要用alert调试
 
-在安卓手机的真机上, 如果`touchstart`或`touchmove`阶段触发了`alert`, 会出现后续的`touchmove/touchend`不触发的 bug. 所以请大家务必避免在手势的事件回调中使用`alert`.
+:heavy_exclamation_mark::heavy_exclamation_mark::heavy_exclamation_mark: 在安卓手机的真机上, 如果`touchstart`或`touchmove`阶段触发了`alert`, 会出现后续的`touchmove/touchend`不触发的 bug. 所以请大家务必避免在手势的事件回调中使用`alert`.
 [测试代码](https://codepen.io/russell2015/pen/vYBjVNe)
 
 如果仅仅是了在移动端调试, 请使用腾讯的[vconsole](https://github.com/Tencent/vConsole)
