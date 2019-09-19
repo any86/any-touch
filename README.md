@@ -34,6 +34,7 @@
 [:bulb: API](docs/API.md)
 
 [:lollipop: 事件对象(event)](docs/EVENT.md)
+
 [:heavy_exclamation_mark::heavy_exclamation_mark::heavy_exclamation_mark: 不要用 alert 调试](#不要用alert调试)
 ## 安装
 
