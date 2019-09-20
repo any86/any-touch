@@ -4,7 +4,7 @@
  */
 export default class <T extends { new(...arys: any): any }> {
     // 存储映射关系
-    stock: { el: HTMLElement, instance: InstanceType<T> }[] = [];
+    stock: { el: HTMLElement, instance: InstanceType<T> }[];
     ClassObject: T;
 
     constructor(ClassObject: T) {
