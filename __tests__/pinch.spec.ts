@@ -2,9 +2,7 @@ import pinchSimulator from './utils/Gesture/pinchSimulator';
 import sleep from './utils/sleep';
 import AnyTouch from '../src/main'
 const el = document.createElement('div');
-
 const at = new AnyTouch(el);
-
 
 test('pinch缩放计算是否正确?', (done) => {
     let index = 0;

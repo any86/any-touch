@@ -18,6 +18,7 @@ export default class PanRecognizer extends Recognizer {
     getTouchAction() {
         let touchActions = [AUTO];
         let { hasHorizontal, hasVertical } = getHV(this.options.directions);
+        // console.log(this.options.directions, hasHorizontal, hasVertical);
         if (hasHorizontal && hasVertical) {
             touchActions = [NONE];
         } else if (!hasHorizontal && hasVertical) {

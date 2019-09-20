@@ -81,6 +81,8 @@ export class AnyTouch {
 
     $store: Store;
 
+    _root: any;
+
     // 是否阻止后面的识别器运行
     private _isStopped: boolean;
 
@@ -115,19 +117,22 @@ export class AnyTouch {
         this._isStopped = false;
         // 识别器
         // 注入当前方法和属性, 方便在识别器中调用类上的方法和属性
+        // fix: 不注入this, 因为微信下回报错, 提示对象里有循环引用
+        const root = { eventEmitter: this.eventEmitter, options: this.options, el, update: this.update.bind(this) };
+        this._root = root;
         this.recognizers = [
-            new Rotate().$injectRoot(this),
-            new Pinch().$injectRoot(this),
-            new Pan().$injectRoot(this),
-            new Swipe().$injectRoot(this),
-            new Tap().$injectRoot(this),
+            new Rotate().$injectRoot(root),
+            new Pinch().$injectRoot(root),
+            new Pan().$injectRoot(root),
+            new Swipe().$injectRoot(root),
+            new Tap().$injectRoot(root),
             new Tap({
                 name: 'doubletap',
                 pointLength: 1,
                 tapTimes: 2,
                 disabled: true
-            }).$injectRoot(this),
-            new Press().$injectRoot(this),
+            }).$injectRoot(root),
+            new Press().$injectRoot(root),
         ];
         // 默认单击需要双击识别失败后触发
         this.recognizers[4].requireFailure(this.recognizers[5]);
@@ -155,6 +160,7 @@ export class AnyTouch {
      * @param {HTMLElement} 目标元素 
      */
     updateTouchAction() {
+        // console.warn(this.options.touchAction);
         if (COMPUTE === this.options.touchAction) {
             let touchActions = [];
             for (let recognizer of this.recognizers) {
@@ -220,7 +226,7 @@ export class AnyTouch {
 
         // Touch
         if (TOUCH === this.touchDevice) {
-            const events = [TOUCH_START,TOUCH_MOVE,TOUCH_END,TOUCH_CANCEL];
+            const events = [TOUCH_START, TOUCH_MOVE, TOUCH_END, TOUCH_CANCEL];
             events.forEach(eventName => {
                 el.addEventListener(eventName, boundInputListener);
             });
@@ -261,7 +267,7 @@ export class AnyTouch {
      * @param recognizer 识别器
      */
     add(recognizer: Recognizer): void {
-        recognizer.$injectRoot(this);
+        recognizer.$injectRoot(this._root);
         const hasSameName = this.recognizers.some((theRecognizer: Recognizer) => recognizer.name === theRecognizer.name);
         if (hasSameName) {
             this.eventEmitter.emit('error', { code: 1, message: `${recognizer.name}识别器已经存在!` })

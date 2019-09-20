@@ -66,7 +66,6 @@ export default abstract class Recognizer {
     public emit(type: string, payload: any) {
         payload.type = type;
         this.$root.eventEmitter.emit(type, payload);
-
         if (undefined !== this.$root.el) {
             if (this.$root.options.syncToAttr) {
                 this.$root.el.setAttribute('at-gesture', type);
