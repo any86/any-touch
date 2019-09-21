@@ -74,19 +74,28 @@ at.on('roatemove', ev=>{});
 由于微信小程序中没有 dom 元素的概念, 所以我们需要通过`catchEvent`方法手动接收 touch 事件的事件对象来进行识别!
 
 ```xml
-<view @touchstart="at.catchEvent" @touchmove="at.catchEvent" @touchend="at.catchEvent"></view>
+<view @touchstart="touchstartHandler" @touchmove="touchmoveHandler" @touchend="touchendHandler"></view>
 ```
 
 ```javascript
+cosnt at = new AnyTouch()
 { 
-    data:{
-      at:new AnyTouch()
-    },
-
     onload(){
         at.on('pan', ev=>{
             // 拖拽
         });
+    },
+    
+    methods: {
+      touchstartHandler(ev){
+        at.catchEvent(ev);
+      },
+      touchmoveHandler(ev){
+        at.catchEvent(ev);
+      },
+      touchendHandler(ev){
+        at.catchEvent(ev);
+      }
     }
 }
 ```
