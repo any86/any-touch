@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.4.9"></a>
+## [0.4.9](https://github.com/any86/any-touch/compare/v0.4.8...v0.4.9) (2019-09-21)
+
+
+### Bug Fixes
+
+* 修复微信下因为因为把AnyTouch的实例传入识别器而造成的JSON解析错误 ([35229af](https://github.com/any86/any-touch/commit/35229af))
+* 增加touches作为默认值, 解决wx下没有targetTouches ([64ea2f4](https://github.com/any86/any-touch/commit/64ea2f4))
+
+
+
 <a name="0.4.8"></a>
 ## [0.4.8](https://github.com/any86/any-touch/compare/v0.4.7...v0.4.8) (2019-09-18)
 
