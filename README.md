@@ -81,8 +81,8 @@ at.on('roatemove', ev=>{});
 cosnt at = new AnyTouch()
 { 
     onload(){
-        at.on('pan', ev=>{
-            // 拖拽
+        at.on('pinch', ev=>{
+            // 缩放
         });
     },
     
