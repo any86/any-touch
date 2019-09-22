@@ -5,8 +5,9 @@ import AnyTouch from '../src/main'
 test('仅有tap识别, 事件是否触发', async (done) => {
     const el = document.createElement('div');
     const at = new AnyTouch(el);
+    const mockCallback = jest.fn();
     at.on('tap', (e: any) => {
-        expect(e.type).toBe('tap');
+        mockCallback(e.type);
     });
     const ts = new TouchSimulator(el);
     // 模拟touch触碰
@@ -14,19 +15,20 @@ test('仅有tap识别, 事件是否触发', async (done) => {
     await sleep(100);
     ts.dispatchTouchEnd();
     await sleep(100);
+    expect(mockCallback.mock.calls[0][0]).toBe(`tap`);
     done();
 });
 
-test('tap与doubletap之间的requireFailure是否生效?', async (done) => {
+test(`模拟doubletap` , async (done) => {
     const el = document.createElement('div');
     const at = new AnyTouch(el);
+    const mockCallback = jest.fn();
     const tap2 = at.get('doubletap');
     if(undefined === tap2) return
     tap2.disabled = false;
 
     at.on('doubletap', (e) => {
-        expect(e.type).toBe('doubletap');
-        done();
+        mockCallback(e.type);
     });
 
     const ts = new TouchSimulator(el);
@@ -37,9 +39,11 @@ test('tap与doubletap之间的requireFailure是否生效?', async (done) => {
     await sleep(10);
     ts.dispatchTouchStart([{ x: 0, y: 0 }]);
     ts.dispatchTouchEnd();
+    await sleep(10);
+    // console.log(mockCallback.mock.calls);
+    expect(mockCallback.mock.calls[0][0]).toBe(`doubletap`);
+    done();
 });
-
-
 
 test('连续点击3下, 第三下, 不符合连击要求, 触发1次双击且触发一次单击', async(done)=>{
     const mockTapCallback = jest.fn();

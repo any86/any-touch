@@ -7,19 +7,15 @@ const MIN_PRESS_TIME = 251;
 
 test('press|pressup事件是否正确?', async(done) => {
     const at = new AnyTouch(el);
-    let lastTime: number;
-    let hasPress = false;
-    let hasPressUp = false;
+    const mockCallback = jest.fn();
+
     
     at.on('press', ({ type, timestamp }) => {
-        lastTime = timestamp;
-        hasPress = true;
+        mockCallback(type,timestamp);
     });
 
     at.on('pressup', ({ type, timestamp }) => {
-        // expect(timestamp - lastTime).toBeGreaterThanOrEqual(MIN_PRESS_TIME);
-        hasPressUp = true;
-        
+        mockCallback(type,timestamp);
     });
 
     // 模拟touch触碰
@@ -29,8 +25,8 @@ test('press|pressup事件是否正确?', async(done) => {
     await sleep(MIN_PRESS_TIME);
     ts.dispatchTouchEnd();
     await sleep(100);
-    expect(hasPress).toBeTruthy();
-    expect(hasPressUp).toBeTruthy();
+    expect(mockCallback.mock.calls[0][0]).toBe(`press`);
+    expect(mockCallback.mock.calls[1][0]).toBe(`pressup`);
     done();
 });
 
