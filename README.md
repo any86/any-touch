@@ -9,7 +9,7 @@
 
 :wave: 一个基于typescript实现的手势库.
 - 支持更多设备: PC端 / 移动端 / [微信小程序](#支持微信小程序).
-- 支持手势更全面: **tap(点击)** / **press(按)** / **pan(拖拽)** / **pinch(捏合)** / **rotate(旋转)** 5大类手势.
+- 支持手势更全面: **tap**(点击) / **press**(按) / **pan**(拖拽) / **swipe**(划) / **pinch**(捏合) / **rotate**(旋转) 6大类手势.
 - 更简单: 支持 [vue指令](#支持vue指令).
 - 更放心: 代码测试覆盖率**100%**.
 
@@ -81,8 +81,8 @@ at.on('roatemove', ev=>{});
 cosnt at = new AnyTouch()
 { 
     onload(){
-        at.on('pan', ev=>{
-            // 拖拽
+        at.on('pinch', ev=>{
+            // 缩放
         });
     },
     
