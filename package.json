@@ -1,11 +1,11 @@
 {
   "name": "any-touch",
-  "version": "0.4.9",
+  "version": "0.5.0",
   "description": "一个手势库",
   "unpkg": "dist/AnyTouch.umd.js",
   "jsdelivr": "dist/AnyTouch.umd.js",
   "main": "dist/AnyTouch.common.js",
-  "module": "dist/AnyTouch.es.js",
+  "module": "dist/AnyTouch.esm.js",
   "types": "types/main.d.ts",
   "files": [
     "dist/**/*",

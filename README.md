@@ -46,6 +46,9 @@ npm i -S any-touch
 
 ```
 https://unpkg.com/any-touch/dist/AnyTouch.umd.min.js
+
+// vue指令插件
+https://unpkg.com/any-touch/dist/vTouch.umd.min.js
 ```
 
 ## 快速开始
@@ -105,8 +108,8 @@ cosnt at = new AnyTouch()
 `AnyTouch.vTouch` 是一个vue指令, 对应`v-touch`指令.
 
 ```javascript
-// main.js
-Vue.use(AnyTouch.vTouch);
+import vTouch from 'any-touch/dist/vTouch.common'
+Vue.use(vTouch);
 ```
 
 ```html

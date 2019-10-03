@@ -1,6 +1,5 @@
 // 注意: 由于vue指令没办法对指令进行优先级设置, 所以指令版本并不能实现AnyTouch所有的功能,
 // 比如新建手势. 所以指令版只支持tap/doubletap/pan/swipe/rotate/pinch等默认手势
-import { AnyTouchEvent } from '../interface';
 import { VueConstructor } from 'vue/types/vue';
 import { DirectiveBinding } from 'vue/types/options';
 import InstanceManage from './InstanceManage';
@@ -8,6 +7,7 @@ import { AnyTouch } from '../AnyTouch';
 
 // 管理实例和元素的映射关系
 const iManage = new InstanceManage(AnyTouch);
+
 // 导出指令
 const plugin = {
     install(Vue: VueConstructor) {

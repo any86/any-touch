@@ -1,3 +1,4 @@
+const path = require('path');
 // 为了让rollup识别commonjs类型的包,默认只支持导入ES6
 const commonjs = require('rollup-plugin-commonjs');
 // 为了支持import xx from 'xxx'
@@ -10,55 +11,59 @@ const json = require('rollup-plugin-json');
 const replace = require('rollup-plugin-replace');
 // 读取package.json
 const pkg = require('../package.json');
-// 压缩代码
-const {
-    terser
-} = require('rollup-plugin-terser');
 // 代码生成sourcemaps
 const sourceMaps = require('rollup-plugin-sourcemaps');
-
-
 
 // 代码头
 const banner =
     `/*!
- * AnyTouch.js v${pkg.version}
+ * AnyTouch.js vue directive plugin  v${pkg.version}
  * (c) 2018-${new Date().getFullYear()} Russell
  * https://github.com/any86/any-touch
  * Released under the MIT License.
  */`
-
 module.exports = {
     output: [{
         format: 'cjs',
         // 生成的文件名和路径
         // package.json的main字段, 也就是模块的入口文件
-        file: pkg.main,
+        file: 'dist/vTouch.common.js',
         banner,
-        sourcemap: true
+        sourcemap: true,
+        paths: (id) => {
+            if (path.resolve(__dirname, '../src/AnyTouch') === id) {
+                return './AnyTouch.commmon'
+            }
+        }
     },
     {
         format: 'es',
-        file: pkg.module,
+        file: 'dist/vTouch.esm.js',
         banner,
-        sourcemap: true
+        sourcemap: true,
+        paths: (id) => {
+            if (path.resolve(__dirname, '../src/AnyTouch') === id) {
+                return './AnyTouch.es'
+            }
+        }
     },
     {
         format: 'umd',
-        name: 'AnyTouch',
-        file: 'dist/AnyTouch.umd.js',
+        file: 'dist/vTouch.umd.js',
+        name:'vTouch',
+        globals: {
+            [path.resolve(__dirname, '../src/AnyTouch')]: 'AnyTouch'
+        },
         banner,
-        sourcemap: true
-    },
-    {
-        format: 'umd',
-        name: 'AnyTouch',
-        file: 'dist/AnyTouch.umd.min.js',
-        banner,
-        sourcemap: true
-    }
-    ],
-    input: './src/main.ts',
+        sourcemap: true,
+        paths: (id) => {
+            if (path.resolve(__dirname, '../src/AnyTouch') === id) {
+                return './AnyTouch.umd'
+            }
+        }
+    }],
+
+    input: './src/vueDirective/index.ts',
 
     plugins: [
         replace({
@@ -77,13 +82,6 @@ module.exports = {
             // exclude: 'node_modules/**',
             typescript: require('typescript'),
         }),
-
-        // 压缩
-        terser({
-            include: [/^.+\.min\.js$/],
-        }),
-        
         sourceMaps(),
-
     ]
 };

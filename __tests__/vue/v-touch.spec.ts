@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import TouchSimulator from '../utils/TouchSimulator';
 import sleep from '../utils/sleep';
-import AnyTouch from '../../src/main';
+import vTouch from '../../src/vueDirective/index';
 
 let el: HTMLElement;
 
@@ -9,7 +9,7 @@ beforeEach(() => {
     el = document.createElement('div');
     Vue.config.devtools = false;
     Vue.config.productionTip = false;
-    Vue.use(AnyTouch.vTouch);
+    Vue.use(vTouch);
 });
 
 test('v-touch没有导出情况下, 是否运行正常以及销毁功能正常?', async (done) => {
