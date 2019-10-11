@@ -48,7 +48,7 @@ npm i -S any-touch
 https://unpkg.com/any-touch/dist/any-touch.min.js
 
 // vue指令插件
-https://unpkg.com/any-touch/dist/any-touch.vTouch.min.js
+https://unpkg.com/any-touch/dist/any-touch.v-touch.min.js
 ```
 
 ## 快速开始
