@@ -11,14 +11,14 @@ import fs from 'fs';
  * @param {String} 名称 
  * @param {String} 格式 
  */
-function generateIndex(name, format) {
+function generateIndex(name) {
     const tpl = `if (process.env.NODE_ENV === 'production') {
-    module.exports = require('./${name}.${format}.prod.js');
+    module.exports = require('./${name}.common.prod.js');
 } else {
-    module.exports = require('./${name}.${format}.dev.js');
+    module.exports = require('./${name}.common.dev.js');
 }`;
 
-    fs.writeFileSync(`dist/${name}.${format}.js`, tpl, 'utf8');
+    fs.writeFileSync(`dist/${name}.common.js`, tpl, 'utf8');
 }
 
 
@@ -43,11 +43,8 @@ if (IS_PROD) {
         fs.mkdirSync(DIST_DIR);
     }
 
-    generateIndex(pkg.name, 'common');
-    generateIndex(pkg.name, 'esm');
-
-    generateIndex(VUE_DIRECTIVE_NAME, 'common');
-    generateIndex(VUE_DIRECTIVE_NAME, 'esm');
+    generateIndex(pkg.name);
+    generateIndex(VUE_DIRECTIVE_NAME);
 }
 
 
@@ -68,7 +65,7 @@ const AT_ES_CJS_CONFIG = {
         sourcemap: IS_DEV,
     }, {
         format: 'es',
-        file: `dist/${pkg.name}.esm.prod.js`,
+        file: `dist/${pkg.name}.esm.js`,
         banner,
         sourcemap: IS_DEV
     }, {
@@ -76,11 +73,6 @@ const AT_ES_CJS_CONFIG = {
         file: `dist/${pkg.name}.common.dev.js`,
         banner,
         sourcemap: IS_DEV,
-    }, {
-        format: 'es',
-        file: `dist/${pkg.name}.esm.dev.js`,
-        banner,
-        sourcemap: IS_DEV
     }]
 };
 
@@ -145,18 +137,7 @@ const VT_ES_CJS_CONFIG = {
         },
         {
             format: 'es',
-            file: `dist/${VUE_DIRECTIVE_NAME}.esm.dev.js`,
-            banner,
-            sourcemap: IS_DEV,
-            paths: (id) => {
-                if (path.resolve(__dirname, './src/AnyTouch') === id) {
-                    return './any-touch.esm'
-                }
-            }
-        },
-        {
-            format: 'es',
-            file: `dist/${VUE_DIRECTIVE_NAME}.esm.prod.js`,
+            file: `dist/${VUE_DIRECTIVE_NAME}.esm.js`,
             banner,
             sourcemap: IS_DEV,
             paths: (id) => {
@@ -199,4 +180,4 @@ const VT_IIFE_CONFIG = {
         },
     }]
 }
-export default !IS_PROD ? [AT_ES_CJS_CONFIG, AT_IIFE_CONFIG, VT_ES_CJS_CONFIG, VT_IIFE_CONFIG] : [AT_IIFE_CONFIG, VT_IIFE_CONFIG];
+export default IS_PROD ? [AT_ES_CJS_CONFIG, AT_IIFE_CONFIG, VT_ES_CJS_CONFIG, VT_IIFE_CONFIG] : [AT_IIFE_CONFIG, VT_IIFE_CONFIG];
