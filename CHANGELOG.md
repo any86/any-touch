@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.4.10"></a>
+## [0.4.10](https://github.com/any86/any-touch/compare/v0.4.9...v0.4.10) (2019-10-11)
+
+
+
 <a name="0.4.9"></a>
 ## [0.4.9](https://github.com/any86/any-touch/compare/v0.4.8...v0.4.9) (2019-09-21)
 
