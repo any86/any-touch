@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.4.11"></a>
+## [0.4.11](https://github.com/any86/any-touch/compare/v0.4.9...v0.4.11) (2019-10-11)
+
+
+### Bug Fixes
+
+* 取消es模块的prod/dev区分, 从而解决bundlephobia不能识别的问题 ([ea44bb6](https://github.com/any86/any-touch/commit/ea44bb6))
+
+
+
 <a name="0.4.10"></a>
 ## [0.4.10](https://github.com/any86/any-touch/compare/v0.4.9...v0.4.10) (2019-10-11)
 
