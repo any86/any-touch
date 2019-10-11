@@ -1,14 +1,11 @@
 /*!
- * AnyTouch.js v0.4.7
+ * AnyTouch.js v0.4.10
  * (c) 2018-2019 Russell
  * https://github.com/any86/any-touch
  * Released under the MIT License.
  */
-(function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
-    typeof define === 'function' && define.amd ? define(factory) :
-    (global.AnyTouch = factory());
-}(this, (function () { 'use strict';
+var AnyTouch = (function () {
+    'use strict';
 
     /*! *****************************************************************************
     Copyright (c) Microsoft Corporation. All rights reserved.
@@ -232,10 +229,22 @@
         };
         return AnyEvent;
     }());
-    //# sourceMappingURL=any-event.esm.js.map
 
     var IS_WX = undefined === window;
     var SUPPORT_TOUCH = IS_WX || ('ontouchstart' in window);
+    var AUTO = 'auto';
+    var NONE = 'none';
+    var MANIPULATION = 'manipulation';
+    var DIRECTION_LEFT = 'left';
+    var DIRECTION_RIGHT = 'right';
+    var DIRECTION_UP = 'up';
+    var DIRECTION_DOWN = 'down';
+    var DIRECTION_X = [DIRECTION_LEFT, DIRECTION_RIGHT];
+    var DIRECTION_Y = [DIRECTION_UP, DIRECTION_DOWN];
+    var DIRECTION_ALL = [DIRECTION_LEFT, DIRECTION_RIGHT, DIRECTION_UP, DIRECTION_DOWN];
+    var PAN_X = 'pan-x';
+    var PAN_Y = 'pan-y';
+    var COMPUTE = 'compute';
     var COMPUTE_INTERVAL = 16;
     var CLIENT_X = 'clientX';
     var CLIENT_Y = 'clientY';
@@ -243,8 +252,16 @@
     var INPUT_MOVE = 'move';
     var INPUT_CANCEL = 'cancel';
     var INPUT_END = 'end';
-    var NONE = 'none';
-    //# sourceMappingURL=const.js.map
+    var TOUCH = 'touch';
+    var MOUSE = 'mouse';
+    var TOUCH_START = 'touchstart';
+    var TOUCH_MOVE = 'touchmove';
+    var TOUCH_END = 'touchend';
+    var TOUCH_CANCEL = 'touchcancel';
+    var MOUSE_UP = 'mouseup';
+    var MOUSE_MOVE = 'mousemove';
+    var MOUSE_DOWN = 'mousedown';
+    var WRONG_DIRECTION = 'wrong direction!';
 
     var getVLength = function (v) {
         return Math.sqrt(v.x * v.x + v.y * v.y);
@@ -284,16 +301,15 @@
     };
     var getDirection = function (x, y) {
         if (x === y) {
-            return 'none';
+            return NONE;
         }
         else if (Math.abs(x) > Math.abs(y)) {
-            return 0 < x ? 'right' : 'left';
+            return 0 < x ? DIRECTION_RIGHT : DIRECTION_LEFT;
         }
         else {
-            return 0 < y ? 'down' : 'up';
+            return 0 < y ? DIRECTION_DOWN : DIRECTION_UP;
         }
     };
-    //# sourceMappingURL=vector.js.map
 
     var Vector = /*#__PURE__*/Object.freeze({
         getVLength: getVLength,
@@ -312,7 +328,6 @@
         }
         return default_1;
     }());
-    //# sourceMappingURL=Abstract.js.map
 
     var default_1$1 = (function (_super) {
         __extends(default_1$$1, _super);
@@ -320,7 +335,7 @@
             return _super !== null && _super.apply(this, arguments) || this;
         }
         default_1$$1.prototype.load = function (event) {
-            var points = Array.from(event.targetTouches).map(function (_a) {
+            var points = Array.from(event.targetTouches || event.touches).map(function (_a) {
                 var clientX = _a.clientX, clientY = _a.clientY;
                 return ({ clientX: clientX, clientY: clientY });
             });
@@ -337,7 +352,6 @@
         };
         return default_1$$1;
     }(default_1));
-    //# sourceMappingURL=Touch.js.map
 
     var default_1$2 = (function (_super) {
         __extends(default_1$$1, _super);
@@ -373,9 +387,9 @@
                 this.isPressed = false;
             }
             var MAP = {
-                mousedown: 'start',
-                mousemove: 'move',
-                mouseup: 'end'
+                mousedown: INPUT_START,
+                mousemove: INPUT_MOVE,
+                mouseup: INPUT_END
             };
             return {
                 eventType: MAP[type],
@@ -386,7 +400,6 @@
         };
         return default_1$$1;
     }(default_1));
-    //# sourceMappingURL=Mouse.js.map
 
     var default_1$3 = (function () {
         function default_1() {
@@ -420,7 +433,6 @@
         };
         return default_1;
     }());
-    //# sourceMappingURL=index.js.map
 
     var intervalCompute = (function (_a, $store) {
         var prevInput = _a.prevInput, input = _a.input;
@@ -428,7 +440,7 @@
         var velocityY = 0;
         var speedX = 0;
         var speedY = 0;
-        var direction = 'none';
+        var direction = NONE;
         if (undefined !== input) {
             var _prevInput = prevInput || input;
             var deltaTime = input.timestamp - _prevInput.timestamp;
@@ -456,7 +468,6 @@
         }
         return { velocityX: velocityX, velocityY: velocityY, speedX: speedX, speedY: speedY, direction: direction };
     });
-    //# sourceMappingURL=intervalCompute.js.map
 
     function computeDistance (_a, $store) {
         var startInput = _a.startInput, input = _a.input;
@@ -485,7 +496,6 @@
             displacementX: displacementX, displacementY: displacementY, distanceX: distanceX, distanceY: distanceY, distance: distance, overallDirection: overallDirection
         };
     }
-    //# sourceMappingURL=computeDistance.js.map
 
     function computeDeltaXY (_a, $store) {
         var prevInput = _a.prevInput, input = _a.input;
@@ -510,7 +520,6 @@
         }
         return { deltaX: deltaX, deltaY: deltaY, deltaXYAngle: deltaXYAngle };
     }
-    //# sourceMappingURL=computeDeltaXY.js.map
 
     var computeMaxLength = (function (_a, $store) {
         var pointLength = _a.pointLength, isStart = _a.isStart;
@@ -520,13 +529,11 @@
         }
         return $store.get('maxPointLength', 0);
     });
-    //# sourceMappingURL=computeMaxLength.js.map
 
     var computeVector = (function (input) { return ({
         x: input.points[1][CLIENT_X] - input.points[0][CLIENT_X],
         y: input.points[1][CLIENT_Y] - input.points[0][CLIENT_Y]
     }); });
-    //# sourceMappingURL=computeVector.js.map
 
     function computeScale (_a) {
         var startV = _a.startV, prevV = _a.prevV, activeV = _a.activeV;
@@ -534,7 +541,6 @@
         var scale = getVLength(activeV) / getVLength(startV);
         return { scale: scale, deltaScale: deltaScale };
     }
-    //# sourceMappingURL=computeScale.js.map
 
     function computeAngle (_a) {
         var startV = _a.startV, prevV = _a.prevV, activeV = _a.activeV;
@@ -542,7 +548,6 @@
         var angle = getAngle(activeV, startV);
         return { angle: angle, deltaAngle: deltaAngle };
     }
-    //# sourceMappingURL=computeAngle.js.map
 
     function computMulti (_a, $store) {
         var startMultiInput = _a.startMultiInput, prevInput = _a.prevInput, input = _a.input;
@@ -567,7 +572,6 @@
             };
         }
     }
-    //# sourceMappingURL=computeMulti.js.map
 
     function compute (inputs, $store) {
         var input = inputs.input;
@@ -596,7 +600,6 @@
             deltaAngle: deltaAngle,
             maxPointLength: maxPointLength });
     }
-    //# sourceMappingURL=index.js.map
 
     var default_1$4 = (function () {
         function default_1(_a) {
@@ -614,7 +617,7 @@
         default_1.prototype._record = function (input) {
             var eventType = input.eventType;
             this.prevInput = this.activeInput;
-            if ('start' === eventType) {
+            if (INPUT_START === eventType) {
                 if (input.isStart) {
                     this.startInput = input;
                 }
@@ -635,19 +638,18 @@
         };
         return default_1;
     }());
-    //# sourceMappingURL=InputManage.js.map
 
     var computeTouchAction = (function (touchActions) {
-        var e_1, _a;
-        var TOUCH_ACTION_PRIORITY = {
-            auto: 0,
-            manipulation: 1,
-            'pan-x': 2,
-            'pan-y': 2,
-            none: 3
-        };
-        var MAX_PRIORITY = TOUCH_ACTION_PRIORITY['none'];
-        var touchActionCSSArray = ['auto'];
+        var _a, e_1, _b;
+        var TOUCH_ACTION_PRIORITY = (_a = {},
+            _a[AUTO] = 0,
+            _a[MANIPULATION] = 1,
+            _a[PAN_X] = 2,
+            _a[PAN_Y] = 2,
+            _a[NONE] = 3,
+            _a);
+        var MAX_PRIORITY = TOUCH_ACTION_PRIORITY[NONE];
+        var touchActionCSSArray = [AUTO];
         var prevPriority = 0;
         try {
             for (var touchActions_1 = __values(touchActions), touchActions_1_1 = touchActions_1.next(); !touchActions_1_1.done; touchActions_1_1 = touchActions_1.next()) {
@@ -670,13 +672,12 @@
         catch (e_1_1) { e_1 = { error: e_1_1 }; }
         finally {
             try {
-                if (touchActions_1_1 && !touchActions_1_1.done && (_a = touchActions_1.return)) _a.call(touchActions_1);
+                if (touchActions_1_1 && !touchActions_1_1.done && (_b = touchActions_1.return)) _b.call(touchActions_1);
             }
             finally { if (e_1) throw e_1.error; }
         }
         return touchActionCSSArray.join(' ');
     });
-    //# sourceMappingURL=computeTouchAction.js.map
 
     var default_1$5 = (function () {
         function default_1() {
@@ -696,7 +697,6 @@
         };
         return default_1;
     }());
-    //# sourceMappingURL=Store.js.map
 
     var STATUS_POSSIBLE = 'possible';
     var STATUS_START = 'start';
@@ -705,7 +705,6 @@
     var STATUS_CANCELLED = 'cancel';
     var STATUS_FAILED = 'failed';
     var STATUS_RECOGNIZED = 'recognized';
-    //# sourceMappingURL=recognizerStatus.js.map
 
     var Recognizer = (function () {
         function Recognizer(options) {
@@ -802,7 +801,7 @@
             try {
                 for (var _b = __values(this.options.directions), _c = _b.next(); !_c.done; _c = _b.next()) {
                     var direction = _c.value;
-                    isOnlyHorizontal = -1 < ['left', 'right'].indexOf(direction);
+                    isOnlyHorizontal = -1 < DIRECTION_X.indexOf(direction);
                     if (!isOnlyHorizontal) {
                         return false;
                     }
@@ -823,7 +822,7 @@
             try {
                 for (var _b = __values(this.options.directions), _c = _b.next(); !_c.done; _c = _b.next()) {
                     var direction = _c.value;
-                    isOnlyVertical = -1 < ['up', 'down'].indexOf(direction);
+                    isOnlyVertical = -1 < DIRECTION_Y.indexOf(direction);
                     if (!isOnlyVertical) {
                         return false;
                     }
@@ -839,7 +838,7 @@
             return isOnlyVertical;
         };
         Recognizer.prototype.isVaildDirection = function (direction) {
-            return -1 !== this.options.directions.indexOf(direction) || 'none' === direction;
+            return -1 !== this.options.directions.indexOf(direction) || NONE === direction;
         };
         Recognizer.prototype.flow = function (isVaild, activeStatus, touchDevice) {
             var _a, _b, _c, _d, _e, _f, _g;
@@ -891,7 +890,7 @@
             var eventType = computed.eventType;
             this.status = this.flow(isVaild, this.status, eventType);
             if (STATUS_CANCELLED === eventType) {
-                this.emit(this.options.name + 'cancel', computed);
+                this.emit(this.options.name + INPUT_CANCEL, computed);
                 return;
             }
             this.isRecognized = -1 < [STATUS_START, STATUS_MOVE, STATUS_END, STATUS_RECOGNIZED].indexOf(this.status);
@@ -909,7 +908,6 @@
         Recognizer.prototype.afterEmit = function (computed) { };
         return Recognizer;
     }());
-    //# sourceMappingURL=Base.js.map
 
     var TapRecognizer = (function (_super) {
         __extends(TapRecognizer, _super);
@@ -920,7 +918,7 @@
             return _this;
         }
         TapRecognizer.prototype.getTouchAction = function () {
-            return (1 < this.options.tapTimes) ? ['manipulation'] : ['auto'];
+            return (1 < this.options.tapTimes) ? ['manipulation'] : [AUTO];
         };
         TapRecognizer.prototype._isValidDistanceFromPrevTap = function (point) {
             if (undefined !== this.prevTapPoint) {
@@ -1016,7 +1014,6 @@
         };
         return TapRecognizer;
     }(Recognizer));
-    //# sourceMappingURL=Tap.js.map
 
     var PressRecognizer = (function (_super) {
         __extends(PressRecognizer, _super);
@@ -1025,7 +1022,7 @@
             return _super.call(this, options) || this;
         }
         PressRecognizer.prototype.getTouchAction = function () {
-            return ['auto'];
+            return [AUTO];
         };
         PressRecognizer.prototype.recognize = function (computed) {
             var _this = this;
@@ -1039,7 +1036,7 @@
                 }, this.options.minPressTime);
             }
             else if (INPUT_END === eventType && STATUS_RECOGNIZED === this.status) {
-                this.emit(this.options.name + "up", computed);
+                this.emit("" + this.options.name + DIRECTION_UP, computed);
             }
             else if (!this.test(computed) || (this.options.minPressTime > deltaTime && -1 !== [INPUT_END, INPUT_CANCEL].indexOf(eventType))) {
                 this.cancel();
@@ -1062,7 +1059,6 @@
         };
         return PressRecognizer;
     }(Recognizer));
-    //# sourceMappingURL=Press.js.map
 
     var getHV = (function (directions) {
         var e_1, _a;
@@ -1071,18 +1067,18 @@
         try {
             for (var directions_1 = __values(directions), directions_1_1 = directions_1.next(); !directions_1_1.done; directions_1_1 = directions_1.next()) {
                 var direction = directions_1_1.value;
-                if (-1 < ['left', 'right'].indexOf(direction)) {
+                if (-1 < DIRECTION_X.indexOf(direction)) {
                     hasHorizontal = true;
                     if (hasVertical)
                         break;
                 }
-                else if (-1 < ['up', 'down'].indexOf(direction)) {
+                else if (-1 < DIRECTION_Y.indexOf(direction)) {
                     hasVertical = true;
                     if (hasHorizontal)
                         break;
                 }
                 else {
-                    throw new Error('wrong direction!');
+                    throw new Error(WRONG_DIRECTION);
                 }
             }
         }
@@ -1095,7 +1091,6 @@
         }
         return { hasHorizontal: hasHorizontal, hasVertical: hasVertical };
     });
-    //# sourceMappingURL=getHV.js.map
 
     var PanRecognizer = (function (_super) {
         __extends(PanRecognizer, _super);
@@ -1104,16 +1099,16 @@
             return _super.call(this, options) || this;
         }
         PanRecognizer.prototype.getTouchAction = function () {
-            var touchActions = ['auto'];
+            var touchActions = [AUTO];
             var _a = getHV(this.options.directions), hasHorizontal = _a.hasHorizontal, hasVertical = _a.hasVertical;
             if (hasHorizontal && hasVertical) {
-                touchActions = ['none'];
+                touchActions = [NONE];
             }
             else if (!hasHorizontal && hasVertical) {
-                touchActions = ['pan-x'];
+                touchActions = [PAN_X];
             }
             else if (!hasVertical && hasHorizontal) {
-                touchActions = ['pan-y'];
+                touchActions = [PAN_Y];
             }
             return touchActions;
         };
@@ -1125,7 +1120,7 @@
                 this.isVaildDirection(direction);
         };
         PanRecognizer.prototype.afterEmit = function (computed) {
-            if ('none' !== computed.direction) {
+            if (NONE !== computed.direction) {
                 this.emit(this.options.name + computed.direction, computed);
             }
         };
@@ -1138,16 +1133,16 @@
             var deltaX = 0;
             var deltaY = 0;
             this.options.directions.forEach(function (direction) {
-                if ('left' === direction && 0 > computed.deltaX) {
+                if (DIRECTION_LEFT === direction && 0 > computed.deltaX) {
                     deltaX = computed.deltaX;
                 }
-                else if ('right' === direction && 0 < computed.deltaX) {
+                else if (DIRECTION_RIGHT === direction && 0 < computed.deltaX) {
                     deltaX = computed.deltaX;
                 }
-                else if ('down' === direction && 0 < computed.deltaY) {
+                else if (DIRECTION_DOWN === direction && 0 < computed.deltaY) {
                     deltaY = computed.deltaY;
                 }
-                else if ('up' === direction && 0 > computed.deltaY) {
+                else if (DIRECTION_UP === direction && 0 > computed.deltaY) {
                     deltaY = computed.deltaY;
                 }
             });
@@ -1159,11 +1154,10 @@
             name: 'pan',
             threshold: 10,
             pointLength: 1,
-            directions: ['up', 'right', 'down', 'left']
+            directions: DIRECTION_ALL
         };
         return PanRecognizer;
     }(Recognizer));
-    //# sourceMappingURL=Pan.js.map
 
     var SwipeRecognizer = (function (_super) {
         __extends(SwipeRecognizer, _super);
@@ -1172,10 +1166,10 @@
             return _super.call(this, options) || this;
         }
         SwipeRecognizer.prototype.getTouchAction = function () {
-            return ['none'];
+            return [NONE];
         };
         SwipeRecognizer.prototype.afterEmit = function (computed) {
-            if ('none' !== computed.direction) {
+            if (NONE !== computed.direction) {
                 this.emit(this.options.name + computed.direction, computed);
             }
         };
@@ -1202,11 +1196,10 @@
             threshold: 10,
             velocity: 0.3,
             pointLength: 1,
-            directions: ['up', 'right', 'down', 'left']
+            directions: DIRECTION_ALL
         };
         return SwipeRecognizer;
     }(Recognizer));
-    //# sourceMappingURL=Swipe.js.map
 
     var PinchRecognizer = (function (_super) {
         __extends(PinchRecognizer, _super);
@@ -1217,10 +1210,10 @@
             return _this;
         }
         PinchRecognizer.prototype.getTouchAction = function () {
-            return ['none'];
+            return [NONE];
         };
         PinchRecognizer.prototype.afterEmit = function (computed) {
-            if ('end' === computed.eventType)
+            if (INPUT_END === computed.eventType)
                 return;
             var scale = computed.scale;
             if (1 !== scale) {
@@ -1240,7 +1233,6 @@
         };
         return PinchRecognizer;
     }(Recognizer));
-    //# sourceMappingURL=Pinch.js.map
 
     var RotateRecognizer = (function (_super) {
         __extends(RotateRecognizer, _super);
@@ -1249,7 +1241,7 @@
             return _super.call(this, options) || this;
         }
         RotateRecognizer.prototype.getTouchAction = function () {
-            return ['none'];
+            return [NONE];
         };
         RotateRecognizer.prototype.afterEmit = function (computed) { };
         RotateRecognizer.prototype.test = function (_a) {
@@ -1263,12 +1255,11 @@
         };
         return RotateRecognizer;
     }(Recognizer));
-    //# sourceMappingURL=Rotate.js.map
 
-    var AnyTouch = (function () {
-        function AnyTouch(el, options) {
+    var default_1$6 = (function () {
+        function default_1(el, options) {
             this.default = {
-                touchAction: 'compute',
+                touchAction: COMPUTE,
                 hasDomEvents: true,
                 isPreventDefault: true,
                 syncToAttr: false,
@@ -1283,23 +1274,25 @@
                 this.el = el;
             this.$store = new default_1$5();
             this.inputManage = new default_1$4({ $store: this.$store });
-            this.touchDevice = SUPPORT_TOUCH ? 'touch' : 'mouse';
+            this.touchDevice = SUPPORT_TOUCH ? TOUCH : MOUSE;
             this.options = __assign({}, this.default, options);
             this.eventEmitter = new AnyEvent();
             this._isStopped = false;
+            var root = { eventEmitter: this.eventEmitter, options: this.options, el: el, update: this.update.bind(this) };
+            this._root = root;
             this.recognizers = [
-                new RotateRecognizer().$injectRoot(this),
-                new PinchRecognizer().$injectRoot(this),
-                new PanRecognizer().$injectRoot(this),
-                new SwipeRecognizer().$injectRoot(this),
-                new TapRecognizer().$injectRoot(this),
+                new RotateRecognizer().$injectRoot(root),
+                new PinchRecognizer().$injectRoot(root),
+                new PanRecognizer().$injectRoot(root),
+                new SwipeRecognizer().$injectRoot(root),
+                new TapRecognizer().$injectRoot(root),
                 new TapRecognizer({
                     name: 'doubletap',
                     pointLength: 1,
                     tapTimes: 2,
                     disabled: true
-                }).$injectRoot(this),
-                new PressRecognizer().$injectRoot(this),
+                }).$injectRoot(root),
+                new PressRecognizer().$injectRoot(root),
             ];
             this.recognizers[4].requireFailure(this.recognizers[5]);
             if (undefined !== this.el) {
@@ -1307,9 +1300,9 @@
                 this._unbindEl = this._bindEL(this.el)._unbindEl;
             }
         }
-        AnyTouch.prototype.updateTouchAction = function () {
+        default_1.prototype.updateTouchAction = function () {
             var e_1, _a;
-            if ('compute' === this.options.touchAction) {
+            if (COMPUTE === this.options.touchAction) {
                 var touchActions = [];
                 try {
                     for (var _b = __values(this.recognizers), _c = _b.next(); !_c.done; _c = _b.next()) {
@@ -1327,10 +1320,10 @@
                 this.el.style.touchAction = computeTouchAction(touchActions);
             }
             else {
-                this.el.style.touchAction = this.options.touchAction || 'auto';
+                this.el.style.touchAction = this.options.touchAction || AUTO;
             }
         };
-        AnyTouch.prototype.updateCssPrevent = function () {
+        default_1.prototype.updateCssPrevent = function () {
             var style = {};
             var cssPrevent = this.options.cssPrevent;
             if (undefined === cssPrevent)
@@ -1355,16 +1348,16 @@
                 this.el.style[k] = style[k];
             }
         };
-        AnyTouch.prototype.update = function () {
+        default_1.prototype.update = function () {
             if (undefined === this.el)
                 return;
             this.updateTouchAction();
             this.updateCssPrevent();
         };
-        AnyTouch.prototype._bindEL = function (el) {
+        default_1.prototype._bindEL = function (el) {
             var boundInputListener = this.inputListener.bind(this);
-            if ('touch' === this.touchDevice) {
-                var events_1 = ['touchstart', 'touchmove', 'touchend', 'touchcancel'];
+            if (TOUCH === this.touchDevice) {
+                var events_1 = [TOUCH_START, TOUCH_MOVE, TOUCH_END, TOUCH_CANCEL];
                 events_1.forEach(function (eventName) {
                     el.addEventListener(eventName, boundInputListener);
                 });
@@ -1377,23 +1370,23 @@
                 };
             }
             else {
-                el.addEventListener('mousedown', boundInputListener);
-                window.addEventListener('mousemove', boundInputListener);
-                window.addEventListener('mouseup', boundInputListener);
+                el.addEventListener(MOUSE_DOWN, boundInputListener);
+                window.addEventListener(MOUSE_MOVE, boundInputListener);
+                window.addEventListener(MOUSE_UP, boundInputListener);
                 return {
                     _unbindEl: function () {
-                        el.removeEventListener('mousedown', boundInputListener);
-                        window.removeEventListener('mousemove', boundInputListener);
-                        window.removeEventListener('mouseup', boundInputListener);
+                        el.removeEventListener(MOUSE_DOWN, boundInputListener);
+                        window.removeEventListener(MOUSE_MOVE, boundInputListener);
+                        window.removeEventListener(MOUSE_UP, boundInputListener);
                     }
                 };
             }
         };
-        AnyTouch.prototype.useEvent = function (event) {
+        default_1.prototype.catchEvent = function (event) {
             this.inputListener(event);
         };
-        AnyTouch.prototype.add = function (recognizer) {
-            recognizer.$injectRoot(this);
+        default_1.prototype.add = function (recognizer) {
+            recognizer.$injectRoot(this._root);
             var hasSameName = this.recognizers.some(function (theRecognizer) { return recognizer.name === theRecognizer.name; });
             if (hasSameName) {
                 this.eventEmitter.emit('error', { code: 1, message: recognizer.name + "\u8BC6\u522B\u5668\u5DF2\u7ECF\u5B58\u5728!" });
@@ -1403,17 +1396,17 @@
                 this.update();
             }
         };
-        AnyTouch.prototype.get = function (name) {
+        default_1.prototype.get = function (name) {
             return this.recognizers.find(function (recognizer) { return name === recognizer.options.name; });
         };
-        AnyTouch.prototype.set = function (options) {
+        default_1.prototype.set = function (options) {
             this.options = __assign({}, this.default, options);
             this.update();
         };
-        AnyTouch.prototype.stop = function () {
+        default_1.prototype.stop = function () {
             this._isStopped = true;
         };
-        AnyTouch.prototype.remove = function (recognizerName) {
+        default_1.prototype.remove = function (recognizerName) {
             var e_2, _a;
             try {
                 for (var _b = __values(this.recognizers.entries()), _c = _b.next(); !_c.done; _c = _b.next()) {
@@ -1432,7 +1425,7 @@
                 finally { if (e_2) throw e_2.error; }
             }
         };
-        AnyTouch.prototype.inputListener = function (event) {
+        default_1.prototype.inputListener = function (event) {
             var e_3, _a;
             if (this.options.isPreventDefault) {
                 event.preventDefault();
@@ -1463,113 +1456,36 @@
                 }
             }
         };
-        AnyTouch.prototype.on = function (type, listener, options) {
+        default_1.prototype.on = function (type, listener, options) {
             if (options === void 0) { options = false; }
             this.eventEmitter.on(type, listener);
         };
-        AnyTouch.prototype.off = function (type, listener) {
+        default_1.prototype.off = function (type, listener) {
             this.eventEmitter.off(type, listener);
         };
-        AnyTouch.prototype.emit = function (type, payload) {
+        default_1.prototype.emit = function (type, payload) {
             this.eventEmitter.emit(type, __assign({}, payload, { type: type }));
         };
-        AnyTouch.prototype._unbindEl = function () { };
-        AnyTouch.prototype.destroy = function () {
+        default_1.prototype._unbindEl = function () { };
+        default_1.prototype.destroy = function () {
             this.$store.destroy();
             if (this.el) {
                 this._unbindEl();
             }
             this.eventEmitter.destroy();
         };
-        AnyTouch.Tap = TapRecognizer;
-        AnyTouch.Press = PressRecognizer;
-        AnyTouch.Pan = PanRecognizer;
-        AnyTouch.Swipe = SwipeRecognizer;
-        AnyTouch.Pinch = PinchRecognizer;
-        AnyTouch.Rotate = RotateRecognizer;
-        AnyTouch.version = '0.4.7';
-        AnyTouch.Vector = Vector;
-        AnyTouch.EventEmitter = AnyEvent;
-        return AnyTouch;
-    }());
-    //# sourceMappingURL=AnyTouch.js.map
-
-    var default_1$6 = (function () {
-        function default_1(ClassObject) {
-            this.stock = [];
-            this.stock = [];
-            this.ClassObject = ClassObject;
-        }
-        default_1.prototype.getIndexByEl = function (el) {
-            for (var i = 0, len = this.stock.length; i < len; i++) {
-                if (el === this.stock[i].el) {
-                    return i;
-                }
-            }
-            return -1;
-        };
-        default_1.prototype.getInstanceByIndex = function (index) {
-            return this.stock[index].instance;
-        };
-        default_1.prototype.removeInstanceByIndex = function (index) {
-            this.stock.splice(index, 1);
-        };
-        default_1.prototype.getOrCreateInstanceByEl = function (el) {
-            var manageIndex = this.getIndexByEl(el);
-            if (-1 === manageIndex) {
-                var instance = new this.ClassObject(el);
-                this.stock.push({ el: el, instance: instance });
-                return instance;
-            }
-            else {
-                return this.getInstanceByIndex(manageIndex);
-            }
-        };
+        default_1.Tap = TapRecognizer;
+        default_1.Press = PressRecognizer;
+        default_1.Pan = PanRecognizer;
+        default_1.Swipe = SwipeRecognizer;
+        default_1.Pinch = PinchRecognizer;
+        default_1.Rotate = RotateRecognizer;
+        default_1.version = '0.4.10';
+        default_1.Vector = Vector;
+        default_1.EventEmitter = AnyEvent;
         return default_1;
     }());
-    //# sourceMappingURL=InstanceManage.js.map
 
-    var iManage = new default_1$6(AnyTouch);
-    var plugin = {
-        install: function (Vue) {
-            var _bindEvent = function (el, binding) {
-                var instance = iManage.getOrCreateInstanceByEl(el);
-                if (undefined !== binding.value) {
-                    binding.value(instance);
-                }
-            };
-            var _unbindEvent = function (el) {
-                var index = iManage.getIndexByEl(el);
-                if (-1 !== index && undefined !== iManage.getInstanceByIndex(index)) {
-                    iManage.getInstanceByIndex(index).destroy();
-                    iManage.removeInstanceByIndex(index);
-                }
-            };
-            Vue.directive('touch', {
-                inserted: function (el, binding) {
-                    _bindEvent(el, binding);
-                },
-                update: function (el, binding) {
-                    _bindEvent(el, binding);
-                },
-                unbind: function (el) {
-                    _unbindEvent(el);
-                }
-            });
-        }
-    };
-    //# sourceMappingURL=index.js.map
+    return default_1$6;
 
-    var default_1$7 = (function (_super) {
-        __extends(default_1, _super);
-        function default_1() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        default_1.vTouch = plugin;
-        return default_1;
-    }(AnyTouch));
-    //# sourceMappingURL=main.js.map
-
-    return default_1$7;
-
-})));
+}());

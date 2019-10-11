@@ -16,7 +16,7 @@ new Vue({
         };
     },
     mounted() {
-        this.$refs.circle.addEventListener('animationend', e=>{
+        this.$refs.circle.addEventListener('animationend', e => {
             this.activeType = 'AnyTouch';
         });
 
@@ -40,21 +40,25 @@ new Vue({
         // 初始化
         const anyTouch = new AnyTouch(el, {
             touchAction: 'auto',
-            syncToAttr:true
+            syncToAttr: true
         });
+
+        el.addEventListener('click', ev => {
+            console.log('click');
+        })
 
 
         // el.addEventListener('touchstart', ev=>{
         //     ev.preventDefault();
-        //     anyTouch.useEvent(ev);
+        //     anyTouch.catchEvent(ev);
         // })
 
         // el.addEventListener('touchmove', ev=>{
-        //     anyTouch.useEvent(ev);
+        //     anyTouch.catchEvent(ev);
         // })
 
         // el.addEventListener('touchend', ev=>{
-        //     anyTouch.useEvent(ev);
+        //     anyTouch.catchEvent(ev);
         // })
 
 
@@ -124,7 +128,7 @@ new Vue({
             // anyTouch.set({touchAction:'auto',isPreventDefault:false});
             this.message = e;
             console.warn(e.type);
-            
+
         });
 
         anyTouch.on('panmove', e => {
@@ -133,21 +137,33 @@ new Vue({
             log(e.type);
         });
 
+
+
+        anyTouch.on('panup', e => {
+            console.warn(e.type);
+        });
+
         anyTouch.on('pancancel', e => {
             // e.nativeEvent.preventDefault()
             this.message = e;
             log(e.type);
         });
 
-        anyTouch.on('panend', e => {            
-            console.warn('panend',e.direction);
+        anyTouch.on('panend', e => {
+            console.warn('panend', e.direction);
             this.message = e;
             log(e.type);
         });
 
 
+
+
         anyTouch.on('pan', e => {
-            const {deltaXYAngle,deltaX, deltaY} = e;
+            const {
+                deltaXYAngle,
+                deltaX,
+                deltaY
+            } = e;
             log(`%c ${e.type} `, 'background-color:#69c;color:#fff;');
             this.message = e;
             this.x += e.deltaX;
@@ -158,7 +174,6 @@ new Vue({
          * =========================== press ===========================
          */
         anyTouch.on('press', e => {
-            
             log(`%c ${e.type} `, 'background-color:#fa0;color:#fff;');
             this.message = e;
         });
@@ -174,10 +189,9 @@ new Vue({
         anyTouch.on('tap', e => {
             e.preventDefault();
             log(`%c ${e.type} `, 'background-color:#f10;color:#fff;');
-            log(e.x,e.y)
             this.message = e;
         });
-        this.$refs.circle.addEventListener('click', ev=>{
+        this.$refs.circle.addEventListener('click', ev => {
             log('click');
         })
         anyTouch.on('doubletap', e => {
@@ -194,7 +208,7 @@ new Vue({
             log(`%c ${e.type} `, 'background-color:#19c;color:#fff;');
             this.message = e;
         });
-        
+
         /**
          * =========================== pinch ===========================
          */
@@ -224,7 +238,7 @@ new Vue({
         });
 
         anyTouch.on('rotate', e => {
-            log(e.deltaAngle, e.deltaX,e.deltaY);
+            log(e.deltaAngle, e.deltaX, e.deltaY);
             this.message = e;
             this.angle += e.deltaAngle;
             this.centerX = e.center.x;
@@ -309,8 +323,8 @@ new Vue({
         // }
     },
 
-    watch:{
-        message(){
+    watch: {
+        message() {
             this.activeType = this.message.type;
         }
     }
