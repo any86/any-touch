@@ -15,7 +15,7 @@
 
 ## 演示
 
-![1568267671](https://user-images.githubusercontent.com/8264787/64757535-fc6da200-d564-11e9-9bf6-1ac40e08b8b7.png)
+![二维码](https://user-images.githubusercontent.com/8264787/64757535-fc6da200-d564-11e9-9bf6-1ac40e08b8b7.png)
 
 [直接访问](https://any86.github.io/any-touch/example/)
 
@@ -45,10 +45,10 @@ npm i -S any-touch
 ## CDN
 
 ```
-https://unpkg.com/any-touch/dist/AnyTouch.umd.min.js
+https://unpkg.com/any-touch/dist/any-touch.min.js
 
 // vue指令插件
-https://unpkg.com/any-touch/dist/vTouch.umd.min.js
+https://unpkg.com/any-touch/dist/any-touch.vTouch.min.js
 ```
 
 ## 快速开始
@@ -104,11 +104,8 @@ cosnt at = new AnyTouch()
 ```
 
 ## 支持vue指令
-
-`AnyTouch.vTouch` 是一个vue指令, 对应`v-touch`指令.
-
 ```javascript
-import vTouch from 'any-touch/dist/vTouch.common'
+import vTouch from 'any-touch/dist/v-touch.common'
 Vue.use(vTouch);
 ```
 
@@ -123,9 +120,7 @@ Vue.use(vTouch);
   @pinch="pinch"
   @rotate="rotate"
   @click="click"
->
-  touch
-</div>
+>hello v-touch</div>
 ```
 此时`div`上可以通过`v-on`进行手势的绑定,和绑定 click 等原生事件一样.
 

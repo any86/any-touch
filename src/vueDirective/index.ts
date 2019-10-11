@@ -3,7 +3,7 @@
 import { VueConstructor } from 'vue/types/vue';
 import { DirectiveBinding } from 'vue/types/options';
 import InstanceManage from './InstanceManage';
-import { AnyTouch } from '../AnyTouch';
+import AnyTouch from '../AnyTouch';
 
 // 管理实例和元素的映射关系
 const iManage = new InstanceManage(AnyTouch);

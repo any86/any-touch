@@ -1,11 +1,11 @@
 {
   "name": "any-touch",
-  "version": "0.5.0",
+  "version": "0.4.9",
   "description": "一个手势库",
-  "unpkg": "dist/AnyTouch.umd.js",
-  "jsdelivr": "dist/AnyTouch.umd.js",
-  "main": "dist/AnyTouch.common.js",
-  "module": "dist/AnyTouch.esm.js",
+  "unpkg": "dist/any-touch.js",
+  "jsdelivr": "dist/any-touch.js",
+  "main": "dist/any-touch.common.js",
+  "module": "dist/any-touch.esm.js",
   "types": "types/main.d.ts",
   "files": [
     "dist/**/*",
@@ -15,9 +15,10 @@
     "build:type": "rimraf types && tsc -p ./tsconfig.type.json",
     "release": "npm run test && standard-version && npm run build && npm pub && git push",
     "release-no-test": "standard-version && npm run build && npm pub && git push",
-    "build": "npm run build:type && rimraf dist && node ./scripts/build",
-    "dev": "rimraf dist && rollup -c --watch",
+    "build": "npm run build:type && rimraf dist && rimraf dist && rollup -c --environment NODE_ENV:production",
+    "dev": "rimraf dist && rollup -c  --watch --environment NODE_ENV:development",
     "test": "jest",
+    "size": "node ./scripts/calcSize",
     "test-no-cache": "jest --no-cache",
     "release:demo": "node ./scripts/demo.js",
     "removeAll": "rimraf ./node_modules",
@@ -53,7 +54,8 @@
     "ts-jest": "^24.0.2",
     "tslib": "^1.9.3",
     "typescript": "^3.0.1",
-    "vue": "^2.6.10"
+    "vue": "^2.6.10",
+    "zlib": "^1.0.5"
   },
   "dependencies": {
     "any-event": "^0.4.1"

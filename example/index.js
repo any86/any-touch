@@ -1,5 +1,5 @@
 let log = console.log;
-log = () => { };
+log = () => {};
 new Vue({
     el: '#app',
 
@@ -42,6 +42,10 @@ new Vue({
             touchAction: 'auto',
             syncToAttr: true
         });
+
+        el.addEventListener('click', ev => {
+            console.log('click');
+        })
 
 
         // el.addEventListener('touchstart', ev=>{
@@ -155,7 +159,11 @@ new Vue({
 
 
         anyTouch.on('pan', e => {
-            const { deltaXYAngle, deltaX, deltaY } = e;
+            const {
+                deltaXYAngle,
+                deltaX,
+                deltaY
+            } = e;
             log(`%c ${e.type} `, 'background-color:#69c;color:#fff;');
             this.message = e;
             this.x += e.deltaX;
@@ -166,7 +174,6 @@ new Vue({
          * =========================== press ===========================
          */
         anyTouch.on('press', e => {
-
             log(`%c ${e.type} `, 'background-color:#fa0;color:#fff;');
             this.message = e;
         });
@@ -182,7 +189,6 @@ new Vue({
         anyTouch.on('tap', e => {
             e.preventDefault();
             log(`%c ${e.type} `, 'background-color:#f10;color:#fff;');
-            log(e.x, e.y)
             this.message = e;
         });
         this.$refs.circle.addEventListener('click', ev => {

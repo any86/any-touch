@@ -48,7 +48,7 @@ interface Options {
         callout?: boolean;
     }
 };
-export class AnyTouch {
+export default class  {
     // 识别器
     static Tap = Tap;
     static Press = Press;

@@ -1,4 +1,4 @@
-import { AnyTouch } from './AnyTouch';
+import AnyTouch from './AnyTouch';
 // import VueDirective from './vueDirective';
 // export default class extends AnyTouch {
 //     // vue指令版

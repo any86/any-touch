@@ -5,10 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>v-touch</title>
+    <title>✊v-touch</title>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="https://res.wx.qq.com/mmbizwap/zh_CN/htmledition/js/vconsole/3.0.0/vconsole.min.js"></script>
-    <script src="../../dist/AnyTouch.umd.min.js"></script>
+    <script src="../../dist/any-touch.js"></script>
+    <script src="../../dist/any-touch.v-touch.min.js"></script>
     <style>
         body {
             margin: 0;
@@ -16,20 +17,19 @@
 
         .box {
             padding: 100px;
-            margin: 30px;
             background: #ccc;
+            text-align: center;
+            font-size: 32px;
         }
     </style>
 </head>
 
 <body>
     <main id="app">
-        <div v-touch="importAT" @tap="tapHandler" @doubletap="doubletapHandler" @click="clickHandler"
-            class="box">{{msg}}</div>
+        <div v-touch="importAT" @tap="tapHandler" @pan="panHandler" @doubletap="doubletapHandler" class="box">{{msg}}</div>
     </main>
     <script>
-        // console.dir(AnyTouch.vTouch);
-        Vue.use(AnyTouch.vTouch)
+        Vue.use(vTouch)
         new Vue({
             el: '#app',
             // render(h) {
@@ -57,6 +57,7 @@
                 importAT(at) {
                     const dt = at.get('doubletap')
                     dt.disabled = false
+                    at.set({isPreventDefault:true})
                 },
 
                 clickHandler(ev) {
