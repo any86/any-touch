@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.5.0"></a>
+# [0.5.0](https://github.com/any86/any-touch/compare/v0.4.11...v0.5.0) (2019-10-22)
+
+
+### Features
+
+* 增加"preventDefaultExclude"参数, 用来排除不需要阻止默认事件的元素 ([1b025b8](https://github.com/any86/any-touch/commit/1b025b8))
+
+
+
 <a name="0.4.11"></a>
 ## [0.4.11](https://github.com/any86/any-touch/compare/v0.4.9...v0.4.11) (2019-10-11)
 
