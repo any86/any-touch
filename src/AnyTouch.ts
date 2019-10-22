@@ -22,6 +22,7 @@ import { TOUCH, MOUSE, SUPPORT_TOUCH, NONE, AUTO, TOUCH_START, TOUCH_MOVE, TOUCH
 import InputManage from './InputManage';
 import computeTouchAction from './utils/computeTouchAction';
 import Store from './Store';
+import { isRegExp, isFunction } from './utils/is';
 
 // 识别器
 import Recognizer from './recognitions/Base';
@@ -36,6 +37,8 @@ interface Options {
     touchAction?: 'compute' | 'auto' | 'manipulation' | 'pan-x' | 'pan-y' | 'none';
     hasDomEvents?: boolean;
     isPreventDefault?: boolean;
+    // 不阻止默认行为的白名单
+    preventDefaultExclude?: RegExp | ((ev: SupportEvent) => boolean);
     syncToAttr?: boolean;
     cssPrevent?: {
         // 阻止触发选择文字
@@ -48,7 +51,7 @@ interface Options {
         callout?: boolean;
     }
 };
-export default class  {
+export default class {
     // 识别器
     static Tap = Tap;
     static Press = Press;
@@ -95,6 +98,7 @@ export default class  {
             touchAction: COMPUTE,
             hasDomEvents: true,
             isPreventDefault: true,
+            preventDefaultExclude: /^(INPUT|TEXTAREA|BUTTON|SELECT)$/,
             syncToAttr: false,
             cssPrevent: {
                 // 阻止触发选择文字
@@ -222,7 +226,7 @@ export default class  {
      * @param {Element} 待绑定手势元素
      */
     private _bindEL(el: Element) {
-        const boundInputListener = <EventListener>this.inputListener.bind(this);
+        const boundInputListener = <EventListener>this.catchEvent.bind(this);
 
         // Touch
         if (TOUCH === this.touchDevice) {
@@ -251,15 +255,6 @@ export default class  {
                 }
             };
         }
-    };
-
-    /**
-     * 为微信设计的功能
-     * 接收touch事件的event对象
-     * @param {SupportEvent} 事件对象
-     */
-    catchEvent(event: SupportEvent) {
-        this.inputListener(event);
     };
 
     /**
@@ -315,12 +310,28 @@ export default class  {
         }
     };
 
+    canPreventDefault(event: SupportEvent): boolean {
+        let isPreventDefault = true;
+        if (null !== event.target) {
+            const { preventDefaultExclude } = this.options;
+            if (isRegExp(preventDefaultExclude)) {
+                const { tagName } = (<HTMLElement>event.target);
+                if (undefined !== tagName) {
+                    isPreventDefault = preventDefaultExclude.test(tagName);
+                }
+            } else if (isFunction(preventDefaultExclude)) {
+                isPreventDefault = preventDefaultExclude(event)
+            }
+        }
+        return isPreventDefault;
+    };
+
     /**
      * 监听input变化
      * @param {Event}
      */
-    inputListener(event: SupportEvent): void {
-        if (this.options.isPreventDefault) {
+    catchEvent(event: SupportEvent): void {
+        if (this.options.isPreventDefault && this.canPreventDefault(event)) {
             event.preventDefault();
         }
 

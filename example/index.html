@@ -3,7 +3,8 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta data-n-head="true" name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" />
+    <meta data-n-head="true" name="viewport"
+        content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>🖐 AnyTouch</title>
     <link rel="stylesheet" href="index.css">
@@ -48,7 +49,7 @@
                 <td>{{message.pointLength}}</td>
                 <td>触点数</td>
             </tr>
-            
+
             <tr>
                 <td>maxPointLength</td>
                 <td>{{message.maxPointLength}}</td>
@@ -206,13 +207,20 @@
                 left:`${x}px`,
             transform: `scale(${scale}) rotate(${angle}deg)`
             
-        }">{{message.type||activeType}}</div>
+        }">{{message.type||activeType}}<span id="inner" style="background:#f10;padding:15px;">1231313</span></div>
+        <span>xsadsadasd</span>
+        
         <!-- <p class="text">scale: {{scale}}</p>
         <p class="text">angle: {{angle}}</p> -->
         <!-- <div class="circle2" id="circle2" ref="circle2">123</div> -->
     </main>
     <script src="./index.js"></script>
     <script>
+        let inner = document.getElementById('inner');
+        inner.addEventListener('click', ev => {
+            console.log(ev);
+        });
+
         // let circle = document.getElementById('circle');
         // circle.addEventListener('pan', ev => {
         //     console.log(ev);

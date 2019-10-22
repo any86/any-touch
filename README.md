@@ -82,7 +82,7 @@ at.on('roatemove', ev=>{});
 ```
 
 ```javascript
-cosnt at = new AnyTouch()
+const at = new AnyTouch()
 { 
     onload(){
         at.on('pinch', ev=>{
@@ -155,6 +155,18 @@ export default {
 [全部手势展示](https://any86.github.io/any-touch/example/)
 
 [做一个drawer(抽屉)插件](https://codepen.io/russell2015/pen/jJRbgp?editors=0010)
+
+
+## 参数说明
+|名称|类型|默认值|简要说明|
+|---|---|---|---|
+|touchAction|`String`|`'compute'`|对应css的touch-action属性|
+|hasDomEvents|`Boolean`|`true`|是否派发手势名对应的原生事件|
+|isPreventDefault|`Boolean`|`true`|是否阻止默认事件|
+|preventDefaultExclude|`RegExp | ((ev: SupportEvent) => boolean)`|`/^(INPUT|TEXTAREA|BUTTON|SELECT)$/`|符合条件可不阻止默认事件的触发|
+|preventDefaultExclude|`RegExp | ((ev: SupportEvent) => boolean)`|`/^(INPUT|TEXTAREA|BUTTON|SELECT)$/`|符合条件可不阻止默认事件的触发|
+syncToAttr|`Boolean`|`true`|是否在元素上的`at-gesture`属性赋值当前手势名|
+cssPrevent|`Object`|`{selectText: true,drag: true, tapHighlight: true, callout: true}`|是否开启上述禁止浏览器默认事件的css属性|
 
 ## 不要用alert调试
 
