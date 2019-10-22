@@ -14,7 +14,6 @@
 - 更放心: 代码测试覆盖率**100%**.
 
 ## 演示
-![](https://user-images.githubusercontent.com/8264787/66906055-8c59ac80-f039-11e9-94b0-3e3e6802d70c.gif)
 
 ![二维码](https://user-images.githubusercontent.com/8264787/64757535-fc6da200-d564-11e9-9bf6-1ac40e08b8b7.png)
 
