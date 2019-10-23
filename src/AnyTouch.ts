@@ -98,7 +98,7 @@ export default class {
             touchAction: COMPUTE,
             hasDomEvents: true,
             isPreventDefault: true,
-            preventDefaultExclude: /^(INPUT|TEXTAREA|BUTTON|SELECT)$/,
+            preventDefaultExclude: /^(?:INPUT|TEXTAREA|BUTTON|SELECT)$/,
             syncToAttr: false,
             cssPrevent: {
                 // 阻止触发选择文字
