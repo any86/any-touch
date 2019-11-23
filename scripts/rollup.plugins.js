@@ -8,6 +8,10 @@ import typescript from 'rollup-plugin-typescript';
 import json from 'rollup-plugin-json';
 // 支持字符串替换, 比如动态读取package.json的version到代码
 import replace from 'rollup-plugin-replace';
+// 别名
+import alias from '@rollup/plugin-alias';
+
+
 // 读取package.json
 import pkg from '../package.json';
 // 压缩代码
@@ -17,6 +21,9 @@ const {
 
 // 插件
 export const plugins = [
+    alias({
+        '@':'/src'
+    }),
     replace({
         __VERSION__: pkg.version
     }),

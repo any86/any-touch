@@ -16,7 +16,7 @@
  * ==================== 流程 ====================
  * 格式化Event成统一的pointer格式 => 通过pointer数据计算 => 用计算结果去识别手势
  */
-import { AnyTouchEvent, SupportEvent, CSSPreventMap } from './interface';
+import { AnyTouchEvent, SupportEvent, CSSPreventMap } from '@/types';
 import AnyEvent from 'any-event';
 import { TOUCH, MOUSE, SUPPORT_TOUCH, NONE, AUTO, TOUCH_START, TOUCH_MOVE, TOUCH_CANCEL, TOUCH_END, MOUSE_DOWN, MOUSE_MOVE, MOUSE_UP, COMPUTE } from './const';
 import InputManage from './InputManage';

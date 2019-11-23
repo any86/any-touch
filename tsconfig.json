@@ -34,7 +34,12 @@
         // 声明文件路径
         // "declarationDir": "./lib",
         // 此处设置为node,才能解析import xx from 'xx'
-        "moduleResolution": "node"
+        "moduleResolution": "node",
+        "baseUrl": ".",
+        "rootDir": ".",
+        "paths": {
+            "@/types":["src/types"],
+        }
     },
     // 入口文件
     "include": [

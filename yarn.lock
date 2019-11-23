@@ -285,6 +285,13 @@
     "@types/istanbul-reports" "^1.1.1"
     "@types/yargs" "^12.0.9"
 
+"@rollup/plugin-alias@^2.2.0":
+  version "2.2.0"
+  resolved "https://registry.npm.taobao.org/@rollup/plugin-alias/download/@rollup/plugin-alias-2.2.0.tgz#3ac52ece8b39583249884adb90fb316484389fe5"
+  integrity sha1-OsUuzos5WDJJiErbkPsxZIQ4n+U=
+  dependencies:
+    slash "^3.0.0"
+
 "@types/babel__core@^7.1.0":
   version "7.1.2"
   resolved "https://registry.npmjs.org/@types/babel__core/-/babel__core-7.1.2.tgz#608c74f55928033fce18b99b213c16be4b3d114f"
@@ -4039,6 +4046,11 @@ slash@^2.0.0:
   version "2.0.0"
   resolved "https://registry.npmjs.org/slash/-/slash-2.0.0.tgz#de552851a1759df3a8f206535442f5ec4ddeab44"
   integrity sha512-ZYKh3Wh2z1PpEXWr0MpSBZ0V6mZHAQfYevttO11c51CaWjGTaadiKZ+wVt1PbMlDV5qhMFslpZCemhwOK7C89A==
+
+slash@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.npm.taobao.org/slash/download/slash-3.0.0.tgz#6539be870c165adbd5240220dbe361f1bc4d4634"
+  integrity sha1-ZTm+hwwWWtvVJAIg2+Nh8bxNRjQ=
 
 snapdragon-node@^2.0.1:
   version "2.1.1"
