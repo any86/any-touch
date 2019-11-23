@@ -1,5 +1,5 @@
-import { Vector } from '../interface';
-import { getAngle } from '../vector';
+import { Vector } from '@/types';
+import { getAngle } from '@/vector';
 export default function ({
     startV, prevV, activeV
 }: Record<string,Vector>): { angle: number, deltaAngle: number } {

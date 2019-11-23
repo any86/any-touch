@@ -1,9 +1,9 @@
 /**
  * 构造统一的Input格式
  */
-import { Input, Point, SupportEvent } from '../interface';
-import { SUPPORT_TOUCH, INPUT_END, INPUT_START, INPUT_CANCEL } from '../const';
-import { getCenter } from '../vector';
+import { Input, Point, SupportEvent } from '@/types';
+import { SUPPORT_TOUCH, INPUT_END, INPUT_START, INPUT_CANCEL } from '@/const';
+import { getCenter } from '@/vector';
 import Touch from './adapters/Touch';
 import Mouse from './adapters/Mouse';
 import Adapter from './adapters/Abstract';

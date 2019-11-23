@@ -1,4 +1,4 @@
-import { AnyTouchEvent, Computed } from '../interface';
+import { AnyTouchEvent, Computed } from '@/types';
 import { INPUT_MOVE, PAN_Y, PAN_X,DIRECTION_LEFT, DIRECTION_RIGHT, DIRECTION_DOWN, DIRECTION_UP,DIRECTION_ALL,NONE,AUTO } from '../const';
 import Recognizer from './Base';
 import getHV from '../utils/getHV';

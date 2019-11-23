@@ -1,4 +1,4 @@
-import { AnyTouchEvent } from '../interface';
+import { AnyTouchEvent } from '@/types';
 import {
     STATUS_FAILED, STATUS_RECOGNIZED
 } from '../const/recognizerStatus';

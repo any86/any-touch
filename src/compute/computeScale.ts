@@ -1,5 +1,5 @@
-import { Vector } from '../interface';
-import { getVLength } from '../vector';
+import { Vector } from '@/types';
+import { getVLength } from '@/vector';
 export default function ({
     startV, prevV, activeV
 }:  Record<string,Vector>): { scale: number, deltaScale: number } {

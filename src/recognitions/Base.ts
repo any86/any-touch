@@ -1,5 +1,5 @@
-import { AnyTouchEvent, directionString } from '../interface';
-import {INPUT_CANCEL, INPUT_END, INPUT_MOVE,DIRECTION_X, DIRECTION_Y,NONE } from '../const';
+import { AnyTouchEvent, directionString } from '@/types';
+import {INPUT_CANCEL, INPUT_END, INPUT_MOVE,DIRECTION_X, DIRECTION_Y,NONE } from '@/const';
 import {
     STATUS_POSSIBLE,
     STATUS_START,

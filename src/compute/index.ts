@@ -1,5 +1,5 @@
 
-import { AnyTouchEvent, InputRecord,Store } from '../interface';
+import { AnyTouchEvent, InputRecord,Store } from '@/types';
 import intervalCompute from './intervalCompute';
 import computeDistance from './computeDistance';
 import computeDeltaXY from './computeDeltaXY';

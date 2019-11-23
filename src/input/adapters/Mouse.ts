@@ -1,4 +1,4 @@
-import { BaseInput, eventType } from '../../interface';
+import { BaseInput, eventType } from '@/types';
 // 默认MouseEvent中对type声明仅为string
 import Adapter from './Abstract';
 

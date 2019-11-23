@@ -1,5 +1,5 @@
-import { radianToAngle } from '../vector';
-import { Store, InputRecord } from '../interface';
+import { radianToAngle } from '@/vector';
+import { Store, InputRecord } from '@/types';
 export default function ({
     prevInput,
     input

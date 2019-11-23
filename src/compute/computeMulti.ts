@@ -1,5 +1,5 @@
 
-import { Input } from '../interface';
+import { Input } from '@/types';
 import computeVector from './computeVector';
 import computeScale from './computeScale';
 import computeAngle from './computeAngle';

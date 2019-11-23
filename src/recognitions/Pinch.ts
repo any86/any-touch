@@ -1,4 +1,4 @@
-import { AnyTouchEvent } from '../interface';
+import { AnyTouchEvent } from '@/types';
 import {NONE,INPUT_END} from '../const';
 import Recognizer from './Base';
 

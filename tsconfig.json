@@ -38,11 +38,12 @@
         "baseUrl": ".",
         "rootDir": ".",
         "paths": {
-            "@/types":["src/types"],
+            "@/*":["src/*"],
         }
     },
     // 入口文件
     "include": [
-        "src/main.ts", "src/vueDirective/index.ts"
+        "src/main.ts"
+        // , "src/vueDirective/index.ts"
     ]
 }

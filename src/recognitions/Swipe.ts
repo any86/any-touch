@@ -1,5 +1,5 @@
 import Recognizer from './Base';
-import { AnyTouchEvent } from '../interface';
+import { AnyTouchEvent } from '@/types';
 import { INPUT_END,DIRECTION_ALL,NONE } from '../const';
 export default class SwipeRecognizer extends Recognizer {
     static DEFAULT_OPTIONS = {

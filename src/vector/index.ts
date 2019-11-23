@@ -1,6 +1,5 @@
-import { CLIENT_X, CLIENT_Y,DIRECTION_UP,DIRECTION_DOWN,DIRECTION_RIGHT,DIRECTION_LEFT, NONE } from './const';
-import { directionString, Point,Vector } from './interface';
-
+import { CLIENT_X, CLIENT_Y,DIRECTION_UP,DIRECTION_DOWN,DIRECTION_RIGHT,DIRECTION_LEFT, NONE } from '@/const';
+import { directionString, Point,Vector } from '@/types';
 /**
  * 获取向量长度(向量模)
  * @param {Object} 向 量

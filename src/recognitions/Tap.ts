@@ -1,11 +1,11 @@
-import { AnyTouchEvent, Point } from '../interface';
+import { AnyTouchEvent, Point } from '@/types';
 import {
     STATUS_RECOGNIZED, STATUS_POSSIBLE,
     STATUS_FAILED,
 } from '../const/recognizerStatus';
 import Recognizer from './Base';
 import { INPUT_END,AUTO } from '../const';
-import { getVLength } from '../vector';
+import { getVLength } from '@/vector';
 
 export default class TapRecognizer extends Recognizer {
     public tapCount: number;

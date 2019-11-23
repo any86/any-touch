@@ -1,7 +1,7 @@
 
-import { Input,directionString } from '../interface';
+import { Input,directionString } from '@/types';
 import { CLIENT_X, CLIENT_Y } from '../const';
-import { getVLength, getDirection } from '../vector';
+import { getVLength, getDirection } from '@/vector';
 import Store from '../Store';
 export default function ({
     startInput,
