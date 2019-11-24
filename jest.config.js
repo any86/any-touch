@@ -14,5 +14,9 @@ module.exports = {
     globals: {
         __TEST__: true,
         ontouchstart: null
-    }
+    },
+    moduleFileExtensions: ['ts', 'tsx', 'js', 'json'],
+    moduleNameMapper: {
+        '^@/(.*?)$': '<rootDir>/src/$1'
+    },
 };
