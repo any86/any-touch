@@ -1,4 +1,4 @@
-import { Input, SupportEvent, InputRecord, AnyTouchEvent,Store } from './interface';
+import { Input, SupportEvent, InputRecord, AnyTouchEvent,Store } from '@/types';
 import InputFactory from './input';
 import compute from './compute/index';
 import { INPUT_START} from './const';

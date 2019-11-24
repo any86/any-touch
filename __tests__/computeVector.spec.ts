@@ -1,4 +1,4 @@
-import { Input } from '../src/interface';
+import { Input } from '../src/types';
 import computeVector from '../src/compute/computeVector';
 
 test('向量计算函数是否正确?', () => {

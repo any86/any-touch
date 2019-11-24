@@ -1,8 +1,5 @@
 import { BaseInput, eventType } from '@/types';
-// 默认MouseEvent中对type声明仅为string
 import Adapter from './Abstract';
-
-import { INPUT_START,INPUT_MOVE,INPUT_END } from '../../const';
 
 export default class extends Adapter {
     prevPoints?: { clientX: number, clientY: number }[];
@@ -13,51 +10,38 @@ export default class extends Adapter {
     };
 
     load(event: MouseEvent): BaseInput | void {
-        let { clientX, clientY, type, button } = event;
+        const { clientX, clientY, type, button } = event;
+        let points = [{ clientX, clientY }];
+        let eventType: eventType | undefined;
+        if ('mousedown' === type && 0 === button) {
+            // 必须左键
+            this.isPressed = true;
+            eventType = 'start';
+        } else if (this.isPressed) {
+            if ('mousemove' === type) {
+                eventType = 'move';
+            } else if ('mouseup' === type) {
+                points = [];
+                eventType = 'end';
+                this.isPressed = false;
+            }
+        }
 
         // changedPoints = prevPoints其实并不能完全等于touch下的changedPoints
         // 但是由于鼠标没有多点输入的需求, 
         // 所以暂时如此实现
         const changedPoints = this.prevPoints || [{ clientX, clientY }];
 
-        let points = [{ clientX, clientY }];
         this.prevPoints = [{ clientX, clientY }];
 
-        // 必须左键
-        if ('mousedown' === type) {
-            if (0 === button) {
-                this.isPressed = true;
-            } else {
-                return;
-            }
-        }
-
-        if ('mousemove' === type) {
-            if (!this.isPressed) return;
-            // 确保移动过程中, 一直按住的都是左键,
-            // if(1 !== event.which) {
-            //     type = 'mouseup'
-            // }
-        } else if ('mouseup' === type) {
-            if (this.isPressed) {
-                points = [];
-            } else {
-                return;
+        if (void 0 !== eventType) {
+            return {
+                eventType,
+                changedPoints,
+                points,
+                nativeEvent: event
             };
-            this.isPressed = false;
         }
 
-        const MAP = {
-            mousedown: INPUT_START,
-            mousemove: INPUT_MOVE,
-            mouseup: INPUT_END
-        };
-
-        return {
-            eventType: <eventType>MAP[<'mousedown' | 'mousemove' | 'mouseup'>type],
-            changedPoints,
-            points,
-            nativeEvent: event
-        };
     }
 }; 
