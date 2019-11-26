@@ -180,3 +180,11 @@ export default {
 因为"双击"的识别需要让"单击"等待他的"第二下单击", 如果没有"第二下单击", 那么"单击"触发, 否则识别为"双击".
 
 基于上面的逻辑, 如果默认开启了"双击", 那么没有"双击"需求的人用的时候就会觉得"单击"反应慢(因为再等双击), 出于对"大多数人没有双击需求"的考虑, 默认"双击"是关闭状态.
+
+开启方式:
+```javascript
+const at = new AnyTouch(el);
+const doubletap = at.get("doubletap");
+// 开启双击
+doubletap.disabled = false;
+```
