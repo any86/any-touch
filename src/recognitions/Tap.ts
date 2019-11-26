@@ -24,7 +24,9 @@ export default class TapRecognizer extends Recognizer {
 
     static DEFAULT_OPTIONS = {
         name: 'tap',
+        // 触点数
         pointLength: 1,
+        // 点击次数
         tapTimes: 1,
         // 等待下一次tap的时间, 
         // 超过该事件就立即判断当前点击数量
