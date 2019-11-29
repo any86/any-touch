@@ -138,7 +138,7 @@ Rotate/ Pinch/ Pan/ Swipe/ Tap/ Press上均存在下列方法和属性.
 // 自定义一个双击识别器
 const tap2 = new AnyTouch.Tap({
     name: 'doubletap',
-    pointer: 1,
+    pointLength: 1,
     taps: 2
 });
 
@@ -146,7 +146,7 @@ const tap2 = new AnyTouch.Tap({
 const el = doucument.getElementById('gesture-box');
 const at = new AnyTouch(el);
 at.add(tap2);
-at.on('tap2', ev=>{
+at.on('doubletap', ev=>{
     console.log(ev);
 });
 

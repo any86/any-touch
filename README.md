@@ -8,10 +8,10 @@
 [downloads-url]: https://npmjs.org/package/any-touch
 
 :wave: 一个基于typescript实现的手势库.
-- 支持更多设备: PC端 / 移动端 / [微信小程序](#支持微信小程序).
-- 支持手势更全面: **tap**(点击) / **press**(按) / **pan**(拖拽) / **swipe**(划) / **pinch**(捏合) / **rotate**(旋转) 6大类手势.
-- 更简单: 支持 [vue指令](#支持vue指令).
-- 更放心: 代码测试覆盖率**100%**.
+- [x] 支持更多设备: PC端 / 移动端 / [微信小程序](#支持微信小程序).
+- [x] 支持手势更全面: **tap**(点击) / **press**(按) / **pan**(拖拽) / **swipe**(划) / **pinch**(捏合) / **rotate**(旋转) 6大类手势.
+- [x] 更简单: 支持 [vue指令](#支持vue指令).
+- [x] 更放心: 代码测试覆盖率**100%**.
 
 ## 演示
 
@@ -162,10 +162,9 @@ export default {
 |touchAction|`String`|`'compute'`|对应css的touch-action属性|
 |hasDomEvents|`Boolean`|`true`|是否派发手势名对应的原生事件|
 |isPreventDefault|`Boolean`|`true`|是否阻止默认事件|
-|preventDefaultExclude|`RegExp | ((ev: SupportEvent) => boolean)`|`/^(INPUT|TEXTAREA|BUTTON|SELECT)$/`|符合条件可不阻止默认事件的触发|
-|preventDefaultExclude|`RegExp | ((ev: SupportEvent) => boolean)`|`/^(INPUT|TEXTAREA|BUTTON|SELECT)$/`|符合条件可不阻止默认事件的触发|
-syncToAttr|`Boolean`|`true`|是否在元素上的`at-gesture`属性赋值当前手势名|
-cssPrevent|`Object`|`{selectText: true,drag: true, tapHighlight: true, callout: true}`|是否开启上述禁止浏览器默认事件的css属性|
+|preventDefaultExclude|`RegExp \| ((ev: SupportEvent) => boolean)`|`/^(INPUT\|TEXTAREA\|BUTTON\|SELECT)$/`|符合条件可不阻止默认事件的触发|
+|syncToAttr|`Boolean`|`true`|是否在元素上的`at-gesture`属性赋值当前手势名|
+|cssPrevent|`Object`|`{selectText: true,drag: true, tapHighlight: true, callout: true}`|是否开启上述禁止浏览器默认事件的css属性|
 
 ## 不要用alert调试
 
@@ -173,3 +172,19 @@ cssPrevent|`Object`|`{selectText: true,drag: true, tapHighlight: true, callout: 
 [测试代码](https://codepen.io/russell2015/pen/vYBjVNe)
 
 如果仅仅是了在移动端调试, 请使用腾讯的[vconsole](https://github.com/Tencent/vConsole)
+
+## 常见问题
+
+### 为什么"双击"默认是关闭的?
+
+因为"双击"的识别需要让"单击"等待他的"第二下单击", 如果没有"第二下单击", 那么"单击"触发, 否则识别为"双击".
+
+基于上面的逻辑, 如果默认开启了"双击", 那么没有"双击"需求的人用的时候就会觉得"单击"反应慢(因为再等双击), 出于对"大多数人没有双击需求"的考虑, 默认"双击"是关闭状态.
+
+开启方式:
+```javascript
+const at = new AnyTouch(el);
+const doubletap = at.get("doubletap");
+// 开启双击
+doubletap.disabled = false;
+```
