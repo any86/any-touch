@@ -24,7 +24,7 @@ import InputManage from '@/InputManage';
 import computeTouchAction from '@/utils/computeTouchAction';
 import Store from '@/Store';
 import { isRegExp, isFunction } from '@/utils/is';
-
+import compute from '@/compute';
 // 识别器
 import Recognizer from '@/recognitions/Base';
 import Tap from '@/recognitions/Tap';
@@ -114,7 +114,7 @@ export default class {
         };
         if (undefined !== el) this.el = el;
         this.$store = new Store();
-        this.inputManage = new InputManage({ $store: this.$store });
+        this.inputManage = new InputManage();
         this.touchDevice = SUPPORT_TOUCH ? TOUCH : MOUSE;
         this.options = { ...this.default, ...options };
         // eventEmitter
@@ -342,10 +342,11 @@ export default class {
 
         // 管理历史input
         // 生成AnyTouchEvent
-        const computed = this.inputManage.load(event);
+        const inputRecord = this.inputManage.load(event);
         // 跳过无效输入
         // 如: 当是鼠标事件的时候, 会有undefined的时候
-        if (undefined !== computed) {
+        if (void 0 !== inputRecord) {
+            const computed = compute(inputRecord, this.$store)
             // input事件
             this.emit('input', computed);
             if (computed.isStart) {
@@ -380,6 +381,7 @@ export default class {
                 }
             }
         }
+
     };
 
     /**

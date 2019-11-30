@@ -51,18 +51,19 @@ export default class TapRecognizer extends Recognizer {
 
     /**
      * 判断前后2次点击的距离是否超过阈值
-     * @param {Point} 当前触点
+     * @param {Point} 当前触点中心坐标
      * @return {Boolean} 前后2次点击的距离是否超过阈值
      */
-    private _isValidDistanceFromPrevTap(point: Point): boolean {
+    private _isValidDistanceFromPrevTap(center: Point): boolean {
+        // console.warn(this.name, point);
         // 判断2次点击的距离
         if (undefined !== this.prevTapPoint) {
-            const distanceFromPreviousTap = getVLength({ x: point.x - this.prevTapPoint.x, y: point.y - this.prevTapPoint.y });
+            const distanceFromPreviousTap = getVLength({ x: center.x - this.prevTapPoint.x, y: center.y - this.prevTapPoint.y });
             // 缓存当前点, 作为下次点击的上一点
-            this.prevTapPoint = point;
+            this.prevTapPoint = center;
             return this.options.tapsPositionTolerance >= distanceFromPreviousTap;
         } else {
-            this.prevTapPoint = point;
+            this.prevTapPoint = center;
             return true;
         }
     };
@@ -140,7 +141,10 @@ export default class TapRecognizer extends Recognizer {
             this.isWaitingOther = false;
             // 判断2次点击之间的距离是否过大
             // 对符合要求的点击进行累加
+            
+
             if (this._isValidDistanceFromPrevTap(computed) && this._isValidInterval()) {
+
                 this.tapCount++;
             } else {
                 this.tapCount = 1;
