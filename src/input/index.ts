@@ -19,7 +19,7 @@ export default class {
         // 从event中采集的数据
         const input = this.adapter.load(event);
         if (void 0 !== input) {
-            const id = Number.MAX_SAFE_INTEGER > this.id ? this.id ++ : 1
+            const id = Number.MAX_SAFE_INTEGER > this.id ? ++this.id : 1
             return { ...input, id };
         }
     };

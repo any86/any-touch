@@ -39,11 +39,13 @@
         "rootDir": ".",
         "paths": {
             "@/*":["src/*"],
+            "@types":["src/types/index.ts"]
         }
     },
     // 入口文件
     "include": [
-        "src/main.ts"
+        "src/main.ts",
+        // "src/compute/lazy.ts"
         // , "src/vueDirective/index.ts"
     ]
 }

@@ -344,9 +344,11 @@ export default class {
         // 生成AnyTouchEvent
         const inputRecord = this.inputManage.load(event);
         // 跳过无效输入
-        // 如: 当是鼠标事件的时候, 会有undefined的时候
+        // 当是鼠标事件的时候, 会有undefined的时候
+        // 比如鼠标还没有mousedown阶段的mousemove等都是无效操作
         if (void 0 !== inputRecord) {
             const computed = compute(inputRecord, this.$store)
+            console.log(computed.id);
             // input事件
             this.emit('input', computed);
             if (computed.isStart) {

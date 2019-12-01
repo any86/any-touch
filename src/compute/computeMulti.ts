@@ -1,9 +1,9 @@
 
 import { Input } from '@/types';
+import Store from '@/Store';
 import computeVector from './computeVector';
 import computeScale from './computeScale';
 import computeAngle from './computeAngle';
-import Store from '../Store';
 type Arg = {
     startMultiInput?: Input,
     prevInput?: Input,

@@ -5,7 +5,7 @@
 import { Input,directionString } from '@/types';
 import { COMPUTE_INTERVAL, NONE,INPUT_CANCEL, INPUT_END } from '../const';
 import { getDirection } from '@/vector';
-import Store from '../Store';
+import Store from '@/Store';
 
 export default ({ prevInput, input }: { prevInput?: Input, input?: Input },$store:Store): { speedX: number, speedY: number, velocityX: number, velocityY: number, direction?: directionString } => {
 
