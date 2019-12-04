@@ -1,6 +1,6 @@
 
 import { Input,directionString } from '@/types';
-import { CLIENT_X, CLIENT_Y } from '@/const';
+import { CLIENT_X, CLIENT_Y,INPUT_START,INPUT_MOVE,INPUT_END } from '@/const';
 import { getVLength, getDirection } from '@/vector';
 import Store from '@/Store';
 export default function ({
@@ -13,16 +13,16 @@ export default function ({
     const { eventType } = input;
     let displacementX = 0;
     let displacementY = 0;
-    if ('start' === eventType) {
+    if (INPUT_START === eventType) {
         $store.set({ displacementX });
         $store.set({ displacementY });
-    } else if ('move' === eventType) {
+    } else if (INPUT_MOVE === eventType) {
         displacementX = Math.round(input!.points[0][CLIENT_X] - startInput!.points[0][CLIENT_X]);
         displacementY = Math.round(input!.points[0][CLIENT_Y] - startInput!.points[0][CLIENT_Y]);
         // 记录本次位移
         $store.set({ displacementX });
         $store.set({ displacementY });
-    } else if ('end' === eventType) {
+    } else if (INPUT_END === eventType) {
         displacementX = $store.get('displacementX', 0);
         displacementY = $store.get('displacementY', 0);
     }

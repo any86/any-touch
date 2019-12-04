@@ -1,9 +1,9 @@
 import Store from '@/Store';
-
-export default ({ pointLength, isStart }: { pointLength: number, isStart: boolean }, $store: Store): number => {
-    if (isStart) {
-        $store.set({ maxPointLength: pointLength });
-        return pointLength;
+import { InputRecord } from '@/types';
+export default (inputRecord:InputRecord, $store: Store): number => {
+    if (inputRecord && inputRecord.input && inputRecord.input.isStart) {
+        $store.set({ maxPointLength:inputRecord.input.pointLength });
+        return inputRecord.input.pointLength;
     }
     return $store.get('maxPointLength', 0)
 };

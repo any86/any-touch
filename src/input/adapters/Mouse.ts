@@ -1,6 +1,5 @@
 import { BaseInput, eventType } from '@/types';
 import Adapter from './Abstract';
-
 export default class extends Adapter {
     prevPoints?: { clientX: number, clientY: number }[];
     isPressed: boolean;
@@ -8,8 +7,7 @@ export default class extends Adapter {
         super();
         this.isPressed = false;
     };
-
-    load(event: MouseEvent): BaseInput | void {
+    load(event: MouseEvent): Omit<BaseInput,'id'> | void {
         const { clientX, clientY, type, button } = event;
         let points = [{ clientX, clientY }];
         let eventType: eventType | undefined;

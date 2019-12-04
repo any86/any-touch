@@ -45,7 +45,7 @@ new Vue({
         });
 
         el.addEventListener('click', ev => {
-            console.log('click');
+            // console.log('click');
         })
 
 

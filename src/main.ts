@@ -348,7 +348,6 @@ export default class {
         // 比如鼠标还没有mousedown阶段的mousemove等都是无效操作
         if (void 0 !== inputRecord) {
             const computed = compute(inputRecord, this.$store)
-            console.log(computed.id);
             // input事件
             this.emit('input', computed);
             if (computed.isStart) {

@@ -35,7 +35,10 @@ export default class PanRecognizer extends Recognizer {
      * @param {AnyTouchEvent} 计算数据
      * @return {Boolean}} .是否是当前手势 
      */
-    test({ distance, direction, eventType, pointLength }: AnyTouchEvent): boolean {
+    test({direction, eventType, pointLength,computeDistanceLazy }: AnyTouchEvent): boolean {
+        // console.log('pan',{ distance, direction}, computeDistanceLazy())
+        const { distance} = computeDistanceLazy();
+        console.log(direction);
         return INPUT_MOVE === eventType &&
             (this.isRecognized || this.options.threshold < distance) &&
             this.isValidPointLength(pointLength) &&

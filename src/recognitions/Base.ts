@@ -244,7 +244,6 @@ export default abstract class Recognizer {
         // if(this.name === 'pan')    console.log(this.name,this.status);
         // 是否识别成功
         let isVaild = this.test(computed);
-
         // 重置status
         this._resetStatus();
 

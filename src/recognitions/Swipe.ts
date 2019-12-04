@@ -48,7 +48,7 @@ export default class SwipeRecognizer extends Recognizer {
 
         let vaildVelocity = Math.sqrt(vaildVelocityX * vaildVelocityX + vaildVelocityY * vaildVelocityY)
 
-        return 1 === maxPointLength &&
+        return this.options.pointLength === maxPointLength &&
             this.options.threshold < distance &&
             this.isVaildDirection(direction) &&
             this.options.velocity < vaildVelocity;
