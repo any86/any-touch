@@ -15,7 +15,7 @@ test('preventDefaultExclude通过函数指定排除', async (done) => {
         }
     });
     const canPreventDefault = at.canPreventDefault((<any>{ target: { tagName: 'div' } }));
-    expect(canPreventDefault).toBeTruthy();
+    expect(canPreventDefault).toBeFalsy();
     done();
 });
 

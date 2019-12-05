@@ -16,7 +16,7 @@
  * ==================== 流程 ====================
  * 格式化Event成统一的pointer格式 => 通过pointer数据计算 => 用计算结果去识别手势
  */
-import { AnyTouchEvent, SupportEvent, CSSPreventMap } from '@/types';
+import { AnyTouchEvent, SupportEvent, CSSPreventMap } from './interface';
 import AnyEvent from 'any-event';
 import { TOUCH, MOUSE, SUPPORT_TOUCH, NONE, AUTO, TOUCH_START, TOUCH_MOVE, TOUCH_CANCEL, TOUCH_END, MOUSE_DOWN, MOUSE_MOVE, MOUSE_UP, COMPUTE } from './const';
 import InputManage from './InputManage';
@@ -97,7 +97,7 @@ export default class {
         this.default = {
             touchAction: COMPUTE,
             hasDomEvents: true,
-            isPreventDefault: true,
+            isPreventDefault: false,
             preventDefaultExclude: /^(?:INPUT|TEXTAREA|BUTTON|SELECT)$/,
             syncToAttr: false,
             cssPrevent: {
@@ -311,16 +311,17 @@ export default class {
     };
 
     canPreventDefault(event: SupportEvent): boolean {
-        let isPreventDefault = true;
+        if(!this.options.isPreventDefault) return false;
+        let isPreventDefault = false;
         if (null !== event.target) {
             const { preventDefaultExclude } = this.options;
             if (isRegExp(preventDefaultExclude)) {
                 const { tagName } = (<HTMLElement>event.target);
-                if (undefined !== tagName) {
-                    isPreventDefault = preventDefaultExclude.test(tagName);
+                if (void 0 !== tagName) {
+                    isPreventDefault = !preventDefaultExclude.test(tagName);
                 }
             } else if (isFunction(preventDefaultExclude)) {
-                isPreventDefault = preventDefaultExclude(event)
+                isPreventDefault = !preventDefaultExclude(event)
             }
         }
         return isPreventDefault;
@@ -331,7 +332,7 @@ export default class {
      * @param {Event}
      */
     catchEvent(event: SupportEvent): void {
-        if (this.options.isPreventDefault && this.canPreventDefault(event)) {
+        if (this.canPreventDefault(event)) {
             event.preventDefault();
         }
 

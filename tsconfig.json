@@ -38,6 +38,7 @@
         "baseUrl": ".",
         "rootDir": ".",
         "paths": {
+            "@/*":["src/*"],
             "@/types":["src/types"],
         }
     },
