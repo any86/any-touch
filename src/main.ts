@@ -312,16 +312,17 @@ export default class {
     };
 
     canPreventDefault(event: SupportEvent): boolean {
-        let isPreventDefault = true;
+        if(!this.options.isPreventDefault) return false;
+        let isPreventDefault = false;
         if (null !== event.target) {
             const { preventDefaultExclude } = this.options;
             if (isRegExp(preventDefaultExclude)) {
                 const { tagName } = (<HTMLElement>event.target);
-                if (undefined !== tagName) {
-                    isPreventDefault = preventDefaultExclude.test(tagName);
+                if (void 0 !== tagName) {
+                    isPreventDefault = !preventDefaultExclude.test(tagName);
                 }
             } else if (isFunction(preventDefaultExclude)) {
-                isPreventDefault = preventDefaultExclude(event)
+                isPreventDefault = !preventDefaultExclude(event)
             }
         }
         return isPreventDefault;
@@ -332,7 +333,7 @@ export default class {
      * @param {Event}
      */
     catchEvent(event: SupportEvent): void {
-        if (this.options.isPreventDefault && this.canPreventDefault(event)) {
+        if (this.canPreventDefault(event)) {
             event.preventDefault();
         }
 
@@ -354,24 +355,6 @@ export default class {
                 // 重置isStopped
                 this._isStopped = false;
             }
-            // if (computed.isStart) {
-            //     // $store.reset();
-            //     this._isStopped = false;
-            //     this.emit('inputstart', computed);
-            // } else if ('cancel' === computed.eventType) {
-            //     this.emit('inputcancel', computed);
-            // } else if (computed.isEnd) {
-            //     this.emit('inputend', computed);
-            // } else {
-            //     // prevInput和input一定不为空
-            //     if (this.inputManage.prevInput!.pointLength > computed.pointLength) {
-            //         this.emit('inputreduce', computed);
-            //     } else if (this.inputManage.prevInput!.pointLength < computed.pointLength) {
-            //         this.emit('inputadd', computed);
-            //     } else {
-            //         this.emit('inputmove', computed);
-            //     }
-            // };
 
             for (let recognizer of this.recognizers) {
                 if (recognizer.disabled) continue;

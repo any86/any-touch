@@ -2,7 +2,6 @@ import { AnyTouchEvent, Computed } from '@/types';
 import { INPUT_MOVE, PAN_Y, PAN_X, DIRECTION_LEFT, DIRECTION_RIGHT, DIRECTION_DOWN, DIRECTION_UP, DIRECTION_ALL, NONE, AUTO } from '../const';
 import Recognizer from './Base';
 import getHV from '../utils/getHV';
-import '@/compute/lazy'
 export default class PanRecognizer extends Recognizer {
     static DEFAULT_OPTIONS = {
         name: 'pan',
@@ -35,10 +34,7 @@ export default class PanRecognizer extends Recognizer {
      * @param {AnyTouchEvent} 计算数据
      * @return {Boolean}} .是否是当前手势 
      */
-    test({direction, eventType, pointLength,computeDistanceLazy }: AnyTouchEvent): boolean {
-        // console.log('pan',{ distance, direction}, computeDistanceLazy())
-        const { distance} = computeDistanceLazy();
-        console.log(direction);
+    test({direction, eventType, pointLength,distance }: AnyTouchEvent): boolean {
         return INPUT_MOVE === eventType &&
             (this.isRecognized || this.options.threshold < distance) &&
             this.isValidPointLength(pointLength) &&

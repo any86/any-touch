@@ -5,13 +5,11 @@ import computeDistance from './computeDistance';
 import computeDeltaXY from './computeDeltaXY';
 import computeMaxLength from './computeMaxLength';
 import computMulti from './computeMulti';
-import lazy from './lazy';
 
 export default function (inputs: InputRecord, $store: Store): AnyTouchEvent {
     const { input } = inputs;
-    const { id } = input;
     // ========= 整体距离/位移=========
-    // const { displacementX, displacementY, distanceX, distanceY, distance, overallDirection } = computeDistance(inputs, $store);
+    const { displacementX, displacementY, distanceX, distanceY, distance, overallDirection } = computeDistance(inputs, $store);
 
 
     // ========= 已消耗时间 =========
@@ -34,11 +32,7 @@ export default function (inputs: InputRecord, $store: Store): AnyTouchEvent {
 
     const maxPointLength = computeMaxLength(inputs, $store);
 
-
-    const computeDistanceLazy = lazy(computeDistance, id).bind(null, inputs, $store);
-
     return {
-        computeDistanceLazy,
         type: '',
         ...input,
         velocityX,
@@ -46,14 +40,14 @@ export default function (inputs: InputRecord, $store: Store): AnyTouchEvent {
         speedX,
         speedY,
         deltaTime,
-        // overallDirection,
+        overallDirection,
         direction,
         deltaX, deltaY, deltaXYAngle,
-        // displacementX,
-        // displacementY,
-        // distanceX,
-        // distanceY,
-        // distance,
+        displacementX,
+        displacementY,
+        distanceX,
+        distanceY,
+        distance,
         scale,
         deltaScale,
         angle,
