@@ -40,6 +40,7 @@ new Vue({
         // 初始化
         const anyTouch = new AnyTouch(el, {
             touchAction: 'auto',
+            isPreventDefault:true,
             syncToAttr: true
         });
 
@@ -127,7 +128,7 @@ new Vue({
             // e.nativeEvent.preventDefault();
             // anyTouch.set({touchAction:'auto',isPreventDefault:false});
             this.message = e;
-            console.warn(e.type);
+            // console.warn(e.type);
 
         });
 
@@ -140,7 +141,7 @@ new Vue({
 
 
         anyTouch.on('panup', e => {
-            console.warn(e.type);
+            // console.warn(e.type);
         });
 
         anyTouch.on('pancancel', e => {
@@ -150,7 +151,7 @@ new Vue({
         });
 
         anyTouch.on('panend', e => {
-            console.warn('panend', e.direction);
+            // console.warn('panend', e.direction);
             this.message = e;
             log(e.type);
         });

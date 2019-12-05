@@ -1,5 +1,5 @@
 /*!
- * AnyTouch.js v0.4.10
+ * AnyTouch.js v0.5.2
  * (c) 2018-2019 Russell
  * https://github.com/any86/any-touch
  * Released under the MIT License.

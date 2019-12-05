@@ -4,7 +4,11 @@
  * https://github.com/any86/any-touch
  * Released under the MIT License.
  */
-import AnyTouch from './any-touch.common';
+'use strict';
+
+function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
+
+var AnyTouch = _interopDefault(require('./any-touch.common'));
 
 var default_1 = (function () {
     function default_1(ClassObject) {
@@ -69,4 +73,4 @@ var plugin = {
     }
 };
 
-export default plugin;
+module.exports = plugin;

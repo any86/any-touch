@@ -4,7 +4,11 @@
  * https://github.com/any86/any-touch
  * Released under the MIT License.
  */
-import AnyEvent from 'any-event';
+'use strict';
+
+function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
+
+var AnyEvent = _interopDefault(require('any-event'));
 
 /*! *****************************************************************************
 Copyright (c) Microsoft Corporation. All rights reserved.
@@ -1372,4 +1376,4 @@ var default_1$6 = (function () {
     return default_1;
 }());
 
-export default default_1$6;
+module.exports = default_1$6;

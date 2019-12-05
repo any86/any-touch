@@ -1,5 +1,5 @@
 /*!
- * AnyTouch.js v0.4.10
+ * AnyTouch.js v0.5.2
  * (c) 2018-2019 Russell
  * https://github.com/any86/any-touch
  * Released under the MIT License.
@@ -698,6 +698,14 @@ var AnyTouch = (function () {
         return default_1;
     }());
 
+    var ObjectToString = Object.prototype.toString;
+    function isRegExp(input) {
+        return '[object RegExp]' === ObjectToString.call(input);
+    }
+    function isFunction(input) {
+        return '[object Function]' === ObjectToString.call(input);
+    }
+
     var STATUS_POSSIBLE = 'possible';
     var STATUS_START = 'start';
     var STATUS_MOVE = 'move';
@@ -1262,6 +1270,7 @@ var AnyTouch = (function () {
                 touchAction: COMPUTE,
                 hasDomEvents: true,
                 isPreventDefault: true,
+                preventDefaultExclude: /^(?:INPUT|TEXTAREA|BUTTON|SELECT)$/,
                 syncToAttr: false,
                 cssPrevent: {
                     selectText: true,
@@ -1355,7 +1364,7 @@ var AnyTouch = (function () {
             this.updateCssPrevent();
         };
         default_1.prototype._bindEL = function (el) {
-            var boundInputListener = this.inputListener.bind(this);
+            var boundInputListener = this.catchEvent.bind(this);
             if (TOUCH === this.touchDevice) {
                 var events_1 = [TOUCH_START, TOUCH_MOVE, TOUCH_END, TOUCH_CANCEL];
                 events_1.forEach(function (eventName) {
@@ -1381,9 +1390,6 @@ var AnyTouch = (function () {
                     }
                 };
             }
-        };
-        default_1.prototype.catchEvent = function (event) {
-            this.inputListener(event);
         };
         default_1.prototype.add = function (recognizer) {
             recognizer.$injectRoot(this._root);
@@ -1425,9 +1431,27 @@ var AnyTouch = (function () {
                 finally { if (e_2) throw e_2.error; }
             }
         };
-        default_1.prototype.inputListener = function (event) {
+        default_1.prototype.canPreventDefault = function (event) {
+            if (!this.options.isPreventDefault)
+                return false;
+            var isPreventDefault = false;
+            if (null !== event.target) {
+                var preventDefaultExclude = this.options.preventDefaultExclude;
+                if (isRegExp(preventDefaultExclude)) {
+                    var tagName = event.target.tagName;
+                    if (void 0 !== tagName) {
+                        isPreventDefault = !preventDefaultExclude.test(tagName);
+                    }
+                }
+                else if (isFunction(preventDefaultExclude)) {
+                    isPreventDefault = !preventDefaultExclude(event);
+                }
+            }
+            return isPreventDefault;
+        };
+        default_1.prototype.catchEvent = function (event) {
             var e_3, _a;
-            if (this.options.isPreventDefault) {
+            if (this.canPreventDefault(event)) {
                 event.preventDefault();
             }
             var computed = this.inputManage.load(event);
@@ -1480,7 +1504,7 @@ var AnyTouch = (function () {
         default_1.Swipe = SwipeRecognizer;
         default_1.Pinch = PinchRecognizer;
         default_1.Rotate = RotateRecognizer;
-        default_1.version = '0.4.10';
+        default_1.version = '0.5.2';
         default_1.Vector = Vector;
         default_1.EventEmitter = AnyEvent;
         return default_1;

@@ -94,8 +94,8 @@ main table tr td:nth-child(3) {
     box-sizing: content-box;
     width: 150px;
     height: 150px;
-    border-radius: 10%;
-    background: rgba(255, 255, 255, 0.2);
+    border-radius: 5%;
+    background: rgba(255, 255, 255, 0.8);
     position: fixed;
     line-height: 150px;
     text-align: center;
