@@ -97,7 +97,7 @@ export default class {
         this.default = {
             touchAction: COMPUTE,
             hasDomEvents: true,
-            isPreventDefault: false,
+            isPreventDefault: true,
             preventDefaultExclude: /^(?:INPUT|TEXTAREA|BUTTON|SELECT)$/,
             syncToAttr: false,
             cssPrevent: {

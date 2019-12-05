@@ -10,6 +10,7 @@ const el = document.createElement('div');
 // 暂时没想到如何触发元素的默认行为, 所以没法完美还原实际情况
 test('preventDefaultExclude通过函数指定排除', async (done) => {
     const at = new AnyTouch(el, {
+        isPreventDefault:true,
         preventDefaultExclude(ev) {
             return 'div' === (<any>ev).target.tagName;
         }
