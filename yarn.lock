@@ -287,8 +287,8 @@
 
 "@rollup/plugin-alias@^2.2.0":
   version "2.2.0"
-  resolved "https://registry.npm.taobao.org/@rollup/plugin-alias/download/@rollup/plugin-alias-2.2.0.tgz#3ac52ece8b39583249884adb90fb316484389fe5"
-  integrity sha1-OsUuzos5WDJJiErbkPsxZIQ4n+U=
+  resolved "https://registry.npmjs.org/@rollup/plugin-alias/-/plugin-alias-2.2.0.tgz#3ac52ece8b39583249884adb90fb316484389fe5"
+  integrity sha512-//6zmlHGbmousaatu4pBlC61gqZykLbH0c2GESBO4JgK5xFZgb/ih0zlg/5/BmTAczX5R/xsHRnsYsu4KyHV5w==
   dependencies:
     slash "^3.0.0"
 

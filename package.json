@@ -1,6 +1,6 @@
 {
   "name": "any-touch",
-  "version": "0.5.0",
+  "version": "0.5.2",
   "description": "一个手势库",
   "unpkg": "dist/any-touch.js",
   "jsdelivr": "dist/any-touch.js",
@@ -36,6 +36,7 @@
   },
   "homepage": "https://github.com/any86/any-touch#readme",
   "devDependencies": {
+    "@rollup/plugin-alias": "^2.2.0",
     "@types/jest": "^24.0.11",
     "chalk": "^2.4.2",
     "gh-pages": "^2.0.1",
@@ -49,7 +50,6 @@
     "rollup-plugin-sourcemaps": "^0.4.2",
     "rollup-plugin-terser": "^5.1.1",
     "rollup-plugin-typescript": "^1.0.0",
-    "@rollup/plugin-alias": "^2.2.0",
     "shelljs": "^0.8.3",
     "standard-version": "^4.4.0",
     "ts-jest": "^24.0.2",
