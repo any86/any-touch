@@ -261,7 +261,7 @@ export default abstract class Recognizer {
         const { eventType } = input;
 
         this.status = this.flow(isVaild, this.status, eventType);
-        const {event} = this;
+        const { event } = this;
         if (STATUS_CANCELLED === eventType) {
             this.emit(this.options.name + INPUT_CANCEL, event);
             return;
@@ -272,16 +272,16 @@ export default abstract class Recognizer {
         // 识别后触发的事件
         if (isVaild) {
             this.afterRecognized(event);
-            
+
             // computed = this.lockDirection(computed);
             this.emit(this.options.name, event);
 
             // panstart | panmove 等
             this.emit(this.options.name + this.status, event);
 
-            this.afterEmit(event);
+            this.afterEmit();
         } else if (this.isRecognized) {
-            
+
             // panend等
             this.emit(this.options.name + this.status, event);
 
@@ -302,13 +302,13 @@ export default abstract class Recognizer {
      * swipe可以把不支持的方向上的速率调整为0
      * @param {AnyTouchEvent} 计算数据 
      */
-    public afterRecognized(computed: any): void { };
+    afterRecognized(computed: any): void { };
 
     /**
      * 基类的所有emit触发后执行
      * @param {AnyTouchEvent} computed 
      */
-    public afterEmit(computed: any): void { };
+    afterEmit(): void { };
 
     /**
      * 计算当前手势的touch-action

@@ -24,7 +24,6 @@ import InputManage from '@/InputManage';
 import computeTouchAction from '@/utils/computeTouchAction';
 import Store from '@/Store';
 import { isRegExp, isFunction } from '@/utils/is';
-import compute from '@/compute';
 // 识别器
 import Recognizer from '@/recognitions/Base';
 import Tap from '@/recognitions/Tap';
@@ -137,7 +136,7 @@ export default class {
             // new Rotate().$injectRoot(root),
             // new Pinch().$injectRoot(root),
             new Pan().$injectRoot(root),
-            // new Swipe().$injectRoot(root),
+            new Swipe().$injectRoot(root),
             // new Tap().$injectRoot(root),
             // new Tap({
             //     name: 'doubletap',
