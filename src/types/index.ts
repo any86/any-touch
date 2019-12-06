@@ -1,7 +1,7 @@
-import _Store from './Store';
+import _Store from '@/Store';
 // export type Store = InstanceType<_Store>;
 export type Store = _Store;
-
+export type AEvent = any;
 // export 
 // 适配器支持的事件类型
 export type SupportEvent = MouseEvent | TouchEvent;
@@ -33,6 +33,7 @@ export interface BaseInput {
 }
 
 export interface Input extends BaseInput {
+    readonly id: number;
     readonly preventDefault: () => void;
     // 新一轮手势识别的开始和结束
     readonly isStart: boolean;

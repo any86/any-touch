@@ -1,7 +1,12 @@
-import { AnyTouchEvent, Computed } from '@/types';
-import { INPUT_MOVE, PAN_Y, PAN_X, DIRECTION_LEFT, DIRECTION_RIGHT, DIRECTION_DOWN, DIRECTION_UP, DIRECTION_ALL, NONE, AUTO } from '../const';
+import { AnyTouchEvent, Computed, InputRecord, Store } from '@/types';
+import { INPUT_MOVE, PAN_Y, PAN_X, DIRECTION_LEFT, DIRECTION_RIGHT, DIRECTION_DOWN, DIRECTION_UP, DIRECTION_ALL, NONE, AUTO, KEY_DELTAX, KEY_DIRECTION, KEY_DISTANCE } from '../const';
 import Recognizer from './Base';
 import getHV from '../utils/getHV';
+import computeDistance from '@/compute/computeDistance';
+import computeDeltaXY from '@/compute/computeDeltaXY';
+import intervalCompute from '@/compute/intervalCompute';
+
+
 export default class PanRecognizer extends Recognizer {
     static DEFAULT_OPTIONS = {
         name: 'pan',
@@ -34,7 +39,19 @@ export default class PanRecognizer extends Recognizer {
      * @param {AnyTouchEvent} 计算数据
      * @return {Boolean}} .是否是当前手势 
      */
-    test({direction, eventType, pointLength,distance }: AnyTouchEvent): boolean {
+    test(inputRecord: InputRecord): boolean {
+        const { input } = inputRecord;
+        const { eventType, pointLength } = input;
+
+        const { direction } = this.event[KEY_DIRECTION] ? this.event[KEY_DIRECTION] : intervalCompute(inputRecord, <any>this.$store);
+
+        const { displacementX, displacementY, distanceX, distanceY, distance, overallDirection } = this.event[KEY_DISTANCE] ? this.event[KEY_DISTANCE] : computeDistance(inputRecord, <any>this.$store);
+
+        const { deltaX, deltaY, deltaXYAngle } = this.event[KEY_DELTAX] ? this.event[KEY_DELTAX] : computeDeltaXY(inputRecord, <any>this.$store);
+
+        // 赋值event
+        this.event = { deltaX, deltaY, deltaXYAngle, displacementX, displacementY, distanceX, distanceY, distance, overallDirection,direction };
+
         return INPUT_MOVE === eventType &&
             (this.isRecognized || this.options.threshold < distance) &&
             this.isValidPointLength(pointLength) &&
@@ -45,9 +62,9 @@ export default class PanRecognizer extends Recognizer {
      * 识别后发布panleft等事件
      * @param {AnyTouchEvent} 计算数据
      */
-    afterEmit(computed: AnyTouchEvent) {
-        if (NONE !== computed.direction) {
-            this.emit(this.options.name + computed.direction, computed);
+    afterEmit() {
+        if (NONE !== this.event.direction) {
+            this.emit(this.options.name + this.event.direction, this.event);
         }
     };
 

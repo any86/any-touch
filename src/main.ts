@@ -18,7 +18,7 @@
  */
 import AnyEvent from 'any-event';
 
-import { AnyTouchEvent, SupportEvent, CSSPreventMap } from '@/types';
+import { AEvent, AnyTouchEvent, SupportEvent, CSSPreventMap } from '@/types';
 import { TOUCH, MOUSE, SUPPORT_TOUCH, NONE, AUTO, TOUCH_START, TOUCH_MOVE, TOUCH_CANCEL, TOUCH_END, MOUSE_DOWN, MOUSE_MOVE, MOUSE_UP, COMPUTE } from '@/const';
 import InputManage from '@/InputManage';
 import computeTouchAction from '@/utils/computeTouchAction';
@@ -87,6 +87,8 @@ export default class {
 
     _root: any;
 
+    event: Record<string, any>;
+
     // 是否阻止后面的识别器运行
     private _isStopped: boolean;
 
@@ -113,6 +115,7 @@ export default class {
             }
         };
         if (undefined !== el) this.el = el;
+        this.event = {};
         this.$store = new Store();
         this.inputManage = new InputManage();
         this.touchDevice = SUPPORT_TOUCH ? TOUCH : MOUSE;
@@ -123,24 +126,29 @@ export default class {
         // 识别器
         // 注入当前方法和属性, 方便在识别器中调用类上的方法和属性
         // fix: 不注入this, 因为微信下回报错, 提示对象里有循环引用
-        const root = { eventEmitter: this.eventEmitter, options: this.options, el, update: this.update.bind(this) };
+        const root = {
+            eventEmitter: this.eventEmitter,
+            options: this.options,
+            el, $store: this.$store,
+            update: this.update.bind(this)
+        };
         this._root = root;
         this.recognizers = [
-            new Rotate().$injectRoot(root),
-            new Pinch().$injectRoot(root),
+            // new Rotate().$injectRoot(root),
+            // new Pinch().$injectRoot(root),
             new Pan().$injectRoot(root),
-            new Swipe().$injectRoot(root),
-            new Tap().$injectRoot(root),
-            new Tap({
-                name: 'doubletap',
-                pointLength: 1,
-                tapTimes: 2,
-                disabled: true
-            }).$injectRoot(root),
-            new Press().$injectRoot(root),
+            // new Swipe().$injectRoot(root),
+            // new Tap().$injectRoot(root),
+            // new Tap({
+            //     name: 'doubletap',
+            //     pointLength: 1,
+            //     tapTimes: 2,
+            //     disabled: true
+            // }).$injectRoot(root),
+            // new Press().$injectRoot(root),
         ];
         // 默认单击需要双击识别失败后触发
-        this.recognizers[4].requireFailure(this.recognizers[5]);
+        // this.recognizers[4].requireFailure(this.recognizers[5]);
         if (undefined !== this.el) {
             // 应用设置
             this.update();
@@ -312,7 +320,7 @@ export default class {
     };
 
     canPreventDefault(event: SupportEvent): boolean {
-        if(!this.options.isPreventDefault) return false;
+        if (!this.options.isPreventDefault) return false;
         let isPreventDefault = false;
         if (null !== event.target) {
             const { preventDefaultExclude } = this.options;
@@ -344,22 +352,29 @@ export default class {
         // 管理历史input
         // 生成AnyTouchEvent
         const inputRecord = this.inputManage.load(event);
+
         // 跳过无效输入
         // 当是鼠标事件的时候, 会有undefined的时候
         // 比如鼠标还没有mousedown阶段的mousemove等都是无效操作
         if (void 0 !== inputRecord) {
-            const computed = compute(inputRecord, this.$store)
-            // input事件
-            this.emit('input', computed);
-            if (computed.isStart) {
-                // 重置isStopped
-                this._isStopped = false;
-            }
-
+            const { input } = inputRecord;
+            const { id } = input;
+            // const computed = compute(inputRecord, this.$store)
+            // // input事件
+            // this.emit('input', computed);
+            // if (computed.isStart) {
+            //     // 重置isStopped
+            //     this._isStopped = false;
+            // }
+            // 每次事件触发重新生成event
+            this.event = { id };
             for (let recognizer of this.recognizers) {
                 if (recognizer.disabled) continue;
                 // 如果遇到停止标记, 立即停止运行后面的识别器
-                recognizer.recognize(computed);
+                recognizer.event = this.event;
+                // 每个识别器的test方法会设置event的值
+                recognizer.recognize(inputRecord);
+
                 if (this._isStopped) {
                     break;
                 }

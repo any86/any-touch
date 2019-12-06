@@ -63,36 +63,36 @@ new Vue({
         // })
 
 
-        const tap2 = anyTouch.get('doubletap');
-        tap2.disabled = false;
+        // const tap2 = anyTouch.get('doubletap');
+        // tap2.disabled = false;
 
-        const pan = anyTouch.get('pan');
+        // const pan = anyTouch.get('pan');
 
-        pan.set({
-            threshold: 10,
-            disabled: false,
-            directions: ['left', 'right', 'up', 'down']
-        });
+        // pan.set({
+        //     threshold: 10,
+        //     disabled: false,
+        //     directions: ['left', 'right', 'up', 'down']
+        // });
 
-        const pinch = anyTouch.get('pinch');
-        pinch.set({
-            threshold: 0.1
-        });
+        // const pinch = anyTouch.get('pinch');
+        // pinch.set({
+        //     threshold: 0.1
+        // });
 
-        const rotate = anyTouch.get('rotate');
-        rotate.set({
-            threshold: 15
-        });
+        // const rotate = anyTouch.get('rotate');
+        // rotate.set({
+        //     threshold: 15
+        // });
 
-        // anyTouch.add(pan2);
-        anyTouch.add(tap3);
-        anyTouch.add(tap4);
-        const tap1 = anyTouch.get('tap');
-        tap1.requireFailure(tap3);
-        tap1.requireFailure(tap4);
-        tap2.requireFailure(tap3);
-        tap2.requireFailure(tap4);
-        tap3.requireFailure(tap4);
+        // // anyTouch.add(pan2);
+        // anyTouch.add(tap3);
+        // anyTouch.add(tap4);
+        // const tap1 = anyTouch.get('tap');
+        // tap1.requireFailure(tap3);
+        // tap1.requireFailure(tap4);
+        // tap2.requireFailure(tap3);
+        // tap2.requireFailure(tap4);
+        // tap3.requireFailure(tap4);
         // this.$refs.circle.addEventListener('touchstart', ev=>{ev.preventDefault()})
         // this.$refs.circle.addEventListener('touchmove', ev=>{ev.preventDefault()})
         // this.$refs.circle.addEventListener('touchend', ev=>{ev.preventDefault()})

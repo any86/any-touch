@@ -33,7 +33,7 @@ export const DIRECTION_UP = 'up';
 export const DIRECTION_DOWN = 'down';
 export const DIRECTION_X = [DIRECTION_LEFT, DIRECTION_RIGHT];
 export const DIRECTION_Y = [DIRECTION_UP, DIRECTION_DOWN];
-export const DIRECTION_ALL = [DIRECTION_LEFT, DIRECTION_RIGHT,DIRECTION_UP, DIRECTION_DOWN];
+export const DIRECTION_ALL = [DIRECTION_LEFT, DIRECTION_RIGHT, DIRECTION_UP, DIRECTION_DOWN];
 
 
 export const PAN_X = 'pan-x';
@@ -77,3 +77,8 @@ export const MOUSE_MOVE = 'mousemove';
 export const MOUSE_DOWN = 'mousedown';
 
 export const WRONG_DIRECTION = 'wrong direction!';
+
+
+export const KEY_DIRECTION = 'direction';
+export const KEY_DISTANCE = 'distance';
+export const KEY_DELTAX = 'deltaX';

@@ -1,5 +1,6 @@
-import { AnyTouchEvent, directionString } from '@/types';
-import {INPUT_CANCEL, INPUT_END, INPUT_MOVE,DIRECTION_X, DIRECTION_Y,NONE } from '@/const';
+import { AnyTouchEvent, AEvent, directionString, Store, InputRecord } from '@/types';
+import AnyTouch from '@/main';
+import { INPUT_CANCEL, INPUT_END, INPUT_MOVE, DIRECTION_X, DIRECTION_Y, NONE } from '@/const';
 import {
     STATUS_POSSIBLE,
     STATUS_START,
@@ -29,6 +30,10 @@ export default abstract class Recognizer {
 
     public isWaitingOther: boolean;
 
+    public $store?: Store;
+
+    public event: any;
+
     constructor(options: { name?: string, [k: string]: any }) {
         this.options = { ...(<any>this.constructor).DEFAULT_OPTIONS, disabled: false, ...options };
         this.name = this.options.name;
@@ -53,8 +58,13 @@ export default abstract class Recognizer {
         return this;
     };
 
+    /**
+     * 传入启动类的实例
+     * @param $root 
+     */
     public $injectRoot($root: any) {
         this.$root = $root;
+        this.$store = $root.$store;
         return this;
     }
 
@@ -66,7 +76,7 @@ export default abstract class Recognizer {
     public emit(type: string, payload: any) {
         payload.type = type;
         this.$root.eventEmitter.emit(type, payload);
-        if (undefined !== this.$root.el) {
+        if (void 0 !== this.$root.el) {
             if (this.$root.options.syncToAttr) {
                 this.$root.el.setAttribute('at-gesture', type);
             }
@@ -229,7 +239,6 @@ export default abstract class Recognizer {
         // if (this.name === 'tap') console.log('@', this.status);
         //STATUS_RECOGNIZED === STATUS_END
         if (-1 !== [STATUS_END, STATUS_CANCELLED, STATUS_RECOGNIZED, STATUS_FAILED].indexOf(this.status)) {
-
             this.status = STATUS_POSSIBLE;
         };
     };
@@ -237,23 +246,24 @@ export default abstract class Recognizer {
     /**
      * 适用于大部分移动类型的手势, 
      * 如pan/rotate/pinch/swipe
-     * @param {AnyTouchEvent} 计算数据 
+     * @param {InputRecord} 输入记录 
      */
-    recognize(computed: AnyTouchEvent) {
+    recognize(inputRecord: InputRecord) {
         // if(!computed.isStart) return;
         // if(this.name === 'pan')    console.log(this.name,this.status);
         // 是否识别成功
-        let isVaild = this.test(computed);
+        const isVaild = this.test(inputRecord);
         // 重置status
         this._resetStatus();
 
         // 状态变化流程
-        let { eventType } = computed;
+        const { input } = inputRecord;
+        const { eventType } = input;
 
         this.status = this.flow(isVaild, this.status, eventType);
-
+        const {event} = this;
         if (STATUS_CANCELLED === eventType) {
-            this.emit(this.options.name + INPUT_CANCEL, computed);
+            this.emit(this.options.name + INPUT_CANCEL, event);
             return;
         }
 
@@ -261,27 +271,29 @@ export default abstract class Recognizer {
         this.isRecognized = -1 < [STATUS_START, STATUS_MOVE, STATUS_END, STATUS_RECOGNIZED].indexOf(this.status);
         // 识别后触发的事件
         if (isVaild) {
-            this.afterRecognized(computed);
-            // computed = this.lockDirection(computed);
-            this.emit(this.options.name, computed);
-
-            // panstart等
-            this.emit(this.options.name + this.status, computed);
-
-            this.afterEmit(computed);
-        } else if (this.isRecognized) {
-            // panmove | panend等
-            this.emit(this.options.name + this.status, computed);
+            this.afterRecognized(event);
             
+            // computed = this.lockDirection(computed);
+            this.emit(this.options.name, event);
+
+            // panstart | panmove 等
+            this.emit(this.options.name + this.status, event);
+
+            this.afterEmit(event);
+        } else if (this.isRecognized) {
+            
+            // panend等
+            this.emit(this.options.name + this.status, event);
+
         }
     };
 
     /**
-     * 识别条件, 基于异步
-     * @param {AnyTouchEvent} 计算数据
-     * @param {(isRecognized: boolean) => void}} 接收是否识别状态
+     * 校验输入数据
+     * @param {InputRecord} 计算数据
+     * @returns {Boolean} 校验结果
      */
-    abstract test(computed: AnyTouchEvent): boolean;
+    abstract test(inputRecord: InputRecord): boolean;
 
     /**
      * 识别成功后执行
@@ -290,13 +302,13 @@ export default abstract class Recognizer {
      * swipe可以把不支持的方向上的速率调整为0
      * @param {AnyTouchEvent} 计算数据 
      */
-    public afterRecognized(computed: AnyTouchEvent): void { };
+    public afterRecognized(computed: any): void { };
 
     /**
      * 基类的所有emit触发后执行
      * @param {AnyTouchEvent} computed 
      */
-    public afterEmit(computed: AnyTouchEvent): void { };
+    public afterEmit(computed: any): void { };
 
     /**
      * 计算当前手势的touch-action
