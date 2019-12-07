@@ -1,11 +1,14 @@
-import { AnyTouchEvent, Point } from '@/types';
+import { AnyTouchEvent, Point, InputRecord } from '@/types';
 import {
     STATUS_RECOGNIZED, STATUS_POSSIBLE,
     STATUS_FAILED,
 } from '../const/recognizerStatus';
 import Recognizer from './Base';
-import { INPUT_END,AUTO } from '../const';
+import { INPUT_END, AUTO, KEY_MAX_POINT_LENGTH, KEY_DISTANCE } from '@/const';
 import { getVLength } from '@/vector';
+import computeDistance from '@/compute/computeDistance';
+import computeDeltaXY from '@/compute/computeDeltaXY';
+import computeMaxLength from '@/compute/computeMaxLength';
 
 export default class TapRecognizer extends Recognizer {
     public tapCount: number;
@@ -126,24 +129,26 @@ export default class TapRecognizer extends Recognizer {
      *              |
      *             结束
      * 
-     * @param {AnyTouchEvent} 计算数据 
+     * @param {InputRecord} 计算数据 
      */
-    public recognize(computed: AnyTouchEvent): void {
+    public recognize(inputRecord: InputRecord): void {
+        const { input } = inputRecord;
+        const { eventType,center } = input;
         // 只在end阶段去识别
-        if (INPUT_END !== computed.eventType) return;
+        if (INPUT_END !== eventType) return;
 
         this.status = STATUS_POSSIBLE;
 
         // 每一次点击是否符合要求
-        if (this.test(computed)) {
+        if (this.test(inputRecord)) {
             clearTimeout(this._delayFailTimer);
             clearTimeout(this._waitOtherFailedTimer);
             this.isWaitingOther = false;
             // 判断2次点击之间的距离是否过大
             // 对符合要求的点击进行累加
-            
 
-            if (this._isValidDistanceFromPrevTap(computed) && this._isValidInterval()) {
+
+            if (this._isValidDistanceFromPrevTap(<Point>center) && this._isValidInterval()) {
 
                 this.tapCount++;
             } else {
@@ -158,7 +163,7 @@ export default class TapRecognizer extends Recognizer {
                         // 检查指定手势是否识别为Failed
                         if (this.isAllRequiresFailedOrPossible()) {
                             this.status = STATUS_RECOGNIZED;
-                            this.emit(this.options.name, { ...computed, tapCount: this.tapCount });
+                            this.emit(this.options.name, { ...this.event, tapCount: this.tapCount });
                         } else {
                             this.status = STATUS_FAILED;
                         };
@@ -170,7 +175,7 @@ export default class TapRecognizer extends Recognizer {
                 // 那么立即执行
                 else {
                     this.status = STATUS_RECOGNIZED;
-                    this.emit(this.options.name, { ...computed, tapCount: this.tapCount });
+                    this.emit(this.options.name, { ...this.event, tapCount: this.tapCount });
                     this.reset();
                 }
             } else {
@@ -193,13 +198,17 @@ export default class TapRecognizer extends Recognizer {
 
     /**
       * 识别条件
-      * @param {AnyTouchEvent} 计算数据
+      * @param {InputRecord} 输入记录
       * @return {Boolean} 是否验证成功
       */
-    public test(computed: AnyTouchEvent): boolean {
+    public test(inputRecord: InputRecord): boolean {
         // 判断是否发生大的位置变化
-        const { distance, deltaTime, maxPointLength } = computed;
-        // 检查
+        const maxPointLength = this.event[KEY_MAX_POINT_LENGTH] ? this.event[KEY_MAX_POINT_LENGTH] : computeMaxLength(inputRecord, <any>this.$store);
+        const deltaTime = inputRecord.input.timestamp - inputRecord.startInput.timestamp;
+        const computed = this.event[KEY_DISTANCE] ? this.event[KEY_DISTANCE] : computeDistance(inputRecord, <any>this.$store);
+        const { distance } = computed;
+        this.event = { ...this.event, maxPointLength, deltaTime, ...computed }
+
         // 1. 触点数
         // 2. 移动距离
         // 3. start至end的事件, 区分tap和press
@@ -208,5 +217,5 @@ export default class TapRecognizer extends Recognizer {
             this.options.maxPressTime > deltaTime;
     };
 
-    public afterEmit(computed: AnyTouchEvent): void { }
+    public afterEmit(): void { }
 };

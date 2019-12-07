@@ -24,7 +24,6 @@ import InputManage from '@/InputManage';
 import computeTouchAction from '@/utils/computeTouchAction';
 import Store from '@/Store';
 import { isRegExp, isFunction } from '@/utils/is';
-import compute from '@/compute';
 // 识别器
 import Recognizer from '@/recognitions/Base';
 import Tap from '@/recognitions/Tap';
@@ -124,8 +123,8 @@ export default class {
         this.eventEmitter = new AnyEvent();
         this._isStopped = false;
         // 识别器
-        // 注入当前方法和属性, 方便在识别器中调用类上的方法和属性
-        // fix: 不注入this, 因为微信下回报错, 提示对象里有循环引用
+        // 混入当前方法和属性, 方便在识别器中调用类上的方法和属性
+        // fix: 不注入this, 因为微信下会报错, 提示对象里有循环引用
         const root = {
             eventEmitter: this.eventEmitter,
             options: this.options,
@@ -134,21 +133,21 @@ export default class {
         };
         this._root = root;
         this.recognizers = [
-            // new Rotate().$injectRoot(root),
-            // new Pinch().$injectRoot(root),
-            new Pan().$injectRoot(root),
-            // new Swipe().$injectRoot(root),
-            // new Tap().$injectRoot(root),
-            // new Tap({
-            //     name: 'doubletap',
-            //     pointLength: 1,
-            //     tapTimes: 2,
-            //     disabled: true
-            // }).$injectRoot(root),
-            // new Press().$injectRoot(root),
+            new Rotate().$mixin(root),
+            new Pinch().$mixin(root),
+            new Pan().$mixin(root),
+            new Swipe().$mixin(root),
+            new Tap().$mixin(root),
+            new Tap({
+                name: 'doubletap',
+                pointLength: 1,
+                tapTimes: 2,
+                disabled: true
+            }).$mixin(root),
+            // new Press().$mixin(root),
         ];
         // 默认单击需要双击识别失败后触发
-        // this.recognizers[4].requireFailure(this.recognizers[5]);
+        this.recognizers[4].requireFailure(this.recognizers[5]);
         if (undefined !== this.el) {
             // 应用设置
             this.update();
@@ -271,7 +270,7 @@ export default class {
      * @param recognizer 识别器
      */
     add(recognizer: Recognizer): void {
-        recognizer.$injectRoot(this._root);
+        recognizer.$mixin(this._root);
         const hasSameName = this.recognizers.some((theRecognizer: Recognizer) => recognizer.name === theRecognizer.name);
         if (hasSameName) {
             this.eventEmitter.emit('error', { code: 1, message: `${recognizer.name}识别器已经存在!` })
@@ -358,7 +357,6 @@ export default class {
         // 比如鼠标还没有mousedown阶段的mousemove等都是无效操作
         if (void 0 !== inputRecord) {
             const { input } = inputRecord;
-            const { id } = input;
             // const computed = compute(inputRecord, this.$store)
             // // input事件
             // this.emit('input', computed);
@@ -367,7 +365,8 @@ export default class {
             //     this._isStopped = false;
             // }
             // 每次事件触发重新生成event
-            this.event = { id };
+            this.event = input;
+
             for (let recognizer of this.recognizers) {
                 if (recognizer.disabled) continue;
                 // 如果遇到停止标记, 立即停止运行后面的识别器

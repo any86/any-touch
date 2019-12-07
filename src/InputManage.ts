@@ -49,7 +49,7 @@ export default class {
         if (isStart) {
             // 起点(单点|多点)
             this.startInput = computed;
-
+            this.prevInput = void 0;
             // 起点(多点)
             if (1 < pointLength) {
                 this.startMultiInput = computed;

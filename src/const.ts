@@ -82,3 +82,4 @@ export const WRONG_DIRECTION = 'wrong direction!';
 export const KEY_DIRECTION = 'direction';
 export const KEY_DISTANCE = 'distance';
 export const KEY_DELTAX = 'deltaX';
+export const KEY_MAX_POINT_LENGTH = 'maxPointLength';

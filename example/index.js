@@ -63,8 +63,8 @@ new Vue({
         // })
 
 
-        // const tap2 = anyTouch.get('doubletap');
-        // tap2.disabled = false;
+        const tap2 = anyTouch.get('doubletap');
+        tap2.disabled = false;
 
         // const pan = anyTouch.get('pan');
 
@@ -84,15 +84,15 @@ new Vue({
         //     threshold: 15
         // });
 
-        // // anyTouch.add(pan2);
-        // anyTouch.add(tap3);
-        // anyTouch.add(tap4);
-        // const tap1 = anyTouch.get('tap');
-        // tap1.requireFailure(tap3);
-        // tap1.requireFailure(tap4);
-        // tap2.requireFailure(tap3);
-        // tap2.requireFailure(tap4);
-        // tap3.requireFailure(tap4);
+        // anyTouch.add(pan2);
+        anyTouch.add(tap3);
+        anyTouch.add(tap4);
+        const tap1 = anyTouch.get('tap');
+        tap1.requireFailure(tap3);
+        tap1.requireFailure(tap4);
+        tap2.requireFailure(tap3);
+        tap2.requireFailure(tap4);
+        tap3.requireFailure(tap4);
         // this.$refs.circle.addEventListener('touchstart', ev=>{ev.preventDefault()})
         // this.$refs.circle.addEventListener('touchmove', ev=>{ev.preventDefault()})
         // this.$refs.circle.addEventListener('touchend', ev=>{ev.preventDefault()})
@@ -224,8 +224,8 @@ new Vue({
             this.message = e;
             this.scale *= e.deltaScale;
             // log(e.deltaScale);
-            this.centerX = e.center.x;
-            this.centerY = e.center.y;
+            this.centerX =e.x;
+            this.centerY =e.y;
             log(`%c ${e.type} `, 'background-color:#f90;color:#fff;');
         });
 
@@ -242,8 +242,8 @@ new Vue({
             log(e.deltaAngle, e.deltaX, e.deltaY);
             this.message = e;
             this.angle += e.deltaAngle;
-            this.centerX = e.center.x;
-            this.centerY = e.center.y;
+            this.centerX =e.x;
+            this.centerY =e.y;
         });
 
         /**

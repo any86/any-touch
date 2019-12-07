@@ -26,6 +26,7 @@ export type InputRecord = {
 }
 
 export interface BaseInput {
+    readonly id: number;
     readonly eventType: eventType;
     readonly changedPoints: { clientX: number, clientY: number }[];
     readonly points: { clientX: number, clientY: number }[];
@@ -33,14 +34,14 @@ export interface BaseInput {
 }
 
 export interface Input extends BaseInput {
-    readonly id: number;
+    
     readonly preventDefault: () => void;
     // 新一轮手势识别的开始和结束
     readonly isStart: boolean;
     readonly isEnd: boolean;
     readonly pointLength: number;
     // 发生改变的触点数据
-    readonly changedPointLength: number;
+    // readonly changedPointLength: number;
     // 当前时间
     readonly timestamp: number;
     readonly target: EventTarget | null;

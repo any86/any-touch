@@ -2,7 +2,6 @@ import Recognizer from './Base';
 import { InputRecord } from '@/types';
 import { INPUT_END, DIRECTION_ALL, NONE, KEY_DIRECTION, KEY_DISTANCE, KEY_MAX_POINT_LENGTH } from '@/const';
 import computeDistance from '@/compute/computeDistance';
-import computeDeltaXY from '@/compute/computeDeltaXY';
 import intervalCompute from '@/compute/intervalCompute';
 import computeMaxLength from '@/compute/computeMaxLength';
 
@@ -48,7 +47,7 @@ export default class SwipeRecognizer extends Recognizer {
         const { displacementX, displacementY, distanceX, distanceY, distance, overallDirection } = this.event[KEY_DISTANCE] ? this.event[KEY_DISTANCE] : computeDistance(inputRecord, <any>this.$store);
 
         // velocityX, velocityY, speedX, speedY, direction
-        const { velocityX, velocityY, speedX, speedY, direction } =  intervalCompute(inputRecord, <any>this.$store);
+        const { velocityX, velocityY, speedX, speedY, direction } = this.event[KEY_DIRECTION] ? this.event[KEY_DIRECTION] : intervalCompute(inputRecord, <any>this.$store);
 
         if (INPUT_END !== eventType) return false;
         // 非end阶段, 开始校验数据

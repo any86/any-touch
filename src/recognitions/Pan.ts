@@ -42,16 +42,18 @@ export default class PanRecognizer extends Recognizer {
     test(inputRecord: InputRecord): boolean {
         const { input } = inputRecord;
         const { eventType, pointLength } = input;
+        // velocityX, velocityY, speedX, speedY, direction
+        const {velocityX, velocityY, speedX, speedY, direction} = this.event[KEY_DIRECTION] ? this.event[KEY_DIRECTION] : intervalCompute(inputRecord, <any>this.$store);
 
-        const { direction } = this.event[KEY_DIRECTION] ? this.event[KEY_DIRECTION] : intervalCompute(inputRecord, <any>this.$store);
-
+        // displacementX, displacementY, distanceX, distanceY, distance, overallDirection
         const { displacementX, displacementY, distanceX, distanceY, distance, overallDirection } = this.event[KEY_DISTANCE] ? this.event[KEY_DISTANCE] : computeDistance(inputRecord, <any>this.$store);
 
+        //  deltaX, deltaY, deltaXYAngle
         const { deltaX, deltaY, deltaXYAngle } = this.event[KEY_DELTAX] ? this.event[KEY_DELTAX] : computeDeltaXY(inputRecord, <any>this.$store);
 
         // 赋值event
-        this.event = { deltaX, deltaY, deltaXYAngle, displacementX, displacementY, distanceX, distanceY, distance, overallDirection,direction };
-
+        this.event = {...this.event,velocityX, velocityY, speedX, speedY, deltaX, deltaY, deltaXYAngle, displacementX, displacementY, distanceX, distanceY, distance, overallDirection,direction };
+        
         return INPUT_MOVE === eventType &&
             (this.isRecognized || this.options.threshold < distance) &&
             this.isValidPointLength(pointLength) &&

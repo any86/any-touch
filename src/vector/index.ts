@@ -73,7 +73,7 @@ export const getCenter = (points: { clientX: number, clientY: number }[]): Point
         // 只有一个点
         if (1 === length) {
             const { clientX, clientY } = points[0];
-            return { x: clientX, y: clientY };
+            return { x: Math.round(clientX), y:  Math.round(clientY) };
         }
 
         const countPoint = points.reduce((countPoint: Point, point: {clientX:number,clientY:number}) => {

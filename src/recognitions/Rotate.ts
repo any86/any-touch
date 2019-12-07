@@ -1,6 +1,7 @@
 import Base from './Base';
 import {NONE} from '../const';
-import { AnyTouchEvent } from '@/types';
+import { AnyTouchEvent, InputRecord } from '@/types';
+import computMulti from '@/compute/computeMulti';
 export default class RotateRecognizer extends Base {
     static DEFAULT_OPTIONS = {
         name: 'rotate',
@@ -19,14 +20,20 @@ export default class RotateRecognizer extends Base {
     /**
      * 无特殊事件要触发
      */
-    afterEmit(computed: AnyTouchEvent) { };
+    afterEmit():void { };
 
     /**
      * 识别条件
      * @param {AnyTouchEvent} 计算数据
      * @return {Boolean} 接收是否识别状态
      */
-    test({ pointLength, angle }: AnyTouchEvent): boolean {
+    test(inputRecord:InputRecord): boolean {
+        const {input} = inputRecord;
+        const {pointLength} = input;
+   
+        const computed = this.event['angle'] ? this.event[`angle`] : computMulti(inputRecord, <any>this.$store);
+        const {angle,deltaAngle} = computed;
+        this.event = {...this.event, angle,deltaAngle};
         // 如果触碰点数要大于指定
         // 如果缩放超过阈值, 或者已识别
         return this.isValidPointLength(pointLength) && (this.options.threshold < Math.abs(angle) || this.isRecognized);

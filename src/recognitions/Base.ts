@@ -1,5 +1,4 @@
 import { AnyTouchEvent, AEvent, directionString, Store, InputRecord } from '@/types';
-import AnyTouch from '@/main';
 import { INPUT_CANCEL, INPUT_END, INPUT_MOVE, DIRECTION_X, DIRECTION_Y, NONE } from '@/const';
 import {
     STATUS_POSSIBLE,
@@ -62,7 +61,7 @@ export default abstract class Recognizer {
      * 传入启动类的实例
      * @param $root 
      */
-    public $injectRoot($root: any) {
+    public $mixin($root: any) {
         this.$root = $root;
         this.$store = $root.$store;
         return this;
@@ -235,7 +234,7 @@ export default abstract class Recognizer {
     /**
      * 如果识别结束, 那么重置状态
      */
-    protected _resetStatus() {
+    protected _resetStatus():void {
         // if (this.name === 'tap') console.log('@', this.status);
         //STATUS_RECOGNIZED === STATUS_END
         if (-1 !== [STATUS_END, STATUS_CANCELLED, STATUS_RECOGNIZED, STATUS_FAILED].indexOf(this.status)) {
@@ -248,7 +247,7 @@ export default abstract class Recognizer {
      * 如pan/rotate/pinch/swipe
      * @param {InputRecord} 输入记录 
      */
-    recognize(inputRecord: InputRecord) {
+    recognize(inputRecord: InputRecord):void {
         // if(!computed.isStart) return;
         // if(this.name === 'pan')    console.log(this.name,this.status);
         // 是否识别成功
@@ -261,7 +260,7 @@ export default abstract class Recognizer {
         const { eventType } = input;
 
         this.status = this.flow(isVaild, this.status, eventType);
-        const {event} = this;
+        const { event } = this;
         if (STATUS_CANCELLED === eventType) {
             this.emit(this.options.name + INPUT_CANCEL, event);
             return;
@@ -272,16 +271,16 @@ export default abstract class Recognizer {
         // 识别后触发的事件
         if (isVaild) {
             this.afterRecognized(event);
-            
+
             // computed = this.lockDirection(computed);
             this.emit(this.options.name, event);
 
             // panstart | panmove 等
             this.emit(this.options.name + this.status, event);
 
-            this.afterEmit(event);
+            this.afterEmit();
         } else if (this.isRecognized) {
-            
+
             // panend等
             this.emit(this.options.name + this.status, event);
 
@@ -302,13 +301,13 @@ export default abstract class Recognizer {
      * swipe可以把不支持的方向上的速率调整为0
      * @param {AnyTouchEvent} 计算数据 
      */
-    public afterRecognized(computed: any): void { };
+    afterRecognized(computed: any): void { };
 
     /**
      * 基类的所有emit触发后执行
      * @param {AnyTouchEvent} computed 
      */
-    public afterEmit(computed: any): void { };
+    afterEmit(): void { };
 
     /**
      * 计算当前手势的touch-action

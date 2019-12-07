@@ -24,7 +24,7 @@ export default function ({
 }: Arg, $store: Store): Ret {
     // 上一触点数大于1, 当前触点大于1
     // 连续第二次出现多点, 才能开始计算
-    if (undefined !== startMultiInput && undefined !== prevInput && 1 < prevInput.points.length && 1 < input.points.length) {
+    if (void 0 !== startMultiInput && void 0 !== prevInput && 1 < prevInput.points.length && 1 < input.points.length) {
         // 2指形成的向量
         const startV = computeVector(startMultiInput);
         const prevV = computeVector(prevInput);
