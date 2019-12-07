@@ -144,7 +144,7 @@ export default class {
                 tapTimes: 2,
                 disabled: true
             }).$mixin(root),
-            // new Press().$mixin(root),
+            new Press().$mixin(root),
         ];
         // 默认单击需要双击识别失败后触发
         this.recognizers[4].requireFailure(this.recognizers[5]);
