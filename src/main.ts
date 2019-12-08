@@ -357,15 +357,16 @@ export default class {
         // 比如鼠标还没有mousedown阶段的mousemove等都是无效操作
         if (void 0 !== inputRecord) {
             const { input } = inputRecord;
-            // const computed = compute(inputRecord, this.$store)
-            // // input事件
-            // this.emit('input', computed);
-            // if (computed.isStart) {
-            //     // 重置isStopped
-            //     this._isStopped = false;
-            // }
+
             // 每次事件触发重新生成event
             this.event = input;
+
+            // input事件
+            this.emit('input', this.event);
+            if (input.isStart) {
+                // 重置isStopped
+                this._isStopped = false;
+            }
 
             for (let recognizer of this.recognizers) {
                 if (recognizer.disabled) continue;
@@ -405,7 +406,7 @@ export default class {
      * @param {String} 类型名
      * @param {Object} 数据
      */
-    emit(type: string, payload: AnyTouchEvent) {
+    emit(type: string, payload: AEvent) {
         this.eventEmitter.emit(type, { ...payload, type });
     };
 
