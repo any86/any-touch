@@ -1,6 +1,6 @@
 import { radianToAngle } from '@/vector';
 import { Store, InputRecord } from '@/types';
-export default function ({
+export default function computeDeltaXY({
     prevInput,
     input
 }: InputRecord, $store: Store): { deltaX: number, deltaY: number, deltaXYAngle: number } {

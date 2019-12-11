@@ -11,27 +11,33 @@ import {
 
 export default abstract class Recognizer {
     // 手势名
-    public name: string;
+    name: string;
     // 是否禁止
-    public disabled: boolean;
+    disabled: boolean;
     // 识别状态
-    public status: string;
+    status: string;
     // 是否已识别
-    public isRecognized: boolean;
+    isRecognized: boolean;
     // 选项
-    public options: { [propName: string]: any };
+    options: { [propName: string]: any };
     // 需要对应手势失败才能识别成功
-    public requireFailureRecognizers: any[];
+    requireFailureRecognizers: any[];
     // 存储外部注入方法的容器
-    public $root: any;
+    $root: any;
 
-    public eventEmitter: any;
+    eventEmitter: any;
 
-    public isWaitingOther: boolean;
+    isWaitingOther: boolean;
 
-    public $store?: Store;
+    $store?: Store;
 
-    public event: any;
+    // 
+    event: Record<string, any>;
+
+    // 缓存当前手势的计算结果
+    // 每次手势识别前, 
+    // 会把前面所有手势的计算结果作为当前计算结果
+    computed: Record<string, any>;
 
     constructor(options: { name?: string, [k: string]: any }) {
         this.options = { ...(<any>this.constructor).DEFAULT_OPTIONS, disabled: false, ...options };
@@ -41,6 +47,8 @@ export default abstract class Recognizer {
         this.isRecognized = false;
         this.requireFailureRecognizers = [];
         this.isWaitingOther = false;
+        this.event = {};
+        this.computed = {};
         // 这里面不能直接调用$root等, 
         // 因为rollup生成的代码构造函数并不是该constructor
         // 而是构造函数中又嵌套了一个同名构造函数
@@ -234,7 +242,7 @@ export default abstract class Recognizer {
     /**
      * 如果识别结束, 那么重置状态
      */
-    protected _resetStatus():void {
+    protected _resetStatus(): void {
         // if (this.name === 'tap') console.log('@', this.status);
         //STATUS_RECOGNIZED === STATUS_END
         if (-1 !== [STATUS_END, STATUS_CANCELLED, STATUS_RECOGNIZED, STATUS_FAILED].indexOf(this.status)) {
@@ -243,11 +251,38 @@ export default abstract class Recognizer {
     };
 
     /**
+     * 缓存计算函数的结果
+     * 如果已存在, 那么跳过计算
+     * 注意:
+     * 为了避免压缩后函数名发生变化, 所以必须搭配_getComputed使用.
+     * 不确定Function.name是不是在所有环境下都ok,暂时参考MDN上的说明, 好像没问题.
+     * https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Function/name
+     * 计算函数也由于这个原因, 所以即便export defalut也指定了函数名
+     * @param {Function} 计算函数 
+     * @param {Array} 计算函数的参数
+     */
+    protected _cacheComputed(fn: (...args: any[]) => any, ...args: any[]) {
+        const { name } = fn;
+        this.computed[name] = this.computed[name] || fn(...args);
+        return this.computed[name];
+    };
+
+    /**
+     * _cacheComputed的配套函数,
+     * 为了避免压缩后函数名发生变化取不到值
+     * @param {Function} 计算函数 
+     */
+    protected _getComputed(fn: (...args: any[]) => any) {
+        const { name } = fn;
+        return this.computed[name];
+    };
+
+    /**
      * 适用于大部分移动类型的手势, 
      * 如pan/rotate/pinch/swipe
      * @param {InputRecord} 输入记录 
      */
-    recognize(inputRecord: InputRecord):void {
+    recognize(inputRecord: InputRecord): void {
         // if(!computed.isStart) return;
         // if(this.name === 'pan')    console.log(this.name,this.status);
         // 是否识别成功

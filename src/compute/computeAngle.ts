@@ -1,6 +1,6 @@
 import { Vector } from '@/types';
 import { getAngle } from '@/vector';
-export default function ({
+export default function computeAngle({
     startV, prevV, activeV
 }: Record<string,Vector>): { angle: number, deltaAngle: number } {
     const deltaAngle = getAngle(activeV, prevV);

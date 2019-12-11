@@ -64,8 +64,9 @@ export default class PressRecognizer extends Recognizer {
         const { input } = inputRecord;
         const { pointLength } = input;
         // displacementX, displacementY, distanceX, distanceY, distance, overallDirection
-        const { displacementX, displacementY, distanceX, distanceY, distance, overallDirection } = this.event[KEY_DISTANCE] ? this.event[KEY_DISTANCE] : computeDistance(inputRecord, <any>this.$store);
-        this.event = { ...this.event, displacementX, displacementY, distanceX, distanceY, distance, overallDirection }
+        const computeDistanceData = this._cacheComputed(computeDistance, inputRecord, <any>this.$store);
+        const { distance } = computeDistanceData;
+        this.event = { ...this.event, ...computeDistanceData }
         return this.options.positionTolerance > distance && this.isValidPointLength(pointLength);
     };
 

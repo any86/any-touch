@@ -6,7 +6,6 @@ import computeDistance from '@/compute/computeDistance';
 import computeDeltaXY from '@/compute/computeDeltaXY';
 import intervalCompute from '@/compute/intervalCompute';
 
-
 export default class PanRecognizer extends Recognizer {
     static DEFAULT_OPTIONS = {
         name: 'pan',
@@ -43,17 +42,20 @@ export default class PanRecognizer extends Recognizer {
         const { input } = inputRecord;
         const { eventType, pointLength } = input;
         // velocityX, velocityY, speedX, speedY, direction
-        const {velocityX, velocityY, speedX, speedY, direction} = this.event[KEY_DIRECTION] ? this.event[KEY_DIRECTION] : intervalCompute(inputRecord, <any>this.$store);
+        const intervalComputeData = this._cacheComputed(intervalCompute, inputRecord, <any>this.$store);
 
         // displacementX, displacementY, distanceX, distanceY, distance, overallDirection
-        const { displacementX, displacementY, distanceX, distanceY, distance, overallDirection } = this.event[KEY_DISTANCE] ? this.event[KEY_DISTANCE] : computeDistance(inputRecord, <any>this.$store);
+        const computeDistanceData = this._cacheComputed(computeDistance, inputRecord, <any>this.$store);
 
         //  deltaX, deltaY, deltaXYAngle
-        const { deltaX, deltaY, deltaXYAngle } = this.event[KEY_DELTAX] ? this.event[KEY_DELTAX] : computeDeltaXY(inputRecord, <any>this.$store);
+        const deltaXYComputed = this._cacheComputed(computeDeltaXY, inputRecord, <any>this.$store);
+
+        const { direction } = intervalComputeData;
+        const { distance } = computeDistanceData;
 
         // 赋值event
-        this.event = {...this.event,velocityX, velocityY, speedX, speedY, deltaX, deltaY, deltaXYAngle, displacementX, displacementY, distanceX, distanceY, distance, overallDirection,direction };
-        
+        this.event = { ...this.event, ...intervalComputeData, ...computeDistanceData, ...deltaXYComputed };
+
         return INPUT_MOVE === eventType &&
             (this.isRecognized || this.options.threshold < distance) &&
             this.isValidPointLength(pointLength) &&

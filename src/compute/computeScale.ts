@@ -1,6 +1,6 @@
 import { Vector } from '@/types';
 import { getVLength } from '@/vector';
-export default function ({
+export default function computeScale({
     startV, prevV, activeV
 }:  Record<string,Vector>): { scale: number, deltaScale: number } {
     const deltaScale = getVLength(activeV) / getVLength(prevV);

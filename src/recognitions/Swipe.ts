@@ -38,23 +38,23 @@ export default class SwipeRecognizer extends Recognizer {
      */
     test(inputRecord: InputRecord): boolean {
         const { input } = inputRecord;
-        const { eventType, pointLength } = input;
+        const { eventType } = input;
 
+        // 非end阶段, 开始校验数据
         // maxPointLength
-        const maxPointLength = this.event[KEY_MAX_POINT_LENGTH] ? this.event[KEY_MAX_POINT_LENGTH] : computeMaxLength(inputRecord, <any>this.$store);
-
-        // displacementX, displacementY, distanceX, distanceY, distance, overallDirection
-        const { displacementX, displacementY, distanceX, distanceY, distance, overallDirection } = this.event[KEY_DISTANCE] ? this.event[KEY_DISTANCE] : computeDistance(inputRecord, <any>this.$store);
+        const maxPointLength = this._cacheComputed(computeMaxLength, inputRecord, <any>this.$store);
 
         // velocityX, velocityY, speedX, speedY, direction
-        const { velocityX, velocityY, speedX, speedY, direction } = this.event[KEY_DIRECTION] ? this.event[KEY_DIRECTION] : intervalCompute(inputRecord, <any>this.$store);
+        const intervalComputeData = this._cacheComputed(intervalCompute, inputRecord, <any>this.$store);
+        const { velocityX, velocityY, direction } = intervalComputeData;
+
+        // displacementX, displacementY, distanceX, distanceY, distance, overallDirection
+        const computeDistanceData = this._cacheComputed(computeDistance, inputRecord, <any>this.$store);
+        const { distance } = computeDistanceData;
 
         if (INPUT_END !== eventType) return false;
-        // 非end阶段, 开始校验数据
-        // const { direction, velocityX, velocityY, maxPointLength, distance } = computed;
 
-
-        this.event = { ...this.event, displacementX, displacementY, distanceX, distanceY, distance, overallDirection, velocityX, velocityY, speedX, speedY, direction, maxPointLength };
+        this.event = { ...this.event, maxPointLength, ...intervalComputeData, ...computeDistanceData };
 
         // 如果只支持水平或垂直, 那么其他方向速率为0;
         // 有效速率

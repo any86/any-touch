@@ -1,16 +1,17 @@
 
-import { Input,directionString } from '@/types';
-import { CLIENT_X, CLIENT_Y,INPUT_START,INPUT_MOVE,INPUT_END } from '@/const';
+import { Input, directionString } from '@/types';
+import { CLIENT_X, CLIENT_Y, INPUT_START, INPUT_MOVE, INPUT_END } from '@/const';
 import { getVLength, getDirection } from '@/vector';
 import Store from '@/Store';
-export default function ({
+export default function computeDistance({
     startInput,
     input
 }: {
     startInput: Input,
     input: Input
-},$store:Store): { displacementX: number, displacementY: number, distanceX: number, distanceY: number, distance: number, overallDirection: directionString } {
+}, $store: Store): { displacementX: number, displacementY: number, distanceX: number, distanceY: number, distance: number, overallDirection: directionString } {
     const { eventType } = input;
+    // console.log(input.id,eventType)
     let displacementX = 0;
     let displacementY = 0;
     if (INPUT_START === eventType) {

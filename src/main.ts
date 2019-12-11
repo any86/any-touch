@@ -361,20 +361,24 @@ export default class {
             // 每次事件触发重新生成event
             this.event = input;
 
+            // 缓存每次计算的结果
+            let computed = {};
+
             // input事件
             this.emit('input', this.event);
             if (input.isStart) {
                 // 重置isStopped
                 this._isStopped = false;
             }
-
+            
             for (let recognizer of this.recognizers) {
                 if (recognizer.disabled) continue;
+                recognizer.computed = computed;
                 // 如果遇到停止标记, 立即停止运行后面的识别器
                 recognizer.event = this.event;
                 // 每个识别器的test方法会设置event的值
                 recognizer.recognize(inputRecord);
-
+                computed = recognizer.computed;
                 if (this._isStopped) {
                     break;
                 }

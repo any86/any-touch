@@ -51,7 +51,8 @@ export default class PinchRecognizer extends Recognizer {
             this.event = { ...this.event, scale, deltaScale };
             return false;
         } else {
-            const { scale, deltaScale } = this.event['scale'] ? { scale: this.event[`scale`], deltaScale: this.event[`deltaScale`] } : computeScale(vectors);
+            const { scale, deltaScale } = this.event['scale'] ? this.event : computeScale(vectors);
+            
             this.event = { ...this.event, scale, deltaScale };
             return this.isValidPointLength(pointLength) && (this.options.threshold < Math.abs(scale - 1) || this.isRecognized);
         }

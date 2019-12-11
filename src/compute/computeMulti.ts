@@ -17,7 +17,7 @@ type Ret = {
     deltaAngle: number
 }
 
-export default function ({
+export default function computeMulti({
     startMultiInput,
     prevInput,
     input

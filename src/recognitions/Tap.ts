@@ -4,10 +4,9 @@ import {
     STATUS_FAILED,
 } from '../const/recognizerStatus';
 import Recognizer from './Base';
-import { INPUT_END, AUTO, KEY_MAX_POINT_LENGTH, KEY_DISTANCE } from '@/const';
+import { INPUT_END, AUTO} from '@/const';
 import { getVLength } from '@/vector';
 import computeDistance from '@/compute/computeDistance';
-import computeDeltaXY from '@/compute/computeDeltaXY';
 import computeMaxLength from '@/compute/computeMaxLength';
 
 export default class TapRecognizer extends Recognizer {
@@ -133,7 +132,7 @@ export default class TapRecognizer extends Recognizer {
      */
     public recognize(inputRecord: InputRecord): void {
         const { input } = inputRecord;
-        const { eventType,center } = input;
+        const { eventType, center } = input;
         // 只在end阶段去识别
         if (INPUT_END !== eventType) return;
 
@@ -203,11 +202,13 @@ export default class TapRecognizer extends Recognizer {
       */
     public test(inputRecord: InputRecord): boolean {
         // 判断是否发生大的位置变化
-        const maxPointLength = this.event[KEY_MAX_POINT_LENGTH] ? this.event[KEY_MAX_POINT_LENGTH] : computeMaxLength(inputRecord, <any>this.$store);
+        const maxPointLength = this._cacheComputed(computeMaxLength, inputRecord, <any>this.$store);
+        console.warn(maxPointLength);
+
         const deltaTime = inputRecord.input.timestamp - inputRecord.startInput.timestamp;
-        const computed = this.event[KEY_DISTANCE] ? this.event[KEY_DISTANCE] : computeDistance(inputRecord, <any>this.$store);
-        const { distance } = computed;
-        this.event = { ...this.event, maxPointLength, deltaTime, ...computed }
+        const computeDistanceData = this._cacheComputed(computeDistance, inputRecord, <any>this.$store);
+        const { distance } = computeDistanceData;
+        this.event = { ...this.event, maxPointLength, deltaTime, ...computeDistanceData }
 
         // 1. 触点数
         // 2. 移动距离

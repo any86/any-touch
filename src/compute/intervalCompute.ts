@@ -7,7 +7,7 @@ import { COMPUTE_INTERVAL, NONE, INPUT_CANCEL, INPUT_END } from '@/const';
 import { getDirection } from '@/vector';
 import Store from '@/Store';
 
-export default ({ prevInput, input }: { prevInput?: Input, input?: Input }, $store: Store): { speedX: number, speedY: number, velocityX: number, velocityY: number, direction?: directionString } => {
+export default function intervalCompute({ prevInput, input }: { prevInput?: Input, input?: Input }, $store: Store): { speedX: number, speedY: number, velocityX: number, velocityY: number, direction?: directionString } {
 
     // 速率
     let velocityX = 0;
@@ -28,7 +28,7 @@ export default ({ prevInput, input }: { prevInput?: Input, input?: Input }, $sto
 
         // 每16ms刷新速度数据
         if (-1 === [INPUT_CANCEL, INPUT_END].indexOf(input.eventType) && (COMPUTE_INTERVAL < deltaTime || undefined === $store.get('direction'))) {
-            
+
             const deltaX = input.x - _prevInput.x;
             const deltaY = input.y - _prevInput.y;
             speedX = Math.round(deltaX / deltaTime * 100) / 100;
@@ -42,7 +42,7 @@ export default ({ prevInput, input }: { prevInput?: Input, input?: Input }, $sto
             $store.set({ velocityX });
             $store.set({ velocityY });
             $store.set({ direction });
-            $store.set({ _lastValidInput: input});
+            $store.set({ _lastValidInput: input });
         } else {
             speedX = $store.get('speedX', 0);
             speedY = $store.get('speedY', 0);
