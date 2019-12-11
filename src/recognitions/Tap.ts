@@ -203,8 +203,6 @@ export default class TapRecognizer extends Recognizer {
     public test(inputRecord: InputRecord): boolean {
         // 判断是否发生大的位置变化
         const maxPointLength = this._cacheComputed(computeMaxLength, inputRecord, <any>this.$store);
-        console.warn(maxPointLength);
-
         const deltaTime = inputRecord.input.timestamp - inputRecord.startInput.timestamp;
         const computeDistanceData = this._cacheComputed(computeDistance, inputRecord, <any>this.$store);
         const { distance } = computeDistanceData;
