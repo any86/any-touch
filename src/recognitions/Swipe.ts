@@ -42,14 +42,14 @@ export default class SwipeRecognizer extends Recognizer {
 
         // 非end阶段, 开始校验数据
         // maxPointLength
-        const maxPointLength = this._cacheComputed(computeMaxLength, inputRecord, <any>this.$store);
+        const maxPointLength = this._getComputed(computeMaxLength, inputRecord, <any>this.$store);
 
         // velocityX, velocityY, speedX, speedY, direction
-        const intervalComputeData = this._cacheComputed(intervalCompute, inputRecord, <any>this.$store);
+        const intervalComputeData = this._getComputed(intervalCompute, inputRecord, <any>this.$store);
         const { velocityX, velocityY, direction } = intervalComputeData;
 
         // displacementX, displacementY, distanceX, distanceY, distance, overallDirection
-        const computeDistanceData = this._cacheComputed(computeDistance, inputRecord, <any>this.$store);
+        const computeDistanceData = this._getComputed(computeDistance, inputRecord, <any>this.$store);
         const { distance } = computeDistanceData;
 
         if (INPUT_END !== eventType) return false;

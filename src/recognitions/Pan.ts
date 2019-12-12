@@ -42,13 +42,13 @@ export default class PanRecognizer extends Recognizer {
         const { input } = inputRecord;
         const { eventType, pointLength } = input;
         // velocityX, velocityY, speedX, speedY, direction
-        const intervalComputeData = this._cacheComputed(intervalCompute, inputRecord, <any>this.$store);
+        const intervalComputeData = this._getComputed(intervalCompute, inputRecord, <any>this.$store);
 
         // displacementX, displacementY, distanceX, distanceY, distance, overallDirection
-        const computeDistanceData = this._cacheComputed(computeDistance, inputRecord, <any>this.$store);
+        const computeDistanceData = this._getComputed(computeDistance, inputRecord, <any>this.$store);
 
         //  deltaX, deltaY, deltaXYAngle
-        const deltaXYComputed = this._cacheComputed(computeDeltaXY, inputRecord, <any>this.$store);
+        const deltaXYComputed = this._getComputed(computeDeltaXY, inputRecord, <any>this.$store);
 
         const { direction } = intervalComputeData;
         const { distance } = computeDistanceData;

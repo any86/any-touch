@@ -130,7 +130,7 @@ export default abstract class Recognizer {
     /**
      * 是否所有"需要失败"的手势都是disabled的
      */
-    public isAllRequireFailureRecognizersDisabled() {
+    public isAllRequireFailureDisabled() {
         return this.requireFailureRecognizers.every((recognizer: any) => recognizer.disabled);
     };
 
@@ -261,19 +261,9 @@ export default abstract class Recognizer {
      * @param {Function} 计算函数 
      * @param {Array} 计算函数的参数
      */
-    protected _cacheComputed(fn: (...args: any[]) => any, ...args: any[]) {
+    protected _getComputed(fn: (...args: any[]) => any, ...args: any[]) {
         const { name } = fn;
         this.computed[name] = this.computed[name] || fn(...args);
-        return this.computed[name];
-    };
-
-    /**
-     * _cacheComputed的配套函数,
-     * 为了避免压缩后函数名发生变化取不到值
-     * @param {Function} 计算函数 
-     */
-    protected _getComputed(fn: (...args: any[]) => any) {
-        const { name } = fn;
         return this.computed[name];
     };
 

@@ -5,7 +5,7 @@ import { InputRecord } from '@/types';
  * 注意:
  * 函数名不可以不写, 
  * jest编译的时候, 会作为匿名函数使用, 
- * 这样才_cacheComputed方法中就取不到Function.name
+ * 这样才_getComputed方法中就取不到Function.name
  * @param inputRecord 
  * @param $store 
  */

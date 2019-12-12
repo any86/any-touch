@@ -1,10 +1,10 @@
-import { AnyTouchEvent, Point, InputRecord } from '@/types';
+import { Point, InputRecord } from '@/types';
 import {
     STATUS_RECOGNIZED, STATUS_POSSIBLE,
     STATUS_FAILED,
 } from '../const/recognizerStatus';
 import Recognizer from './Base';
-import { INPUT_END, AUTO} from '@/const';
+import { INPUT_END, AUTO } from '@/const';
 import { getVLength } from '@/vector';
 import computeDistance from '@/compute/computeDistance';
 import computeMaxLength from '@/compute/computeMaxLength';
@@ -156,7 +156,7 @@ export default class TapRecognizer extends Recognizer {
             // 是否满足点击次数要求
             // 之所以用%, 是因为如果连续点击3次, 单击的tapCount会为3, 但是其实tap也应该触发
             if (0 === this.tapCount % this.options.tapTimes) {
-                if (this.hasRequireFailure() && !this.isAllRequireFailureRecognizersDisabled()) {
+                if (this.hasRequireFailure() && !this.isAllRequireFailureDisabled()) {
                     this.isWaitingOther = true;
                     this._waitOtherFailedTimer = (setTimeout as Window['setTimeout'])(() => {
                         // 检查指定手势是否识别为Failed
@@ -202,9 +202,9 @@ export default class TapRecognizer extends Recognizer {
       */
     public test(inputRecord: InputRecord): boolean {
         // 判断是否发生大的位置变化
-        const maxPointLength = this._cacheComputed(computeMaxLength, inputRecord, <any>this.$store);
+        const maxPointLength = this._getComputed(computeMaxLength, inputRecord, <any>this.$store);
         const deltaTime = inputRecord.input.timestamp - inputRecord.startInput.timestamp;
-        const computeDistanceData = this._cacheComputed(computeDistance, inputRecord, <any>this.$store);
+        const computeDistanceData = this._getComputed(computeDistance, inputRecord, <any>this.$store);
         const { distance } = computeDistanceData;
         this.event = { ...this.event, maxPointLength, deltaTime, ...computeDistanceData }
 
