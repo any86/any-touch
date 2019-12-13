@@ -44,15 +44,14 @@ export default class PinchRecognizer extends Recognizer {
     test(inputRecord: InputRecord): boolean {
         const { input } = inputRecord;
         const { pointLength } = input;
-        const vectors = computeVectorForMutli(inputRecord);
+        const vectors = this._getComputed(computeVectorForMutli,inputRecord);
         if (void 0 === vectors) {
             const scale = this._prevScale;
             const deltaScale = this._prevDeltaScale;
             this.event = { ...this.event, scale, deltaScale };
             return false;
         } else {
-            const { scale, deltaScale } = this.event['scale'] ? this.event : computeScale(vectors);
-            
+            const { scale, deltaScale } = this._getComputed(computeScale, vectors);
             this.event = { ...this.event, scale, deltaScale };
             return this.isValidPointLength(pointLength) && (this.options.threshold < Math.abs(scale - 1) || this.isRecognized);
         }

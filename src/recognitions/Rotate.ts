@@ -31,8 +31,7 @@ export default class RotateRecognizer extends Base {
         const {input} = inputRecord;
         const {pointLength} = input;
    
-        const computed = this.event['angle'] ? this.event[`angle`] : computMulti(inputRecord, <any>this.$store);
-        const {angle,deltaAngle} = computed;
+        const {angle,deltaAngle} = this._getComputed(computMulti,inputRecord,<any>this.$store)
         this.event = {...this.event, angle,deltaAngle};
         // 如果触碰点数要大于指定
         // 如果缩放超过阈值, 或者已识别
