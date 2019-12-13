@@ -39,6 +39,8 @@ export default abstract class Recognizer {
     // 会把前面所有手势的计算结果作为当前计算结果
     computed: Record<string, any>;
 
+    recognizerMap: Record<string, Recognizer>;
+
     constructor(options: { name?: string, [k: string]: any }) {
         this.options = { ...(<any>this.constructor).DEFAULT_OPTIONS, disabled: false, ...options };
         this.name = this.options.name;
@@ -49,6 +51,7 @@ export default abstract class Recognizer {
         this.isWaitingOther = false;
         this.event = {};
         this.computed = {};
+        this.recognizerMap = {};
         // 这里面不能直接调用$root等, 
         // 因为rollup生成的代码构造函数并不是该constructor
         // 而是构造函数中又嵌套了一个同名构造函数
@@ -267,6 +270,7 @@ export default abstract class Recognizer {
         return this.computed[name];
     };
 
+
     /**
      * 适用于大部分移动类型的手势, 
      * 如pan/rotate/pinch/swipe
@@ -338,5 +342,15 @@ export default abstract class Recognizer {
      * 计算当前手势的touch-action
      */
     abstract getTouchAction(): string[];
+
+    /**
+     * 检查指定手势是否失败(可指定时间点)
+     */
+    checkForFailure(gestureName: string, waitTime: number = 0, resultCallback: (isFailed: boolean) => void) {
+        setTimeout(() => {
+            const {status} = this.recognizerMap[gestureName];
+            resultCallback([STATUS_FAILED,STATUS_POSSIBLE].includes(status));
+        }, waitTime);
+    }
 };
 

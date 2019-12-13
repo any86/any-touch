@@ -76,6 +76,9 @@ export default class {
 
     recognizers: Recognizer[];
 
+    recognizerMap: Record<string, Recognizer>;
+
+
     options: Options;
 
     eventEmitter: AnyEvent;
@@ -132,6 +135,7 @@ export default class {
             update: this.update.bind(this)
         };
         this._root = root;
+
         this.recognizers = [
             new Rotate().$mixin(root),
             new Pinch().$mixin(root),
@@ -146,6 +150,14 @@ export default class {
             }).$mixin(root),
             new Press().$mixin(root),
         ];
+
+        // map
+        this.recognizerMap = {};
+        this.recognizers.forEach(recognizer => {
+            this.recognizerMap[recognizer.name] = recognizer;
+            recognizer.recognizerMap = this.recognizerMap;
+        });
+
         // 默认单击需要双击识别失败后触发
         this.recognizers[4].requireFailure(this.recognizers[5]);
         if (undefined !== this.el) {
@@ -276,6 +288,7 @@ export default class {
             this.eventEmitter.emit('error', { code: 1, message: `${recognizer.name}识别器已经存在!` })
         } else {
             this.recognizers.push(recognizer);
+            this.recognizerMap[recognizer.name] = recognizer;
             this.update();
         }
     };
@@ -313,6 +326,7 @@ export default class {
         for (let [index, recognizer] of this.recognizers.entries()) {
             if (recognizerName === recognizer.options.name) {
                 this.recognizers.splice(index, 1);
+                delete this.recognizerMap[recognizerName];
                 break;
             }
         }
@@ -370,7 +384,7 @@ export default class {
                 // 重置isStopped
                 this._isStopped = false;
             }
-            
+
             for (let recognizer of this.recognizers) {
                 if (recognizer.disabled) continue;
                 recognizer.computed = computed;
