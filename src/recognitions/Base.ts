@@ -9,7 +9,10 @@ import {
     STATUS_FAILED, STATUS_RECOGNIZED
 } from '../const/recognizerStatus';
 
-export default abstract class Recognizer {
+import RequireFailure from './RequireFailure';
+
+
+export default abstract class Recognizer extends RequireFailure {
     // 手势名
     name: string;
     // 是否禁止
@@ -39,9 +42,8 @@ export default abstract class Recognizer {
     // 会把前面所有手势的计算结果作为当前计算结果
     computed: Record<string, any>;
 
-    recognizerMap: Record<string, Recognizer>;
-
     constructor(options: { name?: string, [k: string]: any }) {
+        super();
         this.options = { ...(<any>this.constructor).DEFAULT_OPTIONS, disabled: false, ...options };
         this.name = this.options.name;
         this.disabled = this.options.disabled;
@@ -51,7 +53,6 @@ export default abstract class Recognizer {
         this.isWaitingOther = false;
         this.event = {};
         this.computed = {};
-        this.recognizerMap = {};
         // 这里面不能直接调用$root等, 
         // 因为rollup生成的代码构造函数并不是该constructor
         // 而是构造函数中又嵌套了一个同名构造函数
@@ -61,7 +62,7 @@ export default abstract class Recognizer {
      * 设置识别器
      * @param {Object} 选项 
      */
-    public set(options = {}) {
+    set(options = {}) {
         this.options = { ...this.options, ...options };
         // 刷新anyTouch
         this.$root.update();
@@ -72,7 +73,7 @@ export default abstract class Recognizer {
      * 传入启动类的实例
      * @param $root 
      */
-    public $mixin($root: any) {
+    $mixin($root: any) {
         this.$root = $root;
         this.$store = $root.$store;
         return this;
@@ -83,7 +84,7 @@ export default abstract class Recognizer {
      * @param type 
      * @param payload 
      */
-    public emit(type: string, payload: any) {
+    emit(type: string, payload: any) {
         payload.type = type;
         this.$root.eventEmitter.emit(type, payload);
         if (void 0 !== this.$root.el) {
@@ -101,67 +102,17 @@ export default abstract class Recognizer {
     };
 
     /**
-     * 前者需要后者识别失败才能触发
-     * @param {Recognizer} 识别器实例 
-     */
-    public requireFailure(recognizer: this) {
-        if (!this.requireFailureRecognizers.includes(recognizer)) {
-            this.requireFailureRecognizers.push(recognizer);
-        }
-    };
-
-    /**
-     * 移除识别器之间的"需要失败"关系
-     *  @param {Recognizer} 识别器实例 
-     */
-    public removeRequireFailure(recognizer: Recognizer) {
-        for (let [index, requireFailureRecognizer] of this.requireFailureRecognizers.entries()) {
-            if (requireFailureRecognizer.name === recognizer.name) {
-                this.requireFailureRecognizers.splice(index, 1);
-                break;
-            }
-        }
-    };
-
-    /**
-     * 是否需要其他手势失败才能触发
-     */
-    public hasRequireFailure() {
-        return 0 < this.requireFailureRecognizers.length;
-    };
-
-    /**
-     * 是否所有"需要失败"的手势都是disabled的
-     */
-    public isAllRequireFailureDisabled() {
-        return this.requireFailureRecognizers.every((recognizer: any) => recognizer.disabled);
-    };
-
-    /**
-     * 是否要求注册时指定失败的选择器是失败状态
-     */
-    public isAllRequiresFailedOrPossible(): boolean {
-        for (let recognizer of this.requireFailureRecognizers) {
-            // console.log(this.name, this.isWaitingOther)
-            if (recognizer.isWaitingOther) return false;
-            if (STATUS_FAILED !== recognizer.status && STATUS_POSSIBLE !== recognizer.status) {
-                return false;
-            }
-        }
-        return true;
-    };
-    /**
      * 验证触点
      * @param {Number} 触点数
      */
-    public isValidPointLength(pointLength: number): boolean {
+    isValidPointLength(pointLength: number): boolean {
         return 0 === this.options.pointLength || this.options.pointLength === pointLength;
     };
 
     /**
      * 是否只支持水平方向
      */
-    public isOnlyHorizontal() {
+    isOnlyHorizontal() {
         let isOnlyHorizontal = true;
         for (let direction of this.options.directions) {
             isOnlyHorizontal = -1 < DIRECTION_X.indexOf(direction);
@@ -175,7 +126,7 @@ export default abstract class Recognizer {
     /**
      * 是否只支持垂直方向
      */
-    public isOnlyVertical() {
+    isOnlyVertical() {
         let isOnlyVertical = true;
         for (let direction of this.options.directions) {
             isOnlyVertical = -1 < DIRECTION_Y.indexOf(direction);
@@ -190,11 +141,11 @@ export default abstract class Recognizer {
      * 是否支持该方向
      * @param {String} 方向 
      */
-    public isVaildDirection(direction?: directionString) {
+    isVaildDirection(direction?: directionString) {
         return -1 !== this.options.directions.indexOf(direction) || NONE === direction;
     };
 
-    public flow(isVaild: boolean, activeStatus: string, touchDevice: string): string {
+    flow(isVaild: boolean, activeStatus: string, touchDevice: string): string {
         // if(this.name ==='swipe' ) {
         //     console.log(isVaild, activeStatus, touchDevice);
         // }
@@ -342,15 +293,5 @@ export default abstract class Recognizer {
      * 计算当前手势的touch-action
      */
     abstract getTouchAction(): string[];
-
-    /**
-     * 检查指定手势是否失败(可指定时间点)
-     */
-    checkForFailure(gestureName: string, waitTime: number = 0, resultCallback: (isFailed: boolean) => void) {
-        setTimeout(() => {
-            const {status} = this.recognizerMap[gestureName];
-            resultCallback([STATUS_FAILED,STATUS_POSSIBLE].includes(status));
-        }, waitTime);
-    }
 };
 
