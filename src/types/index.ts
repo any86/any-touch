@@ -1,6 +1,13 @@
+import Base from '@/recognitions/Base';
+import RecognizerWithRequireFailureType from '@/recognitions/RecognizerWithRequireFailure';
+export type Recognizer = Base | RecognizerWithRequireFailure;
+export type RecognizerWithRequireFailure = RecognizerWithRequireFailureType;
+
 import _Store from '@/Store';
 // export type Store = InstanceType<_Store>;
 export type Store = _Store;
+
+
 export type AEvent = any;
 // export 
 // 适配器支持的事件类型

@@ -7,12 +7,9 @@ import {
     STATUS_END,
     STATUS_CANCELLED,
     STATUS_FAILED, STATUS_RECOGNIZED
-} from '../const/recognizerStatus';
+} from '@/const/recognizerStatus';
 
-import RequireFailure from './RequireFailure';
-
-
-export default abstract class Recognizer extends RequireFailure {
+export default abstract class Recognizer {
     // 手势名
     name: string;
     // 是否禁止
@@ -23,18 +20,16 @@ export default abstract class Recognizer extends RequireFailure {
     isRecognized: boolean;
     // 选项
     options: { [propName: string]: any };
-    // 需要对应手势失败才能识别成功
-    requireFailureRecognizers: any[];
     // 存储外部注入方法的容器
     $root: any;
 
     eventEmitter: any;
 
-    isWaitingOther: boolean;
 
     $store?: Store;
 
-    // 
+    recognizerMap: Record<string, Recognizer>;
+
     event: Record<string, any>;
 
     // 缓存当前手势的计算结果
@@ -43,16 +38,14 @@ export default abstract class Recognizer extends RequireFailure {
     computed: Record<string, any>;
 
     constructor(options: { name?: string, [k: string]: any }) {
-        super();
         this.options = { ...(<any>this.constructor).DEFAULT_OPTIONS, disabled: false, ...options };
         this.name = this.options.name;
         this.disabled = this.options.disabled;
         this.status = STATUS_POSSIBLE;
         this.isRecognized = false;
-        this.requireFailureRecognizers = [];
-        this.isWaitingOther = false;
         this.event = {};
         this.computed = {};
+        this.recognizerMap = {};
         // 这里面不能直接调用$root等, 
         // 因为rollup生成的代码构造函数并不是该constructor
         // 而是构造函数中又嵌套了一个同名构造函数
@@ -293,5 +286,7 @@ export default abstract class Recognizer extends RequireFailure {
      * 计算当前手势的touch-action
      */
     abstract getTouchAction(): string[];
+
+
 };
 

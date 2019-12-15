@@ -18,14 +18,13 @@
  */
 import AnyEvent from 'any-event';
 
-import { AEvent, AnyTouchEvent, SupportEvent, CSSPreventMap } from '@/types';
+import { AEvent, AnyTouchEvent, SupportEvent, CSSPreventMap, Recognizer, RecognizerWithRequireFailure } from '@/types';
 import { TOUCH, MOUSE, SUPPORT_TOUCH, NONE, AUTO, TOUCH_START, TOUCH_MOVE, TOUCH_CANCEL, TOUCH_END, MOUSE_DOWN, MOUSE_MOVE, MOUSE_UP, COMPUTE } from '@/const';
 import InputManage from '@/InputManage';
 import computeTouchAction from '@/utils/computeTouchAction';
 import Store from '@/Store';
 import { isRegExp, isFunction } from '@/utils/is';
-// 识别器
-import Recognizer from '@/recognitions/Base';
+
 import Tap from '@/recognitions/Tap';
 import Press from '@/recognitions/Press';
 import Pan from '@/recognitions/Pan';
@@ -157,9 +156,8 @@ export default class {
             this.recognizerMap[recognizer.name] = recognizer;
             recognizer.recognizerMap = this.recognizerMap;
         });
-
         // 默认单击需要双击识别失败后触发
-        this.recognizers[4].requireFailure(this.recognizers[5]);
+        (<RecognizerWithRequireFailure>this.recognizers[4]).requireFailure(this.recognizers[5]);
         if (undefined !== this.el) {
             // 应用设置
             this.update();

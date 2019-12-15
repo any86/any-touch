@@ -1,5 +1,5 @@
 let log = console.log;
-log = () => {};
+log = () => { };
 new Vue({
     el: '#app',
 
@@ -40,7 +40,7 @@ new Vue({
         // 初始化
         const anyTouch = new AnyTouch(el, {
             touchAction: 'auto',
-            isPreventDefault:true,
+            isPreventDefault: true,
             syncToAttr: true
         });
 
@@ -88,11 +88,9 @@ new Vue({
         anyTouch.add(tap3);
         anyTouch.add(tap4);
         const tap1 = anyTouch.get('tap');
-        tap1.requireFailure(tap3);
-        tap1.requireFailure(tap4);
-        tap2.requireFailure(tap3);
-        tap2.requireFailure(tap4);
-        tap3.requireFailure(tap4);
+        tap1.requireFailure([tap2, tap3, tap4],300);
+        tap2.requireFailure([tap3, tap4],300);
+        tap3.requireFailure([tap4],300);
         // this.$refs.circle.addEventListener('touchstart', ev=>{ev.preventDefault()})
         // this.$refs.circle.addEventListener('touchmove', ev=>{ev.preventDefault()})
         // this.$refs.circle.addEventListener('touchend', ev=>{ev.preventDefault()})
@@ -189,24 +187,24 @@ new Vue({
          */
         anyTouch.on('tap', e => {
             e.preventDefault();
-            log(`%c ${e.type} `, 'background-color:#f10;color:#fff;');
+            console.log(`%c ${e.type} `, 'background-color:#f10;color:#fff;');
             this.message = e;
         });
         this.$refs.circle.addEventListener('click', ev => {
             log('click');
         })
         anyTouch.on('doubletap', e => {
-            log(`%c ${e.type} `, 'background-color:#9c3;color:#fff;');
+            console.log(`%c ${e.type} `, 'background-color:#9c3;color:#fff;');
             this.message = e;
         });
 
         anyTouch.on('threetap', e => {
-            log(`%c ${e.type} `, 'background-color:#99c;color:#fff;');
+            console.log(`%c ${e.type} `, 'background-color:#99c;color:#fff;');
             this.message = e;
         });
 
         anyTouch.on('fourtap', e => {
-            log(`%c ${e.type} `, 'background-color:#19c;color:#fff;');
+            console.log(`%c ${e.type} `, 'background-color:#19c;color:#fff;');
             this.message = e;
         });
 
@@ -224,8 +222,8 @@ new Vue({
             this.message = e;
             this.scale *= e.deltaScale;
             // log(e.deltaScale);
-            this.centerX =e.x;
-            this.centerY =e.y;
+            this.centerX = e.x;
+            this.centerY = e.y;
             log(`%c ${e.type} `, 'background-color:#f90;color:#fff;');
         });
 
@@ -242,8 +240,8 @@ new Vue({
             log(e.deltaAngle, e.deltaX, e.deltaY);
             this.message = e;
             this.angle += e.deltaAngle;
-            this.centerX =e.x;
-            this.centerY =e.y;
+            this.centerX = e.x;
+            this.centerY = e.y;
         });
 
         /**

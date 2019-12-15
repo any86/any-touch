@@ -3,13 +3,12 @@ import {
     STATUS_RECOGNIZED, STATUS_POSSIBLE,
     STATUS_FAILED,
 } from '../const/recognizerStatus';
-import Recognizer from './Base';
+import RecognizerWithRequireFailure from './RecognizerWithRequireFailure';
 import { INPUT_END, AUTO } from '@/const';
 import { getVLength } from '@/vector';
 import computeDistance from '@/compute/computeDistance';
 import computeMaxLength from '@/compute/computeMaxLength';
-
-export default class TapRecognizer extends Recognizer {
+export default class TapRecognizer extends RecognizerWithRequireFailure {
     public tapCount: number;
 
 
@@ -22,7 +21,6 @@ export default class TapRecognizer extends Recognizer {
 
     // timer
     private _delayFailTimer?: number;
-    private _waitOtherFailedTimer?: number;
 
     static DEFAULT_OPTIONS = {
         name: 'tap',
@@ -57,7 +55,7 @@ export default class TapRecognizer extends Recognizer {
      * @return {Boolean} 前后2次点击的距离是否超过阈值
      */
     private _isValidDistanceFromPrevTap(center: Point): boolean {
-        // console.warn(this.name, point);
+        console.warn(this.name, center);
         // 判断2次点击的距离
         if (undefined !== this.prevTapPoint) {
             const distanceFromPreviousTap = getVLength({ x: center.x - this.prevTapPoint.x, y: center.y - this.prevTapPoint.y });
@@ -132,7 +130,8 @@ export default class TapRecognizer extends Recognizer {
      */
     public recognize(inputRecord: InputRecord): void {
         const { input } = inputRecord;
-        const { eventType, center } = input;
+        const { eventType, x,y } = input;
+        const center = {x,y};
         // 只在end阶段去识别
         if (INPUT_END !== eventType) return;
 
@@ -141,14 +140,9 @@ export default class TapRecognizer extends Recognizer {
         // 每一次点击是否符合要求
         if (this.test(inputRecord)) {
             clearTimeout(this._delayFailTimer);
-            clearTimeout(this._waitOtherFailedTimer);
-            this.isWaitingOther = false;
             // 判断2次点击之间的距离是否过大
             // 对符合要求的点击进行累加
-
-
             if (this._isValidDistanceFromPrevTap(<Point>center) && this._isValidInterval()) {
-
                 this.tapCount++;
             } else {
                 this.tapCount = 1;
@@ -156,19 +150,32 @@ export default class TapRecognizer extends Recognizer {
             // 是否满足点击次数要求
             // 之所以用%, 是因为如果连续点击3次, 单击的tapCount会为3, 但是其实tap也应该触发
             if (0 === this.tapCount % this.options.tapTimes) {
-                if (this.hasRequireFailure() && !this.isAllRequireFailureDisabled()) {
-                    this.isWaitingOther = true;
-                    this._waitOtherFailedTimer = (setTimeout as Window['setTimeout'])(() => {
-                        // 检查指定手势是否识别为Failed
-                        if (this.isAllRequiresFailedOrPossible()) {
+                if (this.hasRequireFailure()) {
+                    // 等待其他指定手势失败
+                    this.waitOtherFailed(isFailed => {
+                        // console.log(this.name, {isFailed});
+                        if (isFailed) {
                             this.status = STATUS_RECOGNIZED;
                             this.emit(this.options.name, { ...this.event, tapCount: this.tapCount });
                         } else {
                             this.status = STATUS_FAILED;
                         };
-                        this.isWaitingOther = false;
-                        // 不论成功失败都要重置tap计数
                     }, this.options.waitNextTapTime);
+
+
+
+                    // this.isWaitingOther = true;
+                    // this._waitOtherFailedTimer = (setTimeout as Window['setTimeout'])(() => {
+                    //     // 检查指定手势是否识别为Failed
+                    //     if (this.isAllRequiresFailedOrPossible()) {
+                    //         this.status = STATUS_RECOGNIZED;
+                    //         this.emit(this.options.name, { ...this.event, tapCount: this.tapCount });
+                    //     } else {
+                    //         this.status = STATUS_FAILED;
+                    //     };
+                    //     this.isWaitingOther = false;
+                    //     // 不论成功失败都要重置tap计数
+                    // }, this.options.waitNextTapTime);
                 }
                 // 如果不需要等待其他手势失败
                 // 那么立即执行
