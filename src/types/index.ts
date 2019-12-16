@@ -2,11 +2,11 @@ import Base from '@/recognitions/Base';
 import RecognizerWithRequireFailureType from '@/recognitions/RecognizerWithRequireFailure';
 export type Recognizer = Base | RecognizerWithRequireFailure;
 export type RecognizerWithRequireFailure = RecognizerWithRequireFailureType;
+export type RecognizerBase = Base;
 
 import _Store from '@/Store';
 // export type Store = InstanceType<_Store>;
 export type Store = _Store;
-
 
 export type AEvent = any;
 // export 
@@ -41,7 +41,7 @@ export interface BaseInput {
 }
 
 export interface Input extends BaseInput {
-    
+
     readonly preventDefault: () => void;
     // 新一轮手势识别的开始和结束
     readonly isStart: boolean;
@@ -86,7 +86,7 @@ export interface Computed {
     direction?: directionString;
 }
 
-export interface AnyTouchEvent extends Input, Readonly<Computed>{
+export interface AnyTouchEvent extends Input, Readonly<Computed> {
     readonly type: string
 }
 

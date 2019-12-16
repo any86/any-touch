@@ -1,4 +1,4 @@
-import { AnyTouchEvent, AEvent, directionString, Store, InputRecord } from '@/types';
+import { Recognizer, AEvent, directionString, Store, InputRecord } from '@/types';
 import { INPUT_CANCEL, INPUT_END, INPUT_MOVE, DIRECTION_X, DIRECTION_Y, NONE } from '@/const';
 import {
     STATUS_POSSIBLE,
@@ -9,7 +9,7 @@ import {
     STATUS_FAILED, STATUS_RECOGNIZED
 } from '@/const/recognizerStatus';
 
-export default abstract class Recognizer {
+export default abstract class RecognizerBase  {
     // 手势名
     name: string;
     // 是否禁止
@@ -66,7 +66,7 @@ export default abstract class Recognizer {
      * 传入启动类的实例
      * @param $root 
      */
-    $mixin($root: any) {
+    $mixin($root: any): Recognizer {
         this.$root = $root;
         this.$store = $root.$store;
         return this;

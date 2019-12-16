@@ -18,7 +18,7 @@
  */
 import AnyEvent from 'any-event';
 
-import { AEvent, AnyTouchEvent, SupportEvent, CSSPreventMap, Recognizer, RecognizerWithRequireFailure } from '@/types';
+import { AEvent, AnyTouchEvent, SupportEvent, CSSPreventMap, Recognizer, RecognizerWithRequireFailure, RecognizerBase } from '@/types';
 import { TOUCH, MOUSE, SUPPORT_TOUCH, NONE, AUTO, TOUCH_START, TOUCH_MOVE, TOUCH_CANCEL, TOUCH_END, MOUSE_DOWN, MOUSE_MOVE, MOUSE_UP, COMPUTE } from '@/const';
 import InputManage from '@/InputManage';
 import computeTouchAction from '@/utils/computeTouchAction';
@@ -50,7 +50,8 @@ interface Options {
         callout?: boolean;
     }
 };
-export default class {
+
+export default class AnyTouch {
     // 识别器
     static Tap = Tap;
     static Press = Press;
@@ -149,7 +150,6 @@ export default class {
             }).$mixin(root),
             new Press().$mixin(root),
         ];
-
         // map
         this.recognizerMap = {};
         this.recognizers.forEach(recognizer => {
@@ -443,3 +443,4 @@ export default class {
         this.eventEmitter.destroy();
     };
 };
+

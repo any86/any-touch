@@ -12,7 +12,8 @@ test('doubletap识别失败, tap应该触发2次', async (done) => {
     const tap2 = at.get('doubletap');
     if(undefined === tap1) return;
     if(undefined === tap2) return;
-    tap1.removeRequireFailure(tap2);
+    if('removeRequireFailure' in tap1) tap1.removeRequireFailure(tap2);
+    
     at.on('tap', (e) => {
         mockTapCallback();
     });

@@ -4,13 +4,15 @@ import {
     STATUS_POSSIBLE,
     STATUS_FAILED
 } from '@/const/recognizerStatus';
-import { ERROR_MESSAGE_IS_NOT_RECOGNIZE } from '@/const/ERROR_MESSAGE';
 import Base from './Base';
-export default abstract class extends Base {
+export default abstract class RecognizerWithRequireFailure extends Base {
     // 正在等待其他识别器失败
     isWaitingOtherFail: boolean;
 
     waitOtherFailTime: number;
+
+    // 定时器id
+    waitOtherFailTimer?: number;
 
     // 需要"失败"识别器列表
     requireFailRecognizers: Recognizer[];
@@ -43,7 +45,7 @@ export default abstract class extends Base {
      * @param {Recognizer} 识别器实例 
      * @param {Number} 延迟时间
      */
-    requireFailure(some: string | Recognizer | string[] | Recognizer[], waitTime: number = 0): void {
+    requireFailure(some: string | RecognizerBase | string[] | RecognizerBase[], waitTime: number = 0): void {
         this.waitOtherFailTime = waitTime;
         this.requireFailRecognizers = [];
         if (Array.isArray(some)) {
@@ -66,8 +68,11 @@ export default abstract class extends Base {
      * 移除识别器之间的"需要失败"关系
      *  @param {Recognizer} 识别器实例 
      */
-    removeRequireFailure(recognizerName: string) {
-        this.requireFailRecognizers = this.requireFailRecognizers.filter(({ name }) => recognizerName !== recognizerName)
+    removeRequireFailure(one: string | RecognizerBase) {
+        const recognizer = this.getRecognizer(one);
+        if (void 0 !== recognizer) {
+            this.requireFailRecognizers = this.requireFailRecognizers.filter(({ name }) => recognizer.name !== name)
+        }
     };
 
     /**
@@ -79,14 +84,16 @@ export default abstract class extends Base {
     };
 
     /**
+     * 核心功能
      * 检查指定手势是否失败(可指定时间点)
      * @param {Function} 返回"是否失败状态"
      */
-    waitOtherFailed(resultCallback: (isFailed: boolean) => void, waitTime?: number): void {
+    triggerAfterOtherFailed(resultCallback: (isFailed: boolean) => void, waitTime?: number): void {
         this.isWaitingOtherFail = true;
         const hasEnabled = this.requireFailRecognizers.some(recognizer => !recognizer.disabled);
+
         if (hasEnabled) {
-            setTimeout(() => {
+            this.waitOtherFailTimer = (setTimeout as Window['setTimeout'])(() => {
                 const isAllFailed = this.requireFailRecognizers.every(recognizer => {
                     return [STATUS_FAILED, STATUS_POSSIBLE].includes(recognizer.status) &&
                         'isWaitingOtherFail' in recognizer && !recognizer.isWaitingOtherFail
@@ -99,6 +106,13 @@ export default abstract class extends Base {
             this.isWaitingOtherFail = false;
             resultCallback(true);
         }
-    }
+    };
+
+    /**
+     * 取消延迟触发
+     */
+    cancelTriggerAfterOtherFailed() {
+        clearTimeout(this.waitOtherFailTimer);
+    };
 };
 

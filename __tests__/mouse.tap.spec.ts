@@ -5,11 +5,11 @@ import AnyTouch from '../src/main'
 test('mouse下, 仅有tap识别, 事件是否触发', async (done) => {
     const el = document.createElement('div');
     const at = new AnyTouch(el);
-    at.on('tap', (e:any) => {
+    at.on('tap', (e: any) => {
         expect(e.type).toBe('tap');
-        
+
     });
-    const ts = new TouchSimulator(el, {device:'mouse'});
+    const ts = new TouchSimulator(el, { device: 'mouse' });
     // 模拟touch触碰
     ts.dispatchTouchStart([{ x: 0, y: 0 }]);
     await sleep(100);
@@ -26,18 +26,17 @@ test('mouse下,tap与doubletap之间的requireFailure是否生效?', async (done
     at.add(tap2);
     at.add(tap3);
     const tap1 = at.get('tap');
-    if(undefined === tap1) {
-        return 
+    if (void 0 !== tap1 && void 0 !== tap2) {
+        (tap1 as any).requireFailure([tap2, tap3]);
+        (tap2 as any).requireFailure(tap3);
     }
-    tap1.requireFailure(tap2);
-    tap1.requireFailure(tap3);
-    tap2.requireFailure(tap3);
+
 
     at.on('doubletap', (e) => {
         expect(e.type).toBe('doubletap');
     });
 
-    const ts = new TouchSimulator(el, {device:'mouse'});
+    const ts = new TouchSimulator(el, { device: 'mouse' });
     // 模拟touch触碰
     ts.dispatchTouchStart([{ x: 0, y: 0 }]);
     ts.dispatchTouchEnd();

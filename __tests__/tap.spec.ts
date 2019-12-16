@@ -19,12 +19,12 @@ test('仅有tap识别, 事件是否触发', async (done) => {
     done();
 });
 
-test(`模拟doubletap` , async (done) => {
+test(`模拟doubletap`, async (done) => {
     const el = document.createElement('div');
     const at = new AnyTouch(el);
     const mockCallback = jest.fn();
     const tap2 = at.get('doubletap');
-    if(undefined === tap2) return
+    if (undefined === tap2) return
     tap2.disabled = false;
 
     at.on('doubletap', (e) => {
@@ -45,23 +45,25 @@ test(`模拟doubletap` , async (done) => {
     done();
 });
 
-test('连续点击3下, 第三下, 不符合连击要求, 触发1次双击且触发一次单击', async(done)=>{
+test('连续点击3下, 第三下, 不符合连击要求, 触发1次双击且触发一次单击', async (done) => {
     const mockTapCallback = jest.fn();
     const mockDoubletapCallback = jest.fn();
     const el = document.createElement('div');
     const at = new AnyTouch(el);
     const tap2 = at.get('doubletap');
-    if(undefined === tap2) return
+    if (undefined === tap2) return
     tap2.disabled = false;
     const tap1 = at.get('tap');
-    if(undefined === tap1) return
-    tap1.requireFailure(tap2);
+    if (undefined === tap1) return
+    (tap1 as any).requireFailure(tap2);
 
     at.on('tap', (e) => {
+        console.warn('tap')
         mockTapCallback();
     });
 
     at.on('doubletap', (e) => {
+        console.warn('doubletap')
         mockDoubletapCallback();
     });
 
