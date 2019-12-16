@@ -17,7 +17,7 @@ export default abstract class RecognizerWithRequireFailure extends Base {
     // 需要"失败"识别器列表
     requireFailRecognizers: Recognizer[];
 
-    constructor(options: { name?: string, [k: string]: any }) {
+    constructor(options={}) {
         super(options)
         this.waitOtherFailTime = 0;
         this.isWaitingOtherFail = false;

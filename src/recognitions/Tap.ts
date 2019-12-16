@@ -20,9 +20,6 @@ export default class TapRecognizer extends RecognizerWithRequireFailure {
     // 多次tap之间的距离是否满足要求
     public isValidDistanceFromPrevTap?: boolean;
 
-    // timer
-    private _delayFailTimer?: number;
-
     private _countDownToFailTimer?: number;
 
     static DEFAULT_OPTIONS = {
