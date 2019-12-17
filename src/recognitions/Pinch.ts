@@ -3,6 +3,7 @@ import { NONE, INPUT_END } from '@/const';
 import Recognizer from './Base';
 import computeVectorForMutli from '@/compute/computeVectorForMutli';
 import computeScale from '@/compute/computeScale';
+import recognizeForPressMoveLike from './recognizeForPressMoveLike';
 
 
 export default class PinchRecognizer extends Recognizer {
@@ -55,5 +56,13 @@ export default class PinchRecognizer extends Recognizer {
             this.event = { ...this.event, scale, deltaScale };
             return this.isValidPointLength(pointLength) && (this.options.threshold < Math.abs(scale - 1) || this.isRecognized);
         }
+    };
+
+        /**
+     * 开始识别
+     * @param {InputRecord} 输入 
+     */
+    recognize(inputRecord:InputRecord){
+        recognizeForPressMoveLike(this,inputRecord);
     };
 };

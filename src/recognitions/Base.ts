@@ -9,6 +9,7 @@ import {
     STATUS_FAILED, STATUS_RECOGNIZED
 } from '@/const/recognizerStatus';
 
+
 export default abstract class RecognizerBase  {
     // 手势名
     name: string;
@@ -138,59 +139,10 @@ export default abstract class RecognizerBase  {
         return -1 !== this.options.directions.indexOf(direction) || NONE === direction;
     };
 
-    flow(isVaild: boolean, activeStatus: string, touchDevice: string): string {
-        // if(this.name ==='swipe' ) {
-        //     console.log(isVaild, activeStatus, touchDevice);
-        // }
-        const STATE_MAP: { [k: number]: any } = {
-            // isVaild === true,
-            // Number(true) === 1
-            // 这个分支不会出现STATUS_FAILED
-            // STATUS_END在上面的代码中也会被重置为STATUS_POSSIBLE, 从而进行重新识别
-            1: {
-                [STATUS_POSSIBLE]: {
-                    [INPUT_MOVE]: STATUS_START,
-                    [INPUT_END]: STATUS_RECOGNIZED,
-                    [INPUT_CANCEL]: STATUS_CANCELLED
-                },
-                [STATUS_START]: {
-                    [INPUT_MOVE]: STATUS_MOVE,
-                    [INPUT_END]: STATUS_END,
-                    [INPUT_CANCEL]: STATUS_CANCELLED
-                },
-                [STATUS_MOVE]: {
-                    [INPUT_MOVE]: STATUS_MOVE,
-                    [INPUT_END]: STATUS_END,
-                }
-            },
-            // isVaild === false
-            // 这个分支有STATUS_FAILED
-            0: {
-                [STATUS_START]: {
-                    [INPUT_MOVE]: STATUS_CANCELLED,
-                    [INPUT_END]: STATUS_END,
-                    [INPUT_CANCEL]: STATUS_CANCELLED
-                },
-                [STATUS_MOVE]: {
-                    [INPUT_MOVE]: STATUS_CANCELLED,
-                    [INPUT_END]: STATUS_END,
-                    [INPUT_CANCEL]: STATUS_CANCELLED
-                }
-            }
-        };
-        // console.warn(Number(isVaild),activeStatus, STATE_MAP[Number(isVaild)][activeStatus]);
-        if (undefined !== STATE_MAP[Number(isVaild)][activeStatus]) {
-            return STATE_MAP[Number(isVaild)][activeStatus][touchDevice] || activeStatus;
-        } else {
-            return activeStatus;
-        }
-    };
-
     /**
      * 如果识别结束, 那么重置状态
      */
     protected _resetStatus(): void {
-        // if (this.name === 'tap') console.log('@', this.status);
         //STATUS_RECOGNIZED === STATUS_END
         if (-1 !== [STATUS_END, STATUS_CANCELLED, STATUS_RECOGNIZED, STATUS_FAILED].indexOf(this.status)) {
             this.status = STATUS_POSSIBLE;
@@ -220,45 +172,8 @@ export default abstract class RecognizerBase  {
      * 如pan/rotate/pinch/swipe
      * @param {InputRecord} 输入记录 
      */
-    recognize(inputRecord: InputRecord): void {
-        // if(!computed.isStart) return;
-        // if(this.name === 'pan')    console.log(this.name,this.status);
-        // 是否识别成功
-        const isVaild = this.test(inputRecord);
-        // 重置status
-        this._resetStatus();
-
-        // 状态变化流程
-        const { input } = inputRecord;
-        const { eventType } = input;
-
-        this.status = this.flow(isVaild, this.status, eventType);
-        const { event } = this;
-        if (STATUS_CANCELLED === eventType) {
-            this.emit(this.options.name + INPUT_CANCEL, event);
-            return;
-        }
-
-        // 是否已识别
-        this.isRecognized = -1 < [STATUS_START, STATUS_MOVE, STATUS_END, STATUS_RECOGNIZED].indexOf(this.status);
-        // 识别后触发的事件
-        if (isVaild) {
-            this.afterRecognized(event);
-
-            // computed = this.lockDirection(computed);
-            this.emit(this.options.name, event);
-
-            // panstart | panmove 等
-            this.emit(this.options.name + this.status, event);
-
-            this.afterEmit();
-        } else if (this.isRecognized) {
-
-            // panend等
-            this.emit(this.options.name + this.status, event);
-
-        }
-    };
+    abstract recognize(inputRecord: InputRecord): void
+    ;
 
     /**
      * 校验输入数据

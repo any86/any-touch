@@ -5,6 +5,7 @@ import getHV from '../utils/getHV';
 import computeDistance from '@/compute/computeDistance';
 import computeDeltaXY from '@/compute/computeDeltaXY';
 import intervalCompute from '@/compute/intervalCompute';
+import recognizeForPressMoveLike from './recognizeForPressMoveLike';
 
 export default class PanRecognizer extends Recognizer {
     static DEFAULT_OPTIONS = {
@@ -60,6 +61,14 @@ export default class PanRecognizer extends Recognizer {
             (this.isRecognized || this.options.threshold < distance) &&
             this.isValidPointLength(pointLength) &&
             this.isVaildDirection(direction);
+    };
+
+    /**
+     * 开始识别
+     * @param {InputRecord} 输入 
+     */
+    recognize(inputRecord:InputRecord){
+        recognizeForPressMoveLike(this,inputRecord);
     };
 
     /**

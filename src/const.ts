@@ -84,5 +84,5 @@ export const KEY_DISTANCE = 'distance';
 export const KEY_DELTAX = 'deltaX';
 export const KEY_MAX_POINT_LENGTH = 'maxPointLength';
 
-
+export * from './const/recognizerStatus';
 export * from './const/ERROR_MESSAGE';

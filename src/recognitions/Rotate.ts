@@ -2,6 +2,8 @@ import Base from './Base';
 import {NONE} from '../const';
 import { AnyTouchEvent, InputRecord } from '@/types';
 import computMulti from '@/compute/computeMulti';
+import recognizeForPressMoveLike from './recognizeForPressMoveLike';
+
 export default class RotateRecognizer extends Base {
     static DEFAULT_OPTIONS = {
         name: 'rotate',
@@ -36,5 +38,13 @@ export default class RotateRecognizer extends Base {
         // 如果触碰点数要大于指定
         // 如果缩放超过阈值, 或者已识别
         return this.isValidPointLength(pointLength) && (this.options.threshold < Math.abs(angle) || this.isRecognized);
+    };
+
+        /**
+     * 开始识别
+     * @param {InputRecord} 输入 
+     */
+    recognize(inputRecord:InputRecord){
+        recognizeForPressMoveLike(this,inputRecord);
     };
 };

@@ -4,7 +4,7 @@ import { INPUT_END, DIRECTION_ALL, NONE, KEY_DIRECTION, KEY_DISTANCE, KEY_MAX_PO
 import computeDistance from '@/compute/computeDistance';
 import intervalCompute from '@/compute/intervalCompute';
 import computeMaxLength from '@/compute/computeMaxLength';
-
+import recognizeForPressMoveLike from './recognizeForPressMoveLike';
 
 export default class SwipeRecognizer extends Recognizer {
     static DEFAULT_OPTIONS = {
@@ -30,6 +30,14 @@ export default class SwipeRecognizer extends Recognizer {
         if (NONE !== this.event.direction) {
             this.emit(this.options.name + this.event.direction, this.event);
         }
+    };
+
+    /**
+     * 开始识别
+     * @param {InputRecord} 输入 
+     */
+    recognize(inputRecord:InputRecord){
+        recognizeForPressMoveLike(this,inputRecord);
     };
 
     /**
