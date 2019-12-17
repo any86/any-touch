@@ -5,6 +5,7 @@ import {
 import computeDistance from '@/compute/computeDistance';
 import { INPUT_CANCEL, INPUT_END, INPUT_START, AUTO, DIRECTION_UP, KEY_DISTANCE } from '@/const';
 import Recognizer from './Base';
+import {resetStatus} from './recognizeForPressMoveLike';
 
 export default class PressRecognizer extends Recognizer {
     private _timeoutId?: any;
@@ -31,7 +32,7 @@ export default class PressRecognizer extends Recognizer {
         // 那么等待minPressTime时间后触发press
         if (INPUT_START === eventType && this.test(inputRecord)) {
             // 重置状态
-            this._resetStatus();
+            resetStatus(this);
             // 延迟触发
             this.cancel();
             this._timeoutId = (setTimeout as Window['setTimeout'])(() => {

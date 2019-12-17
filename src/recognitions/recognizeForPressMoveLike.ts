@@ -52,6 +52,12 @@ function flow(isVaild: boolean, activeStatus: string, eventType: string): string
     }
 };
 
+export function resetStatus(recognizer: any){
+    // 重置status
+    if (-1 !== [STATUS_END, STATUS_CANCELLED, STATUS_RECOGNIZED, STATUS_FAILED].indexOf(recognizer.status)) {
+        recognizer.status = STATUS_POSSIBLE;
+    };
+}
 
 /**
  * 适用于大部分移动类型的手势, 
@@ -62,10 +68,8 @@ export default function (recognizer: any, inputRecord: InputRecord): void {
     // 是否识别成功
     const isVaild = recognizer.test(inputRecord);
 
-    // 重置status
-    if (-1 !== [STATUS_END, STATUS_CANCELLED, STATUS_RECOGNIZED, STATUS_FAILED].indexOf(recognizer.status)) {
-        recognizer.status = STATUS_POSSIBLE;
-    };
+    resetStatus(recognizer);
+
 
     // 状态变化流程
     const { input } = inputRecord;

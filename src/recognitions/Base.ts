@@ -1,16 +1,10 @@
-import { Recognizer, AEvent, directionString, Store, InputRecord } from '@/types';
-import { INPUT_CANCEL, INPUT_END, INPUT_MOVE, DIRECTION_X, DIRECTION_Y, NONE } from '@/const';
+import { Recognizer, Store, InputRecord } from '@/types';
 import {
     STATUS_POSSIBLE,
-    STATUS_START,
-    STATUS_MOVE,
-    STATUS_END,
-    STATUS_CANCELLED,
-    STATUS_FAILED, STATUS_RECOGNIZED
-} from '@/const/recognizerStatus';
+} from '@/const';
 
 
-export default abstract class RecognizerBase  {
+export default abstract class RecognizerBase {
     // 手势名
     name: string;
     // 是否禁止
@@ -103,51 +97,9 @@ export default abstract class RecognizerBase  {
         return 0 === this.options.pointLength || this.options.pointLength === pointLength;
     };
 
-    /**
-     * 是否只支持水平方向
-     */
-    isOnlyHorizontal() {
-        let isOnlyHorizontal = true;
-        for (let direction of this.options.directions) {
-            isOnlyHorizontal = -1 < DIRECTION_X.indexOf(direction);
-            if (!isOnlyHorizontal) {
-                return false;
-            }
-        }
-        return isOnlyHorizontal;
-    };
 
-    /**
-     * 是否只支持垂直方向
-     */
-    isOnlyVertical() {
-        let isOnlyVertical = true;
-        for (let direction of this.options.directions) {
-            isOnlyVertical = -1 < DIRECTION_Y.indexOf(direction);
-            if (!isOnlyVertical) {
-                return false;
-            }
-        }
-        return isOnlyVertical;
-    };
 
-    /**
-     * 是否支持该方向
-     * @param {String} 方向 
-     */
-    isVaildDirection(direction?: directionString) {
-        return -1 !== this.options.directions.indexOf(direction) || NONE === direction;
-    };
 
-    /**
-     * 如果识别结束, 那么重置状态
-     */
-    protected _resetStatus(): void {
-        //STATUS_RECOGNIZED === STATUS_END
-        if (-1 !== [STATUS_END, STATUS_CANCELLED, STATUS_RECOGNIZED, STATUS_FAILED].indexOf(this.status)) {
-            this.status = STATUS_POSSIBLE;
-        };
-    };
 
     /**
      * 缓存计算函数的结果
@@ -173,7 +125,7 @@ export default abstract class RecognizerBase  {
      * @param {InputRecord} 输入记录 
      */
     abstract recognize(inputRecord: InputRecord): void
-    ;
+        ;
 
     /**
      * 校验输入数据

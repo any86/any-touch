@@ -6,6 +6,8 @@ import computeDistance from '@/compute/computeDistance';
 import computeDeltaXY from '@/compute/computeDeltaXY';
 import intervalCompute from '@/compute/intervalCompute';
 import recognizeForPressMoveLike from './recognizeForPressMoveLike';
+import isVaildDirection from './isVaildDirection';
+
 
 export default class PanRecognizer extends Recognizer {
     static DEFAULT_OPTIONS = {
@@ -60,15 +62,15 @@ export default class PanRecognizer extends Recognizer {
         return INPUT_MOVE === eventType &&
             (this.isRecognized || this.options.threshold < distance) &&
             this.isValidPointLength(pointLength) &&
-            this.isVaildDirection(direction);
+            isVaildDirection(this, direction);
     };
 
     /**
      * 开始识别
      * @param {InputRecord} 输入 
      */
-    recognize(inputRecord:InputRecord){
-        recognizeForPressMoveLike(this,inputRecord);
+    recognize(inputRecord: InputRecord) {
+        recognizeForPressMoveLike(this, inputRecord);
     };
 
     /**

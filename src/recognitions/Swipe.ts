@@ -1,10 +1,11 @@
 import Recognizer from './Base';
 import { InputRecord } from '@/types';
-import { INPUT_END, DIRECTION_ALL, NONE, KEY_DIRECTION, KEY_DISTANCE, KEY_MAX_POINT_LENGTH } from '@/const';
+import { INPUT_END, DIRECTION_ALL, NONE, DIRECTION_X, DIRECTION_Y } from '@/const';
 import computeDistance from '@/compute/computeDistance';
 import intervalCompute from '@/compute/intervalCompute';
 import computeMaxLength from '@/compute/computeMaxLength';
 import recognizeForPressMoveLike from './recognizeForPressMoveLike';
+import isVaildDirection from './isVaildDirection';
 
 export default class SwipeRecognizer extends Recognizer {
     static DEFAULT_OPTIONS = {
@@ -39,6 +40,33 @@ export default class SwipeRecognizer extends Recognizer {
     recognize(inputRecord:InputRecord){
         recognizeForPressMoveLike(this,inputRecord);
     };
+    /**
+     * 是否只支持水平方向
+     */
+    isOnlyHorizontal() {
+        let isOnlyHorizontal = true;
+        for (let direction of this.options.directions) {
+            isOnlyHorizontal = -1 < DIRECTION_X.indexOf(direction);
+            if (!isOnlyHorizontal) {
+                return false;
+            }
+        }
+        return isOnlyHorizontal;
+    };
+    /**
+     * 是否只支持垂直方向
+     */
+    isOnlyVertical() {
+        let isOnlyVertical = true;
+        for (let direction of this.options.directions) {
+            isOnlyVertical = -1 < DIRECTION_Y.indexOf(direction);
+            if (!isOnlyVertical) {
+                return false;
+            }
+        }
+        return isOnlyVertical;
+    };
+
 
     /**
      * 识别条件
@@ -79,7 +107,7 @@ export default class SwipeRecognizer extends Recognizer {
 
         return this.options.pointLength === maxPointLength &&
             this.options.threshold < distance &&
-            this.isVaildDirection(direction) &&
+            isVaildDirection(this,direction) &&
             this.options.velocity < vaildVelocity;
     };
 };
