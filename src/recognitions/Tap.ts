@@ -3,6 +3,7 @@ import {
     STATUS_RECOGNIZED, STATUS_POSSIBLE,
     STATUS_FAILED,
 } from '../const/recognizerStatus';
+import Base from './Base';
 import RecognizerWithRequireFailure from './RecognizerWithRequireFailure';
 import { INPUT_END, AUTO } from '@/const';
 import { getVLength } from '@/vector';
@@ -11,7 +12,6 @@ import computeMaxLength from '@/compute/computeMaxLength';
 
 export default class TapRecognizer extends RecognizerWithRequireFailure {
     public tapCount: number;
-
 
     // 记录每次单击完成时的坐标
     public prevTapPoint?: Point;
@@ -138,7 +138,7 @@ export default class TapRecognizer extends RecognizerWithRequireFailure {
         // 每一次点击是否符合要求
         if (this.test(inputRecord)) {
             this.cancelCountDownToFail();
-            this.cancelTriggerAfterOtherFailed();
+            this.stopListenOtherFail();
             // 判断2次点击之间的距离是否过大
             // 对符合要求的点击进行累加
             if (this._isValidDistanceFromPrevTap({ x, y }) && this._isValidInterval()) {
@@ -151,7 +151,7 @@ export default class TapRecognizer extends RecognizerWithRequireFailure {
             if (0 === this.tapCount % this.options.tapTimes) {
                 if (this.hasRequireFailure()) {
                     // 等待其他指定手势失败
-                    this.triggerAfterOtherFailed(isFailed => {
+                    this.listenOtherFail(isFailed => {
                         // console.log(this.name, {isFailed});
                         if (isFailed) {
                             this.status = STATUS_RECOGNIZED;

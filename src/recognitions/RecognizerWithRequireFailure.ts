@@ -88,7 +88,7 @@ export default abstract class RecognizerWithRequireFailure extends Base {
      * 检查指定手势是否失败(可指定时间点)
      * @param {Function} 返回"是否失败状态"
      */
-    triggerAfterOtherFailed(resultCallback: (isFailed: boolean) => void, waitTime?: number): void {
+    listenOtherFail(resultCallback: (isFailed: boolean) => void, waitTime?: number): void {
         this.isWaitingOtherFail = true;
         const hasEnabled = this.requireFailRecognizers.some(recognizer => !recognizer.disabled);
 
@@ -111,7 +111,7 @@ export default abstract class RecognizerWithRequireFailure extends Base {
     /**
      * 取消延迟触发
      */
-    cancelTriggerAfterOtherFailed() {
+    stopListenOtherFail() {
         clearTimeout(this.waitOtherFailTimer);
     };
 };
