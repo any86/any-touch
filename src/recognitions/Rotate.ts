@@ -1,10 +1,10 @@
-import Base from './Base';
+import RecognizerWithRequireFailure from './RecognizerWithRequireFailure';
 import {NONE} from '../const';
 import { AnyTouchEvent, InputRecord } from '@/types';
 import computMulti from '@/compute/computeMulti';
 import recognizeForPressMoveLike from './recognizeForPressMoveLike';
 
-export default class RotateRecognizer extends Base {
+export default class RotateRecognizer extends RecognizerWithRequireFailure {
     static DEFAULT_OPTIONS = {
         name: 'rotate',
         // 触发事件所需要的最小角度

@@ -4,10 +4,10 @@ import {
 } from '../const/recognizerStatus';
 import computeDistance from '@/compute/computeDistance';
 import { INPUT_CANCEL, INPUT_END, INPUT_START, AUTO, DIRECTION_UP, KEY_DISTANCE } from '@/const';
-import Recognizer from './Base';
+import RecognizerWithRequireFailure from './RecognizerWithRequireFailure';
 import {resetStatus} from './recognizeForPressMoveLike';
 
-export default class PressRecognizer extends Recognizer {
+export default class PressRecognizer extends RecognizerWithRequireFailure {
     private _timeoutId?: any;
     static DEFAULT_OPTIONS = {
         name: 'press',

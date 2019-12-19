@@ -1,12 +1,12 @@
 import { AnyTouchEvent, InputRecord } from '@/types';
 import { NONE, INPUT_END } from '@/const';
-import Recognizer from './Base';
+import RecognizerWithRequireFailure from './RecognizerWithRequireFailure';
 import computeVectorForMutli from '@/compute/computeVectorForMutli';
 import computeScale from '@/compute/computeScale';
 import recognizeForPressMoveLike from './recognizeForPressMoveLike';
 
 
-export default class PinchRecognizer extends Recognizer {
+export default class PinchRecognizer extends RecognizerWithRequireFailure {
     private _prevScale: number;
     private _prevDeltaScale: number;
     static DEFAULT_OPTIONS = {

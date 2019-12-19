@@ -3,7 +3,6 @@ import {
     STATUS_RECOGNIZED, STATUS_POSSIBLE,
     STATUS_FAILED,
 } from '../const/recognizerStatus';
-import Base from './Base';
 import RecognizerWithRequireFailure from './RecognizerWithRequireFailure';
 import { INPUT_END, AUTO } from '@/const';
 import { getVLength } from '@/vector';

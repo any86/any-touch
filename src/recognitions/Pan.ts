@@ -1,6 +1,6 @@
 import { AnyTouchEvent, Computed, InputRecord, Store } from '@/types';
 import { INPUT_MOVE, PAN_Y, PAN_X, DIRECTION_LEFT, DIRECTION_RIGHT, DIRECTION_DOWN, DIRECTION_UP, DIRECTION_ALL, NONE, AUTO, KEY_DELTAX, KEY_DIRECTION, KEY_DISTANCE } from '../const';
-import Recognizer from './Base';
+import RecognizerWithRequireFailure from './RecognizerWithRequireFailure';
 import getHV from '../utils/getHV';
 import computeDistance from '@/compute/computeDistance';
 import computeDeltaXY from '@/compute/computeDeltaXY';
@@ -9,7 +9,7 @@ import recognizeForPressMoveLike from './recognizeForPressMoveLike';
 import isVaildDirection from './isVaildDirection';
 
 
-export default class PanRecognizer extends Recognizer {
+export default class PanRecognizer extends RecognizerWithRequireFailure {
     static DEFAULT_OPTIONS = {
         name: 'pan',
         threshold: 10,

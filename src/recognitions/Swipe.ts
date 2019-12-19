@@ -1,4 +1,4 @@
-import Recognizer from './Base';
+import RecognizerWithRequireFailure from './RecognizerWithRequireFailure';
 import { InputRecord } from '@/types';
 import { INPUT_END, DIRECTION_ALL, NONE, DIRECTION_X, DIRECTION_Y } from '@/const';
 import computeDistance from '@/compute/computeDistance';
@@ -7,7 +7,7 @@ import computeMaxLength from '@/compute/computeMaxLength';
 import recognizeForPressMoveLike from './recognizeForPressMoveLike';
 import isVaildDirection from './isVaildDirection';
 
-export default class SwipeRecognizer extends Recognizer {
+export default class SwipeRecognizer extends RecognizerWithRequireFailure {
     static DEFAULT_OPTIONS = {
         name: 'swipe',
         threshold: 10,
