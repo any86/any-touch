@@ -1,7 +1,7 @@
-import { Recognizer, Store, InputRecord } from '@any-touch/types';
+import { Recognizer, Store, InputRecord } from '@types';
 import {
     STATUS_POSSIBLE,
-} from '@any-touch/const';
+} from '@const';
 
 
 export default abstract class RecognizerBase {

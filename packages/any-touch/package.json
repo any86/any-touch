@@ -1,0 +1,34 @@
+{
+  "name": "any-touch",
+  "version": "0.6.0",
+  "description": "一个手势库",
+  "unpkg": "dist/any-touch.js",
+  "jsdelivr": "dist/any-touch.js",
+  "main": "dist/any-touch.common.js",
+  "module": "dist/any-touch.esm.js",
+  "types": "types/main.d.ts",
+  "files": [
+    "dist/**/*",
+    "types/*"
+  ],
+  "scripts": {
+    "build:type": "rimraf types && tsc -p ./tsconfig.type.json",
+    "build": "npm run build:type && rimraf dist && rimraf dist && rollup -c --environment NODE_ENV:production",
+    "dev": "rimraf dist && rollup -c  --watch --environment NODE_ENV:development",
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/any86/any-touch.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/any86/any-touch/issues"
+  },
+  "homepage": "https://github.com/any86/any-touch#readme",
+  "dependencies": {
+    "any-event": "^0.4.1"
+  },
+  "sideEffects": false
+}

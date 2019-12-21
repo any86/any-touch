@@ -1,5 +1,5 @@
 import { radianToAngle } from '@any-touch/vector';
-import { Store, InputRecord } from '@any-touch/types';
+import { Store, InputRecord } from '@types';
 export default function computeDeltaXY({
     prevInput,
     input

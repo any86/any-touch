@@ -1,13 +1,13 @@
-import { Point, InputRecord } from '@any-touch/types';
+import { Point, InputRecord } from '@types';
 import {
     STATUS_RECOGNIZED, STATUS_POSSIBLE,
     STATUS_FAILED,
 } from '../const/recognizerStatus';
 import RecognizerWithRequireFailure from './RecognizerWithRequireFailure';
-import { INPUT_END, AUTO } from '@any-touch/const';
+import { INPUT_END, AUTO } from '@const';
 import { getVLength } from '@any-touch/vector';
-import computeDistance from '@any-touch/compute/computeDistance';
-import computeMaxLength from '@any-touch/compute/computeMaxLength';
+import computeDistance from '@compute/computeDistance';
+import computeMaxLength from '@compute/computeMaxLength';
 
 export default class TapRecognizer extends RecognizerWithRequireFailure {
     public tapCount: number;

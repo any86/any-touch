@@ -1,4 +1,4 @@
-import { Vector } from '@any-touch/types';
+import { Vector } from '@types';
 import { getAngle } from '@any-touch/vector';
 export default function computeAngle({
     startV, prevV, activeV

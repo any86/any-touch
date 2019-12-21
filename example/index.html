@@ -11,7 +11,7 @@
     </link>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <!-- <script src="https://res.wx.qq.com/mmbizwap/zh_CN/htmledition/js/vconsole/3.0.0/vconsole.min.js"></script> -->
-    <script src="../dist/any-touch.min.js"></script>
+    <script src="../dist/any-touch.js"></script>
 
     <script>
         // var vConsole = new VConsole();
@@ -194,15 +194,7 @@
 
         </table>
 
-
-        <!-- 
-        <section class="fixed-bottom">
-            <a href="?debug">vconsole</a>
-            <a href="?">vconsole off</a>
-        </section> -->
-        <!-- <div class="box" id="box" ref="box">BOX</div> -->
-
-        <div class="circle" id="circle" ref="circle" @animationend="animationend" :class="[activeType]" :style="{
+        <div class="circle" id="circle" ref="circle" :class="[activeType]" :style="{
                 top:`${y}px`,
                 left:`${x}px`,
             transform: `scale(${scale}) rotate(${angle}deg)`

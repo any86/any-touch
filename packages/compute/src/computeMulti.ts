@@ -1,5 +1,5 @@
 
-import { Input } from '@any-touch/types';
+import { Input } from '@types';
 import Store from '@any-touch/Store';
 import computeVector from './computeVector';
 import computeScale from './computeScale';

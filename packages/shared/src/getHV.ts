@@ -4,7 +4,7 @@
  * 
  */
 import {WRONG_DIRECTION, DIRECTION_X, DIRECTION_Y } from '../const'
-import { directionString } from '@any-touch/types';
+import { directionString } from '@types';
 export default (directions: [directionString?, directionString?, directionString?, directionString?]): { hasHorizontal: boolean, hasVertical: boolean } => {
     let hasHorizontal = false;
     let hasVertical = false;

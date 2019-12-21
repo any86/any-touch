@@ -17,19 +17,11 @@
  * 格式化Event成统一的pointer格式 => 通过pointer数据计算 => 用计算结果去识别手势
  */
 import AnyEvent from 'any-event';
-import { AEvent, AnyTouchEvent, SupportEvent, CSSPreventMap, Recognizer, RecognizerWithRequireFailure } from '@any-touch/types';
-import { TOUCH, MOUSE, SUPPORT_TOUCH, NONE, AUTO, TOUCH_START, TOUCH_MOVE, TOUCH_CANCEL, TOUCH_END, MOUSE_DOWN, MOUSE_MOVE, MOUSE_UP, COMPUTE } from './const';
+import { AEvent, AnyTouchEvent, SupportEvent, CSSPreventMap, Recognizer, RecognizerWithRequireFailure } from '@types';
+import { TOUCH, MOUSE, SUPPORT_TOUCH, NONE, AUTO, TOUCH_START, TOUCH_MOVE, TOUCH_CANCEL, TOUCH_END, MOUSE_DOWN, MOUSE_MOVE, MOUSE_UP, COMPUTE, } from './const';
 import InputManage from './InputManage';
-import computeTouchAction from '@any-touch/shared/computeTouchAction';
-import Store from './Store';
-import { isRegExp, isFunction } from '@any-touch/shared/is';
+import { isRegExp, isFunction } from '@shared/is';
 
-import Tap from '@any-touch/Tap';
-import Press from '@any-touch/Press';
-import Pan from '@any-touch/Pan';
-import Swipe from '@any-touch/Swipe';
-import Pinch from '@any-touch/Pinch';
-import Rotate from '@any-touch/Rotate';
 interface Options {
     touchAction?: 'compute' | 'auto' | 'manipulation' | 'pan-x' | 'pan-y' | 'none';
     hasDomEvents?: boolean;
@@ -49,203 +41,77 @@ interface Options {
     }
 };
 
-export default class AnyTouch {
-    // 识别器
-    // static Tap = Tap;
-    // static Press = Press;
-    // static Pan = Pan;
-    // static Swipe = Swipe;
-    // static Pinch = Pinch;
-    // static Rotate = Rotate;
+// 默认设置
+const DEFAULT_OPTIONS: Options = {
+    touchAction: COMPUTE,
+    hasDomEvents: true,
+    isPreventDefault: true,
+    preventDefaultExclude: /^(?:INPUT|TEXTAREA|BUTTON|SELECT)$/,
+    syncToAttr: false,
+    cssPrevent: {
+        // 阻止触发选择文字
+        selectText: true,
+        // 阻止触发浏览器默认拖拽
+        drag: true,
+        // 隐藏高亮效果
+        tapHighlight: true,
+        // 阻止默认菜单
+        callout: true
+    }
+};
+export default class AnyTouch extends AnyEvent {
     static version = '__VERSION__';
-
-    // 向量计算
-    // static Vector = Vector;
-
-    // mini的事件触发器
-    // static EventEmitter = AnyEvent;
 
     // 目标元素
     el?: HTMLElement;
-
-    default: Options;
-
-    touchDevice: string;
-
-    recognizers: Recognizer[];
-
-    recognizerMap: Record<string, Recognizer>;
-
-
+    // 选项
     options: Options;
 
-    eventEmitter: AnyEvent;
+    sourceType: typeof TOUCH | typeof MOUSE;
+
+    // 识别器
+    recognizers: Recognizer[];
+    recognizerMap: Record<string, Recognizer>;
 
     inputManage: InputManage;
 
-    $store: Store;
-
-    _root: any;
-
     event: Record<string, any>;
 
-    // 是否阻止后面的识别器运行
-    private _isStopped: boolean;
-
     /**
-     * @param {Element} 目标元素
+     * @param {Element} 目标元素, 微信下没有el
      * @param {Object} 选项
      */
     constructor(el?: HTMLElement, options?: Options) {
-        this.default = {
-            touchAction: COMPUTE,
-            hasDomEvents: true,
-            isPreventDefault: true,
-            preventDefaultExclude: /^(?:INPUT|TEXTAREA|BUTTON|SELECT)$/,
-            syncToAttr: false,
-            cssPrevent: {
-                // 阻止触发选择文字
-                selectText: true,
-                // 阻止触发浏览器默认拖拽
-                drag: true,
-                // 隐藏高亮效果
-                tapHighlight: true,
-                // 阻止默认菜单
-                callout: true
-            }
-        };
-        if (undefined !== el) this.el = el;
+        super();
+        this.el = el;
         this.event = {};
-        this.$store = new Store();
-        this.inputManage = new InputManage();
-        this.touchDevice = SUPPORT_TOUCH ? TOUCH : MOUSE;
-        this.options = { ...this.default, ...options };
-        // eventEmitter
-        this.eventEmitter = new AnyEvent();
-        this._isStopped = false;
-        // 识别器
-        // 混入当前方法和属性, 方便在识别器中调用类上的方法和属性
-        // fix: 不注入this, 因为微信下会报错, 提示对象里有循环引用
-        const root = {
-            eventEmitter: this.eventEmitter,
-            options: this.options,
-            el, $store: this.$store,
-            update: this.update.bind(this)
-        };
-        this._root = root;
+        this.sourceType = SUPPORT_TOUCH ? TOUCH : MOUSE;
+        this.inputManage = new InputManage(this.sourceType);
+        this.options = { ...DEFAULT_OPTIONS, ...options };
 
-        this.recognizers = [
-            new Rotate().$mixin(root),
-            new Pinch().$mixin(root),
-            new Pan().$mixin(root),
-            new Swipe().$mixin(root),
-            new Tap().$mixin(root),
-            new Tap({
-                name: 'doubletap',
-                pointLength: 1,
-                tapTimes: 2,
-                disabled: true
-            }).$mixin(root),
-            new Press().$mixin(root),
-        ];
-        // map
+        // 识别器
+        this.recognizers = [];
         this.recognizerMap = {};
-        this.recognizers.forEach(recognizer => {
-            this.recognizerMap[recognizer.name] = recognizer;
-            recognizer.recognizerMap = this.recognizerMap;
-        });
-        // 默认单击需要双击识别失败后触发
-        (<RecognizerWithRequireFailure>this.recognizers[4]).requireFailure(this.recognizers[5]);
-        if (undefined !== this.el) {
+
+        if (void 0 !== this.el) {
             // 应用设置
-            this.update();
+            // this.update();
             // 绑定事件
             this._unbindEl = this._bindEL(this.el)._unbindEl;
         }
     };
 
-    /**
-     * 刷新设备类型, 一般没什么用, 主要为了模拟器下切换pc/手机可以切换识别器
-     * at.refresh();
-     */
-    // refresh() {
-    //     if (undefined === this.el) return;
-    //     this._unbindEl()
-    //     this.touchDevice = ('ontouchstart' in window) ? 'touch' : 'mouse';
-    //     this._unbindEl = this._bindEL(this.el)._unbindEl;
-    // };
+    update() { };
 
     /**
-     * 计算touch-action
-     * @param {HTMLElement} 目标元素 
-     */
-    updateTouchAction() {
-        // console.warn(this.options.touchAction);
-        if (COMPUTE === this.options.touchAction) {
-            let touchActions = [];
-            for (let recognizer of this.recognizers) {
-                touchActions.push(...recognizer.getTouchAction());
-            };
-            this.el!.style.touchAction = computeTouchAction(touchActions);
-        } else {
-            this.el!.style.touchAction = this.options.touchAction || AUTO;
-        }
-    };
-
-    /**
-     * 设置"阻止浏览器默认行为"的css样式
-     */
-    updateCssPrevent() {
-        const style = <CSSPreventMap>{};
-        const { cssPrevent } = this.options;
-        if (undefined === cssPrevent) return;
-        if (cssPrevent.selectText) {
-            style['mozUserSelect'] = NONE;
-            style['userSelect'] = NONE;
-            style['msUserSelect'] = NONE;
-            style['webkitUserSelect'] = NONE;
-            style['msTouchSelect'] = NONE;
-        }
-
-        if (cssPrevent.drag) {
-            style['webkitUserDrag'] = NONE;
-        }
-
-        if (cssPrevent.tapHighlight) {
-            style['webkitTapHighlightColor'] = 'rgba(0,0,0,0)';
-        }
-
-        if (cssPrevent.callout) {
-            style['webkitTouchCallout'] = NONE;
-        }
-        // 设置
-        for (let k in style) {
-            this.el!.style[k] = style[k];
-        }
-    };
-
-    /**
-     * 更新设置
-     */
-    public update() {
-        if (undefined === this.el) return;
-        this.updateTouchAction();
-        this.updateCssPrevent();
-    };
-
-    /**
-     * 绑定手势到指定元素
-     * 暂时只支持事件冒泡阶段触发, 
-     * 改为捕获阶段需要对inputListener进行编号, 
-     * 产生大量事件绑定,
-     * 而非在一次触发事件中执行所有手势判断
+     * 绑定元素
      * @param {Element} 待绑定手势元素
      */
     private _bindEL(el: Element) {
         const boundInputListener = <EventListener>this.catchEvent.bind(this);
 
         // Touch
-        if (TOUCH === this.touchDevice) {
+        if (TOUCH === this.sourceType) {
             const events = [TOUCH_START, TOUCH_MOVE, TOUCH_END, TOUCH_CANCEL];
             events.forEach(eventName => {
                 el.addEventListener(eventName, boundInputListener);
@@ -278,10 +144,9 @@ export default class AnyTouch {
      * @param recognizer 识别器
      */
     add(recognizer: Recognizer): void {
-        recognizer.$mixin(this._root);
         const hasSameName = this.recognizers.some((theRecognizer: Recognizer) => recognizer.name === theRecognizer.name);
         if (hasSameName) {
-            this.eventEmitter.emit('error', { code: 1, message: `${recognizer.name}识别器已经存在!` })
+            // this.eventEmitter.emit('error', { code: 1, message: `${recognizer.name}识别器已经存在!` })
         } else {
             this.recognizers.push(recognizer);
             this.recognizerMap[recognizer.name] = recognizer;
@@ -303,7 +168,7 @@ export default class AnyTouch {
      * @param {Options} 选项 
      */
     set(options: Options): void {
-        this.options = { ...this.default, ...options };
+        this.options = { ...DEFAULT_OPTIONS, ...options };
         this.update();
     };
 
@@ -311,7 +176,6 @@ export default class AnyTouch {
      * 停止识别
      */
     stop() {
-        this._isStopped = true;
     }
 
     /**
@@ -328,6 +192,10 @@ export default class AnyTouch {
         }
     };
 
+    /**
+     * 检查是否需要阻止默认事件, 根据preventDefaultExclude
+     * @param {SupportEvent} 原生event 
+     */
     canPreventDefault(event: SupportEvent): boolean {
         if (!this.options.isPreventDefault) return false;
         let isPreventDefault = false;
@@ -353,7 +221,7 @@ export default class AnyTouch {
         if (this.canPreventDefault(event)) {
             event.preventDefault();
         }
-
+console.log(event)
         // if (!event.cancelable) {
         //     this.eventEmitter.emit('error', { code: 0, message: '页面滚动的时候, 请暂时不要操作元素!' });
         // }
@@ -378,7 +246,7 @@ export default class AnyTouch {
             this.emit('input', this.event);
             if (input.isStart) {
                 // 重置isStopped
-                this._isStopped = false;
+                // this._isStopped = false;
             }
 
             for (let recognizer of this.recognizers) {
@@ -389,39 +257,12 @@ export default class AnyTouch {
                 // 每个识别器的test方法会设置event的值
                 recognizer.recognize(inputRecord);
                 computed = recognizer.computed;
-                if (this._isStopped) {
-                    break;
-                }
+                // if (this._isStopped) {
+                //     break;
+                // }
             }
         }
 
-    };
-
-    /**
-     * 注册事件
-     * @param {String} 事件名
-     * @param {Function} 回调函数
-     */
-    on(type: string, listener: (event: AnyTouchEvent) => void, options: { [k: string]: boolean } | boolean = false): void {
-        this.eventEmitter.on(type, listener);
-    };
-
-    /**
-     * 解绑事件
-     * @param {String} 事件名 
-     * @param {Function} 事件回调
-     */
-    off(type: string, listener?: (event: AnyTouchEvent) => void): void {
-        this.eventEmitter.off(type, listener);
-    };
-
-    /**
-     * 触发事件, 同时type会作为payload的一个键值
-     * @param {String} 类型名
-     * @param {Object} 数据
-     */
-    emit(type: string, payload: AEvent) {
-        this.eventEmitter.emit(type, { ...payload, type });
     };
 
     /**
@@ -433,12 +274,10 @@ export default class AnyTouch {
      * 销毁
      */
     destroy() {
-        this.$store.destroy();
         // 解绑事件
         if (this.el) {
             this._unbindEl();
         }
-        this.eventEmitter.destroy();
     };
 };
 

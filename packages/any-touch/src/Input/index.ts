@@ -1,17 +1,21 @@
 /**
  * 构造统一的Input格式
  */
-import { BaseInput, SupportEvent } from '@any-touch/types';
-import { SUPPORT_TOUCH } from '@any-touch/const';
+import { BaseInput, SupportEvent } from '@types';
 import Touch from './adapters/Touch';
 import Mouse from './adapters/Mouse';
 import Adapter from './adapters/Abstract';
-
+import { MOUSE, TOUCH } from '@const'
 export default class {
     public adapter: Adapter;
     public id: number;
-    constructor() {
-        this.adapter = SUPPORT_TOUCH ? new Touch() : new Mouse();
+    constructor(sourceType: typeof MOUSE | typeof TOUCH) {
+        const SOURCE = {
+            [MOUSE]:  Mouse,
+            [TOUCH]: Touch
+        } [sourceType];
+
+        this.adapter = new SOURCE();
         this.id = 0;
     };
 

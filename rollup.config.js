@@ -1,11 +1,7 @@
-import {
-    plugins
-} from './scripts/rollup.plugins';
-import pkg from './package.json';
-import path from 'path';
+import pkg from './packages/any-touch/package.json';
+// import path from 'path';
 import fs from 'fs';
-
-
+import {plugins} from './rollup.plugins.config'
 /**
  * 生成索引文件
  * @param {String} 名称 
@@ -38,25 +34,25 @@ const IS_PROD = 'production' === process.env.NODE_ENV;
 const IS_DEV = 'development' === process.env.NODE_ENV;
 const DIST_DIR = 'dist';
 
-if (IS_PROD) {
-    if (!fs.existsSync(DIST_DIR)) {
-        fs.mkdirSync(DIST_DIR);
-    }
+// if (IS_PROD) {
+//     if (!fs.existsSync(DIST_DIR)) {
+//         fs.mkdirSync(DIST_DIR);
+//     }
 
-    generateIndex(pkg.name);
-    generateIndex(VUE_DIRECTIVE_NAME);
-}
+//     generateIndex(pkg.name);
+//     generateIndex(VUE_DIRECTIVE_NAME);
+// }
 
 
 /**
  * any-touch es && cjs
  */
 const AT_ES_CJS_CONFIG = {
-    input: './src/main.ts',
+    input: './packages/any-touch/src/index.ts',
 
     plugins,
 
-    external: ['any-event'],
+    // external: ['any-event'],
 
     output: [{
         format: 'cjs',
@@ -80,106 +76,27 @@ const AT_ES_CJS_CONFIG = {
  * any-touch iife
  */
 const AT_IIFE_CONFIG = {
-    input: './src/main.ts',
+    input: './packages/any-touch/src/index.ts',
 
     plugins,
 
-    output: [{
+    output: [
+    //     {
+    //     format: 'iife',
+    //     name: 'AnyTouch',
+    //     file: `dist/${pkg.name}.min.js`,
+    //     banner,
+    //     sourcemap: IS_DEV
+    // }, 
+    
+    {
         format: 'iife',
         name: 'AnyTouch',
-        file: `dist/${pkg.name}.min.js`,
-        banner,
-        sourcemap: IS_DEV
-    }, {
-        format: 'iife',
-        name: 'AnyTouch',
-        file: `dist/${pkg.name}.js`,
+        file: `./packages/any-touch/dist/${pkg.name}.js`,
         banner,
         sourcemap: IS_DEV
     }]
 };
 
-
-// ========== vTouch ========
-/**
- * vTouch es && cjs
- */
-const VT_ES_CJS_CONFIG = {
-    input: './src/vueDirective/index.ts',
-
-    plugins,
-
-    external: (id) => {
-        return '../AnyTouch' === id;
-        // return /^babel/.test(id)
-    },
-
-    output: [{
-            format: 'cjs',
-            file: `dist/${VUE_DIRECTIVE_NAME}.common.dev.js`,
-            banner,
-            sourcemap: IS_DEV,
-            paths: (id) => {
-                if (path.resolve(__dirname, './src/AnyTouch') === id) {
-                    return './any-touch.common'
-                }
-            }
-        }, {
-            format: 'cjs',
-            file: `dist/${VUE_DIRECTIVE_NAME}.common.prod.js`,
-            banner,
-            sourcemap: IS_DEV,
-            paths: (id) => {
-                if (path.resolve(__dirname, './src/AnyTouch') === id) {
-                    return './any-touch.common'
-                }
-            }
-        },
-        {
-            format: 'es',
-            file: `dist/${VUE_DIRECTIVE_NAME}.esm.js`,
-            banner,
-            sourcemap: IS_DEV,
-            paths: (id) => {
-                if (path.resolve(__dirname, './src/AnyTouch') === id) {
-                    return './any-touch.esm'
-                }
-            }
-        }
-    ]
-}
-/**
- * vTouch iife
- */
-const VT_IIFE_CONFIG = {
-    input: './src/vueDirective/index.ts',
-
-    plugins,
-
-    external: (id) => {
-        return '../AnyTouch' === id;
-    },
-
-    output: [{
-        format: 'iife',
-        name: 'vTouch',
-        file: `dist/${pkg.name}.${VUE_DIRECTIVE_NAME}.min.js`,
-        banner,
-        sourcemap: IS_DEV,
-        globals: {
-            [path.resolve(__dirname, './src/AnyTouch')]: 'AnyTouch'
-        },
-    }, {
-        format: 'iife',
-        name: `vTouch`,
-        file: `dist/${pkg.name}.${VUE_DIRECTIVE_NAME}.js`,
-        banner,
-        sourcemap: IS_DEV,
-        globals: {
-            [path.resolve(__dirname, './src/AnyTouch')]: 'AnyTouch'
-        },
-    }]
-}
-// export default IS_PROD ? [AT_ES_CJS_CONFIG, AT_IIFE_CONFIG, VT_ES_CJS_CONFIG, VT_IIFE_CONFIG] : [AT_IIFE_CONFIG, VT_IIFE_CONFIG];
 
 export default IS_PROD ? [AT_ES_CJS_CONFIG, AT_IIFE_CONFIG] : [AT_IIFE_CONFIG];

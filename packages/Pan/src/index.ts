@@ -1,10 +1,10 @@
-import { AnyTouchEvent, Computed, InputRecord } from '@any-touch/types';
+import { AnyTouchEvent, Computed, InputRecord } from '@types';
 import { INPUT_MOVE, PAN_Y, PAN_X, DIRECTION_LEFT, DIRECTION_RIGHT, DIRECTION_DOWN, DIRECTION_UP, DIRECTION_ALL, NONE, AUTO, KEY_DELTAX, KEY_DIRECTION, KEY_DISTANCE } from '../const';
 import Recognizer from '@any-touch/Recognizer';
-import getHV from '@any-touch/shared/getHV';
-import computeDistance from '@any-touch/compute/computeDistance';
-import computeDeltaXY from '@any-touch/compute/computeDeltaXY';
-import intervalCompute from '@any-touch/compute/intervalCompute';
+import getHV from '@shared/getHV';
+import computeDistance from '@compute/computeDistance';
+import computeDeltaXY from '@compute/computeDeltaXY';
+import intervalCompute from '@compute/intervalCompute';
 import recognizeForPressMoveLike from '@any-touch/Recognizer/recognizeForPressMoveLike';
 import isVaildDirection from '@any-touch/Recognizer/isVaildDirection';
 

@@ -1,4 +1,4 @@
-type Listener = ((...payload: any) => void) & { isOnce?: boolean }
+type Listener = ((...payload: any) => void)
 
 interface ListenersMap {
     [propName: string]: Listener[];
@@ -30,8 +30,10 @@ export default class AnyEvent {
      * @param {Function} 回调函数
      */
     once(eventName: string, listener: Listener): AnyEvent {
-        listener.isOnce = true;
-        this.on(eventName, listener);
+        this.on(eventName, ()=>{
+            listener();
+            this.off(eventName);
+        });
         return this;
     };
 
@@ -70,13 +72,7 @@ export default class AnyEvent {
         const listeners = this._listenersMap[eventName];
         if (undefined !== listeners && 0 < listeners.length) {
             for (let [index, listener] of listeners.entries()) {
-                if (listener.isOnce) {
-                    let listenerClone = listener;
-                    listeners.splice(index, 1);
-                    listenerClone(...payload);
-                } else {
-                    listener(...payload);
-                }
+                listener(...payload);
             }
             return true;
         } else {

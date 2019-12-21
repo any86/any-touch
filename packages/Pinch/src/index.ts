@@ -1,12 +1,12 @@
-import { AnyTouchEvent, InputRecord } from '@any-touch/types';
-import { NONE, INPUT_END } from '@any-touch/const';
-import RecognizerWithRequireFailure from './RecognizerWithRequireFailure';
-import computeVectorForMutli from '@any-touch/compute/computeVectorForMutli';
-import computeScale from '@any-touch/compute/computeScale';
-import recognizeForPressMoveLike from './recognizeForPressMoveLike';
+import { AnyTouchEvent, InputRecord } from '@types';
+import { NONE, INPUT_END } from '@const';
+import computeVectorForMutli from '@compute/computeVectorForMutli';
+import computeScale from '@compute/computeScale';
+import recognizeForPressMoveLike from '@Recognizer/recognizeForPressMoveLike';
+import Recognizer from '@Recognizer/Base';
 
 
-export default class PinchRecognizer extends RecognizerWithRequireFailure {
+export default class PinchRecognizer extends Recognizer {
     private _prevScale: number;
     private _prevDeltaScale: number;
     static DEFAULT_OPTIONS = {

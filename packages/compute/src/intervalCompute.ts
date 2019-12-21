@@ -2,8 +2,8 @@
 // 默认间隔25ms做一次计算, 让数据更新,
 // 让end阶段读取上一步的计算数据, 比如方向, 速率等...
 // 防止快速滑动到慢速滑动的手势识别成swipe
-import { Input, directionString } from '@any-touch/types';
-import { COMPUTE_INTERVAL, NONE, INPUT_CANCEL, INPUT_END } from '@any-touch/const';
+import { Input, directionString } from '@types';
+import { COMPUTE_INTERVAL, NONE, INPUT_CANCEL, INPUT_END } from '@const';
 import { getDirection } from '@any-touch/vector';
 import Store from '@any-touch/Store';
 

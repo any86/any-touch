@@ -1,4 +1,4 @@
-import { BaseInput, eventType } from '@any-touch/types';
+import { BaseInput, eventType } from '@types';
 import Adapter from './Abstract';
 export default class extends Adapter {
     load(event: TouchEvent): Omit<BaseInput,'id'>  {

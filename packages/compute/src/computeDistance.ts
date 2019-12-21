@@ -1,6 +1,6 @@
 
-import { Input, directionString } from '@any-touch/types';
-import { CLIENT_X, CLIENT_Y, INPUT_START, INPUT_MOVE, INPUT_END } from '@any-touch/const';
+import { Input, directionString } from '@types';
+import { CLIENT_X, CLIENT_Y, INPUT_START, INPUT_MOVE, INPUT_END } from '@const';
 import { getVLength, getDirection } from '@any-touch/vector';
 import Store from '@any-touch/Store';
 export default function computeDistance({

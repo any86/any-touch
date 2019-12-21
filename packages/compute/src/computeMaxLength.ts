@@ -1,5 +1,5 @@
 import Store from '@any-touch/Store';
-import { InputRecord } from '@any-touch/types';
+import { InputRecord } from '@types';
 /**
  * 每次start阶段的触点数字作为最大触点数
  * 注意:

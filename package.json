@@ -1,6 +1,10 @@
 {
   "name": "any-touch",
-  "version": "0.5.2",
+  "version": "0.6.0",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
   "description": "一个手势库",
   "unpkg": "dist/any-touch.js",
   "jsdelivr": "dist/any-touch.js",
@@ -12,11 +16,14 @@
     "types/*"
   ],
   "scripts": {
+    "del": "rimraf node_modules",
     "build:type": "rimraf types && tsc -p ./tsconfig.type.json",
     "release": "npm run test && standard-version && npm run build && npm pub && git push",
     "release-no-test": "standard-version && npm run build && npm pub && git push",
     "build": "npm run build:type && rimraf dist && rimraf dist && rollup -c --environment NODE_ENV:production",
+    "dev1": "lerna run --stream --scope any-touch dev",
     "dev": "rimraf dist && rollup -c  --watch --environment NODE_ENV:development",
+
     "test": "jest",
     "size": "node ./scripts/calcSize",
     "test-no-cache": "jest --no-cache",
@@ -36,31 +43,25 @@
   },
   "homepage": "https://github.com/any86/any-touch#readme",
   "devDependencies": {
+    "rollup": "^1.27.13",
     "@rollup/plugin-alias": "^2.2.0",
+    "@rollup/plugin-typescript":"^2.0.1",
+    "@rollup/plugin-json": "^4.0.0",
+    "@rollup/plugin-replace": "^2.2.1",
+    "rollup-plugin-terser": "^5.1.1",
+    "rollup-plugin-typescript2": "^0.25.3",
     "@types/jest": "^24.0.11",
     "chalk": "^2.4.2",
     "gh-pages": "^2.0.1",
     "jest": "^24.7.1",
     "lerna": "^3.19.0",
     "rimraf": "^2.6.2",
-    "rollup": "^0.67.1",
-    "rollup-plugin-commonjs": "^9.2.0",
-    "rollup-plugin-json": "^3.1.0",
-    "rollup-plugin-node-resolve": "^3.4.0",
-    "rollup-plugin-replace": "^2.1.0",
-    "rollup-plugin-sourcemaps": "^0.4.2",
-    "rollup-plugin-terser": "^5.1.1",
-    "rollup-plugin-typescript": "^1.0.0",
     "shelljs": "^0.8.3",
     "standard-version": "^4.4.0",
     "ts-jest": "^24.0.2",
     "tslib": "^1.9.3",
     "typescript": "^3.0.1",
-    "vue": "^2.6.10",
     "zlib": "^1.0.5"
-  },
-  "dependencies": {
-    "any-event": "^0.4.1"
   },
   "sideEffects": false
 }

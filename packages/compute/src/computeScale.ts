@@ -1,4 +1,4 @@
-import { Vector } from '@any-touch/types';
+import { Vector } from '@types';
 import { getVLength } from '@any-touch/vector';
 export default function computeScale({
     startV, prevV, activeV

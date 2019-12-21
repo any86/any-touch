@@ -1,8 +1,30 @@
-import { BaseInput, Input, SupportEvent, InputRecord, Point } from '@any-touch/types';
-import InputFactory from '@any-touch/Input';
-import { getCenter } from '@any-touch/vector';
+import { BaseInput, Input, SupportEvent, InputRecord, Point } from '@types';
+import InputFactory from './Input';
+import { INPUT_END, INPUT_START, INPUT_CANCEL, MOUSE, TOUCH,CLIENT_X,CLIENT_Y } from './const';
 
-import { INPUT_END, INPUT_START, INPUT_CANCEL } from '@any-touch/const';
+
+/**
+ * 获取多点之间的中心坐标
+ * @param {Array} 触碰点
+ */
+function getCenter(points: { clientX: number, clientY: number }[]): Point | void {
+    const { length } = points;
+    if (0 < length) {
+        // 只有一个点
+        if (1 === length) {
+            const { clientX, clientY } = points[0];
+            return { x: Math.round(clientX), y: Math.round(clientY) };
+        }
+
+        const countPoint = points.reduce((countPoint: Point, point: { clientX: number, clientY: number }) => {
+            countPoint.x += point[CLIENT_X];
+            countPoint.y += point[CLIENT_Y];
+            return countPoint;
+        }, { x: 0, y: 0 });
+        return { x: Math.round(countPoint.x / length), y: Math.round(countPoint.y / length) }
+    }
+};
+
 export default class {
     // 起点(单点|多点)
     startInput?: Input;
@@ -15,8 +37,8 @@ export default class {
 
     inputFactory: InputFactory;
 
-    constructor() {
-        this.inputFactory = new InputFactory();
+    constructor(sourceType: typeof MOUSE | typeof TOUCH) {
+        this.inputFactory = new InputFactory(sourceType);
     };
 
     /**

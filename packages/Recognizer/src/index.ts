@@ -3,7 +3,7 @@ import RecognizerBase from './Base';
 import {
     STATUS_POSSIBLE,
     STATUS_FAILED
-} from '@any-touch/const/recognizerStatus';
+} from '@const/recognizerStatus';
 import Base from './Base';
 export default abstract class RecognizerWithRequireFailure extends Base {
     // 正在等待其他识别器失败
