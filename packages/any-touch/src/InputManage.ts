@@ -1,6 +1,6 @@
-import { BaseInput, Input, SupportEvent, InputRecord, Point } from '@types';
+import { EventTransform, Input, SupportEvent, InputRecord, Point } from '@types';
 import InputFactory from './Input';
-import { INPUT_END, INPUT_START, INPUT_CANCEL, MOUSE, TOUCH,CLIENT_X,CLIENT_Y } from './const';
+import { INPUT_END, INPUT_START, INPUT_CANCEL, MOUSE, TOUCH,CLIENT_X,CLIENT_Y } from '@const';
 
 
 /**
@@ -60,7 +60,7 @@ export default class {
      * @param {Input} 输入
      * @return {InputRecord} 输入记录
      */
-    private _record(input: BaseInput): InputRecord {
+    private _record(input: EventTransform): InputRecord {
         // 当前输入状态
         const computed = transform(input);
         const { isStart, pointLength } = computed;
@@ -92,11 +92,11 @@ export default class {
     };
 };
 
-function transform(input: BaseInput): Input {
-    const { eventType, points, changedPoints, nativeEvent } = input;
+function transform(input: EventTransform): Input {
+    const { inputType, points, changedPoints, nativeEvent } = input;
     const pointLength = points.length;
-    const isStart = INPUT_START === eventType;
-    const isEnd = (INPUT_END === eventType && 0 === pointLength) || INPUT_CANCEL === eventType;
+    const isStart = INPUT_START === inputType;
+    const isEnd = (INPUT_END === inputType && 0 === pointLength) || INPUT_CANCEL === inputType;
     // 当前时间
     const timestamp = Date.now();
     // 触点中心

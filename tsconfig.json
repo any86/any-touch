@@ -41,7 +41,8 @@
       "@const": ["packages/any-touch/src/const"],
       "@compute/*": ["packages/compute/src/*"],
       "@shared/*": ["packages/shared/src/*"],
-      "@types": ["packages/types"]
+      "@types": ["packages/types"],
+      "@":["packages"],
     }
   },
   // 入口文件

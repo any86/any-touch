@@ -17,7 +17,7 @@
  * 格式化Event成统一的pointer格式 => 通过pointer数据计算 => 用计算结果去识别手势
  */
 import AnyEvent from 'any-event';
-import { AEvent, AnyTouchEvent, SupportEvent, CSSPreventMap, Recognizer, RecognizerWithRequireFailure } from '@types';
+import { AnyTouchEvent, SupportEvent, Recognizer } from '@types';
 import { TOUCH, MOUSE, SUPPORT_TOUCH, NONE, AUTO, TOUCH_START, TOUCH_MOVE, TOUCH_CANCEL, TOUCH_END, MOUSE_DOWN, MOUSE_MOVE, MOUSE_UP, COMPUTE, } from './const';
 import InputManage from './InputManage';
 import { isRegExp, isFunction } from '@shared/is';
@@ -221,7 +221,7 @@ export default class AnyTouch extends AnyEvent {
         if (this.canPreventDefault(event)) {
             event.preventDefault();
         }
-console.log(event)
+        console.log(event)
         // if (!event.cancelable) {
         //     this.eventEmitter.emit('error', { code: 0, message: '页面滚动的时候, 请暂时不要操作元素!' });
         // }

@@ -1,26 +1,26 @@
-import { BaseInput, eventType } from '@types';
+import { EventTransform, InputType, PointClientXY } from '@types';
 import Adapter from './Abstract';
 export default class extends Adapter {
-    prevPoints?: { clientX: number, clientY: number }[];
+    prevPoints?: PointClientXY[];
     isPressed: boolean;
     constructor() {
         super();
         this.isPressed = false;
     };
-    load(event: MouseEvent): Omit<BaseInput,'id'> | void {
+    load(event: MouseEvent): Omit<EventTransform, 'id'> | void {
         const { clientX, clientY, type, button } = event;
         let points = [{ clientX, clientY }];
-        let eventType: eventType | undefined;
+        let inputType: InputType | undefined;
         if ('mousedown' === type && 0 === button) {
             // 必须左键
             this.isPressed = true;
-            eventType = 'start';
+            inputType = 'start';
         } else if (this.isPressed) {
             if ('mousemove' === type) {
-                eventType = 'move';
+                inputType = 'move';
             } else if ('mouseup' === type) {
                 points = [];
-                eventType = 'end';
+                inputType = 'end';
                 this.isPressed = false;
             }
         }
@@ -32,9 +32,9 @@ export default class extends Adapter {
 
         this.prevPoints = [{ clientX, clientY }];
 
-        if (void 0 !== eventType) {
+        if (void 0 !== inputType) {
             return {
-                eventType,
+                inputType,
                 changedPoints,
                 points,
                 nativeEvent: event

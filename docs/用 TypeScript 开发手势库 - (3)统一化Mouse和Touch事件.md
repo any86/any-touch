@@ -51,7 +51,7 @@ export default (event: TouchEvent): any => {
 let prevPoints: { clientX: number, clientY: number }[];
 let isPressed = false;
 // 默认MocatchEvent中对type声明仅为string
-export default (event: MocatchEvent): BaseInput | void => {
+export default (event: MocatchEvent): EventTransform | void => {
     let { clientX, clientY, type, button } = event;
     const changedPoints = prevPoints || [{ clientX, clientY }];
 

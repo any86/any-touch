@@ -1,21 +1,25 @@
-import Base from '@/recognitions/Base';
-import RecognizerWithRequireFailureType from '@/recognitions/RecognizerWithRequireFailure';
-export type Recognizer = Base | RecognizerWithRequireFailure;
-export type RecognizerWithRequireFailure = RecognizerWithRequireFailureType;
-export type RecognizerBase = Base;
+import Base from '@Recognizer/Base';
+export type Recognizer = Base;
 
-import _Store from '@/Store';
-// export type Store = InstanceType<_Store>;
-export type Store = _Store;
-
-export type AEvent = any;
-// export 
 // 适配器支持的事件类型
 export type SupportEvent = MouseEvent | TouchEvent;
 
+export interface PointClientXY { clientX: number, clientY: number };
+// 输入类型
+export type InputType = 'start' | 'move' | 'end' | 'cancel';
+
+// 事件统一变形
+export interface EventTransform {
+    readonly id: number;
+    readonly inputType: InputType;
+    readonly changedPoints: PointClientXY[];
+    readonly points: PointClientXY[];
+    readonly nativeEvent: Event;
+}
+
 export type directionString = 'up' | 'right' | 'down' | 'left' | 'none';
 export type RecognizerStatus = 'possible' | 'recognized' | 'began' | 'changed' | 'ended' | 'failed' | 'cancelled';
-export type eventType = 'start' | 'move' | 'end' | 'cancel';
+
 
 export interface Point {
     x: number;
@@ -32,15 +36,8 @@ export type InputRecord = {
     startMultiInput?: Input;
 }
 
-export interface BaseInput {
-    readonly id: number;
-    readonly eventType: eventType;
-    readonly changedPoints: { clientX: number, clientY: number }[];
-    readonly points: { clientX: number, clientY: number }[];
-    readonly nativeEvent: Event;
-}
 
-export interface Input extends BaseInput {
+export interface Input extends EventTransform {
 
     readonly preventDefault: () => void;
     // 新一轮手势识别的开始和结束
