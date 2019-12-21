@@ -19,7 +19,7 @@
 import AnyEvent from 'any-event';
 import { AnyTouchEvent, SupportEvent, Recognizer } from '@types';
 import { TOUCH, MOUSE, SUPPORT_TOUCH, NONE, AUTO, TOUCH_START, TOUCH_MOVE, TOUCH_CANCEL, TOUCH_END, MOUSE_DOWN, MOUSE_MOVE, MOUSE_UP, COMPUTE, } from './const';
-import InputManage from './InputManage';
+import Input from './Input';
 import { isRegExp, isFunction } from '@shared/is';
 
 interface Options {
@@ -73,7 +73,7 @@ export default class AnyTouch extends AnyEvent {
     recognizers: Recognizer[];
     recognizerMap: Record<string, Recognizer>;
 
-    inputManage: InputManage;
+    input: Input;
 
     event: Record<string, any>;
 
@@ -86,7 +86,7 @@ export default class AnyTouch extends AnyEvent {
         this.el = el;
         this.event = {};
         this.sourceType = SUPPORT_TOUCH ? TOUCH : MOUSE;
-        this.inputManage = new InputManage(this.sourceType);
+        this.input = new Input(this.sourceType);
         this.options = { ...DEFAULT_OPTIONS, ...options };
 
         // 识别器
@@ -221,47 +221,46 @@ export default class AnyTouch extends AnyEvent {
         if (this.canPreventDefault(event)) {
             event.preventDefault();
         }
-        console.log(event)
         // if (!event.cancelable) {
         //     this.eventEmitter.emit('error', { code: 0, message: '页面滚动的时候, 请暂时不要操作元素!' });
         // }
 
         // 管理历史input
         // 生成AnyTouchEvent
-        const inputRecord = this.inputManage.load(event);
+        const input = this.input.transform(event);
+        console.log(input);
+return;
+        // // 跳过无效输入
+        // // 当是鼠标事件的时候, 会有undefined的时候
+        // // 比如鼠标还没有mousedown阶段的mousemove等都是无效操作
+        // if (void 0 !== input) {
 
-        // 跳过无效输入
-        // 当是鼠标事件的时候, 会有undefined的时候
-        // 比如鼠标还没有mousedown阶段的mousemove等都是无效操作
-        if (void 0 !== inputRecord) {
-            const { input } = inputRecord;
+        //     // 每次事件触发重新生成event
+        //     this.event = input;
 
-            // 每次事件触发重新生成event
-            this.event = input;
+        //     // 缓存每次计算的结果
+        //     let computed = {};
 
-            // 缓存每次计算的结果
-            let computed = {};
+        //     // input事件
+        //     this.emit('input', this.event);
+        //     if (input.isStart) {
+        //         // 重置isStopped
+        //         // this._isStopped = false;
+        //     }
 
-            // input事件
-            this.emit('input', this.event);
-            if (input.isStart) {
-                // 重置isStopped
-                // this._isStopped = false;
-            }
-
-            for (let recognizer of this.recognizers) {
-                if (recognizer.disabled) continue;
-                recognizer.computed = computed;
-                // 如果遇到停止标记, 立即停止运行后面的识别器
-                recognizer.event = this.event;
-                // 每个识别器的test方法会设置event的值
-                recognizer.recognize(inputRecord);
-                computed = recognizer.computed;
-                // if (this._isStopped) {
-                //     break;
-                // }
-            }
-        }
+        //     for (let recognizer of this.recognizers) {
+        //         if (recognizer.disabled) continue;
+        //         recognizer.computed = computed;
+        //         // 如果遇到停止标记, 立即停止运行后面的识别器
+        //         recognizer.event = this.event;
+        //         // 每个识别器的test方法会设置event的值
+        //         recognizer.recognize(input);
+        //         computed = recognizer.computed;
+        //         // if (this._isStopped) {
+        //         //     break;
+        //         // }
+        //     }
+        // }
 
     };
 

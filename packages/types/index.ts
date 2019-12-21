@@ -9,13 +9,42 @@ export interface PointClientXY { clientX: number, clientY: number };
 export type InputType = 'start' | 'move' | 'end' | 'cancel';
 
 // 事件统一变形
-export interface EventTransform {
+export interface InputBase {
     readonly id: number;
     readonly inputType: InputType;
     readonly changedPoints: PointClientXY[];
     readonly points: PointClientXY[];
     readonly nativeEvent: Event;
 }
+
+export interface Input extends InputBase {
+    readonly startInput?:InputBase;
+    readonly startMultiInput?:InputBase;
+    readonly prevInput?:InputBase;
+    readonly preventDefault: () => void;
+    // 新一轮手势识别的开始和结束
+    readonly isStart: boolean;
+    readonly isEnd: boolean;
+    readonly pointLength: number;
+    // 发生改变的触点数据
+    // readonly changedPointLength: number;
+    // 当前时间
+    readonly timestamp: number;
+    readonly target: EventTarget | null;
+    readonly currentTarget: EventTarget | null;
+    readonly center?: Point;
+    // 同centerX/Y
+    readonly x: number;
+    readonly y: number;
+}
+
+
+
+
+
+
+
+
 
 export type directionString = 'up' | 'right' | 'down' | 'left' | 'none';
 export type RecognizerStatus = 'possible' | 'recognized' | 'began' | 'changed' | 'ended' | 'failed' | 'cancelled';
@@ -37,24 +66,6 @@ export type InputRecord = {
 }
 
 
-export interface Input extends EventTransform {
-
-    readonly preventDefault: () => void;
-    // 新一轮手势识别的开始和结束
-    readonly isStart: boolean;
-    readonly isEnd: boolean;
-    readonly pointLength: number;
-    // 发生改变的触点数据
-    // readonly changedPointLength: number;
-    // 当前时间
-    readonly timestamp: number;
-    readonly target: EventTarget | null;
-    readonly currentTarget: EventTarget | null;
-    readonly center?: Point;
-    // 同centerX/Y
-    readonly x: number;
-    readonly y: number;
-}
 
 export interface Computed {
     // 一次识别周期中出现的最大触点数

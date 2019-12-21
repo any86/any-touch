@@ -1,4 +1,4 @@
-import { EventTransform, InputType, PointClientXY } from '@types';
+import { InputBase, InputType, PointClientXY } from '@types';
 import Adapter from './Abstract';
 export default class extends Adapter {
     prevPoints?: PointClientXY[];
@@ -7,7 +7,7 @@ export default class extends Adapter {
         super();
         this.isPressed = false;
     };
-    load(event: MouseEvent): Omit<EventTransform, 'id'> | void {
+    load(event: MouseEvent): Omit<InputBase, 'id'> | void {
         const { clientX, clientY, type, button } = event;
         let points = [{ clientX, clientY }];
         let inputType: InputType | undefined;
