@@ -19,6 +19,9 @@ new Vue({
         const el = this.$refs.circle;
         // 初始化
         const at = new AnyTouch(el);
+        at.on('input', ev=>{
+            console.log(ev);
+        })
     },
 
     watch: {

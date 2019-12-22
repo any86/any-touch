@@ -224,16 +224,18 @@ export default class AnyTouch extends AnyEvent {
         // if (!event.cancelable) {
         //     this.eventEmitter.emit('error', { code: 0, message: '页面滚动的时候, 请暂时不要操作元素!' });
         // }
+        // 跳过无效输入
+        // 当是鼠标事件的时候, 会有undefined的时候
+        // 比如鼠标还没有mousedown阶段的mousemove等都是无效操作
+        const aEvent = this.input.transform(event);
 
-        // 管理历史input
-        // 生成AnyTouchEvent
-        const input = this.input.transform(event);
-        console.log(input);
-return;
-        // // 跳过无效输入
-        // // 当是鼠标事件的时候, 会有undefined的时候
-        // // 比如鼠标还没有mousedown阶段的mousemove等都是无效操作
-        // if (void 0 !== input) {
+        if (void 0 !== aEvent) {
+            // 管理历史input
+            // 生成AnyTouchEvent
+            this.emit('input', aEvent);
+
+            return;
+        }
 
         //     // 每次事件触发重新生成event
         //     this.event = input;
