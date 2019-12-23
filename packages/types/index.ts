@@ -1,4 +1,4 @@
-import Base from '@Recognizer/Base';
+import Base from '@Recognizer/index';
 export type Recognizer = Base;
 
 // 适配器支持的事件类型
@@ -9,7 +9,7 @@ export interface PointClientXY { clientX: number, clientY: number };
 export type InputType = 'start' | 'move' | 'end' | 'cancel';
 
 // 事件统一变形
-export interface InputBase {
+export interface BaseInput {
     readonly id: number;
     readonly inputType: InputType;
     readonly changedPoints: PointClientXY[];
@@ -17,10 +17,9 @@ export interface InputBase {
     readonly nativeEvent: Event;
 }
 
-export interface Input extends InputBase {
-    readonly startInput?:InputBase;
-    readonly startMultiInput?:InputBase;
-    readonly prevInput?:InputBase;
+
+// 不包含prevInput等表示记录的input
+export interface PureInput  extends BaseInput{
     readonly preventDefault: () => void;
     // 新一轮手势识别的开始和结束
     readonly isStart: boolean;
@@ -36,6 +35,12 @@ export interface Input extends InputBase {
     // 同centerX/Y
     readonly x: number;
     readonly y: number;
+}
+
+export interface Input extends PureInput {
+    readonly startInput: PureInput;
+    readonly startMultiInput?: PureInput;
+    readonly prevInput?: PureInput;
 }
 
 

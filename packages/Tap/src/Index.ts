@@ -6,7 +6,7 @@ import {
 import RecognizerWithRequireFailure from './RecognizerWithRequireFailure';
 import { INPUT_END, AUTO } from '@const';
 import { getVLength } from '@any-touch/vector';
-import computeDistance from '@compute/computeDistance';
+import ComputeDistance from '@compute/ComputeDistance';
 import computeMaxLength from '@compute/computeMaxLength';
 
 export default class TapRecognizer extends RecognizerWithRequireFailure {
@@ -205,9 +205,9 @@ export default class TapRecognizer extends RecognizerWithRequireFailure {
         // 判断是否发生大的位置变化
         const maxPointLength = this._getComputed(computeMaxLength, inputRecord, <any>this.$store);
         const deltaTime = inputRecord.input.timestamp - inputRecord.startInput.timestamp;
-        const computeDistanceData = this._getComputed(computeDistance, inputRecord, <any>this.$store);
-        const { distance } = computeDistanceData;
-        this.event = { ...this.event, maxPointLength, deltaTime, ...computeDistanceData }
+        const ComputeDistanceData = this._getComputed(ComputeDistance, inputRecord, <any>this.$store);
+        const { distance } = ComputeDistanceData;
+        this.event = { ...this.event, maxPointLength, deltaTime, ...ComputeDistanceData }
         // 1. 触点数
         // 2. 移动距离
         // 3. start至end的事件, 区分tap和press

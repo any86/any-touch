@@ -1,7 +1,7 @@
 /**
  * 构造统一的Input格式
  */
-import { InputBase, Input, SupportEvent, Point } from '@types';
+import { BaseInput, PureInput, Input, SupportEvent, Point } from '@types';
 import Touch from './adapters/Touch';
 import Mouse from './adapters/Mouse';
 import Adapter from './adapters/Abstract';
@@ -11,12 +11,10 @@ import { MOUSE, TOUCH, CLIENT_X, CLIENT_Y, INPUT_START, INPUT_CANCEL, INPUT_END 
 export default class {
     public adapter: Adapter;
     public id: number;
-    public prevInput?: InputBase;
-    public activeInput?: InputBase;
-    public startInput?: InputBase;
-    public startMultiInput?: InputBase;
-
-
+    public prevInput?: PureInput;
+    public activeInput?: PureInput;
+    public startInput?: PureInput;
+    public startMultiInput?: PureInput;
 
     constructor(sourceType: typeof MOUSE | typeof TOUCH) {
         const SOURCE = {
@@ -31,20 +29,20 @@ export default class {
     public transform(event: SupportEvent): Input | void {
         this.prevInput = this.activeInput;
         // 从event中采集的数据
-        const inputBaseWithoutId = this.adapter.load(event);
-        if (void 0 !== inputBaseWithoutId) {
+        const baseInputWithoutId = this.adapter.load(event);
+        if (void 0 !== baseInputWithoutId) {
             const id = Number.MAX_SAFE_INTEGER > this.id ? ++this.id : 1
-            const inputBase = { ...inputBaseWithoutId, id };
-            this.activeInput = inputBase;
-            const extended = extendInput(inputBase);
-            const { isStart, pointLength } = extended;
+            const baseInput = { ...baseInputWithoutId, id };
+            const pureInput = extendInput(baseInput);
+            this.activeInput = pureInput;
+            const { isStart, pointLength } = pureInput;
             if (isStart) {
                 // 起点(单点|多点)
-                this.startInput = inputBase;
+                this.startInput = pureInput;
                 this.prevInput = void 0;
                 // 起点(多点)
                 if (1 < pointLength) {
-                    this.startMultiInput = inputBase;
+                    this.startMultiInput = pureInput;
                 } else {
                     // 如果出现了单点, 那么之前的多点起点记录失效
                     this.startMultiInput = void 0;
@@ -52,10 +50,10 @@ export default class {
             }
 
             return {
-                ...extended,
+                ...pureInput,
                 prevInput: this.prevInput,
                 startMultiInput: this.startMultiInput,
-                startInput: this.startInput
+                startInput: <PureInput>this.startInput
             }
         };
     }
@@ -83,7 +81,7 @@ function getCenter(points: { clientX: number, clientY: number }[]): Point | void
 };
 
 
-function extendInput(inputBase: InputBase): Omit<Input, 'prev'> {
+function extendInput(inputBase: BaseInput): Omit<Input, 'prevInput' | 'startInput' | 'startMultiInput'> {
     const { inputType, points, changedPoints, nativeEvent } = inputBase;
     const pointLength = points.length;
     const isStart = INPUT_START === inputType;

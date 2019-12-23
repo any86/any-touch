@@ -1,9 +1,10 @@
 import { radianToAngle } from '@any-touch/vector';
-import { Store, InputRecord } from '@types';
-export default function computeDeltaXY({
+import { InputRecord } from '@types';
+
+export default function ComputeDeltaXY({
     prevInput,
     input
-}: InputRecord, $store: Store): { deltaX: number, deltaY: number, deltaXYAngle: number } {
+}: InputRecord): { deltaX: number, deltaY: number, deltaXYAngle: number } {
     // 每次事件触发时位移的变化
     let deltaX: number;
     let deltaY: number;

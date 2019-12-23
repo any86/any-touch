@@ -20,7 +20,7 @@ new Vue({
         // 初始化
         const at = new AnyTouch(el);
         at.on('input', ev=>{
-            console.log(ev);
+            // console.log(ev);
         })
     },
 

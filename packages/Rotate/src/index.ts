@@ -1,5 +1,5 @@
 import RecognizerWithRequireFailure from './RecognizerWithRequireFailure';
-import {NONE} from '../const';
+import {NONE} from '@const';
 import { AnyTouchEvent, InputRecord } from '@types';
 import computMulti from '@compute/computeMulti';
 import recognizeForPressMoveLike from './recognizeForPressMoveLike';

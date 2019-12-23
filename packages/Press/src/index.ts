@@ -2,7 +2,7 @@ import { AnyTouchEvent, InputRecord } from '@types';
 import {
     STATUS_FAILED, STATUS_RECOGNIZED
 } from '../const/recognizerStatus';
-import computeDistance from '@compute/computeDistance';
+import ComputeDistance from '@compute/ComputeDistance';
 import { INPUT_CANCEL, INPUT_END, INPUT_START, AUTO, DIRECTION_UP, KEY_DISTANCE } from '@const';
 import RecognizerWithRequireFailure from './RecognizerWithRequireFailure';
 import {resetStatus} from './recognizeForPressMoveLike';
@@ -65,9 +65,9 @@ export default class PressRecognizer extends RecognizerWithRequireFailure {
         const { input } = inputRecord;
         const { pointLength } = input;
         // displacementX, displacementY, distanceX, distanceY, distance, overallDirection
-        const computeDistanceData = this._getComputed(computeDistance, inputRecord, <any>this.$store);
-        const { distance } = computeDistanceData;
-        this.event = { ...this.event, ...computeDistanceData }
+        const ComputeDistanceData = this._getComputed(ComputeDistance, inputRecord, <any>this.$store);
+        const { distance } = ComputeDistanceData;
+        this.event = { ...this.event, ...ComputeDistanceData }
         return this.options.positionTolerance > distance && this.isValidPointLength(pointLength);
     };
 

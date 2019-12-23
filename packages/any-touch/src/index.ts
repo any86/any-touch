@@ -21,7 +21,7 @@ import { AnyTouchEvent, SupportEvent, Recognizer } from '@types';
 import { TOUCH, MOUSE, SUPPORT_TOUCH, NONE, AUTO, TOUCH_START, TOUCH_MOVE, TOUCH_CANCEL, TOUCH_END, MOUSE_DOWN, MOUSE_MOVE, MOUSE_UP, COMPUTE, } from './const';
 import Input from './Input';
 import { isRegExp, isFunction } from '@shared/is';
-
+import Pan from '@any-touch/Pan'
 interface Options {
     touchAction?: 'compute' | 'auto' | 'manipulation' | 'pan-x' | 'pan-y' | 'none';
     hasDomEvents?: boolean;
@@ -90,7 +90,7 @@ export default class AnyTouch extends AnyEvent {
         this.options = { ...DEFAULT_OPTIONS, ...options };
 
         // 识别器
-        this.recognizers = [];
+        this.recognizers = [new Pan()];
         this.recognizerMap = {};
 
         if (void 0 !== this.el) {
@@ -99,6 +99,10 @@ export default class AnyTouch extends AnyEvent {
             // 绑定事件
             this._unbindEl = this._bindEL(this.el)._unbindEl;
         }
+    };
+
+    use(recognizer: Recognizer) {
+        this.recognizers.push(recognizer);
     };
 
     update() { };
@@ -227,14 +231,24 @@ export default class AnyTouch extends AnyEvent {
         // 跳过无效输入
         // 当是鼠标事件的时候, 会有undefined的时候
         // 比如鼠标还没有mousedown阶段的mousemove等都是无效操作
-        const aEvent = this.input.transform(event);
+        const input = this.input.transform(event);
 
-        if (void 0 !== aEvent) {
+        if (void 0 !== input) {
             // 管理历史input
             // 生成AnyTouchEvent
-            this.emit('input', aEvent);
-
-            return;
+            this.emit('input', input);
+            // 缓存每次计算的结果
+            // 以函数名为键值
+            let computed = {};
+            for (let recognizer of this.recognizers) {
+                if (recognizer.disabled) continue;
+                recognizer.computed = computed;
+                computed = recognizer.recognize(input, (type, ev) => {
+                    this.emit(type, ev)
+                    // console.log(type, ev);
+                });
+                // console.log(computed);
+            }
         }
 
         //     // 每次事件触发重新生成event

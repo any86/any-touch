@@ -1,8 +1,8 @@
 import RecognizerWithRequireFailure from './RecognizerWithRequireFailure';
 import { InputRecord } from '@types';
 import { INPUT_END, DIRECTION_ALL, NONE, DIRECTION_X, DIRECTION_Y } from '@const';
-import computeDistance from '@compute/computeDistance';
-import intervalCompute from '@compute/intervalCompute';
+import ComputeDistance from '@compute/ComputeDistance';
+import ComputeVAndDir from '@compute/ComputeVAndDir';
 import computeMaxLength from '@compute/computeMaxLength';
 import recognizeForPressMoveLike from './recognizeForPressMoveLike';
 import isVaildDirection from './isVaildDirection';
@@ -81,16 +81,16 @@ export default class SwipeRecognizer extends RecognizerWithRequireFailure {
         const maxPointLength = this._getComputed(computeMaxLength, inputRecord, <any>this.$store);
 
         // velocityX, velocityY, speedX, speedY, direction
-        const intervalComputeData = this._getComputed(intervalCompute, inputRecord, <any>this.$store);
-        const { velocityX, velocityY, direction } = intervalComputeData;
+        const ComputeVAndDirData = this._getComputed(ComputeVAndDir, inputRecord, <any>this.$store);
+        const { velocityX, velocityY, direction } = ComputeVAndDirData;
 
         // displacementX, displacementY, distanceX, distanceY, distance, overallDirection
-        const computeDistanceData = this._getComputed(computeDistance, inputRecord, <any>this.$store);
-        const { distance } = computeDistanceData;
+        const ComputeDistanceData = this._getComputed(ComputeDistance, inputRecord, <any>this.$store);
+        const { distance } = ComputeDistanceData;
 
         if (INPUT_END !== eventType) return false;
 
-        this.event = { ...this.event, maxPointLength, ...intervalComputeData, ...computeDistanceData };
+        this.event = { ...this.event, maxPointLength, ...ComputeVAndDirData, ...ComputeDistanceData };
 
         // 如果只支持水平或垂直, 那么其他方向速率为0;
         // 有效速率

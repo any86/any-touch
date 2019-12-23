@@ -1,4 +1,4 @@
-import { Recognizer, AEvent, directionString, Store, InputRecord } from '../types';
+import { Recognizer, directionString, Input } from '@types';
 import {
     INPUT_CANCEL, INPUT_END, INPUT_MOVE, DIRECTION_X, DIRECTION_Y, NONE, STATUS_POSSIBLE,
     STATUS_START,
@@ -6,9 +6,9 @@ import {
     STATUS_END,
     STATUS_CANCELLED,
     STATUS_FAILED, STATUS_RECOGNIZED
-} from '../const';
+} from '@const';
 
-function flow(isVaild: boolean, activeStatus: string, eventType: string): string {
+function flow(isVaild: boolean, activeStatus: string, inputType: string): string {
     const STATE_MAP: { [k: number]: any } = {
         // isVaild === true,
         // Number(true) === 1
@@ -46,13 +46,13 @@ function flow(isVaild: boolean, activeStatus: string, eventType: string): string
         }
     };
     if (void 0 !== STATE_MAP[Number(isVaild)][activeStatus]) {
-        return STATE_MAP[Number(isVaild)][activeStatus][eventType] || activeStatus;
+        return STATE_MAP[Number(isVaild)][activeStatus][inputType] || activeStatus;
     } else {
         return activeStatus;
     }
 };
 
-export function resetStatus(recognizer: any){
+export function resetStatus(recognizer: any) {
     // 重置status
     if (-1 !== [STATUS_END, STATUS_CANCELLED, STATUS_RECOGNIZED, STATUS_FAILED].indexOf(recognizer.status)) {
         recognizer.status = STATUS_POSSIBLE;
@@ -62,23 +62,22 @@ export function resetStatus(recognizer: any){
 /**
  * 适用于大部分移动类型的手势, 
  * 如pan/rotate/pinch/swipe
- * @param {InputRecord} 输入记录 
+ * @param {Input} 输入记录 
  */
-export default function (recognizer: any, inputRecord: InputRecord): void {
+export default function (recognizer: any, input: Input, callback: (type:string,...payload: any[]) => void): void {
     // 是否识别成功
-    const isVaild = recognizer.test(inputRecord);
+    const isVaild = recognizer.test(input);
 
     resetStatus(recognizer);
 
 
     // 状态变化流程
-    const { input } = inputRecord;
-    const { eventType } = input;
+    const { inputType } = input;
 
-    recognizer.status = flow(isVaild, recognizer.status, eventType);
+    recognizer.status = flow(isVaild, recognizer.status, inputType);
     const { event } = recognizer;
-    if (STATUS_CANCELLED === eventType) {
-        recognizer.emit(recognizer.options.name + INPUT_CANCEL, event);
+    if (STATUS_CANCELLED === inputType) {
+        callback(recognizer.options.name + INPUT_CANCEL, event);
         return;
     }
 
@@ -89,16 +88,16 @@ export default function (recognizer: any, inputRecord: InputRecord): void {
         recognizer.afterRecognized(event);
 
         // computed = recognizer.lockDirection(computed);
-        recognizer.emit(recognizer.options.name, event);
+        callback(recognizer.options.name, event);
 
         // panstart | panmove 等
-        recognizer.emit(recognizer.options.name + recognizer.status, event);
+        callback(recognizer.options.name + recognizer.status, event);
 
         recognizer.afterEmit();
     } else if (recognizer.isRecognized) {
 
         // panend等
-        recognizer.emit(recognizer.options.name + recognizer.status, event);
+        callback(recognizer.options.name + recognizer.status, event);
 
     }
 };

@@ -1,12 +1,12 @@
-import { AnyTouchEvent, Computed, InputRecord } from '@types';
-import { INPUT_MOVE, PAN_Y, PAN_X, DIRECTION_LEFT, DIRECTION_RIGHT, DIRECTION_DOWN, DIRECTION_UP, DIRECTION_ALL, NONE, AUTO, KEY_DELTAX, KEY_DIRECTION, KEY_DISTANCE } from '../const';
+import { AnyTouchEvent, Computed, Input } from '@types';
+import { INPUT_MOVE, PAN_Y, PAN_X, DIRECTION_LEFT, DIRECTION_RIGHT, DIRECTION_DOWN, DIRECTION_UP, DIRECTION_ALL, NONE, AUTO } from '@const';
 import Recognizer from '@any-touch/Recognizer';
 import getHV from '@shared/getHV';
-import computeDistance from '@compute/computeDistance';
-import computeDeltaXY from '@compute/computeDeltaXY';
-import intervalCompute from '@compute/intervalCompute';
-import recognizeForPressMoveLike from '@any-touch/Recognizer/recognizeForPressMoveLike';
-import isVaildDirection from '@any-touch/Recognizer/isVaildDirection';
+import ComputeDistance from '@compute/ComputeDistance';
+import ComputeDeltaXY from '@compute/ComputeDeltaXY';
+import ComputeVAndDir from '@compute/ComputeVAndDir';
+import recognizeForPressMoveLike from '@Recognizer/recognizeForPressMoveLike';
+import isVaildDirection from '@Recognizer/isVaildDirection';
 
 
 export default class PanRecognizer extends Recognizer {
@@ -41,36 +41,36 @@ export default class PanRecognizer extends Recognizer {
      * @param {AnyTouchEvent} 计算数据
      * @return {Boolean}} .是否是当前手势 
      */
-    test(inputRecord: InputRecord): boolean {
-        const { input } = inputRecord;
-        const { eventType, pointLength } = input;
+    test(input: Input): boolean {
+        const { inputType, pointLength } = input;
         // velocityX, velocityY, speedX, speedY, direction
-        const intervalComputeData = this._getComputed(intervalCompute, inputRecord, <any>this.$store);
+        const ComputeVAndDirData = this.compute(ComputeVAndDir, input);
+// console.log(ComputeVAndDirData,Date.now());
+        return true;
+        // // displacementX, displacementY, distanceX, distanceY, distance, overallDirection
+        // const ComputeDistanceData = this.compute(ComputeDistance, input);
 
-        // displacementX, displacementY, distanceX, distanceY, distance, overallDirection
-        const computeDistanceData = this._getComputed(computeDistance, inputRecord, <any>this.$store);
+        // //  deltaX, deltaY, deltaXYAngle
+        // const deltaXYComputed = this.compute(ComputeDeltaXY, input);
 
-        //  deltaX, deltaY, deltaXYAngle
-        const deltaXYComputed = this._getComputed(computeDeltaXY, inputRecord, <any>this.$store);
+        // const { direction } = ComputeVAndDirData;
+        // const { distance } = ComputeDistanceData;
 
-        const { direction } = intervalComputeData;
-        const { distance } = computeDistanceData;
+        // // 赋值event
+        // // this.event = { ...this.event, ...ComputeVAndDirData, ...ComputeDistanceData, ...deltaXYComputed };
 
-        // 赋值event
-        this.event = { ...this.event, ...intervalComputeData, ...computeDistanceData, ...deltaXYComputed };
-
-        return INPUT_MOVE === eventType &&
-            (this.isRecognized || this.options.threshold < distance) &&
-            this.isValidPointLength(pointLength) &&
-            isVaildDirection(this, direction);
+        // return INPUT_MOVE === inputType &&
+        //     (this.isRecognized || this.options.threshold < distance) &&
+        //     this.isValidPointLength(pointLength) &&
+        //     isVaildDirection(this, direction);
     };
 
     /**
      * 开始识别
-     * @param {InputRecord} 输入 
+     * @param {Input} 输入 
      */
-    recognize(inputRecord: InputRecord) {
-        recognizeForPressMoveLike(this, inputRecord);
+    recognize(input: Input, callback: (type: string, ...payload: any[]) => void) {
+        recognizeForPressMoveLike(this, input, callback);
     };
 
     /**
@@ -84,7 +84,7 @@ export default class PanRecognizer extends Recognizer {
     };
 
     afterRecognized(computed: AnyTouchEvent) {
-        this.lockDirection(computed);
+        // this.lockDirection(computed);
     }
 
     /**
