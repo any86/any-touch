@@ -1,15 +1,15 @@
-import { Point, InputRecord } from '@types';
+import { Point, Input } from '@types';
 import {
     STATUS_RECOGNIZED, STATUS_POSSIBLE,
     STATUS_FAILED,
-} from '../const/recognizerStatus';
-import RecognizerWithRequireFailure from './RecognizerWithRequireFailure';
+} from '@const';
+import Recognizer from '@any-touch/Recognizer';
 import { INPUT_END, AUTO } from '@const';
 import { getVLength } from '@any-touch/vector';
 import ComputeDistance from '@compute/ComputeDistance';
-import computeMaxLength from '@compute/computeMaxLength';
+import ComputeMaxLength from '@compute/ComputeMaxLength';
 
-export default class TapRecognizer extends RecognizerWithRequireFailure {
+export default class TapRecognizer extends Recognizer {
     public tapCount: number;
 
     // 记录每次单击完成时的坐标
@@ -55,7 +55,7 @@ export default class TapRecognizer extends RecognizerWithRequireFailure {
      */
     private _isValidDistanceFromPrevTap(center: Point): boolean {
         // 判断2次点击的距离
-        if (undefined !== this.prevTapPoint) {
+        if (void 0 !== this.prevTapPoint) {
             const distanceFromPreviousTap = getVLength({ x: center.x - this.prevTapPoint.x, y: center.y - this.prevTapPoint.y });
             // 缓存当前点, 作为下次点击的上一点
             this.prevTapPoint = center;
@@ -72,7 +72,7 @@ export default class TapRecognizer extends RecognizerWithRequireFailure {
      */
     private _isValidInterval(): boolean {
         const now = Date.now();
-        if (undefined === this.prevTapTime) {
+        if (void 0 === this.prevTapTime) {
             this.prevTapTime = now;
             return true;
         } else {
@@ -124,20 +124,20 @@ export default class TapRecognizer extends RecognizerWithRequireFailure {
      *              |
      *             结束
      * 
-     * @param {InputRecord} 计算数据 
+     * @param {Input} 计算数据 
      */
-    public recognize(inputRecord: InputRecord): void {
-        const { input } = inputRecord;
-        const { eventType, x, y } = input;
+    recognize(input: Input, emit: (type: string, ...payload: any[]) => void): void {
+        const { inputType, x, y } = input;
+        type Computed = ReturnType<ComputeMaxLength['compute']> & ReturnType<ComputeDistance['compute']>
+        this.computed  = <Computed>this.compute([ComputeMaxLength, ComputeDistance], input)
         // 只在end阶段去识别
-        if (INPUT_END !== eventType) return;
+        if (INPUT_END !== inputType) return;
 
         this.status = STATUS_POSSIBLE;
 
         // 每一次点击是否符合要求
-        if (this.test(inputRecord)) {
+        if (this.test(input)) {
             this.cancelCountDownToFail();
-            this.stopListenOtherFail();
             // 判断2次点击之间的距离是否过大
             // 对符合要求的点击进行累加
             if (this._isValidDistanceFromPrevTap({ x, y }) && this._isValidInterval()) {
@@ -145,28 +145,13 @@ export default class TapRecognizer extends RecognizerWithRequireFailure {
             } else {
                 this.tapCount = 1;
             }
+
             // 是否满足点击次数要求
             // 之所以用%, 是因为如果连续点击3次, 单击的tapCount会为3, 但是其实tap也应该触发
             if (0 === this.tapCount % this.options.tapTimes) {
-                if (this.hasRequireFailure()) {
-                    // 等待其他指定手势失败
-                    this.listenOtherFail(isFailed => {
-                        // console.log(this.name, {isFailed});
-                        if (isFailed) {
-                            this.status = STATUS_RECOGNIZED;
-                            this.emit(this.options.name, { ...this.event, tapCount: this.tapCount });
-                        } else {
-                            this.status = STATUS_FAILED;
-                        };
-                    }, this.options.waitNextTapTime);
-                }
-                // 如果不需要等待其他手势失败
-                // 那么立即执行
-                else {
-                    this.status = STATUS_RECOGNIZED;
-                    this.emit(this.options.name, { ...this.event, tapCount: this.tapCount });
-                    this.reset();
-                }
+                this.status = STATUS_RECOGNIZED;
+                emit(this.options.name, { ...this.computed, tapCount: this.tapCount });
+                this.reset();
             } else {
                 this.countDownToFail();
             }
@@ -192,29 +177,24 @@ export default class TapRecognizer extends RecognizerWithRequireFailure {
 
     reset() {
         this.tapCount = 0;
-        this.prevTapPoint = undefined;
-        this.prevTapTime = undefined;
+        this.prevTapPoint = void 0;
+        this.prevTapTime = void 0;
     };
 
     /**
       * 识别条件
-      * @param {InputRecord} 输入记录
+      * @param {Input} 输入记录
       * @return {Boolean} 是否验证成功
       */
-    public test(inputRecord: InputRecord): boolean {
-        // 判断是否发生大的位置变化
-        const maxPointLength = this._getComputed(computeMaxLength, inputRecord, <any>this.$store);
-        const deltaTime = inputRecord.input.timestamp - inputRecord.startInput.timestamp;
-        const ComputeDistanceData = this._getComputed(ComputeDistance, inputRecord, <any>this.$store);
-        const { distance } = ComputeDistanceData;
-        this.event = { ...this.event, maxPointLength, deltaTime, ...ComputeDistanceData }
+    test(input: Input): boolean {
+        const {startInput} = input;
+        const deltaTime = input.timestamp - startInput.timestamp;
         // 1. 触点数
         // 2. 移动距离
         // 3. start至end的事件, 区分tap和press
+        const {maxPointLength, distance } = this.computed;
         return maxPointLength === this.options.pointLength &&
             this.options.positionTolerance >= distance &&
             this.options.maxPressTime > deltaTime;
     };
-
-    public afterEmit(): void { }
 };

@@ -44,11 +44,8 @@ export default class PanRecognizer extends Recognizer {
     test(input: Input): boolean {
         const { inputType, pointLength } = input;
 
-        type Computed = ReturnType<ComputeVAndDir['compute']> & ReturnType<ComputeDistance['compute']> &
-            ReturnType<ComputeDeltaXY['compute']>
 
-        const computed = <Computed>this.compute([ComputeVAndDir, ComputeDistance, ComputeDeltaXY], input);
-        const { direction, distance } = computed;
+        const { direction, distance } = this.computed;
         return INPUT_MOVE === inputType &&
             (this.isRecognized || this.options.threshold < distance) &&
             this.isValidPointLength(pointLength) &&
@@ -59,19 +56,18 @@ export default class PanRecognizer extends Recognizer {
      * 开始识别
      * @param {Input} 输入 
      */
-    recognize(input: Input, callback: (type: string, ...payload: any[]) => void) {
-        recognizeForPressMoveLike(this, input, callback);
+    recognize(input: Input, emit: (type: string, ...payload: any[]) => void) {
+        type Computed = ReturnType<ComputeVAndDir['compute']> & ReturnType<ComputeDistance['compute']> &
+            ReturnType<ComputeDeltaXY['compute']>
+
+        this.computed = <Computed>this.compute([ComputeVAndDir, ComputeDistance, ComputeDeltaXY], input);
+        recognizeForPressMoveLike(this, input, emit);
+
+        // panleft...
+        emit(this.options.name + this.computed.direction, this.computed);
     };
 
-    /**
-     * 识别后发布panleft等事件
-     * @param {AnyTouchEvent} 计算数据
-     */
-    afterEmit() {
-        if (NONE !== this.event.direction) {
-            this.emit(this.options.name + this.event.direction, this.event);
-        }
-    };
+
 
     afterRecognized(computed: AnyTouchEvent) {
         // this.lockDirection(computed);

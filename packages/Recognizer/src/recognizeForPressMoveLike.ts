@@ -69,12 +69,12 @@ export default function (recognizer: any, input: Input, emit: (type: string, ...
     const isVaild = recognizer.test(input);
     resetStatus(recognizer);
 
-
     // 状态变化流程
     const { inputType } = input;
 
     recognizer.status = flow(isVaild, recognizer.status, inputType);
     const { event } = recognizer;
+    console.log(event);
     if (STATUS_CANCELLED === inputType) {
         emit(recognizer.options.name + INPUT_CANCEL, event);
         return;

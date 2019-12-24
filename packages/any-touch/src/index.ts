@@ -22,6 +22,8 @@ import { TOUCH, MOUSE, SUPPORT_TOUCH, NONE, AUTO, TOUCH_START, TOUCH_MOVE, TOUCH
 import Input from './Input';
 import { isRegExp, isFunction } from '@shared/is';
 import Pan from '@any-touch/Pan'
+import Tap from '@any-touch/Tap'
+
 interface Options {
     touchAction?: 'compute' | 'auto' | 'manipulation' | 'pan-x' | 'pan-y' | 'none';
     hasDomEvents?: boolean;
@@ -75,8 +77,6 @@ export default class AnyTouch extends AnyEvent {
 
     input: Input;
 
-    event: Record<string, any>;
-
     /**
      * @param {Element} 目标元素, 微信下没有el
      * @param {Object} 选项
@@ -84,13 +84,12 @@ export default class AnyTouch extends AnyEvent {
     constructor(el?: HTMLElement, options?: Options) {
         super();
         this.el = el;
-        this.event = {};
         this.sourceType = SUPPORT_TOUCH ? TOUCH : MOUSE;
         this.input = new Input(this.sourceType);
         this.options = { ...DEFAULT_OPTIONS, ...options };
 
         // 识别器
-        this.recognizers = [new Pan()];
+        this.recognizers = [new Pan(), new Tap()];
         this.recognizerMap = {};
 
         if (void 0 !== this.el) {
@@ -236,16 +235,19 @@ export default class AnyTouch extends AnyEvent {
         if (void 0 !== input) {
             // 管理历史input
             // 生成AnyTouchEvent
+            if(void 0 !== this.recognizers[0]){
+                this.recognizers[0].input = input;
+            }
             this.emit('input', input);
             // 缓存每次计算的结果
             // 以函数名为键值
+            // console.log(this.recognizers)
             let computedGroup = {};
-
             for (let recognizer of this.recognizers) {
                 if (recognizer.disabled) continue;
                 recognizer.computedGroup = computedGroup;
                 recognizer.recognize(input, (type, ev) => {
-                    this.emit(type, ev);
+                    this.emit(type, {...input, ...ev});
                 });
                 computedGroup = recognizer.computedGroup;
             }

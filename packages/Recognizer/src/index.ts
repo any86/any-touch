@@ -25,11 +25,14 @@ export default abstract class RecognizerBase {
     // 会把前面所有手势的计算结果作为当前计算结果
     computedGroup: Record<string, any>;
 
+    computed:Record<string, any>;
+
     // 使用过的计算函数
     usedComputeFunctionMap: Record<string, any>;
 
-    // 本手势识别对应的计算结果
-    event: Record<string, any>;
+    // 当前输入
+    input?: Input;
+
 
 
     constructor(options: { name?: string, [k: string]: any }) {
@@ -39,11 +42,11 @@ export default abstract class RecognizerBase {
         this.status = STATUS_POSSIBLE;
         this.isRecognized = false;
 
+        this.computed = {};
         this.computedGroup = {};
         this.usedComputeFunctionMap = {};
 
         this.recognizerMap = {};
-        this.event = {}
         // 这里面不能直接调用$root等, 
         // 因为rollup生成的代码构造函数并不是该constructor
         // 而是构造函数中又嵌套了一个同名构造函数
@@ -123,7 +126,7 @@ export default abstract class RecognizerBase {
             flatMap = { ...flatMap, ...computedGroup[name] }
         }
         // 本次的事件对象, 此时没有type字段
-        this.event = flatMap;
+        this.computed = flatMap;
         return flatMap;
     };
 

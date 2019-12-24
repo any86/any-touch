@@ -22,6 +22,17 @@ new Vue({
         at.on('input', ev=>{
             // console.log(ev);
         })
+        
+        at.on('tap', ev=>{
+            console.warn('tap',ev)
+        });
+
+        
+        at.on('pan', ev=>{
+            this.x+= ev.deltaX;
+            this.y+= ev.deltaY;
+            // console.warn('pan',ev)
+        })
     },
 
     watch: {
