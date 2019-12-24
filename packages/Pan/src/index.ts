@@ -43,26 +43,16 @@ export default class PanRecognizer extends Recognizer {
      */
     test(input: Input): boolean {
         const { inputType, pointLength } = input;
-        // velocityX, velocityY, speedX, speedY, direction
-        const ComputeVAndDirData = this.compute(ComputeVAndDir, input);
-// console.log(ComputeVAndDirData,Date.now());
-        return true;
-        // // displacementX, displacementY, distanceX, distanceY, distance, overallDirection
-        // const ComputeDistanceData = this.compute(ComputeDistance, input);
 
-        // //  deltaX, deltaY, deltaXYAngle
-        // const deltaXYComputed = this.compute(ComputeDeltaXY, input);
+        type Computed = ReturnType<ComputeVAndDir['compute']> & ReturnType<ComputeDistance['compute']> &
+            ReturnType<ComputeDeltaXY['compute']>
 
-        // const { direction } = ComputeVAndDirData;
-        // const { distance } = ComputeDistanceData;
-
-        // // 赋值event
-        // // this.event = { ...this.event, ...ComputeVAndDirData, ...ComputeDistanceData, ...deltaXYComputed };
-
-        // return INPUT_MOVE === inputType &&
-        //     (this.isRecognized || this.options.threshold < distance) &&
-        //     this.isValidPointLength(pointLength) &&
-        //     isVaildDirection(this, direction);
+        const computed = <Computed>this.compute([ComputeVAndDir, ComputeDistance, ComputeDeltaXY], input);
+        const { direction, distance } = computed;
+        return INPUT_MOVE === inputType &&
+            (this.isRecognized || this.options.threshold < distance) &&
+            this.isValidPointLength(pointLength) &&
+            isVaildDirection(this, direction);
     };
 
     /**

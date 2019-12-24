@@ -64,10 +64,9 @@ export function resetStatus(recognizer: any) {
  * 如pan/rotate/pinch/swipe
  * @param {Input} 输入记录 
  */
-export default function (recognizer: any, input: Input, callback: (type:string,...payload: any[]) => void): void {
+export default function (recognizer: any, input: Input, emit: (type: string, ...payload: any[]) => void): void {
     // 是否识别成功
     const isVaild = recognizer.test(input);
-
     resetStatus(recognizer);
 
 
@@ -77,7 +76,7 @@ export default function (recognizer: any, input: Input, callback: (type:string,.
     recognizer.status = flow(isVaild, recognizer.status, inputType);
     const { event } = recognizer;
     if (STATUS_CANCELLED === inputType) {
-        callback(recognizer.options.name + INPUT_CANCEL, event);
+        emit(recognizer.options.name + INPUT_CANCEL, event);
         return;
     }
 
@@ -88,16 +87,16 @@ export default function (recognizer: any, input: Input, callback: (type:string,.
         recognizer.afterRecognized(event);
 
         // computed = recognizer.lockDirection(computed);
-        callback(recognizer.options.name, event);
+        emit(recognizer.options.name, event);
 
         // panstart | panmove 等
-        callback(recognizer.options.name + recognizer.status, event);
+        emit(recognizer.options.name + recognizer.status, event);
 
         recognizer.afterEmit();
     } else if (recognizer.isRecognized) {
 
         // panend等
-        callback(recognizer.options.name + recognizer.status, event);
+        emit(recognizer.options.name + recognizer.status, event);
 
     }
 };

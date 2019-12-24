@@ -1,6 +1,7 @@
 import Base from '@Recognizer/index';
 export type Recognizer = Base;
 
+
 // 适配器支持的事件类型
 export type SupportEvent = MouseEvent | TouchEvent;
 
@@ -19,7 +20,7 @@ export interface BaseInput {
 
 
 // 不包含prevInput等表示记录的input
-export interface PureInput  extends BaseInput{
+export interface PureInput extends BaseInput {
     readonly preventDefault: () => void;
     // 新一轮手势识别的开始和结束
     readonly isStart: boolean;
@@ -43,6 +44,17 @@ export interface Input extends PureInput {
     readonly prevInput?: PureInput;
 }
 
+// 标准class
+export interface StdClass {
+    new(...args: any[]): any;
+}
+
+
+export interface ComputeConstructor {
+    new(...args: any[]): {
+        compute(input: Input): Record<string, any>
+    };
+}
 
 
 

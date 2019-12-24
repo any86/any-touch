@@ -1,4 +1,4 @@
-import { Recognizer, Input } from '@types';
+import { Recognizer, Input, StdClass, ComputeConstructor } from '@types';
 import {
     STATUS_POSSIBLE,
 } from '@const';
@@ -18,19 +18,19 @@ export default abstract class RecognizerBase {
     // 存储外部注入方法的容器
     $root: any;
 
-    eventEmitter: any;
-
     recognizerMap: Record<string, Recognizer>;
-
-    event: Record<string, any>;
 
     // 缓存当前手势的计算结果
     // 每次手势识别前, 
     // 会把前面所有手势的计算结果作为当前计算结果
-    computed: Record<string, any>;
+    computedGroup: Record<string, any>;
 
     // 使用过的计算函数
     usedComputeFunctionMap: Record<string, any>;
+
+    // 本手势识别对应的计算结果
+    event: Record<string, any>;
+
 
     constructor(options: { name?: string, [k: string]: any }) {
         this.options = { ...(<any>this.constructor).DEFAULT_OPTIONS, disabled: false, ...options };
@@ -38,10 +38,12 @@ export default abstract class RecognizerBase {
         this.disabled = this.options.disabled;
         this.status = STATUS_POSSIBLE;
         this.isRecognized = false;
-        this.event = {};
-        this.computed = {};
-        this.recognizerMap = {};
+
+        this.computedGroup = {};
         this.usedComputeFunctionMap = {};
+
+        this.recognizerMap = {};
+        this.event = {}
         // 这里面不能直接调用$root等, 
         // 因为rollup生成的代码构造函数并不是该constructor
         // 而是构造函数中又嵌套了一个同名构造函数
@@ -103,20 +105,26 @@ export default abstract class RecognizerBase {
      * 注意:
      * 为了避免压缩后函数名发生变化, 所以default export后面必须跟着类名
      * https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Function/name
-     * @param {Function} 计算函数 
+     * @param {StdClass[]} 计算函数 
      * @param {Array} 计算函数的参数
      */
-    protected compute(C: new (...args: any[]) => any, ...args: any[]) {
-        const { name } = C;
-        const { computed, usedComputeFunctionMap } = this;
-        if (void 0 === usedComputeFunctionMap[name]) {
-            // 缓存初始化后的实例
-            usedComputeFunctionMap[name] = new C();
-        }
+    protected compute(Cs: ComputeConstructor[], ...args: any[]): unknown {
+        let flatMap = Object.create(null);
+        for (const C of Cs) {
+            const { name } = C;
+            const { computedGroup, usedComputeFunctionMap } = this;
+            if (void 0 === usedComputeFunctionMap[name]) {
+                // 缓存初始化后的实例
+                usedComputeFunctionMap[name] = new C();
+            }
 
-        // 缓存计算结果
-        computed[name] = computed[name] || usedComputeFunctionMap[name].compute(...args);
-        return computed[name];
+            // 缓存计算结果
+            computedGroup[name] = computedGroup[name] || usedComputeFunctionMap[name].compute(...args);
+            flatMap = { ...flatMap, ...computedGroup[name] }
+        }
+        // 本次的事件对象, 此时没有type字段
+        this.event = flatMap;
+        return flatMap;
     };
 
     /**
@@ -124,7 +132,7 @@ export default abstract class RecognizerBase {
      * 如pan/rotate/pinch/swipe
      * @param {Input} 输入记录 
      */
-    abstract recognize(Input: Input,callback:(type:string,...payload:any[])=>void): any;
+    abstract recognize(Input: Input, callback: (type: string, ...payload: any[]) => void): any;
 
     /**
      * 校验输入数据
@@ -140,11 +148,11 @@ export default abstract class RecognizerBase {
      * swipe可以把不支持的方向上的速率调整为0
      * @param {AnyTouchEvent} 计算数据 
      */
-    afterRecognized(computed: any): void { };
+    afterRecognized(event: any): void { };
 
     /**
      * 基类的所有emit触发后执行
-     * @param {AnyTouchEvent} computed 
+     * @param {AnyTouchEvent} event 
      */
     afterEmit(): void { };
 

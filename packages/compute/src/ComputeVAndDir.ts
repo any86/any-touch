@@ -2,8 +2,8 @@
 // 默认间隔25ms做一次计算, 让数据更新,
 // 让end阶段读取上一步的计算数据, 比如方向, 速率等...
 // 防止快速滑动到慢速滑动的手势识别成swipe
-import { Input,PureInput, directionString } from '@types';
-import { COMPUTE_INTERVAL, NONE, INPUT_END, INPUT_START, INPUT_MOVE } from '@const';
+import { Input, PureInput, directionString } from '@types';
+import { COMPUTE_INTERVAL, INPUT_MOVE } from '@const';
 import { getDirection } from '@any-touch/vector';
 
 export default class ComputeVAndDir {
@@ -13,8 +13,7 @@ export default class ComputeVAndDir {
     speedY = 0;
     direction?: directionString;
     // 上一次发生计算时候参与计算的input
-    private _lastValidInput?: PureInput|Input
-
+    private _lastValidInput?: PureInput | Input
 
     /**
      * 计算
@@ -24,7 +23,7 @@ export default class ComputeVAndDir {
     compute(input: Input): { speedX: number, speedY: number, velocityX: number, velocityY: number, direction?: directionString } {
         // 点击鼠标左键, 会出现undefined
         if (void 0 !== input) {
-            const {inputType} = input;
+            const { inputType } = input;
             this._lastValidInput = this._lastValidInput || input.startInput;
             const deltaTime = input.timestamp - this._lastValidInput.timestamp;
 
@@ -38,14 +37,17 @@ export default class ComputeVAndDir {
                 this.velocityX = Math.abs(this.speedX);
                 this.velocityY = Math.abs(this.speedY);
                 this.direction = getDirection(deltaX, deltaY) || <directionString>(this.direction);
-                
+
                 // if(NONE === this.direction) console.warn({deltaX,deltaY},input.id,this._lastValidInput.id );
-                
+
                 this._lastValidInput = input;
             }
         }
         const { velocityX, velocityY, speedX, speedY, direction } = this;
-        // console.warn({ velocityX, velocityY, speedX, speedY, direction }, Date.now())
+
         return { velocityX, velocityY, speedX, speedY, direction };
     }
 }
+
+
+type A = keyof ComputeVAndDir

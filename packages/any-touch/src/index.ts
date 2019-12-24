@@ -239,15 +239,15 @@ export default class AnyTouch extends AnyEvent {
             this.emit('input', input);
             // 缓存每次计算的结果
             // 以函数名为键值
-            let computed = {};
+            let computedGroup = {};
+
             for (let recognizer of this.recognizers) {
                 if (recognizer.disabled) continue;
-                recognizer.computed = computed;
-                computed = recognizer.recognize(input, (type, ev) => {
-                    this.emit(type, ev)
-                    // console.log(type, ev);
+                recognizer.computedGroup = computedGroup;
+                recognizer.recognize(input, (type, ev) => {
+                    this.emit(type, ev);
                 });
-                // console.log(computed);
+                computedGroup = recognizer.computedGroup;
             }
         }
 
