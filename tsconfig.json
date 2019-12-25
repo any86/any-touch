@@ -35,11 +35,11 @@
     "baseUrl": ".",
     "rootDir": ".",
     "paths": {
-      "@any-touch/*": ["packages/*/src"],
       "any-event": ["packages/any-event/src"],
+      "@any-touch/*": ["packages/*/src"],
+      "@any-touch/compute/*": ["packages/compute/src/*"],
       "@Recognizer/*": ["packages/Recognizer/src/*"],
       "@const": ["packages/any-touch/src/const"],
-      "@compute/*": ["packages/compute/src/*"],
       "@shared/*": ["packages/shared/src/*"],
       "@types": ["packages/types"],
       "@":["packages"],

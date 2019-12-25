@@ -6,8 +6,8 @@ import {
 import Recognizer from '@any-touch/Recognizer';
 import { INPUT_END, AUTO } from '@const';
 import { getVLength } from '@any-touch/vector';
-import ComputeDistance from '@compute/ComputeDistance';
-import ComputeMaxLength from '@compute/ComputeMaxLength';
+import ComputeDistance from '@any-touch/compute/ComputeDistance';
+import ComputeMaxLength from '@any-touch/compute/ComputeMaxLength';
 
 export default class TapRecognizer extends Recognizer {
     public tapCount: number;

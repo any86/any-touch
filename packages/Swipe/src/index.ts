@@ -1,9 +1,9 @@
 import RecognizerWithRequireFailure from './RecognizerWithRequireFailure';
 import { InputRecord } from '@types';
 import { INPUT_END, DIRECTION_ALL, NONE, DIRECTION_X, DIRECTION_Y } from '@const';
-import ComputeDistance from '@compute/ComputeDistance';
-import ComputeVAndDir from '@compute/ComputeVAndDir';
-import computeMaxLength from '@compute/computeMaxLength';
+import ComputeDistance from '@any-touch/compute/ComputeDistance';
+import ComputeVAndDir from '@any-touch/compute/ComputeVAndDir';
+import computeMaxLength from '@any-touch/compute/computeMaxLength';
 import recognizeForPressMoveLike from './recognizeForPressMoveLike';
 import isVaildDirection from './isVaildDirection';
 

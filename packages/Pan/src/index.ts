@@ -2,9 +2,9 @@ import { AnyTouchEvent, Computed, Input } from '@types';
 import { INPUT_MOVE, PAN_Y, PAN_X, DIRECTION_LEFT, DIRECTION_RIGHT, DIRECTION_DOWN, DIRECTION_UP, DIRECTION_ALL, NONE, AUTO } from '@const';
 import Recognizer from '@any-touch/Recognizer';
 import getHV from '@shared/getHV';
-import ComputeDistance from '@compute/ComputeDistance';
-import ComputeDeltaXY from '@compute/ComputeDeltaXY';
-import ComputeVAndDir from '@compute/ComputeVAndDir';
+import ComputeDistance from '@any-touch/compute/ComputeDistance';
+import ComputeDeltaXY from '@any-touch/compute/ComputeDeltaXY';
+import ComputeVAndDir from '@any-touch/compute/ComputeVAndDir';
 import recognizeForPressMoveLike from '@Recognizer/recognizeForPressMoveLike';
 import isVaildDirection from '@Recognizer/isVaildDirection';
 

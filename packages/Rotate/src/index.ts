@@ -1,7 +1,7 @@
 import RecognizerWithRequireFailure from './RecognizerWithRequireFailure';
 import {NONE} from '@const';
 import { AnyTouchEvent, InputRecord } from '@types';
-import computMulti from '@compute/computeMulti';
+import computMulti from '@any-touch/compute/computeMulti';
 import recognizeForPressMoveLike from './recognizeForPressMoveLike';
 
 export default class RotateRecognizer extends RecognizerWithRequireFailure {

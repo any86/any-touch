@@ -1,7 +1,7 @@
 import { AnyTouchEvent, InputRecord } from '@types';
 import { NONE, INPUT_END } from '@const';
-import computeVectorForMutli from '@compute/computeVectorForMutli';
-import computeScale from '@compute/computeScale';
+import computeVectorForMutli from '@any-touch/compute/computeVectorForMutli';
+import computeScale from '@any-touch/compute/computeScale';
 import recognizeForPressMoveLike from '@Recognizer/recognizeForPressMoveLike';
 import Recognizer from '@Recognizer/Base';
 

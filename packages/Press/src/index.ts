@@ -2,7 +2,7 @@ import { AnyTouchEvent, InputRecord } from '@types';
 import {
     STATUS_FAILED, STATUS_RECOGNIZED
 } from '../const/recognizerStatus';
-import ComputeDistance from '@compute/ComputeDistance';
+import ComputeDistance from '@any-touch/compute/ComputeDistance';
 import { INPUT_CANCEL, INPUT_END, INPUT_START, AUTO, DIRECTION_UP, KEY_DISTANCE } from '@const';
 import RecognizerWithRequireFailure from './RecognizerWithRequireFailure';
 import {resetStatus} from './recognizeForPressMoveLike';
