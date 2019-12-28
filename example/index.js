@@ -19,18 +19,21 @@ new Vue({
         const el = this.$refs.circle;
         // 初始化
         const at = new AnyTouch(el);
-        at.on('input', ev=>{
+        at.on('input', ev => {
             // console.log(ev);
         })
-        
-        at.on('tap', ev=>{
-            console.warn('tap',ev)
+
+        at.on('tap', ev => {
+            console.warn('tap', ev)
         });
 
-        
-        at.on('pan', ev=>{
-            this.x+= ev.deltaX;
-            this.y+= ev.deltaY;
+        at.on('swipe', ev => {
+            console.warn('swipe', ev)
+        });
+
+        at.on('pan', ev => {
+            this.x += ev.deltaX;
+            this.y += ev.deltaY;
             // console.warn('pan',ev)
         })
     },

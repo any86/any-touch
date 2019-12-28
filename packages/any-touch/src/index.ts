@@ -23,6 +23,7 @@ import Input from './Input';
 import { isRegExp, isFunction } from '@shared/is';
 import Pan from '@any-touch/Pan'
 import Tap from '@any-touch/Tap'
+import Swipe from '@any-touch/Swipe'
 
 interface Options {
     touchAction?: 'compute' | 'auto' | 'manipulation' | 'pan-x' | 'pan-y' | 'none';
@@ -89,7 +90,7 @@ export default class AnyTouch extends AnyEvent {
         this.options = { ...DEFAULT_OPTIONS, ...options };
 
         // 识别器
-        this.recognizers = [new Pan(), new Tap()];
+        this.recognizers = [new Pan(), new Tap(), new Swipe()];
         this.recognizerMap = {};
 
         if (void 0 !== this.el) {

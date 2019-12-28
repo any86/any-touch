@@ -1,13 +1,13 @@
-import RecognizerWithRequireFailure from './RecognizerWithRequireFailure';
-import { InputRecord } from '@types';
+import { Input } from '@types';
 import { INPUT_END, DIRECTION_ALL, NONE, DIRECTION_X, DIRECTION_Y } from '@const';
 import ComputeDistance from '@any-touch/compute/ComputeDistance';
 import ComputeVAndDir from '@any-touch/compute/ComputeVAndDir';
-import computeMaxLength from '@any-touch/compute/computeMaxLength';
-import recognizeForPressMoveLike from './recognizeForPressMoveLike';
-import isVaildDirection from './isVaildDirection';
+import ComputeMaxLength from '@any-touch/compute/ComputeMaxLength';
+import recognizeForPressMoveLike from '@Recognizer/recognizeForPressMoveLike';
+import isVaildDirection from '@Recognizer/isVaildDirection';
+import Recognizer from '@any-touch/Recognizer';
 
-export default class SwipeRecognizer extends RecognizerWithRequireFailure {
+export default class SwipeRecognizer extends Recognizer {
     static DEFAULT_OPTIONS = {
         name: 'swipe',
         threshold: 10,
@@ -23,23 +23,55 @@ export default class SwipeRecognizer extends RecognizerWithRequireFailure {
         return [NONE];
     };
 
+    // /**
+    //  * 识别后发布swipeleft等事件
+    //  * @param {AnyTouchEvent} 计算数据
+    //  */
+    // afterEmit() {
+    //     if (NONE !== this.event.direction) {
+    //         this.emit(this.options.name + this.event.direction, this.event);
+    //     }
+    // };
     /**
-     * 识别后发布swipeleft等事件
+     * 识别条件
      * @param {AnyTouchEvent} 计算数据
      */
-    afterEmit() {
-        if (NONE !== this.event.direction) {
-            this.emit(this.options.name + this.event.direction, this.event);
-        }
-    };
+    test(input: Input): boolean {
+        const { inputType } = input;
+        // 非end阶段, 开始校验数据
+        if (INPUT_END !== inputType) return false;
 
+        const { velocityX, velocityY, maxPointLength, distance, direction } = this.computed;
+        // 如果只支持水平或垂直, 那么其他方向速率为0;
+        // 有效速率
+        let vaildVelocityX: number = velocityX;
+        let vaildVelocityY: number = velocityY;
+        if (this.isOnlyHorizontal()) {
+            vaildVelocityY = 0;
+        } else if (this.isOnlyVertical()) {
+            vaildVelocityX = 0;
+        }
+
+        const vaildVelocity = Math.sqrt(vaildVelocityX * vaildVelocityX + vaildVelocityY * vaildVelocityY)
+
+        return this.options.pointLength === maxPointLength &&
+            this.options.threshold < distance &&
+            isVaildDirection(this, direction) &&
+            this.options.velocity < vaildVelocity;
+    };
     /**
      * 开始识别
-     * @param {InputRecord} 输入 
+     * @param {Input} 输入 
      */
-    recognize(inputRecord:InputRecord){
-        recognizeForPressMoveLike(this,inputRecord);
+    recognize(input: Input, emit: (type: string, ...payload: any[]) => void) {
+        type Computed = ReturnType<ComputeMaxLength['compute']> & ReturnType<ComputeVAndDir['compute']> &
+            ReturnType<ComputeDistance['compute']>
+        this.computed = <Computed>this.compute([ComputeMaxLength, ComputeVAndDir, ComputeDistance], input);
+        recognizeForPressMoveLike(this, input, emit);
+        // panleft...
+        // emit(this.options.name + this.computed.direction, this.computed);
     };
+
     /**
      * 是否只支持水平方向
      */
@@ -68,46 +100,5 @@ export default class SwipeRecognizer extends RecognizerWithRequireFailure {
     };
 
 
-    /**
-     * 识别条件
-     * @param {AnyTouchEvent} 计算数据
-     */
-    test(inputRecord: InputRecord): boolean {
-        const { input } = inputRecord;
-        const { eventType } = input;
 
-        // 非end阶段, 开始校验数据
-        // maxPointLength
-        const maxPointLength = this._getComputed(computeMaxLength, inputRecord, <any>this.$store);
-
-        // velocityX, velocityY, speedX, speedY, direction
-        const ComputeVAndDirData = this._getComputed(ComputeVAndDir, inputRecord, <any>this.$store);
-        const { velocityX, velocityY, direction } = ComputeVAndDirData;
-
-        // displacementX, displacementY, distanceX, distanceY, distance, overallDirection
-        const ComputeDistanceData = this._getComputed(ComputeDistance, inputRecord, <any>this.$store);
-        const { distance } = ComputeDistanceData;
-
-        if (INPUT_END !== eventType) return false;
-
-        this.event = { ...this.event, maxPointLength, ...ComputeVAndDirData, ...ComputeDistanceData };
-
-        // 如果只支持水平或垂直, 那么其他方向速率为0;
-        // 有效速率
-        let vaildVelocityX: number = velocityX;
-        let vaildVelocityY: number = velocityY;
-        if (this.isOnlyHorizontal()) {
-            vaildVelocityY = 0;
-        } else if (this.isOnlyVertical()) {
-            vaildVelocityX = 0;
-        }
-
-        const vaildVelocity = Math.sqrt(vaildVelocityX * vaildVelocityX + vaildVelocityY * vaildVelocityY)
-
-
-        return this.options.pointLength === maxPointLength &&
-            this.options.threshold < distance &&
-            isVaildDirection(this,direction) &&
-            this.options.velocity < vaildVelocity;
-    };
 };

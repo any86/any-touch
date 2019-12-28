@@ -1,6 +1,8 @@
 import { InputRecord, Vector, Input } from '../types';
 import computeVector from './computeVector';
 
+
+
 export default function computeVectorForMutli({
     startMultiInput,
     prevInput,
