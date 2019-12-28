@@ -1,6 +1,6 @@
-import { Input } from '@types';
+import { Input, CommonEmitFunction } from '@types';
 import { NONE, INPUT_END } from '@const';
-import computeVectorForMutli from '@any-touch/compute/computeVectorForMutli';
+import ComputeVectorForMutli from '@any-touch/compute/ComputeVectorForMutli';
 import computeScale from '@any-touch/compute/computeScale';
 import recognizeForPressMoveLike from '@Recognizer/recognizeForPressMoveLike';
 import Recognizer from '@Recognizer/index';
@@ -43,24 +43,22 @@ export default class PinchRecognizer extends Recognizer {
      */
     test(input: Input): boolean {
         const { pointLength } = input;
-        const vectors = this.compute(computeVectorForMutli, Input);
-        if (void 0 === vectors) {
-            const scale = this._prevScale;
-            const deltaScale = this._prevDeltaScale;
-            this.event = { ...this.event, scale, deltaScale };
-            return false;
-        } else {
-            const { scale, deltaScale } = this._getComputed(computeScale, vectors);
-            this.event = { ...this.event, scale, deltaScale };
-            return this.isValidPointLength(pointLength) && (this.options.threshold < Math.abs(scale - 1) || this.isRecognized);
-        }
+        const { scale } = this.computed;
+        return this.isValidPointLength(pointLength) && (this.options.threshold < Math.abs(scale - 1) || this.isRecognized);
     };
 
     /**
  * 开始识别
  * @param {Input} 输入 
  */
-    recognize(Input: Input) {
-        recognizeForPressMoveLike(this, Input);
+    recognize(input: Input, emit: CommonEmitFunction) {
+        type Computed = ReturnType<ComputeVectorForMutli['compute']> & {};
+        const computed = <Computed>this.compute([ComputeVectorForMutli], input);
+        if (`activeV` in computed) {
+            // const {activeV, prevV,startV} = computed;
+            this.computed = computeScale(computed)
+        }
+        // console.log(this.computed);
+        recognizeForPressMoveLike(this, input, emit);
     };
 };

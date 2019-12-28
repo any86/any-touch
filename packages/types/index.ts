@@ -52,13 +52,13 @@ export interface StdClass {
 
 export interface ComputeConstructor {
     new(...args: any[]): {
-        compute(input: Input): Record<string, any>
+        compute(input: Input): Record<string, any>|void;
     };
 }
 
-
-
-
+export interface CommonEmitFunction {
+    (type: string, ...payload: any[]): void
+}
 
 
 

@@ -1,4 +1,4 @@
-import { Recognizer, directionString, Input } from '@types';
+import { Recognizer, CommonEmitFunction, Input } from '@types';
 import {
     INPUT_CANCEL, INPUT_END, INPUT_MOVE, DIRECTION_X, DIRECTION_Y, NONE, STATUS_POSSIBLE,
     STATUS_START,
@@ -64,7 +64,7 @@ export function resetStatus(recognizer: any) {
  * 如pan/rotate/pinch/swipe
  * @param {Input} 输入记录 
  */
-export default function (recognizer: any, input: Input, emit: (type: string, ...payload: any[]) => void): void {
+export default function (recognizer: any, input: Input, emit: CommonEmitFunction): void {
     // 是否识别成功
     const isVaild = recognizer.test(input);
     resetStatus(recognizer);

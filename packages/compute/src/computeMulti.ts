@@ -1,8 +1,7 @@
 
 import { Input } from '@types';
-import Store from '@any-touch/Store';
 import computeVector from './computeVector';
-import computeScale from './computeScale';
+import computeScale from './ComputeScale';
 import computeAngle from './computeAngle';
 type Arg = {
     startMultiInput?: Input,

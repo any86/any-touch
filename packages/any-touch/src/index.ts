@@ -24,6 +24,8 @@ import { isRegExp, isFunction } from '@shared/is';
 import Pan from '@any-touch/Pan'
 import Tap from '@any-touch/Tap'
 import Swipe from '@any-touch/Swipe'
+import Pinch from '@any-touch/Pinch'
+import Rotate from '@any-touch/Rotate'
 
 interface Options {
     touchAction?: 'compute' | 'auto' | 'manipulation' | 'pan-x' | 'pan-y' | 'none';
@@ -90,7 +92,7 @@ export default class AnyTouch extends AnyEvent {
         this.options = { ...DEFAULT_OPTIONS, ...options };
 
         // 识别器
-        this.recognizers = [new Pan(), new Tap(), new Swipe()];
+        this.recognizers = [new Pan(), new Tap(), new Swipe(), new Pinch()];
         this.recognizerMap = {};
 
         if (void 0 !== this.el) {
@@ -248,7 +250,7 @@ export default class AnyTouch extends AnyEvent {
                 if (recognizer.disabled) continue;
                 recognizer.computedGroup = computedGroup;
                 recognizer.recognize(input, (type, ev) => {
-                    this.emit(type, { ...input, ...ev });
+                    this.emit(type, { ...input, ...ev, type });
                 });
                 computedGroup = recognizer.computedGroup;
             }
