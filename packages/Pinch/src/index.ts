@@ -48,15 +48,15 @@ export default class PinchRecognizer extends Recognizer {
     };
 
     /**
- * 开始识别
- * @param {Input} 输入 
- */
+     * 开始识别
+     * @param {Input} 输入 
+     */
     recognize(input: Input, emit: CommonEmitFunction) {
         type Computed = ReturnType<ComputeVectorForMutli['compute']> & {};
         const computed = <Computed>this.compute([ComputeVectorForMutli], input);
         if (`activeV` in computed) {
             // const {activeV, prevV,startV} = computed;
-            this.computed = computeScale(computed)
+            this.computed = {...this.computed, ...computeScale(computed)};
         }
         // console.log(this.computed);
         recognizeForPressMoveLike(this, input, emit);

@@ -92,7 +92,7 @@ export default class AnyTouch extends AnyEvent {
         this.options = { ...DEFAULT_OPTIONS, ...options };
 
         // 识别器
-        this.recognizers = [new Pan(), new Tap(), new Swipe(), new Pinch()];
+        this.recognizers = [new Pan(), new Tap(), new Swipe(), new Pinch() , new Rotate()];
         this.recognizerMap = {};
 
         if (void 0 !== this.el) {

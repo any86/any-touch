@@ -1,10 +1,12 @@
-import RecognizerWithRequireFailure from './RecognizerWithRequireFailure';
-import {NONE} from '@const';
-import { AnyTouchEvent, InputRecord } from '@types';
-import computMulti from '@any-touch/compute/computeMulti';
-import recognizeForPressMoveLike from './recognizeForPressMoveLike';
+import { Input, CommonEmitFunction } from '@types';
+import { NONE, INPUT_END } from '@const';
+import ComputeVectorForMutli from '@any-touch/compute/ComputeVectorForMutli';
+import computeAngle from '@any-touch/compute/computeAngle';
+import recognizeForPressMoveLike from '@Recognizer/recognizeForPressMoveLike';
+import Recognizer from '@Recognizer/index';
 
-export default class RotateRecognizer extends RecognizerWithRequireFailure {
+
+export default class PinchRecognizer extends Recognizer {
     static DEFAULT_OPTIONS = {
         name: 'rotate',
         // 触发事件所需要的最小角度
@@ -29,14 +31,9 @@ export default class RotateRecognizer extends RecognizerWithRequireFailure {
      * @param {AnyTouchEvent} 计算数据
      * @return {Boolean} 接收是否识别状态
      */
-    test(inputRecord:InputRecord): boolean {
-        const {input} = inputRecord;
-        const {pointLength} = input;
-   
-        const {angle,deltaAngle} = this._getComputed(computMulti,inputRecord,<any>this.$store)
-        this.event = {...this.event, angle,deltaAngle};
-        // 如果触碰点数要大于指定
-        // 如果缩放超过阈值, 或者已识别
+    test(input:Input): boolean {
+        const { pointLength } = input;
+        const { angle } = this.computed;
         return this.isValidPointLength(pointLength) && (this.options.threshold < Math.abs(angle) || this.isRecognized);
     };
 
@@ -44,7 +41,15 @@ export default class RotateRecognizer extends RecognizerWithRequireFailure {
      * 开始识别
      * @param {InputRecord} 输入 
      */
-    recognize(inputRecord:InputRecord){
-        recognizeForPressMoveLike(this,inputRecord);
+    recognize(input: Input, emit: CommonEmitFunction) {
+        type Computed = ReturnType<ComputeVectorForMutli['compute']> & {};
+        const computed = <Computed>this.compute([ComputeVectorForMutli], input);
+        if (`activeV` in computed) {
+            // const {activeV, prevV,startV} = computed;
+            this.computed = {...this.computed, ...computeAngle(computed)};
+        }
+        // console.log(this.computed);
+        recognizeForPressMoveLike(this, input, emit);
     };
+
 };

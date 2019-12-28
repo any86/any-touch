@@ -30,13 +30,13 @@ new Vue({
             C(ev, '#f99');
         });
 
-        // at.on('tap', ev => {
-        //     C(ev, '#f10');
-        // });
+        at.on('tap', ev => {
+            C(ev, '#f10');
+        });
 
-        // at.on('swipe', ev => {
-        //     C(ev, '#680');
-        // });
+        at.on('swipe', ev => {
+            C(ev, '#680');
+        });
 
         at.on('pan', ev => {
             this.x += ev.deltaX;
@@ -47,7 +47,11 @@ new Vue({
 
         at.on('pinch', ev => {
             this.scale*= ev.deltaScale;
-            C(ev, '#a08');
+        });
+
+
+        at.on('rotate', ev => {
+            this.angle+= ev.deltaAngle;
         });
 
     },
