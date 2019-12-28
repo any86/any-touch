@@ -73,10 +73,9 @@ export default function (recognizer: any, input: Input, emit: (type: string, ...
     const { inputType } = input;
 
     recognizer.status = flow(isVaild, recognizer.status, inputType);
-    const { event } = recognizer;
-    console.log(event);
+    const { computed } = recognizer;
     if (STATUS_CANCELLED === inputType) {
-        emit(recognizer.options.name + INPUT_CANCEL, event);
+        emit(recognizer.options.name + INPUT_CANCEL, computed);
         return;
     }
 
@@ -84,19 +83,14 @@ export default function (recognizer: any, input: Input, emit: (type: string, ...
     recognizer.isRecognized = -1 < [STATUS_START, STATUS_MOVE, STATUS_END, STATUS_RECOGNIZED].indexOf(recognizer.status);
     // 识别后触发的事件
     if (isVaild) {
-        recognizer.afterRecognized(event);
-
         // computed = recognizer.lockDirection(computed);
-        emit(recognizer.options.name, event);
+        emit(recognizer.options.name, computed);
 
         // panstart | panmove 等
-        emit(recognizer.options.name + recognizer.status, event);
-
-        recognizer.afterEmit();
+        emit(recognizer.options.name + recognizer.status, computed);
     } else if (recognizer.isRecognized) {
-
         // panend等
-        emit(recognizer.options.name + recognizer.status, event);
+        emit(recognizer.options.name + recognizer.status, computed);
 
     }
 };

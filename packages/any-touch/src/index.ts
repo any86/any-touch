@@ -235,7 +235,7 @@ export default class AnyTouch extends AnyEvent {
         if (void 0 !== input) {
             // 管理历史input
             // 生成AnyTouchEvent
-            if(void 0 !== this.recognizers[0]){
+            if (void 0 !== this.recognizers[0]) {
                 this.recognizers[0].input = input;
             }
             this.emit('input', input);
@@ -247,7 +247,7 @@ export default class AnyTouch extends AnyEvent {
                 if (recognizer.disabled) continue;
                 recognizer.computedGroup = computedGroup;
                 recognizer.recognize(input, (type, ev) => {
-                    this.emit(type, {...input, ...ev});
+                    this.emit(type, { ...input, ...ev });
                 });
                 computedGroup = recognizer.computedGroup;
             }

@@ -62,7 +62,6 @@ export default class PanRecognizer extends Recognizer {
 
         this.computed = <Computed>this.compute([ComputeVAndDir, ComputeDistance, ComputeDeltaXY], input);
         recognizeForPressMoveLike(this, input, emit);
-
         // panleft...
         emit(this.options.name + this.computed.direction, this.computed);
     };
