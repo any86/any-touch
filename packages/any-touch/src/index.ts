@@ -26,6 +26,7 @@ import Tap from '@any-touch/Tap'
 import Swipe from '@any-touch/Swipe'
 import Pinch from '@any-touch/Pinch'
 import Rotate from '@any-touch/Rotate'
+import Press from '@any-touch/Press'
 
 interface Options {
     touchAction?: 'compute' | 'auto' | 'manipulation' | 'pan-x' | 'pan-y' | 'none';
@@ -92,7 +93,7 @@ export default class AnyTouch extends AnyEvent {
         this.options = { ...DEFAULT_OPTIONS, ...options };
 
         // 识别器
-        this.recognizers = [new Pan(), new Tap(), new Swipe(), new Pinch() , new Rotate()];
+        this.recognizers = [new Press(), new Pan(), new Tap(), new Swipe(), new Pinch() , new Rotate()];
         this.recognizerMap = {};
 
         if (void 0 !== this.el) {

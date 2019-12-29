@@ -44,6 +44,14 @@ new Vue({
             C(ev, '#968');
         })
 
+        at.on('press', ev => {
+            C(ev, '#168');
+        })
+
+        at.on('pressup', ev => {
+            C(ev, '#996');
+        })
+
 
         at.on('pinch', ev => {
             this.scale*= ev.deltaScale;

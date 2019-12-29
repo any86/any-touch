@@ -1,4 +1,4 @@
-import { AnyTouchEvent, Computed, Input } from '@types';
+import {Computed, Input, CommonEmitFunction } from '@types';
 import { INPUT_MOVE, PAN_Y, PAN_X, DIRECTION_LEFT, DIRECTION_RIGHT, DIRECTION_DOWN, DIRECTION_UP, DIRECTION_ALL, NONE, AUTO } from '@const';
 import Recognizer from '@any-touch/Recognizer';
 import getHV from '@shared/getHV';
@@ -56,7 +56,7 @@ export default class PanRecognizer extends Recognizer {
      * 开始识别
      * @param {Input} 输入 
      */
-    recognize(input: Input, emit: (type: string, ...payload: any[]) => void) {
+    recognize(input: Input, emit:CommonEmitFunction) {
         type Computed = ReturnType<ComputeVAndDir['compute']> & ReturnType<ComputeDistance['compute']> &
             ReturnType<ComputeDeltaXY['compute']>
 
@@ -68,9 +68,9 @@ export default class PanRecognizer extends Recognizer {
 
 
 
-    afterRecognized(computed: AnyTouchEvent) {
+    // afterRecognized(computed: AnyTouchEvent) {
         // this.lockDirection(computed);
-    }
+    // }
 
     /**
      * 移除限制方向的deltaX/Y

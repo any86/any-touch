@@ -1,13 +1,13 @@
-import { AnyTouchEvent, InputRecord } from '@types';
+import { CommonEmitFunction, Input } from '@types';
 import {
     STATUS_FAILED, STATUS_RECOGNIZED
-} from '../const/recognizerStatus';
+} from '@const';
 import ComputeDistance from '@any-touch/compute/ComputeDistance';
-import { INPUT_CANCEL, INPUT_END, INPUT_START, AUTO, DIRECTION_UP, KEY_DISTANCE } from '@const';
-import RecognizerWithRequireFailure from './RecognizerWithRequireFailure';
-import {resetStatus} from './recognizeForPressMoveLike';
+import { INPUT_CANCEL, INPUT_END, INPUT_START, AUTO, DIRECTION_UP } from '@const';
+import Recognizer from '@any-touch/Recognizer';
+import {resetStatus} from '@Recognizer/recognizeForPressMoveLike';
 
-export default class PressRecognizer extends RecognizerWithRequireFailure {
+export default class PressRecognizer extends Recognizer {
     private _timeoutId?: any;
     static DEFAULT_OPTIONS = {
         name: 'press',
@@ -23,34 +23,33 @@ export default class PressRecognizer extends RecognizerWithRequireFailure {
         return [AUTO];
     };
 
-    recognize(inputRecord: InputRecord): void {
-        const { input } = inputRecord;
-        const { eventType } = input;
-        const deltaTime = inputRecord.input.timestamp - inputRecord.startInput.timestamp;
+    recognize(input: Input, emit:CommonEmitFunction): void {
+        const { inputType,startInput } = input;
+        const deltaTime = input.timestamp - startInput.timestamp;
         // 1. start阶段
         // 2. 触点数符合
         // 那么等待minPressTime时间后触发press
-        if (INPUT_START === eventType && this.test(inputRecord)) {
+        if (INPUT_START === inputType && this.test(input)) {
             // 重置状态
             resetStatus(this);
             // 延迟触发
             this.cancel();
             this._timeoutId = (setTimeout as Window['setTimeout'])(() => {
                 this.status = STATUS_RECOGNIZED;
-                this.emit(this.options.name, input);
+                emit(this.options.name, input);
             }, this.options.minPressTime);
         }
 
         // 触发pressup条件:
         // 1. end阶段
         // 2. 已识别
-        else if (INPUT_END === eventType && STATUS_RECOGNIZED === this.status) {
-            this.emit(`${this.options.name}${DIRECTION_UP}`, this.event);
+        else if (INPUT_END === inputType && STATUS_RECOGNIZED === this.status) {
+            emit(`${this.options.name}${DIRECTION_UP}`, this.computed);
         }
 
         // 一旦不满足必要条件, 触发失败
         // 对应cancel和end阶段
-        else if (!this.test(inputRecord) || (this.options.minPressTime > deltaTime && -1 !== [INPUT_END, INPUT_CANCEL].indexOf(eventType))) {
+        else if (!this.test(input) || (this.options.minPressTime > deltaTime && -1 !== [INPUT_END, INPUT_CANCEL].indexOf(inputType))) {
             this.cancel();
             this.status = STATUS_FAILED;
         }
@@ -61,13 +60,11 @@ export default class PressRecognizer extends RecognizerWithRequireFailure {
      * 是否满足:
      * 移动距离不大
      */
-    test(inputRecord: InputRecord): boolean {
-        const { input } = inputRecord;
+    test(input: Input): boolean {
         const { pointLength } = input;
-        // displacementX, displacementY, distanceX, distanceY, distance, overallDirection
-        const ComputeDistanceData = this._getComputed(ComputeDistance, inputRecord, <any>this.$store);
-        const { distance } = ComputeDistanceData;
-        this.event = { ...this.event, ...ComputeDistanceData }
+        type Computed = ReturnType<ComputeDistance['compute']>;
+        this.computed = <Computed>this.compute([ComputeDistance], input);
+        const { distance } = this.computed;
         return this.options.positionTolerance > distance && this.isValidPointLength(pointLength);
     };
 
