@@ -5,7 +5,7 @@ import {
 import ComputeDistance from '@any-touch/compute/ComputeDistance';
 import { INPUT_CANCEL, INPUT_END, INPUT_START, AUTO, DIRECTION_UP } from '@const';
 import Recognizer from '@any-touch/Recognizer';
-import {resetStatus} from '@Recognizer/recognizeForPressMoveLike';
+import { resetStatus } from '@Recognizer/recognizeForPressMoveLike';
 
 export default class PressRecognizer extends Recognizer {
     private _timeoutId?: any;
@@ -23,8 +23,8 @@ export default class PressRecognizer extends Recognizer {
         return [AUTO];
     };
 
-    recognize(input: Input, emit:CommonEmitFunction): void {
-        const { inputType,startInput } = input;
+    recognize(input: Input, emit: CommonEmitFunction): void {
+        const { inputType, startInput } = input;
         const deltaTime = input.timestamp - startInput.timestamp;
         // 1. start阶段
         // 2. 触点数符合

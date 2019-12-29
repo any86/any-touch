@@ -31,10 +31,17 @@ new Vue({
         });
 
         at.on('tap', ev => {
+            this.scale= 0.8;
+            setTimeout(()=>{
+                this.scale = 1;
+            },100)
             C(ev, '#f10');
         });
 
         at.on('swipe', ev => {
+            this.x+= ev.speedX*50;
+            this.y+= ev.speedY*50;
+
             C(ev, '#680');
         });
 
@@ -45,10 +52,12 @@ new Vue({
         })
 
         at.on('press', ev => {
+            this.scale= 0.9;
             C(ev, '#168');
         })
 
         at.on('pressup', ev => {
+            this.scale= 1;
             C(ev, '#996');
         })
 
