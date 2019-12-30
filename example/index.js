@@ -12,6 +12,7 @@ new Vue({
             y: window.innerHeight / 2 - 100,
             centerX: 0,
             centerY: 0,
+            transitionDuration:0,
             message: {}
         };
     },
@@ -39,6 +40,7 @@ new Vue({
         });
 
         at.on('swipe', ev => {
+            this.transitionDuration = 200;
             this.x+= ev.speedX*50;
             this.y+= ev.speedY*50;
 
@@ -46,6 +48,7 @@ new Vue({
         });
 
         at.on('pan', ev => {
+            this.transitionDuration = 0;
             this.x += ev.deltaX;
             this.y += ev.deltaY;
             C(ev, '#968');
@@ -63,11 +66,13 @@ new Vue({
 
 
         at.on('pinch', ev => {
+            this.transitionDuration = 0;
             this.scale*= ev.deltaScale;
         });
 
 
         at.on('rotate', ev => {
+            this.transitionDuration = 0;
             this.angle+= ev.deltaAngle;
         });
 

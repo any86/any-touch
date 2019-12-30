@@ -197,10 +197,11 @@
         <div class="circle" id="circle" ref="circle" :class="[activeType]" :style="{
                 top:`${y}px`,
                 left:`${x}px`,
+                transitionDuration: `${transitionDuration}ms`,
             transform: `scale(${scale}) rotate(${angle}deg)`
             
         }">{{message.type||activeType}}</div>
-        
+
         <!-- <p class="text">scale: {{scale}}</p>
         <p class="text">angle: {{angle}}</p> -->
         <!-- <div class="circle2" id="circle2" ref="circle2">123</div> -->

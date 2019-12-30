@@ -91,6 +91,7 @@ main table tr td:nth-child(3) {
 
 
 .circle {
+    cursor: pointer;
     box-sizing: content-box;
     width: 150px;
     height: 150px;
@@ -103,6 +104,8 @@ main table tr td:nth-child(3) {
     font-size: 24px;
     font-weight: 100;
     box-shadow: 0 0  30px 5px var(--primary);
+    transition: ease-out;
+
 }
 
 .fixed-bottom {
