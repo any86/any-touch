@@ -19,19 +19,6 @@ export default class SwipeRecognizer extends Recognizer {
         super(options);
     };
 
-    getTouchAction() {
-        return [NONE];
-    };
-
-    // /**
-    //  * 识别后发布swipeleft等事件
-    //  * @param {AnyTouchEvent} 计算数据
-    //  */
-    // afterEmit() {
-    //     if (NONE !== this.event.direction) {
-    //         this.emit(this.options.name + this.event.direction, this.event);
-    //     }
-    // };
     /**
      * 识别条件
      * @param {AnyTouchEvent} 计算数据

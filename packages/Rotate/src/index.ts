@@ -17,15 +17,6 @@ export default class PinchRecognizer extends Recognizer {
         super(options);
     };
 
-    getTouchAction() {
-        return [NONE];
-    };
-
-    /**
-     * 无特殊事件要触发
-     */
-    afterEmit():void { };
-
     /**
      * 识别条件
      * @param {AnyTouchEvent} 计算数据

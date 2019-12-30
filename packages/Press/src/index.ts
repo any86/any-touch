@@ -8,7 +8,7 @@ import Recognizer from '@any-touch/Recognizer';
 import { resetStatus } from '@Recognizer/recognizeForPressMoveLike';
 
 export default class PressRecognizer extends Recognizer {
-    private _timeoutId?: any;
+    private _timeoutId?: number;
     static DEFAULT_OPTIONS = {
         name: 'press',
         pointLength: 1,
@@ -17,10 +17,6 @@ export default class PressRecognizer extends Recognizer {
     };
     constructor(options = {}) {
         super(options);
-    };
-
-    getTouchAction(): string[] {
-        return [AUTO];
     };
 
     recognize(input: Input, emit: CommonEmitFunction): void {
@@ -71,6 +67,4 @@ export default class PressRecognizer extends Recognizer {
     cancel(): void {
         clearTimeout(this._timeoutId);
     }
-
-    afterEmit() { }
 };

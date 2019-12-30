@@ -15,11 +15,8 @@ export default abstract class RecognizerBase {
     isRecognized: boolean;
     // 选项
     options: { [propName: string]: any };
-    // 存储外部注入方法的容器
-    $root: any;
 
     recognizerMap: Record<string, Recognizer>;
-
     // 缓存当前手势的计算结果
     // 每次手势识别前, 
     // 会把前面所有手势的计算结果作为当前计算结果
@@ -59,18 +56,9 @@ export default abstract class RecognizerBase {
     set(options = {}) {
         this.options = { ...this.options, ...options };
         // 刷新anyTouch
-        this.$root.update();
+        // this.$root.update();
         return this;
     };
-
-    /**
-     * 传入启动类的实例
-     * @param $root 
-     */
-    $mixin($root: any): Recognizer {
-        this.$root = $root;
-        return this;
-    }
 
     /**
      * 对eventEmitter进行封装
@@ -143,27 +131,5 @@ export default abstract class RecognizerBase {
      * @returns {Boolean} 校验结果
      */
     abstract test(input: Input): boolean;
-
-    /**
-     * 识别成功后执行
-     * 这个阶段可以对computed数据做些处理
-     * 比如pan可以针对不支持的方向吧deltaX/Y调整为0
-     * swipe可以把不支持的方向上的速率调整为0
-     * @param {AnyTouchEvent} 计算数据 
-     */
-    afterRecognized(event: any): void { };
-
-    /**
-     * 基类的所有emit触发后执行
-     * @param {AnyTouchEvent} event 
-     */
-    afterEmit(): void { };
-
-    /**
-     * 计算当前手势的touch-action
-     */
-    abstract getTouchAction(): string[];
-
-
 };
 

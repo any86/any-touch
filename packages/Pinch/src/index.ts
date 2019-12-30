@@ -6,8 +6,6 @@ import recognizeForPressMoveLike from '@Recognizer/recognizeForPressMoveLike';
 import Recognizer from '@Recognizer/index';
 
 export default class PinchRecognizer extends Recognizer {
-    private _prevScale: number;
-    private _prevDeltaScale: number;
     static DEFAULT_OPTIONS = {
         name: 'pinch',
         // 触发事件所需要的最小缩放比例
@@ -16,26 +14,8 @@ export default class PinchRecognizer extends Recognizer {
     };
     constructor(options = {}) {
         super(options);
-        this._prevScale = 1;
-        this._prevDeltaScale = 1;
     };
-
-    getTouchAction() {
-        return [NONE];
-    };
-
-    // afterEmit() {
-    //     if (INPUT_END === this.event.eventType) return;
-    //     // pinchin | pinchout
-    //     const { scale, deltaScale } = this.event;
-    //     if (1 !== scale) {
-    //         const inOrOut = scale > this._prevScale ? 'out' : 'in';
-    //         this.emit(this.options.name + inOrOut, this.event);
-    //     }
-    //     this._prevScale = scale;
-    //     this._prevDeltaScale = deltaScale;
-    // };
-
+  
     /**
      * 识别条件
      * @param {AnyTouchEvent} 计算数据
