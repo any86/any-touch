@@ -1,5 +1,5 @@
 import {Computed, Input, CommonEmitFunction } from '@types';
-import { INPUT_MOVE, PAN_Y, PAN_X, DIRECTION_LEFT, DIRECTION_RIGHT, DIRECTION_DOWN, DIRECTION_UP, DIRECTION_ALL, NONE, AUTO } from '@const';
+import { INPUT_MOVE, PAN_Y, PAN_X, DIRECTION_LEFT, DIRECTION_RIGHT, DIRECTION_DOWN, DIRECTION_UP, DIRECTION_ALL, NONE, AUTO, INPUT_END } from '@const';
 import Recognizer from '@any-touch/Recognizer';
 import getHV from '@shared/getHV';
 import ComputeDistance from '@any-touch/compute/ComputeDistance';
@@ -62,8 +62,11 @@ export default class PanRecognizer extends Recognizer {
 
         this.computed = <Computed>this.compute([ComputeVAndDir, ComputeDistance, ComputeDeltaXY], input);
         recognizeForPressMoveLike(this, input, emit);
-        // panleft...
-        emit(this.options.name + this.computed.direction, this.computed);
+        // panleft/panup/panright/pandown
+        const {inputType} = input;
+        if(INPUT_END !== inputType){
+            emit(this.options.name + this.computed.direction, this.computed);
+        }
     };
 
 

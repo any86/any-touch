@@ -12,7 +12,7 @@ new Vue({
             y: window.innerHeight / 2 - 100,
             centerX: 0,
             centerY: 0,
-            transitionDuration:0,
+            transitionDuration: 0,
             message: {}
         };
     },
@@ -32,17 +32,17 @@ new Vue({
         });
 
         at.on('tap', ev => {
-            this.scale= 0.8;
-            setTimeout(()=>{
+            this.scale = 0.8;
+            setTimeout(() => {
                 this.scale = 1;
-            },100)
+            }, 100)
             C(ev, '#f10');
         });
 
         at.on('swipe', ev => {
             this.transitionDuration = 200;
-            this.x+= ev.speedX*50;
-            this.y+= ev.speedY*50;
+            this.x += ev.speedX * 50;
+            this.y += ev.speedY * 50;
 
             C(ev, '#680');
         });
@@ -55,25 +55,25 @@ new Vue({
         })
 
         at.on('press', ev => {
-            this.scale= 0.9;
+            this.scale = 0.9;
             C(ev, '#168');
         })
 
         at.on('pressup', ev => {
-            this.scale= 1;
+            this.scale = 1;
             C(ev, '#996');
         })
 
 
         at.on('pinch', ev => {
             this.transitionDuration = 0;
-            this.scale*= ev.deltaScale;
+            this.scale *= ev.deltaScale;
         });
 
 
         at.on('rotate', ev => {
             this.transitionDuration = 0;
-            this.angle+= ev.deltaAngle;
+            this.angle += ev.deltaAngle;
         });
 
     },
