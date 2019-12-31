@@ -17,7 +17,7 @@
  * 格式化Event成统一的pointer格式 => 通过pointer数据计算 => 用计算结果去识别手势
  */
 import AnyEvent from 'any-event';
-import { AnyTouchEvent, SupportEvent, Recognizer } from '@types';
+import { SupportEvent, Recognizer } from '@types';
 import { TOUCH, MOUSE, SUPPORT_TOUCH, NONE, AUTO, TOUCH_START, TOUCH_MOVE, TOUCH_CANCEL, TOUCH_END, MOUSE_DOWN, MOUSE_MOVE, MOUSE_UP, COMPUTE, } from './const';
 import Input from './Input';
 import { isRegExp, isFunction } from '@shared/is';
@@ -29,41 +29,19 @@ import Rotate from '@any-touch/Rotate'
 import Press from '@any-touch/Press'
 
 interface Options {
-    touchAction?: 'compute' | 'auto' | 'manipulation' | 'pan-x' | 'pan-y' | 'none';
     hasDomEvents?: boolean;
     isPreventDefault?: boolean;
     // 不阻止默认行为的白名单
     preventDefaultExclude?: RegExp | ((ev: SupportEvent) => boolean);
     syncToAttr?: boolean;
-    cssPrevent?: {
-        // 阻止触发选择文字
-        selectText?: boolean;
-        // 阻止触发浏览器默认拖拽
-        drag?: boolean;
-        // 隐藏高亮效果
-        tapHighlight?: boolean;
-        // 阻止默认菜单
-        callout?: boolean;
-    }
 };
 
 // 默认设置
 const DEFAULT_OPTIONS: Options = {
-    touchAction: COMPUTE,
     hasDomEvents: true,
     isPreventDefault: true,
     preventDefaultExclude: /^(?:INPUT|TEXTAREA|BUTTON|SELECT)$/,
     syncToAttr: false,
-    cssPrevent: {
-        // 阻止触发选择文字
-        selectText: true,
-        // 阻止触发浏览器默认拖拽
-        drag: true,
-        // 隐藏高亮效果
-        tapHighlight: true,
-        // 阻止默认菜单
-        callout: true
-    }
 };
 export default class AnyTouch extends AnyEvent {
     static version = '__VERSION__';
@@ -93,14 +71,14 @@ export default class AnyTouch extends AnyEvent {
         this.options = { ...DEFAULT_OPTIONS, ...options };
 
         // 识别器
-        this.recognizers = [new Press(), new Pan(), new Tap(), new Swipe(), new Pinch() , new Rotate()];
+        this.recognizers = [new Press(), new Pan(), new Tap(), new Swipe(), new Pinch(), new Rotate()];
         this.recognizerMap = {};
 
         if (void 0 !== this.el) {
             // 应用设置
             // this.update();
             // 绑定事件
-            this._unbindEl = this._bindEL(this.el)._unbindEl;
+            this._unbindEl = this._bindEL(this.el);
         }
     };
 
@@ -123,12 +101,10 @@ export default class AnyTouch extends AnyEvent {
             events.forEach(eventName => {
                 el.addEventListener(eventName, boundInputListener);
             });
-            return {
-                _unbindEl: () => {
-                    events.forEach(eventName => {
-                        el.removeEventListener(eventName, boundInputListener);
-                    });
-                }
+            return () => {
+                events.forEach(eventName => {
+                    el.removeEventListener(eventName, boundInputListener);
+                });
             }
         }
         // Mouse
@@ -136,12 +112,10 @@ export default class AnyTouch extends AnyEvent {
             el.addEventListener(MOUSE_DOWN, boundInputListener);
             window.addEventListener(MOUSE_MOVE, boundInputListener);
             window.addEventListener(MOUSE_UP, boundInputListener);
-            return {
-                _unbindEl: () => {
-                    el.removeEventListener(MOUSE_DOWN, boundInputListener);
-                    window.removeEventListener(MOUSE_MOVE, boundInputListener);
-                    window.removeEventListener(MOUSE_UP, boundInputListener);
-                }
+            return () => {
+                el.removeEventListener(MOUSE_DOWN, boundInputListener);
+                window.removeEventListener(MOUSE_MOVE, boundInputListener);
+                window.removeEventListener(MOUSE_UP, boundInputListener);
             };
         }
     };
