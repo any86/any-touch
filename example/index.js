@@ -20,12 +20,31 @@ new Vue({
         function C(ev, bgColor = "#f10", color = "#fff") {
             console.log(`%c${ev.type}`, `color:${color};background-color:${bgColor};padding:4px;`, ev)
         }
+
+        // hack 解决document.body 的cancelable不能等于true
+        // const gEl = document.body
+        // gEl.addEventListener('touchstart', ev=>{
+        //     console.log(`touchstart`,ev.cancelable)
+        //    ev.preventDefault();
+        // }, {passive:false})
+        
+        // gEl.addEventListener('touchmove', ev=>{
+        //     console.log(`touchmove`,ev.cancelable)
+        //     ev.preventDefault();
+        // }, {passive:false})
+
+
         const el = this.$refs.circle;
+        el.addEventListener('pan', ev => {
+            // console.log(ev)
+        })
         // 初始化
-        const at = new AnyTouch(el);
+        const at = new AnyTouch(document);
         at.on('input', ev => {
+            console.dir(ev)
             // console.log(ev);
         })
+
 
         at.on('pinch', ev => {
             C(ev, '#f99');
@@ -46,15 +65,11 @@ new Vue({
             C(ev, '#680');
         });
 
-        at.on('swipeleft', ev => {
-            C(ev, '#111');
-        });
-
         at.on('pan', ev => {
             this.transitionDuration = 0;
             this.x += ev.deltaX;
             this.y += ev.deltaY;
-            C(ev, '#968');
+            // C(ev, '#968');
         })
 
         at.on('press', ev => {

@@ -85,6 +85,60 @@ export default class AnyTouch extends AnyEvent {
     use(recognizer: Recognizer) {
         this.recognizers.push(recognizer);
     };
+    /**
+     * 监听input变化
+     * @param {Event}
+     */
+    catchEvent(event: SupportEvent): void {
+        if (this.canPreventDefault(event)) {
+            event.preventDefault();
+        }
+        // if (!event.cancelable) {
+        //     this.eventEmitter.emit('error', { code: 0, message: '页面滚动的时候, 请暂时不要操作元素!' });
+        // }
+
+        // 统一不同输入
+        const input = this.input.transform(event);
+        // 跳过无效输入
+        // 当是鼠标事件的时候, 会有undefined的时候
+        // 比如鼠标还没有mousedown阶段的mousemove等都是无效操作
+        if (void 0 !== input) {
+            // 管理历史input
+            // 生成AnyTouchEvent
+            if (void 0 !== this.recognizers[0]) {
+                this.recognizers[0].input = input;
+            }
+            this.emit('input', input);
+
+            // 缓存每次计算的结果
+            // 以函数名为键值
+            // console.log(this.recognizers)
+            let computedGroup = {};
+            for (let recognizer of this.recognizers) {
+                if (recognizer.disabled) continue;
+                recognizer.computedGroup = computedGroup;
+                recognizer.recognize(input, (type, ev) => {
+                    const payload = { ...input, ...ev, type }
+                    this.emit(type, payload);
+                    this.emitDomEvent(payload)
+                });
+                computedGroup = recognizer.computedGroup;
+            }
+        }
+    };
+
+    /**
+     * 触发dom事件
+     */
+    emitDomEvent(payload: Record<string, any>) {
+        if (this.el) {
+            // 过滤掉几个Event上保留的字段(target, currentTarget)
+            let { target, currentTarget, type, ...data } = payload;
+            let event = new Event(type, payload);
+            Object.assign(event, data);
+            this.el.dispatchEvent(event);
+        }
+    }
 
     update() { };
 
@@ -194,71 +248,7 @@ export default class AnyTouch extends AnyEvent {
         return isPreventDefault;
     };
 
-    /**
-     * 监听input变化
-     * @param {Event}
-     */
-    catchEvent(event: SupportEvent): void {
-        if (this.canPreventDefault(event)) {
-            event.preventDefault();
-        }
-        // if (!event.cancelable) {
-        //     this.eventEmitter.emit('error', { code: 0, message: '页面滚动的时候, 请暂时不要操作元素!' });
-        // }
-        // 跳过无效输入
-        // 当是鼠标事件的时候, 会有undefined的时候
-        // 比如鼠标还没有mousedown阶段的mousemove等都是无效操作
-        const input = this.input.transform(event);
 
-        if (void 0 !== input) {
-            // 管理历史input
-            // 生成AnyTouchEvent
-            if (void 0 !== this.recognizers[0]) {
-                this.recognizers[0].input = input;
-            }
-            this.emit('input', input);
-            // 缓存每次计算的结果
-            // 以函数名为键值
-            // console.log(this.recognizers)
-            let computedGroup = {};
-            for (let recognizer of this.recognizers) {
-                if (recognizer.disabled) continue;
-                recognizer.computedGroup = computedGroup;
-                recognizer.recognize(input, (type, ev) => {
-                    this.emit(type, { ...input, ...ev, type });
-                });
-                computedGroup = recognizer.computedGroup;
-            }
-        }
-
-        //     // 每次事件触发重新生成event
-        //     this.event = input;
-
-        //     // 缓存每次计算的结果
-        //     let computed = {};
-
-        //     // input事件
-        //     this.emit('input', this.event);
-        //     if (input.isStart) {
-        //         // 重置isStopped
-        //         // this._isStopped = false;
-        //     }
-
-        //     for (let recognizer of this.recognizers) {
-        //         if (recognizer.disabled) continue;
-        //         recognizer.computed = computed;
-        //         // 如果遇到停止标记, 立即停止运行后面的识别器
-        //         recognizer.event = this.event;
-        //         // 每个识别器的test方法会设置event的值
-        //         recognizer.recognize(input);
-        //         computed = recognizer.computed;
-        //         // if (this._isStopped) {
-        //         //     break;
-        //         // }
-        //     }
-        // }
-
-    };
 
     /**
      * 解绑所有触摸事件
