@@ -1,15 +1,6 @@
-import { Computed, Input, CommonEmitFunction } from "@types";
+import { Input, CommonEmitFunction } from "@types";
 import {
     INPUT_MOVE,
-    PAN_Y,
-    PAN_X,
-    DIRECTION_LEFT,
-    DIRECTION_RIGHT,
-    DIRECTION_DOWN,
-    DIRECTION_UP,
-    DIRECTION_ALL,
-    NONE,
-    AUTO,
     INPUT_END
 } from "@const";
 import Recognizer from "@any-touch/Recognizer";
@@ -23,8 +14,7 @@ export default class PanRecognizer extends Recognizer {
     static DEFAULT_OPTIONS = {
         name: "pan",
         threshold: 10,
-        pointLength: 1,
-        directions: DIRECTION_ALL
+        pointLength: 1
     };
 
     constructor(options = {}) {

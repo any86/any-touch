@@ -1,5 +1,5 @@
 import { Input } from '@types';
-import { INPUT_END, DIRECTION_ALL, NONE, DIRECTION_X, DIRECTION_Y } from '@const';
+import { INPUT_END } from '@const';
 import ComputeDistance from '@any-touch/compute/ComputeDistance';
 import ComputeVAndDir from '@any-touch/compute/ComputeVAndDir';
 import ComputeMaxLength from '@any-touch/compute/ComputeMaxLength';
@@ -13,7 +13,6 @@ export default class SwipeRecognizer extends Recognizer {
         threshold: 10,
         velocity: 0.3,
         pointLength: 1,
-        directions: DIRECTION_ALL
     };
     constructor(options = {}) {
         super(options);
@@ -27,24 +26,11 @@ export default class SwipeRecognizer extends Recognizer {
         const { inputType } = input;
         // 非end阶段, 开始校验数据
         if (INPUT_END !== inputType) return false;
-
         const { velocityX, velocityY, maxPointLength, distance, direction } = this.computed;
-        // 如果只支持水平或垂直, 那么其他方向速率为0;
-        // 有效速率
-        let vaildVelocityX: number = velocityX;
-        let vaildVelocityY: number = velocityY;
-        if (this.isOnlyHorizontal()) {
-            vaildVelocityY = 0;
-        } else if (this.isOnlyVertical()) {
-            vaildVelocityX = 0;
-        }
-
-        const vaildVelocity = Math.sqrt(vaildVelocityX * vaildVelocityX + vaildVelocityY * vaildVelocityY)
-
         return this.options.pointLength === maxPointLength &&
             this.options.threshold < distance &&
             isVaildDirection(this, direction) &&
-            this.options.velocity < vaildVelocity;
+            this.options.velocity < Math.max(velocityX, velocityY);
     };
     /**
      * 开始识别
@@ -58,34 +44,4 @@ export default class SwipeRecognizer extends Recognizer {
         // panleft...
         // emit(this.options.name + this.computed.direction, this.computed);
     };
-
-    /**
-     * 是否只支持水平方向
-     */
-    isOnlyHorizontal() {
-        let isOnlyHorizontal = true;
-        for (let direction of this.options.directions) {
-            isOnlyHorizontal = -1 < DIRECTION_X.indexOf(direction);
-            if (!isOnlyHorizontal) {
-                return false;
-            }
-        }
-        return isOnlyHorizontal;
-    };
-    /**
-     * 是否只支持垂直方向
-     */
-    isOnlyVertical() {
-        let isOnlyVertical = true;
-        for (let direction of this.options.directions) {
-            isOnlyVertical = -1 < DIRECTION_Y.indexOf(direction);
-            if (!isOnlyVertical) {
-                return false;
-            }
-        }
-        return isOnlyVertical;
-    };
-
-
-
 };
