@@ -43,8 +43,11 @@ new Vue({
             this.transitionDuration = 200;
             this.x += ev.speedX * 50;
             this.y += ev.speedY * 50;
-
             C(ev, '#680');
+        });
+
+        at.on('swipeleft', ev => {
+            C(ev, '#111');
         });
 
         at.on('pan', ev => {

@@ -8,7 +8,6 @@ import ComputeDistance from "@any-touch/compute/ComputeDistance";
 import ComputeDeltaXY from "@any-touch/compute/ComputeDeltaXY";
 import ComputeVAndDir from "@any-touch/compute/ComputeVAndDir";
 import recognizeForPressMoveLike from "@Recognizer/recognizeForPressMoveLike";
-import isVaildDirection from "@Recognizer/isVaildDirection";
 
 export default class PanRecognizer extends Recognizer {
     static DEFAULT_OPTIONS = {
@@ -28,12 +27,11 @@ export default class PanRecognizer extends Recognizer {
     test(input: Input): boolean {
         const { inputType, pointLength } = input;
 
-        const { direction, distance } = this.computed;
+        const { distance } = this.computed;
         return (
             INPUT_MOVE === inputType &&
             (this.isRecognized || this.options.threshold < distance) &&
-            this.isValidPointLength(pointLength) &&
-            isVaildDirection(this, direction)
+            this.isValidPointLength(pointLength)
         );
     }
 
