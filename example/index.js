@@ -39,9 +39,9 @@ new Vue({
             // console.log(ev)
         })
         // 初始化
-        const at = new AnyTouch(document);
+        const at = new AnyTouch(document.getElementById('app'));
         at.on('input', ev => {
-            console.dir(ev)
+            console.dir(ev.target)
             // console.log(ev);
         })
 
@@ -66,6 +66,7 @@ new Vue({
         });
 
         at.on('pan', ev => {
+            if(ev.target !== el) return;
             this.transitionDuration = 0;
             this.x += ev.deltaX;
             this.y += ev.deltaY;

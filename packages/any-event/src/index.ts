@@ -16,7 +16,7 @@ export default class AnyEvent {
      * @param {Function} 回调函数
      */
     on(eventName: string, listener: Listener): this {
-        if (undefined === this.map[eventName]) {
+        if (void 0 === this.map[eventName]) {
             this.map[eventName] = [];
         }
         this.map[eventName].push(listener);
@@ -46,9 +46,9 @@ export default class AnyEvent {
     off(eventName: string, listener?: Listener): this {
         const listeners = this.map[eventName];
         // 事件存在
-        if (undefined !== listeners) {
+        if (void 0 !== listeners) {
             // 清空事件名对应的所有回调
-            if (undefined === listener) {
+            if (void 0 === listener) {
                 delete this.map[eventName];
             }
             // 清空指定回调
@@ -68,8 +68,8 @@ export default class AnyEvent {
      */
     emit(eventName: string, ...payload: any): boolean {
         const listeners = this.map[eventName];
-        if (undefined !== listeners && 0 < listeners.length) {
-            for (let [index, listener] of listeners.entries()) {
+        if (void 0 !== listeners && 0 < listeners.length) {
+            for (let listener of listeners) {
                 listener(...payload);
             }
             return true;
