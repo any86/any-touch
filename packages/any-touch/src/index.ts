@@ -16,9 +16,9 @@
  * ==================== 流程 ====================
  * 格式化Event成统一的pointer格式 => 通过pointer数据计算 => 用计算结果去识别手势
  */
-import AnyEvent from 'any-event';
+import AnyEvent, { Listener } from 'any-event';
 import { SupportEvent, Recognizer } from '@types';
-import { TOUCH, MOUSE, SUPPORT_TOUCH, NONE, AUTO, TOUCH_START, TOUCH_MOVE, TOUCH_CANCEL, TOUCH_END, MOUSE_DOWN, MOUSE_MOVE, MOUSE_UP, COMPUTE, } from './const';
+import { TOUCH, MOUSE, SUPPORT_TOUCH, TOUCH_START, TOUCH_MOVE, TOUCH_CANCEL, TOUCH_END, MOUSE_DOWN, MOUSE_MOVE, MOUSE_UP, COMPUTE, } from './const';
 import Input from './Input';
 import { isRegExp, isFunction } from '@shared/is';
 import Pan from '@any-touch/Pan'
@@ -211,6 +211,15 @@ export default class AnyTouch extends AnyEvent {
      * 停止识别
      */
     stop() {
+
+    }
+
+    target(el: HTMLElement) {
+        return {
+            on: (name: string, listener: Listener) => {
+                this.on(name, listener, ev => ev.target === el);
+            }
+        }
     }
 
     /**

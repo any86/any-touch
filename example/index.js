@@ -27,7 +27,7 @@ new Vue({
         //     console.log(`touchstart`,ev.cancelable)
         //    ev.preventDefault();
         // }, {passive:false})
-        
+
         // gEl.addEventListener('touchmove', ev=>{
         //     console.log(`touchmove`,ev.cancelable)
         //     ev.preventDefault();
@@ -40,17 +40,17 @@ new Vue({
         })
         // 初始化
         const at = new AnyTouch(document.getElementById('app'));
-        at.on('input', ev => {
+        at.target(el).on('input', ev => {
             console.dir(ev.target)
             // console.log(ev);
         })
 
 
-        at.on('pinch', ev => {
+        at.target(el).on('pinch', ev => {
             C(ev, '#f99');
         });
 
-        at.on('tap', ev => {
+        at.target(el).on('tap', ev => {
             this.scale = 0.8;
             setTimeout(() => {
                 this.scale = 1;
@@ -58,39 +58,37 @@ new Vue({
             C(ev, '#f10');
         });
 
-        at.on('swipe', ev => {
+        at.target(el).on('swipe', ev => {
             this.transitionDuration = 200;
             this.x += ev.speedX * 50;
             this.y += ev.speedY * 50;
             C(ev, '#680');
         });
 
-        at.on('pan', ev => {
-            if(ev.target !== el) return;
+        at.target(el).on('pan', ev => {
             this.transitionDuration = 0;
             this.x += ev.deltaX;
             this.y += ev.deltaY;
-            // C(ev, '#968');
         })
 
-        at.on('press', ev => {
+        at.target(el).on('press', ev => {
             this.scale = 0.9;
             C(ev, '#168');
         })
 
-        at.on('pressup', ev => {
+        at.target(el).on('pressup', ev => {
             this.scale = 1;
             C(ev, '#996');
         })
 
 
-        at.on('pinch', ev => {
+        at.target(el).on('pinch', ev => {
             this.transitionDuration = 0;
             this.scale *= ev.deltaScale;
         });
 
 
-        at.on('rotate', ev => {
+        at.target(el).on('rotate', ev => {
             this.transitionDuration = 0;
             this.angle += ev.deltaAngle;
         });

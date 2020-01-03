@@ -1,13 +1,13 @@
-interface FilterPayloadFunction {
+export interface FilterPayloadFunction {
     (...args: any): boolean
 }
 
-interface Listener {
+export interface Listener {
     (...payload: any): void;
     filter?: FilterPayloadFunction
 }
 
-interface ListenersMap {
+export interface ListenersMap {
     [propName: string]: Listener[];
 }
 export default class AnyEvent {
