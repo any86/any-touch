@@ -1,4 +1,11 @@
-type Listener = ((...payload: any) => void)
+interface FilterPayloadFunction {
+    (...args: any): boolean
+}
+
+interface Listener {
+    (...payload: any): void;
+    filter?: FilterPayloadFunction
+}
 
 interface ListenersMap {
     [propName: string]: Listener[];
@@ -14,11 +21,13 @@ export default class AnyEvent {
      * 绑定事件
      * @param {String|Symbol} 事件名
      * @param {Function} 回调函数
+     * @param {Function} payload筛选器
      */
-    on(eventName: string, listener: Listener): this {
+    on(eventName: string, listener: Listener, filter?: FilterPayloadFunction): this {
         if (void 0 === this.map[eventName]) {
             this.map[eventName] = [];
         }
+        listener.filter = filter;
         this.map[eventName].push(listener);
         return this;
     };
@@ -70,7 +79,14 @@ export default class AnyEvent {
         const listeners = this.map[eventName];
         if (void 0 !== listeners && 0 < listeners.length) {
             for (let listener of listeners) {
-                listener(...payload);
+                const { filter } = listener;
+                if (void 0 === filter) {
+                    listener(...payload);
+                } else {
+                    if (filter(...payload)) {
+                        listener(...payload);
+                    }
+                }
             }
             return true;
         } else {
