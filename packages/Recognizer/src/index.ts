@@ -1,10 +1,12 @@
-import { Recognizer, Input, StdClass, ComputeConstructor } from '@types';
+import { Recognizer, Input, ComputeConstructor } from '@types';
 import {
     STATUS_POSSIBLE,
 } from '@const';
 
 
 export default abstract class RecognizerBase {
+    // 给use方法用
+    static type = 'Recognizer';
     // 手势名
     name: string;
     // 是否禁止
@@ -22,14 +24,13 @@ export default abstract class RecognizerBase {
     // 会把前面所有手势的计算结果作为当前计算结果
     computedGroup: Record<string, any>;
 
-    computed:Record<string, any>;
+    computed: Record<string, any>;
 
     // 使用过的计算函数
     usedComputeFunctionMap: Record<string, any>;
 
     // 当前输入
     input?: Input;
-
 
 
     constructor(options: { name?: string, [k: string]: any }) {
@@ -55,32 +56,7 @@ export default abstract class RecognizerBase {
      */
     set(options = {}) {
         this.options = { ...this.options, ...options };
-        // 刷新anyTouch
-        // this.$root.update();
         return this;
-    };
-
-    /**
-     * 对eventEmitter进行封装
-     * @param type 
-     * @param payload 
-     */
-    emit(type: string, payload: any) {
-        // console.log(type);
-        // payload.type = type;
-        // this.$root.emit(type, payload);
-        // if (void 0 !== this.$root.el) {
-        //     if (this.$root.options.syncToAttr) {
-        //         this.$root.el.setAttribute('at-gesture', type);
-        //     }
-        //     if (this.$root.options.hasDomEvents) {
-        //         // 过滤掉几个Event上保留的字段
-        //         let { target, currentTarget, type, ...data } = payload;
-        //         let event = new Event(type, payload);
-        //         Object.assign(event, data);
-        //         this.$root.el.dispatchEvent(event);
-        //     }
-        // }
     };
 
     /**
@@ -123,7 +99,7 @@ export default abstract class RecognizerBase {
      * 如pan/rotate/pinch/swipe
      * @param {Input} 输入记录 
      */
-    abstract recognize(Input: Input, callback: (type: string, ...payload: any[]) => void): any;
+    abstract recognize(Input: Input, callback: (type: string, ...payload: any[]) => void): void;
 
     /**
      * 校验输入数据

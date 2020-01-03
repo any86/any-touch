@@ -17,7 +17,7 @@
  * 格式化Event成统一的pointer格式 => 通过pointer数据计算 => 用计算结果去识别手势
  */
 import AnyEvent, { Listener } from 'any-event';
-import { SupportEvent, Recognizer } from '@types';
+import { SupportEvent, Recognizer, AnyTouchPlugin } from '@types';
 import { TOUCH, MOUSE, SUPPORT_TOUCH, TOUCH_START, TOUCH_MOVE, TOUCH_CANCEL, TOUCH_END, MOUSE_DOWN, MOUSE_MOVE, MOUSE_UP, COMPUTE, } from './const';
 import Input from './Input';
 import { isRegExp, isFunction } from '@shared/is';
@@ -45,18 +45,25 @@ const DEFAULT_OPTIONS: Options = {
 };
 export default class AnyTouch extends AnyEvent {
     static version = '__VERSION__';
+    static recognizers: Recognizer[] = [new Press(), new Pan(), new Tap(), new Swipe(), new Pinch(), new Rotate()];
+    static recognizerMap: Record<string, Recognizer> = {};
+    static plugins: AnyTouchPlugin[] = [];
+    static use = (plugin: AnyTouchPlugin) => {
+        if ('Recognizer' === plugin.type) {
+            AnyTouch.recognizers.push(plugin);
+            AnyTouch.recognizerMap[plugin.name] = plugin;
+        } else {
+            AnyTouch.plugins.push(plugin);
+        }
+    };
 
     // 目标元素
     el?: HTMLElement;
     // 选项
     options: Options;
-
+    // 输入来源
     sourceType: typeof TOUCH | typeof MOUSE;
-
-    // 识别器
-    recognizers: Recognizer[];
-    recognizerMap: Record<string, Recognizer>;
-
+    // 统一转换器
     input: Input;
 
     /**
@@ -70,23 +77,14 @@ export default class AnyTouch extends AnyEvent {
         this.input = new Input(this.sourceType);
         this.options = { ...DEFAULT_OPTIONS, ...options };
 
-        // 识别器
-        this.recognizers = [new Press(), new Pan(), new Tap(), new Swipe(), new Pinch(), new Rotate()];
-        this.recognizerMap = {};
-
         if (void 0 !== this.el) {
-            // 应用设置
-            // this.update();
             // 绑定事件
             this._unbindEl = this._bindEL(this.el);
         }
     };
 
-    use(recognizer: Recognizer) {
-        this.recognizers.push(recognizer);
-    };
     /**
-     * 监听input变化
+     * 监听input变化s
      * @param {Event}
      */
     catchEvent(event: SupportEvent): void {
@@ -105,17 +103,19 @@ export default class AnyTouch extends AnyEvent {
         if (void 0 !== input) {
             // 管理历史input
             // 生成AnyTouchEvent
-            if (void 0 !== this.recognizers[0]) {
-                this.recognizers[0].input = input;
-            }
+            // if (void 0 !== AnyTouch.recognizers[0]) {
+            //     AnyTouch.recognizers[0].input = input;
+            // }
             this.emit('input', input);
 
             // 缓存每次计算的结果
             // 以函数名为键值
             // console.log(this.recognizers)
             let computedGroup = {};
-            for (let recognizer of this.recognizers) {
+            for (let recognizer of AnyTouch.recognizers) {
                 if (recognizer.disabled) continue;
+                recognizer.input = input;
+
                 recognizer.computedGroup = computedGroup;
                 recognizer.recognize(input, (type, ev) => {
                     const payload = { ...input, ...ev, type }
@@ -174,20 +174,6 @@ export default class AnyTouch extends AnyEvent {
         }
     };
 
-    /**
-     * 添加识别器
-     * @param recognizer 识别器
-     */
-    add(recognizer: Recognizer): void {
-        const hasSameName = this.recognizers.some((theRecognizer: Recognizer) => recognizer.name === theRecognizer.name);
-        if (hasSameName) {
-            // this.eventEmitter.emit('error', { code: 1, message: `${recognizer.name}识别器已经存在!` })
-        } else {
-            this.recognizers.push(recognizer);
-            this.recognizerMap[recognizer.name] = recognizer;
-            this.update();
-        }
-    };
 
     /**
      * 获取识别器通过名字
@@ -195,7 +181,7 @@ export default class AnyTouch extends AnyEvent {
      * @return {Recognizer|undefined} 返回识别器
      */
     get(name: string): Recognizer | undefined {
-        return this.recognizers.find(recognizer => name === recognizer.options.name);
+        return AnyTouch.recognizers.find(recognizer => name === recognizer.options.name);
     };
 
     /**
@@ -206,13 +192,6 @@ export default class AnyTouch extends AnyEvent {
         this.options = { ...DEFAULT_OPTIONS, ...options };
         this.update();
     };
-
-    /**
-     * 停止识别
-     */
-    stop() {
-
-    }
 
     target(el: HTMLElement) {
         return {
@@ -227,10 +206,10 @@ export default class AnyTouch extends AnyEvent {
      * @param {String} 识别器name
      */
     remove(recognizerName: string): void {
-        for (let [index, recognizer] of this.recognizers.entries()) {
+        for (let [index, recognizer] of AnyTouch.recognizers.entries()) {
             if (recognizerName === recognizer.options.name) {
-                this.recognizers.splice(index, 1);
-                delete this.recognizerMap[recognizerName];
+                AnyTouch.recognizers.splice(index, 1);
+                delete AnyTouch.recognizerMap[recognizerName];
                 break;
             }
         }
@@ -256,8 +235,6 @@ export default class AnyTouch extends AnyEvent {
         }
         return isPreventDefault;
     };
-
-
 
     /**
      * 解绑所有触摸事件

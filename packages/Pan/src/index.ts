@@ -39,7 +39,7 @@ export default class PanRecognizer extends Recognizer {
      * 开始识别
      * @param {Input} 输入
      */
-    recognize(input: Input, emit: CommonEmitFunction) {
+    recognize(input: Input, emit: CommonEmitFunction):void {
         type Computed = ReturnType<ComputeVAndDir["compute"]> &
             ReturnType<ComputeDistance["compute"]> &
             ReturnType<ComputeDeltaXY["compute"]>;

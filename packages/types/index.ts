@@ -1,6 +1,6 @@
 import Base from '@Recognizer/index';
 export type Recognizer = Base;
-
+export type AnyTouchPlugin = any;
 
 // 适配器支持的事件类型
 export type SupportEvent = MouseEvent | TouchEvent;

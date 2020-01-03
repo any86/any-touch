@@ -18,7 +18,7 @@ new Vue({
     },
     mounted() {
         function C(ev, bgColor = "#f10", color = "#fff") {
-            console.log(`%c${ev.type}`, `color:${color};background-color:${bgColor};padding:4px;`, ev)
+            console.log(`%c${ev.type}`, `color:${color};background-color:${bgColor};padding:2px 8px;border-radius:999px;`, ev)
         }
 
         // hack 解决document.body 的cancelable不能等于true
@@ -69,6 +69,7 @@ new Vue({
             this.transitionDuration = 0;
             this.x += ev.deltaX;
             this.y += ev.deltaY;
+            C(ev, '#99c');
         })
 
         at.target(el).on('press', ev => {
