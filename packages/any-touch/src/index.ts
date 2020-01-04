@@ -3,7 +3,7 @@
  * https://segmentfault.com/a/1190000010511484#articleHeader0
  * https://segmentfault.com/a/1190000007448808#articleHeader1
  * hammer.js http://hammerjs.github.io/
- * 
+ *
  * ==================== 支持的手势 ====================
  * rotate 旋转
  * pinch 捏合,
@@ -12,21 +12,33 @@
  * press 按压
  * pan 拖拽
  * swipe 快划
- * 
+ *
  * ==================== 流程 ====================
  * 格式化Event成统一的pointer格式 => 通过pointer数据计算 => 用计算结果去识别手势
  */
 import AnyEvent, { Listener } from 'any-event';
 import { SupportEvent, Recognizer, AnyTouchPlugin } from '@types';
-import { TOUCH, MOUSE, SUPPORT_TOUCH, TOUCH_START, TOUCH_MOVE, TOUCH_CANCEL, TOUCH_END, MOUSE_DOWN, MOUSE_MOVE, MOUSE_UP, COMPUTE, } from './const';
+import {
+    TOUCH,
+    MOUSE,
+    SUPPORT_TOUCH,
+    TOUCH_START,
+    TOUCH_MOVE,
+    TOUCH_CANCEL,
+    TOUCH_END,
+    MOUSE_DOWN,
+    MOUSE_MOVE,
+    MOUSE_UP,
+    COMPUTE
+} from './const';
 import Input from './Input';
 import { isRegExp, isFunction } from '@shared/is';
-import Pan from '@any-touch/Pan'
-import Tap from '@any-touch/Tap'
-import Swipe from '@any-touch/Swipe'
-import Pinch from '@any-touch/Pinch'
-import Rotate from '@any-touch/Rotate'
-import Press from '@any-touch/Press'
+import Pan from '@any-touch/Pan';
+import Tap from '@any-touch/Tap';
+import Swipe from '@any-touch/Swipe';
+import Pinch from '@any-touch/Pinch';
+import Rotate from '@any-touch/Rotate';
+import Press from '@any-touch/Press';
 
 interface Options {
     hasDomEvents?: boolean;
@@ -34,14 +46,14 @@ interface Options {
     // 不阻止默认行为的白名单
     preventDefaultExclude?: RegExp | ((ev: SupportEvent) => boolean);
     syncToAttr?: boolean;
-};
+}
 
 // 默认设置
 const DEFAULT_OPTIONS: Options = {
     hasDomEvents: true,
     isPreventDefault: true,
     preventDefaultExclude: /^(?:INPUT|TEXTAREA|BUTTON|SELECT)$/,
-    syncToAttr: false,
+    syncToAttr: false
 };
 export default class AnyTouch extends AnyEvent {
     static version = '__VERSION__';
@@ -81,7 +93,7 @@ export default class AnyTouch extends AnyEvent {
             // 绑定事件
             this._unbindEl = this._bindEL(this.el);
         }
-    };
+    }
 
     /**
      * 监听input变化s
@@ -118,14 +130,22 @@ export default class AnyTouch extends AnyEvent {
 
                 recognizer.computedGroup = computedGroup;
                 recognizer.recognize(input, (type, ev) => {
-                    const payload = { ...input, ...ev, type }
+                    const payload = { ...input, ...ev, type };
                     this.emit(type, payload);
-                    this.emitDomEvent(payload)
+                    this.emitDomEvent(payload);
                 });
                 computedGroup = recognizer.computedGroup;
             }
         }
-    };
+    }
+
+    target(el: HTMLElement) {
+        return {
+            on: (name: string, listener: Listener) => {
+                this.on(name, listener, (ev) => ev.target === el);
+            }
+        };
+    }
 
     /**
      * 触发dom事件
@@ -140,7 +160,7 @@ export default class AnyTouch extends AnyEvent {
         }
     }
 
-    update() { };
+    update() { }
 
     /**
      * 绑定元素
@@ -152,14 +172,14 @@ export default class AnyTouch extends AnyEvent {
         // Touch
         if (TOUCH === this.sourceType) {
             const events = [TOUCH_START, TOUCH_MOVE, TOUCH_END, TOUCH_CANCEL];
-            events.forEach(eventName => {
+            events.forEach((eventName) => {
                 el.addEventListener(eventName, boundInputListener);
             });
             return () => {
-                events.forEach(eventName => {
+                events.forEach((eventName) => {
                     el.removeEventListener(eventName, boundInputListener);
                 });
-            }
+            };
         }
         // Mouse
         else {
@@ -172,8 +192,7 @@ export default class AnyTouch extends AnyEvent {
                 window.removeEventListener(MOUSE_UP, boundInputListener);
             };
         }
-    };
-
+    }
 
     /**
      * 获取识别器通过名字
@@ -181,24 +200,16 @@ export default class AnyTouch extends AnyEvent {
      * @return {Recognizer|undefined} 返回识别器
      */
     get(name: string): Recognizer | undefined {
-        return AnyTouch.recognizers.find(recognizer => name === recognizer.options.name);
-    };
+        return AnyTouch.recognizers.find((recognizer) => name === recognizer.options.name);
+    }
 
     /**
      * 设置
-     * @param {Options} 选项 
+     * @param {Options} 选项
      */
     set(options: Options): void {
         this.options = { ...DEFAULT_OPTIONS, ...options };
         this.update();
-    };
-
-    target(el: HTMLElement) {
-        return {
-            on: (name: string, listener: Listener) => {
-                this.on(name, listener, ev => ev.target === el);
-            }
-        }
     }
 
     /**
@@ -213,11 +224,11 @@ export default class AnyTouch extends AnyEvent {
                 break;
             }
         }
-    };
+    }
 
     /**
      * 检查是否需要阻止默认事件, 根据preventDefaultExclude
-     * @param {SupportEvent} 原生event 
+     * @param {SupportEvent} 原生event
      */
     canPreventDefault(event: SupportEvent): boolean {
         if (!this.options.isPreventDefault) return false;
@@ -225,21 +236,21 @@ export default class AnyTouch extends AnyEvent {
         if (null !== event.target) {
             const { preventDefaultExclude } = this.options;
             if (isRegExp(preventDefaultExclude)) {
-                const { tagName } = (<HTMLElement>event.target);
+                const { tagName } = <HTMLElement>event.target;
                 if (void 0 !== tagName) {
                     isPreventDefault = !preventDefaultExclude.test(tagName);
                 }
             } else if (isFunction(preventDefaultExclude)) {
-                isPreventDefault = !preventDefaultExclude(event)
+                isPreventDefault = !preventDefaultExclude(event);
             }
         }
         return isPreventDefault;
-    };
+    }
 
     /**
      * 解绑所有触摸事件
      */
-    _unbindEl(): void { };
+    _unbindEl(): void { }
 
     /**
      * 销毁
@@ -249,6 +260,5 @@ export default class AnyTouch extends AnyEvent {
         if (this.el) {
             this._unbindEl();
         }
-    };
-};
-
+    }
+}

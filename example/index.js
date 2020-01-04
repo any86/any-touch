@@ -35,13 +35,15 @@ new Vue({
 
 
         const el = this.$refs.circle;
+        const el2 = this.$refs.circle2;
+
         el.addEventListener('pan', ev => {
             // console.log(ev)
         })
         // 初始化
         const at = new AnyTouch(document.getElementById('app'));
         at.target(el).on('input', ev => {
-            console.dir(ev.target)
+            // console.dir(ev.target)
             // console.log(ev);
         })
 
@@ -57,6 +59,17 @@ new Vue({
             }, 100)
             C(ev, '#f10');
         });
+
+        at.target(el2).on('tap', ev => {
+            this.scale = 0.8;
+            setTimeout(() => {
+                this.scale = 1;
+            }, 100)
+            C(ev, '#fc0');
+        });
+
+        
+
 
         at.target(el).on('swipe', ev => {
             this.transitionDuration = 200;
