@@ -119,6 +119,7 @@ export default class AnyTouch extends AnyEvent {
             //     AnyTouch.recognizers[0].input = input;
             // }
             this.emit('input', input);
+            this.emit(`input${input.inputType}`, input);
 
             // 缓存每次计算的结果
             // 以函数名为键值

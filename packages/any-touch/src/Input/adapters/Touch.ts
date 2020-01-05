@@ -9,7 +9,8 @@ export default class extends Adapter {
             inputType: <InputType>event.type.replace('touch', ''),
             changedPoints,
             points,
-            nativeEvent: event
+            nativeEvent: event,
+            target:event.target
         };
     }
 }; 

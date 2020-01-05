@@ -3,15 +3,17 @@ import Adapter from './Abstract';
 export default class extends Adapter {
     prevPoints?: PointClientXY[];
     isPressed: boolean;
+    target: EventTarget|null = null;
     constructor() {
         super();
         this.isPressed = false;
     };
     load(event: MouseEvent): Omit<BaseInput, 'id'> | void {
-        const { clientX, clientY, type, button } = event;
+        const { clientX, clientY, type, button, target } = event;
         let points = [{ clientX, clientY }];
         let inputType: InputType | undefined;
         if ('mousedown' === type && 0 === button) {
+            this.target = target;
             // 必须左键
             this.isPressed = true;
             inputType = 'start';
@@ -37,6 +39,7 @@ export default class extends Adapter {
                 inputType,
                 changedPoints,
                 points,
+                target:this.target,
                 nativeEvent: event
             };
         }
