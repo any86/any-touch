@@ -68,9 +68,6 @@ new Vue({
             C(ev, '#fc0');
         });
 
-        
-
-
         at.target(el).on('swipe', ev => {
             this.transitionDuration = 200;
             this.x += ev.speedX * 50;
@@ -79,6 +76,7 @@ new Vue({
         });
 
         at.target(el).on('pan', ev => {
+            ev.preventDefault();
             this.transitionDuration = 0;
             this.x += ev.deltaX;
             this.y += ev.deltaY;

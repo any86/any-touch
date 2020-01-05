@@ -78,7 +78,7 @@ export default class AnyEvent {
     emit(eventName: string, ...payload: any): boolean {
         const listeners = this.map[eventName];
         if (void 0 !== listeners && 0 < listeners.length) {
-            for (let listener of listeners) {
+            for (const listener of listeners) {
                 const { filter } = listener;
                 if (void 0 === filter) {
                     listener(...payload);
