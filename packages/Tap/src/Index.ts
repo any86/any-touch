@@ -43,11 +43,6 @@ export default class TapRecognizer extends Recognizer {
         this.tapCount = 0;
     };
 
-    public getTouchAction() {
-        // 单击auto, 多击manipulation=pan + pinch-zoom(禁用了默认双击)
-        return (1 < this.options.tapTimes) ? ['manipulation'] : [AUTO];
-    };
-
     /**
      * 判断前后2次点击的距离是否超过阈值
      * @param {Point} 当前触点中心坐标
