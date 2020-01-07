@@ -33,12 +33,12 @@ import {
 } from './const';
 import Input from './Input';
 import { isRegExp, isFunction } from '@shared/is';
-import Pan from '@any-touch/Pan';
-import Tap from '@any-touch/Tap';
-import Swipe from '@any-touch/Swipe';
-import Pinch from '@any-touch/Pinch';
-import Rotate from '@any-touch/Rotate';
-import Press from '@any-touch/Press';
+// import Pan from '@any-touch/Pan';
+// import Tap from '@any-touch/Tap';
+// import Swipe from '@any-touch/Swipe';
+// import Pinch from '@any-touch/Pinch';
+// import Rotate from '@any-touch/Rotate';
+// import Press from '@any-touch/Press';
 
 interface Options {
     hasDomEvents?: boolean;
@@ -57,7 +57,8 @@ const DEFAULT_OPTIONS: Options = {
 };
 export default class AnyTouch extends AnyEvent {
     static version = '__VERSION__';
-    static recognizers: Recognizer[] = [new Press(), new Pan(), new Tap(), new Swipe(), new Pinch(), new Rotate()];
+    // static recognizers: Recognizer[] = [new Press(), new Pan(), new Tap(), new Swipe(), new Pinch(), new Rotate()];
+    static recognizers: Recognizer[] = [];
     static recognizerMap: Record<string, Recognizer> = {};
     static plugins: AnyTouchPlugin[] = [];
     static use = (plugin: AnyTouchPlugin) => {

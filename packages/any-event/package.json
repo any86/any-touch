@@ -1,0 +1,14 @@
+{
+  "name": "any-event",
+  "version": "0.4.1",
+  "description": "简单的事件模型",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+  },
+  "keywords": ["event","emit"],
+  "author": "any86",
+  "license": "ISC"
+}

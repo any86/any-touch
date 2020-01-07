@@ -1,5 +1,5 @@
 // ts转js的编译器
-import typescript from 'rollup-plugin-typescript2';
+import typescript from 'rollup-plugin-typescript';
 // 支持加载json文件
 import json from '@rollup/plugin-json';
 // 支持字符串替换, 比如动态读取package.json的version到代码
