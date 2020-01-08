@@ -1,9 +1,10 @@
 import { BaseInput, InputType, PointClientXY } from '@types';
 import Adapter from './Abstract';
+import { MOUSE_DOWN, MOUSE_MOVE, MOUSE_UP, INPUT_START, INPUT_MOVE, INPUT_END } from '@any-touch/const'
 export default class extends Adapter {
     prevPoints?: PointClientXY[];
     isPressed: boolean;
-    target: EventTarget|null = null;
+    target: EventTarget | null = null;
     constructor() {
         super();
         this.isPressed = false;
@@ -12,17 +13,17 @@ export default class extends Adapter {
         const { clientX, clientY, type, button, target } = event;
         let points = [{ clientX, clientY }];
         let inputType: InputType | undefined;
-        if ('mousedown' === type && 0 === button) {
+        if (MOUSE_DOWN === type && 0 === button) {
             this.target = target;
             // 必须左键
             this.isPressed = true;
-            inputType = 'start';
+            inputType = INPUT_START;
         } else if (this.isPressed) {
-            if ('mousemove' === type) {
-                inputType = 'move';
-            } else if ('mouseup' === type) {
+            if (MOUSE_MOVE === type) {
+                inputType = INPUT_MOVE;
+            } else if (MOUSE_UP === type) {
                 points = [];
-                inputType = 'end';
+                inputType = INPUT_END;
                 this.isPressed = false;
             }
         }
@@ -39,7 +40,7 @@ export default class extends Adapter {
                 inputType,
                 changedPoints,
                 points,
-                target:this.target,
+                target: this.target,
                 nativeEvent: event
             };
         }
