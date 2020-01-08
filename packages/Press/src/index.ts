@@ -1,11 +1,11 @@
 import { CommonEmitFunction, Input } from '@types';
 import {
     STATUS_FAILED, STATUS_RECOGNIZED
-} from '@const';
+} from '@any-touch/const';
 import ComputeDistance from '@any-touch/compute/ComputeDistance';
-import { INPUT_CANCEL, INPUT_END, INPUT_START, AUTO, DIRECTION_UP } from '@const';
+import { INPUT_CANCEL, INPUT_END, INPUT_START, AUTO, DIRECTION_UP } from '@any-touch/const';
 import Recognizer from '@any-touch/Recognizer';
-import { resetStatus } from '@Recognizer/recognizeForPressMoveLike';
+import { resetStatus } from '@any-touch/Recognizer/recognizeForPressMoveLike';
 
 export default class PressRecognizer extends Recognizer {
     private _timeoutId?: number;

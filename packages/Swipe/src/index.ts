@@ -1,5 +1,5 @@
 import { Input, CommonEmitFunction } from '@types';
-import { INPUT_END } from '@const';
+import { INPUT_END } from '@any-touch/const';
 import ComputeDistance from '@any-touch/compute/ComputeDistance';
 import ComputeVAndDir from '@any-touch/compute/ComputeVAndDir';
 import ComputeMaxLength from '@any-touch/compute/ComputeMaxLength';

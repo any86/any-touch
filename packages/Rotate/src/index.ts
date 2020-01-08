@@ -1,9 +1,9 @@
 import { Input, CommonEmitFunction } from '@types';
-import { NONE, INPUT_END } from '@const';
+import { NONE, INPUT_END } from '@any-touch/const';
 import ComputeVectorForMutli from '@any-touch/compute/ComputeVectorForMutli';
 import computeAngle from '@any-touch/compute/computeAngle';
-import recognizeForPressMoveLike from '@Recognizer/recognizeForPressMoveLike';
-import Recognizer from '@Recognizer/index';
+import recognizeForPressMoveLike from '@any-touch/Recognizer/recognizeForPressMoveLike';
+import Recognizer from '@any-touch/Recognizer';
 
 
 export default class PinchRecognizer extends Recognizer {

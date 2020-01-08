@@ -38,11 +38,10 @@
       "any-event": ["packages/any-event/src"],
       "@any-touch/*": ["packages/*/src"],
       "@any-touch/compute/*": ["packages/compute/src/*"],
-      "@Recognizer/*": ["packages/Recognizer/src/*"],
-      "@const": ["packages/any-touch/src/const"],
-      "@shared/*": ["packages/shared/src/*"],
+      "@any-touch/Recognizer/*": ["packages/Recognizer/src/*"],
+      "@any-touch/const": ["packages/any-touch/src/const"],
+      "@any-touch/shared/*": ["packages/shared/src/*"],
       "@types": ["packages/types"],
-      "@":["packages"],
     }
   },
   // 入口文件

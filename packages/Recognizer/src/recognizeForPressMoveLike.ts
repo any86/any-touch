@@ -6,7 +6,7 @@ import {
     STATUS_END,
     STATUS_CANCELLED,
     STATUS_FAILED, STATUS_RECOGNIZED
-} from '@const';
+} from '@any-touch/const';
 
 function flow(isVaild: boolean, activeStatus: string, inputType: string): string {
     const STATE_MAP: { [k: number]: any } = {

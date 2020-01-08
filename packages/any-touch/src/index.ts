@@ -29,16 +29,9 @@ import {
     MOUSE_DOWN,
     MOUSE_MOVE,
     MOUSE_UP,
-    COMPUTE
 } from './const';
 import Input from './Input';
-import { isRegExp, isFunction } from '@shared/is';
-// import Pan from '@any-touch/Pan';
-// import Tap from '@any-touch/Tap';
-// import Swipe from '@any-touch/Swipe';
-// import Pinch from '@any-touch/Pinch';
-// import Rotate from '@any-touch/Rotate';
-// import Press from '@any-touch/Press';
+import { isRegExp, isFunction } from '@any-touch/shared/is';
 
 interface Options {
     hasDomEvents?: boolean;

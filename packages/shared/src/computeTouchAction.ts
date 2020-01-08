@@ -1,4 +1,4 @@
-import { PAN_X,PAN_Y, NONE,AUTO, MANIPULATION } from '@const';
+import { PAN_X,PAN_Y, NONE,AUTO, MANIPULATION } from '@any-touch/const';
 export default (touchActions: string[]): string => {
     // 表示优先级
     const TOUCH_ACTION_PRIORITY: { [propName: string]: number } = {

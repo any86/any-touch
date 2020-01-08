@@ -1,7 +1,7 @@
 import { Recognizer, Input, ComputeConstructor } from '@types';
 import {
     STATUS_POSSIBLE,
-} from '@const';
+} from '@any-touch/const';
 
 
 export default abstract class RecognizerBase {

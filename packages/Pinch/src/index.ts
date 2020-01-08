@@ -1,9 +1,8 @@
 import { Input, CommonEmitFunction } from '@types';
-import { NONE, INPUT_END } from '@const';
 import ComputeVectorForMutli from '@any-touch/compute/ComputeVectorForMutli';
 import computeScale from '@any-touch/compute/computeScale';
-import recognizeForPressMoveLike from '@Recognizer/recognizeForPressMoveLike';
-import Recognizer from '@Recognizer/index';
+import recognizeForPressMoveLike from '@any-touch/Recognizer/recognizeForPressMoveLike';
+import Recognizer from '@any-touch/Recognizer';
 
 export default class PinchRecognizer extends Recognizer {
     static DEFAULT_OPTIONS = {
@@ -15,7 +14,7 @@ export default class PinchRecognizer extends Recognizer {
     constructor(options = {}) {
         super(options);
     };
-  
+
     /**
      * 识别条件
      * @param {AnyTouchEvent} 计算数据
@@ -36,7 +35,7 @@ export default class PinchRecognizer extends Recognizer {
         const computed = <Computed>this.compute([ComputeVectorForMutli], input);
         if (`activeV` in computed) {
             // const {activeV, prevV,startV} = computed;
-            this.computed = {...this.computed, ...computeScale(computed)};
+            this.computed = { ...this.computed, ...computeScale(computed) };
         }
         // console.log(this.computed);
         recognizeForPressMoveLike(this, input, emit);

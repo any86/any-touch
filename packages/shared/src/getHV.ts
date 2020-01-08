@@ -3,7 +3,7 @@
  * @param {directionString[]} 方向数组, ['left', 'right','up', 'down']
  * 
  */
-import {WRONG_DIRECTION, DIRECTION_X, DIRECTION_Y } from '@const'
+import {WRONG_DIRECTION, DIRECTION_X, DIRECTION_Y } from '@any-touch/const'
 import { directionString } from '@types';
 export default (directions: [directionString?, directionString?, directionString?, directionString?]): { hasHorizontal: boolean, hasVertical: boolean } => {
     let hasHorizontal = false;

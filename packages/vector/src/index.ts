@@ -1,4 +1,4 @@
-import {DIRECTION_UP, DIRECTION_DOWN, DIRECTION_RIGHT, DIRECTION_LEFT, NONE } from '@const';
+import {DIRECTION_UP, DIRECTION_DOWN, DIRECTION_RIGHT, DIRECTION_LEFT, NONE } from '@any-touch/const';
 import { directionString, Point, Vector } from '@types';
 /**
  * 获取向量长度(向量模)

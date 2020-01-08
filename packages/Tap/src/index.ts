@@ -2,9 +2,9 @@ import { Point, Input } from '@types';
 import {
     STATUS_RECOGNIZED, STATUS_POSSIBLE,
     STATUS_FAILED,
-} from '@const';
+} from '@any-touch/const';
 import Recognizer from '@any-touch/Recognizer';
-import { INPUT_END, AUTO } from '@const';
+import { INPUT_END, AUTO } from '@any-touch/const';
 import { getVLength } from '@any-touch/vector';
 import ComputeDistance from '@any-touch/compute/ComputeDistance';
 import ComputeMaxLength from '@any-touch/compute/ComputeMaxLength';

@@ -23,9 +23,9 @@ async function build(input, output) {
                 __VERSION__: '0.6.0'
             }),
             json(),
-            terser(),
+            // terser(),
         ],
-        external: id => ['any-event', '@const'].includes(id) || /^@/.test(id),
+        external: id => ['any-event'].includes(id) || /^@/.test(id),
     });
 
     // console.log(bundle.watchFiles); // an array of file names this bundle depends on
@@ -43,12 +43,13 @@ async function build(input, output) {
     const compressed = compress(file)
     const compressedSize = (compressed.length / 1024).toFixed(2) + 'kb'
     console.log(
-        `${chalk.blue(
+        `${chalk.green(
             chalk.bold(file)
-        )}mini: ${minSize} / gzip: ${gzippedSize} / compressedSize: ${compressedSize}`
+        )} mini: ${minSize} / gzip: ${gzippedSize} / compressedSize: ${compressedSize}`
     )
 }
 
+build('./packages/any-event/src/index.ts', `./packages/any-event/dist/any-event.esm.js`);
 build('./packages/any-touch/src/index.ts', `./packages/any-touch/dist/any-touch.esm.js`);
 build('./packages/Tap/src/index.ts', `./packages/Tap/dist/any-touch.plugin.tap.esm.js`);
 build('./packages/Pan/src/index.ts', `./packages/Pan/dist/any-touch.plugin.pan.esm.js`);
