@@ -1,12 +1,17 @@
 import { Recognizer, CommonEmitFunction, Input } from '@types';
 import {
-    INPUT_CANCEL, INPUT_END, INPUT_MOVE, DIRECTION_X, DIRECTION_Y, NONE, STATUS_POSSIBLE,
+    INPUT_CANCEL, INPUT_END, INPUT_MOVE
+} from '@any-touch/shared/const';
+
+import {
+    STATUS_POSSIBLE,
     STATUS_START,
     STATUS_MOVE,
     STATUS_END,
     STATUS_CANCELLED,
-    STATUS_FAILED, STATUS_RECOGNIZED
-} from '@any-touch/const';
+    STATUS_RECOGNIZED
+} from '@any-touch/Recognizer/const'
+import resetStatus from './resetStatusForPressMoveLike';
 
 function flow(isVaild: boolean, activeStatus: string, inputType: string): string {
     const STATE_MAP: { [k: number]: any } = {
@@ -52,19 +57,14 @@ function flow(isVaild: boolean, activeStatus: string, inputType: string): string
     }
 };
 
-export function resetStatus(recognizer: Recognizer) {
-    // 重置status
-    if (-1 !== [STATUS_END, STATUS_CANCELLED, STATUS_RECOGNIZED, STATUS_FAILED].indexOf(recognizer.status)) {
-        recognizer.status = STATUS_POSSIBLE;
-    };
-}
+
 
 /**
  * 适用于大部分移动类型的手势, 
  * 如pan/rotate/pinch/swipe
  * @param {Input} 输入记录 
  */
-export default function (recognizer: any, input: Input, emit: CommonEmitFunction): any {
+export default function (recognizer: Recognizer, input: Input, emit: CommonEmitFunction): any {
     // 是否识别成功
     const isVaild = recognizer.test(input);
     resetStatus(recognizer);

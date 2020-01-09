@@ -1,5 +1,5 @@
 import { Vector } from '@types';
-import { getAngle } from '@any-touch/vector';
+import getAngle from '@any-touch/vector/getAngle';
 export default function computeAngle({
     startV, prevV, activeV
 }: Record<string,Vector>): { angle: number, deltaAngle: number } {

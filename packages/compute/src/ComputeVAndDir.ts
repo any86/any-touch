@@ -3,9 +3,8 @@
 // 让end阶段读取上一步的计算数据, 比如方向, 速率等...
 // 防止快速滑动到慢速滑动的手势识别成swipe
 import { Input, PureInput, directionString } from '@types';
-import { COMPUTE_INTERVAL, INPUT_MOVE } from '@any-touch/const';
-import { getDirection } from '@any-touch/vector';
-
+import {INPUT_MOVE,COMPUTE_INTERVAL } from '@any-touch/shared/const';
+import getDirection from '@any-touch/vector/getDirection';
 export default class ComputeVAndDir {
     velocityX = 0;
     velocityY = 0;

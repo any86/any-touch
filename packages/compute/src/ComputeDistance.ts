@@ -1,7 +1,10 @@
 
 import { Input, directionString } from '@types';
-import { CLIENT_X, CLIENT_Y, NONE, INPUT_MOVE, INPUT_START } from '@any-touch/const';
-import { getVLength, getDirection } from '@any-touch/vector';
+import { CLIENT_X, CLIENT_Y, INPUT_MOVE, INPUT_START } from '@any-touch/shared/const';
+import { NONE } from '@any-touch/vector/DIRECION';
+import getVLength from '@any-touch/vector/getVLength';
+import getDirection from '@any-touch/vector/getDirection';
+
 
 export default class ComputeDistance {
     displacementX = 0;

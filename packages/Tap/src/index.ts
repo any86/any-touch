@@ -1,11 +1,12 @@
 import { Point, Input } from '@types';
 import {
-    STATUS_RECOGNIZED, STATUS_POSSIBLE,
+    STATUS_RECOGNIZED,
+    STATUS_POSSIBLE,
     STATUS_FAILED,
-} from '@any-touch/const';
+} from '@any-touch/Recognizer/const';
 import Recognizer from '@any-touch/Recognizer';
-import { INPUT_END, AUTO } from '@any-touch/const';
-import { getVLength } from '@any-touch/vector';
+import { INPUT_END } from '@any-touch/shared/const';
+import getVLength from '@any-touch/vector/getVLength';
 import ComputeDistance from '@any-touch/compute/ComputeDistance';
 import ComputeMaxLength from '@any-touch/compute/ComputeMaxLength';
 
@@ -124,7 +125,7 @@ export default class TapRecognizer extends Recognizer {
     recognize(input: Input, emit: (type: string, ...payload: any[]) => void): void {
         const { inputType, x, y } = input;
         type Computed = ReturnType<ComputeMaxLength['compute']> & ReturnType<ComputeDistance['compute']>
-        this.computed  = <Computed>this.compute([ComputeMaxLength, ComputeDistance], input)
+        this.computed = <Computed>this.compute([ComputeMaxLength, ComputeDistance], input)
         // 只在end阶段去识别
         if (INPUT_END !== inputType) return;
 
@@ -182,12 +183,12 @@ export default class TapRecognizer extends Recognizer {
       * @return {Boolean} 是否验证成功
       */
     test(input: Input): boolean {
-        const {startInput} = input;
+        const { startInput } = input;
         const deltaTime = input.timestamp - startInput.timestamp;
         // 1. 触点数
         // 2. 移动距离
         // 3. start至end的事件, 区分tap和press
-        const {maxPointLength, distance } = this.computed;
+        const { maxPointLength, distance } = this.computed;
         return maxPointLength === this.options.pointLength &&
             this.options.positionTolerance >= distance &&
             this.options.maxPressTime > deltaTime;

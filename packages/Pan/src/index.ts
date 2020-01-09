@@ -1,17 +1,14 @@
-import { Input, CommonEmitFunction } from "@types";
-import {
-    INPUT_MOVE,
-    INPUT_END
-} from "@any-touch/const";
-import Recognizer from "@any-touch/Recognizer";
-import ComputeDistance from "@any-touch/compute/ComputeDistance";
-import ComputeDeltaXY from "@any-touch/compute/ComputeDeltaXY";
-import ComputeVAndDir from "@any-touch/compute/ComputeVAndDir";
-import recognizeForPressMoveLike from "@any-touch/Recognizer/recognizeForPressMoveLike";
+import { Input, CommonEmitFunction } from '@types';
+import { INPUT_MOVE, INPUT_END } from '@any-touch/shared/const';
+import Recognizer from '@any-touch/Recognizer';
+import ComputeDistance from '@any-touch/compute/ComputeDistance';
+import ComputeDeltaXY from '@any-touch/compute/ComputeDeltaXY';
+import ComputeVAndDir from '@any-touch/compute/ComputeVAndDir';
+import recognizeForPressMoveLike from '@any-touch/Recognizer/recognizeForPressMoveLike';
 
 export default class PanRecognizer extends Recognizer {
     static DEFAULT_OPTIONS = {
-        name: "pan",
+        name: 'pan',
         threshold: 10,
         pointLength: 1
     };
@@ -39,14 +36,12 @@ export default class PanRecognizer extends Recognizer {
      * 开始识别
      * @param {Input} 输入
      */
-    recognize(input: Input, emit: CommonEmitFunction):void {
-        type Computed = ReturnType<ComputeVAndDir["compute"]> &
-            ReturnType<ComputeDistance["compute"]> &
-            ReturnType<ComputeDeltaXY["compute"]>;
+    recognize(input: Input, emit: CommonEmitFunction): void {
+        type Computed = ReturnType<ComputeVAndDir['compute']> &
+            ReturnType<ComputeDistance['compute']> &
+            ReturnType<ComputeDeltaXY['compute']>;
 
-        this.computed = <Computed>(
-            this.compute([ComputeVAndDir, ComputeDistance, ComputeDeltaXY], input)
-        );
+        this.computed = <Computed>this.compute([ComputeVAndDir, ComputeDistance, ComputeDeltaXY], input);
         recognizeForPressMoveLike(this, input, emit);
         // panleft/panup/panright/pandown
         const { inputType } = input;

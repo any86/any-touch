@@ -5,9 +5,7 @@ import { BaseInput, PureInput, Input, SupportEvent, Point } from '@types';
 import Touch from './adapters/Touch';
 import Mouse from './adapters/Mouse';
 import Adapter from './adapters/Abstract';
-import { MOUSE, TOUCH, CLIENT_X, CLIENT_Y, INPUT_START, INPUT_CANCEL, INPUT_END } from '@any-touch/const'
-
-
+import { MOUSE, TOUCH, CLIENT_X, CLIENT_Y, INPUT_START, INPUT_CANCEL, INPUT_END } from '@any-touch/shared/const';
 export default class {
     public adapter: Adapter;
     public id: number;

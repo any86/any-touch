@@ -1,5 +1,5 @@
 import { Input, CommonEmitFunction } from '@types';
-import { INPUT_END } from '@any-touch/const';
+import { INPUT_END } from '@any-touch/shared/const';
 import ComputeDistance from '@any-touch/compute/ComputeDistance';
 import ComputeVAndDir from '@any-touch/compute/ComputeVAndDir';
 import ComputeMaxLength from '@any-touch/compute/ComputeMaxLength';
@@ -37,11 +37,11 @@ export default class SwipeRecognizer extends Recognizer {
         type Computed = ReturnType<ComputeMaxLength['compute']> & ReturnType<ComputeVAndDir['compute']> &
             ReturnType<ComputeDistance['compute']>
         this.computed = <Computed>this.compute([ComputeMaxLength, ComputeVAndDir, ComputeDistance], input);
-        if(this.test(input)){
+        if (this.test(input)) {
             emit(this.options.name, this.computed);
             // swipeleft...
             emit(this.options.name + this.computed.direction, this.computed);
         }
-        
+
     };
 };

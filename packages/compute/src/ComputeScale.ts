@@ -1,5 +1,5 @@
 import { Vector } from '@types';
-import { getVLength } from '@any-touch/vector';
+import getVLength from '@any-touch/vector/getVLength';
 export default function computeScale({
     startV, prevV, activeV
 }:  Record<string,Vector>): { scale: number, deltaScale: number } {
