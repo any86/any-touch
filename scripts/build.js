@@ -58,7 +58,7 @@ async function build(input, output) {
     )
 }
 
-packInOne(['any-event', 'any-touch', 'Tap', 'Pan', 'Swipe', 'Press', 'Pinch', 'Rotate']);
+packAllInOne(['any-event', 'any-touch', 'Tap', 'Pan', 'Swipe', 'Press', 'Pinch', 'Rotate']);
 packSeparate([`shared`,'compute','Recognizer','vector']);
 
 /**
@@ -71,8 +71,11 @@ function packSeparate(names) {
         const dir = `./packages/${name}/src/`
         const fileNames = fs.readdirSync(dir);
         const tsFileName = fileNames.filter(fileName => /\.ts$/.test(fileName));
+ 
+ 
         for (const name of tsFileName) {
-            build(`${dir}${name}`, `${path.resolve(dir, '../')}\\${name.replace(/\.ts$/, '')}.js`);
+            const dest = path.resolve(dir, '../',`${name.replace(/\.ts$/, '')}.js`);
+            build(`${dir}${name}`, dest);
         }
     }
 
@@ -82,7 +85,7 @@ function packSeparate(names) {
  * 打包到各自的dist文件夹
  * @param {String[]} dirs 
  */
-function packInOne(dirs) {
+function packAllInOne(dirs) {
     for (const dir of dirs) {
         build(`./packages/${dir}/src/index.ts`, `./packages/${dir}/dist/index.js`);
     }
