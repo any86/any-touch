@@ -20,10 +20,7 @@ async function build(input, output) {
     const bundle = await rollup.rollup({
         input,
         plugins: [
-            typescript({
-                exclude: 'node_modules/**',
-                typescript: require('typescript'),
-            }),
+            typescript({lib: ["es5", "es6", "dom"], target: "es5",importHelpers:true}),
             replace({
                 __VERSION__: '0.6.0'
             }),
@@ -59,9 +56,10 @@ async function build(input, output) {
 }
 
 packAllInOne(['any-event', 'any-touch', 'Tap', 'Pan', 'Swipe', 'Press', 'Pinch', 'Rotate']);
-packSeparate([`shared`,'compute','Recognizer','vector']);
+packSeparate([`shared`, 'compute', 'Recognizer', 'vector']);
 
 /**
+ * 注意并不遍历src下的文件夹
  * 打包js到包的跟目录
  * 生成更小力度的js
  *@param {String} ts文件夹
@@ -71,17 +69,15 @@ function packSeparate(names) {
         const dir = `./packages/${name}/src/`
         const fileNames = fs.readdirSync(dir);
         const tsFileName = fileNames.filter(fileName => /\.ts$/.test(fileName));
- 
- 
         for (const name of tsFileName) {
-            const dest = path.resolve(dir, '../',`${name.replace(/\.ts$/, '')}.js`);
+            const dest = path.resolve(dir, '../', `${name.replace(/\.ts$/, '')}.js`);
             build(`${dir}${name}`, dest);
         }
     }
-
 }
 
 /**
+ * 注意并不遍历src下的文件夹
  * 打包到各自的dist文件夹
  * @param {String[]} dirs 
  */
