@@ -92,7 +92,7 @@ function extendInput(inputBase: BaseInput): Omit<Input, 'prevInput' | 'startInpu
     // 所以即便是touchend, 也会有x,y, 方便后续的位移和速度等计算.
     // 2. changedPoints 最少有一个点
     const { x, y } = getCenter(points) || getCenter(changedPoints) as Point;
-    const {currentTarget } = nativeEvent;
+    const { currentTarget } = nativeEvent;
 
     return {
         ...inputBase,

@@ -10,7 +10,7 @@ import {
     STATUS_END,
     STATUS_CANCELLED,
     STATUS_RECOGNIZED
-} from '@any-touch/Recognizer/const'
+} from '@any-touch/shared/const'
 import resetStatus from './resetStatusForPressMoveLike';
 
 function flow(isVaild: boolean, activeStatus: string, inputType: string): string {

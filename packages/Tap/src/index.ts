@@ -3,7 +3,7 @@ import {
     STATUS_RECOGNIZED,
     STATUS_POSSIBLE,
     STATUS_FAILED,
-} from '@any-touch/Recognizer/const';
+} from '@any-touch/shared/const';
 import Recognizer from '@any-touch/Recognizer';
 import { INPUT_END } from '@any-touch/shared/const';
 import getVLength from '@any-touch/vector/getVLength';

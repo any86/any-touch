@@ -8,15 +8,13 @@
         // 支持别名导入:
         // import * as React from "react"
         "esModuleInterop": true,
+        "importHelpers": true,
         // 目标js的版本
         "target": "ES5",
         // 目标代码的模块结构版本
-        // "module": "CommonJS",
+        // "module": "es6",
         // 在表达式和声明上有隐含的 any类型时报错。
         "noImplicitAny": true,
-        // "__extends"等函数
-        // 将以"import {__extends} from 'tslib'的形式导入
-        "importHelpers":true,
         // 删除注释
         "removeComments": true,
         // 保留 const和 enum声明
@@ -50,6 +48,5 @@
         }
     },
     // 入口文件
-    // "include": ["packages/*/src", "packages/*/__tests__"]
-    "include":["packages/any-touch/src/index.ts"]
+    "include": ["packages/*/src", "packages/*/__tests__"]
 }

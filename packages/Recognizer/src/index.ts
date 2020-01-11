@@ -1,21 +1,7 @@
 import { Recognizer, Input, ComputeConstructor } from '@types';
 import {
     STATUS_POSSIBLE,
-    STATUS_START,
-    STATUS_MOVE,
-    STATUS_END,
-    STATUS_CANCELLED,
-    STATUS_FAILED, STATUS_RECOGNIZED
-} from '@any-touch/Recognizer/const'
-
-export {
-    STATUS_POSSIBLE,
-    STATUS_START,
-    STATUS_MOVE,
-    STATUS_END,
-    STATUS_CANCELLED,
-    STATUS_FAILED, STATUS_RECOGNIZED
-};
+} from '@any-touch/shared/const';
 
 export default abstract class RecognizerBase {
     // 给use方法用

@@ -1,7 +1,7 @@
 import { CommonEmitFunction, Input } from '@types';
 import {
     STATUS_FAILED, STATUS_RECOGNIZED
-} from '@any-touch/Recognizer/const';
+} from '@any-touch/shared/const';
 import ComputeDistance from '@any-touch/compute/ComputeDistance';
 import { INPUT_CANCEL, INPUT_END, INPUT_START } from '@any-touch/shared/const';
 import {DIRECTION_UP} from '@any-touch/vector/DIRECION';
