@@ -16,9 +16,6 @@ const {
 } = require('rollup-plugin-terser');
 // const pkg = require('../package.json');
 
-let minSizeCount = 0;
-let gzippedSizeCount = 0;
-let compressedSizeCount = 0;
 
 async function build(input, output) {
     const bundle = await rollup.rollup({
@@ -67,9 +64,6 @@ async function build(input, output) {
 
     const compressed = compress(file)
     const compressedSize = (compressed.length / 1024).toFixed(2)
-    minSizeCount += minSize;
-    gzippedSizeCount += gzippedSize;
-    compressedSizeCount += compressedSize;
 
     console.log(
         `${chalk.green(

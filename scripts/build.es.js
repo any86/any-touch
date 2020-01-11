@@ -5,31 +5,36 @@ const rollup = require('rollup');
 const typescript = require('@rollup/plugin-typescript');
 const json = require('@rollup/plugin-json');
 const replace = require('@rollup/plugin-replace');
-const { gzipSync } = require('zlib');
-const { compress } = require('brotli');
+const {
+    gzipSync
+} = require('zlib');
+const {
+    compress
+} = require('brotli');
 const {
     terser
 } = require('rollup-plugin-terser');
 // const pkg = require('../package.json');
 
-let minSizeCount = 0;
-let gzippedSizeCount = 0;
-let compressedSizeCount = 0;
 
 async function build(input, output) {
     const bundle = await rollup.rollup({
         input,
         plugins: [
-            typescript({lib: ["es5", "es6", "dom"], target: "es5",importHelpers:true}),
+            typescript({
+                exclude: 'node_modules/**',
+                typescript: require('typescript'),
+                tsconfig: './tsconfig.es.json'
+            }),
+
             replace({
                 __VERSION__: '0.6.0'
             }),
             json(),
             // terser(),
         ],
-        external: id => ['any-event', 'any-touch'].includes(id) || /^@/.test(id),
+        external: id => ['any-event', 'any-touch', 'tslib'].includes(id) || /^@/.test(id),
     });
-
     // console.log(bundle.watchFiles); // an array of file names this bundle depends on
     const file = output;
     await bundle.write({
@@ -44,9 +49,6 @@ async function build(input, output) {
 
     const compressed = compress(file)
     const compressedSize = (compressed.length / 1024).toFixed(2)
-    minSizeCount += minSize;
-    gzippedSizeCount += gzippedSize;
-    compressedSizeCount += compressedSize;
 
     console.log(
         `${chalk.green(

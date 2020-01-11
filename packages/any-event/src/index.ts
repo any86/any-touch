@@ -33,20 +33,6 @@ export default class AnyEvent {
     };
 
     /**
-     * 添加单次监听器 listener 到名为 eventName 的事件。 
-     * 当 eventName 事件下次触发时，监听器会先被移除，然后再调用。
-     * @param {String|Symbol} 事件名
-     * @param {Function} 回调函数
-     */
-    once(eventName: string, listener: Listener): this {
-        this.on(eventName, () => {
-            listener();
-            this.off(eventName);
-        });
-        return this;
-    };
-
-    /**
      * 解除绑定 
      * 如果不指定listener, 那么解除所有eventName对应回调
      * @param {String|Symbol} 事件名
