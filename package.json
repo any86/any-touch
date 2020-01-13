@@ -17,10 +17,11 @@
     ],
     "scripts": {
         "tsc": "tsc",
+        "build:type": "rimraf types && tsc -p ./tsconfig.type.json",
         "build:cjs": "node ./scripts/build.cjs",
         "build:es": "node ./scripts/build.es",
+        "build:dts": "node ./scripts/build.dts",
         "del": "rimraf node_modules",
-        "build:type": "rimraf types && tsc -p ./tsconfig.type.json",
         "release": "npm run test && standard-version && npm run build && npm pub && git push",
         "release-no-test": "standard-version && npm run build && npm pub && git push",
         "build1": "npm run build:type && rimraf dist && rimraf dist && rollup -c --environment NODE_ENV:production",
@@ -44,10 +45,7 @@
         "url": "https://github.com/any86/any-touch/issues"
     },
     "homepage": "https://github.com/any86/any-touch#readme",
-
     "devDependencies": {
-        "tslib": "^1.9.3",
-        "typescript": "^3.0.1",
         "@rollup/plugin-alias": "^2.2.0",
         "@rollup/plugin-json": "^4.0.0",
         "@rollup/plugin-replace": "^2.2.1",
@@ -61,9 +59,12 @@
         "rimraf": "^2.6.2",
         "rollup": "^1.27.13",
         "rollup-plugin-terser": "^5.1.1",
+        "rollup-plugin-typescript2": "^0.25.3",
         "shelljs": "^0.8.3",
         "standard-version": "^4.4.0",
         "ts-jest": "^24.0.2",
+        "tslib": "^1.9.3",
+        "typescript": "^3.0.1",
         "zlib": "^1.0.5"
     },
     "sideEffects": false

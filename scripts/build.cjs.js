@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const chalk = require('chalk');
 const rollup = require('rollup');
-const typescript = require('@rollup/plugin-typescript');
+const typescript = require('rollup-plugin-typescript2');
 const json = require('@rollup/plugin-json');
 const replace = require('@rollup/plugin-replace');
 const {
@@ -71,9 +71,10 @@ async function build(input, output) {
         )} mini: ${minSize}kb / gzip: ${gzippedSize}kb / compressedSize: ${compressedSize}kb`
     )
 }
+packAllInOne(['any-event']);
 
-packAllInOne(['any-event', 'any-touch', 'Tap', 'Pan', 'Swipe', 'Press', 'Pinch', 'Rotate']);
-packSeparate([`shared`, 'compute', 'Recognizer', 'vector']);
+// packAllInOne(['any-event', 'any-touch', 'Tap', 'Pan', 'Swipe', 'Press', 'Pinch', 'Rotate']);
+// packSeparate([`shared`, 'compute', 'Recognizer', 'vector']);
 
 /**
  * 注意并不遍历src下的文件夹
