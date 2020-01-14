@@ -1,4 +1,4 @@
-import { Point, Input } from '@types';
+import { Point, Input } from '@any-touch/types';
 import {
     STATUS_RECOGNIZED,
     STATUS_POSSIBLE,

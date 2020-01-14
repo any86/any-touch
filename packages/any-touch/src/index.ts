@@ -17,7 +17,7 @@
  * 格式化Event成统一的pointer格式 => 通过pointer数据计算 => 用计算结果去识别手势
  */
 import AnyEvent, { Listener } from 'any-event';
-import { SupportEvent, Recognizer, AnyTouchPlugin } from '@types';
+import { SupportEvent, Recognizer, AnyTouchPlugin } from '@any-touch/types';
 import {
     TOUCH,
     MOUSE,

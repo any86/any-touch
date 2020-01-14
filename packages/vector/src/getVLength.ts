@@ -1,5 +1,5 @@
 
-import { Vector } from '@types';
+import { Vector } from '@any-touch/types';
 /**
  * 获取向量长度(向量模)
  * @param {Object} 向 量

@@ -1,4 +1,4 @@
-import { CommonEmitFunction, Input } from '@types';
+import { CommonEmitFunction, Input } from '@any-touch/types';
 import {
     STATUS_FAILED, STATUS_RECOGNIZED
 } from '@any-touch/shared/const';

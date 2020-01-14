@@ -1,4 +1,4 @@
-import { Input, CommonEmitFunction } from '@types';
+import { Input, CommonEmitFunction } from '@any-touch/types';
 import ComputeVectorForMutli from '@any-touch/compute/ComputeVectorForMutli';
 import computeAngle from '@any-touch/compute/computeAngle';
 import recognizeForPressMoveLike from '@any-touch/Recognizer/recognizeForPressMoveLike';

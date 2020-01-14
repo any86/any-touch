@@ -30,7 +30,7 @@
         // 额外支持解构/forof等功能
         "downlevelIteration": true,
         // 是否生成声明文件
-        "declaration": true,
+        "declaration": false,
         // 声明文件路径
         // "declarationDir": "./lib",
         // 此处设置为node,才能解析import xx from 'xx'
@@ -46,11 +46,9 @@
             "@any-touch/shared/*": ["packages/shared/src/*"],
             "@any-touch/const/*": ["packages/const/src/*"],
             "@any-touch/vector/*": ["packages/vector/src/*"],
-            "@types": ["packages/types"]
+            "@any-touch/types": ["packages/types/index.ts"]
         }
     },
     // 入口文件
-    "include": ["packages/any-event/src", "packages/*/__tests__"]
-
-    // "include": ["packages/*/src", "packages/*/__tests__"]
+    "include": ["packages/*/src", "packages/*/__tests__"]
 }

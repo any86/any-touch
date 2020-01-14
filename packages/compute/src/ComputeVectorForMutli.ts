@@ -1,4 +1,4 @@
-import { Vector, Input } from '@types';
+import { Vector, Input } from '@any-touch/types';
 import computeVector from './computeVector';
 
 export default class ComputeVectorForMutli {

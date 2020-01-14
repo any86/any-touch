@@ -1,4 +1,4 @@
-import { Vector } from '@types';
+import { Vector } from '@any-touch/types';
 
 /**
  * 点积

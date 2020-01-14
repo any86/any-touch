@@ -7,3 +7,4 @@ lib
 dist
 yarn-error.log
 packages/**/*.js
+packages/**/types

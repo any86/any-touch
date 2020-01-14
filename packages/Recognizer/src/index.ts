@@ -1,4 +1,4 @@
-import { Recognizer, Input, ComputeConstructor } from '@types';
+import { Recognizer, Input, ComputeConstructor } from '@any-touch/types';
 import {
     STATUS_POSSIBLE,
 } from '@any-touch/shared/const';

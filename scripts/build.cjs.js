@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const chalk = require('chalk');
 const rollup = require('rollup');
-const typescript = require('rollup-plugin-typescript2');
+const typescript = require('@rollup/plugin-typescript');
 const json = require('@rollup/plugin-json');
 const replace = require('@rollup/plugin-replace');
 const {
@@ -25,22 +25,6 @@ async function build(input, output) {
                 exclude: 'node_modules/**',
                 typescript: require('typescript'),
             }),
-
-            // (function() {
-            //     return {
-            //         name: 'my-example',
-            //         resolveId(source) {
-            //             return null; // other ids should be handled as usually
-            //         },
-            //         transform(code,id){
-            //             console.log({code,id})
-            //             return {code,id}
-            //         },
-            //         load(id) {
-            //             return null; // other ids should be handled as usually
-            //         }
-            //     }
-            // })(),
 
             replace({
                 __VERSION__: '0.6.0'
@@ -71,10 +55,9 @@ async function build(input, output) {
         )} mini: ${minSize}kb / gzip: ${gzippedSize}kb / compressedSize: ${compressedSize}kb`
     )
 }
-packAllInOne(['any-event']);
 
-// packAllInOne(['any-event', 'any-touch', 'Tap', 'Pan', 'Swipe', 'Press', 'Pinch', 'Rotate']);
-// packSeparate([`shared`, 'compute', 'Recognizer', 'vector']);
+packAllInOne(['any-event', 'any-touch', 'Tap', 'Pan', 'Swipe', 'Press', 'Pinch', 'Rotate']);
+packSeparate([`shared`, 'compute', 'Recognizer', 'vector']);
 
 /**
  * 注意并不遍历src下的文件夹
