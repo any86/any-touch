@@ -2,41 +2,21 @@ const fs = require('fs');
 const path = require('path');
 const chalk = require('chalk');
 const ts = require('typescript');
+const ora = require('ora');
 
-
-function compile(fileNames, options) {
-    // Create a Program with an in-memory emit
-    const createdFiles = {}
-    const host = ts.createCompilerHost(options);
-    host.writeFile = (fileName, contents) => createdFiles[fileName] = contents
-
-    // Prepare and emit the d.ts files
-    const program = ts.createProgram(fileNames, options, host);
-    program.emit();
-    // Loop through all the input files
-    fileNames.forEach(file => {
-        const dts = file.replace(".ts", ".d.ts");
-        const dist = dts.replace('/src', '/types');
-        const distDir = path.dirname(dist);
-        if (!fs.existsSync(distDir)) {
-            fs.mkdirSync(distDir, { recursive: true });
-        }
-
-        fs.writeFileSync(dist, createdFiles[dts]);
-
-    })
-}
-
-
+// ======== 生成声明文件到types目录 ========
 const tsFiles = [];
 const PACKAGES_DIR = 'packages';
 walkDir(PACKAGES_DIR, path => {
     if (/^packages(\/)[\w-]+\1src\1([\w/]|[^test])+\.ts$/.test(path)) {
         tsFiles.push(path);
-        console.log({path})
     }
 });
+compile(tsFiles);
+// ======== 生成声明文件到types目录 ========
 
+
+// 遇到文件执行回调
 function walkDir(distDir, callback) {
     const fileOrDirs = fs.readdirSync(distDir);
     for (const fileOrDir of fileOrDirs) {
@@ -51,8 +31,22 @@ function walkDir(distDir, callback) {
     }
 }
 
-// Run the compiler
-compile(tsFiles, {
-    declaration: true,
-    emitDeclarationOnly: true,
-});
+// 编译dts
+function compile(fileNames) {
+    const options = {
+        declaration: true,
+        emitDeclarationOnly: true,
+    };
+    const host = ts.createCompilerHost(options);
+    host.writeFile = (fileName, contents) => {
+        const typeFileName = path.basename(fileName);
+        const typeDir = path.resolve(fileName, '../../','types');
+        const filePath = path.join(typeDir,typeFileName);
+        if (!fs.existsSync(typeDir)) {
+            fs.mkdirSync(typeDir, { recursive: true });
+        }
+        fs.writeFileSync(filePath, contents);
+    }
+    const program = ts.createProgram(fileNames, options, host);
+    program.emit();
+}
