@@ -14,8 +14,7 @@ const {
 const {
     terser
 } = require('rollup-plugin-terser');
-// const pkg = require('../package.json');
-
+const {version} = require('../package.json');
 
 async function build(input, output) {
     const bundle = await rollup.rollup({
@@ -24,11 +23,12 @@ async function build(input, output) {
             typescript({
                 exclude: 'node_modules/**',
                 typescript: require('typescript'),
-                tsconfig: './tsconfig.es.json'
+                target: "ESNEXT",
+                module: "ESNEXT",
             }),
 
             replace({
-                __VERSION__: '0.6.0'
+                __VERSION__: version
             }),
             json(),
             // terser(),
@@ -72,7 +72,7 @@ function packSeparate(names) {
         const fileNames = fs.readdirSync(dir);
         const tsFileName = fileNames.filter(fileName => /\.ts$/.test(fileName));
         for (const name of tsFileName) {
-            const dest = path.resolve(dir, '../', `${name.replace(/\.ts$/, '')}.js`);
+            const dest = path.resolve(dir, '../', `${name.replace(/\.ts$/, '')}.mjs`);
             build(`${dir}${name}`, dest);
         }
     }
@@ -85,6 +85,6 @@ function packSeparate(names) {
  */
 function packAllInOne(dirs) {
     for (const dir of dirs) {
-        build(`./packages/${dir}/src/index.ts`, `./packages/${dir}/dist/index.js`);
+        build(`./packages/${dir}/src/index.ts`, `./packages/${dir}/dist/index.mjs`);
     }
 }

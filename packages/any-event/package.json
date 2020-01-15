@@ -1,13 +1,10 @@
 {
   "name": "any-event",
-  "version": "0.4.1",
-  "description": "简单的事件模型",
-  "main": "index.js",
-  "directories": {
-    "test": "test"
-  },
-  "scripts": {
-  },
+  "version": "0.4.2",
+  "description": "小巧的事件模型",
+  "main": "index",
+  "module": "index.mjs",
+  "types": "types/index.d.ts",
   "keywords": ["event","emit"],
   "author": "any86",
   "license": "ISC"

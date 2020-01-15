@@ -1,0 +1,7 @@
+{
+  "name": "@any-event/pan",
+  "version": "0.0.1",
+  "description": "any-touch内部依赖的包, 进行手势数据计算.",
+  "author": "any86",
+  "license": "ISC"
+}

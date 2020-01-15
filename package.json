@@ -19,7 +19,7 @@
         "tsc": "tsc",
         "rm:dist": "rimraf packages/*/dist",
         "build:type": "rimraf types && tsc -p ./tsconfig.type.json",
-        "build:cjs": "npm run rm:dist && node ./scripts/build.cjs",
+        "build:cjs": "node ./scripts/build.cjs",
         "build:es": "node ./scripts/build.es",
         "build:dts": "rimraf packages/*/types && node ./scripts/build.dts",
         "del": "rimraf node_modules",
