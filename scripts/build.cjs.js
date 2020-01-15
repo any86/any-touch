@@ -17,6 +17,13 @@ const {
 // const pkg = require('../package.json');
 
 
+
+console.log(chalk.blue('正在生成cjs模块!'))
+packAllInOne(['any-event', 'any-touch', 'Tap', 'Pan', 'Swipe', 'Press', 'Pinch', 'Rotate']);
+packSeparate([`shared`, 'compute', 'Recognizer', 'vector']);
+
+
+
 async function build(input, output) {
     const bundle = await rollup.rollup({
         input,
@@ -55,9 +62,6 @@ async function build(input, output) {
         )} mini: ${minSize}kb / gzip: ${gzippedSize}kb / compressedSize: ${compressedSize}kb`
     )
 }
-
-packAllInOne(['any-event', 'any-touch', 'Tap', 'Pan', 'Swipe', 'Press', 'Pinch', 'Rotate']);
-packSeparate([`shared`, 'compute', 'Recognizer', 'vector']);
 
 /**
  * 注意并不遍历src下的文件夹

@@ -2,9 +2,8 @@ const fs = require('fs');
 const path = require('path');
 const chalk = require('chalk');
 const ts = require('typescript');
-const ora = require('ora');
-
 // ======== 生成声明文件到types目录 ========
+console.log(chalk.blue('正在生成tds!'))
 const tsFiles = [];
 const PACKAGES_DIR = 'packages';
 walkDir(PACKAGES_DIR, path => {
@@ -46,6 +45,7 @@ function compile(fileNames) {
             fs.mkdirSync(typeDir, { recursive: true });
         }
         fs.writeFileSync(filePath, contents);
+        console.log(chalk.green(filePath));
     }
     const program = ts.createProgram(fileNames, options, host);
     program.emit();
