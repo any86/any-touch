@@ -1,6 +1,6 @@
 {
     "name": "any-touch",
-    "version": "0.6.0-beta.2",
+    "version": "0.6.0-beta.3",
     "description": "一个小巧的手势库",
     "unpkg": "dist/any-touch.js",
     "jsdelivr": "dist/any-touch.js",
@@ -31,7 +31,7 @@
         "@any-touch/swipe": "^0.6.0-beta.2",
         "@any-touch/tap": "^0.6.0-beta.2",
         "@any-touch/vector": "^0.6.0-beta.2",
-        "any-event": "^0.6.0-beta.2"
+        "any-event": "^0.6.0-beta.3"
     },
     "keywords": [
         "touch",
