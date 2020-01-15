@@ -1,7 +1,10 @@
 {
-  "name": "@any-touch/vector",
-  "version": "0.0.1",
-  "description": "any-touch中向量计算相关的函数.",
-  "author": "any86",
-  "license": "ISC"
+    "name": "@any-touch/vector",
+    "version": "0.6.0-beta.1",
+    "description": "any-touch中向量计算相关的函数.",
+    "author": "any86",
+    "license": "ISC",
+    "publishConfig": {
+        "access": "public"
+    }
 }

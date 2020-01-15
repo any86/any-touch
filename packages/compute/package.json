@@ -1,7 +1,10 @@
 {
-  "name": "@any-touch/compute",
-  "version": "0.0.1",
-  "description": "any-touch内部依赖的包, 进行手势数据计算.",
-  "author": "any86",
-  "license": "ISC"
+    "name": "@any-touch/compute",
+    "version": "0.6.0-beta.1",
+    "description": "any-touch内部依赖的包, 进行手势数据计算.",
+    "publishConfig": {
+        "access": "public"
+    },
+    "author": "any86",
+    "license": "ISC"
 }
