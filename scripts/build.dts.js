@@ -15,17 +15,11 @@ function compile(fileNames, options) {
     program.emit();
     // Loop through all the input files
     fileNames.forEach(file => {
-        // console.log("### JavaScript\n")
-        // console.log(host.readFile(file))
-
-        // console.log("### Type Definition\n")
-        // console.log({file})
-
         const dts = file.replace(".ts", ".d.ts");
         const dist = dts.replace('/src', '/types');
         const distDir = path.dirname(dist);
         if (!fs.existsSync(distDir)) {
-            fs.mkdirSync(distDir);
+            fs.mkdirSync(distDir, { recursive: true });
         }
 
         fs.writeFileSync(dist, createdFiles[dts]);
@@ -34,23 +28,25 @@ function compile(fileNames, options) {
 }
 
 
-
 const tsFiles = [];
 const PACKAGES_DIR = 'packages';
-const dirs = fs.readdirSync(PACKAGES_DIR);
-for (const dir of dirs) {
-    const stats = fs.statSync(`${PACKAGES_DIR}/${dir}`);
-    if (stats.isDirectory()) {
-        if ('types' !== dir) {
-            const files = fs.readdirSync(`${PACKAGES_DIR}/${dir}/src`);
-            for (const file of files) {
-                const filePath = `${PACKAGES_DIR}/${dir}/src/${file}`;
-                const stats = fs.statSync(filePath);
-                if (stats.isFile()) {
-                    tsFiles.push(filePath)
-                }
-            }
+walkDir(PACKAGES_DIR, path => {
+    if (/^packages(\/)[\w-]+\1src\1([\w/]|[^test])+\.ts$/.test(path)) {
+        tsFiles.push(path);
+        console.log({path})
+    }
+});
 
+function walkDir(distDir, callback) {
+    const fileOrDirs = fs.readdirSync(distDir);
+    for (const fileOrDir of fileOrDirs) {
+        const path = `${distDir}/${fileOrDir}`;
+        const stats = fs.statSync(path);
+        // 文件夹
+        if (stats.isDirectory()) {
+            walkDir(path, callback);
+        } else {
+            callback(path);
         }
     }
 }
