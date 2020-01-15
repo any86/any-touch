@@ -7,12 +7,6 @@
 [downloads-image]: https://badgen.net/npm/dt/any-touch
 [downloads-url]: https://npmjs.org/package/any-touch
 
-## 注意
-any-touch在0.6.0版本后有重大变化, 暂时请大家使用0.5.2
-```
-npm i -S any-touch@0.5.2
-```
-
 :wave: 一个基于typescript实现的手势库.
 - [x] 支持更多设备: PC端 / 移动端 / [微信小程序](#支持微信小程序).
 - [x] 支持手势更全面: **tap**(点击) / **press**(按) / **pan**(拖拽) / **swipe**(划) / **pinch**(捏合) / **rotate**(旋转) 6大类手势.
