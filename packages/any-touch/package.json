@@ -4,7 +4,7 @@
     "description": "一个小巧的手势库",
     "unpkg": "dist/any-touch.js",
     "jsdelivr": "dist/any-touch.js",
-    "main": "dist/index",
+    "main": "dist/index.js",
     "module": "dist/index.mjs",
     "types": "types/index.d.ts",
     "files": [
