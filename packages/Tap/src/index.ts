@@ -1,10 +1,10 @@
-import { Point, Input } from '@any-touch/types';
+import { Point, Input } from '@any-touch/shared/types';
 import {
     STATUS_RECOGNIZED,
     STATUS_POSSIBLE,
     STATUS_FAILED,
 } from '@any-touch/shared/const';
-import Recognizer from '@any-touch/Recognizer';
+import Recognizer from '@any-touch/recognizer';
 import { INPUT_END } from '@any-touch/shared/const';
 import getVLength from '@any-touch/vector/getVLength';
 import ComputeDistance from '@any-touch/compute/ComputeDistance';

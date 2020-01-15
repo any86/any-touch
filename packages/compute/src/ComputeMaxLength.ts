@@ -1,4 +1,4 @@
-import { Input } from '@any-touch/types';
+import { Input } from '@any-touch/shared/types';
 import { INPUT_START } from '@any-touch/shared/const';
 export default class ComputeMaxLength {
     maxPointLength = 0;

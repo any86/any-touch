@@ -16,7 +16,7 @@
         "noImplicitAny": true,
         // "__extends"等函数
         // 将以"import {__extends} from 'tslib'的形式导入
-        "importHelpers":true,
+        "importHelpers": true,
         // 删除注释
         "removeComments": true,
         // 保留 const和 enum声明
@@ -42,11 +42,10 @@
             "any-touch": ["packages/any-touch/src"],
             "@any-touch/*": ["packages/*/src"],
             "@any-touch/compute/*": ["packages/compute/src/*"],
-            "@any-touch/Recognizer/*": ["packages/Recognizer/src/*"],
+            "@any-touch/recognizer/*": ["packages/Recognizer/src/*"],
             "@any-touch/shared/*": ["packages/shared/src/*"],
             "@any-touch/const/*": ["packages/const/src/*"],
             "@any-touch/vector/*": ["packages/vector/src/*"],
-            "@any-touch/types": ["packages/types/index.ts"]
         }
     },
     // 入口文件

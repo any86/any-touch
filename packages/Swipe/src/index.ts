@@ -1,9 +1,9 @@
-import { Input, CommonEmitFunction } from '@any-touch/types';
+import { Input, CommonEmitFunction } from '@any-touch/shared/types';
 import { INPUT_END } from '@any-touch/shared/const';
 import ComputeDistance from '@any-touch/compute/ComputeDistance';
 import ComputeVAndDir from '@any-touch/compute/ComputeVAndDir';
 import ComputeMaxLength from '@any-touch/compute/ComputeMaxLength';
-import Recognizer from '@any-touch/Recognizer';
+import Recognizer from '@any-touch/recognizer';
 
 export default class SwipeRecognizer extends Recognizer {
     static DEFAULT_OPTIONS = {

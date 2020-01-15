@@ -1,4 +1,4 @@
-import { Vector } from '@any-touch/types';
+import { Vector } from '@any-touch/shared/types';
 import getVLength from '@any-touch/vector/getVLength';
 import getDotProduct from '@any-touch/vector/getDotProduct';
 /**

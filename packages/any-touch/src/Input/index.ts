@@ -1,7 +1,7 @@
 /**
  * 构造统一的Input格式
  */
-import { BaseInput, PureInput, Input, SupportEvent, Point } from '@any-touch/types';
+import { BaseInput, PureInput, Input, SupportEvent, Point } from '@any-touch/shared/types';
 import Touch from './adapters/Touch';
 import Mouse from './adapters/Mouse';
 import Adapter from './adapters/Abstract';

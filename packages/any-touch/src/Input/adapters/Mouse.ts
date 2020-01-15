@@ -1,4 +1,4 @@
-import { BaseInput, InputType, PointClientXY } from '@any-touch/types';
+import { BaseInput, InputType, PointClientXY } from '@any-touch/shared/types';
 import Adapter from './Abstract';
 import { MOUSE_DOWN, MOUSE_MOVE, MOUSE_UP, INPUT_START, INPUT_MOVE, INPUT_END } from '@any-touch/shared/const';
 export default class extends Adapter {

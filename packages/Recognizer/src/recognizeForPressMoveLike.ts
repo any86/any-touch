@@ -1,4 +1,4 @@
-import { Recognizer, CommonEmitFunction, Input } from '@any-touch/types';
+import { Recognizer, CommonEmitFunction, Input } from '@any-touch/shared/types';
 import {
     INPUT_CANCEL, INPUT_END, INPUT_MOVE
 } from '@any-touch/shared/const';

@@ -1,5 +1,5 @@
 import {DIRECTION_UP, DIRECTION_DOWN, DIRECTION_RIGHT, DIRECTION_LEFT, NONE } from '@any-touch/vector/DIRECION';
-import { directionString} from '@any-touch/types';
+import { directionString} from '@any-touch/shared/types';
 
 /**
  * 

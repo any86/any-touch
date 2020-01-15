@@ -1,4 +1,4 @@
-import { Recognizer} from '@any-touch/types';
+import { Recognizer} from '@any-touch/shared/types';
 import {
     STATUS_POSSIBLE,
     STATUS_END,
