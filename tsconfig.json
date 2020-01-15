@@ -49,5 +49,5 @@
         }
     },
     // 入口文件
-    "include": ["packages/*/src", "packages/*/__tests__"]
+    "include": ["packages/*/src", "packages/*/types", "packages/*/__tests__"]
 }

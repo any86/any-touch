@@ -1,4 +1,4 @@
-import { Recognizer, Input, ComputeConstructor } from '@any-touch/shared/types';
+import { Input, ComputeConstructor } from '@any-touch/shared/types';
 import {
     STATUS_POSSIBLE,
 } from '@any-touch/shared/const';
@@ -17,7 +17,7 @@ export default abstract class RecognizerBase {
     // 选项
     options: { [propName: string]: any };
 
-    recognizerMap: Record<string, Recognizer>;
+    recognizerMap: Record<string, this>;
     // 缓存当前手势的计算结果
     // 每次手势识别前, 
     // 会把前面所有手势的计算结果作为当前计算结果
