@@ -33,3 +33,11 @@ export const STATUS_END = 'end';
 export const STATUS_CANCELLED = 'cancel';
 export const STATUS_FAILED = 'failed';
 export const STATUS_RECOGNIZED = 'recognized';
+
+
+// 方向
+export const DIRECTION_LEFT = 'left';
+export const DIRECTION_RIGHT = 'right';
+export const DIRECTION_UP = 'up';
+export const DIRECTION_DOWN = 'down';
+export const NONE = 'none';

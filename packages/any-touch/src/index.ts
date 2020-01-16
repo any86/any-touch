@@ -29,7 +29,8 @@ import {
     MOUSE_DOWN,
     MOUSE_MOVE,
     MOUSE_UP,
-} from '@any-touch/shared/const';
+}  from '@any-touch/shared';
+
 import Input from './Input';
 import { isRegExp, isFunction } from '@any-touch/shared/is';
 

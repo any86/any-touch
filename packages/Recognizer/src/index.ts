@@ -3,7 +3,12 @@ import {
     STATUS_POSSIBLE,
 } from '@any-touch/shared/const';
 
-export default abstract class RecognizerBase {
+// 导出recognizeForPressMoveLike,
+// resetStatusForPressMoveLike
+export { default as recognizeForPressMoveLike } from './recognizeForPressMoveLike';
+export { default as resetStatusForPressMoveLike } from './resetStatusForPressMoveLike';
+
+export default abstract class{
     // 给use方法用
     static type = 'Recognizer';
     // 手势名
