@@ -1,6 +1,6 @@
 {
   "name": "@any-touch/tap",
-  "version": "0.6.0-beta.2",
+  "version": "0.6.0-beta.7",
   "description": "any-touch的识别器, 用来识别点击手势.",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -8,7 +8,7 @@
   "author": "any86",
   "license": "ISC",
   "dependencies": {
-    "@any-touch/recognizer": "^0.6.0-beta.2"
+    "@any-touch/recognizer": "^0.6.0-beta.7"
   },
   "publishConfig": {
     "access": "public"
