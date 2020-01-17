@@ -26,7 +26,7 @@ async function build(input, output) {
             typescript({
                 exclude: 'node_modules/**',
                 typescript: require('typescript'),
-                target: "ESNEXT",
+                target: "ES5",
                 module: "ESNEXT",
             }),
 
