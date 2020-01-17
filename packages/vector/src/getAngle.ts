@@ -1,7 +1,7 @@
 import { Vector } from '@any-touch/shared/types';
-import getRadian from '@any-touch/vector/getRadian';
-import getCross from '@any-touch/vector/getCross';
-import radianToAngle from '@any-touch/vector/radianToAngle';
+import getRadian from './getRadian';
+import getCross from './getCross';
+import radianToAngle from './radianToAngle';
 
 /**
  * 向量夹角(角度)

@@ -2,13 +2,11 @@ import { Point, Input } from '@any-touch/shared/types';
 import {
     STATUS_RECOGNIZED,
     STATUS_POSSIBLE,
-    STATUS_FAILED,
+    STATUS_FAILED,INPUT_END
 } from '@any-touch/shared';
 import Recognizer from '@any-touch/recognizer';
-import { INPUT_END } from '@any-touch/shared';
 import getVLength from '@any-touch/vector/getVLength';
-import ComputeDistance from '@any-touch/compute/ComputeDistance';
-import ComputeMaxLength from '@any-touch/compute/ComputeMaxLength';
+import {ComputeDistance,ComputeMaxLength} from '@any-touch/compute';
 
 export default class TapRecognizer extends Recognizer {
     public tapCount: number;

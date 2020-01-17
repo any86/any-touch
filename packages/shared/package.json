@@ -2,7 +2,7 @@
   "name": "@any-touch/shared",
   "version": "0.6.0-beta.7",
   "description": "any-touch内部的公共函数.",
-  "main": "dist/index.js",
+  "main": "dist/index",
   "module": "dist/index.mjs",
   "author": "any86",
   "license": "ISC",

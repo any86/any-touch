@@ -1,6 +1,6 @@
 import { Vector } from '@any-touch/shared/types';
-import getVLength from '@any-touch/vector/getVLength';
-import getDotProduct from '@any-touch/vector/getDotProduct';
+import getVLength from './getVLength';
+import getDotProduct from './getDotProduct';
 /**
  * 向量夹角(弧度)
  * @param {Object} v1

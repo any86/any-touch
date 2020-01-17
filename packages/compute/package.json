@@ -1,7 +1,7 @@
 {
     "name": "@any-touch/compute",
     "version": "0.6.0-beta.7",
-    "main": "dist/index.js",
+    "main": "dist/index",
     "module": "dist/index.mjs",
     "description": "any-touch内部依赖的包, 进行手势数据计算.",
     "publishConfig": {
