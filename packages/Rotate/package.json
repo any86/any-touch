@@ -1,6 +1,6 @@
 {
   "name": "@any-touch/rotate",
-  "version": "0.6.0-beta.8",
+  "version": "0.6.0-beta.9",
   "description": "any-touch的识别器, 用来识别旋转手势.",
   "main": "./dist/index",
   "module": "./dist/index.es.js",
@@ -8,8 +8,8 @@
   "author": "any86",
   "license": "ISC",
   "dependencies": {
-    "@any-touch/compute": "^0.6.0-beta.8",
-    "@any-touch/recognizer": "^0.6.0-beta.8"
+    "@any-touch/compute": "^0.6.0-beta.9",
+    "@any-touch/recognizer": "^0.6.0-beta.9"
   },
   "publishConfig": {
     "access": "public"
