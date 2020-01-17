@@ -4,7 +4,7 @@
 // 防止快速滑动到慢速滑动的手势识别成swipe
 import { Input, PureInput, directionString } from '@any-touch/shared/types';
 import {INPUT_MOVE,COMPUTE_INTERVAL } from '@any-touch/shared';
-import getDirection from '@any-touch/vector/getDirection';
+import {getDirection} from '@any-touch/vector';
 export default class ComputeVAndDir {
     velocityX = 0;
     velocityY = 0;

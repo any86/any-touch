@@ -5,7 +5,7 @@ import {
     STATUS_FAILED,INPUT_END
 } from '@any-touch/shared';
 import Recognizer from '@any-touch/recognizer';
-import getVLength from '@any-touch/vector/getVLength';
+import {getVLength} from '@any-touch/vector';
 import {ComputeDistance,ComputeMaxLength} from '@any-touch/compute';
 
 export default class TapRecognizer extends Recognizer {

@@ -9,11 +9,10 @@
         "types/*"
     ],
     "scripts": {
-        "release:next":"lerna publish from-package --dist-tag next",
+        "release:next":"npm run build && lerna publish --dist-tag next",
         "release:last":"npm run build && lerna publish",
-        "rm": "npm-run-all rm:cjs rm:es rm:dts",
-        "rm:es": "rimraf packages/**/*.mjs",
-        "rm:cjs": "rimraf packages/**/*.js",
+        "rm": "npm-run-all rm:js rm:dts",
+        "rm:js": "rimraf packages/**/*.js",
         "rm:dts": "rimraf packages/*/types",
         "rm:nm": "rimraf node_modules",
         "build": "npm-run-all rm build:cjs build:es build:dts",
