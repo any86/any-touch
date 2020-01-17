@@ -49,9 +49,6 @@ export default abstract class{
         this.usedComputeFunctionMap = {};
 
         this.recognizerMap = {};
-        // 这里面不能直接调用$root等, 
-        // 因为rollup生成的代码构造函数并不是该constructor
-        // 而是构造函数中又嵌套了一个同名构造函数
     };
 
     /**

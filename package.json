@@ -1,6 +1,5 @@
 {
     "private": true,
-    "version": "0.6.1",
     "workspaces": [
         "packages/*"
     ],
@@ -10,7 +9,7 @@
         "types/*"
     ],
     "scripts": {
-        "release:next":"lerna publish from-package --dist-tag next --contents packages/**/dist",
+        "release:next":"lerna publish from-package --dist-tag next",
         "release:last":"npm run build && lerna publish",
         "rm": "npm-run-all rm:cjs rm:es rm:dts",
         "rm:es": "rimraf packages/**/*.mjs",
