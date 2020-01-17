@@ -39,7 +39,6 @@ interface Options {
     isPreventDefault?: boolean;
     // 不阻止默认行为的白名单
     preventDefaultExclude?: RegExp | ((ev: SupportEvent) => boolean);
-    syncToAttr?: boolean;
 }
 
 // 默认设置
@@ -47,7 +46,6 @@ const DEFAULT_OPTIONS: Options = {
     hasDomEvents: true,
     isPreventDefault: true,
     preventDefaultExclude: /^(?:INPUT|TEXTAREA|BUTTON|SELECT)$/,
-    syncToAttr: false
 };
 export default class AnyTouch extends AnyEvent {
     static version = '__VERSION__';
