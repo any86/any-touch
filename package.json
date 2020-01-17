@@ -9,8 +9,8 @@
         "types/*"
     ],
     "scripts": {
-        "release:next":"npm run build && lerna publish --dist-tag next",
-        "release:last":"npm run build && lerna publish",
+        "release:next": "npm run build && lerna publish --dist-tag next",
+        "release:last": "npm run build && lerna publish",
         "rm": "npm-run-all rm:js rm:dts",
         "rm:js": "rimraf packages/**/*.js",
         "rm:dts": "rimraf packages/*/types",
@@ -42,6 +42,9 @@
         "url": "https://github.com/any86/any-touch/issues"
     },
     "homepage": "https://github.com/any86/any-touch#readme",
+    "dependencies": {
+        "tslib": "^1.9.3"
+    },
     "devDependencies": {
         "@rollup/plugin-alias": "^2.2.0",
         "@rollup/plugin-json": "^4.0.0",
@@ -61,7 +64,6 @@
         "shelljs": "^0.8.3",
         "standard-version": "^4.4.0",
         "ts-jest": "^24.0.2",
-        "tslib": "^1.9.3",
         "typescript": "^3.0.1",
         "zlib": "^1.0.5"
     },
