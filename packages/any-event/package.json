@@ -2,8 +2,8 @@
   "name": "any-event",
   "version": "0.6.0-beta.8",
   "description": "小巧的事件模型",
-  "main": "dist/index",
-  "module": "dist/index.mjs",
+  "main": "dist/index.js",
+  "module": "dist/index.es.js",
   "types": "types/index.d.ts",
   "keywords": [
     "event",

@@ -5,7 +5,7 @@
     "unpkg": "dist/any-touch.js",
     "jsdelivr": "dist/any-touch.js",
     "main": "dist/index.js",
-    "module": "dist/index.mjs",
+    "module": "dist/index.es.js",
     "types": "types/index.d.ts",
     "files": [
         "dist/*",

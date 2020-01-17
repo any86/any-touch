@@ -84,6 +84,6 @@ function packSeparate(names) {
  */
 function packAllInOne(dirs) {
     for (const dir of dirs) {
-        build(`./packages/${dir}/src/index.ts`, `./packages/${dir}/dist/index.mjs`);
+        build(`./packages/${dir}/src/index.ts`, `./packages/${dir}/dist/index.es.js`);
     }
 }
