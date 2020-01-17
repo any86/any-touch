@@ -9,7 +9,7 @@
         "types/*"
     ],
     "scripts": {
-        "release:beta":"lerna publish --dist-tag next",
+        "release:beta":"npm run build && lerna publish --dist-tag next",
         "rm": "npm-run-all rm:cjs rm:es rm:dts",
         "rm:es": "rimraf packages/**/*.mjs",
         "rm:cjs": "rimraf packages/**/*.js",
