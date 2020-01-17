@@ -15,10 +15,10 @@
     ],
     "scripts": {
         "tsc": "tsc",
-        "rm": "npm-run-all rm:cjs rm:es rm:types",
+        "rm": "npm-run-all rm:cjs rm:es rm:dts",
         "rm:es": "rimraf packages/**/*.mjs",
         "rm:cjs": "rimraf packages/**/*.js",
-        "rm:types": "rimraf packages/*/types",
+        "rm:dts": "rimraf packages/*/types",
         "rm:nm": "rimraf node_modules",
         "build": "npm-run-all rm build:cjs build:es build:dts",
         "build:cjs": "node ./scripts/build.cjs",
