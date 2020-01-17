@@ -1,8 +1,8 @@
-import {default as angleToRadian} from './angleToRadian';
-import {default as getAngle} from './getAngle';
-import {default as getCross} from './getCross';
-import {default as getDirection} from './getDirection';
-import {default as getDotProduct} from './getDotProduct';
-import {default as getRadian} from './getRadian';
-import {default as getVLength} from './getVLength';
-import {default as radianToAngle} from './radianToAngle';
+export { default as angleToRadian } from './angleToRadian';
+export { default as getAngle } from './getAngle';
+export { default as getCross } from './getCross';
+export { default as getDirection } from './getDirection';
+export { default as getDotProduct } from './getDotProduct';
+export { default as getRadian } from './getRadian';
+export { default as getVLength } from './getVLength';
+export { default as radianToAngle } from './radianToAngle';

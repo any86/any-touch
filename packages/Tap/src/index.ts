@@ -3,9 +3,9 @@ import {
     STATUS_RECOGNIZED,
     STATUS_POSSIBLE,
     STATUS_FAILED,
-} from '@any-touch/shared/const';
+} from '@any-touch/shared';
 import Recognizer from '@any-touch/recognizer';
-import { INPUT_END } from '@any-touch/shared/const';
+import { INPUT_END } from '@any-touch/shared';
 import getVLength from '@any-touch/vector/getVLength';
 import ComputeDistance from '@any-touch/compute/ComputeDistance';
 import ComputeMaxLength from '@any-touch/compute/ComputeMaxLength';

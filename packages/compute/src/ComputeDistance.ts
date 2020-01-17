@@ -1,7 +1,7 @@
 
 import { Input, directionString } from '@any-touch/shared/types';
-import { CLIENT_X, CLIENT_Y, INPUT_MOVE, INPUT_START } from '@any-touch/shared/const';
-import { NONE } from '@any-touch/vector/DIRECION';
+import { CLIENT_X, CLIENT_Y, INPUT_MOVE, INPUT_START } from '@any-touch/shared';
+import { NONE } from '@any-touch/shared';
 import getVLength from '@any-touch/vector/getVLength';
 import getDirection from '@any-touch/vector/getDirection';
 

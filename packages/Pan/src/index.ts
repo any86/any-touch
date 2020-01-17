@@ -1,5 +1,5 @@
 import { Input, CommonEmitFunction } from '@any-touch/shared/types';
-import { INPUT_MOVE, INPUT_END } from '@any-touch/shared/const';
+import { INPUT_MOVE, INPUT_END } from '@any-touch/shared';
 import Recognizer from '@any-touch/recognizer';
 // import ComputeDistance from '@any-touch/compute/ComputeDistance';
 // import ComputeDeltaXY from '@any-touch/compute/ComputeDeltaXY';

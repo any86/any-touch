@@ -32,7 +32,7 @@ import {
 }  from '@any-touch/shared';
 
 import Input from './Input';
-import { isRegExp, isFunction } from '@any-touch/shared/is';
+import { isRegExp, isFunction } from '@any-touch/shared';
 
 interface Options {
     hasDomEvents?: boolean;

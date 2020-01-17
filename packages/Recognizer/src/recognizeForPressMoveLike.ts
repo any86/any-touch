@@ -2,7 +2,7 @@ import { CommonEmitFunction, Input } from '@any-touch/shared/types';
 import Recognizer from './index';
 import {
     INPUT_CANCEL, INPUT_END, INPUT_MOVE
-} from '@any-touch/shared/const';
+} from '@any-touch/shared';
 
 import {
     STATUS_POSSIBLE,
@@ -11,7 +11,7 @@ import {
     STATUS_END,
     STATUS_CANCELLED,
     STATUS_RECOGNIZED
-} from '@any-touch/shared/const'
+} from '@any-touch/shared'
 import resetStatus from './resetStatusForPressMoveLike';
 
 function flow(isVaild: boolean, activeStatus: string, inputType: string): string {

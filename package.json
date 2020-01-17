@@ -3,18 +3,13 @@
     "workspaces": [
         "packages/*"
     ],
-    "description": "一个手势库",
-    "unpkg": "dist/any-touch.js",
-    "jsdelivr": "dist/any-touch.js",
-    "main": "dist/any-touch.common.js",
-    "module": "dist/any-touch.esm.js",
-    "types": "types/main.d.ts",
+    "description": "一个小巧的手势库",
     "files": [
         "dist/**/*",
         "types/*"
     ],
     "scripts": {
-        "tsc": "tsc",
+        "release:beta":"lerna publish --dist-tag next",
         "rm": "npm-run-all rm:cjs rm:es rm:dts",
         "rm:es": "rimraf packages/**/*.mjs",
         "rm:cjs": "rimraf packages/**/*.js",

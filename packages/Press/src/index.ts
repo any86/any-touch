@@ -1,10 +1,10 @@
 import { CommonEmitFunction, Input } from '@any-touch/shared/types';
 import {
     STATUS_FAILED, STATUS_RECOGNIZED
-} from '@any-touch/shared/const';
+} from '@any-touch/shared';
 import ComputeDistance from '@any-touch/compute/ComputeDistance';
-import { INPUT_CANCEL, INPUT_END, INPUT_START } from '@any-touch/shared/const';
-import {DIRECTION_UP} from '@any-touch/vector/DIRECION';
+import { INPUT_CANCEL, INPUT_END, INPUT_START } from '@any-touch/shared';
+import {DIRECTION_UP} from '@any-touch/shared';
 import Recognizer from '@any-touch/recognizer';
 import resetStatus from '@any-touch/recognizer/resetStatusForPressMoveLike';
 

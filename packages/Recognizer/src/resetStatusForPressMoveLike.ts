@@ -4,7 +4,7 @@ import {
     STATUS_END,
     STATUS_CANCELLED,
     STATUS_FAILED, STATUS_RECOGNIZED
-} from '@any-touch/shared/const'
+} from '@any-touch/shared'
 export default function(recognizer: Recognizer) {
     // 重置status
     if (-1 !== [STATUS_END, STATUS_CANCELLED, STATUS_RECOGNIZED, STATUS_FAILED].indexOf(recognizer.status)) {
