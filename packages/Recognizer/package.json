@@ -1,6 +1,6 @@
 {
   "name": "@any-touch/recognizer",
-  "version": "0.6.0-beta.7",
+  "version": "0.6.0-beta.8",
   "description": "any-touch的识别器的基类.",
   "main": "./dist/index",
   "module": "./dist/index.mjs",
@@ -8,7 +8,7 @@
   "author": "any86",
   "license": "ISC",
   "dependencies": {
-    "@any-touch/shared": "^0.6.0-beta.7"
+    "@any-touch/shared": "^0.6.0-beta.8"
   },
   "publishConfig": {
     "access": "public"
