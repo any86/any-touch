@@ -5,7 +5,8 @@
 import { Input, PureInput, directionString } from '@any-touch/shared/types';
 import {INPUT_MOVE,COMPUTE_INTERVAL } from '@any-touch/shared';
 import {getDirection} from '@any-touch/vector';
-export default class ComputeVAndDir {
+export default class {
+    static _id='ComputeVAndDir';
     velocityX = 0;
     velocityY = 0;
     speedX = 0;
@@ -47,6 +48,3 @@ export default class ComputeVAndDir {
         return { velocityX, velocityY, speedX, speedY, direction };
     }
 }
-
-
-type A = keyof ComputeVAndDir

@@ -1,7 +1,8 @@
 import { Vector, Input } from '@any-touch/shared/types';
 import computeVector from './computeVector';
 
-export default class ComputeVectorForMutli {
+export default class  {
+    static _id='ComputeVectorForMutli';
     compute(input: Input): { startV: Vector, activeV: Vector, prevV: Vector } | void {
         const { prevInput, startMultiInput } = input;
         if (void 0 !== startMultiInput &&

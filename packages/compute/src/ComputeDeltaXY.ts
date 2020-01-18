@@ -1,8 +1,8 @@
 import {radianToAngle} from '@any-touch/vector';
 import { Input } from '@any-touch/shared/types';
 
-export default class ComputeDeltaXY {
-
+export default class {
+    static _id='ComputeDeltaXY';
     compute(input: Input): { deltaX: number, deltaY: number, deltaXYAngle: number } {
         const { prevInput } = input;
         let deltaX = 0;

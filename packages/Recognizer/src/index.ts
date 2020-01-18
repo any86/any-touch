@@ -79,16 +79,16 @@ export default abstract class{
     protected compute(Cs: ComputeConstructor[], ...args: any[]): unknown {
         let flatMap = Object.create(null);
         for (const C of Cs) {
-            const { name } = C;
+            const { _id } = C;
             const { computedGroup, usedComputeFunctionMap } = this;
-            if (void 0 === usedComputeFunctionMap[name]) {
+            if (void 0 === usedComputeFunctionMap[_id]) {
                 // 缓存初始化后的实例
-                usedComputeFunctionMap[name] = new C();
+                usedComputeFunctionMap[_id] = new C();
             }
 
             // 缓存计算结果
-            computedGroup[name] = computedGroup[name] || usedComputeFunctionMap[name].compute(...args);
-            flatMap = { ...flatMap, ...computedGroup[name] }
+            computedGroup[_id] = computedGroup[_id] || usedComputeFunctionMap[_id].compute(...args);
+            flatMap = { ...flatMap, ...computedGroup[_id] }
         }
         // 本次的事件对象, 此时没有type字段
         this.computed = flatMap;

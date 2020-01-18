@@ -53,6 +53,7 @@ export interface StdClass {
 
 
 export interface ComputeConstructor {
+    _id:string;
     new(...args: any[]): {
         compute(input: Input): Record<string, any>|void;
     };

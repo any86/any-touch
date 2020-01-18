@@ -6,7 +6,8 @@ import {getVLength} from '@any-touch/vector';
 import {getDirection} from '@any-touch/vector';
 
 
-export default class ComputeDistance {
+export default class {
+    static _id='ComputeDistance';
     displacementX = 0;
     displacementY = 0;
     distanceX = 0;

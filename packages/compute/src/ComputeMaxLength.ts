@@ -1,6 +1,7 @@
 import { Input } from '@any-touch/shared/types';
 import { INPUT_START } from '@any-touch/shared';
-export default class ComputeMaxLength {
+export default class {
+    static _id='ComputeMaxLength';
     maxPointLength = 0;
 
     compute(input: Input): { maxPointLength: number } {
