@@ -17,7 +17,16 @@ const {
 // const pkg = require('../package.json');
 
 console.log(chalk.blue('正在生成cjs模块!'))
-packAllInOne(['any-event', 'any-touch', 'Tap', 'Pan', 'Swipe', 'Press', 'Pinch', 'Rotate',`shared`, 'compute', 'Recognizer', 'vector']);
+const PACKAGES_DIR = `packages`
+const pkgNames = fs.readdirSync(PACKAGES_DIR);
+for (const pkgName of pkgNames) {
+    const path = `${PACKAGES_DIR}/${pkgName}`;
+    const stats = fs.statSync(path);
+    // 文件夹
+    if (stats.isDirectory()) {
+        build(`./packages/${pkgName}/src/index.ts`, `./packages/${pkgName}/dist/index.js`);
+    }
+}
 
 async function build(input, output) {
     const bundle = await rollup.rollup({
@@ -34,7 +43,7 @@ async function build(input, output) {
             json(),
             // terser(),
         ],
-        external: id => ['any-event', 'any-touch', 'tslib'].includes(id) || /^@/.test(id),
+        external: id => ['any-event', 'any-touch', 'tslib'].includes(id) || /^@any-touch/.test(id),
     });
     // console.log(bundle.watchFiles); // an array of file names this bundle depends on
     const file = output;
@@ -56,33 +65,4 @@ async function build(input, output) {
             chalk.bold(file)
         )} mini: ${minSize}kb / gzip: ${gzippedSize}kb / compressedSize: ${compressedSize}kb`
     )
-}
-
-/**
- * 注意并不遍历src下的文件夹
- * 打包js到包的跟目录
- * 生成更小力度的js
- *@param {String} ts文件夹
- */
-function packSeparate(names) {
-    for (const name of names) {
-        const dir = `./packages/${name}/src/`
-        const fileNames = fs.readdirSync(dir);
-        const tsFileName = fileNames.filter(fileName => /\.ts$/.test(fileName));
-        for (const name of tsFileName) {
-            const dest = path.resolve(dir, '../', `${name.replace(/\.ts$/, '')}.js`);
-            build(`${dir}${name}`, dest);
-        }
-    }
-}
-
-/**
- * 注意并不遍历src下的文件夹
- * 打包到各自的dist文件夹
- * @param {String[]} dirs 
- */
-function packAllInOne(dirs) {
-    for (const dir of dirs) {
-        build(`./packages/${dir}/src/index.ts`, `./packages/${dir}/dist/index.js`);
-    }
 }

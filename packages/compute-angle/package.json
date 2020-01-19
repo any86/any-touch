@@ -1,0 +1,12 @@
+{
+    "name": "@any-touch/compute-angle",
+    "version": "0.6.0-beta.13",
+    "main": "dist/index.js",
+    "module": "dist/index.es.js",
+    "description": "any-touch内部依赖的包, 进行手势数据计算.",
+    "publishConfig": {
+        "access": "public"
+    },
+    "author": "any86",
+    "license": "ISC"
+}

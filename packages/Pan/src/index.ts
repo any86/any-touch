@@ -1,7 +1,10 @@
 import { Input, CommonEmitFunction } from '@any-touch/shared/types';
 import { INPUT_MOVE, INPUT_END } from '@any-touch/shared';
-import { ComputeDistance, ComputeDeltaXY, ComputeVAndDir } from '@any-touch/compute';
-import Recognizer,{recognizeForPressMoveLike} from '@any-touch/recognizer';
+import ComputeDistance from '@any-touch/compute-distance';
+import ComputeDeltaXY from '@any-touch/compute-delta-xy';
+import ComputeVAndDir from '@any-touch/compute-velocity-and-direction';
+import Recognizer from '@any-touch/recognizer';
+import recognizeForPressMoveLike from '@any-touch/recognize-for-press-move-like';
 
 export default class PanRecognizer extends Recognizer {
     static DEFAULT_OPTIONS = {

@@ -1,5 +1,5 @@
 import { Vector, Input } from '@any-touch/shared/types';
-import computeVector from './computeVector';
+import computeVector from '@any-touch/compute-vector';
 
 export default class  {
     static _id='ComputeVectorForMutli';

@@ -1,5 +1,5 @@
 {
-    "name": "@any-touch/compute",
+    "name": "@any-touch/compute-scale",
     "version": "0.6.0-beta.13",
     "main": "dist/index.js",
     "module": "dist/index.es.js",

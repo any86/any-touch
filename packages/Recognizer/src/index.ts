@@ -2,12 +2,6 @@ import { Input, ComputeConstructor } from '@any-touch/shared/types';
 import {
     STATUS_POSSIBLE,
 } from '@any-touch/shared';
-
-// 导出recognizeForPressMoveLike,
-// resetStatusForPressMoveLike
-export { default as recognizeForPressMoveLike } from './recognizeForPressMoveLike';
-export { default as resetStatusForPressMoveLike } from './resetStatusForPressMoveLike';
-
 export default abstract class{
     // 给use方法用
     static type = 'Recognizer';

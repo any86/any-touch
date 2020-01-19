@@ -1,7 +1,8 @@
 import { Input, CommonEmitFunction } from '@any-touch/shared/types';
-import {computeAngle, ComputeVectorForMutli} from '@any-touch/compute';
-import Recognizer,{recognizeForPressMoveLike} from '@any-touch/recognizer';
-
+import computeAngle from '@any-touch/compute-angle';
+import ComputeVectorForMutli from '@any-touch/compute-vector-for-mutli';
+import Recognizer from '@any-touch/recognizer';
+import recognizeForPressMoveLike from '@any-touch/recognize-for-press-move-like';
 export default class PinchRecognizer extends Recognizer {
     static DEFAULT_OPTIONS = {
         name: 'rotate',

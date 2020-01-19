@@ -12,7 +12,7 @@
         "release:next": "npm run build && lerna publish --dist-tag next",
         "release:last": "npm run build && lerna publish",
         "rm": "npm-run-all rm:js rm:dts",
-        "rm:js": "rimraf packages/**/*.js",
+        "rm:js": "rimraf packages/*/dist",
         "rm:dts": "rimraf packages/*/types",
         "rm:nm": "rimraf node_modules",
         "build": "npm-run-all rm build:cjs build:es build:dts",

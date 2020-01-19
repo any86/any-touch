@@ -1,5 +1,5 @@
 import { CommonEmitFunction, Input } from '@any-touch/shared/types';
-import Recognizer from './index';
+import Recognizer from '@any-touch/recognizer';
 import {
     INPUT_CANCEL, INPUT_END, INPUT_MOVE
 } from '@any-touch/shared';
@@ -12,7 +12,7 @@ import {
     STATUS_CANCELLED,
     STATUS_RECOGNIZED
 } from '@any-touch/shared'
-import resetStatus from './resetStatusForPressMoveLike';
+import resetStatus from '@any-touch/reset-status-for-press-move-like';
 
 function flow(isVaild: boolean, activeStatus: string, inputType: string): string {
     const STATE_MAP: { [k: number]: any } = {
