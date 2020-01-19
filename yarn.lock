@@ -2,6 +2,11 @@
 # yarn lockfile v1
 
 
+"@any-touch/swipe@^0.6.0-beta.13":
+  version "0.6.0-beta.13"
+  resolved "https://registry.npmjs.org/@any-touch/swipe/-/swipe-0.6.0-beta.13.tgz#34821bcdf4ede9e542256b3c04e264e8f086334d"
+  integrity sha512-XxTdNmTatVHsA4uR8AJDCBfLJ8+RqCLPH/UJ+zZqBaRJlleMY0aEvWSLFtsFrLmB3HRuHwzjdK3Y0vitHSJUlg==
+
 "@babel/code-frame@^7.0.0", "@babel/code-frame@^7.5.5":
   version "7.5.5"
   resolved "https://registry.npmjs.org/@babel/code-frame/-/code-frame-7.5.5.tgz#bc0782f6d69f7b7d49531219699b988f669a8f9d"
