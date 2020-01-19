@@ -1,6 +1,6 @@
 {
     "name": "@any-touch/pan",
-    "version": "0.6.0-beta.12",
+    "version": "0.6.0-beta.13",
     "description": "any-touch的识别器, 用来识别拖拽手势.",
     "main": "./dist/index",
     "module": "./dist/index.es.js",
@@ -8,9 +8,9 @@
     "author": "any86",
     "license": "ISC",
     "dependencies": {
-        "@any-touch/compute": "^0.6.0-beta.12",
-        "@any-touch/recognizer": "^0.6.0-beta.11",
-        "@any-touch/shared": "^0.6.0-beta.11"
+        "@any-touch/compute": "^0.6.0-beta.13",
+        "@any-touch/recognizer": "^0.6.0-beta.13",
+        "@any-touch/shared": "^0.6.0-beta.13"
     },
     "publishConfig": {
         "access": "public"
