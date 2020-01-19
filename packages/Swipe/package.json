@@ -1,6 +1,6 @@
 {
   "name": "@any-touch/swipe",
-  "version": "0.6.0-beta.12",
+  "version": "0.6.0-beta.14",
   "description": "any-touch的识别器, 用来识别划动手势.",
   "main": "./dist/index.js",
   "module": "./dist/index.es.js",
@@ -8,8 +8,8 @@
   "author": "any86",
   "license": "ISC",
   "peerDependencies": {
-    "any-touch":"0.6.0-beta.13"
-},
+    "any-touch": "0.6.0-beta.13"
+  },
   "publishConfig": {
     "access": "public"
   }
