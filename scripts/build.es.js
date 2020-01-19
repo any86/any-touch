@@ -24,7 +24,7 @@ for (const pkgName of pkgNames) {
     const stats = fs.statSync(path);
     // 文件夹
     if (stats.isDirectory()) {
-        build(`./packages/${pkgName}/src/index.ts`, `./packages/${pkgName}/dist/index.js`);
+        build(`./packages/${pkgName}/src/index.ts`, `./packages/${pkgName}/dist/index.es.js`);
     }
 }
 
