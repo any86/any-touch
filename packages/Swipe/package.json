@@ -7,11 +7,6 @@
   "types": "types/index.d.ts",
   "author": "any86",
   "license": "ISC",
-  "dependencies": {
-    "@any-touch/compute": "^0.6.0-beta.12",
-    "@any-touch/recognizer": "^0.6.0-beta.11",
-    "@any-touch/shared": "^0.6.0-beta.11"
-  },
   "publishConfig": {
     "access": "public"
   }
