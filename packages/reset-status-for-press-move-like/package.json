@@ -1,6 +1,6 @@
 {
   "name": "@any-touch/reset-status-for-press-move-like",
-  "version": "0.6.0-beta.13",
+  "version": "0.6.0-beta.15",
   "description": "复位'按压'类手势的状态",
   "main": "./dist/index",
   "module": "./dist/index.es.js",
