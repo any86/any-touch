@@ -64,8 +64,9 @@ function flow(isVaild: boolean, activeStatus: string, inputType: string): string
  * 适用于大部分移动类型的手势, 
  * 如pan/rotate/pinch/swipe
  * @param {Input} 输入记录 
+ * @returns {Boolean} test是否通过
  */
-export default function (recognizer: Recognizer, input: Input, emit: CommonEmitFunction): any {
+export default function (recognizer: Recognizer, input: Input, emit: CommonEmitFunction): boolean {
     // 是否识别成功
     const isVaild = recognizer.test(input);
     resetStatus(recognizer);
@@ -77,7 +78,7 @@ export default function (recognizer: Recognizer, input: Input, emit: CommonEmitF
     const { computed } = recognizer;
     if (STATUS_CANCELLED === inputType) {
         emit(recognizer.options.name + INPUT_CANCEL, computed);
-        return;
+        return false;
     }
 
     // 是否已识别
@@ -94,4 +95,5 @@ export default function (recognizer: Recognizer, input: Input, emit: CommonEmitF
         // panend等
         emit(recognizer.options.name + recognizer.status, computed);
     }
+    return isVaild;
 };

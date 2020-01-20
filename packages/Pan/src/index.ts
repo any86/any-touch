@@ -39,12 +39,13 @@ export default class PanRecognizer extends Recognizer {
             ReturnType<ComputeDeltaXY['compute']>;
 
         this.computed = <Computed>this.compute([ComputeVAndDir, ComputeDistance, ComputeDeltaXY], input);
-        recognizeForPressMoveLike(this, input, emit);
+        const isPass = recognizeForPressMoveLike(this, input, emit);
         // panleft/panup/panright/pandown
-        
-        const { inputType } = input;
-        if (INPUT_END !== inputType) {
-            emit(this.options.name + this.computed.direction, this.computed);
+        if (isPass) {
+            const { inputType } = input;
+            if (INPUT_END !== inputType) {
+                emit(this.options.name + this.computed.direction, this.computed);
+            }
         }
     }
 }
