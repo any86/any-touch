@@ -1,6 +1,6 @@
 {
     "name": "@any-touch/compute",
-    "version": "0.6.0-beta.21",
+    "version": "0.6.0-beta.23",
     "main": "dist/index.js",
     "module": "dist/index.es.js",
     "description": "any-touch内部依赖的包, 进行手势数据计算.",
@@ -8,9 +8,8 @@
         "access": "public"
     },
     "dependencies": {
-        "@any-touch/vector": "0.6.0-beta.20",
-        "@any-touch/shared": "0.6.0-beta.20"
-
+        "@any-touch/shared": "0.6.0-beta.20",
+        "@any-touch/vector": "0.6.0-beta.20"
     },
     "author": "any86",
     "license": "ISC"
