@@ -42,13 +42,29 @@ export default class AnyTouch extends AnyEvent {
     static recognizers: Recognizer[] = [];
     static recognizerMap: Record<string, Recognizer> = {};
     static plugins: AnyTouchPlugin[] = [];
-    static use = (plugin: AnyTouchPlugin, options?: Record<string, any>) => {
+    /**
+     * 安装插件
+     */
+    static use = (plugin: AnyTouchPlugin, options?: Record<string, any>): void => {
         if ('Recognizer' === plugin.type) {
             const instance = new plugin(options);
-            AnyTouch.recognizers.push(instance);
             AnyTouch.recognizerMap[instance.name] = instance;
+            AnyTouch.recognizers.push(AnyTouch.recognizerMap[instance.name]);
+
         } else {
             AnyTouch.plugins.push(plugin);
+        }
+    };
+    /**
+     * 卸载插件
+     */
+    static removeUse = (recognizerName: string): void => {
+        for (let [index, recognizer] of AnyTouch.recognizers.entries()) {
+            if (recognizerName === recognizer.options.name) {
+                AnyTouch.recognizers.splice(index, 1);
+                delete AnyTouch.recognizerMap[recognizerName];
+                break;
+            }
         }
     };
 
@@ -61,6 +77,9 @@ export default class AnyTouch extends AnyEvent {
     // 统一转换器
     input: Input;
 
+    recognizerMap: Record<string, Recognizer> = {};
+    recognizers: Recognizer[] = [];
+    plugins: AnyTouchPlugin[] = [];
     /**
      * @param {Element} 目标元素, 微信下没有el
      * @param {Object} 选项
@@ -76,7 +95,16 @@ export default class AnyTouch extends AnyEvent {
             // 绑定事件
             this._unbindEl = this._bindEL(this.el);
         }
-    }
+    };
+
+    /**
+     * 使用插件
+     * @param {AnyTouchPlugin} 插件 
+     * @param {Object} 选项 
+     */
+    use(plugin: AnyTouchPlugin, options?: Record<string, any>): void {
+        AnyTouch.use(plugin, options);
+    };
 
     /**
      * 监听input变化s
@@ -115,6 +143,7 @@ export default class AnyTouch extends AnyEvent {
                 recognizer.computedGroup = computedGroup;
                 recognizer.recognize(input, (type, ev) => {
                     const payload = { ...input, ...ev, type };
+                    console.warn(type, payload)
                     this.emit(type, payload);
                     this.emitDomEvent(payload);
                 });
@@ -143,8 +172,6 @@ export default class AnyTouch extends AnyEvent {
             this.el.dispatchEvent(event);
         }
     }
-
-    update() { }
 
     /**
      * 绑定元素
@@ -193,21 +220,14 @@ export default class AnyTouch extends AnyEvent {
      */
     set(options: Options): void {
         this.options = { ...DEFAULT_OPTIONS, ...options };
-        this.update();
     }
 
     /**
-     * 删除识别器
+     * 移除插件
      * @param {String} 识别器name
      */
-    remove(recognizerName: string): void {
-        for (let [index, recognizer] of AnyTouch.recognizers.entries()) {
-            if (recognizerName === recognizer.options.name) {
-                AnyTouch.recognizers.splice(index, 1);
-                delete AnyTouch.recognizerMap[recognizerName];
-                break;
-            }
-        }
+    removeUse(name: string): void {
+        AnyTouch.removeUse(name);
     }
 
     /**
@@ -234,7 +254,7 @@ export default class AnyTouch extends AnyEvent {
     /**
      * 解绑所有触摸事件
      */
-    _unbindEl(): void { }
+    private _unbindEl(): void { }
 
     /**
      * 销毁
