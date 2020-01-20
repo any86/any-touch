@@ -10,5 +10,6 @@
     "emit"
   ],
   "author": "any86",
-  "license": "ISC"
+  "license": "ISC",
+  "sideEffects": false
 }
