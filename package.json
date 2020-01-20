@@ -11,7 +11,7 @@
     "scripts": {
         "release:next": "npm run build && lerna publish --dist-tag next",
         "release:last": "npm run build && lerna publish",
-        "rm": "rimraf packages/*/dist",
+        "rm": "rimraf packages/**/dist",
         "clean": "rimraf node_modules",
         "build": "npm-run-all rm build:cjs build:es build:dts",
         "build:cjs": "node ./scripts/build.cjs",

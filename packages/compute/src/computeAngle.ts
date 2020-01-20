@@ -1,4 +1,4 @@
-import { Vector } from '@any-touch/shared/types';
+import { Vector } from '@any-touch/shared';
 import {getAngle} from '@any-touch/vector';
 export default function({
     startV, prevV, activeV

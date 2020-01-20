@@ -1,4 +1,4 @@
-import { Vector } from '@any-touch/shared/types';
+import { Vector } from '@any-touch/shared';
 import getRadian from './getRadian';
 import getCross from './getCross';
 import radianToAngle from './radianToAngle';

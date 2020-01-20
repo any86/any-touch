@@ -1,4 +1,4 @@
-import { Input, CommonEmitFunction } from '@any-touch/shared/types';
+import { Input, CommonEmitFunction } from '@any-touch/shared';
 import {ComputeVectorForMutli,computeScale} from '@any-touch/compute';
 import Recognizer,{recognizeForPressMoveLike} from '@any-touch/recognizer';
 

@@ -1,4 +1,4 @@
-import { Input, CommonEmitFunction } from '@any-touch/shared/types';
+import { Input, CommonEmitFunction } from '@any-touch/shared';
 import { INPUT_END } from '@any-touch/shared';
 import {ComputeDistance,ComputeVAndDir,ComputeMaxLength} from '@any-touch/compute';
 import Recognizer from '@any-touch/recognizer';

@@ -1,4 +1,4 @@
-import { Vector } from '@any-touch/shared/types';
+import { Vector } from '@any-touch/shared';
 /**
  * 求旋转方向
  * 顺时针/逆时针

@@ -1,4 +1,4 @@
-import { PureInput, Vector } from '@any-touch/shared/types';
+import { PureInput, Vector } from '@any-touch/shared';
 import { CLIENT_X, CLIENT_Y } from '@any-touch/shared';
 export default function computeVector(input: PureInput): Vector {
     return {

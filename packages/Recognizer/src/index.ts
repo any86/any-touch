@@ -1,4 +1,4 @@
-import { Input, ComputeConstructor } from '@any-touch/shared/types';
+import { Input, ComputeConstructor } from '@any-touch/shared';
 import {
     STATUS_POSSIBLE,
 } from '@any-touch/shared';

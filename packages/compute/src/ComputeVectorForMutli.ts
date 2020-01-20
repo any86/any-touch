@@ -1,4 +1,4 @@
-import { Vector, Input } from '@any-touch/shared/types';
+import { Vector, Input } from '@any-touch/shared';
 import computeVector from './computeVector';
 
 export default class  {
