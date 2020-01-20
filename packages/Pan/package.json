@@ -7,6 +7,13 @@
     "types": "types/index.d.ts",
     "author": "any86",
     "license": "ISC",
+    "dependencies": {
+        "@any-touch/recognizer": "0.6.0-beta.15",
+        "@any-touch/recognize-for-press-move-like": "0.6.0-beta.15",
+        "@any-touch/compute-distance": "0.6.0-beta.15",
+        "@any-touch/compute-delta-xy": "0.6.0-beta.15",
+        "@any-touch/compute-velocity-and-direction": "0.6.0-beta.15"
+    },
     "peerDependencies": {
         "any-touch": "0.6.0-beta.13"
     },
