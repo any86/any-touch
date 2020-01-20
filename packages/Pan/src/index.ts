@@ -1,7 +1,7 @@
 import { Input, CommonEmitFunction } from '@any-touch/shared/types';
 import { INPUT_MOVE, INPUT_END } from '@any-touch/shared';
 import { ComputeDistance, ComputeDeltaXY, ComputeVAndDir } from '@any-touch/compute';
-import Recognizer,{recognizeForPressMoveLike} from '@any-touch/recognizer';
+import Recognizer, { recognizeForPressMoveLike } from '@any-touch/recognizer';
 
 export default class PanRecognizer extends Recognizer {
     static DEFAULT_OPTIONS = {
@@ -41,6 +41,7 @@ export default class PanRecognizer extends Recognizer {
         this.computed = <Computed>this.compute([ComputeVAndDir, ComputeDistance, ComputeDeltaXY], input);
         recognizeForPressMoveLike(this, input, emit);
         // panleft/panup/panright/pandown
+        
         const { inputType } = input;
         if (INPUT_END !== inputType) {
             emit(this.options.name + this.computed.direction, this.computed);
