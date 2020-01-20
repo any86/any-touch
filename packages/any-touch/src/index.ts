@@ -1,3 +1,12 @@
+/*
+* ==================== 支持的手势 ====================
+* rotate 旋转
+* pinch 捏合,
+* tap 点击
+* press 按压
+* pan 拖拽
+* swipe 快划
+*/
 import AnyTouch from '@any-touch/core';
 import Tap from '@any-touch/tap';
 import Pan from '@any-touch/pan';

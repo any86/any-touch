@@ -4,12 +4,12 @@ const {
 } = require('rollup-plugin-terser');
 const {build,walkPackageDirs} = require('./build');
 
-console.log(chalk.blue('正在生成cjs模块!'));
+console.log(chalk.blue('正在生成es模块!'));
 walkPackageDirs((dirName) => {
     build({
         input: `./packages/${dirName}/src/index.ts`,
         output: {
-            file: `./packages/${dirName}/dist/index.js`,
+            file: `./packages/${dirName}/dist/index.es.js`,
             format: 'es',
         },
         external: id => ['any-event', 'any-touch', 'tslib'].includes(id) || /^@/.test(id),

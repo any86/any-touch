@@ -1,20 +1,10 @@
 /**
+ * 主程序, 不包含手势,
+ * 主要用来适配Mouse/Touch事件
  * ==================== 参考 ====================
  * https://segmentfault.com/a/1190000010511484#articleHeader0
  * https://segmentfault.com/a/1190000007448808#articleHeader1
  * hammer.js http://hammerjs.github.io/
- *
- * ==================== 支持的手势 ====================
- * rotate 旋转
- * pinch 捏合,
- * tap 单机
- * doubleTap 双击
- * press 按压
- * pan 拖拽
- * swipe 快划
- *
- * ==================== 流程 ====================
- * 格式化Event成统一的pointer格式 => 通过pointer数据计算 => 用计算结果去识别手势
  */
 import AnyEvent, { Listener } from 'any-event';
 import { SupportEvent, Recognizer, AnyTouchPlugin } from '@any-touch/shared';
@@ -49,7 +39,6 @@ const DEFAULT_OPTIONS: Options = {
 };
 export default class AnyTouch extends AnyEvent {
     static version = '__VERSION__';
-    // static recognizers: Recognizer[] = [new Press(), new Pan(), new Tap(), new Swipe(), new Pinch(), new Rotate()];
     static recognizers: Recognizer[] = [];
     static recognizerMap: Record<string, Recognizer> = {};
     static plugins: AnyTouchPlugin[] = [];
