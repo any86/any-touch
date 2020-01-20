@@ -24,7 +24,7 @@ export default class SwipeRecognizer extends Recognizer {
         const { inputType } = input;
         // 非end阶段, 开始校验数据
         if (INPUT_END !== inputType) return false;
-        const { velocityX, velocityY, maxPointLength, distance, direction } = this.computed;
+        const { velocityX, velocityY, maxPointLength, distance } = this.computed;
         return this.options.pointLength === maxPointLength &&
             this.options.threshold < distance &&
             this.options.velocity < Math.max(velocityX, velocityY);
