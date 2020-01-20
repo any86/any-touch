@@ -1,6 +1,6 @@
 {
     "name": "@any-touch/core",
-    "version": "0.6.0-beta.24",
+    "version": "0.6.0-beta.25",
     "description": "any-touch核心程序, 主要用来兼容Mouse/Touch事件.",
     "unpkg": "dist/any-touch.js",
     "jsdelivr": "dist/any-touch.js",
@@ -22,7 +22,7 @@
     },
     "homepage": "https://github.com/any86/any-touch#readme",
     "dependencies": {
-        "@any-touch/shared": "^0.6.0-beta.24"
+        "@any-touch/shared": "^0.6.0-beta.25"
     },
     "peerDependencies": {
         "@any-touch/pan": "^0.6.0-beta.21",
@@ -41,7 +41,7 @@
     ],
     "publishConfig": {
         "access": "public"
-      },
+    },
     "sideEffects": false,
     "gitHead": "033802fd310406b975f03b5358e0300a7decfe81"
 }
