@@ -1,7 +1,7 @@
 {
-    "name": "any-touch",
+    "name": "@any-touch/core",
     "version": "0.6.0-beta.22",
-    "description": "一个小巧的手势库",
+    "description": "any-touch核心程序, 主要用来兼容Mouse/Touch事件.",
     "unpkg": "dist/any-touch.js",
     "jsdelivr": "dist/any-touch.js",
     "main": "dist/index.js",
@@ -21,8 +21,10 @@
         "url": "https://github.com/any86/any-touch/issues"
     },
     "homepage": "https://github.com/any86/any-touch#readme",
+    "dependencies": {
+        "@any-touch/shared": "^0.6.0-beta.20"
+    },
     "peerDependencies": {
-        "@any-touch/core": "^0.6.0-beta.22",
         "@any-touch/pan": "^0.6.0-beta.21",
         "@any-touch/pinch": "^0.6.0-beta.20",
         "@any-touch/press": "^0.6.0-beta.20",
