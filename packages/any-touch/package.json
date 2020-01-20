@@ -1,6 +1,6 @@
 {
     "name": "any-touch",
-    "version": "0.6.0-beta.22",
+    "version": "0.6.0-beta.24",
     "description": "一个小巧的手势库",
     "unpkg": "dist/any-touch.js",
     "jsdelivr": "dist/any-touch.js",
