@@ -8,7 +8,13 @@
     "author": "any86",
     "license": "ISC",
     "peerDependencies": {
-        "any-touch": "0.6.0-beta.13"
+        "any-touch": "0.6.0-beta.13",
+        "tslib": "^1.9.3"
+    },
+    "dependencies": {
+        "@any-touch/recognizer":"0.6.0-beta.13",
+        "@any-touch/compute":"0.6.0-beta.13",
+        "@any-touch/shared":"0.6.0-beta.13"
     },
     "publishConfig": {
         "access": "public"
