@@ -9,7 +9,6 @@
         "types/*"
     ],
     "scripts": {
-        "compress": "node ./scripts/build.umd --compress && node ./scripts/build.cjs --compress && node ./scripts/build.es --compress",
         "release:next": "npm run build && lerna publish --dist-tag next",
         "release:last": "npm run build && lerna publish",
         "rm": "rimraf packages/**/dist",
@@ -17,7 +16,7 @@
         "build": "npm-run-all rm build:umd build:cjs build:es build:dts",
         "build:cjs": "node ./scripts/build.cjs",
         "build:es": "node ./scripts/build.es",
-        "build:umd": "node ./scripts/build.umd",
+        "build:umd": "node ./scripts/build.umd && node ./scripts/build.umd --compress",
         "build:dts": "rimraf packages/*/types && node ./scripts/build.dts",
         "release": "npm run test && standard-version && npm run build && npm pub && git push",
         "release-no-test": "standard-version && npm run build && npm pub && git push",
