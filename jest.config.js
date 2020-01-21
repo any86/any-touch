@@ -8,15 +8,18 @@ module.exports = {
     },
     collectCoverage: true,
     coverageDirectory: "./coverage/",
+    collectCoverageFrom: [
+        'packages/*/src/**/*.ts'],
     verbose: false,
     testPathIgnorePatterns: ["<rootDir>/node_modules/", "<rootDir>/__tests__/utils/"],
     coveragePathIgnorePatterns: ["<rootDir>/node_modules/", "<rootDir>/__tests__/utils/"],
     globals: {
         __TEST__: true,
+        __VERSION__: require('./package.json').version,
         ontouchstart: null
     },
     moduleFileExtensions: ['ts', 'tsx', 'js', 'json'],
     moduleNameMapper: {
-        '^@/(.*?)$': '<rootDir>/src/$1'
+        '^@/(.*?)$': '<rootDir>/packages/src/$1'
     },
 };
