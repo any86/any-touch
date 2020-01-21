@@ -10,7 +10,7 @@ walkPackageDirs((dirName) => {
         input: `./packages/${dirName}/src/index.ts`,
         output: {
             file: `./packages/${dirName}/dist/index.es.js`,
-            format: 'es',
+            format: 'esm',
         },
         external: id => ['any-event', 'any-touch', 'tslib'].includes(id) || /^@/.test(id),
         tsConfig: {

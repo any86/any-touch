@@ -3,7 +3,7 @@ const path = require('path');
 const chalk = require('chalk');
 const ts = require('typescript');
 // ======== 生成声明文件到types目录 ========
-console.log(chalk.blue('🚀 正在生成tds!'))
+console.log(chalk.blue('正在生成dts!'))
 const tsFiles = [];
 const PACKAGES_DIR = 'packages';
 walkDir(PACKAGES_DIR, path => {
