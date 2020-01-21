@@ -1,0 +1,18 @@
+{
+  "name": "@any-touch/simulator",
+  "version": "0.6.0-beta.25",
+  "description": "Mouse/Touch事件模拟器",
+  "main": "./dist/index.js",
+  "module": "./dist/index.es.js",
+  "types": "types/index.d.ts",
+  "author": "any86",
+  "license": "ISC",
+  "peerDependencies": {
+    "tslib": "^1.9.3"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "sideEffects": false,
+  "gitHead": "033802fd310406b975f03b5358e0300a7decfe81"
+}
