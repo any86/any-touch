@@ -22,6 +22,7 @@
         "release-no-test": "standard-version && npm run build && npm pub && git push",
         "dev": "rollup -c  --watch --environment NODE_ENV:development",
         "test": "jest",
+        "test:qk":"jest --collectCoverage false",
         "size": "node ./scripts/calcSize",
         "test-no-cache": "jest --no-cache",
         "release:demo": "node ./scripts/demo.js",
