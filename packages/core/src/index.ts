@@ -48,6 +48,7 @@ export default class AnyTouch extends AnyEvent {
     static use = (plugin: AnyTouchPlugin, options?: Record<string, any>): void => {
         if ('Recognizer' === plugin.type) {
             const instance = new plugin(options);
+            // console.warn(instance)
             AnyTouch.recognizerMap[instance.name] = instance;
             AnyTouch.recognizers.push(AnyTouch.recognizerMap[instance.name]);
         } else {
@@ -142,7 +143,6 @@ export default class AnyTouch extends AnyEvent {
                 recognizer.computedGroup = computedGroup;
                 recognizer.recognize(input, (type, ev) => {
                     const payload = { ...input, ...ev, type };
-                    console.warn(type, payload)
                     this.emit(type, payload);
                     this.emitDomEvent(payload);
                 });
