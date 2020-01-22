@@ -1,4 +1,4 @@
-import TouchSimulator from '../TouchSimulator';
+import TouchSimulator from '../GestureSimulator';
 import sleep from '../sleep';
 interface Options {
     direction?: string;

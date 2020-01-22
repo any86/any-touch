@@ -1,4 +1,4 @@
-import TouchSimulator from '../TouchSimulator';
+import TouchSimulator from '../GestureSimulator';
 interface Options {
     pointLength?: number;
     direction?: string;

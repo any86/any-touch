@@ -33,7 +33,7 @@ export default class TouchSimulator {
      * 模拟touchstart
      * @param {Input[]} 新增触点
      */
-    public dispatchTouchStart(input: Input[]) {
+    public dispatchTouchStart(input: Input[]=[{x:0,y:0}]) {
         let type = 'touch' === this.device ? 'touchstart' : 'mousedown';
         let event: any = new Event(type, {});
         if ('touch' === this.device) {

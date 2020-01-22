@@ -17,23 +17,32 @@ test('使用emit过滤"payload.a === 1"的事件?', (done) => {
     const mockFn = jest.fn();
     const eventEmitter = new EventEmitter();
     eventEmitter.on('add', ev => {
-        console.warn(ev)
         mockFn(ev);
     }, ev => ev === 1);
+    eventEmitter.emit('add', 1);
     eventEmitter.emit('add', 2);
+
     setTimeout(() => {
-        expect(mockFn.mock.calls.length).toBe(0);
+        expect(mockFn.mock.calls.length).toBe(1);
         done();
     }, 200)
 });
 
-test('off是否正确?', () => {
+test('off指定事假', () => {
     const eventEmitter = new EventEmitter();
     const mockCallback = jest.fn();
     eventEmitter.on('abc', mockCallback);
     eventEmitter.off('abc', mockCallback);
-    // 解绑不存在的事件def, 仅仅为了增加代码覆盖率
-    eventEmitter.off('def', mockCallback);
+    eventEmitter.emit('abc');
+    expect(mockCallback.mock.calls.length).toBe(0);
+});
+
+
+test('off所有对应的事件绑定', ()=>{
+    const eventEmitter = new EventEmitter();
+    const mockCallback = jest.fn();
+    eventEmitter.on('abc', mockCallback);
+    eventEmitter.off('abc');
     eventEmitter.emit('abc');
     expect(mockCallback.mock.calls.length).toBe(0);
 });

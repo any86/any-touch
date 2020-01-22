@@ -50,7 +50,6 @@ export default class AnyTouch extends AnyEvent {
             const instance = new plugin(options);
             AnyTouch.recognizerMap[instance.name] = instance;
             AnyTouch.recognizers.push(AnyTouch.recognizerMap[instance.name]);
-
         } else {
             AnyTouch.plugins.push(plugin);
         }
@@ -129,8 +128,8 @@ export default class AnyTouch extends AnyEvent {
             // if (void 0 !== AnyTouch.recognizers[0]) {
             //     AnyTouch.recognizers[0].input = input;
             // }
-            this.emit('input', input);
-            this.emit(`input${input.inputType}`, input);
+            this.emit('at:input', input);
+            this.emit(`at:input${input.inputType}`, input);
 
             // 缓存每次计算的结果
             // 以函数名为键值
