@@ -20,6 +20,7 @@ module.exports = {
     },
     moduleFileExtensions: ['ts', 'tsx', 'js', 'json'],
     moduleNameMapper: {
-        '^@/(.*?)$': '<rootDir>/packages/src/$1'
+        '^@any-touch/(.*?)$': '<rootDir>/packages/$1/src',
+        'any-event': '<rootDir>/packages/any-event/src'
     },
 };
