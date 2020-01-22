@@ -46,8 +46,9 @@
             "@any-touch/shared/*": ["packages/shared/src/*"],
             "@any-touch/const/*": ["packages/const/src/*"],
             "@any-touch/vector/*": ["packages/vector/src/*"],
+            "@testUtils":["testUtils"]
         }
     },
     // 入口文件
-    "include": ["packages/*/src", "packages/*/types", "packages/*/__tests__"]
+    "include": ["testUtils","packages/*/src", "packages/*/types", "packages/*/__tests__"]
 }

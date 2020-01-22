@@ -1,25 +1,13 @@
-import AnyTouch from '@any-touch/core';
-import { GestureSimulator, sleep } from '@any-touch/simulator';
+import { create } from '@testUtils';
 import Tap from '@any-touch/tap';
 
-function init() {
-    const el = document.createElement('div');
-    const at = new AnyTouch(el);
-    const gs = new GestureSimulator(el);
-    const mockCB = jest.fn();
-    const {mock} = mockCB;
-    return {
-        gs, at, el,mockCB,mock
-    }
-}
-
 test('依次输入start->move->end->start-cancel', async done => {
-    const {gs, at ,mockCB,mock} = init();
+    const { gs, at, mockCB, mock, sleep } = create();
     at.on('at:input', ev => {
         mockCB(ev.inputType);
     });
     gs.dispatchTouchStart();
-    gs.dispatchTouchMove([{x:1,y:1}]);
+    gs.dispatchTouchMove([{ x: 1, y: 1 }]);
     gs.dispatchTouchEnd();
     gs.dispatchTouchStart();
     gs.dispatchTouchCancel();
@@ -32,10 +20,22 @@ test('依次输入start->move->end->start-cancel', async done => {
     done();
 });
 
-test('加载一个手势, 检查recognizers和recognizerMap', ()=>{
-    const {gs,el} = init();
+test('加载一个手势, 检查recognizers和recognizerMap', () => {
+    const {AnyTouch } = create();
     AnyTouch.use(Tap);
-    const at = new AnyTouch(el);
     expect(AnyTouch.recognizers.length).toBe(1);
     expect(AnyTouch.recognizerMap.tap).toBeDefined();
-})
+});
+
+
+test('通过isPreventDefault禁止默认事件触发', async done=>{
+    const {AnyTouch, el,gs, sleep} = create();
+    const at = new AnyTouch(el, {isPreventDefault:false});
+    el.addEventListener('click',ev=>{
+        console.warn('click')
+    });
+    gs.dispatchTouchStart();
+    gs.dispatchTouchEnd();
+    await sleep();
+    done();
+});
