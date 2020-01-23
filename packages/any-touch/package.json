@@ -23,7 +23,7 @@
     "homepage": "https://github.com/any86/any-touch#readme",
     "peerDependencies": {
         "@any-touch/core": "^0.6.0-beta.22",
-        "@any-touch/pan": "^0.6.0-beta.21",
+        "@any-touch/pan": "^0.6.0-beta.25",
         "@any-touch/pinch": "^0.6.0-beta.20",
         "@any-touch/press": "^0.6.0-beta.20",
         "@any-touch/rotate": "^0.6.0-beta.20",
