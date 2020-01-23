@@ -111,7 +111,7 @@ export default class AnyTouch extends AnyEvent {
      * @param {Event}
      */
     catchEvent(event: SupportEvent): void {
-        if (this._canPreventDefault(event)) {
+        if (this.canPreventDefault(event)) {
             event.preventDefault();
         }
         // if (!event.cancelable) {
@@ -233,7 +233,7 @@ export default class AnyTouch extends AnyEvent {
      * 检查是否需要阻止默认事件, 根据preventDefaultExclude
      * @param {SupportEvent} 原生event
      */
-    private _canPreventDefault(event: SupportEvent): boolean {
+    canPreventDefault(event: SupportEvent): boolean {
         if (!this.options.isPreventDefault) return false;
         let isPreventDefault = false;
         if (null !== event.target) {

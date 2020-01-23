@@ -21,21 +21,27 @@ test('依次输入start->move->end->start-cancel', async done => {
 });
 
 test('加载一个手势, 检查recognizers和recognizerMap', () => {
-    const {AnyTouch } = create();
+    const { AnyTouch } = create();
     AnyTouch.use(Tap);
     expect(AnyTouch.recognizers.length).toBe(1);
     expect(AnyTouch.recognizerMap.tap).toBeDefined();
 });
 
+test('isPreventDefaul=false, 那么canPreventDefault === false', () => {
+    const { AnyTouch, el, touch, sleep, mockCB, mockCalls } = create();
+    const at = new AnyTouch(el, { isPreventDefault: false });
+    const event = new TouchEvent('touchstart', { cancelable: true });
+    expect(at.canPreventDefault(event)).toBeFalsy();
+});
 
-test('通过isPreventDefault禁止默认事件触发', async done=>{
-    const {AnyTouch, el,gs, sleep} = create();
-    const at = new AnyTouch(el, {isPreventDefault:false});
-    el.addEventListener('click',ev=>{
-        console.warn('click')
+
+test('通过"preventDefaultExclude"排除div元素不执行preventDefault', () => {
+    const { AnyTouch, el, touch, sleep, mockCB, mockCalls } = create();
+    const at = new AnyTouch(el, {
+        isPreventDefault: false,
+        preventDefaultExclude(ev) {
+            return 'div' === (ev as any).target.tagName;
+        }
     });
-    gs.dispatchTouchStart();
-    gs.dispatchTouchEnd();
-    await sleep();
-    done();
+    expect(at.canPreventDefault({ target: { tagName: 'div' } } as any)).toBeFalsy();
 });
