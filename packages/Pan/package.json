@@ -8,7 +8,7 @@
     "author": "any86",
     "license": "ISC",
     "peerDependencies": {
-        "any-touch": "0.6.0-beta.19",
+        "any-touch": "0.6.0-beta.25",
         "tslib": "^1.9.3"
     },
     "dependencies": {

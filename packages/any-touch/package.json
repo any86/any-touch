@@ -27,7 +27,7 @@
         "@any-touch/pinch": "^0.6.0-beta.20",
         "@any-touch/press": "^0.6.0-beta.20",
         "@any-touch/rotate": "^0.6.0-beta.20",
-        "@any-touch/swipe": "^0.6.0-beta.19",
+        "@any-touch/swipe": "^0.6.0-beta.25",
         "@any-touch/tap": "^0.6.0-beta.20",
         "any-event": "^0.6.0-beta.9",
         "tslib": "^1.9.3"
