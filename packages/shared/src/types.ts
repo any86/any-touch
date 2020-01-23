@@ -1,4 +1,4 @@
-import Base from '@any-touch/recognizer/index';
+import Base from '@any-touch/recognizer';
 export type Recognizer = Base;
 export type AnyTouchPlugin = any;
 
