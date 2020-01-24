@@ -34,26 +34,18 @@ test('加载/卸载一个手势,', async done => {
     expect(AnyTouch.recognizers.length).toBe(1);
     expect(AnyTouch.recognizerMap.tap).toBeDefined();
     expect(mockCB).toHaveBeenCalledTimes(1);
+    await sleep();
 
-    // await sleep();
+    AnyTouch.removeUse('tap');
+    const mockCallback = jest.fn();
+    at.on('tap', ev=>{
+        console.warn('tap')
+        mockCallback(ev);
+    });
+    touch.dispatchTouchStart();
+    touch.dispatchTouchEnd();
+    await sleep();
+    expect(mockCallback).toHaveBeenCalledTimes(0);
     done();
 });
 
-test('isPreventDefaul=false, 那么canPreventDefault === false', () => {
-    const { AnyTouch, el, touch, sleep, mockCB, mockCalls } = create();
-    const at = new AnyTouch(el, { isPreventDefault: false });
-    const event = new TouchEvent('touchstart', { cancelable: true });
-    expect(at.canPreventDefault(event)).toBeFalsy();
-});
-
-
-test('通过"preventDefaultExclude"排除div元素不执行preventDefault', () => {
-    const { AnyTouch, el, touch, sleep, mockCB, mockCalls } = create();
-    const at = new AnyTouch(el, {
-        isPreventDefault: false,
-        preventDefaultExclude(ev) {
-            return 'div' === (ev as any).target.tagName;
-        }
-    });
-    expect(at.canPreventDefault({ target: { tagName: 'div' } } as any)).toBeFalsy();
-});

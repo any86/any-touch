@@ -22,9 +22,8 @@ import {
 } from '@any-touch/shared';
 
 import Input from './Input';
-import { isRegExp, isFunction } from '@any-touch/shared';
-
-interface Options {
+import canPreventDefault from './canPreventDefault';
+export interface Options {
     hasDomEvents?: boolean;
     isPreventDefault?: boolean;
     // 不阻止默认行为的白名单
@@ -55,11 +54,12 @@ export default class AnyTouch extends AnyEvent {
             AnyTouch.plugins.push(plugin);
         }
     };
+
     /**
      * 卸载插件
      */
     static removeUse = (recognizerName: string): void => {
-        for (let [index, recognizer] of AnyTouch.recognizers.entries()) {
+        for (const [index, recognizer] of AnyTouch.recognizers.entries()) {
             if (recognizerName === recognizer.options.name) {
                 AnyTouch.recognizers.splice(index, 1);
                 delete AnyTouch.recognizerMap[recognizerName];
@@ -111,7 +111,7 @@ export default class AnyTouch extends AnyEvent {
      * @param {Event}
      */
     catchEvent(event: SupportEvent): void {
-        if (this.canPreventDefault(event)) {
+        if (canPreventDefault(event, this.options)) {
             event.preventDefault();
         }
         // if (!event.cancelable) {
@@ -227,27 +227,6 @@ export default class AnyTouch extends AnyEvent {
      */
     removeUse(name: string): void {
         AnyTouch.removeUse(name);
-    }
-
-    /**
-     * 检查是否需要阻止默认事件, 根据preventDefaultExclude
-     * @param {SupportEvent} 原生event
-     */
-    canPreventDefault(event: SupportEvent): boolean {
-        if (!this.options.isPreventDefault) return false;
-        let isPreventDefault = false;
-        if (null !== event.target) {
-            const { preventDefaultExclude } = this.options;
-            if (isRegExp(preventDefaultExclude)) {
-                const { tagName } = <HTMLElement>event.target;
-                if (void 0 !== tagName) {
-                    isPreventDefault = !preventDefaultExclude.test(tagName);
-                }
-            } else if (isFunction(preventDefaultExclude)) {
-                isPreventDefault = !preventDefaultExclude(event);
-            }
-        }
-        return isPreventDefault;
     }
 
     /**
