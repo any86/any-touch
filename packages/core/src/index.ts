@@ -22,6 +22,7 @@ import {
 } from '@any-touch/shared';
 
 import Input from './Input';
+import dispatchDomEvent from './dispatchDomEvent';
 import canPreventDefault from './canPreventDefault';
 export interface Options {
     hasDomEvents?: boolean;
@@ -144,7 +145,9 @@ export default class AnyTouch extends AnyEvent {
                 recognizer.recognize(input, (type, ev) => {
                     const payload = { ...input, ...ev, type };
                     this.emit(type, payload);
-                    this.emitDomEvent(payload);
+                    if (void 0 !== this.el) {
+                        dispatchDomEvent(this.el, payload);
+                    }
                 });
                 computedGroup = recognizer.computedGroup;
             }
@@ -157,19 +160,6 @@ export default class AnyTouch extends AnyEvent {
                 this.on(name, listener, (ev) => ev.target === el);
             }
         };
-    }
-
-    /**
-     * 触发dom事件
-     */
-    emitDomEvent(payload: Record<string, any>) {
-        if (this.el) {
-            // 过滤掉几个Event上保留的字段(target, currentTarget)
-            let { target, currentTarget, type, ...data } = payload;
-            let event = new Event(type, payload);
-            Object.assign(event, data);
-            this.el.dispatchEvent(event);
-        }
     }
 
     /**
