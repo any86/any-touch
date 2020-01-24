@@ -20,11 +20,23 @@ test('依次输入start->move->end->start-cancel', async done => {
     done();
 });
 
-test('加载一个手势, 检查recognizers和recognizerMap', () => {
-    const { AnyTouch } = create();
+test('加载/卸载一个手势,', async done => {
+    const { AnyTouch,el,touch,mockCB,sleep } = create();
     AnyTouch.use(Tap);
+    const at = new AnyTouch(el);
+    at.on('tap', ev=>{
+        mockCB(ev);
+    });
+    touch.dispatchTouchStart();
+    touch.dispatchTouchEnd();
+    await sleep();
+
     expect(AnyTouch.recognizers.length).toBe(1);
     expect(AnyTouch.recognizerMap.tap).toBeDefined();
+    expect(mockCB).toHaveBeenCalledTimes(1);
+
+    // await sleep();
+    done();
 });
 
 test('isPreventDefaul=false, 那么canPreventDefault === false', () => {
