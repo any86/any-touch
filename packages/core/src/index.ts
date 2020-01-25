@@ -22,9 +22,9 @@ import {
 } from '@any-touch/shared';
 
 import Input from './Input';
-import { isRegExp, isFunction } from '@any-touch/shared';
-
-interface Options {
+import dispatchDomEvent from './dispatchDomEvent';
+import canPreventDefault from './canPreventDefault';
+export interface Options {
     hasDomEvents?: boolean;
     isPreventDefault?: boolean;
     // 不阻止默认行为的白名单
@@ -55,11 +55,12 @@ export default class AnyTouch extends AnyEvent {
             AnyTouch.plugins.push(plugin);
         }
     };
+
     /**
      * 卸载插件
      */
     static removeUse = (recognizerName: string): void => {
-        for (let [index, recognizer] of AnyTouch.recognizers.entries()) {
+        for (const [index, recognizer] of AnyTouch.recognizers.entries()) {
             if (recognizerName === recognizer.options.name) {
                 AnyTouch.recognizers.splice(index, 1);
                 delete AnyTouch.recognizerMap[recognizerName];
@@ -111,7 +112,7 @@ export default class AnyTouch extends AnyEvent {
      * @param {Event}
      */
     catchEvent(event: SupportEvent): void {
-        if (this.canPreventDefault(event)) {
+        if (canPreventDefault(event, this.options)) {
             event.preventDefault();
         }
         // if (!event.cancelable) {
@@ -144,7 +145,9 @@ export default class AnyTouch extends AnyEvent {
                 recognizer.recognize(input, (type, ev) => {
                     const payload = { ...input, ...ev, type };
                     this.emit(type, payload);
-                    this.emitDomEvent(payload);
+                    if (void 0 !== this.el) {
+                        dispatchDomEvent(this.el, payload);
+                    }
                 });
                 computedGroup = recognizer.computedGroup;
             }
@@ -157,19 +160,6 @@ export default class AnyTouch extends AnyEvent {
                 this.on(name, listener, (ev) => ev.target === el);
             }
         };
-    }
-
-    /**
-     * 触发dom事件
-     */
-    emitDomEvent(payload: Record<string, any>) {
-        if (this.el) {
-            // 过滤掉几个Event上保留的字段(target, currentTarget)
-            let { target, currentTarget, type, ...data } = payload;
-            let event = new Event(type, payload);
-            Object.assign(event, data);
-            this.el.dispatchEvent(event);
-        }
     }
 
     /**
@@ -227,27 +217,6 @@ export default class AnyTouch extends AnyEvent {
      */
     removeUse(name: string): void {
         AnyTouch.removeUse(name);
-    }
-
-    /**
-     * 检查是否需要阻止默认事件, 根据preventDefaultExclude
-     * @param {SupportEvent} 原生event
-     */
-    canPreventDefault(event: SupportEvent): boolean {
-        if (!this.options.isPreventDefault) return false;
-        let isPreventDefault = false;
-        if (null !== event.target) {
-            const { preventDefaultExclude } = this.options;
-            if (isRegExp(preventDefaultExclude)) {
-                const { tagName } = <HTMLElement>event.target;
-                if (void 0 !== tagName) {
-                    isPreventDefault = !preventDefaultExclude.test(tagName);
-                }
-            } else if (isFunction(preventDefaultExclude)) {
-                isPreventDefault = !preventDefaultExclude(event);
-            }
-        }
-        return isPreventDefault;
     }
 
     /**

@@ -20,20 +20,36 @@ test('依次输入start->move->end->start-cancel', async done => {
     done();
 });
 
-test('加载一个手势, 检查recognizers和recognizerMap', () => {
-    const { AnyTouch } = create();
+test('加载/卸载一个手势,', async done => {
+    const { AnyTouch,el,touch,mockCB,sleep } = create();
     AnyTouch.use(Tap);
+    const at = new AnyTouch(el);
+    at.on('tap', ev=>{
+        mockCB(ev);
+    });
+    touch.dispatchTouchStart();
+    touch.dispatchTouchEnd();
+    await sleep();
+
     expect(AnyTouch.recognizers.length).toBe(1);
     expect(AnyTouch.recognizerMap.tap).toBeDefined();
+    expect(mockCB).toHaveBeenCalledTimes(1);
+    await sleep();
+
+    AnyTouch.removeUse('tap');
+    const mockCallback = jest.fn();
+    at.on('tap', ev=>{
+        console.warn('tap')
+        mockCallback(ev);
+    });
+    touch.dispatchTouchStart();
+    touch.dispatchTouchEnd();
+    await sleep();
+    expect(mockCallback).toHaveBeenCalledTimes(0);
+    done();
 });
 
-test('isPreventDefaul=false, 那么canPreventDefault === false', () => {
-    const { AnyTouch, el, touch, sleep, mockCB, mockCalls } = create();
-    const at = new AnyTouch(el, { isPreventDefault: false });
-    const event = new TouchEvent('touchstart', { cancelable: true });
-    expect(at.canPreventDefault(event)).toBeFalsy();
-});
-
+<<<<<<< HEAD
 
 test('通过"preventDefaultExclude"排除div元素不执行preventDefault', () => {
     const { AnyTouch, el, touch, sleep, mockCB, mockCalls } = create();
@@ -57,3 +73,5 @@ test('destroy实例', () => {
     touch.dispatchTouchStart();
     expect(mockCB).toBeCalledTimes(0);
 });
+=======
+>>>>>>> f050f017bc70b3dfab76787243f0f4e4567ff509
