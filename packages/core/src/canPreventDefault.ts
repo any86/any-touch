@@ -6,13 +6,15 @@ import { Options } from './index';
 * @param {SupportEvent} 原生event
 */
 export default function (event: SupportEvent, options: Options): boolean {
+    // 不阻止默认
+    // 那么不进行过滤
     if (!options.isPreventDefault) return false;
-    let isPreventDefault = false;
+    let isPreventDefault = true;
     if (null !== event.target) {
         const { preventDefaultExclude } = options;
         if (isRegExp(preventDefaultExclude)) {
-            const { tagName } = <HTMLElement>event.target;
-            if (void 0 !== tagName) {
+            if ('tagName' in event.target) {
+                const { tagName } = event.target;
                 isPreventDefault = !preventDefaultExclude.test(tagName);
             }
         } else if (isFunction(preventDefaultExclude)) {
