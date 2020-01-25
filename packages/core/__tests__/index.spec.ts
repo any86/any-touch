@@ -45,3 +45,15 @@ test('通过"preventDefaultExclude"排除div元素不执行preventDefault', () =
     });
     expect(at.canPreventDefault({ target: { tagName: 'div' } } as any)).toBeFalsy();
 });
+
+
+test('destroy实例', () => {
+    const { at, touch, sleep, mockCB } = create();
+    at.on('at:input',()=>{
+        mockCB();
+    });
+    at.destroy();
+    sleep();
+    touch.dispatchTouchStart();
+    expect(mockCB).toBeCalledTimes(0);
+});
