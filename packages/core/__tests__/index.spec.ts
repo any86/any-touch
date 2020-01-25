@@ -49,20 +49,6 @@ test('加载/卸载一个手势,', async done => {
     done();
 });
 
-<<<<<<< HEAD
-
-test('通过"preventDefaultExclude"排除div元素不执行preventDefault', () => {
-    const { AnyTouch, el, touch, sleep, mockCB, mockCalls } = create();
-    const at = new AnyTouch(el, {
-        isPreventDefault: false,
-        preventDefaultExclude(ev) {
-            return 'div' === (ev as any).target.tagName;
-        }
-    });
-    expect(at.canPreventDefault({ target: { tagName: 'div' } } as any)).toBeFalsy();
-});
-
-
 test('destroy实例', () => {
     const { at, touch, sleep, mockCB } = create();
     at.on('at:input',()=>{
@@ -73,5 +59,3 @@ test('destroy实例', () => {
     touch.dispatchTouchStart();
     expect(mockCB).toBeCalledTimes(0);
 });
-=======
->>>>>>> f050f017bc70b3dfab76787243f0f4e4567ff509
