@@ -12,18 +12,13 @@ import {
     TOUCH,
     MOUSE,
     SUPPORT_TOUCH,
-    TOUCH_START,
-    TOUCH_MOVE,
-    TOUCH_CANCEL,
-    TOUCH_END,
-    MOUSE_DOWN,
-    MOUSE_MOVE,
-    MOUSE_UP,
 } from '@any-touch/shared';
 
 import Input from './Input';
 import dispatchDomEvent from './dispatchDomEvent';
 import canPreventDefault from './canPreventDefault';
+import bindElement from './bindElement';
+
 export interface Options {
     hasDomEvents?: boolean;
     isPreventDefault?: boolean;
@@ -94,7 +89,8 @@ export default class AnyTouch extends AnyEvent {
 
         if (void 0 !== this.el) {
             // 绑定事件
-            this._unbindEl = this._bindEL(this.el);
+            const boundInputListener = this.catchEvent.bind(this);
+            this._unbindEl = bindElement(this.el, boundInputListener);
         }
     };
 
@@ -160,38 +156,6 @@ export default class AnyTouch extends AnyEvent {
                 this.on(name, listener, (ev) => ev.target === el);
             }
         };
-    }
-
-    /**
-     * 绑定元素
-     * @param {Element} 待绑定手势元素
-     */
-    private _bindEL(el: Element) {
-        const boundInputListener = <EventListener>this.catchEvent.bind(this);
-
-        // Touch
-        if (TOUCH === this.sourceType) {
-            const events = [TOUCH_START, TOUCH_MOVE, TOUCH_END, TOUCH_CANCEL];
-            events.forEach((eventName) => {
-                el.addEventListener(eventName, boundInputListener);
-            });
-            return () => {
-                events.forEach((eventName) => {
-                    el.removeEventListener(eventName, boundInputListener);
-                });
-            };
-        }
-        // Mouse
-        else {
-            el.addEventListener(MOUSE_DOWN, boundInputListener);
-            window.addEventListener(MOUSE_MOVE, boundInputListener);
-            window.addEventListener(MOUSE_UP, boundInputListener);
-            return () => {
-                el.removeEventListener(MOUSE_DOWN, boundInputListener);
-                window.removeEventListener(MOUSE_MOVE, boundInputListener);
-                window.removeEventListener(MOUSE_UP, boundInputListener);
-            };
-        }
     }
 
     /**
