@@ -59,6 +59,13 @@ new Vue({
             }, 100)
             C(ev, '#f10');
         });
+        at.target(el).on('doubletap', ev => {
+            this.scale = 0.1;
+            setTimeout(() => {
+                this.scale = 1;
+            }, 100)
+            C(ev, '#110');
+        });
 
         at.target(el2).on('tap', ev => {
             this.scale = 0.8;

@@ -42,8 +42,8 @@ export default class AnyTouch extends AnyEvent {
     /**
      * 安装插件
      */
-    static use = (Plugin: AnyTouchPlugin, options?: Record<string, any>): void => {
-        use(AnyTouch, Plugin, options);
+    static use = (Plugin: AnyTouchPlugin, ...args: any): void => {
+        use(AnyTouch, Plugin, ...args);
     };
     /**
      * 卸载插件
@@ -72,6 +72,7 @@ export default class AnyTouch extends AnyEvent {
         super();
         this.el = el;
         this.sourceType = SUPPORT_TOUCH ? TOUCH : MOUSE;
+        // 适配器
         this.input = new Input(this.sourceType);
         this.options = { ...DEFAULT_OPTIONS, ...options };
 
@@ -91,8 +92,8 @@ export default class AnyTouch extends AnyEvent {
      * @param {AnyTouchPlugin} 插件 
      * @param {Object} 选项 
      */
-    use(Plugin: AnyTouchPlugin, options?: Record<string, any>): void {
-        use(this, Plugin, options);
+    use(Plugin: AnyTouchPlugin, ...args: any): void {
+        use(this, Plugin, ...args);
     };
 
     /**
@@ -136,14 +137,28 @@ export default class AnyTouch extends AnyEvent {
             for (const recognizer of this.recognizers) {
                 if (recognizer.disabled) continue;
                 recognizer.input = input;
-
                 recognizer.computedGroup = computedGroup;
                 recognizer.recognize(input, (type, ev) => {
-                    const payload = { ...input, ...ev, type };
-                    this.emit(type, payload);
-                    if (void 0 !== this.el) {
-                        dispatchDomEvent(this.el, payload);
+
+                    if (0 < this.plugins.length) {
+                        this.plugins.forEach(plugin => {
+                            // console.log(plugin);
+                            plugin(this, recognizer, () => {
+                                const payload = { ...input, ...ev, type };
+                                this.emit(type, payload);
+                                if (void 0 !== this.el) {
+                                    dispatchDomEvent(this.el, payload);
+                                }
+                            });
+                        });
+                    } else {
+                        const payload = { ...input, ...ev, type };
+                        this.emit(type, payload);
+                        if (void 0 !== this.el) {
+                            dispatchDomEvent(this.el, payload);
+                        }
                     }
+
                 });
                 computedGroup = recognizer.computedGroup;
             }

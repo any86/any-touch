@@ -5,13 +5,13 @@ type I = InstanceType<C>;
 /**
  * 触发dom事件
  */
-export function use(instanceOrClass: C | I, plugin: AnyTouchPlugin, options?: Record<string, any>): void {
+export function use(instanceOrClass: C | I, plugin: AnyTouchPlugin, ...args: any): void {
     if ('Recognizer' === plugin.type) {
-        const instance = new plugin(options);
+        const instance = new plugin(...args);
         instanceOrClass.recognizerMap[instance.name] = instance;
         instanceOrClass.recognizers.push(instanceOrClass.recognizerMap[instance.name]);
     } else {
-        instanceOrClass.plugins.push(plugin);
+        instanceOrClass.plugins.push(plugin(...args));
     }
 };
 

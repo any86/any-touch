@@ -14,10 +14,16 @@ import Swipe from '@any-touch/swipe';
 import Press from '@any-touch/press';
 import Pinch from '@any-touch/pinch';
 import Rotate from '@any-touch/rotate';
+// import requireFailure from '@any-touch/requireFailure';
+// AnyTouch.use(requireFailure, 'tap', ['doubletap'], 300);
+
 AnyTouch.use(Tap);
+// AnyTouch.use(Tap, {name:'doubletap', tapTimes:2});
+
 AnyTouch.use(Pan);
 AnyTouch.use(Swipe);
 AnyTouch.use(Press);
 AnyTouch.use(Pinch);
 AnyTouch.use(Rotate);
+
 export default AnyTouch;
