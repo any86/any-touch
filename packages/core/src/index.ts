@@ -18,6 +18,7 @@ import Input from './Input';
 import dispatchDomEvent from './dispatchDomEvent';
 import canPreventDefault from './canPreventDefault';
 import bindElement from './bindElement';
+import { use, removeUse } from './use';
 
 export interface Options {
     hasDomEvents?: boolean;
@@ -32,6 +33,7 @@ const DEFAULT_OPTIONS: Options = {
     isPreventDefault: true,
     preventDefaultExclude: /^(?:INPUT|TEXTAREA|BUTTON|SELECT)$/,
 };
+
 export default class AnyTouch extends AnyEvent {
     static version = '__VERSION__';
     static recognizers: Recognizer[] = [];
@@ -40,28 +42,14 @@ export default class AnyTouch extends AnyEvent {
     /**
      * 安装插件
      */
-    static use = (plugin: AnyTouchPlugin, options?: Record<string, any>): void => {
-        if ('Recognizer' === plugin.type) {
-            const instance = new plugin(options);
-            // console.warn(instance)
-            AnyTouch.recognizerMap[instance.name] = instance;
-            AnyTouch.recognizers.push(AnyTouch.recognizerMap[instance.name]);
-        } else {
-            AnyTouch.plugins.push(plugin);
-        }
+    static use = (Plugin: AnyTouchPlugin, options?: Record<string, any>): void => {
+        use(AnyTouch, Plugin, options);
     };
-
     /**
      * 卸载插件
      */
     static removeUse = (recognizerName: string): void => {
-        for (const [index, recognizer] of AnyTouch.recognizers.entries()) {
-            if (recognizerName === recognizer.options.name) {
-                AnyTouch.recognizers.splice(index, 1);
-                delete AnyTouch.recognizerMap[recognizerName];
-                break;
-            }
-        }
+        removeUse(AnyTouch, recognizerName);
     };
 
     // 目标元素
@@ -87,10 +75,14 @@ export default class AnyTouch extends AnyEvent {
         this.input = new Input(this.sourceType);
         this.options = { ...DEFAULT_OPTIONS, ...options };
 
+        // 同步到插件到实例
+        this.recognizerMap = AnyTouch.recognizerMap;
+        this.recognizers = AnyTouch.recognizers;
+        this.plugins = AnyTouch.plugins;
+
+        // 绑定事件
         if (void 0 !== this.el) {
-            // 绑定事件
-            const boundInputListener = this.catchEvent.bind(this);
-            this._unbindEl = bindElement(this.el, boundInputListener);
+            this._unbindEl = bindElement(this.el, this.catchEvent.bind(this));
         }
     };
 
@@ -99,8 +91,16 @@ export default class AnyTouch extends AnyEvent {
      * @param {AnyTouchPlugin} 插件 
      * @param {Object} 选项 
      */
-    use(plugin: AnyTouchPlugin, options?: Record<string, any>): void {
-        AnyTouch.use(plugin, options);
+    use(Plugin: AnyTouchPlugin, options?: Record<string, any>): void {
+        use(this, Plugin, options);
+    };
+
+    /**
+     * 移除插件
+     * @param {String} 识别器name
+     */
+    removeUse(name: string): void {
+        removeUse(this, name);
     };
 
     /**
@@ -133,7 +133,7 @@ export default class AnyTouch extends AnyEvent {
             // 以函数名为键值
             // console.log(this.recognizers)
             let computedGroup = {};
-            for (let recognizer of AnyTouch.recognizers) {
+            for (const recognizer of this.recognizers) {
                 if (recognizer.disabled) continue;
                 recognizer.input = input;
 
@@ -150,6 +150,10 @@ export default class AnyTouch extends AnyEvent {
         }
     }
 
+    /**
+     * 只对event.target === "目标元素"触发事件
+     * @param {HTMLElement} 目标元素
+     */
     target(el: HTMLElement) {
         return {
             on: (name: string, listener: Listener) => {
@@ -163,30 +167,22 @@ export default class AnyTouch extends AnyEvent {
      * @param {String} 识别器的名字
      * @return {Recognizer|undefined} 返回识别器
      */
-    get(name: string): Recognizer | undefined {
-        return AnyTouch.recognizers.find((recognizer) => name === recognizer.options.name);
-    }
+    get(name: string): Recognizer | void {
+        return this.recognizerMap[name];
+    };
 
     /**
      * 设置
      * @param {Options} 选项
      */
     set(options: Options): void {
-        this.options = { ...DEFAULT_OPTIONS, ...options };
-    }
-
-    /**
-     * 移除插件
-     * @param {String} 识别器name
-     */
-    removeUse(name: string): void {
-        AnyTouch.removeUse(name);
-    }
+        this.options = { ...this.options, ...options };
+    };
 
     /**
      * 解绑所有触摸事件
      */
-    private _unbindEl(): void { }
+    private _unbindEl(): void { };
 
     /**
      * 销毁
