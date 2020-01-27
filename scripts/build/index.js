@@ -12,17 +12,13 @@ const {
     compress
 } = require('brotli');
 const {
-    terser
-} = require('rollup-plugin-terser');
-const {
     version
-} = require('../../package.json');
+} = require('../../lerna.json');
 const walkPackageDirs = require('./walkPackageDirs');
-
 
 module.exports = {
     walkPackageDirs,
-    build: async function({
+    build: async function ({
         input,
         output,
         tsConfig,
