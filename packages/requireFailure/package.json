@@ -1,17 +1,20 @@
 {
-  "name": "@any-touch/plugin-require-failure",
-  "version": "0.6.0-beta.28",
-  "description": "any-touch的识别器, 用来识别点击手势.",
-  "main": "./dist/index",
-  "module": "./dist/index.es.js",
-  "types": "types/index.d.ts",
-  "author": "any86",
-  "license": "ISC",
-  "peerDependencies": {
-    "tslib": "^1.9.3"
-  },
-  "publishConfig": {
-    "access": "public"
-  },
-  "sideEffects": false
+    "name": "@any-touch/plugin-require-failure",
+    "version": "0.6.0-beta.28",
+    "description": "any-touch的识别器, 用来识别点击手势.",
+    "main": "./dist/index",
+    "module": "./dist/index.es.js",
+    "types": "types/index.d.ts",
+    "author": "any86",
+    "license": "ISC",
+    "peerDependencies": {
+        "tslib": "^1.9.3"
+    },
+    "optionalDependencies": {
+        "@any-touch/shared": "^0.6.0-beta.26"
+    },
+    "publishConfig": {
+        "access": "public"
+    },
+    "sideEffects": false
 }
