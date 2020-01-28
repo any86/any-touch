@@ -39,9 +39,9 @@ export default class extends Recognizer {
             ReturnType<ComputeDeltaXY['compute']>;
 
         this.computed = <Computed>this.compute([ComputeVAndDir, ComputeDistance, ComputeDeltaXY], input);
-        const isPass = recognizeForPressMoveLike(this, input, emit);
+        const isRecognized = recognizeForPressMoveLike(this, input, emit);
         // panleft/panup/panright/pandown
-        if (isPass) {
+        if (isRecognized) {
             const { inputType } = input;
             if (INPUT_END !== inputType) {
                 emit(this.options.name + this.computed.direction, this.computed);
