@@ -5,7 +5,7 @@ import {
 import { ComputeDistance } from '@any-touch/compute';
 import Recognizer,{ resetStatusForPressMoveLike as resetStatus } from '@any-touch/recognizer';
 
-export default class PressRecognizer extends Recognizer {
+export default class extends Recognizer {
     private _timeoutId?: number;
     static DEFAULT_OPTIONS = {
         name: 'press',

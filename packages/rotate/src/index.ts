@@ -2,7 +2,7 @@ import { Input, CommonEmitFunction } from '@any-touch/shared';
 import {computeAngle, ComputeVectorForMutli} from '@any-touch/compute';
 import Recognizer,{recognizeForPressMoveLike} from '@any-touch/recognizer';
 
-export default class PinchRecognizer extends Recognizer {
+export default class extends Recognizer {
     static DEFAULT_OPTIONS = {
         name: 'rotate',
         // 触发事件所需要的最小角度

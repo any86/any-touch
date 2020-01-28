@@ -2,7 +2,7 @@ import { Input, CommonEmitFunction } from '@any-touch/shared';
 import {ComputeVectorForMutli,computeScale} from '@any-touch/compute';
 import Recognizer,{recognizeForPressMoveLike} from '@any-touch/recognizer';
 
-export default class PinchRecognizer extends Recognizer {
+export default class extends Recognizer {
     static DEFAULT_OPTIONS = {
         name: 'pinch',
         // 触发事件所需要的最小缩放比例

@@ -3,7 +3,7 @@ import { INPUT_MOVE, INPUT_END } from '@any-touch/shared';
 import { ComputeDistance, ComputeDeltaXY, ComputeVAndDir } from '@any-touch/compute';
 import Recognizer, { recognizeForPressMoveLike } from '@any-touch/recognizer';
 
-export default class PanRecognizer extends Recognizer {
+export default class extends Recognizer {
     static DEFAULT_OPTIONS = {
         name: 'pan',
         threshold: 10,

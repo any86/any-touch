@@ -3,7 +3,7 @@ import { INPUT_END } from '@any-touch/shared';
 import {ComputeDistance,ComputeVAndDir,ComputeMaxLength} from '@any-touch/compute';
 import Recognizer from '@any-touch/recognizer';
 
-export default class SwipeRecognizer extends Recognizer {
+export default class extends Recognizer {
     static DEFAULT_OPTIONS = {
         name: 'swipe',
         threshold: 10,

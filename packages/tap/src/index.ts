@@ -8,7 +8,7 @@ import Recognizer from '@any-touch/recognizer';
 import {getVLength} from '@any-touch/vector';
 import {ComputeDistance,ComputeMaxLength} from '@any-touch/compute';
 
-export default class TapRecognizer extends Recognizer {
+export default class extends Recognizer {
     public tapCount: number;
 
     // 记录每次单击完成时的坐标
