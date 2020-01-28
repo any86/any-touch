@@ -1,6 +1,6 @@
 import { Input, CommonEmitFunction } from '@any-touch/shared';
-import {ComputeVectorForMutli,computeScale} from '@any-touch/compute';
-import Recognizer,{recognizeForPressMoveLike} from '@any-touch/recognizer';
+import { ComputeVectorForMutli, computeScale } from '@any-touch/compute';
+import Recognizer, { recognizeForPressMoveLike } from '@any-touch/recognizer';
 
 export default class extends Recognizer {
     static DEFAULT_OPTIONS = {
@@ -19,9 +19,9 @@ export default class extends Recognizer {
      * @param {(isRecognized: boolean) => void}} 接收是否识别状态
      */
     test(input: Input): boolean {
-        const { pointLength } = input;
+        const { pointLength,inputType } = input;
         const { scale } = this.computed;
-        return this.isValidPointLength(pointLength) && (this.options.threshold < Math.abs(scale - 1) || this.isRecognized);
+        return this.isValidPointLength(pointLength) && void 0 !== scale && (this.options.threshold < Math.abs(scale - 1) || this.isRecognized);
     };
 
     /**
