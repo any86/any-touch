@@ -101,12 +101,5 @@ export default abstract class{
      * @param {Input} 输入记录 
      */
     abstract recognize(Input: Input, callback: (type: string, ...payload: any[]) => void): void;
-
-    /**
-     * 校验输入数据
-     * @param {Input} 计算数据
-     * @returns {Boolean} 校验结果
-     */
-    abstract test(input: Input): boolean;
 };
 
