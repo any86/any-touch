@@ -139,29 +139,27 @@ export default class AnyTouch extends AnyEvent {
                 recognizer.input = input;
                 recognizer.computedGroup = computedGroup;
                 recognizer.recognize(input, (type, ev) => {
-
+                    const payload = { ...input, ...ev, type };
                     if (0 < this.plugins.length) {
                         this.plugins.forEach(plugin => {
                             // console.log(plugin);
                             plugin(this, recognizer, () => {
-                                const payload = { ...input, ...ev, type };
-                                this.emit(type, payload);
-                                if (void 0 !== this.el) {
-                                    dispatchDomEvent(this.el, payload);
-                                }
+                                this.emit2(payload);
                             });
                         });
                     } else {
-                        const payload = { ...input, ...ev, type };
-                        this.emit(type, payload);
-                        if (void 0 !== this.el) {
-                            dispatchDomEvent(this.el, payload);
-                        }
+                        this.emit2(payload);
                     }
-
                 });
                 computedGroup = recognizer.computedGroup;
             }
+        }
+    };
+
+    emit2(payload: { type: string, [k: string]: any }) {
+        this.emit(payload.type, payload);
+        if (void 0 !== this.el) {
+            dispatchDomEvent(this.el, payload);
         }
     }
 
