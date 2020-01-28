@@ -69,6 +69,7 @@ function flow(isVaild: boolean, activeStatus: string, inputType: string): string
 export default function (recognizer: Recognizer, input: Input, emit: CommonEmitFunction): boolean {
     // 是否识别成功
     const isVaild = recognizer.test(input);
+    // console.log({isVaild},input.inputType,recognizer.name)
     resetStatus(recognizer);
 
     // 状态变化流程
@@ -84,16 +85,17 @@ export default function (recognizer: Recognizer, input: Input, emit: CommonEmitF
     // 是否已识别
     recognizer.isRecognized = -1 < [STATUS_START, STATUS_MOVE, STATUS_END, STATUS_RECOGNIZED].indexOf(recognizer.status);
 
+
+    const {name, status,isRecognized} = recognizer;
     // 识别后触发的事件
     if (isVaild) {
         // computed = recognizer.lockDirection(computed);
-        emit(recognizer.options.name, computed);
-
+        emit(name, computed);
         // panstart | panmove 等
-        emit(recognizer.options.name + recognizer.status, computed);
-    } else if (recognizer.isRecognized) {
+        emit(name + status, computed);
+    } else if (isRecognized) {
         // panend等
-        emit(recognizer.options.name + recognizer.status, computed);
+        emit(name + status, computed);
     }
     return isVaild;
 };
