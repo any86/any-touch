@@ -1,6 +1,6 @@
 {
   "name": "@any-touch/plugin-require-failure",
-  "version": "0.6.0-beta.26",
+  "version": "0.6.0-beta.28",
   "description": "any-touch的识别器, 用来识别点击手势.",
   "main": "./dist/index",
   "module": "./dist/index.es.js",
