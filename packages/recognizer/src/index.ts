@@ -8,7 +8,7 @@ import {
 export { default as recognizeForPressMoveLike } from './recognizeForPressMoveLike';
 export { default as resetStatusForPressMoveLike } from './resetStatusForPressMoveLike';
 
-export default abstract class{
+export default abstract class {
     // 给use方法用
     static type = 'Recognizer';
     // 手势名
@@ -101,5 +101,13 @@ export default abstract class{
      * @param {Input} 输入记录 
      */
     abstract recognize(Input: Input, callback: (type: string, ...payload: any[]) => void): void;
+
+
+    /**
+     * 校验输入数据
+     * @param {Input} 计算数据
+     * @returns {Boolean} 校验结果
+     */
+    abstract test(input: Input): boolean;
 };
 
