@@ -41,12 +41,15 @@ export default class TouchSimulator {
             event.targetTouches = event.touches;
             event.changedTouches = this.input2Points(input);
             event.identifier = this.index++;
+            this.prevTouches = event.touches;
         } else {
             event[CLIENT_X] = input[0].x;
             event[CLIENT_Y] = input[0].y;
             event.button = 0;
+            const {clientX,clientY} = event;
+            this.prevTouches = [{clientX,clientY}];
         }
-        this.prevTouches = event.touches;
+        
         this.el.dispatchEvent(event);
         return event;
     };
