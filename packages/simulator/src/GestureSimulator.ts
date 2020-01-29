@@ -80,6 +80,7 @@ export default class TouchSimulator {
             event[CLIENT_X] = points[0][CLIENT_X];
             event[CLIENT_Y] = points[0][CLIENT_Y];
             window.dispatchEvent(event);
+            this.prevTouches = points;
             this.el.dispatchEvent(event);
         }
         return event;

@@ -1,5 +1,5 @@
 import GestureSimulator from '../GestureSimulator';
-import { Point, directionString } from '@any-touch/shared';
+import { Point } from '@any-touch/shared';
 type MoveInfo = { distance: number, direction: 'up' | 'down' | 'right' | 'left' };
 
 function parseMoveInfo({ x, y }: Point, { distance, direction }: MoveInfo):Point {
