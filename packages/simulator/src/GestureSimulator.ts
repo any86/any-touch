@@ -94,10 +94,10 @@ export default class TouchSimulator {
     public dispatchTouchEnd(pointerIndex = 0, pointerNumber?: number) {
         let type = 'touch' === this.device ? 'touchend' : 'mouseup';
         let event: any = new Event(type, {});
+        const { length } = this.prevTouches;
+        const changePoints =  this.prevTouches.splice(pointerIndex, pointerNumber || length);
         if ('touch' === this.device) {
-            const { length } = this.prevTouches;
-            
-            event.changedTouches = this.prevTouches.splice(pointerIndex, pointerNumber || length);
+            event.changedTouches = changePoints;
             event.touches = this.prevTouches;
             event.targetTouches = event.touches;
             this.prevTouches = event.touches;
