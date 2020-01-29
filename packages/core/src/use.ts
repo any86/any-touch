@@ -15,12 +15,17 @@ export function use(instanceOrClass: C | I, plugin: AnyTouchPlugin, ...args: any
     }
 };
 
-export function removeUse(instanceOrClass: C | I, recognizerName: string): void {
-    for (const [index, recognizer] of instanceOrClass.recognizers.entries()) {
-        if (recognizerName === recognizer.options.name) {
-            instanceOrClass.recognizers.splice(index, 1);
-            delete instanceOrClass.recognizerMap[recognizerName];
-            break;
+export function removeUse(instanceOrClass: C | I, recognizerName?: string): void {
+    if (void 0 === recognizerName) {
+        instanceOrClass.recognizers = [];
+        instanceOrClass.recognizerMap = {};
+    } else {
+        for (const [index, recognizer] of instanceOrClass.recognizers.entries()) {
+            if (recognizerName === recognizer.options.name) {
+                instanceOrClass.recognizers.splice(index, 1);
+                delete instanceOrClass.recognizerMap[recognizerName];
+                break;
+            }
         }
     }
 };

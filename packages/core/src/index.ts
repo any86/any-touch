@@ -44,7 +44,7 @@ export default class AnyTouch extends AnyEvent {
     /**
      * 卸载插件
      */
-    static removeUse = (recognizerName: string): void => {
+    static removeUse = (recognizerName?: string): void => {
         removeUse(AnyTouch, recognizerName);
     };
 
@@ -96,7 +96,7 @@ export default class AnyTouch extends AnyEvent {
      * 移除插件
      * @param {String} 识别器name
      */
-    removeUse(name: string): void {
+    removeUse(name?: string): void {
         removeUse(this, name);
     }
 
