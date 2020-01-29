@@ -8,11 +8,7 @@
  */
 import AnyEvent, { Listener } from 'any-event';
 import { SupportEvent, Recognizer, AnyTouchPlugin } from '@any-touch/shared';
-import {
-    TOUCH,
-    MOUSE,
-    SUPPORT_TOUCH,
-} from '@any-touch/shared';
+import { TOUCH, MOUSE, SUPPORT_TOUCH } from '@any-touch/shared';
 
 import Input from './Input';
 import dispatchDomEvent from './dispatchDomEvent';
@@ -31,7 +27,7 @@ export interface Options {
 const DEFAULT_OPTIONS: Options = {
     hasDomEvents: true,
     isPreventDefault: true,
-    preventDefaultExclude: /^(?:INPUT|TEXTAREA|BUTTON|SELECT)$/,
+    preventDefaultExclude: /^(?:INPUT|TEXTAREA|BUTTON|SELECT)$/
 };
 
 export default class AnyTouch extends AnyEvent {
@@ -85,16 +81,16 @@ export default class AnyTouch extends AnyEvent {
         if (void 0 !== this.el) {
             this._unbindEl = bindElement(this.el, this.catchEvent.bind(this));
         }
-    };
+    }
 
     /**
      * 使用插件
-     * @param {AnyTouchPlugin} 插件 
-     * @param {Object} 选项 
+     * @param {AnyTouchPlugin} 插件
+     * @param {Object} 选项
      */
     use(Plugin: AnyTouchPlugin, ...args: any): void {
         use(this, Plugin, ...args);
-    };
+    }
 
     /**
      * 移除插件
@@ -102,7 +98,7 @@ export default class AnyTouch extends AnyEvent {
      */
     removeUse(name: string): void {
         removeUse(this, name);
-    };
+    }
 
     /**
      * 监听input变化s
@@ -141,7 +137,7 @@ export default class AnyTouch extends AnyEvent {
                 recognizer.recognize(input, (type, ev) => {
                     const payload = { ...input, ...ev, type };
                     if (0 < this.plugins.length) {
-                        this.plugins.forEach(plugin => {
+                        this.plugins.forEach((plugin) => {
                             // console.log(plugin);
                             plugin(this, recognizer, () => {
                                 this.emit2(payload);
@@ -154,9 +150,9 @@ export default class AnyTouch extends AnyEvent {
                 computedGroup = recognizer.computedGroup;
             }
         }
-    };
+    }
 
-    emit2(payload: { type: string, [k: string]: any }) {
+    emit2(payload: { type: string;[k: string]: any }) {
         this.emit(payload.type, payload);
         if (void 0 !== this.el) {
             dispatchDomEvent(this.el, payload);
@@ -167,7 +163,7 @@ export default class AnyTouch extends AnyEvent {
      * 只对event.target === "目标元素"触发事件
      * @param {HTMLElement} 目标元素
      */
-    target(el: HTMLElement) {
+    target(el: HTMLElement): { on: (name: string, listener: Listener) => void } {
         return {
             on: (name: string, listener: Listener) => {
                 this.on(name, listener, (ev) => ev.target === el);
@@ -182,7 +178,7 @@ export default class AnyTouch extends AnyEvent {
      */
     get(name: string): Recognizer | void {
         return this.recognizerMap[name];
-    };
+    }
 
     /**
      * 设置
@@ -190,12 +186,12 @@ export default class AnyTouch extends AnyEvent {
      */
     set(options: Options): void {
         this.options = { ...this.options, ...options };
-    };
+    }
 
     /**
      * 解绑所有触摸事件
      */
-    private _unbindEl(): void { };
+    private _unbindEl(): void { }
 
     /**
      * 销毁
