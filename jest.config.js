@@ -11,8 +11,8 @@ module.exports = {
     collectCoverageFrom: [
         'packages/*/src/**/*.ts'],
     verbose: false,
-    testPathIgnorePatterns: ["<rootDir>/node_modules/", "<rootDir>/__tests__/utils/"],
-    coveragePathIgnorePatterns: ["<rootDir>/node_modules/", "<rootDir>/__tests__/utils/"],
+    testPathIgnorePatterns: ["<rootDir>/node_modules/","<rootDir>/packages/simulator/"],
+    coveragePathIgnorePatterns: ["<rootDir>/node_modules/","<rootDir>/packages/simulator/"],
     globals: {
         __TEST__: true,
         __VERSION__: require('./package.json').version,
