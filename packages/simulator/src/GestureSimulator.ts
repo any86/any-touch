@@ -35,7 +35,7 @@ export default class TouchSimulator {
      */
     public dispatchTouchStart(input: Input[]=[{x:0,y:0}]) {
         let type = 'touch' === this.device ? 'touchstart' : 'mousedown';
-        let event: any = new Event(type, {bubbles:true});
+        let event: any = new Event(type, {bubbles:true,cancelable:true});
         if ('touch' === this.device) {
             event.touches = [...this.prevTouches, ...this.input2Points(input)];
             event.targetTouches = event.touches;
@@ -62,7 +62,7 @@ export default class TouchSimulator {
     public dispatchTouchMove(input: Input[]) {
         const points = this.input2Points(input);
         let type = 'touch' === this.device ? 'touchmove' : 'mousemove';
-        let event: any = new Event(type, {bubbles:true});
+        let event: any = new Event(type, {bubbles:true,cancelable:true});
 
         if ('touch' === this.device) {
             if(points.length !== this.prevTouches.length) {
@@ -97,7 +97,7 @@ export default class TouchSimulator {
      */
     public dispatchTouchEnd(pointerIndex = 0, pointerNumber?: number) {
         let type = 'touch' === this.device ? 'touchend' : 'mouseup';
-        let event: any = new Event(type, {bubbles:true});
+        let event: any = new Event(type, {bubbles:true,cancelable:true});
         const { length } = this.prevTouches;
         const changePoints =  this.prevTouches.splice(pointerIndex, pointerNumber || length);
         if ('touch' === this.device) {
@@ -118,7 +118,7 @@ export default class TouchSimulator {
      * @param dom元素 
      */
     public dispatchTouchCancel() {
-        let event: any = new Event('touchcancel', {bubbles:true});
+        let event: any = new Event('touchcancel', {bubbles:true,cancelable:true});
         event.changedTouches = this.prevTouches;
         event.touches = [];
         event.targetTouches = [];

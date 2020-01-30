@@ -17,7 +17,7 @@ import bindElement from './bindElement';
 import { use, removeUse } from './use';
 
 export interface Options {
-    withDomEvents?: boolean;
+    hasDomEvents?: boolean;
     isPreventDefault?: boolean;
     // 不阻止默认行为的白名单
     preventDefaultExclude?: RegExp | ((ev: SupportEvent) => boolean);
@@ -25,7 +25,7 @@ export interface Options {
 
 // 默认设置
 const DEFAULT_OPTIONS: Options = {
-    withDomEvents: true,
+    hasDomEvents: true,
     isPreventDefault: true,
     preventDefaultExclude: /^(?:INPUT|TEXTAREA|BUTTON|SELECT)$/
 };
@@ -158,7 +158,7 @@ export default class AnyTouch extends AnyEvent {
      */
     emit2(payload: { type: string;[k: string]: any }) {
         this.emit(payload.type, payload);
-        if (this.options.withDomEvents && void 0 !== this.el) {
+        if (this.options.hasDomEvents && void 0 !== this.el) {
             dispatchDomEvent(this.el, payload);
         }
     };

@@ -96,9 +96,7 @@ function extendInput(inputBase: BaseInput): Omit<Input, 'prevInput' | 'startInpu
 
     return {
         ...inputBase,
-        preventDefault: () => {
-            nativeEvent.preventDefault();
-        },
+        preventDefault: () => nativeEvent.preventDefault(),
         x, y,
         timestamp,
         isStart, isEnd,
