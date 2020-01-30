@@ -118,10 +118,13 @@ export default class TouchSimulator {
      * @param dom元素 
      */
     public dispatchTouchCancel() {
+        if(void 0 === this.prevTouches){
+            throw new Error('不能单独触发Cancel!');
+        }
         let event: any = new Event('touchcancel', {bubbles:true,cancelable:true});
         event.changedTouches = this.prevTouches;
-        event.touches = [];
-        event.targetTouches = [];
+        event.touches = this.prevTouches;
+        event.targetTouches = this.prevTouches;
         this.prevTouches = event.touches;
         this.el.dispatchEvent(event);
         return event;
