@@ -20,11 +20,37 @@ test('依次输入start->move->end->start-cancel', async done => {
     done();
 });
 
+test('通过target指定相应事件的元素', async done => {
+    const { GestureSimulator, AnyTouch, sleep } = create();
+    const pEl = document.createElement('div');
+    const at = new AnyTouch(pEl);
+    const el = document.createElement('span');
+    pEl.appendChild(el);
+
+    // 只触发span的touch事件
+    const mockCallback = jest.fn();
+    at.target(el).on('at:input', ev => {
+        mockCallback(ev.target);
+    });
+
+    at.on('at:input', ev => {
+        mockCallback(ev.target);
+    });
+
+    const gs = new GestureSimulator(el);
+    gs.dispatchTouchStart();
+    await sleep();
+    expect(mockCallback).toHaveBeenNthCalledWith(1, el);
+    expect(mockCallback).toHaveBeenNthCalledWith(2, el);
+    done();
+});
+
+
 test('加载/卸载一个手势,', async done => {
-    const { AnyTouch,el,touch,mockCB,sleep } = create();
+    const { AnyTouch, el, touch, mockCB, sleep } = create();
     AnyTouch.use(Tap);
     const at = new AnyTouch(el);
-    at.on('tap', ev=>{
+    at.on('tap', ev => {
         mockCB(ev);
     });
     touch.dispatchTouchStart();
@@ -38,7 +64,7 @@ test('加载/卸载一个手势,', async done => {
 
     AnyTouch.removeUse('tap');
     const mockCallback = jest.fn();
-    at.on('tap', ev=>{
+    at.on('tap', ev => {
         console.warn('tap')
         mockCallback(ev);
     });
@@ -51,7 +77,7 @@ test('加载/卸载一个手势,', async done => {
 
 test('destroy实例', () => {
     const { at, touch, sleep, mockCB } = create();
-    at.on('at:input',()=>{
+    at.on('at:input', () => {
         mockCB();
     });
     at.destroy();

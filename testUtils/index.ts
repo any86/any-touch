@@ -11,6 +11,7 @@ export function create() {
     const mockCalls = mock.calls;
     const{ dispatchTouchStart, dispatchTouchCancel, dispatchTouchEnd, dispatchTouchMove } = gs;
     return {
+        GestureSimulator,
         dispatchTouchStart,
         dispatchTouchCancel,
         dispatchTouchEnd,
