@@ -91,6 +91,11 @@ new Vue({
             C(ev, '#99c');
         })
 
+        at.target(el).on('panend', ev => {
+            C(ev, '#19c');
+        })
+
+
         at.target(el).on('press', ev => {
             this.scale = 0.9;
             C(ev, '#168');
