@@ -2,11 +2,11 @@ import { Point, Input } from '@any-touch/shared';
 import {
     STATUS_RECOGNIZED,
     STATUS_POSSIBLE,
-    STATUS_FAILED,INPUT_END
+    STATUS_FAILED, INPUT_END
 } from '@any-touch/shared';
 import Recognizer from '@any-touch/recognizer';
-import {getVLength} from '@any-touch/vector';
-import {ComputeDistance,ComputeMaxLength} from '@any-touch/compute';
+import { getVLength } from '@any-touch/vector';
+import { ComputeDistance, ComputeMaxLength } from '@any-touch/compute';
 
 export default class extends Recognizer {
     public tapCount: number;
@@ -29,11 +29,11 @@ export default class extends Recognizer {
         // 等待下一次tap的时间, 
         // 超过该事件就立即判断当前点击数量
         waitNextTapTime: 300,
-        disabled: false,
+
         // 从接触到离开允许产生的最大距离
-        positionTolerance: 2,
+        maxDistance: 2,
         // 2次tap之间允许的最大位移
-        tapsPositionTolerance: 9,
+        maxDistanceFromPrevTap: 9,
         // 从接触到离开屏幕的最大时间
         maxPressTime: 250,
     };
@@ -53,7 +53,7 @@ export default class extends Recognizer {
             const distanceFromPreviousTap = getVLength({ x: center.x - this.prevTapPoint.x, y: center.y - this.prevTapPoint.y });
             // 缓存当前点, 作为下次点击的上一点
             this.prevTapPoint = center;
-            return this.options.tapsPositionTolerance >= distanceFromPreviousTap;
+            return this.options.maxDistanceFromPrevTap >= distanceFromPreviousTap;
         } else {
             this.prevTapPoint = center;
             return true;
@@ -188,7 +188,7 @@ export default class extends Recognizer {
         // 3. start至end的事件, 区分tap和press
         const { maxPointLength, distance } = this.computed;
         return maxPointLength === this.options.pointLength &&
-            this.options.positionTolerance >= distance &&
+            this.options.maxDistance >= distance &&
             this.options.maxPressTime > deltaTime;
     };
 };

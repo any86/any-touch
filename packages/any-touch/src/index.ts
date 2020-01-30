@@ -21,5 +21,10 @@ AnyTouch.use(Swipe);
 AnyTouch.use(Press);
 AnyTouch.use(Pinch);
 AnyTouch.use(Rotate);
-
+(AnyTouch as any).Tap = Tap;
+(AnyTouch as any).Pan = Pan;
+(AnyTouch as any).Swipe = Swipe;
+(AnyTouch as any).Press = Press;
+(AnyTouch as any).Pinch = Pinch;
+(AnyTouch as any).Rotate = Rotate;
 export default AnyTouch;
