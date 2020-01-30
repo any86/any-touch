@@ -55,8 +55,10 @@ export default abstract class {
      * 设置识别器
      * @param {Object} 选项 
      */
-    set(options = {}) {
-        this.options = { ...this.options, ...options };
+    set(options?: Record<string, any>) {
+        if (void 0 !== options) {
+            this.options = { ...this.options, ...options };
+        }
         return this;
     };
 

@@ -65,10 +65,14 @@ test(`当2次点击的距离超过阈值(20px), 本次点击不累计`,async don
 
 test(`如果点击用时超过指定时间(250ms), 不识别成tap`, async done=>{
     const maxPressTime = 250;
-    AnyTouch.use(Tap, { maxPressTime});
+    AnyTouch.use(Tap);
     const el = document.createElement('div');
     const gs = new GestureSimulator(el);
     const at = new AnyTouch(el);
+    const tap = at.get('tap');
+    if(tap){
+        tap.set({ maxPressTime});
+    }
     const onTap = jest.fn().mockName('tap');
     at.on('tap', onTap);
     gs.dispatchTouchStart();
