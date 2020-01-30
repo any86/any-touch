@@ -14,7 +14,7 @@
     <script src="../packages/any-touch/dist/any-touch.umd.js"></script>
 
     <script>
-        // var vConsole = new VConsole();
+        var vConsole = new VConsole();
     </script>
 </head>
 
@@ -23,7 +23,7 @@
         <!-- <header>
             已识别: {{message.type}}
         </header> -->
-
+        <button  @click="reset">复位</button>
         <h1>返回数据说明</h1>
         <table>
             <tr>
@@ -203,13 +203,13 @@
         }">{{message.type||activeType}}</div>
 
 
-        <div class="circle"  ref="circle2" :class="[activeType]" :style="{
+        <!-- <div class="circle"  ref="circle2" :class="[activeType]" :style="{
             top:`${y+100}px`,
             left:`${x+100}px`,
             transitionDuration: `${transitionDuration}ms`,
         transform: `scale(${scale}) rotate(${angle}deg)`
         
-    }">Circle2</div>
+    }">Circle2</div> -->
 
         <!-- <p class="text">scale: {{scale}}</p>
         <p class="text">angle: {{angle}}</p> -->

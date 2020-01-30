@@ -124,5 +124,17 @@ new Vue({
         message() {
             this.activeType = this.message.type;
         }
+    },
+
+    methods:{
+        reset(){
+            this.angle= 0;
+            this.scale= 1;
+            this.x= window.innerWidth / 2 - 100;
+            this.y= window.innerHeight / 2 - 100;
+            this.centerX= 0;
+            this.centerY= 0;
+            this.transitionDuration= 0;
+        }
     }
 });
