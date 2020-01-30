@@ -40,6 +40,7 @@ new Vue({
         el.addEventListener('pan', ev => {
             // console.log(ev)
         })
+        AnyTouch.use(AnyTouch.Tap, {name:'doubletap',tapTimes:2, maxDistanceFromPrevTap:20});
         // 初始化
         const at = new AnyTouch(document.getElementById('app'));
         at.target(el).on('input', ev => {
