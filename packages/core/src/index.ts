@@ -17,7 +17,7 @@ import bindElement from './bindElement';
 import { use, removeUse } from './use';
 
 export interface Options {
-    hasDomEvents?: boolean;
+    withDomEvents?: boolean;
     isPreventDefault?: boolean;
     // 不阻止默认行为的白名单
     preventDefaultExclude?: RegExp | ((ev: SupportEvent) => boolean);
@@ -25,7 +25,7 @@ export interface Options {
 
 // 默认设置
 const DEFAULT_OPTIONS: Options = {
-    hasDomEvents: true,
+    withDomEvents: true,
     isPreventDefault: true,
     preventDefaultExclude: /^(?:INPUT|TEXTAREA|BUTTON|SELECT)$/
 };
@@ -90,7 +90,7 @@ export default class AnyTouch extends AnyEvent {
      */
     use(Plugin: AnyTouchPlugin, ...args: any): void {
         use(this, Plugin, ...args);
-    }
+    };
 
     /**
      * 移除插件
@@ -98,7 +98,7 @@ export default class AnyTouch extends AnyEvent {
      */
     removeUse(name?: string): void {
         removeUse(this, name);
-    }
+    };
 
     /**
      * 监听input变化s
@@ -150,14 +150,18 @@ export default class AnyTouch extends AnyEvent {
                 computedGroup = recognizer.computedGroup;
             }
         }
-    }
+    };
 
+    /**
+     * 同时出发内部/dom事件
+     * @param {Object} 事件对象 
+     */
     emit2(payload: { type: string;[k: string]: any }) {
         this.emit(payload.type, payload);
-        if (void 0 !== this.el) {
+        if (this.options.withDomEvents && void 0 !== this.el) {
             dispatchDomEvent(this.el, payload);
         }
-    }
+    };
 
     /**
      * 只对event.target === "目标元素"触发事件
@@ -169,7 +173,7 @@ export default class AnyTouch extends AnyEvent {
                 this.on(name, listener, (ev) => ev.target === el);
             }
         };
-    }
+    };
 
     /**
      * 获取识别器通过名字
@@ -178,7 +182,7 @@ export default class AnyTouch extends AnyEvent {
      */
     get(name: string): Recognizer | void {
         return this.recognizerMap[name];
-    }
+    };
 
     /**
      * 设置
@@ -186,12 +190,12 @@ export default class AnyTouch extends AnyEvent {
      */
     set(options: Options): void {
         this.options = { ...this.options, ...options };
-    }
+    };
 
     /**
      * 解绑所有触摸事件
      */
-    private _unbindEl(): void { }
+    private _unbindEl(): void { };
 
     /**
      * 销毁
@@ -201,5 +205,5 @@ export default class AnyTouch extends AnyEvent {
         if (this.el) {
             this._unbindEl();
         }
-    }
+    };
 }

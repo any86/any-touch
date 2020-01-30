@@ -75,14 +75,14 @@ test('加载/卸载一个手势,', async done => {
     done();
 });
 
-test(`通过实例加载/卸载插件`, async done=>{
+test(`通过实例加载/卸载插件`, async done => {
     const { AnyTouch, el, GestureSimulator, mockCB, sleep } = create();
     const at = new AnyTouch(el);
     const gs = new GestureSimulator(el);
     at.use(Tap);
-    at.on('tap',ev=>{
+    at.on('tap', ev => {
         mockCB(ev.type);
-    });  
+    });
 
     gs.dispatchTouchStart();
     gs.dispatchTouchEnd();
@@ -91,14 +91,54 @@ test(`通过实例加载/卸载插件`, async done=>{
 
     // 卸载
     at.removeUse('tap');
-    at.on('tap',ev=>{
+    at.on('tap', ev => {
         mockCB();
-    }); 
+    });
     await sleep();
     expect(mockCB).toHaveBeenCalledTimes(1);
     done();
 });
 
+
+test(`通过get获取tap手势实例, 并设置maxPressTime为100ms`, async done => {
+    const { AnyTouch, el } = create();
+    AnyTouch.use(Tap);
+    const at = new AnyTouch(el);
+    const tap = at.get('tap');
+    expect(tap).toBeInstanceOf(Tap);
+    done();
+});
+
+test('默认会触发dom事件', async done => {
+    const { AnyTouch, el, GestureSimulator, mockCB, sleep } = create();
+    AnyTouch.use(Tap);
+    new AnyTouch(el);
+    const gs = new GestureSimulator(el);
+    el.addEventListener('tap', ev => {
+        mockCB(ev.type);
+    });
+    gs.dispatchTouchStart();
+    gs.dispatchTouchEnd();
+    await sleep();
+    expect(mockCB).toHaveBeenCalledWith('tap');
+    done();
+});
+
+
+test(`通过set设置不触发dom事件`, async done => {
+    const { AnyTouch, el, GestureSimulator, mockCB, sleep } = create();
+    const at = new AnyTouch(el);
+    at.set({withDomEvents:false});
+    const gs = new GestureSimulator(el);
+    el.addEventListener('tap', ev => {
+        mockCB();
+    });
+    gs.dispatchTouchStart();
+    gs.dispatchTouchEnd();
+    await sleep();
+    expect(mockCB).not.toHaveBeenCalled();
+    done();
+});
 
 test('destroy实例', () => {
     const { at, touch, sleep, mockCB } = create();
