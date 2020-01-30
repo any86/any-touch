@@ -37,6 +37,8 @@ export default class AnyTouch extends AnyEvent {
     static plugins: AnyTouchPlugin[] = [];
     /**
      * 安装插件
+     * @param {AnyTouchPlugin} 插件
+     * @param {any[]} 插件参数
      */
     static use = (Plugin: AnyTouchPlugin, ...args: any): void => {
         use(AnyTouch, Plugin, ...args);

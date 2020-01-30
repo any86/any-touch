@@ -23,8 +23,8 @@ function flow(isVaild: boolean, activeStatus: string, inputType: string): string
         1: {
             [STATUS_POSSIBLE]: {
                 [INPUT_MOVE]: STATUS_START,
-                [INPUT_END]: STATUS_RECOGNIZED,
-                [INPUT_CANCEL]: STATUS_CANCELLED
+                // [INPUT_END]: STATUS_RECOGNIZED,
+                // [INPUT_CANCEL]: STATUS_CANCELLED
             },
             [STATUS_START]: {
                 [INPUT_MOVE]: STATUS_MOVE,
@@ -34,10 +34,12 @@ function flow(isVaild: boolean, activeStatus: string, inputType: string): string
             [STATUS_MOVE]: {
                 [INPUT_MOVE]: STATUS_MOVE,
                 [INPUT_END]: STATUS_END,
+                [INPUT_CANCEL]: STATUS_CANCELLED
             }
         },
         // isVaild === false
         // 这个分支有STATUS_FAILED
+        // 2020年1月30, 未看完, 有待商榷
         0: {
             [STATUS_START]: {
                 [INPUT_MOVE]: STATUS_CANCELLED,
@@ -77,24 +79,20 @@ export default function (recognizer: Recognizer, input: Input, emit: CommonEmitF
 
     recognizer.status = flow(isVaild, recognizer.status, inputType);
     const { computed } = recognizer;
-    if (STATUS_CANCELLED === inputType) {
-        emit(recognizer.options.name + INPUT_CANCEL, computed);
-        return false;
-    }
 
-    // 是否已识别
-    recognizer.isRecognized = -1 < [STATUS_START, STATUS_MOVE, STATUS_END, STATUS_RECOGNIZED].indexOf(recognizer.status);
+    // 是否已识别, 包含end
+    recognizer.isRecognized = -1 < [STATUS_START, STATUS_MOVE, STATUS_END,STATUS_CANCELLED, STATUS_RECOGNIZED].indexOf(recognizer.status);
 
 
     const {name, status,isRecognized} = recognizer;
+    // console.log({status,inputType,isRecognized,isVaild})
+    
     // 识别后触发的事件
-    if (isVaild) {
-        // computed = recognizer.lockDirection(computed);
-        emit(name, computed);
-        // panstart | panmove 等
-        emit(name + status, computed);
-    } else if (isRecognized) {
+    if (isRecognized) {
         // panend等
+        if(INPUT_END !== inputType){
+            emit(name, computed);
+        }
         emit(name + status, computed);
     }
     return isVaild;
