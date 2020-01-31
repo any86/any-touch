@@ -1,34 +1,8 @@
 import EventEmitter from '../src/index';
 
-test('emit传递多个参数是否正确?', () => {
-    const eventEmitter = new EventEmitter();
-    const add = (n: number[]): number => n.reduce((prev: number, current: number) => {
-        return prev + current;
-    });
-    eventEmitter.on('add', (...n: number[]) => {
-        let result = add(n);
-        expect(result).toBe(10);
-    });
-    eventEmitter.emit('add', 1, 2, 3, 4);
-});
 
 
-test('使用emit过滤"payload.a === 1"的事件?', (done) => {
-    const mockFn = jest.fn();
-    const eventEmitter = new EventEmitter();
-    eventEmitter.on('add', ev => {
-        mockFn(ev);
-    }, ev => ev === 1);
-    eventEmitter.emit('add', 1);
-    eventEmitter.emit('add', 2);
-
-    setTimeout(() => {
-        expect(mockFn.mock.calls.length).toBe(1);
-        done();
-    }, 200)
-});
-
-test('off指定事假', () => {
+test('off指定事件', () => {
     const eventEmitter = new EventEmitter();
     const mockCallback = jest.fn();
     eventEmitter.on('abc', mockCallback);

@@ -1,20 +1,23 @@
-export interface FilterPayloadFunction {
-    (...args: any): boolean
-}
 
 export interface Listener {
     (...payload: any): void;
-    filter?: FilterPayloadFunction
+    targetEl?: HTMLElement;
 }
 
 export interface ListenersMap {
     [propName: string]: Listener[];
 }
 export default class AnyEvent {
-    map: ListenersMap;
+    callbackMap: ListenersMap;
+    targetEl?: HTMLElement;
 
     constructor() {
-        this.map = {};
+        this.callbackMap = {};
+    };
+
+    target(el: HTMLElement) {
+        this.targetEl = el;
+        return this;
     };
 
     /**
@@ -23,12 +26,14 @@ export default class AnyEvent {
      * @param {Function} 回调函数
      * @param {Function} payload筛选器
      */
-    on(eventName: string, listener: Listener, filter?: FilterPayloadFunction): this {
-        if (void 0 === this.map[eventName]) {
-            this.map[eventName] = [];
+    on(eventName: string, listener: Listener): this {
+        if (void 0 === this.callbackMap[eventName]) {
+            this.callbackMap[eventName] = [];
         }
-        listener.filter = filter;
-        this.map[eventName].push(listener);
+        listener.targetEl = this.targetEl;
+        this.callbackMap[eventName].push(listener);
+        // 重置targetEl
+        this.targetEl = void 0;
         return this;
     };
 
@@ -39,12 +44,12 @@ export default class AnyEvent {
      * @param {Function} 回调函数
      */
     off(eventName: string, listener?: Listener): this {
-        const listeners = this.map[eventName];
+        const listeners = this.callbackMap[eventName];
         // 事件存在
         if (void 0 !== listeners) {
             // 清空事件名对应的所有回调
             if (void 0 === listener) {
-                delete this.map[eventName];
+                delete this.callbackMap[eventName];
             }
             // 清空指定回调
             else {
@@ -61,17 +66,13 @@ export default class AnyEvent {
      * @param {Any} 载荷数据 
      * @returns {Boolean} 如果事件有监听器，则返回 true，否则返回 false。
      */
-    emit(eventName: string, ...payload: any): boolean {
-        const listeners = this.map[eventName];
+    emit(eventName: string, payload?: any): boolean {
+        const listeners = this.callbackMap[eventName];
+        const { target } = payload || {};
         if (void 0 !== listeners && 0 < listeners.length) {
             for (const listener of listeners) {
-                const { filter } = listener;
-                if (void 0 === filter) {
-                    listener(...payload);
-                } else {
-                    if (filter(...payload)) {
-                        listener(...payload);
-                    }
+                if (void 0 === target || void 0 === listener.targetEl || target === listener.targetEl) {
+                    listener(payload);
                 }
             }
             return true;
@@ -84,6 +85,6 @@ export default class AnyEvent {
      * 销毁实例
      */
     destroy() {
-        this.map = {};
+        this.callbackMap = {};
     };
 };

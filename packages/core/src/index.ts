@@ -162,18 +162,6 @@ export default class AnyTouch extends AnyEvent {
     };
 
     /**
-     * 只对event.target === "目标元素"触发事件
-     * @param {HTMLElement} 目标元素
-     */
-    target(el: HTMLElement): { on: (name: string, listener: Listener) => void } {
-        return {
-            on: (name: string, listener: Listener) => {
-                this.on(name, listener, (ev) => ev.target === el);
-            }
-        };
-    };
-
-    /**
      * 获取识别器通过名字
      * @param {String} 识别器的名字
      * @return {Recognizer|undefined} 返回识别器
