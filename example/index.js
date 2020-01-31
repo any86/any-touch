@@ -40,7 +40,7 @@ new Vue({
         el.addEventListener('pan', ev => {
             // console.log(ev)
         })
-        AnyTouch.use(AnyTouch.Tap, {name:'doubletap',tapTimes:2, maxDistanceFromPrevTap:20});
+        AnyTouch.use(AnyTouch.Tap, { name: 'doubletap', tapTimes: 2, maxDistanceFromPrevTap: 20 });
         // 初始化
         const at = new AnyTouch(document.getElementById('app'));
         at.on('at:input', ev => {
@@ -49,7 +49,7 @@ new Vue({
 
 
         at.target(el).on('pinch', ev => {
-            C(ev, '#f99');
+            console.log(ev.type)
         });
 
         at.target(el).on('tap', ev => {
@@ -124,15 +124,15 @@ new Vue({
         }
     },
 
-    methods:{
-        reset(){
-            this.angle= 0;
-            this.scale= 1;
-            this.x= window.innerWidth / 2 - 100;
-            this.y= window.innerHeight / 2 - 100;
-            this.centerX= 0;
-            this.centerY= 0;
-            this.transitionDuration= 0;
+    methods: {
+        reset() {
+            this.angle = 0;
+            this.scale = 1;
+            this.x = window.innerWidth / 2 - 100;
+            this.y = window.innerHeight / 2 - 100;
+            this.centerX = 0;
+            this.centerY = 0;
+            this.transitionDuration = 0;
         }
     }
 });
