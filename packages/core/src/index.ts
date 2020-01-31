@@ -65,7 +65,7 @@ export default class AnyTouch extends AnyEvent {
     constructor(el?: HTMLElement, options?: Options) {
         super();
         this.el = el;
-        
+
         // 适配器
         this.input = new Input();
         this.options = { ...DEFAULT_OPTIONS, ...options };
@@ -156,8 +156,9 @@ export default class AnyTouch extends AnyEvent {
      */
     emit2(payload: { type: string;[k: string]: any }) {
         this.emit(payload.type, payload);
-        if (this.options.hasDomEvents && void 0 !== this.el) {
-            dispatchDomEvent(this.el, payload);
+        const { target } = payload;
+        if (this.options.hasDomEvents && void 0 !== this.el && void 0 !== target) {
+            dispatchDomEvent(target, payload);
         }
     };
 
