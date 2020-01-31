@@ -5,7 +5,7 @@ import { BaseInput, PureInput, Input, SupportEvent, Point } from '@any-touch/sha
 import Touch from './adapters/Touch';
 import Mouse from './adapters/Mouse';
 import Adapter from './adapters/Abstract';
-import { MOUSE, TOUCH, CLIENT_X, CLIENT_Y, INPUT_START, INPUT_CANCEL, INPUT_END } from '@any-touch/shared';
+import { SUPPORT_TOUCH, CLIENT_X, CLIENT_Y, INPUT_START, INPUT_CANCEL, INPUT_END } from '@any-touch/shared';
 export default class {
     public adapter: Adapter;
     public id: number;
@@ -14,13 +14,9 @@ export default class {
     public startInput?: PureInput;
     public startMultiInput?: PureInput;
 
-    constructor(sourceType: typeof MOUSE | typeof TOUCH) {
-        const SOURCE = {
-            [MOUSE]: Mouse,
-            [TOUCH]: Touch
-        }[sourceType];
-
-        this.adapter = new SOURCE();
+    constructor() {
+        const Input = SUPPORT_TOUCH ? Touch : Mouse;
+        this.adapter = new Input();
         this.id = 0;
     };
 

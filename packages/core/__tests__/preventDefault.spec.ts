@@ -2,8 +2,8 @@ import { create } from '@testUtils';
 import Input from '../src/Input/index';
 
 test(`preventDefault.spec`, () => {
-    const { AnyTouch, el, GestureSimulator, mockCB, sleep } = create();
-    const inputFactory = new Input('touch');
+    const {el, GestureSimulator} = create();
+    const inputFactory = new Input();
     const gs = new GestureSimulator(el);
     const event = gs.dispatchTouchStart();
     const input = inputFactory.transform(event);

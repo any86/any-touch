@@ -8,8 +8,6 @@
  */
 import AnyEvent, { Listener } from 'any-event';
 import { SupportEvent, Recognizer, AnyTouchPlugin } from '@any-touch/shared';
-import { TOUCH, MOUSE, SUPPORT_TOUCH } from '@any-touch/shared';
-
 import Input from './Input';
 import dispatchDomEvent from './dispatchDomEvent';
 import canPreventDefault from './canPreventDefault';
@@ -54,8 +52,6 @@ export default class AnyTouch extends AnyEvent {
     el?: HTMLElement;
     // 选项
     options: Options;
-    // 输入来源
-    sourceType: typeof TOUCH | typeof MOUSE;
     // 统一转换器
     input: Input;
 
@@ -69,9 +65,9 @@ export default class AnyTouch extends AnyEvent {
     constructor(el?: HTMLElement, options?: Options) {
         super();
         this.el = el;
-        this.sourceType = SUPPORT_TOUCH ? TOUCH : MOUSE;
+        
         // 适配器
-        this.input = new Input(this.sourceType);
+        this.input = new Input();
         this.options = { ...DEFAULT_OPTIONS, ...options };
 
         // 同步到插件到实例
