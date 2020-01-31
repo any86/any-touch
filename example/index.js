@@ -43,9 +43,8 @@ new Vue({
         AnyTouch.use(AnyTouch.Tap, {name:'doubletap',tapTimes:2, maxDistanceFromPrevTap:20});
         // 初始化
         const at = new AnyTouch(document.getElementById('app'));
-        at.target(el).on('input', ev => {
+        at.on('at:input', ev => {
             // console.dir(ev.target)
-            // console.log(ev);
         })
 
 
@@ -84,7 +83,6 @@ new Vue({
         });
 
         at.target(el).on('pan', ev => {
-            ev.preventDefault();
             this.transitionDuration = 0;
             this.x += ev.deltaX;
             this.y += ev.deltaY;
