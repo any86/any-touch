@@ -1,16 +1,16 @@
 import { Input, CommonEmitFunction } from '@any-touch/shared';
 import { ComputeVectorForMutli, computeScale } from '@any-touch/compute';
 import Recognizer, { recognizeForPressMoveLike } from '@any-touch/recognizer';
+const DEFAULT_OPTIONS = {
+    name: 'pinch',
+    // 触发事件所需要的最小缩放比例
+    threshold: 0,
+    pointLength: 2,
+};
 
 export default class extends Recognizer {
-    static DEFAULT_OPTIONS = {
-        name: 'pinch',
-        // 触发事件所需要的最小缩放比例
-        threshold: 0,
-        pointLength: 2,
-    };
-    constructor(options = {}) {
-        super(options);
+    constructor(options: typeof DEFAULT_OPTIONS) {
+        super({ ...DEFAULT_OPTIONS, ...options });
     };
 
     /**
