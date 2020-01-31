@@ -4,17 +4,17 @@ import {
 } from '@any-touch/shared';
 import { ComputeDistance } from '@any-touch/compute';
 import Recognizer, { resetStatusForPressMoveLike as resetStatus } from '@any-touch/recognizer';
-
+const DEFAULT_OPTIONS = {
+    name: 'press',
+    pointLength: 1,
+    positionTolerance: 9,
+    minPressTime: 251,
+};
 export default class extends Recognizer {
     private _timeoutId?: number;
-    static DEFAULT_OPTIONS = {
-        name: 'press',
-        pointLength: 1,
-        positionTolerance: 9,
-        minPressTime: 251,
-    };
-    constructor(options = {}) {
-        super(options);
+    
+    constructor(options: Partial<typeof DEFAULT_OPTIONS>) {
+        super({ ...DEFAULT_OPTIONS, ...options });
     };
 
     recognize(input: Input, emit: CommonEmitFunction): void {

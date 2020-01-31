@@ -5,20 +5,17 @@ import requireFailure from '@any-touch/requireFailure';
 import { GestureSimulator, sleep } from '@any-touch/simulator';
 test('识别为双击那么单击不触发', async (done) => {
     const DOUBLE_TAP_NAME = 'doubletap';
-    const { mockCB, sleep } = create();
     AnyTouch.use(Tap);
     AnyTouch.use(Tap, { name: DOUBLE_TAP_NAME, tapTimes: 2 });
     AnyTouch.use(requireFailure, 'tap', DOUBLE_TAP_NAME);
     const el = document.createElement('div');
     const gs = new GestureSimulator(el);
     const at = new AnyTouch(el);
-    at.on('tap', ev => {
-        mockCB(ev.type);
-    });
+    const onTap = jest.fn().mockName('onTap');
+    const onDoubleTap = jest.fn().mockName('onDoubleTap');
 
-    at.on(DOUBLE_TAP_NAME, ev => {
-        mockCB(ev.type);
-    });
+    at.on('tap', onTap);
+    at.on(DOUBLE_TAP_NAME, onDoubleTap);
 
     gs.dispatchTouchStart();
     gs.dispatchTouchEnd();
@@ -26,8 +23,8 @@ test('识别为双击那么单击不触发', async (done) => {
     gs.dispatchTouchEnd();
 
     await sleep(350);
-    expect(mockCB).toHaveBeenCalledTimes(1);
-    expect(mockCB).toHaveBeenCalledWith(DOUBLE_TAP_NAME);
+    expect(onTap).toHaveBeenCalledTimes(0);
+    expect(onDoubleTap).toHaveBeenCalledTimes(1);
     done();
 });
 

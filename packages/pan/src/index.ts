@@ -2,16 +2,14 @@ import { Input, CommonEmitFunction } from '@any-touch/shared';
 import { INPUT_MOVE, INPUT_END } from '@any-touch/shared';
 import { ComputeDistance, ComputeDeltaXY, ComputeVAndDir } from '@any-touch/compute';
 import Recognizer, { recognizeForPressMoveLike } from '@any-touch/recognizer';
-
+const DEFAULT_OPTIONS = {
+    name: 'pan',
+    threshold: 10,
+    pointLength: 1
+};
 export default class extends Recognizer {
-    static DEFAULT_OPTIONS = {
-        name: 'pan',
-        threshold: 10,
-        pointLength: 1
-    };
-
-    constructor(options = {}) {
-        super(options);
+    constructor(options: Partial<typeof DEFAULT_OPTIONS>) {
+        super({ ...DEFAULT_OPTIONS, ...options });
     }
 
     /**

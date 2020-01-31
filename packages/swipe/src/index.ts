@@ -1,17 +1,16 @@
 import { Input, CommonEmitFunction } from '@any-touch/shared';
 import { INPUT_END } from '@any-touch/shared';
-import {ComputeDistance,ComputeVAndDir,ComputeMaxLength} from '@any-touch/compute';
+import { ComputeDistance, ComputeVAndDir, ComputeMaxLength } from '@any-touch/compute';
 import Recognizer from '@any-touch/recognizer';
-
+const DEFAULT_OPTIONS = {
+    name: 'swipe',
+    threshold: 10,
+    velocity: 0.3,
+    pointLength: 1,
+};
 export default class extends Recognizer {
-    static DEFAULT_OPTIONS = {
-        name: 'swipe',
-        threshold: 10,
-        velocity: 0.3,
-        pointLength: 1,
-    };
-    constructor(options = {}) {
-        super(options);
+    constructor(options: Partial<typeof DEFAULT_OPTIONS>) {
+        super({ ...DEFAULT_OPTIONS, ...options });
     };
 
     /**

@@ -9,7 +9,7 @@ const DEFAULT_OPTIONS = {
 };
 
 export default class extends Recognizer {
-    constructor(options: typeof DEFAULT_OPTIONS) {
+    constructor(options: Partial<typeof DEFAULT_OPTIONS>) {
         super({ ...DEFAULT_OPTIONS, ...options });
     };
 

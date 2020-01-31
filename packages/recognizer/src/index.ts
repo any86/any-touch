@@ -1,4 +1,3 @@
-import AnyEvent from 'any-event';
 import { Input, ComputeConstructor } from '@any-touch/shared';
 import {
     STATUS_POSSIBLE,
@@ -9,7 +8,7 @@ import {
 export { default as recognizeForPressMoveLike } from './recognizeForPressMoveLike';
 export { default as resetStatusForPressMoveLike } from './resetStatusForPressMoveLike';
 
-export default abstract class extends AnyEvent {
+export default abstract class {
     // 给use方法用来判断是手势插件
     static type = 'Recognizer';
     // 手势名
@@ -37,12 +36,10 @@ export default abstract class extends AnyEvent {
     // 当前输入
     input?: Input;
 
-
-    constructor(options: { name?: string, [k: string]: any }) {
-        super();
-        this.options = { ...(<any>this.constructor).DEFAULT_OPTIONS, disabled: false, ...options };
+    constructor(options: { name: string, [k: string]: any }) {
+        this.options = options;
         this.name = this.options.name;
-        this.disabled = this.options.disabled;
+        this.disabled = false;
         this.status = STATUS_POSSIBLE;
         this.isRecognized = false;
 

@@ -7,7 +7,23 @@ import {
 import Recognizer from '@any-touch/recognizer';
 import { getVLength } from '@any-touch/vector';
 import { ComputeDistance, ComputeMaxLength } from '@any-touch/compute';
+const DEFAULT_OPTIONS = {
+    name: 'tap',
+    // 触点数
+    pointLength: 1,
+    // 点击次数
+    tapTimes: 1,
+    // 等待下一次tap的时间, 
+    // 超过该事件就立即判断当前点击数量
+    waitNextTapTime: 300,
 
+    // 从接触到离开允许产生的最大距离
+    maxDistance: 2,
+    // 2次tap之间允许的最大位移
+    maxDistanceFromPrevTap: 9,
+    // 从接触到离开屏幕的最大时间
+    maxPressTime: 250,
+};
 export default class extends Recognizer {
     public tapCount: number;
 
@@ -20,25 +36,8 @@ export default class extends Recognizer {
 
     private _countDownToFailTimer?: number;
 
-    static DEFAULT_OPTIONS = {
-        name: 'tap',
-        // 触点数
-        pointLength: 1,
-        // 点击次数
-        tapTimes: 1,
-        // 等待下一次tap的时间, 
-        // 超过该事件就立即判断当前点击数量
-        waitNextTapTime: 300,
-
-        // 从接触到离开允许产生的最大距离
-        maxDistance: 2,
-        // 2次tap之间允许的最大位移
-        maxDistanceFromPrevTap: 9,
-        // 从接触到离开屏幕的最大时间
-        maxPressTime: 250,
-    };
-    constructor(options = {}) {
-        super(options);
+    constructor(options: Partial<typeof DEFAULT_OPTIONS>) {
+        super({ ...DEFAULT_OPTIONS, ...options });
         this.tapCount = 0;
     };
 
