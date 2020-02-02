@@ -1,7 +1,7 @@
 
 export interface Listener {
     (...payload: any): void;
-    targetEl?: HTMLElement;
+    targetEl?: HTMLElement | HTMLCollection;
 }
 
 export interface ListenersMap {
@@ -9,13 +9,13 @@ export interface ListenersMap {
 }
 export default class AnyEvent {
     callbackMap: ListenersMap;
-    targetEl?: HTMLElement;
+    targetEl?: HTMLElement | HTMLCollection;
 
     constructor() {
         this.callbackMap = {};
     };
 
-    target(el: HTMLElement) {
+    target(el: HTMLElement | HTMLCollection) {
         this.targetEl = el;
         return this;
     };
@@ -71,7 +71,12 @@ export default class AnyEvent {
         const { target } = payload || {};
         if (void 0 !== listeners && 0 < listeners.length) {
             for (const listener of listeners) {
-                if (void 0 === target || void 0 === listener.targetEl || target === listener.targetEl) {
+                const { targetEl } = listener;
+                if (void 0 === target ||
+                    void 0 === targetEl ||
+                    target === targetEl ||
+                    (Array.isArray(targetEl) && Array.from(targetEl).includes(target))
+                ) {
                     listener(payload);
                 }
             }
