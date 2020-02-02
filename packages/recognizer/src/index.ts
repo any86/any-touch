@@ -7,10 +7,7 @@ import {
 // resetStatusForPressMoveLike
 export { default as recognizeForPressMoveLike } from './recognizeForPressMoveLike';
 export { default as resetStatusForPressMoveLike } from './resetStatusForPressMoveLike';
-
 export default abstract class {
-    // 给use方法用来判断是手势插件
-    static type = 'Recognizer';
     // 手势名
     name: string;
     // 是否禁止

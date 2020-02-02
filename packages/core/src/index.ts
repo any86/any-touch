@@ -6,7 +6,7 @@
  * https://segmentfault.com/a/1190000007448808#articleHeader1
  * hammer.js http://hammerjs.github.io/
  */
-import AnyEvent, { Listener } from 'any-event';
+import AnyEvent from 'any-event';
 import { SupportEvent, Recognizer, AnyTouchPlugin } from '@any-touch/shared';
 import Input from './Input';
 import dispatchDomEvent from './dispatchDomEvent';
@@ -32,14 +32,13 @@ export default class AnyTouch extends AnyEvent {
     static version = '__VERSION__';
     static recognizers: Recognizer[] = [];
     static recognizerMap: Record<string, Recognizer> = {};
-    static plugins: AnyTouchPlugin[] = [];
     /**
      * 安装插件
      * @param {AnyTouchPlugin} 插件
      * @param {any[]} 插件参数
      */
-    static use = (Plugin: AnyTouchPlugin, ...args: any): void => {
-        use(AnyTouch, Plugin, ...args);
+    static use = (Recognizer: new (...args: any) => Recognizer, options?: Record<string,any>): void => {
+        use(AnyTouch, Recognizer, options);
     };
     /**
      * 卸载插件
@@ -58,6 +57,7 @@ export default class AnyTouch extends AnyEvent {
     recognizerMap: Record<string, Recognizer> = {};
     recognizers: Recognizer[] = [];
     plugins: AnyTouchPlugin[] = [];
+    beforeEachHook: any;
     /**
      * @param {Element} 目标元素, 微信下没有el
      * @param {Object} 选项
@@ -73,7 +73,6 @@ export default class AnyTouch extends AnyEvent {
         // 同步到插件到实例
         this.recognizerMap = AnyTouch.recognizerMap;
         this.recognizers = AnyTouch.recognizers;
-        this.plugins = AnyTouch.plugins;
 
         // 绑定事件
         if (void 0 !== this.el) {
@@ -86,8 +85,8 @@ export default class AnyTouch extends AnyEvent {
      * @param {AnyTouchPlugin} 插件
      * @param {Object} 选项
      */
-    use(Plugin: AnyTouchPlugin, ...args: any): void {
-        use(this, Plugin, ...args);
+    use(Recognizer: new (...args: any) => Recognizer, options?: Record<string,any>): void {
+        use(this, Recognizer, options);
     };
 
     /**
@@ -134,20 +133,21 @@ export default class AnyTouch extends AnyEvent {
                 recognizer.computedGroup = computedGroup;
                 recognizer.recognize(input, (type, ev) => {
                     const payload = { ...input, ...ev, type };
-                    if (0 < this.plugins.length) {
-                        this.plugins.forEach((plugin) => {
-                            // console.log(plugin);
-                            plugin(this, recognizer, () => {
-                                this.emit2(payload);
-                            });
-                        });
-                    } else {
+                    if (void 0 === this.beforeEachHook) {
                         this.emit2(payload);
+                    } else {
+                        this.beforeEachHook(recognizer, () => {
+                            this.emit2(payload);
+                        });
                     }
                 });
                 computedGroup = recognizer.computedGroup;
             }
         }
+    };
+
+    beforeEach(hook: (active: Recognizer, next: () => void) => void): void {
+        this.beforeEachHook = hook;
     };
 
     /**
