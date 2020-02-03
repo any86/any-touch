@@ -157,7 +157,10 @@ export default class AnyTouch extends AnyEvent {
     emit2(payload: { type: string;[k: string]: any }) {
         this.emit(payload.type, payload);
         const { target } = payload;
-        if (false !== this.options.domEvents && void 0 !== this.el && void 0 !== target) {
+        if (false !== this.options.domEvents &&
+            void 0 !== this.el &&
+            void 0 !== target &&
+            (void 0 === this.targetEls || this.targetEls.includes(target))) {
             dispatchDomEvent(target, payload, this.options.domEvents);
         }
     };

@@ -10,13 +10,16 @@ export interface ListenersMap {
 export default class AnyEvent {
     callbackMap: ListenersMap;
     targetEl?: HTMLElement | HTMLCollection;
-
+    targetEls?: (HTMLElement | HTMLCollection)[];
     constructor() {
         this.callbackMap = {};
     };
 
     target(el: HTMLElement | HTMLCollection) {
         this.targetEl = el;
+        const els = Array.isArray(el) ? Array.from(el) : [el];
+        this.targetEls = this.targetEls || [];
+        this.targetEls.push(...els);
         return this;
     };
 
@@ -24,7 +27,6 @@ export default class AnyEvent {
      * 绑定事件
      * @param {String|Symbol} 事件名
      * @param {Function} 回调函数
-     * @param {Function} payload筛选器
      */
     on(eventName: string, listener: Listener): this {
         if (void 0 === this.callbackMap[eventName]) {
