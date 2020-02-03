@@ -7,7 +7,7 @@
  * hammer.js http://hammerjs.github.io/
  */
 import AnyEvent from 'any-event';
-import { SupportEvent, Recognizer, AnyTouchPlugin } from '@any-touch/shared';
+import { SupportEvent, Recognizer, InputType } from '@any-touch/shared';
 import Input from './Input';
 import dispatchDomEvent from './dispatchDomEvent';
 import canPreventDefault from './canPreventDefault';
@@ -56,7 +56,6 @@ export default class AnyTouch extends AnyEvent {
 
     recognizerMap: Record<string, Recognizer> = {};
     recognizers: Recognizer[] = [];
-    plugins: AnyTouchPlugin[] = [];
     beforeEachHook: any;
     /**
      * @param {Element} 目标元素, 微信下没有el
@@ -122,10 +121,16 @@ export default class AnyTouch extends AnyEvent {
             // }
             this.emit('at:touch', input);
             this.emit(`at:touch${input.inputType}`, input);
-            (event.target as HTMLElement)?.setAttribute('at-state', input.inputType);
             // 缓存每次计算的结果
             // 以函数名为键值
             // console.log(this.recognizers)
+
+            const realTarget = findRealTargetEl(this, event.target as HTMLElement);
+            if (realTarget) {
+                realTarget.setAttribute('at-state', input.inputType);
+            }
+
+
             let computedGroup = {};
             for (const recognizer of this.recognizers) {
                 if (recognizer.disabled) continue;
@@ -153,16 +158,24 @@ export default class AnyTouch extends AnyEvent {
     /**
      * 同时出发内部/dom事件
      * @param {Object} 事件对象 
+     * @param {string} 当前输入状态
      */
     emit2(payload: { type: string;[k: string]: any }) {
-        const { type, baseType, target,inputType } = payload;
+        const { type, baseType, target } = payload;
+
         this.emit(type, payload);
-        target.setAttribute('at', baseType);
-        if (false !== this.options.domEvents &&
-            void 0 !== this.el &&
-            void 0 !== target &&
-            (void 0 === this.targetEls || this.targetEls.includes(target))) {
-            dispatchDomEvent(target, payload, this.options.domEvents);
+        // 构造函数绑定的根元素或者target指定的元素
+        // 如果使用了target方法
+        // 那么realTarget指向target传入的元素
+        if (false !== this.options.domEvents
+            && void 0 !== this.el
+            && void 0 !== target
+        ) {
+            const realTarget = findRealTargetEl(this, target);
+            if (void 0 !== realTarget) {
+                dispatchDomEvent(realTarget, payload, this.options.domEvents);
+                realTarget.setAttribute('at', baseType);
+            }
         }
     };
 
@@ -197,4 +210,32 @@ export default class AnyTouch extends AnyEvent {
             this._unbindEl();
         }
     };
+}
+
+
+function findRealTargetEl(context: AnyTouch, target: HTMLElement) {
+    // 构造函数绑定的根元素或者target指定的元素
+    // 如果使用了target方法
+    // 那么realTarget指向target传入的元素
+    let realTarget = context.el;
+    if (false !== context.options.domEvents
+        && void 0 !== context.el
+        && void 0 !== target
+    ) {
+        // 没有使用target
+        // 也就代表是构造函数参数里的元素
+        if (void 0 === context.targetEls) {
+            realTarget = context.el;
+        }
+        // 有使用target方法
+        else {
+            for (const targetEl of context.targetEls) {
+                if (targetEl.contains(target)) {
+                    realTarget = targetEl;
+                    break;
+                }
+            }
+        }
+    }
+    return realTarget;
 }

@@ -93,6 +93,7 @@ export default function (recognizer: Recognizer, input: Input, emit: CommonEmitF
         if(INPUT_END !== inputType){
             emit(name, computed);
         }
+        // console.log(recognizer.name)
         emit(name + status, computed);
     }
     return isVaild;

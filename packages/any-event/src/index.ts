@@ -10,7 +10,7 @@ export interface ListenersMap {
 export default class AnyEvent {
     callbackMap: ListenersMap;
     targetEl?: HTMLElement | HTMLCollection;
-    targetEls?: (HTMLElement | HTMLCollection)[];
+    targetEls?: (HTMLElement)[];
     constructor() {
         this.callbackMap = {};
     };
