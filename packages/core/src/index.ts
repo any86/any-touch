@@ -132,7 +132,7 @@ export default class AnyTouch extends AnyEvent {
                 recognizer.input = input;
                 recognizer.computedGroup = computedGroup;
                 recognizer.recognize(input, (type, ev) => {
-                    const payload = { ...input, ...ev, type };
+                    const payload = { ...input, ...ev, type,baseType: recognizer.name};
                     if (void 0 === this.beforeEachHook) {
                         this.emit2(payload);
                     } else {
@@ -155,8 +155,9 @@ export default class AnyTouch extends AnyEvent {
      * @param {Object} 事件对象 
      */
     emit2(payload: { type: string;[k: string]: any }) {
-        this.emit(payload.type, payload);
-        const { target } = payload;
+        const { type, baseType,target, inputType } = payload;
+        this.emit(type, payload);
+        target.setAttribute('at', baseType);
         if (false !== this.options.domEvents &&
             void 0 !== this.el &&
             void 0 !== target &&
