@@ -17,6 +17,7 @@ import { use, removeUse } from './use';
 export interface Options {
     domEvents?: false | EventInit;
     isPreventDefault?: boolean;
+    domAttrs?: boolean;
     // 不阻止默认行为的白名单
     preventDefaultExclude?: RegExp | ((ev: SupportEvent) => boolean);
 }
@@ -24,6 +25,7 @@ export interface Options {
 // 默认设置
 const DEFAULT_OPTIONS: Options = {
     domEvents: { bubbles: true, cancelable: true },
+    domAttrs: true,
     isPreventDefault: true,
     preventDefaultExclude: /^(?:INPUT|TEXTAREA|BUTTON|SELECT)$/
 };
@@ -125,11 +127,16 @@ export default class AnyTouch extends AnyEvent {
             // 以函数名为键值
             // console.log(this.recognizers)
 
-            const realTarget = findRealTargetEl(this, event.target as HTMLElement);
-            if (realTarget) {
-                realTarget.setAttribute('at-stage', input.inputType);
+            if (this.options.domAttrs) {
+                const realTarget = findRealTargetEl(this, event.target as HTMLElement);
+                if (realTarget) {
+                    realTarget.setAttribute('at-stage', input.inputType);
+                    if (false !== this.options.domEvents) {
+                        dispatchDomEvent(realTarget, { ...input, type: 'at:touch' }, this.options.domEvents);
+                        dispatchDomEvent(realTarget, { ...input, type: `at:touch${input.inputType}` }, this.options.domEvents);
+                    }
+                }
             }
-
 
             let computedGroup = {};
             for (const recognizer of this.recognizers) {
