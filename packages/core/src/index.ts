@@ -127,7 +127,7 @@ export default class AnyTouch extends AnyEvent {
 
             const realTarget = findRealTargetEl(this, event.target as HTMLElement);
             if (realTarget) {
-                realTarget.setAttribute('at-state', input.inputType);
+                realTarget.setAttribute('at-stage', input.inputType);
             }
 
 
