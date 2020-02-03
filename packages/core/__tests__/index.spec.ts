@@ -3,7 +3,7 @@ import Tap from '@any-touch/tap';
 
 test('依次输入start->move->end->start-cancel', async done => {
     const { gs, at, mockCB, mock, sleep } = create();
-    at.on('at:input', ev => {
+    at.on('at:touch', ev => {
         mockCB(ev.inputType);
     });
     gs.dispatchTouchStart();
@@ -62,7 +62,7 @@ test(`通过set设置不触发dom事件`, async done => {
 
 test('destroy实例', () => {
     const { at, touch, sleep, mockCB } = create();
-    at.on('at:input', () => {
+    at.on('at:touch', () => {
         mockCB();
     });
     at.destroy();

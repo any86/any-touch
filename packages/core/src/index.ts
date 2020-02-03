@@ -120,9 +120,9 @@ export default class AnyTouch extends AnyEvent {
             // if (void 0 !== AnyTouch.recognizers[0]) {
             //     AnyTouch.recognizers[0].input = input;
             // }
-            this.emit('at:input', input);
-            this.emit(`at:input${input.inputType}`, input);
-
+            this.emit('at:touch', input);
+            this.emit(`at:touch${input.inputType}`, input);
+            (event.target as HTMLElement)?.setAttribute('at-state', input.inputType);
             // 缓存每次计算的结果
             // 以函数名为键值
             // console.log(this.recognizers)
@@ -132,7 +132,7 @@ export default class AnyTouch extends AnyEvent {
                 recognizer.input = input;
                 recognizer.computedGroup = computedGroup;
                 recognizer.recognize(input, (type, ev) => {
-                    const payload = { ...input, ...ev, type,baseType: recognizer.name};
+                    const payload = { ...input, ...ev, type, baseType: recognizer.name };
                     if (void 0 === this.beforeEachHook) {
                         this.emit2(payload);
                     } else {
@@ -155,7 +155,7 @@ export default class AnyTouch extends AnyEvent {
      * @param {Object} 事件对象 
      */
     emit2(payload: { type: string;[k: string]: any }) {
-        const { type, baseType,target, inputType } = payload;
+        const { type, baseType, target,inputType } = payload;
         this.emit(type, payload);
         target.setAttribute('at', baseType);
         if (false !== this.options.domEvents &&

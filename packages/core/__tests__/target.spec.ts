@@ -9,11 +9,11 @@ test('通过target指定相应事件的元素', async done => {
 
     // 只触发span的touch事件
     const mockCallback = jest.fn();
-    at.target(el).on('at:input', ev => {
+    at.target(el).on('at:touch', ev => {
         mockCallback(ev.target);
     });
 
-    at.on('at:input', ev => {
+    at.on('at:touch', ev => {
         mockCallback(ev.target);
     });
 
