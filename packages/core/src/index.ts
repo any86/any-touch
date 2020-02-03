@@ -15,7 +15,7 @@ import bindElement from './bindElement';
 import { use, removeUse } from './use';
 
 export interface Options {
-    hasDomEvents?: boolean;
+    domEvents?: false | EventInit;
     isPreventDefault?: boolean;
     // 不阻止默认行为的白名单
     preventDefaultExclude?: RegExp | ((ev: SupportEvent) => boolean);
@@ -23,7 +23,7 @@ export interface Options {
 
 // 默认设置
 const DEFAULT_OPTIONS: Options = {
-    hasDomEvents: true,
+    domEvents: { bubbles: true, cancelable: true },
     isPreventDefault: true,
     preventDefaultExclude: /^(?:INPUT|TEXTAREA|BUTTON|SELECT)$/
 };
@@ -37,7 +37,7 @@ export default class AnyTouch extends AnyEvent {
      * @param {AnyTouchPlugin} 插件
      * @param {any[]} 插件参数
      */
-    static use = (Recognizer: new (...args: any) => Recognizer, options?: Record<string,any>): void => {
+    static use = (Recognizer: new (...args: any) => Recognizer, options?: Record<string, any>): void => {
         use(AnyTouch, Recognizer, options);
     };
     /**
@@ -85,7 +85,7 @@ export default class AnyTouch extends AnyEvent {
      * @param {AnyTouchPlugin} 插件
      * @param {Object} 选项
      */
-    use(Recognizer: new (...args: any) => Recognizer, options?: Record<string,any>): void {
+    use(Recognizer: new (...args: any) => Recognizer, options?: Record<string, any>): void {
         use(this, Recognizer, options);
     };
 
@@ -157,8 +157,8 @@ export default class AnyTouch extends AnyEvent {
     emit2(payload: { type: string;[k: string]: any }) {
         this.emit(payload.type, payload);
         const { target } = payload;
-        if (this.options.hasDomEvents && void 0 !== this.el && void 0 !== target) {
-            dispatchDomEvent(target, payload);
+        if (false !== this.options.domEvents && void 0 !== this.el && void 0 !== target) {
+            dispatchDomEvent(target, payload, this.options.domEvents);
         }
     };
 

@@ -48,7 +48,7 @@ test('默认会触发dom事件', async done => {
 test(`通过set设置不触发dom事件`, async done => {
     const { AnyTouch, el, GestureSimulator, mockCB, sleep } = create();
     const at = new AnyTouch(el);
-    at.set({hasDomEvents:false});
+    at.set({domEvents:false});
     const gs = new GestureSimulator(el);
     el.addEventListener('tap', ev => {
         mockCB();
