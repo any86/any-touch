@@ -7821,6 +7821,11 @@ vary@~1.1.2:
   resolved "https://registry.npm.taobao.org/vary/download/vary-1.1.2.tgz#2299f02c6ded30d4a5961b0b9f74524a18f634fc"
   integrity sha1-IpnwLG3tMNSllhsLn3RSShj2NPw=
 
+vconsole@^3.3.4:
+  version "3.3.4"
+  resolved "https://registry.npm.taobao.org/vconsole/download/vconsole-3.3.4.tgz#a7dacd8887b3d3e902e8d18425cda56c34e77f51"
+  integrity sha1-p9rNiIez0+kC6NGEJc2lbDTnf1E=
+
 vendors@^1.0.0:
   version "1.0.4"
   resolved "https://registry.npm.taobao.org/vendors/download/vendors-1.0.4.tgz#e2b800a53e7a29b93506c3cf41100d16c4c4ad8e"

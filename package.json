@@ -9,6 +9,7 @@
         "types/*"
     ],
     "scripts": {
+        "example":"cd example && npm run serve",
         "release:next": "npm run build && lerna publish --dist-tag next",
         "release:last": "npm run build && lerna publish",
         "rm": "rimraf packages/**/dist",
