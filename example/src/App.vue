@@ -49,7 +49,7 @@
                     </tr>
                 </table>  
             </template>
-            <h1 v-else>👋请拖拽</h1>
+            <h1 v-else>👋请拖拽 / 点击 / 按压 / 划 / 缩放 / 旋转</h1>
         </article>
 
         <p class="tip">
@@ -131,7 +131,6 @@ export default {
         },
         afterEach(ev) {
             this.action = ev.baseType;
-            console.log(ev)
             this.$set(this, 'data', ev);
         },
         onRotate(ev, index) {
