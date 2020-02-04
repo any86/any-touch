@@ -211,6 +211,7 @@ main {
             line-height:12px;
             color:#69c;
             margin-left:16px;
+            text-decoration: none;
         }
     }
     >.title{
