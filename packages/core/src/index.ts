@@ -128,7 +128,7 @@ export default class AnyTouch extends AnyEvent {
             // console.log(this.recognizers)
 
             if (this.options.domAttrs) {
-                const realTarget = findRealTargetEl(this, event.target as HTMLElement);
+                const realTarget = findRealTargetEl(this.targets, event.target as HTMLElement);
                 if (realTarget) {
                     realTarget.setAttribute('at-stage', input.inputType);
                     if (false !== this.options.domEvents) {
@@ -169,7 +169,7 @@ export default class AnyTouch extends AnyEvent {
      */
     emit2(payload: { type: string;[k: string]: any }) {
         const { type, baseType, target } = payload;
-
+        this.emit('at:after', payload);
         this.emit(type, payload);
         // 构造函数绑定的根元素或者target指定的元素
         // 如果使用了target方法
@@ -178,10 +178,13 @@ export default class AnyTouch extends AnyEvent {
             && void 0 !== this.el
             && void 0 !== target
         ) {
-            const realTarget = findRealTargetEl(this, target);
+            const realTarget = findRealTargetEl(this.targets, target);
             if (void 0 !== realTarget) {
                 dispatchDomEvent(realTarget, payload, this.options.domEvents);
                 realTarget.setAttribute('at', baseType);
+            } else if (this.el) {
+                dispatchDomEvent(this.el, payload, this.options.domEvents);
+                this.el.setAttribute('at', baseType);
             }
         }
     };
@@ -220,29 +223,18 @@ export default class AnyTouch extends AnyEvent {
 }
 
 
-function findRealTargetEl(context: AnyTouch, target: HTMLElement) {
+function findRealTargetEl(targets: HTMLElement[], target: HTMLElement) {
     // 构造函数绑定的根元素或者target指定的元素
     // 如果使用了target方法
     // 那么realTarget指向target传入的元素
-    let realTarget = context.el;
-    if (false !== context.options.domEvents
-        && void 0 !== context.el
-        && void 0 !== target
-    ) {
-        // 没有使用target
-        // 也就代表是构造函数参数里的元素
-        if (void 0 === context.targetEls) {
-            realTarget = context.el;
-        }
-        // 有使用target方法
-        else {
-            for (const targetEl of context.targetEls) {
-                if (targetEl.contains(target)) {
-                    realTarget = targetEl;
-                    break;
-                }
-            }
+    let realTarget: HTMLElement | void;
+    for (const targetEl of targets) {
+        if (targetEl.contains(target)) {
+            realTarget = targetEl;
+            break;
         }
     }
     return realTarget;
 }
+
+

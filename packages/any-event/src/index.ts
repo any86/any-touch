@@ -1,7 +1,7 @@
 
 export interface Listener {
     (...payload: any): void;
-    targetEl?: HTMLElement | HTMLCollection;
+    targets?: HTMLElement[];
 }
 
 export interface ListenersMap {
@@ -9,18 +9,20 @@ export interface ListenersMap {
 }
 export default class AnyEvent {
     callbackMap: ListenersMap;
-    targetEl?: HTMLElement | HTMLCollection;
-    targetEls?: (HTMLElement)[];
+    targets: HTMLElement[];
     constructor() {
         this.callbackMap = {};
+        this.targets = [];
     };
 
     target(el: HTMLElement | HTMLCollection) {
-        this.targetEl = el;
-        const els = Array.isArray(el) ? Array.from(el) : [el];
-        this.targetEls = this.targetEls || [];
-        this.targetEls.push(...els);
-        return this;
+        const targets = Array.isArray(el) ? Array.from(el) : [el];
+        this.targets.push(...targets);
+        return {
+            on: (eventName: string, listener: Listener): void => {
+                this.on(eventName, listener, { targets });
+            }
+        };
     };
 
     /**
@@ -28,15 +30,15 @@ export default class AnyEvent {
      * @param {String|Symbol} 事件名
      * @param {Function} 回调函数
      */
-    on(eventName: string, listener: Listener): this {
+    on(eventName: string, listener: Listener, { targets }: { targets?: HTMLElement[] } = {}): void {
         if (void 0 === this.callbackMap[eventName]) {
             this.callbackMap[eventName] = [];
         }
-        listener.targetEl = this.targetEl;
+        //  备注targets信息
+        if (void 0 !== targets) {
+            listener.targets = targets;
+        }
         this.callbackMap[eventName].push(listener);
-        // 重置targetEl
-        this.targetEl = void 0;
-        return this;
     };
 
     /**
@@ -45,7 +47,7 @@ export default class AnyEvent {
      * @param {String|Symbol} 事件名
      * @param {Function} 回调函数
      */
-    off(eventName: string, listener?: Listener): this {
+    off(eventName: string, listener?: Listener): void {
         const listeners = this.callbackMap[eventName];
         // 事件存在
         if (void 0 !== listeners) {
@@ -59,7 +61,6 @@ export default class AnyEvent {
                 listeners.splice(index, 1);
             }
         }
-        return this;
     };
 
     /**
@@ -73,12 +74,15 @@ export default class AnyEvent {
         const { target } = payload || {};
         if (void 0 !== listeners && 0 < listeners.length) {
             for (const listener of listeners) {
-                const { targetEl } = listener;
-                if (void 0 === target ||
-                    void 0 === targetEl ||
-                    target === targetEl ||
-                    (Array.isArray(targetEl) && Array.from(targetEl).includes(target))
+                const { targets } = listener;
+                if (void 0 !== target
+                    && void 0 !== targets
+                    && findRealTargetEl(targets, target)
                 ) {
+                    listener(payload);
+                }
+                // 没有绑定targets
+                else if (void 0 === targets) {
                     listener(payload);
                 }
             }
@@ -95,3 +99,19 @@ export default class AnyEvent {
         this.callbackMap = {};
     };
 };
+
+function findRealTargetEl(targetEls: HTMLElement[], target: HTMLElement) {
+    // 构造函数绑定的根元素或者target指定的元素
+    // 如果使用了target方法
+    // 那么realTarget指向target传入的元素
+    let realTarget: HTMLElement | undefined;
+    if (void 0 !== targetEls) {
+        for (const targetEl of targetEls) {
+            if (targetEl.contains(target)) {
+                realTarget = targetEl;
+                break;
+            }
+        }
+    }
+    return realTarget;
+}
