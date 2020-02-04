@@ -7,17 +7,17 @@
  * hammer.js http://hammerjs.github.io/
  */
 import AnyEvent from 'any-event';
-import { SupportEvent, Recognizer, InputType } from '@any-touch/shared';
+import { SupportEvent, Recognizer } from '@any-touch/shared';
 import Input from './Input';
 import dispatchDomEvent from './dispatchDomEvent';
 import canPreventDefault from './canPreventDefault';
 import bindElement from './bindElement';
 import { use, removeUse } from './use';
+// type TouchAction = 'auto' | 'none' | 'pan-x' | 'pan-left' | 'pan-right' | 'pan-y' | 'pan-up' | 'pan-down' | 'pinch-zoom' | 'manipulation';
 
 export interface Options {
     domEvents?: false | EventInit;
     isPreventDefault?: boolean;
-    domAttrs?: boolean;
     // 不阻止默认行为的白名单
     preventDefaultExclude?: RegExp | ((ev: SupportEvent) => boolean);
 }
@@ -25,7 +25,6 @@ export interface Options {
 // 默认设置
 const DEFAULT_OPTIONS: Options = {
     domEvents: { bubbles: true, cancelable: true },
-    domAttrs: true,
     isPreventDefault: true,
     preventDefaultExclude: /^(?:INPUT|TEXTAREA|BUTTON|SELECT)$/
 };
@@ -123,20 +122,16 @@ export default class AnyTouch extends AnyEvent {
             // }
             this.emit('at:touch', input);
             this.emit(`at:touch${input.inputType}`, input);
-            // 缓存每次计算的结果
-            // 以函数名为键值
-            // console.log(this.recognizers)
 
-            if (this.options.domAttrs) {
-                const realTarget = findRealTargetEl(this.targets, event.target as HTMLElement);
-                if (realTarget) {
-                    realTarget.setAttribute('at-stage', input.inputType);
-                    if (false !== this.options.domEvents) {
-                        dispatchDomEvent(realTarget, { ...input, type: 'at:touch' }, this.options.domEvents);
-                        dispatchDomEvent(realTarget, { ...input, type: `at:touch${input.inputType}` }, this.options.domEvents);
-                    }
+            if (false !== this.options.domEvents) {
+                const { target } = event;
+                if (null !== target) {
+                    dispatchDomEvent(target as HTMLElement, { ...input, type: 'at:touch' }, this.options.domEvents);
+                    dispatchDomEvent(target as HTMLElement, { ...input, type: `at:touch${input.inputType}` }, this.options.domEvents);
                 }
             }
+            // 缓存每次计算的结果
+            // 以函数名为键值
 
             let computedGroup = {};
             for (const recognizer of this.recognizers) {
@@ -168,7 +163,7 @@ export default class AnyTouch extends AnyEvent {
      * @param {string} 当前输入状态
      */
     emit2(payload: { type: string;[k: string]: any }) {
-        const { type, baseType, target } = payload;
+        const { type, target } = payload;
         this.emit('at:after', payload);
         this.emit(type, payload);
         // 构造函数绑定的根元素或者target指定的元素
@@ -178,14 +173,10 @@ export default class AnyTouch extends AnyEvent {
             && void 0 !== this.el
             && void 0 !== target
         ) {
-            const realTarget = findRealTargetEl(this.targets, target);
-            if (void 0 !== realTarget) {
-                dispatchDomEvent(realTarget, payload, this.options.domEvents);
-                realTarget.setAttribute('at', baseType);
-            } else if (this.el) {
-                dispatchDomEvent(this.el, payload, this.options.domEvents);
-                this.el.setAttribute('at', baseType);
-            }
+            // vue会把绑定元素的所有子元素都进行事件绑定
+            // 所以此处的target会自动冒泡到目标元素
+            dispatchDomEvent(target, payload, this.options.domEvents);
+            dispatchDomEvent(target, { ...payload, type: 'at:after' }, this.options.domEvents);
         }
     };
 
@@ -219,22 +210,6 @@ export default class AnyTouch extends AnyEvent {
         if (this.el) {
             this._unbindEl();
         }
+        this.callbackMap = {};
     };
 }
-
-
-function findRealTargetEl(targets: HTMLElement[], target: HTMLElement) {
-    // 构造函数绑定的根元素或者target指定的元素
-    // 如果使用了target方法
-    // 那么realTarget指向target传入的元素
-    let realTarget: HTMLElement | void;
-    for (const targetEl of targets) {
-        if (targetEl.contains(target)) {
-            realTarget = targetEl;
-            break;
-        }
-    }
-    return realTarget;
-}
-
-
