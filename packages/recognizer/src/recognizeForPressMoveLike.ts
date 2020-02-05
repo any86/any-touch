@@ -1,4 +1,4 @@
-import { CommonEmitFunction, Input } from '@any-touch/shared';
+import { CommonEmitFunction, Input, STATUS_FAILED } from '@any-touch/shared';
 import Recognizer from './index';
 import {
     INPUT_CANCEL, INPUT_END, INPUT_MOVE
@@ -10,7 +10,7 @@ import {
     STATUS_MOVE,
     STATUS_END,
     STATUS_CANCELLED,
-    STATUS_RECOGNIZED
+    INPUT_START
 } from '@any-touch/shared'
 import resetStatus from './resetStatusForPressMoveLike';
 
@@ -42,11 +42,13 @@ function flow(isVaild: boolean, activeStatus: string, inputType: string): string
         // 2020年1月30, 未看完, 有待商榷
         0: {
             [STATUS_START]: {
+                // [INPUT_START]: STATUS_FAILED,
                 [INPUT_MOVE]: STATUS_CANCELLED,
                 [INPUT_END]: STATUS_END,
                 [INPUT_CANCEL]: STATUS_CANCELLED
             },
             [STATUS_MOVE]: {
+                [INPUT_START]: STATUS_FAILED,
                 [INPUT_MOVE]: STATUS_CANCELLED,
                 [INPUT_END]: STATUS_END,
                 [INPUT_CANCEL]: STATUS_CANCELLED
@@ -81,19 +83,15 @@ export default function (recognizer: Recognizer, input: Input, emit: CommonEmitF
     const { computed } = recognizer;
 
     // 是否已识别, 包含end
-    recognizer.isRecognized = -1 < [STATUS_START, STATUS_MOVE, STATUS_END,STATUS_CANCELLED, STATUS_RECOGNIZED].indexOf(recognizer.status);
+    recognizer.isRecognized = [STATUS_START, STATUS_MOVE].includes(recognizer.status);
 
-
-    const {name, status,isRecognized} = recognizer;
-    // console.log({status,inputType,isRecognized,isVaild})
-    
+    const { name, status, isRecognized } = recognizer;
+    // if('pan' == name) console.warn(status,inputType,{isRecognized,isVaild},input.pointLength)
     // 识别后触发的事件
     if (isRecognized) {
-        // panend等
-        if(INPUT_END !== inputType){
-            emit(name, computed);
-        }
-        // console.log(recognizer.name)
+        emit(name, computed);
+    }
+    if (isRecognized || [STATUS_END, STATUS_CANCELLED].includes(recognizer.status)) {
         emit(name + status, computed);
     }
     return isVaild;
