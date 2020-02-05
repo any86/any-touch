@@ -21,16 +21,8 @@
     },
     "homepage": "https://github.com/any86/any-touch#readme",
     "dependencies": {
-        "@any-touch/shared": "^0.6.1-beta.2"
-    },
-    "peerDependencies": {
-        "@any-touch/pan": "^0.6.0-beta.29",
-        "@any-touch/pinch": "^0.6.0-beta.20",
-        "@any-touch/press": "^0.6.0-beta.20",
-        "@any-touch/rotate": "^0.6.0-beta.20",
-        "@any-touch/swipe": "^0.6.0-beta.29",
-        "@any-touch/tap": "^0.6.0-beta.20",
-        "any-event": "^0.6.0-beta.9",
+        "@any-touch/shared": "^0.6.1-beta.2",
+        "any-event": "^0.6.1-beta.2",
         "tslib": "^1.9.3"
     },
     "keywords": [

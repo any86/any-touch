@@ -7,7 +7,7 @@
     "types": "dist/index.d.ts",
     "author": "any86",
     "license": "ISC",
-    "peerDependencies": {
+    "dependencies": {
         "tslib": "^1.9.3"
     },
     "publishConfig": {
