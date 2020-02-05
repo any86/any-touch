@@ -8,22 +8,24 @@
 [downloads-url]: https://npmjs.org/package/any-touch
 
 :wave: 一个小巧的手势库.
-- [x] 支持更多设备: PC端 / 移动端 / [微信小程序](#支持微信小程序).
-- [x] 灵活可配: 按需加载需要的识别器.
 
-|名称|尺寸|说明|
-|---|---|---|
-|**@any-touch/core**|![](https://badgen.net/bundlephobia/minzip/@any-touch/core)|核心, 适配Mouse/Touch设备|
-|**@any-touch/tap**|![](https://badgen.net/bundlephobia/minzip/@any-touch/tap)|"点击"识别器|
-|**@any-touch/pan**|![](https://badgen.net/bundlephobia/minzip/@any-touch/pan)|"拖拽"识别器|
-|**@any-touch/swipe**|![](https://badgen.net/bundlephobia/minzip/@any-touch/swipe)|"划"识别器|
-|**@any-touch/press**|![](https://badgen.net/bundlephobia/minzip/@any-touch/press)|"按压"识别器|
-|**@any-touch/pinch**|![](https://badgen.net/bundlephobia/minzip/@any-touch/pinch)|"缩放"识别器|
-|**@any-touch/rotate**|![](https://badgen.net/bundlephobia/minzip/@any-touch/rotate)|"旋转"识别器|
+-   [x] 支持更多设备: PC 端 / 移动端 / [微信小程序](#支持微信小程序).
+-   [x] 灵活可配: 按需加载需要的识别器.
 
-[x] 支持手势更全面: **tap**(点击) / **press**(按) / **pan**(拖拽) / **swipe**(划) / **pinch**(捏合) / **rotate**(旋转) 6大类手势.
-- [x] 更简单: 通过自定义DOM事件和**Vue**语法完美配合.
-- [x] 更放心: 代码测试覆盖率**100%**.
+<!-- ![](https://user-images.githubusercontent.com/8264787/73827884-4b311680-483b-11ea-9cf5-946ac77fc5f1.png) -->
+
+| 名称                  | 尺寸                                                          | 说明                        |
+| --------------------- | ------------------------------------------------------------- | --------------------------- |
+| **@any-touch/core**   | ![](https://badgen.net/bundlephobia/minzip/@any-touch/core)   | 核心, 适配 Mouse/Touch 设备 |
+| **@any-touch/tap**    | ![](https://badgen.net/bundlephobia/minzip/@any-touch/tap)    | "点击"识别器                |
+| **@any-touch/pan**    | ![](https://badgen.net/bundlephobia/minzip/@any-touch/pan)    | "拖拽"识别器                |
+| **@any-touch/swipe**  | ![](https://badgen.net/bundlephobia/minzip/@any-touch/swipe)  | "划"识别器                  |
+| **@any-touch/press**  | ![](https://badgen.net/bundlephobia/minzip/@any-touch/press)  | "按压"识别器                |
+| **@any-touch/pinch**  | ![](https://badgen.net/bundlephobia/minzip/@any-touch/pinch)  | "缩放"识别器                |
+| **@any-touch/rotate** | ![](https://badgen.net/bundlephobia/minzip/@any-touch/rotate) | "旋转"识别器                |
+
+-   [x] 更简单: 通过自定义 DOM 事件和**Vue**语法完美配合, 使用更简单.
+-   [x] 更放心: 代码测试覆盖率**100%**.
 
 ## 演示
 
@@ -35,11 +37,11 @@
 
 [:zap: 快速开始](#快速开始)
 
-[:alien: 名词解释](docs/CONCEPT.md) 
+[:alien: 名词解释](docs/CONCEPT.md)
 
 [:iphone: 支持微信小程序](#支持微信小程序)
 
-[:seedling: 支持vue指令](#支持vue指令)
+[:seedling: 完美配合 vue](#完美配合vue)
 
 [:rocket: 更多应用](#更多应用)
 
@@ -48,6 +50,7 @@
 [:lollipop: 事件对象(event)](docs/EVENT.md)
 
 [:heavy_exclamation_mark::heavy_exclamation_mark::heavy_exclamation_mark: 不要用 alert 调试](#不要用alert调试)
+
 ## 安装
 
 ```javascript
@@ -58,30 +61,29 @@ npm i -S any-touch
 
 ```
 https://unpkg.com/any-touch/dist/any-touch.min.js
-
-// vue指令插件
-https://unpkg.com/any-touch/dist/any-touch.v-touch.min.js
 ```
 
 ## 快速开始
 
 ```javascript
-import AnyTouch from "any-touch";
-const el = doucument.getElementById("box");
+import AnyTouch from 'any-touch';
+const el = doucument.getElementById('box');
 const at = new AnyTouch(el);
 // 单击
-at.on("tap", ev => {
-  // 阻止默认事件触发, 比如click
-  ev.preventDefault();
+at.on('tap', (ev) => {
+    // ev包含位置/速度/方向等信息
 });
 ```
 
 ## 更多手势
-根据手势的运动方向和状态我们还支持panstart / panup / pinchin / pinchout / pressup等更多的手势事件.
+
+根据手势的运动方向和状态我们还支持 panstart / panup / pinchin / pinchout / pressup 等更多的手势事件.
+
 ```javascript
 // 旋转中触发
-at.on('roatemove', ev=>{});
+at.on('roatemove', (ev) => {});
 ```
+
 [更多手势说明](/docs/GESTURE.md)
 
 ## 支持微信小程序
@@ -94,13 +96,13 @@ at.on('roatemove', ev=>{});
 
 ```javascript
 const at = new AnyTouch()
-{ 
+{
     onload(){
         at.on('pinch', ev=>{
             // 缩放
         });
     },
-    
+
     methods: {
       touchstartHandler(ev){
         at.catchEvent(ev);
@@ -115,70 +117,39 @@ const at = new AnyTouch()
 }
 ```
 
-## 支持vue指令
-```javascript
-import vTouch from 'any-touch/dist/v-touch.common'
-Vue.use(vTouch);
-```
-
-```html
-<!-- xxx.vue -->
-<div
-  v-touch
-  @tap="tap"
-  @doubletap="doubletap"
-  @press="press"
-  @pan="pan"
-  @pinch="pinch"
-  @rotate="rotate"
-  @click="click"
->hello v-touch</div>
-```
-此时`div`上可以通过`v-on`进行手势的绑定,和绑定 click 等原生事件一样.
-
-##### :bulb: v-touch 高级设置
-我们可以通过v-touch导入AnyTouch的实例, 然后进行高级设置.
-```html
-<!-- xxx.vue -->
-<div v-touch="importAT" @tap="tap">touch</div>
-```
+## :bulb: 完美配合 vue
 
 ```javascript
+import AnyTouch from 'any-touch';
 export default {
-  methods: {
-    importAT(at) {
-      const doubletap = at.get("doubletap");
-      // 开启双击
-      doubletap.disabled = false;
+    mounted() {
+        new AnyTouch(this.$el);
     }
-  }
 };
 ```
 
-[示例](https://any86.github.io/any-touch/example/vue/)
+```html
+<div @tap="tap" @doubletap="doubletap" @press="press" @pan="pan" @pinch="pinch" @rotate="rotate" @click="click">
+    <p>hello any-touch</p>
+</div>
+```
 
-## 更多应用
+any-touch 会模拟原生 dom 事件触发, 所以在 vue 上可以**通过 v-on 直接绑定手势**.
 
-[基础](https://codepen.io/russell2015/pen/rRmQaw#)
+## 应用
 
-[自定义手势-双击](https://codepen.io/russell2015/pen/xBrgjJ)
-
-[全部手势展示](https://any86.github.io/any-touch/example/)
-
-[做一个drawer(抽屉)插件](https://codepen.io/russell2015/pen/jJRbgp?editors=0010)
-
+[做一个 drawer(抽屉)插件](https://codepen.io/russell2015/pen/jJRbgp?editors=0010)
 
 ## 参数说明
-|名称|类型|默认值|简要说明|
-|---|---|---|---|
-|touchAction|`String`|`'compute'`|对应css的touch-action属性|
-|hasDomEvents|`Boolean`|`true`|是否派发手势名对应的原生事件|
-|isPreventDefault|`Boolean`|`true`|是否阻止默认事件|
-|preventDefaultExclude|`RegExp \| ((ev: SupportEvent) => boolean)`|`/^(INPUT\|TEXTAREA\|BUTTON\|SELECT)$/`|符合条件可不阻止默认事件的触发|
-|syncToAttr|`Boolean`|`true`|是否在元素上的`at-gesture`属性赋值当前手势名|
-|cssPrevent|`Object`|`{selectText: true,drag: true, tapHighlight: true, callout: true}`|是否开启上述禁止浏览器默认事件的css属性|
 
-## 不要用alert调试
+| 名称| 类型| 默认值 | 简要说明                                     |
+| --- | --- | --- |--- |
+| domEvents | `Boolean`                                   | `true`                                                             | 是否派发手势名对应的原生事件                 |
+| isPreventDefault      | `Boolean`                                   | `true`                                                             | 是否阻止默认事件                             |
+| preventDefaultExclude | `RegExp \| ((ev: SupportEvent) => boolean)` | `/^(INPUT\|TEXTAREA\|BUTTON\|SELECT)$/`                            | 符合条件可不阻止默认事件的触发               |
+
+
+## 不要用 alert 调试
 
 :heavy_exclamation_mark::heavy_exclamation_mark::heavy_exclamation_mark: 在安卓手机的真机上, 如果`touchstart`或`touchmove`阶段触发了`alert`, 会出现后续的`touchmove/touchend`不触发的 bug. 所以请大家务必避免在手势的事件回调中使用`alert`.
 [测试代码](https://codepen.io/russell2015/pen/vYBjVNe)
@@ -194,9 +165,10 @@ export default {
 基于上面的逻辑, 如果默认开启了"双击", 那么没有"双击"需求的人用的时候就会觉得"单击"反应慢(因为再等双击), 出于对"大多数人没有双击需求"的考虑, 默认"双击"是关闭状态.
 
 开启方式:
+
 ```javascript
 const at = new AnyTouch(el);
-const doubletap = at.get("doubletap");
+const doubletap = at.get('doubletap');
 // 开启双击
 doubletap.disabled = false;
 ```

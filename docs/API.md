@@ -8,7 +8,7 @@
 // 设置
 const options = {
     touchAction: 'compute',
-    hasDomEvents: true,
+    domEvents: true,
     isPreventDefault: false,
     style: {}
 };
@@ -19,7 +19,7 @@ const at = new AnyTouch(el, options);
 |名称|类型|默认值|说明|
 |---|---|---|---|
 |touchAction|`String`|'compute'|元素css的**touch-action**属性, compute代表由系统根据加载的手势计算, 其他值为为不同css设置.|
-|hasDomEvents|`Boolean`|true|是否触发dom事件|
+|domEvents|`Boolean`|true|是否触发dom事件|
 |isPreventDefault|`Boolean`|false|是否阻止默认事件|
 |style|`Object`|[查看更多]()|一些提高操作流程体验的样式|
 
