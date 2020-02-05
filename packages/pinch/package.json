@@ -1,6 +1,6 @@
 {
   "name": "@any-touch/pinch",
-  "version": "0.6.0-beta.30",
+  "version": "0.6.1-beta.0",
   "description": "any-touch的识别器, 用来识别捏合手势.",
   "main": "./dist/index",
   "module": "./dist/index.es.js",
@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "@any-touch/compute": "^0.6.0-beta.30",
-    "@any-touch/recognizer": "^0.6.0-beta.30"
+    "@any-touch/recognizer": "^0.6.1-beta.0"
   },
   "publishConfig": {
     "access": "public"
