@@ -13,11 +13,12 @@ export default class extends Recognizer {
     }
 
     /**
-     * @param {AnyTouchEvent} 计算数据
-     * @return {Boolean}} .是否是当前手势
+     * 必要条件
+     * @param input 计算数据
+     * @return 是否是当前手势
      */
     test(input: Input): boolean {
-        const { inputType, pointLength } = input;
+        const {pointLength } = input;
 
         const { distance } = this.computed;
         return (
@@ -29,7 +30,8 @@ export default class extends Recognizer {
 
     /**
      * 开始识别
-     * @param {Input} 输入
+     * @param input 输入
+     * @param emit 触发事件函数
      */
     recognize(input: Input, emit: CommonEmitFunction): void {
         type Computed = ReturnType<ComputeVAndDir['compute']> &
