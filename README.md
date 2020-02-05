@@ -1,7 +1,7 @@
 # any-touch [![NPM Version][npm-image]][npm-url] [![NPM Downloads][downloads-image]][downloads-url] [![size-image]][size-url] [![codecov](https://badgen.net/codecov/c/github/any86/any-touch/master)](https://codecov.io/gh/any86/any-touch) [![CircleCI](https://circleci.com/gh/any86/any-touch.svg?style=svg)](https://circleci.com/gh/any86/any-touch)
 
 [size-image]: https://badgen.net/bundlephobia/minzip/any-touch
-[size-url]: https://bundlephobia.com/result?p=any-touch
+[size-url]: https://bundlephobia.com/result?p=@any-touch/core
 [npm-image]: https://badgen.net/npm/v/any-touch
 [npm-url]: https://npmjs.org/package/any-touch
 [downloads-image]: https://badgen.net/npm/dt/any-touch
@@ -9,15 +9,27 @@
 
 :wave: 一个小巧的手势库.
 - [x] 支持更多设备: PC端 / 移动端 / [微信小程序](#支持微信小程序).
-- [x] 支持手势更全面: **tap**(点击) / **press**(按) / **pan**(拖拽) / **swipe**(划) / **pinch**(捏合) / **rotate**(旋转) 6大类手势.
-- [x] 更简单: 支持 [vue指令](#支持vue指令).
+- [x] 灵活可配: 按需加载需要的识别器.
+
+|名称|尺寸|说明|
+|---|---|---|
+|**@any-touch/core**|![](https://badgen.net/bundlephobia/minzip/@any-touch/core)|核心, 适配Mouse/Touch设备|
+|**@any-touch/tap**|![](https://badgen.net/bundlephobia/minzip/@any-touch/tap)|---|
+|**@any-touch/pan**|![](https://badgen.net/bundlephobia/minzip/@any-touch/pan)|---|
+|**@any-touch/swipe**|![](https://badgen.net/bundlephobia/minzip/@any-touch/swipe)|---|
+|**@any-touch/press**|![](https://badgen.net/bundlephobia/minzip/@any-touch/press)|---|
+|**@any-touch/pinch**|![](https://badgen.net/bundlephobia/minzip/@any-touch/pinch)|---|
+|**@any-touch/rotate**|![](https://badgen.net/bundlephobia/minzip/@any-touch/rotate)|---|
+
+[x] 支持手势更全面: **tap**(点击) / **press**(按) / **pan**(拖拽) / **swipe**(划) / **pinch**(捏合) / **rotate**(旋转) 6大类手势.
+- [x] 更简单: 通过自定义DOM事件和**Vue**语法完美配合.
 - [x] 更放心: 代码测试覆盖率**100%**.
 
 ## 演示
 
-![二维码](https://user-images.githubusercontent.com/8264787/64757535-fc6da200-d564-11e9-9bf6-1ac40e08b8b7.png)
+![二维码](https://user-images.githubusercontent.com/8264787/73740124-83285300-4782-11ea-9660-fcd50183f27b.png)
 
-[直接访问](https://any86.github.io/any-touch/example/)
+[直接访问](https://any86.github.io/any-touch)
 
 ## 直达
 
