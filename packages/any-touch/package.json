@@ -8,7 +8,8 @@
     "module": "dist/index.es.js",
     "types": "dist/index.d.ts",
     "files": [
-        "dist/*"
+        "dist/*",
+        "../../README.md"
     ],
     "repository": {
         "type": "git",
