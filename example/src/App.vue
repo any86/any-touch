@@ -6,6 +6,9 @@
             </a>
 
             <a class="link" target="_new" href="https://github.com/any86/any-touch">文档</a>
+
+            <!-- <a class="link" target="_new" :href="`?a=${Date.now()}`">刷新</a> -->
+
         </header>
         <article ref="panel" class="panel">
             <div
@@ -18,6 +21,7 @@
                 @at:after="onAfter($event,index)"
                 @panstart="onPanstart($event,index)"
                 @panmove="onPanmove($event,index)"
+                @panend="onPanend($event,index)"
                 @swipe="onSwipe($event,index)"
                 @pinch="onPinch($event,index)"
                 @rotate="onRotate($event,index)"
@@ -61,6 +65,7 @@
             <span >pinch(捏合)</span>
             <span>rotate(旋转)</span>
         </p>
+        <span class="btn-add" @click="add">添加一个(第{{styles.length+1}}个)</span>
     </main>
 </template>
 
@@ -122,10 +127,15 @@ export default {
     },
 
     methods: {
+        add(){
+            const style = { left: `50px`, top: `160px`, zIndex: 1, scale: 1, angle: 0 };
+            this.styles.push(style);
+        },
         onAfter(ev){
             ev.currentTarget.setAttribute('at', ev.baseType);
         },
         onTouch(ev) {
+            // console.log('html:', ev.target.innerHTML);
             ev.currentTarget.setAttribute('at-stage', ev.inputType);
 
         },
@@ -134,6 +144,7 @@ export default {
             this.$set(this, 'data', ev);
         },
         onRotate(ev, index) {
+            // console.log(`deltaAngle:${ev.deltaAngle}`,ev.inputType,ev.pointLength)
             this.styles[index].angle += ev.deltaAngle;
         },
         onTransitionend(ev, index) {},
@@ -145,6 +156,7 @@ export default {
             C(ev.type, '#710');
         },
         onPinch(ev, index) {
+            console.log(`deltaScale:${ev.deltaScale}`,ev.inputType,ev.pointLength)
             this.styles[index].scale = Math.round(this.styles[index].scale * ev.deltaScale * 100) / 100;
         },
 
@@ -163,6 +175,10 @@ export default {
         onPanmove(ev, index) {
             this.styles[index].top = parseInt(this.styles[index].top) + ev.deltaY + 'px';
             this.styles[index].left = parseInt(this.styles[index].left) + ev.deltaX + 'px';
+        },
+
+        onPanend(ev,index){
+            // console.log(ev)
         }
     }
 };
@@ -227,14 +243,25 @@ main {
             &:hover {
                 cursor: pointer;
             }
-            &:nth-of-type(3n + 1) {
-                background-color: rgba(226, 47, 47, 0.8);
-            }
-            &:nth-of-type(3n + 2) {
-                background-color: rgba(134, 136, 45, 0.8);
-            }
-            &:nth-of-type(3n) {
-                background-color: rgb(9, 206, 140, 0.8);
+
+            $colors: (
+                rgba(226, 47, 47, 0.8),
+                rgba(134, 136, 45, 0.8),
+                rgba(9, 206, 140, 0.8),
+                rgba(123, 44, 1, 0.8),
+                rgba(9, 55, 140, 0.8),
+                rgba(68, 2, 33, 0.8),
+                rgba(1, 206, 2, 0.8),
+                rgba(52, 4, 44, 0.8),
+                rgba(219, 66, 140, 0.8),
+                rgba(66, 66, 1, 0.8),
+
+            );
+
+            @for $i from 1 through 10{
+                &:nth-of-type(10n + #{$i}) {
+                    background-color: nth($colors,$i);
+                }
             }
 
             &[at='tap'][at-stage='end'] {
@@ -291,6 +318,18 @@ main {
             &.active {
                 color: #f10;
             }
+        }
+    }
+    .btn-add{
+        color:#fff;
+        padding:16px;position:absolute;
+        background-color:#69c;border-radius:4px;
+        z-index:1986;right:16px;bottom:16px;
+        box-shadow:0 2px 8px rgba(0,0,0,0.3);
+        &:hover{
+            cursor: pointer;
+        }
+        &:active{
         }
     }
 }
