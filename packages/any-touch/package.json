@@ -6,7 +6,7 @@
     "jsdelivr": "dist/any-touch.js",
     "main": "dist/index.js",
     "module": "dist/index.es.js",
-    "types": "types/index.d.ts",
+    "types": "dist/index.d.ts",
     "files": [
         "dist/*",
         "types/*"
@@ -21,7 +21,7 @@
         "url": "https://github.com/any86/any-touch/issues"
     },
     "homepage": "https://github.com/any86/any-touch#readme",
-    "peerDependencies": {
+    "dependencies": {
         "@any-touch/core": "^0.6.0-beta.30",
         "@any-touch/pan": "^0.6.0-beta.30",
         "@any-touch/pinch": "^0.6.0-beta.30",

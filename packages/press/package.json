@@ -4,7 +4,7 @@
   "description": "any-touch的识别器, 用来识别按压手势.",
   "main": "./dist/index",
   "module": "./dist/index.es.js",
-  "types": "types/index.d.ts",
+  "types": "dist/index.d.ts",
   "author": "any86",
   "license": "ISC",
   "peerDependencies": {

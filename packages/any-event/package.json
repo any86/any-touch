@@ -4,7 +4,7 @@
   "description": "小巧的事件模型",
   "main": "dist/index.js",
   "module": "dist/index.es.js",
-  "types": "types/index.d.ts",
+  "types": "dist/index.d.ts",
   "keywords": [
     "event",
     "emit"
