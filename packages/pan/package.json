@@ -11,6 +11,9 @@
         "any-touch": "^0.6.0-beta.30",
         "tslib": "^1.9.3"
     },
+    "files": [
+        "dist/*"
+    ],
     "dependencies": {
         "@any-touch/compute": "^0.6.0-beta.30",
         "@any-touch/recognizer": "^0.6.1-beta.1",

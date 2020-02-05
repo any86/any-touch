@@ -1,24 +1,27 @@
 {
-  "name": "@any-touch/swipe",
-  "version": "0.6.1-beta.1",
-  "description": "any-touch的识别器, 用来识别划动手势.",
-  "main": "./dist/index.js",
-  "module": "./dist/index.es.js",
-  "types": "dist/index.d.ts",
-  "author": "any86",
-  "license": "ISC",
-  "peerDependencies": {
-    "any-touch": "^0.6.0-beta.30",
-    "tslib": "^1.9.3"
-  },
-  "dependencies": {
-    "@any-touch/compute": "^0.6.0-beta.30",
-    "@any-touch/recognizer": "^0.6.1-beta.1",
-    "@any-touch/shared": "^0.6.0-beta.30"
-  },
-  "publishConfig": {
-    "access": "public"
-  },
-  "sideEffects": false,
-  "gitHead": "033802fd310406b975f03b5358e0300a7decfe81"
+    "name": "@any-touch/swipe",
+    "version": "0.6.1-beta.1",
+    "description": "any-touch的识别器, 用来识别划动手势.",
+    "main": "./dist/index.js",
+    "module": "./dist/index.es.js",
+    "types": "dist/index.d.ts",
+    "author": "any86",
+    "license": "ISC",
+    "peerDependencies": {
+        "any-touch": "^0.6.0-beta.30",
+        "tslib": "^1.9.3"
+    },
+    "dependencies": {
+        "@any-touch/compute": "^0.6.0-beta.30",
+        "@any-touch/recognizer": "^0.6.1-beta.1",
+        "@any-touch/shared": "^0.6.0-beta.30"
+    },
+    "files": [
+        "dist/*"
+    ],
+    "publishConfig": {
+        "access": "public"
+    },
+    "sideEffects": false,
+    "gitHead": "033802fd310406b975f03b5358e0300a7decfe81"
 }
