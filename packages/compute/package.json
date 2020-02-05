@@ -12,7 +12,8 @@
     ],
     "dependencies": {
         "@any-touch/shared": "^0.6.1-beta.2",
-        "@any-touch/vector": "^0.6.1-beta.2"
+        "@any-touch/vector": "^0.6.1-beta.2",
+        "tslib": "^1.9.3"
     },
     "author": "any86",
     "license": "ISC",

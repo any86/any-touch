@@ -7,7 +7,8 @@
     "author": "any86",
     "license": "ISC",
     "dependencies": {
-        "@any-touch/shared": "^0.6.1-beta.2"
+        "@any-touch/shared": "^0.6.1-beta.2",
+        "tslib": "^1.9.3"
     },
     "publishConfig": {
         "access": "public"
