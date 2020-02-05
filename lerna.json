@@ -1,8 +1,11 @@
 {
-  "npmClient": "yarn",
-  "useWorkspaces": true,
-  "packages": [
-    "packages/*"
-  ],
-  "version": "0.6.1-beta.3"
+    "npmClient": "yarn",
+    "useWorkspaces": true,
+    "publish": {
+        "ignoreChanges": ["ignored-file", "*.md"],
+        "message": "chore(release): publish",
+        "registry":"https://registry.npmjs.org"
+    },
+    "packages": ["packages/*"],
+    "version": "0.6.1-beta.3"
 }
