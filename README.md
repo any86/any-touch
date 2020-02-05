@@ -14,12 +14,12 @@
 |名称|尺寸|说明|
 |---|---|---|
 |**@any-touch/core**|![](https://badgen.net/bundlephobia/minzip/@any-touch/core)|核心, 适配Mouse/Touch设备|
-|**@any-touch/tap**|![](https://badgen.net/bundlephobia/minzip/@any-touch/tap)|---|
-|**@any-touch/pan**|![](https://badgen.net/bundlephobia/minzip/@any-touch/pan)|---|
-|**@any-touch/swipe**|![](https://badgen.net/bundlephobia/minzip/@any-touch/swipe)|---|
-|**@any-touch/press**|![](https://badgen.net/bundlephobia/minzip/@any-touch/press)|---|
-|**@any-touch/pinch**|![](https://badgen.net/bundlephobia/minzip/@any-touch/pinch)|---|
-|**@any-touch/rotate**|![](https://badgen.net/bundlephobia/minzip/@any-touch/rotate)|---|
+|**@any-touch/tap**|![](https://badgen.net/bundlephobia/minzip/@any-touch/tap)|"点击"识别器|
+|**@any-touch/pan**|![](https://badgen.net/bundlephobia/minzip/@any-touch/pan)|"拖拽"识别器|
+|**@any-touch/swipe**|![](https://badgen.net/bundlephobia/minzip/@any-touch/swipe)|"划"识别器|
+|**@any-touch/press**|![](https://badgen.net/bundlephobia/minzip/@any-touch/press)|"按压"识别器|
+|**@any-touch/pinch**|![](https://badgen.net/bundlephobia/minzip/@any-touch/pinch)|"缩放"识别器|
+|**@any-touch/rotate**|![](https://badgen.net/bundlephobia/minzip/@any-touch/rotate)|"旋转"识别器|
 
 [x] 支持手势更全面: **tap**(点击) / **press**(按) / **pan**(拖拽) / **swipe**(划) / **pinch**(捏合) / **rotate**(旋转) 6大类手势.
 - [x] 更简单: 通过自定义DOM事件和**Vue**语法完美配合.
