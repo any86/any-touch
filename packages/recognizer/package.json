@@ -1,6 +1,6 @@
 {
   "name": "@any-touch/recognizer",
-  "version": "0.6.1-beta.0",
+  "version": "0.6.1-beta.1",
   "description": "any-touch的识别器的基类.",
   "main": "./dist/index",
   "module": "./dist/index.es.js",

@@ -1,6 +1,6 @@
 {
     "name": "@any-touch/core",
-    "version": "0.6.0-beta.30",
+    "version": "0.6.1-beta.1",
     "description": "any-touch核心程序, 主要用来兼容Mouse/Touch事件.",
     "unpkg": "dist/any-touch.js",
     "jsdelivr": "dist/any-touch.js",
