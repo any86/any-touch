@@ -29,4 +29,4 @@
 | target           | `EventTarget` | 绑定事件的元素                                                           |
 | currentTarget    | `EventTarget` | 实际触发绑定事件的元素                                                   |
 | timestamp        | `Number`      | **当前时间**                                                             |
-| **nativeEvent**  | `TouchEvent`  | MocatchEvent`|原生事件对象   
+| **nativeEvent**  | `TouchEvent`  |原生事件对象   
