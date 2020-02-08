@@ -10,3 +10,4 @@ packages/**/*.js
 packages/**/types
 packages/**/*.mjs
 lerna-debug.log
+example/uploads
