@@ -26,7 +26,7 @@
                 @transitionend="onTransitionend($event,index)"
                 :class="['circle']"
             >
-                <p style="font-size:18px;border-bottom:1px dashed #fff;">👋可拖拽</p>
+                <p style="font-size:16px;border-bottom:1px dashed #fff;">👋可拖拽 / 缩放等...</p>
                 <p>Top: {{top}}</p>
                 <p>Left: {{left}}</p>
                 <p>Scale: {{scale}}</p>
@@ -144,7 +144,7 @@ export default {
             C(ev.type, '#710');
         },
         onPinch(ev, index) {
-            console.log(`deltaScale:${ev.deltaScale}`,ev.inputType,ev.pointLength)
+            // console.log(`deltaScale:${ev.deltaScale}`,ev.inputType,ev.pointLength)
             this.styles[index].scale = Math.round(this.styles[index].scale * ev.deltaScale * 100) / 100;
         },
 
@@ -161,6 +161,8 @@ export default {
         },
 
         onPanmove(ev, index) {
+            // console.log(ev.preventDefault)
+            // console.dir(ev.target)
             this.styles[index].top = parseInt(this.styles[index].top) + ev.deltaY + 'px';
             this.styles[index].left = parseInt(this.styles[index].left) + ev.deltaX + 'px';
         },
@@ -223,8 +225,6 @@ main {
     > .panel {
         .circle {
             position: absolute;
-            width: 120px;
-            height: 120px;
             border-radius: 4px;
             color: #fff;
             padding: 16px;
