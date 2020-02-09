@@ -20,4 +20,4 @@ at.on('pinch', (ev) => {
 |---|---|---|---|
 |name|`String`|'pinch'|自定义事件名称|
 |pointLength|`Number`|2|支持的触点数, 可支持多指拖拽|
-|threshold| `Number`|0|缩放超过0倍触发pinch事件|
+|threshold| `Number`|0|缩放超过0倍才触发pinch事件|
