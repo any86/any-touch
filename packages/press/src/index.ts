@@ -7,12 +7,12 @@ import Recognizer, { resetStatusForPressMoveLike as resetStatus } from '@any-tou
 const DEFAULT_OPTIONS = {
     name: 'press',
     pointLength: 1,
-    positionTolerance: 9,
+    maxDistance: 9,
     minPressTime: 251,
 };
 export default class extends Recognizer {
     private _timeoutId?: number;
-    
+
     constructor(options: Partial<typeof DEFAULT_OPTIONS>) {
         super({ ...DEFAULT_OPTIONS, ...options });
     };
@@ -43,9 +43,9 @@ export default class extends Recognizer {
             const deltaTime = input.timestamp - startInput.timestamp;
             // 一旦不满足必要条件,
             // 发生了大的位移变化
-            if (!this.test(input) || 
-            // end 或 cancel触发的时候还不到要求的press触发时间
-            (this.options.minPressTime > deltaTime && [INPUT_END, INPUT_CANCEL].includes(inputType))) {
+            if (!this.test(input) ||
+                // end 或 cancel触发的时候还不到要求的press触发时间
+                (this.options.minPressTime > deltaTime && [INPUT_END, INPUT_CANCEL].includes(inputType))) {
                 this.cancel();
                 this.status = STATUS_FAILED;
             }
@@ -61,7 +61,7 @@ export default class extends Recognizer {
         type Computed = ReturnType<ComputeDistance['compute']>;
         this.computed = <Computed>this.compute([ComputeDistance], input);
         const { distance } = this.computed;
-        return this.options.positionTolerance > distance;
+        return this.options.maxDistance > distance;
     };
 
     cancel(): void {
