@@ -119,7 +119,7 @@ function hasTouchTargetOutOfCurrentTarget(baseInputWithoutId: Omit<BaseInput, 'i
         && null !== currentTarget) {
         baseInputWithoutId.points.forEach(({ target }) => {
             // console.log({currentTarget})
-            console.log({currentTarget,target})
+            // console.log({currentTarget,target})
             if (!(currentTarget as HTMLElement).contains(target as HTMLElement)) {
                 console.log('out')
                 hasOutTarget = true;
