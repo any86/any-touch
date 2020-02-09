@@ -43,9 +43,9 @@ export default class extends Recognizer {
         // panleft/panup/panright/pandown
         if (isRecognized) {
             const { inputType } = input;
-            if (INPUT_END !== inputType) {
+            // if (INPUT_END !== inputType) {
                 emit(this.options.name + this.computed.direction, this.computed);
-            }
+            // }
         }
     }
 }
