@@ -21,6 +21,7 @@ export default class extends Recognizer {
     test(input: Input): boolean {
         const { pointLength } = input;
         const { scale } = this.computed;
+        console.warn(scale)
         return this.isValidPointLength(pointLength)
             && void 0 !== scale
             && (this.options.threshold < Math.abs(scale - 1) || this.isRecognized);

@@ -3,8 +3,8 @@ import Adapter from './Abstract';
 export default class extends Adapter {
     load(event: TouchEvent): Omit<BaseInput, 'id'> {
         // tip: wx下没有targetTouches
-        const points = Array.from(event.touches).map(({ clientX, clientY }) => ({ clientX, clientY }));
-        const changedPoints = Array.from(event.changedTouches).map(({ clientX, clientY }) => ({ clientX, clientY }));
+        const points = Array.from(event.touches).map(({ clientX, clientY,target }) => ({ clientX, clientY,target}));
+        const changedPoints = Array.from(event.changedTouches).map(({ clientX, clientY,target }) => ({ clientX, clientY ,target}));
         return {
             inputType: <InputType>event.type.replace('touch', ''),
             changedPoints,

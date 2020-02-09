@@ -9,7 +9,7 @@ test(`preventDefault.spec`, () => {
     const input = inputFactory.transform(event);
     expect(input).not.toBeUndefined();
     if(void 0 !== input){
-        input.preventDefault();
+        input.nativeEvent.preventDefault();
         expect(input.nativeEvent.defaultPrevented).toBeTruthy();
     }
 });

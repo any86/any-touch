@@ -11,7 +11,7 @@ export default class extends Adapter {
     };
     load(event: MouseEvent): Omit<BaseInput, 'id'> | void {
         const { clientX, clientY, type, button, target } = event;
-        let points = [{ clientX, clientY }];
+        let points = [{ clientX, clientY,target }];
         let inputType: InputType | undefined;
         if (MOUSE_DOWN === type && 0 === button) {
             this.target = target;
@@ -31,9 +31,9 @@ export default class extends Adapter {
         // changedPoints = prevPoints其实并不能完全等于touch下的changedPoints
         // 但是由于鼠标没有多点输入的需求, 
         // 所以暂时如此实现
-        const changedPoints = this.prevPoints || [{ clientX, clientY }];
+        const changedPoints = this.prevPoints || [{ clientX, clientY,target }];
 
-        this.prevPoints = [{ clientX, clientY }];
+        this.prevPoints = [{ clientX, clientY,target }];
 
         if (void 0 !== inputType) {
             return {

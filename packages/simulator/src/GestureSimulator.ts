@@ -1,6 +1,7 @@
 interface Input {
     x: number;
     y: number;
+    target?:HTMLElement|SVGElement
 };
 interface Options {
     device: 'touch' | 'mouse';
@@ -17,7 +18,7 @@ export default class TouchSimulator {
     public device: 'touch' | 'mouse';
     public index: number;
 
-    constructor(el: Element | Document, { device = 'touch' }: Options = <Options>{}) {
+    constructor(el: Element | SVGElement, { device = 'touch' }: Options = <Options>{}) {
         this.el = el;
         this.device = device;
         this.prevTouches = [];
@@ -26,7 +27,7 @@ export default class TouchSimulator {
 
 
     public input2Points(input: Input[]) {
-        return input.map(({ x, y }: any) => ({ [CLIENT_X]: x, [CLIENT_Y]: y }));
+        return input.map(({ x, y,target }: any) => ({ [CLIENT_X]: x, [CLIENT_Y]: y ,target:target||this.el}));
     }
 
     /**

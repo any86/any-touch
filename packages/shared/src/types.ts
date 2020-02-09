@@ -5,7 +5,7 @@ export type AnyTouchPlugin = any;
 // 适配器支持的事件类型
 export type SupportEvent = MouseEvent | TouchEvent;
 
-export interface PointClientXY { clientX: number, clientY: number };
+export interface PointClientXY {target:EventTarget|null, clientX: number, clientY: number };
 // 输入类型
 export type InputType = 'start' | 'move' | 'end' | 'cancel';
 
@@ -23,7 +23,7 @@ export interface BaseInput {
 
 // 不包含prevInput等表示记录的input
 export interface PureInput extends BaseInput {
-    readonly preventDefault: () => void;
+    // readonly preventDefault: () => void;
     // 新一轮手势识别的开始和结束
     readonly isStart: boolean;
     readonly isEnd: boolean;
