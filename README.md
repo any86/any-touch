@@ -10,8 +10,8 @@
 :wave: 一个小巧的手势库.
 
 -   [x] **更多端**: PC 端 / 移动端 / [微信小程序](#支持微信小程序).
--   [x] **更灵巧**: 默认加载6个手势, 也可按需加载手势, 核心@any-touch/core只有2kb.
--   [x] **更简单**: 通过自定义 DOM 事件和**Vue**语法完美配合, [使用更简单](#完美配合vue).
+-   [x] **更灵巧**: 默认加载6个手势, 也可🤖[按需加载](#按需加载)手势, 核心@any-touch/core只有**2kb**, 完整安装也仅需要**5kb**.
+-   [x] **更简单**: 通过自定义 DOM 事件和**Vue**语法完美配合, [使用更简单](#兼容vue语法).
 -   [x] **更放心**: 代码测试覆盖率**100%**.
 
 ## 演示
@@ -25,18 +25,18 @@
 ## 直达
 
 [:zap: 快速开始](#快速开始)
-    
-[🤖 按需加载](#按需加载)
 
+[:seedling: 兼容vue语法](#兼容vue语法)
+    
 [:iphone: 支持微信小程序](#支持微信小程序)
 
-[:seedling: 完美配合 vue](#完美配合vue)
+[🤖 按需加载](#按需加载)
 
 [:bulb: API](docs/API.md)
 
 [:lollipop: 事件对象(event)](docs/EVENT.md)
 
-[:heavy_exclamation_mark::heavy_exclamation_mark::heavy_exclamation_mark: 不要用 alert 调试](#不要用alert调试)
+[:heavy_exclamation_mark::heavy_exclamation_mark::heavy_exclamation_mark: 注意事项](#注意事项)
 
 ## 安装
 ```javascript
@@ -62,61 +62,32 @@ at.on('tap', (ev) => {
 ```
 
 
-## 按需加载
-<!-- ![](https://user-images.githubusercontent.com/8264787/73827884-4b311680-483b-11ea-9cf5-946ac77fc5f1.png) -->
-可以通过单独引入"@any-touch/core"和"@any-touch/xxx手势"来实现.
+## 兼容vue语法
 
-**⚠️注意**: 执行`npm i any-touch`后, **@any-touch/core和@any-touch/pan**便已自动安装, 直接引入即可.
-
-```javascript
-// 只加载pan识别器(拖拽)
-import Core from '@any-touch/core';
-import Pan from '@any-touch/pan';
-Core.use(Pan)
-const at = new Core(el);
-// 拖拽
-at.on('pan', (ev) => {
-    // ev包含位置/速度/方向等信息
-});
-```
-### @any-touch/core
-手势库的核心组件, 主要用来把Mouse/Touch输入变成统一的输出, 实现PC/Mobile端的兼容.
-```javascript
-import Core from '@any-touch/core';
-const at = new Core(el);
-// 兼容Mouse/Touch
-at.on('at:touch', (ev) => {
-    // ev包含位置/时间/事件对象等属性.
-});
+```html
+<div 
+    @tap="tap" 
+    @doubletap="doubletap" 
+    @press="press" 
+    @pan="pan" 
+    @pinch="pinch" 
+    @rotate="rotate">
+    <p>Hello any-touch</p>
+</div>
 ```
 
-### @any-touch/tap等
-手势识别器均已做成独立的包, 从而实现按需加载.
-
-| 名称 | 说明 |
-| --- | --- |
-| **@any-touch/tap**    |[点击](packages/tap/README.md)|
-| **@any-touch/pan**    |[拖拽](packages/pan/README.md)|
-| **@any-touch/swipe**  |[划](packages/swipe/README.md)|
-| **@any-touch/press**  |[按压](packages/press/README.md)|
-| **@any-touch/pinch**  |[缩放](packages/pinch/README.md)|
-| **@any-touch/rotate** |[旋转](packages/rotate/README.md)|
-
-**注意**: 如果直接引入"any-touch", 不需要单独引入上面的包:
 ```javascript
-// any-touch直接集成了6类手势识别器
 import AnyTouch from 'any-touch';
-at.on('rotate', ev => {});
+export default {
+    mounted() {
+        // 没错, 就这一行
+        new AnyTouch(this.$el);
+    }
+};
 ```
-对比"按需加载":
-```javascript
-import Core from '@any-touch/core';
-import Rotate from '@any-touch/rotate';
-// 旋转超过5度, 才触发rotate事件
-Core.use(Rotate, {threshold:5});
-const at = new Core(el);
-at.on('rotate', ev=>{})
-```
+
+
+any-touch 会模拟原生 dom 事件触发, 所以在 vue 上可以**通过 v-on 直接绑定手势**.
 
 ## 支持微信小程序
 
@@ -152,26 +123,8 @@ const at = new AnyTouch()
 }
 ```
 
-## 完美配合vue
-```javascript
-import AnyTouch from 'any-touch';
-export default {
-    mounted() {
-        new AnyTouch(this.$el);
-    }
-};
-```
-
-```html
-<div @tap="tap" @doubletap="doubletap" @press="press" @pan="pan" @pinch="pinch" @rotate="rotate" @click="click">
-    <p>hello any-touch</p>
-</div>
-```
-
-any-touch 会模拟原生 dom 事件触发, 所以在 vue 上可以**通过 v-on 直接绑定手势**.
-
 ## beforeEach拦截
-手势的触发与否可自由控制, 比如可以实现"单击延迟300ms, 如果双击没有触发才触发":
+手势的触发与否可自由控制, 比如可以实现"单击延迟300ms, 如果双击没有触发才触发(默认手势事件都是并行触发)":
 ```javascript
 import AnyTouch from '@any-touch/core';
 import Tap from '@any-touch/tap';
@@ -197,10 +150,67 @@ at.on('doubletap', onDoubleTap);
 ```
 "**next**"的执行用来决定是否触发对应事件.
 
+## 按需加载
+**默认any-touch支持所有手势**, 但是对于有特殊要求的开发者, 提供了按需加载.
+<!-- ![](https://user-images.githubusercontent.com/8264787/73827884-4b311680-483b-11ea-9cf5-946ac77fc5f1.png) -->
 
-## 不要用 alert 调试
+### 使用"按需加载"
+
+**⚠️ 注意**: 执行`npm i any-touch`后, "@any-touch/core"和"@any-touch/xx手势"**🤖便已自动安装**, 直接引入即可.
+
+```javascript
+// 只加载pan识别器(拖拽)
+import Core from '@any-touch/core';
+import Pan from '@any-touch/pan';
+Core.use(Pan)
+const at = new Core(el);
+// 拖拽
+at.on('pan', (ev) => {
+    // ev包含位置/速度/方向等信息
+});
+```
+### @any-touch/core
+手势库的核心组件, 主要用来把Mouse/Touch输入变成统一的输出, 实现PC/Mobile端的兼容, 提供了"**at:**"开头的兼容事件.
+```javascript
+import Core from '@any-touch/core';
+const at = new Core(el);
+// 兼容Mouse/Touch
+at.on('at:touch', (ev) => {
+    // ev包含位置/时间/事件对象等属性.
+});
+// start / move / end / cancel
+at.on('at:touchstart', onStart);
+at.on('at:touchmove', onMove);
+at.on('at:touchend', onEnd);
+at.on('at:touchcancel', onCancel);
+```
+<!-- [更多](core) -->
+
+
+### @any-touch/xx手势
+手势识别器均已做成独立的包, 从而实现按需加载.
+
+| 名称 | 说明 |
+| --- | --- |
+| **@any-touch/tap**    |[点击](packages/tap/README.md)|
+| **@any-touch/pan**    |[拖拽](packages/pan/README.md)|
+| **@any-touch/swipe**  |[划](packages/swipe/README.md)|
+| **@any-touch/press**  |[按压](packages/press/README.md)|
+| **@any-touch/pinch**  |[缩放](packages/pinch/README.md)|
+| **@any-touch/rotate** |[旋转](packages/rotate/README.md)|
+
+**⚠️ 再次提示**: 如果已安装"any-touch", 上面的包便也已经自动安装.
+
+
+
+## 注意事项
+
+### 不要用 alert 调试
 
 :heavy_exclamation_mark::heavy_exclamation_mark::heavy_exclamation_mark: 在安卓手机的真机上, 如果`touchstart`或`touchmove`阶段触发了`alert`, 会出现后续的`touchmove/touchend`不触发的 bug. 所以请大家务必避免在手势的事件回调中使用`alert`.
 [测试代码](https://codepen.io/russell2015/pen/vYBjVNe)
 
 如果仅仅是了在移动端调试, 请使用腾讯的[vconsole](https://github.com/Tencent/vConsole)
+
+### mac os上的chrome浏览器触发touchend会比较慢
+由于上述原因, swipe事件发生的会"慢半拍",所以请大家最终测试以手机效果为准.
