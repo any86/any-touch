@@ -41,6 +41,7 @@ export default class extends Adapter {
                 changedPoints,
                 points,
                 target: this.target,
+                targets: [this.target],
                 nativeEvent: event
             };
         }

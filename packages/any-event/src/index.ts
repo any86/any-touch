@@ -1,26 +1,23 @@
+type SupportElement = HTMLElement | SVGElement;
 
 export interface Listener {
     (...payload: any): void;
-    targets?: HTMLElement[];
+    target?: SupportElement;
 }
 
 export interface ListenersMap {
     [propName: string]: Listener[];
 }
 export default class AnyEvent {
-    callbackMap: ListenersMap;
-    targets: HTMLElement[];
-    constructor() {
-        this.callbackMap = {};
-        this.targets = [];
-    };
+    callbackMap: ListenersMap = {};
+    currentTarget?: SupportElement;
 
-    target(el: HTMLElement | HTMLCollection) {
-        const targets = Array.isArray(el) ? Array.from(el) : [el];
-        this.targets.push(...targets);
+
+    target(el: HTMLElement) {
+        this.currentTarget = el;
         return {
             on: (eventName: string, listener: Listener): void => {
-                this.on(eventName, listener, { targets });
+                this.on(eventName, listener, { target: this.currentTarget });
             }
         };
     };
@@ -30,13 +27,13 @@ export default class AnyEvent {
      * @param {String|Symbol} 事件名
      * @param {Function} 回调函数
      */
-    on(eventName: string, listener: Listener, { targets }: { targets?: HTMLElement[] } = {}): void {
+    on(eventName: string, listener: Listener, { target }: { target?: SupportElement } = {}): void {
         if (void 0 === this.callbackMap[eventName]) {
             this.callbackMap[eventName] = [];
         }
         //  备注targets信息
-        if (void 0 !== targets) {
-            listener.targets = targets;
+        if (void 0 !== target) {
+            listener.target = target;
         }
         this.callbackMap[eventName].push(listener);
     };
@@ -71,18 +68,22 @@ export default class AnyEvent {
      */
     emit(eventName: string, payload?: any): boolean {
         const listeners = this.callbackMap[eventName];
-        const { target } = payload || {};
+        //  触发事件的元素
+        const { targets } = payload || {};
+        // 一会判断下2个target是否都是一个元素的子元素
         if (void 0 !== listeners && 0 < listeners.length) {
+
             for (const listener of listeners) {
-                const { targets } = listener;
-                if (void 0 !== target
+                const { target: currentTarget } = listener;
+
+                if (void 0 !== currentTarget
                     && void 0 !== targets
-                    && findRealTargetEl(targets, target)
+                    && targets.every((target: any) => currentTarget.contains(target))
                 ) {
                     listener(payload);
                 }
-                // 没有绑定targets
-                else if (void 0 === targets) {
+                // 没有绑定currentTarget
+                else if (void 0 === currentTarget) {
                     listener(payload);
                 }
             }
@@ -99,19 +100,3 @@ export default class AnyEvent {
         this.callbackMap = {};
     };
 };
-
-function findRealTargetEl(targetEls: HTMLElement[], target: HTMLElement) {
-    // 构造函数绑定的根元素或者target指定的元素
-    // 如果使用了target方法
-    // 那么realTarget指向target传入的元素
-    let realTarget: HTMLElement | undefined;
-    if (void 0 !== targetEls) {
-        for (const targetEl of targetEls) {
-            if (targetEl.contains(target)) {
-                realTarget = targetEl;
-                break;
-            }
-        }
-    }
-    return realTarget;
-}

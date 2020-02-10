@@ -16,8 +16,8 @@ export interface BaseInput {
     readonly changedPoints: PointClientXY[];
     readonly points: PointClientXY[];
     readonly target: EventTarget | null;
+    readonly targets:(EventTarget|null)[];
     readonly nativeEvent: Event;
-
 }
 
 
