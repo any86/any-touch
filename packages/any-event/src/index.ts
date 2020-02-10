@@ -67,6 +67,7 @@ export default class AnyEvent {
      * @returns {Boolean} 如果事件有监听器，则返回 true，否则返回 false。
      */
     emit(eventName: string, payload?: any): boolean {
+        Object.freeze(payload);
         const listeners = this.callbackMap[eventName];
         //  触发事件的元素
         const { targets } = payload || {};
