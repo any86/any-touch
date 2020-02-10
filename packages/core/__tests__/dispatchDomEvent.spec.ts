@@ -6,7 +6,7 @@ test('触发自定义事件', () => {
     el.addEventListener(EVENT_NAME, ev => {
         mockCB(ev.type);
     });
-    dispatchDomEvent(el, { type: EVENT_NAME, x: 100 });
+    dispatchDomEvent(el, { type: EVENT_NAME } as any);
     sleep();
     expect(mockCB).toHaveBeenCalledWith(EVENT_NAME);
 });
