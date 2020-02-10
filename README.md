@@ -162,7 +162,7 @@ at.on('doubletap', onDoubleTap);
 
 
 ## 按需加载
-**默认any-touch支持所有手势**, 但是对于有特殊要求的开发者, 提供了按需加载.
+**默认any-touch支持所有手势**, 为了"减小体积"和"减少不必要的识别器执行时间", 提供了按需加载.
 <!-- ![](https://user-images.githubusercontent.com/8264787/73827884-4b311680-483b-11ea-9cf5-946ac77fc5f1.png) -->
 
 ### 使用"按需加载"
