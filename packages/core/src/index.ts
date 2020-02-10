@@ -7,8 +7,8 @@
  * hammer.js http://hammerjs.github.io/
  */
 import AnyEvent from 'any-event';
-import { SupportEvent, Recognizer } from '@any-touch/shared';
-import Input from './Input';
+import { SupportEvent, Recognizer,Input } from '@any-touch/shared';
+import InputFactory from './Input';
 import dispatchDomEvent from './dispatchDomEvent';
 import canPreventDefault from './canPreventDefault';
 import bindElement from './bindElement';
@@ -53,7 +53,7 @@ export default class AnyTouch extends AnyEvent {
     // 选项
     options: Options;
     // 统一转换器
-    input: Input;
+    input: InputFactory;
 
     recognizerMap: Record<string, Recognizer> = {};
     recognizers: Recognizer[] = [];
@@ -67,7 +67,7 @@ export default class AnyTouch extends AnyEvent {
         this.el = el;
 
         // 适配器
-        this.input = new Input();
+        this.input = new InputFactory();
         this.options = { ...DEFAULT_OPTIONS, ...options };
 
         // 同步到插件到实例
@@ -120,14 +120,17 @@ export default class AnyTouch extends AnyEvent {
             // if (void 0 !== AnyTouch.recognizers[0]) {
             //     AnyTouch.recognizers[0].input = input;
             // }
-            this.emit('at:touch', input);
-            this.emit(`at:touch${input.inputType}`, input);
+            const AT_TOUCH = 'at:touch';
+            const AT_TOUCH_WITH_STATUS = AT_TOUCH + input.inputType;
+
+            this.emit(AT_TOUCH, input);
+            this.emit(AT_TOUCH_WITH_STATUS, input);
 
             if (false !== this.options.domEvents) {
                 const { target } = event;
                 if (null !== target) {
-                    dispatchDomEvent(target as HTMLElement, { ...input, type: 'at:touch' }, this.options.domEvents);
-                    dispatchDomEvent(target as HTMLElement, { ...input, type: `at:touch${input.inputType}` }, this.options.domEvents);
+                    dispatchDomEvent(target, { ...input, type: AT_TOUCH }, this.options.domEvents);
+                    dispatchDomEvent(target, { ...input, type: AT_TOUCH_WITH_STATUS }, this.options.domEvents);
                 }
             }
             // 缓存每次计算的结果
@@ -162,7 +165,7 @@ export default class AnyTouch extends AnyEvent {
      * @param {Object} 事件对象 
      * @param {string} 当前输入状态
      */
-    emit2(payload: { type: string;[k: string]: any }) {
+    emit2(payload: Record<string, any> & Input) {
         const { type, target } = payload;
         this.emit('at:after', payload);
         this.emit(type, payload);
@@ -172,6 +175,7 @@ export default class AnyTouch extends AnyEvent {
         if (false !== this.options.domEvents
             && void 0 !== this.el
             && void 0 !== target
+            && null !== target
         ) {
             // vue会把绑定元素的所有子元素都进行事件绑定
             // 所以此处的target会自动冒泡到目标元素

@@ -46,7 +46,6 @@ export default class {
                     this.startMultiInput = void 0;
                 }
             }
-
             return {
                 ...pureInput,
                 prevInput: this.prevInput,
@@ -114,14 +113,14 @@ function hasTouchTargetOutOfCurrentTarget(baseInputWithoutId: Omit<BaseInput, 'i
     let hasOutTarget = false;
     const { currentTarget } = baseInputWithoutId.nativeEvent;
     // 在运行阶段应该不会出现 null === currentTarget, 此处判断有待商榷是否删除
-    if (window !== currentTarget 
+    if (window !== currentTarget
         && document !== currentTarget
         && null !== currentTarget) {
         baseInputWithoutId.points.forEach(({ target }) => {
             // console.log({currentTarget})
             // console.log({currentTarget,target})
             if (!(currentTarget as HTMLElement).contains(target as HTMLElement)) {
-                console.log('out')
+                // console.log('out')
                 hasOutTarget = true;
             }
         });

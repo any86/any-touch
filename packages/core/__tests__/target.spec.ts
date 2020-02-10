@@ -13,6 +13,8 @@ test('通过target指定相应事件的元素', async done => {
         mockCallback(ev.target);
     });
 
+    
+
     at.on('at:touch', ev => {
         mockCallback(ev.target);
     });
