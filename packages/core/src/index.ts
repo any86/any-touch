@@ -7,13 +7,28 @@
  * hammer.js http://hammerjs.github.io/
  */
 import AnyEvent from 'any-event';
-import { SupportEvent, Recognizer,Input } from '@any-touch/shared';
+import { SupportEvent, Recognizer, Input } from '@any-touch/shared';
 import InputFactory from './Input';
 import dispatchDomEvent from './dispatchDomEvent';
 import canPreventDefault from './canPreventDefault';
 import bindElement from './bindElement';
 import { use, removeUse } from './use';
 // type TouchAction = 'auto' | 'none' | 'pan-x' | 'pan-left' | 'pan-right' | 'pan-y' | 'pan-up' | 'pan-down' | 'pinch-zoom' | 'manipulation';
+
+// 校验passive
+interface WindowEventMap {
+    _: Event
+}
+let supportsPassive = false;
+try {
+    var opts = {};
+    Object.defineProperty(opts, 'passive', ({
+        get: function get() {
+            supportsPassive = true;
+        }
+    }));
+    window.addEventListener('_', () => void 0, opts);
+} catch (e) { }
 
 export interface Options {
     domEvents?: false | EventInit;
@@ -28,6 +43,8 @@ const DEFAULT_OPTIONS: Options = {
     isPreventDefault: true,
     preventDefaultExclude: /^(?:INPUT|TEXTAREA|BUTTON|SELECT)$/
 };
+
+
 
 export default class AnyTouch extends AnyEvent {
     static version = '__VERSION__';
@@ -76,7 +93,7 @@ export default class AnyTouch extends AnyEvent {
 
         // 绑定事件
         if (void 0 !== this.el) {
-            this._unbindEl = bindElement(this.el, this.catchEvent.bind(this));
+            this._unbindEl = bindElement(this.el, this.catchEvent.bind(this), !this.options.isPreventDefault && supportsPassive ? { passive: true } : false);
         }
     }
 
