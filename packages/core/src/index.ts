@@ -15,20 +15,7 @@ import bindElement from './bindElement';
 import { use, removeUse } from './use';
 // type TouchAction = 'auto' | 'none' | 'pan-x' | 'pan-left' | 'pan-right' | 'pan-y' | 'pan-up' | 'pan-down' | 'pinch-zoom' | 'manipulation';
 
-// 校验passive
-interface WindowEventMap {
-    _: Event
-}
-let supportsPassive = false;
-try {
-    var opts = {};
-    Object.defineProperty(opts, 'passive', ({
-        get: function get() {
-            supportsPassive = true;
-        }
-    }));
-    window.addEventListener('_', () => void 0, opts);
-} catch (e) { }
+
 
 export interface Options {
     domEvents?: false | EventInit;
@@ -93,6 +80,20 @@ export default class AnyTouch extends AnyEvent {
 
         // 绑定事件
         if (void 0 !== this.el) {
+            
+            // 校验是否支持passive
+            let supportsPassive = false;
+            try {
+                const opts = {};
+                Object.defineProperty(opts, 'passive', ({
+                    get: function get() {
+                        // 不想暴露, 会增加体积, 暂时忽略
+                        /* istanbul ignore next */ 
+                        supportsPassive = true;
+                    }
+                }));
+                window.addEventListener('_', () => void 0, opts);
+            } catch{ }
             this._unbindEl = bindElement(this.el, this.catchEvent.bind(this), !this.options.isPreventDefault && supportsPassive ? { passive: true } : false);
         }
     }
