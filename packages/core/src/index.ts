@@ -80,21 +80,22 @@ export default class AnyTouch extends AnyEvent {
 
         // 绑定事件
         if (void 0 !== this.el) {
-            
+
             // 校验是否支持passive
             let supportsPassive = false;
             try {
                 const opts = {};
                 Object.defineProperty(opts, 'passive', ({
                     get: function get() {
-                        // 不想暴露, 会增加体积, 暂时忽略
-                        /* istanbul ignore next */ 
+                        // 不想为测试暴露, 会增加体积, 暂时忽略
+                        /* istanbul ignore next */
                         supportsPassive = true;
                     }
                 }));
                 window.addEventListener('_', () => void 0, opts);
             } catch{ }
-            this._unbindEl = bindElement(this.el, this.catchEvent.bind(this), !this.options.isPreventDefault && supportsPassive ? { passive: true } : false);
+            const unbindEl = bindElement(this.el, this.catchEvent.bind(this), !this.options.isPreventDefault && supportsPassive ? { passive: true } : false);
+            this.on('unbindEl', unbindEl);
         }
     }
 
@@ -219,19 +220,13 @@ export default class AnyTouch extends AnyEvent {
         this.options = { ...this.options, ...options };
     };
 
-    /**
-     * 解绑所有触摸事件
-     */
-    private _unbindEl(): void { };
 
     /**
      * 销毁
      */
     destroy() {
         // 解绑事件
-        if (this.el) {
-            this._unbindEl();
-        }
+        this.emit('unbindEl');
         this.callbackMap = {};
     };
 }
