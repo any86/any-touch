@@ -16,7 +16,7 @@ import { use, removeUse } from './use';
 // type TouchAction = 'auto' | 'none' | 'pan-x' | 'pan-left' | 'pan-right' | 'pan-y' | 'pan-up' | 'pan-down' | 'pinch-zoom' | 'manipulation';
 
 
-
+type BeforeEachHook = (active: Recognizer, next: () => void) => void;
 export interface Options {
     domEvents?: false | EventInit;
     isPreventDefault?: boolean;
@@ -61,7 +61,7 @@ export default class AnyTouch extends AnyEvent {
 
     recognizerMap: Record<string, Recognizer> = {};
     recognizers: Recognizer[] = [];
-    beforeEachHook: any;
+    beforeEachHook?: BeforeEachHook;
     /**
      * @param {Element} 目标元素, 微信下没有el
      * @param {Object} 选项
@@ -79,8 +79,12 @@ export default class AnyTouch extends AnyEvent {
         this.recognizers = AnyTouch.recognizers;
 
         // 绑定事件
-        if (void 0 !== this.el) {
-
+        if (void 0 !== el) {
+            // 观察了几个移动端组件, 作者都会加webkitTapHighlightColor
+            // 比如vant ui
+            // 所以在此作为默认值
+            // 使用者也可通过at.el改回去
+            el.style.webkitTapHighlightColor = 'rgba(0,0,0,0)';
             // 校验是否支持passive
             let supportsPassive = false;
             try {
@@ -94,7 +98,7 @@ export default class AnyTouch extends AnyEvent {
                 }));
                 window.addEventListener('_', () => void 0, opts);
             } catch{ }
-            const unbindEl = bindElement(this.el, this.catchEvent.bind(this), !this.options.isPreventDefault && supportsPassive ? { passive: true } : false);
+            const unbindEl = bindElement(el, this.catchEvent.bind(this), !this.options.isPreventDefault && supportsPassive ? { passive: true } : false);
             this.on('unbindEl', unbindEl);
         }
     }
