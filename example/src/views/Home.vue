@@ -21,8 +21,8 @@
                 @panmove="onPanmove($event,index)"
                 @panend="onPanend($event,index)"
                 @swipe="onSwipe($event,index)"
-                @pinch="onPinch($event,index)"
-                @rotate="onRotate($event,index)"
+                @pinch="$event.exact() && onPinch($event,index)"
+                @rotate="$event.exact() && onRotate($event,index)"
                 @transitionend="onTransitionend($event,index)"
                 :class="['circle']"
             >
@@ -52,6 +52,8 @@
                 </table>  
             </template>
             <h1 v-else>👋请拖拽 / 点击 / 按压 / 划 / 缩放 / 旋转</h1>
+        <span class="btn-add" @click="add">添加一个(第{{styles.length+1}}个)</span>
+
         </article>
 
         <p class="tip">
@@ -63,7 +65,6 @@
             <span >pinch(捏合)</span>
             <span>rotate(旋转)</span>
         </p>
-        <span class="btn-add" @click="add">添加一个(第{{styles.length+1}}个)</span>
     </main>
 </template>
 
@@ -108,8 +109,16 @@ export default {
     },
 
     mounted() {
-        const at = new AnyTouch(this.$refs.panel);
-        at.target(this.$refs.circle[1]).on('tap', this.onTap);
+
+
+        const at = new AnyTouch(this.$refs.panel, {isPreventDefault:true});
+        // at.on('tap', ev=>{
+        //     console.warn('tap')
+        // })
+        // at.target(this.$refs.circle[0]).on('pinch', this.onPinch);
+        // at.target(this.$refs.circle[0]).on('rotate', this.onRotate);
+        // at.target(this.$refs.circle[1]).on('pinch', this.onPinch1);
+        // at.target(this.$refs.circle[1]).on('rotate', this.onRotate1);
         // at.target(this.$refs.circle).on('press', this.onPress);
         at.on('at:after', this.afterEach);
     },
@@ -131,10 +140,30 @@ export default {
             this.action = ev.baseType;
             this.$set(this, 'data', ev);
         },
-        onRotate(ev, index) {
+        onRotate(ev, index=0) {
+            // if(ev.isMatch() ) return;
             // console.log(`deltaAngle:${ev.deltaAngle}`,ev.inputType,ev.pointLength)
             this.styles[index].angle += ev.deltaAngle;
         },
+
+        onPinch(ev, index=0) {
+                        // if(ev.isMatch() ) return;
+
+
+            // console.log(`deltaScale:${ev.deltaScale}`,ev.inputType,ev.pointLength)
+            this.styles[index].scale = Math.round(this.styles[index].scale * ev.deltaScale * 100) / 100;
+        },
+
+        onRotate1(ev, index=1) {
+            // console.log(`deltaAngle:${ev.deltaAngle}`,ev.inputType,ev.pointLength)
+            this.styles[index].angle += ev.deltaAngle;
+        },
+
+        onPinch1(ev, index=1) {
+            // console.log(`deltaScale:${ev.deltaScale}`,ev.inputType,ev.pointLength)
+            this.styles[index].scale = Math.round(this.styles[index].scale * ev.deltaScale * 100) / 100;
+        },
+
         onTransitionend(ev, index) {},
         onTap(ev) {
             C(ev.type, '#f10');
@@ -143,10 +172,7 @@ export default {
         onPress(ev) {
             C(ev.type, '#710');
         },
-        onPinch(ev, index) {
-            // console.log(`deltaScale:${ev.deltaScale}`,ev.inputType,ev.pointLength)
-            this.styles[index].scale = Math.round(this.styles[index].scale * ev.deltaScale * 100) / 100;
-        },
+
 
         onSwipe({ speedX, speedY }, index) {
             this.styles[index].top = Math.round(parseInt(this.styles[index].top) + speedY * 120) + 'px';
@@ -154,7 +180,6 @@ export default {
         },
 
         onPanstart(ev, index) {
-            // console.log(ev.target)
             for (const i in this.styles) {
                 this.styles[i].zIndex = i == index ? 2 : 1;
             }
@@ -210,7 +235,7 @@ main {
     >header{
         display:flex;
         align-items:center;
-        padding:28px;
+        padding:16px 16px 0 16px;
         .link{
             font-size:16px;
             line-height:12px;
@@ -219,9 +244,7 @@ main {
             text-decoration: none;
         }
     }
-    >.title{
-        margin-left:32px;
-    }
+
     > .panel {
         .circle {
             position: absolute;
@@ -271,34 +294,38 @@ main {
     }
 
     > .info {
-        background-size:100%;
-        position: absolute;
         box-sizing: border-box;
         background-color: #fff;
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         border-radius: 4px;
         padding: 16px;
-        margin: 64px auto;
-        bottom: 0;
-        right: 0;
-        left: 0;
-        top: 0;
-        width:96%;
-        height:80vh;
+        margin: 16px;
+        min-height:80vh;
         h1{padding:8px;}
         tr{ 
             td,th{padding:6px 8px;font-size:16px;}
         }
+
+            .btn-add{
+        color:#fff;
+        padding:16px;
+        position:absolute;
+        background-color:#69c;border-radius:4px;
+        z-index:1986;right:16px;bottom:16px;
+        box-shadow:0 2px 8px rgba(0,0,0,0.3);
+        &:hover{
+            cursor: pointer;
+        }
+        &:active{
+        }
+    }
     }
 
     .tip {
-        position: absolute;
+        
         color: #000;
-        bottom: 16px;
-        right: 0;
-        left: 0;
         font-size: 14px;
-        padding: 0 24px;
+        padding: 16px 24px;
         span {
             &:after {
                 content: ' / ';
@@ -309,17 +336,6 @@ main {
             }
         }
     }
-    .btn-add{
-        color:#fff;
-        padding:16px;position:absolute;
-        background-color:#69c;border-radius:4px;
-        z-index:1986;right:16px;bottom:16px;
-        box-shadow:0 2px 8px rgba(0,0,0,0.3);
-        &:hover{
-            cursor: pointer;
-        }
-        &:active{
-        }
-    }
+
 }
 </style>
