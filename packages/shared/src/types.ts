@@ -5,7 +5,7 @@ export type AnyTouchPlugin = any;
 // 适配器支持的事件类型
 export type SupportEvent = MouseEvent | TouchEvent;
 
-export interface PointClientXY {target:EventTarget|null, clientX: number, clientY: number };
+export interface PointClientXY { target: EventTarget | null, clientX: number, clientY: number };
 // 输入类型
 export type InputType = 'start' | 'move' | 'end' | 'cancel';
 
@@ -16,7 +16,7 @@ export interface BaseInput {
     readonly changedPoints: PointClientXY[];
     readonly points: PointClientXY[];
     readonly target: EventTarget | null;
-    readonly targets:(EventTarget|null)[];
+    readonly targets: (EventTarget | null)[];
     readonly nativeEvent: Event;
 }
 
@@ -38,6 +38,7 @@ export interface PureInput extends BaseInput {
     // 同centerX/Y
     readonly x: number;
     readonly y: number;
+    readonly getOffset: (el: HTMLElement | SVGElement) => { x: number, y: number }
 }
 
 export interface Input extends PureInput {
@@ -53,9 +54,9 @@ export interface StdClass {
 
 
 export interface ComputeConstructor {
-    _id:string;
+    _id: string;
     new(...args: any[]): {
-        compute(input: Input): Record<string, any>|void;
+        compute(input: Input): Record<string, any> | void;
     };
 }
 

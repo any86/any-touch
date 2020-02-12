@@ -21,8 +21,8 @@
                 @panmove="onPanmove($event,index)"
                 @panend="onPanend($event,index)"
                 @swipe="onSwipe($event,index)"
-                @pinch="$event.exact() && onPinch($event,index)"
-                @rotate="$event.exact() && onRotate($event,index)"
+                @pinch="$event.match() && onPinch($event,index)"
+                @rotate="$event.match() && onRotate($event,index)"
                 @transitionend="onTransitionend($event,index)"
                 :class="['circle']"
             >

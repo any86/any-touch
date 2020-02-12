@@ -31,7 +31,9 @@ export default class {
 
             const id = Number.MAX_SAFE_INTEGER > this.id ? ++this.id : 1
             const baseInput = { ...baseInputWithoutId, id };
+
             const pureInput = extendInput(baseInput);
+
             this.activeInput = pureInput;
             const { isStart, pointLength } = pureInput;
             if (isStart) {
@@ -101,6 +103,12 @@ function extendInput(inputBase: BaseInput): Omit<Input, 'prevInput' | 'startInpu
         isStart, isEnd,
         pointLength,
         currentTarget,
+        // 触点距离指定元素左上角的偏移
+        getOffset(el: HTMLElement | SVGElement = currentTarget as HTMLElement): { x: number, y: number } {
+            const rect = el.getBoundingClientRect();
+            // console.log(rect,x,y);
+            return { x: x - Math.round(rect.left), y: y - Math.round(rect.top) };
+        }
     }
 }
 
