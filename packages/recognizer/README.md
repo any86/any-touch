@@ -1,14 +1,11 @@
-# Recognizer
-所有手势的基类.
-
-## index
-基类
-
-## const
-状态常量
-
-## recognizeForPressMoveLike
-"按压拖拽"类手势的必要方法
-
-## resetStatusForPressMoveLike
-"按压拖拽"类手势的重置状态函数, 由于**press**手势只使用`resetStatusForPressMoveLike`而不用`recognizeForPressMoveLike`, 所以独立打包.
+# @any-touch/recognizer (内部模块)
+所有识别器的基类, 主要管理识别器内部的状态.
+|值|说明|
+|---|---|
+|possible|表示当前还"未识别"|
+|start|"**拖拽类**"手势(pan/pinch/rotate等)中表示"第一次识别."|
+|move|"拖拽类"手势中表示"识别后移动中"|
+|end|"拖拽类"手势中表示"有触点离开,即手势结束"|
+|cancel|手势识别后,发生事件中断,比如"来电话","浏览器最小化"等.|
+|failed|表示"识别失败", 比如识别tap的时候,触点在250ms内没有离开屏幕等|
+|recognized|表示"已识别", 区别于"拖拽类"手势, 用在"瞬发"识别的手势,比如tap/press/swipe.
