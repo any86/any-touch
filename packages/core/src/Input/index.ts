@@ -84,7 +84,7 @@ function extendInput(inputBase: BaseInput): Omit<Input, 'prevInput' | 'startInpu
     const isStart = INPUT_START === inputType;
     const isEnd = (INPUT_END === inputType && 0 === pointLength) || INPUT_CANCEL === inputType;
     // 当前时间
-    const timestamp = Date.now();
+    const timestamp = performance.now();
     // 触点中心
     // !!! 注意 !!!
     // 1. 此处的x,y和Touch事件的touchs不同, x,y代表发生事件的坐标,
