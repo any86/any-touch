@@ -64,7 +64,7 @@ export default class extends Recognizer {
      * @return {Boolean} 是否满足
      */
     private _isValidInterval(): boolean {
-        const now = Date.now();
+        const now = performance.now();
         if (void 0 === this.prevTapTime) {
             this.prevTapTime = now;
             return true;
