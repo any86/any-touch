@@ -8,11 +8,7 @@
                 />
             </a>
             <!-- {{mapImg}} -->
-            <a
-                class="link"
-                target="_new"
-                href="https://github.com/any86/any-touch"
-            >文档</a>
+            <a class="link" target="_new" href="https://github.com/any86/any-touch">文档</a>
             <button @click="zoomOut">缩小</button>
             <button @click="zoomIn">放大</button>
 
@@ -28,6 +24,8 @@
                 v-if="mapImg.url"
                 @panmove="onMapPan"
                 @tap="onMapTap"
+                @wheel="onMapWheel"
+                @pinchstart="onMapPinchstart"
                 :style="{
                     left:`${mapImg.left}px`,
                     top:`${mapImg.top}px`, 
@@ -53,7 +51,7 @@
             >{{xInMap}} - {{yInMap}}</div>
         </article>
 
-        <p class="tip">
+        <!-- <p class="tip">
             👋 支持6类手势:
             <span>tap(点击)</span>
             <span>press(按)</span>
@@ -61,7 +59,7 @@
             <span>swipe(划)</span>
             <span>pinch(捏合)</span>
             <span>rotate(旋转)</span>
-        </p>
+        </p>-->
         <!-- <span class="btn-add" @click="add">添加一个(第{{mapDots.length+1}}个)</span> -->
         <label ref="btn" class="btn-add">
             上传
@@ -86,8 +84,8 @@ export default {
         return {
             data: {},
             map: { top: 0, left: 0 },
-            deltaOrgX:0,
-            deltaOrgY:0,
+            deltaOrgX: 0,
+            deltaOrgY: 0,
             mapImg: {
                 orgX: 0,
                 orgY: 0,
@@ -124,6 +122,15 @@ export default {
     },
 
     methods: {
+        onMapPinchstart(ev){
+            this.changeOrgXY(ev);
+        },
+        onMapWheel(ev) {
+            const { clientX, clientY, deltaY } = ev;
+            // this.mapImg.orgX
+            this.changeOrgXY({ x: clientX, y: clientY });
+            this.mapImg.scale *= 1 + deltaY / 100;
+        },
         async onChangeFile(ev) {
             const files = Array.from(ev.target.files);
             let formData = new FormData();
@@ -195,13 +202,17 @@ export default {
             this.mapDots[index].yInMap += Math.round(deltaY / this.scale);
         },
 
-        onDotTap({ x, y }) {
+        changeOrgXY({ x, y }) {
             const rect = this.getMapImgOffset();
             const offsetMapX = x - rect.x;
             const offsetMapY = y - rect.y;
             const xInMap = Math.round(offsetMapX / this.mapImg.scale);
             const yInMap = Math.round(offsetMapY / this.mapImg.scale);
-            this.setOrg(xInMap,yInMap)
+            this.setOrg(xInMap, yInMap);
+        },
+
+        onDotTap(ev){
+            this.changeOrgXY(ev)
         },
 
         setOrg(x, y) {
@@ -209,9 +220,8 @@ export default {
             this.deltaOrgY = y - this.mapImg.orgY;
             this.mapImg.orgX = x;
             this.mapImg.orgY = y;
-            this.mapImg.left-= this.deltaOrgX*(1-this.scale)
-            this.mapImg.top-= this.deltaOrgY*(1-this.scale)
-
+            this.mapImg.left -= this.deltaOrgX * (1 - this.scale);
+            this.mapImg.top -= this.deltaOrgY * (1 - this.scale);
         }
     }
 };
