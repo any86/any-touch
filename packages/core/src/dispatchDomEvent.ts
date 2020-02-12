@@ -13,7 +13,7 @@ export default function (el: EventTarget, payload: Record<string, any> & Input, 
         event.initEvent(type, eventInit?.bubbles, eventInit?.cancelable);
     }
     Object.assign(event, data, {
-        exact: () =>
+        match: () =>
             payload.targets.every(target =>
                 (event.currentTarget as HTMLElement).contains(target as HTMLElement)
             )
