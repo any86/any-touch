@@ -166,6 +166,9 @@ export default class AnyTouch extends AnyEvent {
                 recognizer.computedGroup = computedGroup;
                 recognizer.recognize(input, (type, ev) => {
                     const payload = { ...input, ...ev, type, baseType: recognizer.name };
+
+                    Object.freeze(payload);
+
                     if (void 0 === this.beforeEachHook) {
                         this.emit2(payload);
                     } else {

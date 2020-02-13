@@ -10,14 +10,11 @@ export interface ListenersMap {
 }
 export default class AnyEvent {
     callbackMap: ListenersMap = {};
-    currentTarget?: SupportElement;
-
 
     target(el: HTMLElement) {
-        this.currentTarget = el;
         return {
             on: (eventName: string, listener: Listener): void => {
-                this.on(eventName, listener, { target: this.currentTarget });
+                this.on(eventName, listener, { target: el });
             }
         };
     };
@@ -67,7 +64,6 @@ export default class AnyEvent {
      * @returns {Boolean} 如果事件有监听器，则返回 true，否则返回 false。
      */
     emit(eventName: string, payload?: any): boolean {
-        Object.freeze(payload);
         const listeners = this.callbackMap[eventName];
         //  触发事件的元素
         const { targets } = payload || {};
