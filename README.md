@@ -22,7 +22,7 @@
 
 [直接访问](https://any86.github.io/any-touch)
 
-## 直达
+## 目录
 
 [:zap: 快速开始](#快速开始)
 
@@ -60,7 +60,7 @@ at.on('tap', (ev) => {
     // ev包含位置/速度/方向等信息
 });
 ```
-
+[返回目录](#目录)
 
 ## 兼容vue语法
 
@@ -92,6 +92,8 @@ export default {
 
 <!-- 由于`event.currentTarget`需要在事件的回调函数触发过程中才可以得到, 而vue封装了他, any-touch没法提前进行拦截,
 所以在vue中多触点的手势识别的时候,如果想要确保多个触点的`target`都是`currentTarget`的子元素或自身请使用. -->
+
+[返回目录](#目录)
 
 ## 支持微信小程序
 
@@ -126,6 +128,7 @@ const at = new AnyTouch()
     }
 }
 ```
+[返回目录](#目录)
 
 ## beforeEach拦截
 手势的触发与否可自由控制, 比如可以实现"单击延迟300ms, 如果双击没有触发才触发(默认手势事件都是并行触发)":
@@ -154,15 +157,15 @@ at.on('doubletap', onDoubleTap);
 ```
 "**next**"的执行用来决定是否触发对应事件. 说道这里顺便解释下手势识别器的状态:
 #### 手势识别器的状态
-|值|说明|
-|---|---|
-|possible|表示当前还"未识别"|
-|start|"**拖拽类**"手势(pan/pinch/rotate等)中表示"第一次识别."|
-|move|"拖拽类"手势中表示"识别后移动中"|
-|end|"拖拽类"手势中表示"有触点离开,即手势结束"|
-|cancel|手势识别后,发生事件中断,比如"来电话","浏览器最小化"等.|
-|failed|表示"识别失败", 比如识别tap的时候,触点在250ms内没有离开屏幕等|
-|recognized|表示"已识别", 区别于"拖拽类"手势, 用在"瞬发"识别的手势,比如tap/press/swipe.
+|变量|说明|
+|-|-|
+|STATUS_POSSIBLE|表示当前还"未识别"|
+|STATUS_START|"**拖拽类**"手势(pan/pinch/rotate等)中表示"第一次识别."|
+|STATUS_MOVE|"拖拽类"手势中表示"识别后移动中"|
+|STATUS_END|"拖拽类"手势中表示"有触点离开,即手势结束"|
+|STATUS_CANCELLED|手势识别后,发生事件中断,比如"来电话","浏览器最小化"等.|
+|STATUS_FAILED|表示"识别失败", 比如识别tap的时候,触点在250ms内没有离开屏幕等|
+|STATUS_RECOGNIZED|表示"已识别", 区别于"拖拽类"手势, 用在"瞬发"识别的手势,比如tap/press/swipe.|
 
 
 ## 按需加载
@@ -208,7 +211,7 @@ at.on('at:touchcancel', onCancel);
 手势识别器均已做成独立的包, 从而实现按需加载.
 
 | 名称 | 说明 |
-| --- | --- |
+| - | - |
 | **@any-touch/tap**    |[点击](packages/tap/README.md)|
 | **@any-touch/pan**    |[拖拽](packages/pan/README.md)|
 | **@any-touch/swipe**  |[划](packages/swipe/README.md)|
@@ -219,6 +222,7 @@ at.on('at:touchcancel', onCancel);
 **⚠️ 再次提示**: 如果已安装"any-touch", 上面的包便也已经自动安装.
 
 
+[返回目录](#目录)
 
 ## 注意事项
 
@@ -231,3 +235,5 @@ at.on('at:touchcancel', onCancel);
 
 ### mac os上的chrome浏览器触发touchend会比较慢
 由于上述原因, swipe事件发生的会"慢半拍",所以请大家最终测试以手机效果为准.
+
+[返回目录](#目录)
