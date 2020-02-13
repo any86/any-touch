@@ -6,7 +6,7 @@
     "module": "dist/index.es.js",
     "author": "any86",
     "license": "ISC",
-    "dependencies": {
+    "peerDependencies": {
         "@any-touch/shared": "^0.6.1-beta.6",
         "tslib": "^1.9.3"
     },

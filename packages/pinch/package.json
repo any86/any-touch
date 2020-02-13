@@ -7,16 +7,15 @@
     "types": "dist/index.d.ts",
     "author": "any86",
     "license": "ISC",
-    "peerDependencies": {
-        "any-touch": ">=0.6.1-beta.2"
-    },
     "files": [
         "dist/*"
     ],
+    "peerDependencies": {
+        "tslib": "^1.9.3"
+    },
     "dependencies": {
         "@any-touch/compute": "^0.6.1-beta.6",
-        "@any-touch/recognizer": "^0.6.1-beta.6",
-        "tslib": "^1.9.3"
+        "@any-touch/recognizer": "^0.6.1-beta.6"
     },
     "publishConfig": {
         "access": "public"
