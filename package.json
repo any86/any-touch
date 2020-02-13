@@ -12,7 +12,7 @@
         "dev:ex": "cd example && npm run serve",
         "build:ex": "cd example && npm run build",
         "release:ex": "npm run build:ex && node ./scripts/releaseExample.js",
-        "release:next": "npm run build && lerna publish from-git --force-publish --dist-tag next",
+        "release:next": "npm run build && lerna publish --force-publish --dist-tag next",
         "release:last": "npm run build && lerna publish",
         "rm": "rimraf packages/**/dist",
         "clean": "rimraf node_modules",
