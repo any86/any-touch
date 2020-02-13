@@ -1,6 +1,6 @@
 import { Input, ComputeConstructor } from '@any-touch/shared';
 import {
-    STATUS_POSSIBLE,
+    STATUS_POSSIBLE,SupportStatus
 } from '@any-touch/shared';
 
 // 导出recognizeForPressMoveLike,
@@ -13,7 +13,7 @@ export default abstract class {
     // 是否禁止
     disabled: boolean;
     // 识别状态
-    status: string;
+    status: SupportStatus;
     // 是否已识别
     isRecognized: boolean;
     // 选项

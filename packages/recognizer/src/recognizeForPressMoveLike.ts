@@ -1,4 +1,4 @@
-import { CommonEmitFunction, Input, STATUS_FAILED } from '@any-touch/shared';
+import { CommonEmitFunction, Input, STATUS_FAILED ,SupportStatus} from '@any-touch/shared';
 import Recognizer from './index';
 import {
     INPUT_CANCEL, INPUT_END, INPUT_MOVE
@@ -14,7 +14,7 @@ import {
 } from '@any-touch/shared'
 import resetStatus from './resetStatusForPressMoveLike';
 
-function flow(isVaild: boolean, activeStatus: string, inputType: string): string {
+function flow(isVaild: boolean, activeStatus: SupportStatus, inputType: string): SupportStatus {
     const STATE_MAP: { [k: number]: any } = {
         // isVaild === true,
         // Number(true) === 1
@@ -83,7 +83,7 @@ export default function (recognizer: Recognizer, input: Input, emit: CommonEmitF
     const { computed } = recognizer;
 
     // 是否已识别, 包含end
-    recognizer.isRecognized = [STATUS_START, STATUS_MOVE].includes(recognizer.status);
+    recognizer.isRecognized = ([STATUS_START, STATUS_MOVE] as SupportStatus[]).includes(recognizer.status);
 
     const { name, status, isRecognized } = recognizer;
     // if('pan' == name) console.warn(status,inputType,{isRecognized,isVaild},input.pointLength)
@@ -91,7 +91,7 @@ export default function (recognizer: Recognizer, input: Input, emit: CommonEmitF
     if (isRecognized) {
         emit(name, computed);
     }
-    if (isRecognized || [STATUS_END, STATUS_CANCELLED].includes(recognizer.status)) {
+    if (isRecognized || ([STATUS_END, STATUS_CANCELLED] as SupportStatus[]).includes(recognizer.status)) {
         emit(name + status, computed);
     }
     return isVaild;

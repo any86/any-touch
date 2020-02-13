@@ -1,6 +1,14 @@
 import { SupportEvent, SUPPORT_TOUCH, TOUCH_START, TOUCH_MOVE, TOUCH_END, TOUCH_CANCEL, MOUSE_DOWN, MOUSE_MOVE, MOUSE_UP } from '@any-touch/shared';
-const TOUCH_EVENT_NAMES: ["touchstart", "touchmove", "touchend", "touchcancel"] = [TOUCH_START, TOUCH_MOVE, TOUCH_END, TOUCH_CANCEL];
+const TOUCH_EVENT_NAMES = [TOUCH_START, TOUCH_MOVE, TOUCH_END, TOUCH_CANCEL];
 
+// interface AddEvent{
+//     <K extends keyof WindowEventMap>(type: K, listener: (this: Window, ev: WindowEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+
+//     <K extends keyof HTMLElementEventMap>(el: HTMLElement, type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void 
+// }
+// const add:AddEvent = (el,type,listener,options)=>{
+
+// }
 
 /*
 * 根据输入设备绑定事件
@@ -20,13 +28,13 @@ export default function (el: HTMLElement, callback: (ev: SupportEvent) => void, 
     }
     // Mouse
     else {
-        el.addEventListener('mousedown', callback, options);
-        window.addEventListener('mousemove', callback, options);
-        window.addEventListener('mouseup', callback, options);
+        el.addEventListener(MOUSE_DOWN, callback, options);
+        window.addEventListener(MOUSE_MOVE, callback, options);
+        window.addEventListener(MOUSE_UP, callback, options);
         return () => {
-            el.removeEventListener('mousedown', callback);
-            window.removeEventListener('mousemove', callback);
-            window.removeEventListener('mouseup', callback);
+            el.removeEventListener(MOUSE_DOWN, callback);
+            window.removeEventListener(MOUSE_MOVE, callback);
+            window.removeEventListener(MOUSE_UP, callback);
         };
     }
 }

@@ -7,7 +7,7 @@
  * hammer.js http://hammerjs.github.io/
  */
 import AnyEvent from 'any-event';
-import { SupportEvent, Recognizer, Input } from '@any-touch/shared';
+import { SupportEvent, Recognizer, Input, TOUCH } from '@any-touch/shared';
 import InputFactory from './Input';
 import dispatchDomEvent from './dispatchDomEvent';
 import canPreventDefault from './canPreventDefault';
@@ -143,7 +143,7 @@ export default class AnyTouch extends AnyEvent {
             // if (void 0 !== AnyTouch.recognizers[0]) {
             //     AnyTouch.recognizers[0].input = input;
             // }
-            const AT_TOUCH = 'at:touch';
+            const AT_TOUCH = `at:${TOUCH}`;
             const AT_TOUCH_WITH_STATUS = AT_TOUCH + input.inputType;
 
             this.emit(AT_TOUCH, input);

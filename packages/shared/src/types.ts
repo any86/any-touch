@@ -1,3 +1,4 @@
+import { STATUS_POSSIBLE, STATUS_START, STATUS_MOVE, STATUS_END, STATUS_CANCELLED, STATUS_FAILED, STATUS_RECOGNIZED } from '@any-touch/shared';
 import Base from '@any-touch/recognizer';
 export type Recognizer = Base;
 export type AnyTouchPlugin = any;
@@ -118,3 +119,4 @@ export interface Computed {
 export interface AnyTouchEvent extends Input, Readonly<Computed> {
     readonly type: string
 }
+export type SupportStatus = typeof STATUS_POSSIBLE | typeof STATUS_START | typeof STATUS_MOVE | typeof STATUS_END | typeof STATUS_CANCELLED | typeof STATUS_FAILED | typeof STATUS_RECOGNIZED;
