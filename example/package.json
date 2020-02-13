@@ -8,7 +8,7 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
-    "@antv/g6": "^3.2.10",
+    "@antv/g6": "^3.3.1",
     "axios": "^0.19.2",
     "core-js": "^3.4.4",
     "express": "^4.17.1",

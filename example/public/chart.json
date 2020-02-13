@@ -1,107 +1,110 @@
-{
-  "id": "新一代顶点",
-  "children": [
     {
-      "id": "Classification",
       "children": [
         {
-          "id": "Logistic regression"
-        },
-        {
-          "id": "Linear discriminant analysis"
-        },
-        {
-          "id": "Rules"
-        },
-        {
-          "id": "Decision trees"
-        },
-        {
-          "id": "Naive Bayes"
-        },
-        {
-          "id": "K nearest neighbor"
-        },
-        {
-          "id": "Probabilistic neural network"
-        },
-        {
-          "id": "Support vector machine"
-        }
-      ]
-    },
-    {
-      "id": "Consensus",
-      "children": [
-        {
-          "id": "Models diversity",
           "children": [
             {
-              "id": "Different initializations"
+              "children": [
+                {
+                  "name": "iot-test5",
+                  "id": "1"
+                },
+                {
+                  "name": "prometheus",
+                  "id": "1001"
+                },
+                {
+                  "name": "iot-test8",
+                  "id": "12"
+                },
+                {
+                  "name": "jz2",
+                  "id": "15"
+                }
+              ],
+              "name": "圈存子系统"
             },
             {
-              "id": "Different parameter choices"
-            },
-            {
-              "id": "Different architectures"
-            },
-            {
-              "id": "Different modeling methods"
-            },
-            {
-              "id": "Different training sets"
-            },
-            {
-              "id": "Different feature sets"
+              "children": [
+                {
+                  "name": "iot-test6",
+                  "id": "10"
+                },
+                {
+                  "name": "xy-k8s-noder-2",
+                  "id": "101",
+                  "status": ""
+                },
+                {
+                  "name": "iot-test9",
+                  "id": "13"
+                },
+                {
+                  "name": "jz3",
+                  "id": "16"
+                }
+              ],
+              "name": "一线现金充值机子系统"
             }
-          ]
+          ],
+          "name": "综合业务平台"
         },
         {
-          "id": "Methods",
           "children": [
             {
-              "id": "Classifier selection"
+              "children": [
+                {
+                  "name": "xy-k8s-noder-1",
+                  "id": "100",
+                  "status": ""
+                },
+                {
+                  "name": "iot-test7",
+                  "id": "11"
+                },
+                {
+                  "name": "jz1",
+                  "id": "14"
+                },
+                {
+                  "name": "jz4",
+                  "id": "17",
+                  "status": "6"
+                }
+              ],
+              "name": "多媒体POS"
             },
             {
-              "id": "Classifier fusion"
+              "children": [
+                {
+                  "name": "jz4-oracle",
+                  "id": "18",
+                  "status": "6"
+                },
+                {
+                  "name": "jz5",
+                  "id": "19"
+                },
+                {
+                  "name": "monitor-test",
+                  "id": "2"
+                },
+                {
+                  "name": "monitor-test-mysql",
+                  "id": "20"
+                },
+                {
+                  "name": "monitor-test-pushgateway",
+                  "id": "21"
+                }
+              ],
+              "name": "\r\n烟台威尔门禁"
+            },
+            {
+              "name": "教务考勤应用系统V3.0"
             }
-          ]
-        },
-        {
-          "id": "Common",
-          "children": [
-            {
-              "id": "Bagging"
-            },
-            {
-              "id": "Boosting"
-            },
-            {
-              "id": "AdaBoost"
-            }
-          ]
+          ],
+          "name": "能力开放平台"
         }
-      ]
-    },
-    {
-      "id": "Regression",
-      "children": [
-        {
-          "id": "Multiple linear regression"
-        },
-        {
-          "id": "Partial least squares"
-        },
-        {
-          "id": "西欧阿米电视机"
-        },
-        {
-          "id": "General regression neural network"
-        },
-        {
-          "id": "Support vector regression"
-        }
-      ]
+      ],
+      "name": "新一代一卡通"
     }
-  ]
-}

@@ -126,10 +126,11 @@ export default {
             this.changeOrgXY(ev);
         },
         onMapWheel(ev) {
+            
             const { clientX, clientY, deltaY } = ev;
             // this.mapImg.orgX
             this.changeOrgXY({ x: clientX, y: clientY });
-            this.mapImg.scale *= 1 + deltaY / 100;
+            this.mapImg.scale *= 1 - Math.sign(deltaY)*0.15;
         },
         async onChangeFile(ev) {
             const files = Array.from(ev.target.files);

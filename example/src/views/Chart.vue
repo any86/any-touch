@@ -53,19 +53,22 @@ export default {
                             [1, 0.5]
                         ],
                         style: {
-                            fill: '#C6E5FF',
-                            stroke: '#5B8FF9'
+                            fill: '#c6e5fe',
+                            stroke: '#7ba7f9'
                         }
                     },
                     defaultEdge: {
                         type: 'cubic-vertical',
                         style: {
-                            stroke: '#A3B1BF'
+                            stroke: '#a8b5c2'
                         }
                     },
                     layout: {
+                        workerEnabled: true,
                         type: 'compactBox',
                         direction: 'TB',
+                        nodeSep:100,
+                        preventOverlap:true,
                         getId: function getId(d) {
                             return d.id;
                         },
@@ -78,27 +81,32 @@ export default {
                         getVGap: function getVGap() {
                             return 80;
                         },
-                        getHGap: function getHGap() {
+                        getHGap: function getHGap(n) {
                             return 20;
                         }
                     }
                 });
+                
+                graph.on('node:click',ev=>{
+                    console.log(ev)
+                })
 
                 graph.node(function(node) {
                     let position = 'right';
                     let rotate = 0;
                     if (!node.children) {
                         position = 'bottom';
-                        rotate = Math.PI / 2;
+                        rotate = Math.PI / 3;
                     }
                     return {
-                        label: node.id,
+                        label: node.name,
                         labelCfg: {
                             position,
                             offset: 5,
                             style: {
                                 rotate,
-                                textAlign: 'start'
+                                textAlign: 'start',
+                                fill:"#6f6f6f"
                             }
                         }
                     };

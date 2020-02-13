@@ -16,7 +16,7 @@ import { use, removeUse } from './use';
 // type TouchAction = 'auto' | 'none' | 'pan-x' | 'pan-left' | 'pan-right' | 'pan-y' | 'pan-up' | 'pan-down' | 'pinch-zoom' | 'manipulation';
 
 
-type BeforeEachHook = (active: Recognizer, next: () => void) => void;
+type BeforeEachHook = (recognizer: Recognizer, next: () => void) => void;
 export interface Options {
     domEvents?: false | EventInit;
     isPreventDefault?: boolean;
@@ -182,7 +182,7 @@ export default class AnyTouch extends AnyEvent {
         }
     };
 
-    beforeEach(hook: (active: Recognizer, next: () => void) => void): void {
+    beforeEach(hook: (recognizer: Recognizer, next: () => void) => void): void {
         this.beforeEachHook = hook;
     };
 
@@ -191,7 +191,7 @@ export default class AnyTouch extends AnyEvent {
      * @param {Object} 事件对象 
      * @param {string} 当前输入状态
      */
-    emit2(payload: Record<string, any> & Input) {
+    private emit2(payload: Record<string, any> & Input) {
         const { type, target } = payload;
         this.emit('at:after', payload);
         this.emit(type, payload);
@@ -226,7 +226,6 @@ export default class AnyTouch extends AnyEvent {
     set(options: Options): void {
         this.options = { ...this.options, ...options };
     };
-
 
     /**
      * 销毁
