@@ -34,6 +34,7 @@ at.on('pan', ev=>{
 |isStart|`Boolean`|是否当前识别周期的开始, 规律为从touchstart->touchend即是一个周期, 即便多点触碰, 有一个点离开,本轮识别结束|
 |isEnd|`Boolean`|是否当前识别周期的结束|
 |target|`EventTarget`|绑定事件的元素|
+|targets|`EventTarget[]`|对应多个触点会存储touches中的每一个target|
 |currentTarget|`EventTarget`|实际触发绑定事件的元素|
 |timestamp|`Number`|**当前时间**|
 |**nativeEvent**|`TouchEvent`|原生事件对象
