@@ -4,7 +4,7 @@ const replace = require('@rollup/plugin-replace');
 import {version} from './packages/any-touch/package.json';
 
 export default {
-    input: './packages/any-touch/src/index.ts',
+    input: './packages/any-touch/src/UMD.ts',
 
     plugins: [
         typescript({

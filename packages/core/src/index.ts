@@ -32,8 +32,10 @@ const DEFAULT_OPTIONS: Options = {
 };
 
 
-
-export default class AnyTouch extends AnyEvent {
+/**
+ * AnyTouch工厂函数
+ */
+export const createCore = () => class AnyTouch extends AnyEvent {
     static version = '__VERSION__';
     static recognizers: Recognizer[] = [];
     static recognizerMap: Record<string, Recognizer> = {};
@@ -213,12 +215,16 @@ export default class AnyTouch extends AnyEvent {
     };
 }
 
+// 默认导出
+export default createCore();
+
+
 /**
  * 触发自定义和dom事件
  * @param at AnyTouch实例
  * @param payload 数据
  */
-function emit2(at: AnyTouch, payload: Record<string, any> & Input) {
+function emit2(at: InstanceType<ReturnType<typeof createCore>>, payload: Record<string, any> & Input) {
     const { type, target } = payload;
     at.emit('at:after', payload);
     at.emit(type, payload);

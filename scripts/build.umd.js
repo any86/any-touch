@@ -11,7 +11,7 @@ const {compress} = require('minimist')(process.argv.slice(2));
 console.log(chalk.blue(`🤖 正在${compress?'压缩':'生成'}umd模块!`));
 
 const options = {
-    input: `./packages/any-touch/src/index.ts`,
+    input: `./packages/any-touch/src/UMD.ts`,
     output: {
         file: `./packages/any-touch/dist/any-touch.umd.js`,
         format: 'umd',
