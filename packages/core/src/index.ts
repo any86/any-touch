@@ -170,10 +170,10 @@ export default class AnyTouch extends AnyEvent {
                     Object.freeze(payload);
 
                     if (void 0 === this.beforeEachHook) {
-                        this.emit2(payload);
+                        emit2(this, payload);
                     } else {
                         this.beforeEachHook(recognizer, () => {
-                            this.emit2(payload);
+                            emit2(this, payload);
                         });
                     }
                 });
@@ -184,30 +184,6 @@ export default class AnyTouch extends AnyEvent {
 
     beforeEach(hook: (recognizer: Recognizer, next: () => void) => void): void {
         this.beforeEachHook = hook;
-    };
-
-    /**
-     * 同时出发内部/dom事件
-     * @param {Object} 事件对象 
-     * @param {string} 当前输入状态
-     */
-    private emit2(payload: Record<string, any> & Input) {
-        const { type, target } = payload;
-        this.emit('at:after', payload);
-        this.emit(type, payload);
-        // 构造函数绑定的根元素或者target指定的元素
-        // 如果使用了target方法
-        // 那么realTarget指向target传入的元素
-        if (false !== this.options.domEvents
-            && void 0 !== this.el
-            && void 0 !== target
-            && null !== target
-        ) {
-            // vue会把绑定元素的所有子元素都进行事件绑定
-            // 所以此处的target会自动冒泡到目标元素
-            dispatchDomEvent(target, payload, this.options.domEvents);
-            dispatchDomEvent(target, { ...payload, type: 'at:after' }, this.options.domEvents);
-        }
     };
 
     /**
@@ -236,3 +212,27 @@ export default class AnyTouch extends AnyEvent {
         this.callbackMap = {};
     };
 }
+
+/**
+ * 触发自定义和dom事件
+ * @param at AnyTouch实例
+ * @param payload 数据
+ */
+function emit2(at: AnyTouch, payload: Record<string, any> & Input) {
+    const { type, target } = payload;
+    at.emit('at:after', payload);
+    at.emit(type, payload);
+    // 构造函数绑定的根元素或者target指定的元素
+    // 如果使用了target方法
+    // 那么realTarget指向target传入的元素
+    if (false !== at.options.domEvents
+        && void 0 !== at.el
+        && void 0 !== target
+        && null !== target
+    ) {
+        // vue会把绑定元素的所有子元素都进行事件绑定
+        // 所以此处的target会自动冒泡到目标元素
+        dispatchDomEvent(target, payload, at.options.domEvents);
+        dispatchDomEvent(target, { ...payload, type: 'at:after' }, at.options.domEvents);
+    }
+};
