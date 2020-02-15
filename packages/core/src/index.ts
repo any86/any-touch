@@ -170,10 +170,10 @@ export default class AnyTouch extends AnyEvent {
                     Object.freeze(payload);
 
                     if (void 0 === this.beforeEachHook) {
-                        this.emit2(payload);
+                        this._emit2(payload);
                     } else {
                         this.beforeEachHook(recognizer, () => {
-                            this.emit2(payload);
+                            this._emit2(payload);
                         });
                     }
                 });
@@ -191,7 +191,7 @@ export default class AnyTouch extends AnyEvent {
      * @param {Object} 事件对象 
      * @param {string} 当前输入状态
      */
-    private emit2(payload: Record<string, any> & Input) {
+    private _emit2(payload: Record<string, any> & Input) {
         const { type, target } = payload;
         this.emit('at:after', payload);
         this.emit(type, payload);
