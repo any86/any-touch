@@ -74,6 +74,9 @@ function C(text, bgColor = '#000', color = '#fff') {
     console.log(`%c${text}`, `color:${color};background-color:${bgColor};padding:2px 6px;border-radius:4px;`);
 }
 import AnyTouch from '../../../packages/any-touch/dist/any-touch.umd';
+// import {Core, Pan} from '../../../packages/any-touch/dist/index.js';
+// const AnyTouch = Core;
+// AnyTouch.use(Pan)
 export default {
     name: 'Home',
     data() {
@@ -107,10 +110,7 @@ export default {
             ],
         };
     },
-
     mounted() {
-
-
         const at = new AnyTouch(this.$refs.panel, {isPreventDefault:true});
         // at.on('tap', ev=>{
         //     console.warn('tap')
