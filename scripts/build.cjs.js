@@ -17,6 +17,7 @@ const genRollupConfig = (dirName, env = 'dev') => ({
     output: {
         file: `./packages/${dirName}/dist/index.${env}.js`,
         format: 'cjs',
+        exports: "named"
     },
     external: id => ['any-event', 'any-touch', 'tslib'].includes(id) || /^@/.test(id),
     tsConfig: {
