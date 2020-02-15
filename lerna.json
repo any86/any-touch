@@ -3,8 +3,7 @@
     "useWorkspaces": true,
     "publish": {
         "ignoreChanges": [
-            "ignored-file",
-            "*.md"
+            "ignored-file"
         ],
         "message": "chore(release): publish",
         "registry": "https://registry.npmjs.org"

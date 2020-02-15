@@ -9,14 +9,9 @@ const routes = [{
         component: Home
     },
     {
-        path: '/map',
-        name: 'Map',
-        component: () => import( /* webpackChunkName: "map" */ '../views/Map.vue')
-    },
-    {
-        path: '/chart',
-        name: 'Chart',
-        component: () => import( /* webpackChunkName: "chart" */ '../views/Chart.vue')
+        path: '/pan',
+        name: 'Pan',
+        component: () => import( /* webpackChunkName: "pan" */ '../views/Pan.vue')
     }
 ]
 
