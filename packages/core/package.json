@@ -24,6 +24,7 @@
         "tslib": "^1.9.3"
     },
     "dependencies": {
+        "any-event": "^0.6.3-beta.0",
         "@any-touch/shared": "^0.6.3-beta.0"
     },
     "keywords": [
