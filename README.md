@@ -135,6 +135,7 @@ const at = new AnyTouch()
 ```javascript
 import AnyTouch from '@any-touch/core';
 import Tap from '@any-touch/tap';
+import {STATUS_POSSIBLE, STATUS_FAILED} from '@any-touch/shared';
 import debounce from 'lodash/debounce'
 AnyTouch.use(Tap);
 AnyTouch.use(Tap, { name: 'doubletap', tapTimes: 2 });
@@ -145,7 +146,7 @@ const at = new AnyTouch(el);
 at.beforeEach(({ recognizerMap, name }, next) => {
     if ('tap' === name) {
         debounce(() => {
-            if (['failed', 'possible'].includes(recognizerMap.doubletap.status)) next();
+            if ([STATUS_POSSIBLE, STATUS_FAILED].includes(recognizerMap.doubletap.status)) next();
         }, 300);
     } else {
         next();
