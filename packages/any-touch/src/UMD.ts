@@ -7,21 +7,15 @@
 * pan 拖拽
 * swipe 快划
 */
-import {createCore} from '@any-touch/core';
+import { createAnyTouch } from '@any-touch/core';
 import Tap from '@any-touch/tap';
 import Pan from '@any-touch/pan';
 import Swipe from '@any-touch/swipe';
 import Press from '@any-touch/press';
 import Pinch from '@any-touch/pinch';
 import Rotate from '@any-touch/rotate';
-import {STATUS_POSSIBLE, STATUS_START,STATUS_MOVE,STATUS_END,STATUS_CANCELLED,STATUS_FAILED,STATUS_RECOGNIZED} from '@any-touch/shared';
-const AnyTouch = createCore();
-AnyTouch.use(Tap);
-AnyTouch.use(Pan);
-AnyTouch.use(Swipe);
-AnyTouch.use(Press);
-AnyTouch.use(Pinch);
-AnyTouch.use(Rotate);
+import { STATUS_POSSIBLE, STATUS_START, STATUS_MOVE, STATUS_END, STATUS_CANCELLED, STATUS_FAILED, STATUS_RECOGNIZED } from '@any-touch/shared';
+const AnyTouch = createAnyTouch([Tap, Pan, Swipe, Press, Pinch, Rotate]);
 (AnyTouch as any).Tap = Tap;
 (AnyTouch as any).Pan = Pan;
 (AnyTouch as any).Swipe = Swipe;
