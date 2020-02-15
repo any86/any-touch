@@ -8,12 +8,13 @@
 * swipe 快划
 */
 import AnyTouch from './UMD';
-export {default as Core} from '@any-touch/core';
-export {default as Tap}  from '@any-touch/tap';
-export {default as Pan}  from '@any-touch/pan';
-export {default as Swipe}  from '@any-touch/swipe';
-export {default as Press}  from '@any-touch/press';
-export {default as Pinch} from '@any-touch/pinch';
-export {default as Rotate}  from '@any-touch/rotate';
-export {STATUS_POSSIBLE, STATUS_START,STATUS_MOVE,STATUS_END,STATUS_CANCELLED,STATUS_FAILED,STATUS_RECOGNIZED} from '@any-touch/shared';
+import { create } from '@any-touch/core';
+export const Core = create();
+export { default as Tap } from '@any-touch/tap';
+export { default as Pan } from '@any-touch/pan';
+export { default as Swipe } from '@any-touch/swipe';
+export { default as Press } from '@any-touch/press';
+export { default as Pinch } from '@any-touch/pinch';
+export { default as Rotate } from '@any-touch/rotate';
+export { STATUS_POSSIBLE, STATUS_START, STATUS_MOVE, STATUS_END, STATUS_CANCELLED, STATUS_FAILED, STATUS_RECOGNIZED } from '@any-touch/shared';
 export default AnyTouch;
