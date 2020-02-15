@@ -7,31 +7,13 @@
 * pan 拖拽
 * swipe 快划
 */
-import AnyTouch from '@any-touch/core';
-import Tap from '@any-touch/tap';
-import Pan from '@any-touch/pan';
-import Swipe from '@any-touch/swipe';
-import Press from '@any-touch/press';
-import Pinch from '@any-touch/pinch';
-import Rotate from '@any-touch/rotate';
-import {STATUS_POSSIBLE, STATUS_START,STATUS_MOVE,STATUS_END,STATUS_CANCELLED,STATUS_FAILED,STATUS_RECOGNIZED} from '@any-touch/shared';
-AnyTouch.use(Tap);
-AnyTouch.use(Pan);
-AnyTouch.use(Swipe);
-AnyTouch.use(Press);
-AnyTouch.use(Pinch);
-AnyTouch.use(Rotate);
-(AnyTouch as any).Tap = Tap;
-(AnyTouch as any).Pan = Pan;
-(AnyTouch as any).Swipe = Swipe;
-(AnyTouch as any).Press = Press;
-(AnyTouch as any).Pinch = Pinch;
-(AnyTouch as any).Rotate = Rotate;
-(AnyTouch as any).STATUS_POSSIBLE = STATUS_POSSIBLE;
-(AnyTouch as any).STATUS_START = STATUS_START;
-(AnyTouch as any).STATUS_MOVE = STATUS_MOVE;
-(AnyTouch as any).STATUS_END = STATUS_END;
-(AnyTouch as any).STATUS_CANCELLED = STATUS_CANCELLED;
-(AnyTouch as any).STATUS_FAILED = STATUS_FAILED;
-(AnyTouch as any).STATUS_RECOGNIZED = STATUS_RECOGNIZED;
+import AnyTouch from './UMD';
+export {default as Core} from '@any-touch/core';
+export {default as Tap}  from '@any-touch/tap';
+export {default as Pan}  from '@any-touch/pan';
+export {default as Swipe}  from '@any-touch/swipe';
+export {default as Press}  from '@any-touch/press';
+export {default as Pinch} from '@any-touch/pinch';
+export {default as Rotate}  from '@any-touch/rotate';
+export {STATUS_POSSIBLE, STATUS_START,STATUS_MOVE,STATUS_END,STATUS_CANCELLED,STATUS_FAILED,STATUS_RECOGNIZED} from '@any-touch/shared';
 export default AnyTouch;
