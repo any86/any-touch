@@ -21,8 +21,10 @@
     },
     "homepage": "https://github.com/any86/any-touch#readme",
     "peerDependencies": {
-        "any-touch": "^0.6.1-beta.4",
         "tslib": "^1.9.3"
+    },
+    "dependencies": {
+        "@any-touch/shared": "^0.6.2-beta.0"
     },
     "keywords": [
         "touch",
