@@ -1,7 +1,7 @@
 /*
 * UMD格式配置文件
 */
-import AnyTouch from '@any-touch/core';
+import {create} from '@any-touch/core';
 import Tap from '@any-touch/tap';
 import Pan from '@any-touch/pan';
 import Swipe from '@any-touch/swipe';
@@ -9,6 +9,7 @@ import Press from '@any-touch/press';
 import Pinch from '@any-touch/pinch';
 import Rotate from '@any-touch/rotate';
 import {STATUS_POSSIBLE, STATUS_START,STATUS_MOVE,STATUS_END,STATUS_CANCELLED,STATUS_FAILED,STATUS_RECOGNIZED} from '@any-touch/shared';
+const AnyTouch = create();
 AnyTouch.use(Tap);
 AnyTouch.use(Pan);
 AnyTouch.use(Swipe);

@@ -31,6 +31,9 @@ const DEFAULT_OPTIONS: Options = {
     preventDefaultExclude: /^(?:INPUT|TEXTAREA|BUTTON|SELECT)$/
 };
 
+export function create(){
+    return AnyTouch;
+}
 
 
 export default class AnyTouch extends AnyEvent {
