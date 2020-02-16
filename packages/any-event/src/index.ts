@@ -1,15 +1,26 @@
-type SupportElement = HTMLElement | SVGElement;
+type SupportTarget = HTMLElement | SVGElement;
 
-export interface Listener {
+interface Listener {
     (...payload: any): void;
-    target?: SupportElement;
+    target?: SupportTarget;
 }
 
-export interface ListenersMap {
+interface ListenersMap {
     [propName: string]: Listener[];
 }
-export default class AnyEvent {
-    callbackMap: ListenersMap = {};
+
+interface BeforeEachHook {
+    (payload: any, next: () => void): void;
+}
+
+interface EmitBeforeHook {
+    (options?: { target?: SupportTarget }): boolean;
+}
+
+
+export default class {
+    listenersMap: ListenersMap = {};
+    beforeEachHook?: BeforeEachHook;
 
     target(el: HTMLElement) {
         return {
@@ -24,15 +35,15 @@ export default class AnyEvent {
      * @param {String|Symbol} 事件名
      * @param {Function} 回调函数
      */
-    on(eventName: string, listener: Listener, { target }: { target?: SupportElement } = {}): void {
-        if (void 0 === this.callbackMap[eventName]) {
-            this.callbackMap[eventName] = [];
+    on(eventName: string, listener: Listener, { target }: { target?: SupportTarget } = {}): void {
+        if (void 0 === this.listenersMap[eventName]) {
+            this.listenersMap[eventName] = [];
         }
         //  备注targets信息
         if (void 0 !== target) {
             listener.target = target;
         }
-        this.callbackMap[eventName].push(listener);
+        this.listenersMap[eventName].push(listener);
     };
 
     /**
@@ -42,12 +53,12 @@ export default class AnyEvent {
      * @param {Function} 回调函数
      */
     off(eventName: string, listener?: Listener): void {
-        const listeners = this.callbackMap[eventName];
+        const listeners = this.listenersMap[eventName];
         // 事件存在
         if (void 0 !== listeners) {
             // 清空事件名对应的所有回调
             if (void 0 === listener) {
-                delete this.callbackMap[eventName];
+                delete this.listenersMap[eventName];
             }
             // 清空指定回调
             else {
@@ -63,37 +74,38 @@ export default class AnyEvent {
      * @param {Any} 载荷数据 
      * @returns {Boolean} 如果事件有监听器，则返回 true，否则返回 false。
      */
-    emit(eventName: string, payload?: any): boolean {
-        const listeners = this.callbackMap[eventName];
-        //  触发事件的元素
-        const { targets } = payload || {};
-        // 一会判断下2个target是否都是一个元素的子元素
+    emit(eventName: string, payload?: any, beforeHook: EmitBeforeHook = () => true): void {
+        const listeners = this.listenersMap[eventName];
+        
         if (void 0 !== listeners && 0 < listeners.length) {
-
             for (const listener of listeners) {
-                const { target: currentTarget } = listener;
-
-                if (void 0 !== currentTarget
-                    && void 0 !== targets
-                    && targets.every((target: any) => currentTarget.contains(target))
-                ) {
-                    listener(payload);
-                }
-                // 没有绑定currentTarget
-                else if (void 0 === currentTarget) {
-                    listener(payload);
+                const { target } = listener;
+                // 自己的钩子
+                if (beforeHook({ target })) {
+                    if (void 0 === this.beforeEachHook) {
+                        listener(payload);
+                    } else {
+                        this.beforeEachHook(payload, () => {
+                            listener(payload);
+                        });
+                    }
                 }
             }
-            return true;
-        } else {
-            return false;
         }
     };
+
+    /**
+     * 事件拦截器
+     * @param hook 钩子函数
+     */
+    // beforeEach2(hook: BeforeEachHook): void {
+    //     this.beforeEachHook = hook;
+    // };
 
     /**
      * 销毁实例
      */
     destroy() {
-        this.callbackMap = {};
+        this.listenersMap = {};
     };
 };

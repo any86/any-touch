@@ -90,7 +90,7 @@ export default class AnyTouch extends AnyEvent {
             try {
                 const opts = {};
                 Object.defineProperty(opts, 'passive', ({
-                    get: function get() {
+                    get() {
                         // 不想为测试暴露, 会增加体积, 暂时忽略
                         /* istanbul ignore next */
                         supportsPassive = true;
@@ -167,6 +167,7 @@ export default class AnyTouch extends AnyEvent {
                 recognizer.recognize(input, (type, ev) => {
                     const payload = { ...input, ...ev, type, baseType: recognizer.name };
 
+                    // 防止数据被vue类框架拦截
                     Object.freeze(payload);
 
                     if (void 0 === this.beforeEachHook) {
@@ -182,14 +183,18 @@ export default class AnyTouch extends AnyEvent {
         }
     };
 
+    /**
+     * 事件拦截器
+     * @param hook 钩子函数
+     */
     beforeEach(hook: (recognizer: Recognizer, next: () => void) => void): void {
         this.beforeEachHook = hook;
     };
 
     /**
      * 获取识别器通过名字
-     * @param {String} 识别器的名字
-     * @return {Recognizer|undefined} 返回识别器
+     * @param name 识别器的名字
+     * @return 返回识别器
      */
     get(name: string): Recognizer | void {
         return this.recognizerMap[name];
@@ -197,7 +202,7 @@ export default class AnyTouch extends AnyEvent {
 
     /**
      * 设置
-     * @param {Options} 选项
+     * @param options 选项
      */
     set(options: Options): void {
         this.options = { ...this.options, ...options };
@@ -209,7 +214,7 @@ export default class AnyTouch extends AnyEvent {
     destroy() {
         // 解绑事件
         this.emit('unbindEl');
-        this.callbackMap = {};
+        this.listenersMap = {};
     };
 }
 
@@ -219,9 +224,21 @@ export default class AnyTouch extends AnyEvent {
  * @param payload 数据
  */
 function emit2(at: AnyTouch, payload: Record<string, any> & Input) {
-    const { type, target } = payload;
+    const { type, target, targets } = payload;
     at.emit('at:after', payload);
-    at.emit(type, payload);
+    at.emit(type, payload, (data) => {
+        if (void 0 !== data?.target) {
+            // 可选链在3.7.5下推断有点问题, 下面直接用data.target会提示data.target可能为undefined
+            const currentTarget = data.target;
+            // 没有绑定currentTarget
+            // 也就是没使用target方法或on指定targets
+            // 如果指定了, 
+            // 那么检查当前触发事件的元素是否是其子元素
+            return currentTarget.contains(target as HTMLElement)
+                && targets.every((target) => currentTarget.contains(target as HTMLElement))
+        }
+        return true;
+    });
     // 构造函数绑定的根元素或者target指定的元素
     // 如果使用了target方法
     // 那么realTarget指向target传入的元素
