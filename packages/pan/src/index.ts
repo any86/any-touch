@@ -1,5 +1,4 @@
 import { Input, CommonEmitFunction } from '@any-touch/shared';
-import { INPUT_MOVE, INPUT_END } from '@any-touch/shared';
 import { ComputeDistance, ComputeDeltaXY, ComputeVAndDir } from '@any-touch/compute';
 import Recognizer, { recognizeForPressMoveLike } from '@any-touch/recognizer';
 const DEFAULT_OPTIONS = {

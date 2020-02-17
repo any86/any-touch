@@ -13,7 +13,7 @@
         "build:ex": "cd example && npm run build",
         "release:ex": "npm run build:ex && node ./scripts/releaseExample.js",
         "release:next": "npm run build && lerna publish --force-publish --dist-tag next",
-        "release:last": "npm run build && lerna publish",
+        "release:last": "npm run build && lerna publish --force-publish",
         "rm": "rimraf packages/**/dist",
         "clean": "rimraf node_modules",
         "build": "npm-run-all rm build:umd build:cjs build:es build:dts",
