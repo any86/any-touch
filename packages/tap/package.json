@@ -1,6 +1,6 @@
 {
     "name": "@any-touch/tap",
-    "version": "0.6.3-beta.0",
+    "version": "1.0.0",
     "description": "any-touch的识别器, 用来识别点击手势.",
     "main": "./dist/index",
     "module": "./dist/index.es.js",
