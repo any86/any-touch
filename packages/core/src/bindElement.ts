@@ -6,8 +6,12 @@ const TOUCH_EVENT_NAMES = [TOUCH_START, TOUCH_MOVE, TOUCH_END, TOUCH_CANCEL];
 
 //     <K extends keyof HTMLElementEventMap>(el: HTMLElement, type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void 
 // }
-// const add:AddEvent = (el,type,listener,options)=>{
+// function addEvent<K extends keyof WindowEventMap>(target:Window,type: K, listener: (this: Window, ev: WindowEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
 
+// function addEvent<K extends keyof HTMLElementEventMap>(target: HTMLElement, type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+
+// function addEvent(target,type,listener,options):void{
+//     target.addEventListener(type,listener,options);
 // }
 
 /*

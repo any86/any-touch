@@ -85,6 +85,7 @@ export default class {
                     if (void 0 === this.beforeEachHook) {
                         listener(payload);
                     } else {
+                        // 全局钩子
                         this.beforeEachHook(payload, () => {
                             listener(payload);
                         });

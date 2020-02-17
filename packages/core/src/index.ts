@@ -13,6 +13,7 @@ import dispatchDomEvent from './dispatchDomEvent';
 import canPreventDefault from './canPreventDefault';
 import bindElement from './bindElement';
 import { use, removeUse } from './use';
+import emit2 from './emit2';
 // type TouchAction = 'auto' | 'none' | 'pan-x' | 'pan-left' | 'pan-right' | 'pan-y' | 'pan-up' | 'pan-down' | 'pinch-zoom' | 'manipulation';
 
 
@@ -98,8 +99,8 @@ export default class AnyTouch extends AnyEvent {
                 }));
                 window.addEventListener('_', () => void 0, opts);
             } catch{ }
-            const unbindEl = bindElement(el, this.catchEvent.bind(this), !this.options.isPreventDefault && supportsPassive ? { passive: true } : false);
-            this.on('unbindEl', unbindEl);
+            // 绑定元素
+            this.on('unbind', bindElement(el, this.catchEvent.bind(this), !this.options.isPreventDefault && supportsPassive ? { passive: true } : false));
         }
     }
 
@@ -158,7 +159,6 @@ export default class AnyTouch extends AnyEvent {
             }
             // 缓存每次计算的结果
             // 以函数名为键值
-
             let computedGroup = {};
             for (const recognizer of this.recognizers) {
                 if (recognizer.disabled) continue;
@@ -213,43 +213,7 @@ export default class AnyTouch extends AnyEvent {
      */
     destroy() {
         // 解绑事件
-        this.emit('unbindEl');
+        this.emit('unbind');
         this.listenersMap = {};
     };
 }
-
-/**
- * 触发自定义和dom事件
- * @param at AnyTouch实例
- * @param payload 数据
- */
-function emit2(at: AnyTouch, payload: Record<string, any> & Input) {
-    const { type, target, targets } = payload;
-    at.emit('at:after', payload);
-    at.emit(type, payload, (data) => {
-        if (void 0 !== data?.target) {
-            // 可选链在3.7.5下推断有点问题, 下面直接用data.target会提示data.target可能为undefined
-            const currentTarget = data.target;
-            // 没有绑定currentTarget
-            // 也就是没使用target方法或on指定targets
-            // 如果指定了, 
-            // 那么检查当前触发事件的元素是否是其子元素
-            return currentTarget.contains(target as HTMLElement)
-                && targets.every((target) => currentTarget.contains(target as HTMLElement))
-        }
-        return true;
-    });
-    // 构造函数绑定的根元素或者target指定的元素
-    // 如果使用了target方法
-    // 那么realTarget指向target传入的元素
-    if (false !== at.options.domEvents
-        && void 0 !== at.el
-        && void 0 !== target
-        && null !== target
-    ) {
-        // vue会把绑定元素的所有子元素都进行事件绑定
-        // 所以此处的target会自动冒泡到目标元素
-        dispatchDomEvent(target, payload, at.options.domEvents);
-        dispatchDomEvent(target, { ...payload, type: 'at:after' }, at.options.domEvents);
-    }
-};
