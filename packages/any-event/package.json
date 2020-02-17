@@ -1,0 +1,23 @@
+{
+    "name": "any-event",
+    "version": "1.0.1",
+    "description": "小巧的事件模型",
+    "main": "dist/index.js",
+    "module": "dist/index.es.js",
+    "types": "dist/index.d.ts",
+    "homepage": "https://github.com/any86/any-event",
+    "keywords": [
+        "event",
+        "emit"
+    ],
+    "dependencies": {
+        "tslib": "^1.9.3"
+    },
+    "files": [
+        "dist/*"
+    ],
+    "author": "any86",
+    "license": "ISC",
+    "sideEffects": false,
+    "gitHead": "033802fd310406b975f03b5358e0300a7decfe81"
+}

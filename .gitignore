@@ -6,4 +6,8 @@ false
 lib
 dist
 yarn-error.log
-types
+packages/**/*.js
+packages/**/types
+packages/**/*.mjs
+lerna-debug.log
+example/uploads

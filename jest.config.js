@@ -8,11 +8,21 @@ module.exports = {
     },
     collectCoverage: true,
     coverageDirectory: "./coverage/",
+    collectCoverageFrom: [
+        'packages/*/src/**/*.ts'],
     verbose: false,
-    testPathIgnorePatterns: ["<rootDir>/node_modules/", "<rootDir>/__tests__/utils/"],
-    coveragePathIgnorePatterns: ["<rootDir>/node_modules/", "<rootDir>/__tests__/utils/"],
+    testPathIgnorePatterns: ["<rootDir>/node_modules/","<rootDir>/packages/simulator/"],
+    coveragePathIgnorePatterns: ["<rootDir>/node_modules/","<rootDir>/packages/simulator/"],
     globals: {
         __TEST__: true,
+        __VERSION__: require('./package.json').version,
         ontouchstart: null
-    }
+    },
+    moduleFileExtensions: ['ts', 'tsx', 'js', 'json'],
+    moduleNameMapper: {
+        '^@any-touch/(.*?)$': '<rootDir>/packages/$1/src',
+        '^@testUtils$': '<rootDir>/testUtils/index.ts',
+        '^any-touch$': '<rootDir>/packages/any-touch/src',
+        '^any-event$': '<rootDir>/packages/any-event/src'
+    },
 };

@@ -1,0 +1,15 @@
+{
+    "npmClient": "yarn",
+    "useWorkspaces": true,
+    "publish": {
+        "ignoreChanges": [
+            "ignored-file"
+        ],
+        "message": "chore(release): publish",
+        "registry": "https://registry.npmjs.org"
+    },
+    "packages": [
+        "packages/*"
+    ],
+    "version": "1.0.1"
+}

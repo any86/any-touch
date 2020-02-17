@@ -1,0 +1,26 @@
+{
+    "name": "@any-touch/pan",
+    "version": "1.0.1",
+    "description": "any-touch的识别器, 用来识别拖拽手势.",
+    "main": "./dist/index",
+    "module": "./dist/index.es.js",
+    "types": "dist/index.d.ts",
+    "author": "any86",
+    "license": "ISC",
+    "files": [
+        "dist/*"
+    ],
+    "peerDependencies": {
+        "tslib": "^1.9.3"
+    },
+    "dependencies": {
+        "@any-touch/compute": "^1.0.1",
+        "@any-touch/recognizer": "^1.0.1",
+        "@any-touch/shared": "^1.0.1"
+    },
+    "publishConfig": {
+        "access": "public"
+    },
+    "sideEffects": false,
+    "gitHead": "033802fd310406b975f03b5358e0300a7decfe81"
+}
