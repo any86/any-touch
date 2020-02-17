@@ -8,7 +8,8 @@ import { Input } from '@any-touch/shared';
  */
 export default function emit2(at: AnyTouch, payload: Record<string, any> & Input) {
     const { type, target, targets } = payload;
-    at.emit('at:after', payload);
+    const AT_AFTER = 'at:after'
+    at.emit(AT_AFTER, payload);
     at.emit(type, payload, data => {
         if (void 0 !== data?.target) {
             // 可选链在3.7.5下推断有点问题, 下面直接用data.target会提示data.target可能为undefined
@@ -17,9 +18,8 @@ export default function emit2(at: AnyTouch, payload: Record<string, any> & Input
             // 也就是没使用target方法或on指定targets
             // 如果指定了, 
             // 那么检查当前触发事件的元素是否是其子元素
-            return currentTarget.contains(target as HTMLElement)
-                && targets.every((target) => currentTarget.contains(target as HTMLElement))
-        }
+            return targets.every((target) => currentTarget.contains(target as HTMLElement));
+        } 
         return true;
     });
 
@@ -31,6 +31,6 @@ export default function emit2(at: AnyTouch, payload: Record<string, any> & Input
         // vue会把绑定元素的所有子元素都进行事件绑定
         // 所以此处的target会自动冒泡到目标元素
         dispatchDomEvent(target, payload, at.options.domEvents);
-        dispatchDomEvent(target, { ...payload, type: 'at:after' }, at.options.domEvents);
+        dispatchDomEvent(target, { ...payload, type: AT_AFTER }, at.options.domEvents);
     }
 };

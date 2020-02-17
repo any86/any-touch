@@ -150,11 +150,12 @@ export default class AnyTouch extends AnyEvent {
             this.emit(AT_TOUCH, input);
             this.emit(AT_TOUCH_WITH_STATUS, input);
 
-            if (false !== this.options.domEvents) {
+            const {domEvents} = this.options;
+            if (false !== domEvents) {
                 const { target } = event;
                 if (null !== target) {
-                    dispatchDomEvent(target, { ...input, type: AT_TOUCH }, this.options.domEvents);
-                    dispatchDomEvent(target, { ...input, type: AT_TOUCH_WITH_STATUS }, this.options.domEvents);
+                    dispatchDomEvent(target, { ...input, type: AT_TOUCH }, domEvents);
+                    dispatchDomEvent(target, { ...input, type: AT_TOUCH_WITH_STATUS }, domEvents);
                 }
             }
             // 缓存每次计算的结果

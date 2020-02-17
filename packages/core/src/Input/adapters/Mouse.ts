@@ -40,6 +40,8 @@ export default class extends Adapter {
                 inputType,
                 changedPoints,
                 points,
+                // 覆盖target为window
+                // 后续做currentTarget判断会读取此处target和targets
                 target: this.target,
                 targets: [this.target],
                 nativeEvent: event

@@ -27,7 +27,8 @@ export default class {
         if (void 0 !== baseInputWithoutId) {
             // 过滤第一个点非绑定元素, 但是第二个触点是绑定元素的情况
             // 不然会错误的触发pinch/rotate等多指操作
-            if (hasTouchTargetOutOfCurrentTarget(baseInputWithoutId)) return;
+            // !!!后续考虑是否仅仅排除错误的触点, 而保留本次事件部分数据
+            // if (hasTouchTargetOutOfCurrentTarget(baseInputWithoutId)) return;
 
             const id = Number.MAX_SAFE_INTEGER > this.id ? ++this.id : 1
             const baseInput = { ...baseInputWithoutId, id };
@@ -117,21 +118,19 @@ function extendInput(inputBase: BaseInput): Omit<Input, 'prevInput' | 'startInpu
  * 过滤第一个点非绑定元素, 但是第二个触点是绑定元素的情况
  * @param baseInputWithoutId 输入
  */
-function hasTouchTargetOutOfCurrentTarget(baseInputWithoutId: Omit<BaseInput, 'id'>): boolean {
-    let hasOutTarget = false;
-    const { currentTarget } = baseInputWithoutId.nativeEvent;
-    // 在运行阶段应该不会出现 null === currentTarget, 此处判断有待商榷是否删除
-    if (window !== currentTarget
-        && document !== currentTarget
-        && null !== currentTarget) {
-        baseInputWithoutId.points.forEach(({ target }) => {
-            // console.log({currentTarget})
-            // console.log({currentTarget,target})
-            if (!(currentTarget as HTMLElement).contains(target as HTMLElement)) {
-                // console.log('out')
-                hasOutTarget = true;
-            }
-        });
-    }
-    return hasOutTarget;
-}
+// function hasTouchTargetOutOfCurrentTarget(baseInputWithoutId: Omit<BaseInput, 'id'>): boolean {
+//     let isOutOfCurrentTarget = false;
+//     const { currentTarget } = baseInputWithoutId.nativeEvent;
+//     // 在运行阶段应该不会出现 null === currentTarget, 此处判断有待商榷是否删除
+//     if (window !== currentTarget
+//         && document !== currentTarget
+//         && null !== currentTarget) {
+//         baseInputWithoutId.points.forEach(({ target }) => {
+//             if (!(currentTarget as HTMLElement).contains(target as HTMLElement)) {
+//                 // console.log('out')
+//                 isOutOfCurrentTarget = true;
+//             }
+//         });
+//     }
+//     return isOutOfCurrentTarget;
+// }

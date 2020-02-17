@@ -20,7 +20,7 @@ interface EmitBeforeHook {
 
 export default class {
     listenersMap: ListenersMap = {};
-    beforeEachHook?: BeforeEachHook;
+    // beforeEachHook?: BeforeEachHook;
 
     target(el: HTMLElement) {
         return {
@@ -81,15 +81,18 @@ export default class {
             for (const listener of listeners) {
                 const { target } = listener;
                 // 自己的钩子
+                // 暂时传target
+                // 实际应该传如on的第三个参数的全部
                 if (beforeHook({ target })) {
-                    if (void 0 === this.beforeEachHook) {
-                        listener(payload);
-                    } else {
-                        // 全局钩子
-                        this.beforeEachHook(payload, () => {
-                            listener(payload);
-                        });
-                    }
+                    listener(payload);
+                    // if (void 0 === this.beforeEachHook) {
+                    //     listener(payload);
+                    // } else {
+                    //     // 全局钩子
+                    //     this.beforeEachHook(payload, () => {
+                    //         listener(payload);
+                    //     });
+                    // }
                 }
             }
         }
