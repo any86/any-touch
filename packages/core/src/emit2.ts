@@ -8,8 +8,6 @@ import { Input } from '@any-touch/shared';
  */
 export default function emit2(at: AnyTouch, payload: Record<string, any> & Input) {
     const { type, target, targets } = payload;
-    const AT_AFTER = 'at:after'
-    at.emit(AT_AFTER, payload);
     at.emit(type, payload, data => {
         if (void 0 !== data?.target) {
             // 可选链在3.7.5下推断有点问题, 下面直接用data.target会提示data.target可能为undefined
@@ -22,6 +20,8 @@ export default function emit2(at: AnyTouch, payload: Record<string, any> & Input
         } 
         return true;
     });
+    const AT_AFTER = 'at:after';
+    at.emit(AT_AFTER, payload);
 
     // 触发DOM事件
     if (!!at.options.domEvents
