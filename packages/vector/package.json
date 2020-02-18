@@ -1,6 +1,6 @@
 {
     "name": "@any-touch/vector",
-    "version": "1.0.1",
+    "version": "0.7.0",
     "description": "any-touch中向量计算相关的函数.",
     "main": "dist/index.js",
     "module": "dist/index.es.js",

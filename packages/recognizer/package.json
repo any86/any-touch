@@ -1,6 +1,6 @@
 {
     "name": "@any-touch/recognizer",
-    "version": "1.0.1",
+    "version": "0.7.0",
     "description": "any-touch的识别器的基类.",
     "main": "./dist/index",
     "module": "./dist/index.es.js",
@@ -8,7 +8,7 @@
     "author": "any86",
     "license": "ISC",
     "dependencies": {
-        "@any-touch/shared": "^1.0.1"
+        "@any-touch/shared": "^0.7.0"
     },
     "files": [
         "dist/*"
