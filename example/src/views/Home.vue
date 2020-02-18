@@ -18,6 +18,7 @@
                 @at:touch="onTouch"
                 @at:after="onAfter($event,index)"
                 @panstart="onPanstart($event,index)"
+                @panmove="onPanmove($event,index)"
                 @panend="onPanend($event,index)"
                 @swipe="onSwipe($event,index)"
                 @pinch="$event.match() && onPinch($event,index)"
@@ -118,9 +119,9 @@ export default {
         // at.target(this.$refs.circle[0]).on('rotate', this.onRotate);
         // at.target(this.$refs.circle[1]).on('pinch', this.onPinch1);
         // at.target(this.$refs.circle[1]).on('rotate', this.onRotate1);
-        at.target(this.$refs.circle[0]).on('panmove', e=>{
-            this.onPanmove(e,0)
-        });
+        // at.target(this.$refs.circle[0]).on('panmove', e=>{
+        //     this.onPanmove(e,0)
+        // });
         at.on('at:after', this.afterEach);
     },
 
