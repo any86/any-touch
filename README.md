@@ -9,10 +9,11 @@
 
 :wave: 一个小巧的手势库.
 
--   [x] **更多端**: PC 端 / 移动端 / [微信小程序](#支持微信小程序).
--   [x] **更灵巧**: 默认加载6个手势, 也可🤖[按需加载](#按需加载)手势, 核心@any-touch/core只有**2kb**, 完整安装也仅需要**5kb**.
--   [x] **更简单**: [在Vue可直接通过v-on调用](#兼容vue语法), 比如`<div @pan="onPan"></div>`.
--   [x] **更放心**: 代码测试覆盖率**100%**.
+- [x] **更多端**: PC 端 / 移动端 / [微信小程序](#支持微信小程序).
+- [x] **更全面**: 支持Tap(点击) / Press(按压) / Pan(拖拽) / Swipe(快划) / Pinch(缩放) / Rotate(旋转)6种手势. 
+- [x] **更灵巧**: 默认加载6个手势, 也可🤖[按需加载](#按需加载)手势, 核心@any-touch/core只有**2kb**, 完整安装也仅需要**5kb**.
+- [x] **更简单**: [在Vue可直接通过v-on调用](#兼容vue语法), 比如`<div @pan="onPan"></div>`.
+- [x] **更放心**: 代码测试覆盖率**100%**.
 
 ## 演示
 <details>
@@ -182,7 +183,8 @@ at.on('doubletap', onDoubleTap);
 // 只加载pan识别器(拖拽)
 import Core from '@any-touch/core';
 import Pan from '@any-touch/pan';
-Core.use(Pan)
+// 使用Pan
+Core.use(Pan);
 const at = new Core(el);
 // 拖拽
 at.on('pan', (ev) => {
