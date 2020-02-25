@@ -131,7 +131,17 @@ const at = new AnyTouch()
 ```
 [返回目录](#目录)
 
-## beforeEach拦截
+## target(事件委派)
+如果有多个元素需要绑定手势, 那么建议初始化绑定一个父元素, 通过target绑定子元素和函数.
+```javascript
+const at =  new AnyTouch(parent);
+at.on('pan', onPan, { target: child });
+// 还可以表示为
+at.target(child).on('pan', onPan);
+```
+[返回目录](#目录)
+
+## beforeEach(触发拦截)
 手势的触发与否可自由控制, 比如可以实现"单击延迟300ms, 如果双击没有触发才触发(默认手势事件都是并行触发)":
 ```javascript
 import AnyTouch from '@any-touch/core';

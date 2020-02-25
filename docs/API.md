@@ -6,7 +6,7 @@
 
 [on(监听)](#on)
 
-[target(事件委派)](#)
+[target(事件委派)](#targetZ)
 
 [set(设置)](#set)
 
