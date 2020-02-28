@@ -6,9 +6,9 @@
     "module": "dist/index.es.js",
     "author": "any86",
     "license": "ISC",
-    "peerDependencies": {
-        "@any-touch/shared": "^0.6.1-beta.6",
-        "tslib": "^1.9.3"
+    "dependencies": {
+        "tslib": "^1.9.3",
+        "@any-touch/shared": "^0.7.0"
     },
     "publishConfig": {
         "access": "public"
