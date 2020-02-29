@@ -81,8 +81,9 @@ at.on('tap', (ev) => {
 import AnyTouch from 'any-touch';
 export default {
     mounted() {
-        // 没错, 就这一行
-        new AnyTouch(this.$el);
+        // 没错, 就这2行
+        const {destroy} = new AnyTouch(this.$el);
+        this.on('hook:destroy', destroy);
     }
 };
 ```
