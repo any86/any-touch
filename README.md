@@ -211,10 +211,13 @@ const at = new Core(el);
 at.on('at:touch', (ev) => {
     // ev包含位置/时间/事件对象等属性.
 });
-// start / move / end / cancel
+// touchstart 或 mousedown
 at.on('at:touchstart', onStart);
+// touchmove 或 mousemove
 at.on('at:touchmove', onMove);
+// touchend 或 mouseup
 at.on('at:touchend', onEnd);
+// touchcancel
 at.on('at:touchcancel', onCancel);
 ```
 <!-- [更多](core) -->
