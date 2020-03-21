@@ -150,7 +150,7 @@ export default class AnyTouch extends AnyEvent {
             this.emit(AT_TOUCH, input);
             this.emit(AT_TOUCH_WITH_STATUS, input);
 
-            const {domEvents} = this.options;
+            const { domEvents } = this.options;
             if (false !== domEvents) {
                 const { target } = event;
                 if (null !== target) {
@@ -160,12 +160,13 @@ export default class AnyTouch extends AnyEvent {
             }
             // 缓存每次计算的结果
             // 以函数名为键值
-            let computedGroup = {};
+            let cacheComputedGroup = Object.create(null);
             for (const recognizer of this.recognizers) {
                 if (recognizer.disabled) continue;
                 recognizer.input = input;
-                recognizer.computedGroup = computedGroup;
+                recognizer.computedGroup = cacheComputedGroup;
                 recognizer.recognize(input, (type, ev) => {
+                    // 此时的ev就是this.computed
                     const payload = { ...input, ...ev, type, baseType: recognizer.name };
 
                     // 防止数据被vue类框架拦截
@@ -179,7 +180,7 @@ export default class AnyTouch extends AnyEvent {
                         });
                     }
                 });
-                computedGroup = recognizer.computedGroup;
+                cacheComputedGroup = recognizer.computedGroup;
             }
         }
     };

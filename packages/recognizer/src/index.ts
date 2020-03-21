@@ -1,12 +1,26 @@
 import { Input, ComputeConstructor } from '@any-touch/shared';
 import {
-    STATUS_POSSIBLE,SupportStatus
+    STATUS_POSSIBLE, SupportStatus
 } from '@any-touch/shared';
 
 // 导出recognizeForPressMoveLike,
 // resetStatusForPressMoveLike
 export { default as recognizeForPressMoveLike } from './recognizeForPressMoveLike';
 export { default as resetStatusForPressMoveLike } from './resetStatusForPressMoveLike';
+
+
+type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends ((k: infer I) => void) ? I : never;
+
+
+interface ComputeFunction {
+    (input: Input): Record<string, any> | void;
+}
+
+interface GenComputeFunction {
+    (): ComputeFunction;
+    _id: string;
+}
+
 export default abstract class {
     // 手势名
     name: string;
@@ -28,7 +42,7 @@ export default abstract class {
     computed: Record<string, any>;
 
     // 使用过的计算函数
-    usedComputeFunctionMap: Record<string, any>;
+    computeInstanceMap: Record<string, any>;
 
     // 当前输入
     input?: Input;
@@ -42,10 +56,11 @@ export default abstract class {
 
         this.computed = {};
         this.computedGroup = {};
-        this.usedComputeFunctionMap = {};
+        this.computeInstanceMap = {};
 
         this.recognizerMap = {};
     };
+
 
     /**
      * 设置识别器
@@ -68,30 +83,29 @@ export default abstract class {
 
     /**
      * 缓存计算函数的结果
-     * 注意:
-     * 为了避免压缩后函数名发生变化, 所以default export后面必须跟着类名
-     * https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Function/name
-     * @param {StdClass[]} 计算函数 
-     * @param {Array} 计算函数的参数
+     * @param Cs 计算函数 
+     * @param input 计算函数的参数
      */
-    protected compute(Cs: ComputeConstructor[], ...args: any[]): unknown {
-        let flatMap = Object.create(null);
+    protected compute<T extends GenComputeFunction>(Cs: T[], input: Input): UnionToIntersection<Exclude<ReturnType<ReturnType<T>>, void>> {
+        const computed = Object.create(null);
         for (const C of Cs) {
             const { _id } = C;
-            const { computedGroup, usedComputeFunctionMap } = this;
-            if (void 0 === usedComputeFunctionMap[_id]) {
+            // computedGroup 键为函数名(_id), 值为计算结果
+            const { computedGroup, computeInstanceMap } = this;
+            if (void 0 === computeInstanceMap[_id]) {
                 // 缓存初始化后的实例
-                usedComputeFunctionMap[_id] = new C();
+                computeInstanceMap[_id] = C();
             }
-
             // 缓存计算结果
-            computedGroup[_id] = computedGroup[_id] || usedComputeFunctionMap[_id].compute(...args);
-            flatMap = { ...flatMap, ...computedGroup[_id] }
+            computedGroup[_id] = computedGroup[_id] || computeInstanceMap[_id](input);
+            for (const key in computedGroup[_id]) {
+                computed[key] = computedGroup[_id][key];
+            }
         }
-        // 本次的事件对象, 此时没有type字段
-        this.computed = flatMap;
-        return flatMap;
+        return computed;
     };
+
+
 
     /**
      * 适用于大部分移动类型的手势, 

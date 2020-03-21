@@ -31,8 +31,7 @@ export default class extends Recognizer {
      * @param {Input} 输入 
      */
     recognize(input: Input, emit: CommonEmitFunction) {
-        type Computed = ReturnType<ComputeVectorForMutli['compute']> & {};
-        const computed = <Computed>this.compute([ComputeVectorForMutli], input);
+        const computed = this.compute([ComputeVectorForMutli], input);
         if (`activeV` in computed) {
             // const {activeV, prevV,startV} = computed;
             this.computed = { ...this.computed, ...computeScale(computed) };

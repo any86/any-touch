@@ -6,7 +6,7 @@
     "description": "一个小巧的手势库",
     "files": [
         "dist/**/*",
-        "types/*"
+        "types/**/*"
     ],
     "scripts": {
         "dev:ex": "cd example && npm run serve",

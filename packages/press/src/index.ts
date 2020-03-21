@@ -57,9 +57,7 @@ export default class extends Recognizer {
      * 移动距离不大
      */
     test(input: Input): boolean {
-        const { pointLength } = input;
-        type Computed = ReturnType<ComputeDistance['compute']>;
-        this.computed = <Computed>this.compute([ComputeDistance], input);
+        this.computed = this.compute([ComputeDistance], input);
         const { distance } = this.computed;
         return this.options.maxDistance > distance;
     };

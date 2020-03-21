@@ -121,8 +121,8 @@ export default class extends Recognizer {
      */
     recognize(input: Input, emit: (type: string, ...payload: any[]) => void): void {
         const { inputType, x, y } = input;
-        type Computed = ReturnType<ComputeMaxLength['compute']> & ReturnType<ComputeDistance['compute']>
-        this.computed = <Computed>this.compute([ComputeMaxLength, ComputeDistance], input)
+        // type Computed = ReturnType<ComputeMaxLength['compute']> & ReturnType<ComputeDistance['compute']>
+        this.computed = this.compute([ComputeMaxLength, ComputeDistance], input)
         // 只在end阶段去识别
         if (INPUT_END !== inputType) return;
 

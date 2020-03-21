@@ -31,9 +31,7 @@ export default class extends Recognizer {
      * @param {Input} 输入 
      */
     recognize(input: Input, emit: CommonEmitFunction) {
-        type Computed = ReturnType<ComputeMaxLength['compute']> & ReturnType<ComputeVAndDir['compute']> &
-            ReturnType<ComputeDistance['compute']>
-        this.computed = <Computed>this.compute([ComputeMaxLength, ComputeVAndDir, ComputeDistance], input);
+        this.computed = this.compute([ComputeMaxLength, ComputeVAndDir, ComputeDistance], input);
         if (this.test(input)) {
             emit(this.options.name, this.computed);
             // swipeleft...
