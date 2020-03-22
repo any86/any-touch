@@ -161,10 +161,13 @@ export default class AnyTouch extends AnyEvent {
             // 缓存每次计算的结果
             // 以函数名为键值
             let cacheComputedGroup = Object.create(null);
+            let cacheComputedFunctionGroup = this.recognizers[0]?.computeFunctionMap || Object.create(null);
+
             for (const recognizer of this.recognizers) {
                 if (recognizer.disabled) continue;
-                recognizer.input = input;
+                // 恢复上次的缓存
                 recognizer.computedGroup = cacheComputedGroup;
+                recognizer.computeFunctionMap = cacheComputedFunctionGroup;
                 recognizer.recognize(input, (type, ev) => {
                     // 此时的ev就是this.computed
                     const payload = { ...input, ...ev, type, baseType: recognizer.name };
@@ -180,7 +183,9 @@ export default class AnyTouch extends AnyEvent {
                         });
                     }
                 });
+                // 记录到缓存
                 cacheComputedGroup = recognizer.computedGroup;
+                cacheComputedFunctionGroup = recognizer.computeFunctionMap;
             }
         }
     };

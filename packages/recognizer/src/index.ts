@@ -8,7 +8,7 @@ import {
 export { default as recognizeForPressMoveLike } from './recognizeForPressMoveLike';
 export { default as resetStatusForPressMoveLike } from './resetStatusForPressMoveLike';
 
-
+// 联合变交叉
 type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends ((k: infer I) => void) ? I : never;
 
 
@@ -25,24 +25,22 @@ export default abstract class {
     // 手势名
     name: string;
     // 是否禁止
-    disabled: boolean;
+    disabled = false;
     // 识别状态
-    status: SupportStatus;
+    status: SupportStatus = STATUS_POSSIBLE;
     // 是否已识别
-    isRecognized: boolean;
+    isRecognized: boolean = false;
     // 选项
     options: { [propName: string]: any };
 
-    recognizerMap: Record<string, this>;
+    recognizerMap: Record<string, this> = {};
     // 缓存当前手势的计算结果
     // 每次手势识别前, 
     // 会把前面所有手势的计算结果作为当前计算结果
-    computedGroup: Record<string, any>;
-
-    computed: Record<string, any>;
-
+    computedGroup: Record<string, any> = {};
+    computed: Record<string, any> = {};
     // 使用过的计算函数
-    computeInstanceMap: Record<string, any>;
+    computeFunctionMap: Record<string, any> = {};
 
     // 当前输入
     input?: Input;
@@ -50,17 +48,7 @@ export default abstract class {
     constructor(options: { name: string, [k: string]: any }) {
         this.options = options;
         this.name = this.options.name;
-        this.disabled = false;
-        this.status = STATUS_POSSIBLE;
-        this.isRecognized = false;
-
-        this.computed = {};
-        this.computedGroup = {};
-        this.computeInstanceMap = {};
-
-        this.recognizerMap = {};
     };
-
 
     /**
      * 设置识别器
@@ -88,16 +76,18 @@ export default abstract class {
      */
     protected compute<T extends GenComputeFunction>(Cs: T[], input: Input): UnionToIntersection<Exclude<ReturnType<ReturnType<T>>, void>> {
         const computed = Object.create(null);
+        // console.warn(this.name, JSON.stringify(this.computeFunctionMap));
         for (const C of Cs) {
             const { _id } = C;
             // computedGroup 键为函数名(_id), 值为计算结果
-            const { computedGroup, computeInstanceMap } = this;
-            if (void 0 === computeInstanceMap[_id]) {
+            const { computedGroup, computeFunctionMap } = this;
+            if (void 0 === computeFunctionMap[_id]) {
                 // 缓存初始化后的实例
-                computeInstanceMap[_id] = C();
+                computeFunctionMap[_id] = C();
             }
+
             // 缓存计算结果
-            computedGroup[_id] = computedGroup[_id] || computeInstanceMap[_id](input);
+            computedGroup[_id] = computedGroup[_id] || computeFunctionMap[_id](input);
             for (const key in computedGroup[_id]) {
                 computed[key] = computedGroup[_id][key];
             }

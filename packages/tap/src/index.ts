@@ -127,9 +127,9 @@ export default class extends Recognizer {
         if (INPUT_END !== inputType) return;
 
         this.status = STATUS_POSSIBLE;
-
         // 每一次点击是否符合要求
         if (this.test(input)) {
+
             this.cancelCountDownToFail();
             // 判断2次点击之间的距离是否过大
             // 对符合要求的点击进行累加
@@ -186,6 +186,7 @@ export default class extends Recognizer {
         // 2. 移动距离
         // 3. start至end的事件, 区分tap和press
         const { maxPointLength, distance } = this.computed;
+
         return maxPointLength === this.options.pointLength &&
             this.options.maxDistance >= distance &&
             this.options.maxPressTime > deltaTime;

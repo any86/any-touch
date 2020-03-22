@@ -13,6 +13,7 @@ function computeDistance() {
 
     return function (input: Input): { displacementX: number, displacementY: number, distanceX: number, distanceY: number, distance: number, overallDirection: directionString } {
         const { inputType, startInput } = input;
+
         if (INPUT_START === inputType) {
             displacementX = 0;
             displacementY = 0;
