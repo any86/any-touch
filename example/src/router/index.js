@@ -7,11 +7,6 @@ const routes = [{
         path: '/',
         name: 'home',
         component: Home
-    },
-    {
-        path: '/pan',
-        name: 'Pan',
-        component: () => import( /* webpackChunkName: "pan" */ '../views/Pan.vue')
     }
 ]
 
