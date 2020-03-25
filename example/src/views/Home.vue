@@ -19,7 +19,7 @@
                 @at:after="onAfter($event,index)"
                 @panstart="onPanstart($event,index)"
                 @panmove="onPanmove($event,index)"
-                @panend="onPanend($event,index)"
+                @pandown="onPandown($event,index)"
                 @swipe="onSwipe($event,index)"
                 @pinch="$event.match() && onPinch($event,index)"
                 @rotate="$event.match() && onRotate($event,index)"
@@ -194,8 +194,8 @@ export default {
             this.styles[index].left = parseInt(this.styles[index].left) + ev.deltaX + 'px';
         },
 
-        onPanend(ev,index){
-            // console.log(ev)
+        onPandown(ev,index){
+            console.warn(ev)
         }
     }
 };

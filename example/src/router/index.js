@@ -7,6 +7,11 @@ const routes = [{
         path: '/',
         name: 'home',
         component: Home
+    },
+    {
+        path: '/pan',
+        name: 'pan',
+        component: ()=>import('../views/Pan')
     }
 ]
 
