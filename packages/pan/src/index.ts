@@ -22,7 +22,7 @@ export default class extends Recognizer {
         const { distance } = this.computed;
         return (
             // INPUT_MOVE === inputType &&
-            (this.isRecognized || this.options.threshold < distance) &&
+            (this.isRecognized || this.options.threshold <= distance) &&
             this.isValidPointLength(pointLength)
         );
     }
@@ -34,7 +34,8 @@ export default class extends Recognizer {
      */
     recognize(input: Input, emit: CommonEmitFunction): void {
         this.computed = this.compute([ComputeVAndDir, ComputeDistance, ComputeDeltaXY], input);
-        const isRecognized = recognizeForPressMoveLike(this, input, emit);
+        // 需要有方向
+        const isRecognized = void 0 !== this.computed.direction && recognizeForPressMoveLike(this, input, emit);
         // panleft/panup/panright/pandown
         if (isRecognized) {
             emit(this.options.name + this.computed.direction, this.computed);
