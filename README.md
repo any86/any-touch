@@ -1,4 +1,4 @@
-# any-touch [![NPM Version][npm-image]][npm-url] [![NPM Downloads][downloads-image]][downloads-url] [![size-image]][size-url] [![codecov](https://badgen.net/codecov/c/github/any86/any-touch/master)](https://codecov.io/gh/any86/any-touch) [![CircleCI](https://circleci.com/gh/any86/any-touch.svg?style=svg)](https://circleci.com/gh/any86/any-touch)
+# any-touch [![NPM Version][npm-image]][npm-url] [![NPM Downloads][downloads-image]][downloads-url] [![size-image]][size-url] [![codecov](https://codecov.io/gh/any86/any-touch/branch/master/graph/badge.svg)](https://codecov.io/gh/any86/any-touch) [![CircleCI](https://circleci.com/gh/any86/any-touch.svg?style=svg)](https://circleci.com/gh/any86/any-touch)
 
 [size-image]: https://badgen.net/bundlephobia/minzip/any-touch
 [size-url]: https://bundlephobia.com/result?p=@any-touch/core
@@ -47,7 +47,7 @@ npm i -S any-touch
 ## CDN
 
 ```
-https://unpkg.com/any-touch/dist/any-touch.min.js
+https://unpkg.com/any-touch/dist/any-touch.umd.min.js
 ```
 
 ## 快速开始
@@ -81,15 +81,16 @@ at.on('tap', (ev) => {
 import AnyTouch from 'any-touch';
 export default {
     mounted() {
-        // 没错, 就这一行
-        new AnyTouch(this.$el);
+        // 没错, 就这2行
+        const {destroy} = new AnyTouch(this.$el);
+        this.on('hook:destroy', destroy);
     }
 };
 ```
 **注意**
 1. 默认any-touch 会模拟原生 dom 事件触发, 所以在 vue 上可以**通过 v-on 直接绑定手势**, 如不需要可通过`new AnyTouch(el, {domEvents:false}`关闭.
 
-2. 由于框架(vue等)的特殊行, 建议多触点手势(pinch/rotate等pointLength>1的手势)使用`match`, 如`<div @pinch="$event.match() && onPinch"></div>`, 用来保证每个触点都落在目标元素内(使用`anyTouch.target().on()`监听不需要考虑这个问题,[原因如下]()).
+2. 由于框架(vue等)的特殊行, 建议多触点手势(pinch/rotate等pointLength>1的手势)使用`match`, 如`<div @pinch="$event.match() && onPinch"></div>`, 用来保证每个触点都落在目标元素内(使用`anyTouch.target().on()`监听不需要考虑这个问题.
 
 <!-- 由于`event.currentTarget`需要在事件的回调函数触发过程中才可以得到, 而vue封装了他, any-touch没法提前进行拦截,
 所以在vue中多触点的手势识别的时候,如果想要确保多个触点的`target`都是`currentTarget`的子元素或自身请使用. -->
@@ -210,10 +211,13 @@ const at = new Core(el);
 at.on('at:touch', (ev) => {
     // ev包含位置/时间/事件对象等属性.
 });
-// start / move / end / cancel
+// touchstart 或 mousedown
 at.on('at:touchstart', onStart);
+// touchmove 或 mousemove
 at.on('at:touchmove', onMove);
+// touchend 或 mouseup
 at.on('at:touchend', onEnd);
+// touchcancel
 at.on('at:touchcancel', onCancel);
 ```
 <!-- [更多](core) -->
