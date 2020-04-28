@@ -82,8 +82,10 @@ import AnyTouch from 'any-touch';
 export default {
     mounted() {
         // 没错, 就这2行
-        const {destroy} = new AnyTouch(this.$el);
-        this.on('hook:destroyed', destroy);
+        const at = new AnyTouch(this.$refs.el);
+        this.on('at:after', e => {
+            console.log(e);
+        });
     }
 };
 ```
