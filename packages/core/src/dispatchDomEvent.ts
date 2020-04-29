@@ -6,11 +6,11 @@ export default function (el: EventTarget, payload: Record<string, any> & Input, 
     // 过滤掉Event上保留的字段(target, currentTarget,type)
     let { target, currentTarget, type, ...data } = payload;
     let event: Event;
-    if (void 0 !== Event) {
-        event = new Event(type, eventInit);
-    } else {
+    if ('createEvent' in document) {
         event = document.createEvent('HTMLEvents');
         event.initEvent(type, eventInit?.bubbles, eventInit?.cancelable);
+    } else {
+        event = new Event(type, eventInit);
     }
     Object.assign(event, data, {
         match: () =>

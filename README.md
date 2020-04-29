@@ -240,6 +240,14 @@ at.on('at:touchcancel', onCancel);
 
 ## 注意事项
 
+### 手势识别器的name字段必填
+
+自定义手势**一定记得给起一个名字哦**, 而且不要和默认存在的手势同名(已有tap/swipe/pan/rotate/pinch/press).
+```javascript
+AnyTouch.use(Tap, { pointLength: 2 , name:'twoFingersTap'});
+at.on('twoFingersTap', onTwoFingersTap);
+```
+
 ### 不要用 alert 调试
 
 :heavy_exclamation_mark::heavy_exclamation_mark::heavy_exclamation_mark: 在安卓手机的真机上, 如果`touchstart`或`touchmove`阶段触发了`alert`, 会出现后续的`touchmove/touchend`不触发的 bug. 所以请大家务必避免在手势的事件回调中使用`alert`.
@@ -247,7 +255,7 @@ at.on('at:touchcancel', onCancel);
 
 如果仅仅是了在移动端调试, 请使用腾讯的[vconsole](https://github.com/Tencent/vConsole)
 
-### mac os上的chrome浏览器触发touchend会比较慢
+### macos上的chrome浏览器触发touchend会比较慢
 由于上述原因, swipe事件发生的会"慢半拍",所以请大家最终测试以手机效果为准.
 
 [返回目录](#目录)
