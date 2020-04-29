@@ -180,14 +180,16 @@ export default class extends Recognizer {
       * @return {Boolean} 是否验证成功
       */
     test(input: Input): boolean {
-        const { startInput } = input;
+        const { startInput, pointLength } = input;
         const deltaTime = input.timestamp - startInput.timestamp;
         // 1. 触点数
-        // 2. 移动距离
-        // 3. start至end的事件, 区分tap和press
+        // 2. 当前点击数为0, 也就是当所有触点离开才通过
+        // 3. 移动距离
+        // 4. start至end的事件, 区分tap和press
         const { maxPointLength, distance } = this.computed;
-
+        // console.log(this.name,pointLength, maxPointLength)
         return maxPointLength === this.options.pointLength &&
+            0 === pointLength &&
             this.options.maxDistance >= distance &&
             this.options.maxPressTime > deltaTime;
     };
