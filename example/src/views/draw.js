@@ -1,12 +1,15 @@
 import * as d3 from 'd3';
 export const dataset = {
     "name": "新中新",
-    x:1000,
-    y:1000,
+    x: 1000,
+    y: 1000,
+    value:99,
     "children": [{
         "name": "第一级",
+        value:21,
         "children": [{
             "name": "第二级A",
+            value:14,
             "children": [{
                 "name": "第三级A",
                 "value": 3938
@@ -36,15 +39,15 @@ export function treeChart(id, dataset) {
     };
 
     const root = tree(dataset);
-    
 
-    root.links().map(link=>{
-        return d3.linkHorizontal().x(d =>d.y).y(d => d.x)(link)
+
+    root.links().map(link => {
+        return d3.linkHorizontal().x(d => d.y).y(d => d.x)(link)
     })
 
 
 
-    
+
     return;
 
 

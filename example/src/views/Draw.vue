@@ -1,5 +1,5 @@
 <template>
-<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="1000">
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="1000" style="width:100%">
     <g transform="translate(100, 100)">
         <path v-for="linkPath in linkPaths" :key="linkPath" :d="linkPath" class="line" />
     </g>
@@ -12,11 +12,12 @@
             :height="itemHeight"
             :x="node.y - itemWidth/2"
             :y="node.x - itemHeight/2"
-            @panstart="onPanstart"
+            @panstart="onPanstart(index,$event)"
             @panmove="onPanmove(index,$event)"
+            @panend="onPanend"
         >
-            <body style="padding:8px;" xmlns="http://www.w3.org/1999/xhtml">
-                <p class="text">一段需要word wrap的文字。</p>
+            <body xmlns="http://www.w3.org/1999/xhtml">
+                <p class="text">{{index}}-{{node.depth}}一段需要word wrap的文字。</p>
             </body>
         </foreignObject>
     </g>
@@ -32,7 +33,7 @@ Core.use(Pan, { threshold: 0 });
 const pointsGroup = [];
 const paths = [];
 export default {
-    name: 'Draw',
+    name: 'Topology',
 
     props: {
         itemWidth: {
@@ -49,7 +50,8 @@ export default {
         return {
             nodes: [],
             linkPaths: [],
-            tree: {}
+            tree: {},
+            activeNode: null
         };
     },
     mounted() {
@@ -64,6 +66,7 @@ export default {
             const svg = d3.select(svg);
             const tree = (data) => {
                 const root = d3.hierarchy(data);
+                // console.log(JSON.stringify(root))
                 root.dx = 110;
                 root.dy = width / (root.height + 1);
                 return d3
@@ -73,7 +76,6 @@ export default {
                     })
                     .nodeSize([root.dx, root.dy])(root);
             };
-
             this.tree = tree(dataset);
             this.updateLink();
             this.nodes = this.tree.descendants();
@@ -88,19 +90,30 @@ export default {
             });
         },
 
+        updateNodeOrder(index) {},
+
         // https://blog.csdn.net/qq_34414916/article/details/80026029
         // https://www.jianshu.com/p/64305821087a
         // https://github.com/d3/d3-shape/blob/master/src/curve/monotone.js
-        onPanstart(ev) {},
+        onPanstart(index, ev) {
+            // console.warn({index})
+            const [item] = this.nodes.splice(index, 1);
+            this.nodes.push(item);
+            this.activeNode = item;
+        },
 
         onPanmove(index, ev) {
             const { deltaX, deltaY } = ev;
-            this.nodes[index].x += deltaY;
-            this.nodes[index].y += deltaX;
+            const { length } = this.nodes;
+            this.activeNode.x += deltaY;
+            this.activeNode.y += deltaX;
             this.updateLink();
         },
 
-        onPanend(ev) {}
+        onPanend(ev) {
+            console.warn(this.tree)
+            // console.log(this.nodes)
+        }
     }
 };
 </script>
@@ -117,10 +130,13 @@ export default {
 
 .text {
     background-color: rgb(3, 159, 107);
-    padding: 16px;
+    padding: 8px;
+    margin: 8px;
+    width: 90%;
+    height: 60px;
     color: #fff;
-    box-shadow: 1px 2px 8px rgba(0, 0, 0, 0.2);
+    box-shadow: 1px 2px 8px rgba(4, 108, 73, 0.5);
     border-radius: 4px;
-    cursor:move;
+    cursor: move;
 }
 </style>
