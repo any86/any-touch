@@ -142,8 +142,10 @@ at.target(child).on('pan', onPan);
 ```
 [返回目录](#目录)
 
-## beforeEach(触发拦截)
-手势的触发与否可自由控制, 比如可以实现"单击延迟300ms, 如果双击没有触发才触发(默认手势事件都是并行触发)":
+## beforeEach(触发拦截), 实战单/双击互斥触发
+`beforeEach`拦截手势的触发, 用来实现同类手势不同时触发.
+比如"**双击**"明显不能同时触发2次"**单击**", 所以我们需要让"单击"出发后延迟300ms, 如果没有触发"双击", "单击"再触发.
+
 ```javascript
 import AnyTouch from '@any-touch/core';
 import Tap from '@any-touch/tap';
@@ -154,7 +156,8 @@ AnyTouch.use(Tap, { name: 'doubletap', tapTimes: 2 });
 const at = new AnyTouch(el);
 
 // 🚀关键代码
-// beforeEach
+// 单击后延迟300ms, 如果双击没有触发才触发单击
+// 这里通过next来控制触发时机
 at.beforeEach(({ recognizerMap, name }, next) => {
     if ('tap' === name) {
         debounce(() => {
@@ -168,7 +171,7 @@ at.beforeEach(({ recognizerMap, name }, next) => {
 at.on('tap', onTap);
 at.on('doubletap', onDoubleTap);
 ```
-"**next**"的执行用来决定是否触发对应事件. 说道这里顺便解释下手势识别器的状态:
+"**next**"的执行用来决定是否触发对应事件. 说到这里顺便解释下手势识别器的状态:
 #### 手势识别器的状态
 |变量|说明|
 |-|-|
