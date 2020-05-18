@@ -15,9 +15,9 @@ const routes = [{
         component: ()=>import('../views/Pan')
     },
     {
-        path: '/draw',
-        name: 'draw',
-        component: ()=>import('../views/Draw.vue')
+        path: '/topology',
+        name: 'Topology',
+        component: ()=>import('../views/Topology.vue')
     }
 ]
 
