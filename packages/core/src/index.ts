@@ -140,15 +140,10 @@ export default class AnyTouch extends AnyEvent {
         // 当是鼠标事件的时候, 会有undefined的时候
         // 比如鼠标还没有mousedown阶段的mousemove等都是无效操作
         if (void 0 !== input) {
-            // 管理历史input
-            // 生成AnyTouchEvent
-            // if (void 0 !== AnyTouch.recognizers[0]) {
-            //     AnyTouch.recognizers[0].input = input;
-            // }
             const AT_TOUCH = `at:${TOUCH}`;
             const AT_TOUCH_WITH_STATUS = AT_TOUCH + input.inputType;
-
             this.emit(AT_TOUCH, input);
+            this.emit('at:before', input);
             this.emit(AT_TOUCH_WITH_STATUS, input);
 
             const { domEvents } = this.options;

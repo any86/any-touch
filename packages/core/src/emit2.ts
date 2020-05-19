@@ -17,7 +17,7 @@ export default function emit2(at: AnyTouch, payload: Record<string, any> & Input
             // 如果指定了, 
             // 那么检查当前触发事件的元素是否是其子元素
             return targets.every((target) => currentTarget.contains(target as HTMLElement));
-        } 
+        }
         return true;
     });
     const AT_AFTER = 'at:after';
@@ -28,9 +28,10 @@ export default function emit2(at: AnyTouch, payload: Record<string, any> & Input
         && void 0 !== at.el
         && null !== target
     ) {
+
         // vue会把绑定元素的所有子元素都进行事件绑定
         // 所以此处的target会自动冒泡到目标元素
         dispatchDomEvent(target, payload, at.options.domEvents);
-        dispatchDomEvent(target, { ...payload, type: AT_AFTER }, at.options.domEvents);
+        dispatchDomEvent(target, { ...payload, _type: payload.type, type: AT_AFTER }, at.options.domEvents);
     }
 };

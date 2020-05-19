@@ -18,7 +18,7 @@ interface EmitBeforeHook {
 }
 
 
-export default class {
+export default class <Payload = any> {
     listenersMap: ListenersMap = {};
     // beforeEachHook?: BeforeEachHook;
 
@@ -74,9 +74,9 @@ export default class {
      * @param {Any} 载荷数据 
      * @returns {Boolean} 如果事件有监听器，则返回 true，否则返回 false。
      */
-    emit(eventName: string, payload?: any, beforeHook: EmitBeforeHook = () => true): void {
+    emit(eventName: string, payload?: Payload, beforeHook: EmitBeforeHook = () => true): void {
         const listeners = this.listenersMap[eventName];
-        
+
         if (void 0 !== listeners && 0 < listeners.length) {
             for (const listener of listeners) {
                 const { target } = listener;
