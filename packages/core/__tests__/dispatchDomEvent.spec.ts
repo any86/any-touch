@@ -12,7 +12,8 @@ test('触发自定义事件', () => {
 });
 
 test('当Event不存的时候, 依然可以触发事件', ()=>{
-    (window as any).Event = void 0;
+
+    (document as any).createEvent = void 0;
     const EVENT_NAME = 'xyz'
     const { el, mockCB, sleep } = create();
     el.addEventListener(EVENT_NAME, ev => {
