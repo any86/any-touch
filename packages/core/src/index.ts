@@ -143,7 +143,6 @@ export default class AnyTouch extends AnyEvent {
             const AT_TOUCH = `at:${TOUCH}`;
             const AT_TOUCH_WITH_STATUS = AT_TOUCH + input.inputType;
             this.emit(AT_TOUCH, input);
-            this.emit('at:before', input);
             this.emit(AT_TOUCH_WITH_STATUS, input);
 
             const { domEvents } = this.options;

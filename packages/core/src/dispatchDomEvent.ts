@@ -6,7 +6,7 @@ export default function (el: EventTarget, payload: Record<string, any> & Input, 
     // 过滤掉Event上保留的字段(target, currentTarget,type)
     let { target, currentTarget, type, ...data } = payload;
     let event: Event;
-    if ('createEvent' in document) {
+    if (document.createEvent) {
         event = document.createEvent('HTMLEvents');
         event.initEvent(type, eventInit?.bubbles, eventInit?.cancelable);
     } else {
