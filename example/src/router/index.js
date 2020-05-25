@@ -18,7 +18,15 @@ const routes = [{
         path: '/topology',
         name: 'Topology',
         component: ()=>import('../views/Topology.vue')
+    },
+    {
+        path: '/sc',
+        name: 'SortCarousel',
+        component: ()=>import('../views/SortCarousel.vue')
     }
+
+
+    
 ]
 
 const router = new VueRouter({
