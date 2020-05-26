@@ -19,7 +19,6 @@ export default class extends Recognizer {
 
     recognize(input: Input, emit: CommonEmitFunction): void {
         const { inputType, startInput, pointLength } = input;
-
         // 1. start阶段
         // 2. 触点数符合
         // 那么等待minPressTime时间后触发press
@@ -39,7 +38,7 @@ export default class extends Recognizer {
         else if (INPUT_END === inputType && STATUS_RECOGNIZED === this.status) {
             emit(`${this.options.name}${DIRECTION_UP}`, this.computed);
         }
-        else {
+        else if (STATUS_RECOGNIZED !== this.status) {
             const deltaTime = input.timestamp - startInput.timestamp;
             // 一旦不满足必要条件,
             // 发生了大的位移变化
