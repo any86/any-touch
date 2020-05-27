@@ -64,7 +64,7 @@ export default {
     },
 
     mounted() {
-        const at = new AnyTouch(this.$el);
+        const at = new AnyTouch(this.$refs.body);
         this.$on('destroyed', () => {
             at.destroy();
         });
