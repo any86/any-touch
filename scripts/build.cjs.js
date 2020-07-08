@@ -7,8 +7,6 @@ const {
     build,
     walkPackageDirs
 } = require('./build');
-const writeProdAndDevEntry = require('./build/writeProdAndDevEntry');
-
 
 console.log(chalk.blue(`正在生成cjs模块!`));
 
@@ -36,5 +34,4 @@ walkPackageDirs((dirName) => {
     fs.mkdirSync(`./packages/${dirName}/dist`,{recursive:true});
     build(genRollupConfig(dirName, 'dev'));
     build(genRollupConfig(dirName, 'prod'));
-    fs.writeFileSync(`./packages/${dirName}/dist/index.js`, writeProdAndDevEntry(), 'utf8');
 });
