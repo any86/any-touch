@@ -7,7 +7,7 @@
         <a target="_new" href="https://github.com/any86/any-touch">any-touch</a>
     </header>
 
-    <svg xmlns="http://www.w3.org/2000/svg" width="1000" height="1000" style="width:100%">
+    <svg xmlns="http://www.w3.org/2000/svg" width="1000" height="1000" style="width:100%;">
         <g transform="translate(100, 100)">
             <template v-for="(linkPath, index) in linkPaths">
                 <path v-if="linkPath" :key="index" :d="linkPath" class="line" />
@@ -232,11 +232,12 @@ export default {
 
 <style scope lang="scss">
 header {
-    position: fixed;
+    position: sticky;
     width: 100%;
     top: 0;
     left: 0;
     padding: 16px;
+    box-shadow:1px 2px 8px rgba(0,0,0,.1);
     a {
         color: #69c;
     }
