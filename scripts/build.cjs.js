@@ -10,10 +10,10 @@ const {
 
 console.log(chalk.blue(`正在生成cjs模块!`));
 
-const genRollupConfig = (dirName, env = 'dev') => ({
+const genRollupConfig = (dirName) => ({
     input: `./packages/${dirName}/src/index.ts`,
     output: {
-        file: `./packages/${dirName}/dist/index.${env}.js`,
+        file: `./packages/${dirName}/dist/index.js`,
         exports:'named',
         format: 'cjs',
     },
@@ -22,7 +22,7 @@ const genRollupConfig = (dirName, env = 'dev') => ({
         target: 'ES5'
     },
     terser: terser({
-        include: [/^.+\.prod\.js$/],
+        // include: [/^.+\.prod\.js$/],
         output: {
             comments: false
         }
@@ -32,6 +32,6 @@ const genRollupConfig = (dirName, env = 'dev') => ({
 
 walkPackageDirs((dirName) => {
     fs.mkdirSync(`./packages/${dirName}/dist`,{recursive:true});
-    build(genRollupConfig(dirName, 'dev'));
-    build(genRollupConfig(dirName, 'prod'));
+    build(genRollupConfig(dirName));
+    // build(genRollupConfig(dirName, 'prod'));
 });
