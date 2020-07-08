@@ -29,7 +29,7 @@ export const MOUSE_UP = MOUSE + DIRECTION_UP as 'mouseup';
 export const MOUSE_MOVE = MOUSE + INPUT_MOVE as 'mousemove';
 export const MOUSE_DOWN = MOUSE + DIRECTION_DOWN as 'mousedown';
 
-export const SUPPORT_TOUCH = `on${TOUCH_START}` in window;
+export const SUPPORT_TOUCH = (window as any).wx ||`on${TOUCH_START}` in window;
 
 
 // 识别器状态码
