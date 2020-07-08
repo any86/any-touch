@@ -5,5 +5,5 @@
  * @param {String} 文件名称 
  */
 module.exports = function(name = 'index') {
-    return `if (process.env.NODE_ENV === 'development') {module.exports = require('./${name}.dev.js');} else {module.exports = require('./${name}.prod.js');}`;
+    return `if(void 0 === process){require('./${name}.prod.js');} else {if (process.env.NODE_ENV === 'development') {module.exports = require('./${name}.dev.js');} else {module.exports = require('./${name}.prod.js');}}`;
 }
