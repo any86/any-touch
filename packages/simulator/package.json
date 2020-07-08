@@ -1,6 +1,6 @@
 {
     "name": "@any-touch/simulator",
-    "version": "0.7.4",
+    "version": "0.7.5",
     "description": "手势事件模拟器",
     "main": "./dist/index.js",
     "module": "./dist/index.es.js",
