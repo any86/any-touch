@@ -36,7 +36,14 @@ export default {
             default: 0
         },
 
+        // 元素坐标系上的点
         point: {
+            type: Array,
+            default: () => [0, 0]
+        },
+
+        // 平移距离
+        offset: {
             type: Array,
             default: () => [0, 0]
         }
@@ -45,22 +52,24 @@ export default {
     data() {
         return {
             context: null,
-            newPoint: null,
-            offsetX: 0,
-            offsetY: 0,
-            deltaOrg: [0, 0],
-            lastOrg: [...this.org]
+            // 图片左上角在canvas坐标系中的坐标
+            imageApexPointInCanvas: null,
+            offsetInCanvas:null,
         };
     },
 
     computed: {
+        rad() {
+            return (this.angle * Math.PI) / 180;
+        },
+
         moveRate() {
             return this.$el?.offsetWidth / this.width;
         },
 
         _transfrom() {
-            const { scale, org, angle, point } = this;
-            return { scale, org, angle, point };
+            const { scale, org, angle, point, offset } = this;
+            return { scale, org, angle, point, offset };
         }
     },
 
@@ -69,13 +78,21 @@ export default {
             this.render();
         },
 
-        // point() {
-        //     this.newPoint = this.swtichCoordinate(this.point);
-        //     this.render();
-        // },
+        offset: {
+            deep: true,
+            handler() {
+                this.offsetInCanvas = this.swtichCoordinateToCanvas(this.offset);
+                this.render();
+            }
+        },
+
+        scale(){
+            this.render();
+        },
 
         org() {
-            this.newPoint = this.swtichCoordinate(this.point);
+            // 元素坐标系中的点在canvas坐标系中的坐标
+            this.imageApexPointInCanvas = this.getPositionInCanvas(this.point);
             this.render();
         },
 
@@ -87,46 +104,76 @@ export default {
     mounted() {
         new AnyTouch(this.$el);
         this.context = this.$el.getContext('2d');
-        this.newPoint = this.swtichCoordinate(this.point);
+        this.imageApexPointInCanvas = this.getPositionInCanvas(this.point);
+        this.offsetInCanvas = this.swtichCoordinateToCanvas(this.offset);
         this.$nextTick(() => {
             this.render();
         });
     },
 
     methods: {
-        swtichCoordinate1() {
-            return [this.org[0] - x, this.org[1] - y];
-        },
-
-        swtichCoordinate(point) {
-            const [x, y] = point;
+        /**
+         * 元素坐标系下的坐标转换到canvas坐标系
+         */
+        swtichCoordinateToCanvas([x, y]) {
             const rad = (this.angle * Math.PI) / 180;
             return [
-                (Math.cos(rad) * (x - this.org[0]) + Math.sin(rad) * (y - this.org[1])) / this.scale,
-                (-Math.sin(rad) * (x - this.org[0]) + Math.cos(rad) * (y - this.org[1])) / this.scale
+                (Math.cos(rad) * x + Math.sin(rad) * y) / this.scale,
+                (-Math.sin(rad) * x + Math.cos(rad) * y) / this.scale
             ];
+        },
+        /**
+         * canvas坐标系坐标转到标准坐标系下
+         */
+        switchCoordinateToStandard([x, y]) {
+            const rad = (this.angle * Math.PI) / 180;
+            return [
+                (Math.cos(rad) * x - Math.sin(rad) * y) * this.scale,
+                (Math.sin(rad) * x + Math.cos(rad) * y) * this.scale
+            ];
+        },
+        /**
+         * 元素坐标系中的点在canvas坐标系中的坐标
+         * @param {Array} 元素坐标系中的点
+         */
+        getPositionInCanvas([x, y]) {
+            // 计算平移
+            const dx = x - this.org[0];
+            const dy = y - this.org[1];
+            // 计算旋转/缩放
+            return this.swtichCoordinateToCanvas([dx, dy]);
         },
 
         render() {
             if (!this.img) return;
+
             const { context } = this;
             // 初始值
             const rad = (this.angle * Math.PI) / 180;
             context.clearRect(0, 0, this.width, this.height);
+            this.drawChessboard();
+
             context.save();
             context.translate(this.org[0], this.org[1]);
             context.scale(this.scale, this.scale);
             context.rotate(rad);
-            const [x, y] = this.newPoint;
+            // 图片左上角在canvas坐标系中的坐标
+            // 只有变化坐标系原点的时候(org)才会发生imageApexPoint变化
+            const [x, y] = this.imageApexPointInCanvas;
+
+            // 求图片左上角在元素坐标系中的新坐标
+            // 每次旋转/缩放计算新坐标
+            const _point = this.switchCoordinateToStandard(this.imageApexPointInCanvas);
             const newPoint = [
-                this.org[0] + Math.cos(rad) * x - Math.sin(rad) * y,
-                this.org[1] + Math.sin(rad) * x + Math.cos(rad) * y
+                this.org[0] + _point[0],
+                this.org[1] + _point[1]
             ];
             this.$emit('update:point', newPoint);
-            context.fillRect(x, y, 100, 100);
+            // 把外部的偏移变成变化坐标系的xy变化
+            context.fillRect(this.offsetInCanvas[0] + x, this.offsetInCanvas[1] + y, 100, 100);
             // context.drawImage(this.img, 0, 0,this.img.width,this.img.height,x,y,this.img.width,this.img.height,);
             context.fillStyle = '#d10';
-            context.fillRect(-10, -10, 20, 20);
+            context.fillRect(-10/this.scale, -10/this.scale, 20/this.scale, 20/this.scale);
 
             context.restore();
         },
@@ -134,16 +181,16 @@ export default {
         changeAngle() {},
 
         onPanmove({ deltaX, deltaY }) {
-            const dx = deltaX / this.moveRate / this.scale;
-            const dy = deltaY / this.moveRate / this.scale;
-            const rad = (this.angle * Math.PI) / 180;
-            if (0 === rad % Math.PI) {
-                this.offsetX += dx;
-                this.offsetY += dy;
-            } else {
-                this.offsetX += Math.cos(rad) * dx + Math.sin(rad) * dy;
-                this.offsetY += -Math.sin(rad) * dx + Math.cos(rad) * dy;
-            }
+            // const dx = deltaX / this.moveRate / this.scale;
+            // const dy = deltaY / this.moveRate / this.scale;
+            // const rad = (this.angle * Math.PI) / 180;
+            // if (0 === rad % Math.PI) {
+            //     this.offsetX += dx;
+            //     this.offsetY += dy;
+            // } else {
+            //     this.offsetX += Math.cos(rad) * dx + Math.sin(rad) * dy;
+            //     this.offsetY += -Math.sin(rad) * dx + Math.cos(rad) * dy;
+            // }
 
             this.render();
         },
@@ -183,7 +230,31 @@ export default {
         /**
          * 棋盘
          */
+
         drawChessboard() {
+            const context = this.context;
+            const size = 10;
+            const count = [this.width / size, this.height / size];
+            const colorReverse = { '#fff': '#ddd', '#ddd': '#fff' };
+            context.save();
+            let color = '#ddd';
+            let rowStartColor = color;
+            for (let i = 0; i <= count[0]; i++) {
+                for (let j = 0; j < count[1]; j++) {
+                    context.fillStyle = color;
+                    const x = 0 + size * i;
+                    const y = 0 + size * j;
+                    context.fillRect(x, y, size, size);
+                    color = colorReverse[color];
+                }
+                rowStartColor = colorReverse[rowStartColor];
+                color = rowStartColor;
+            }
+            context.stroke();
+            context.restore();
+        },
+
+        drawChessboard1() {
             const context = this.context;
             const count = [40, Math.ceil((40 * this.height) / this.width)];
             const size = this.width / count[0];

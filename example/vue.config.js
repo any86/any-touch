@@ -9,7 +9,7 @@ module.exports = {
 
       alias: {
         '@any-touch': '../../../packages',
-        'any-event':'../../../packages/any-event/dist/index.es.js'
+        'any-event':'../../../packages/any-event/dist/index.js'
       }
     }
   }
