@@ -1,8 +1,18 @@
 <template>
     <article class="p-2">
         <ButtonLoadFile class="a-button a-button--primary" @loaded="onImageLoaded"></ButtonLoadFile>
-        <Crop :img="img" :point.sync="point" :org="org" :scale="scale" :angle="angle" :offset="offset" style="border:2px solid #643;"/>
-        <hr>
+        <Crop
+            ref="crop"
+            :width="width"
+            :img="img"
+            :point.sync="point"
+            :org="org"
+            :scale="scale"
+            :angle="angle"
+            :offset="offset"
+            style="border:2px solid #643;"
+        />
+        <hr />
         <label class="a-input">
             <input v-model.number="point[0]" type="range" />
             图片顶点X: {{point[0]}}
@@ -12,7 +22,7 @@
             图片顶点Y: {{point[1]}}
         </label>
 
-        <hr>
+        <hr />
         <!-- Offset -->
         <label class="a-input">
             <input v-model.number="offset[0]" type="range" />
@@ -22,13 +32,13 @@
             <input v-model.number="offset[1]" type="range" />
             OffsetY: {{offset[1]}}
         </label>
-        <hr>
+        <hr />
 
         <label class="a-input">
             <input v-model.number="scale" min="0.1" max="2" step="0.1" type="range" />
             Scale: {{scale}}
         </label>
-        <hr>
+        <hr />
 
         <label class="a-input">
             <input v-model.number="org[0]" type="range" />
@@ -56,18 +66,59 @@ export default {
     components: { ButtonLoadFile, Crop },
 
     data() {
-        return { context: null, img: null, org: [0, 0],angle:0 ,point:[0,0], scale:1,offset:[0,0]};
+        return { context: null, img: null, org: [0, 0], angle: 0, point: [0, 0], scale: 1, offset: [0, 0] ,width:300,};
+    },
+
+    computed:{
+        moveRate() {
+            return this.$refs.crop.$el?.offsetWidth / this.width;
+        },
     },
 
     methods: {
+        onPanmove({ deltaX, deltaY }) {
+            const [offsetX, offsetY] = this.offset;
+            this.offset = [offsetX+deltaX, offsetY+deltaY];
+        },
+
+        onRotatemove({deltaAngle}){
+            this.angle+= deltaAngle;
+        },
+
+        onPinchmove({deltaScale}){
+            this.scale=Math.round(this.scale * deltaScale * 100) / 100;
+        },
+
         onImageLoaded(e) {
             const { img } = e[0].source;
             this.img = img;
+        },
+
+        changeOrg({x,y}){
+            const rect = this.$refs.crop.$el.getBoundingClientRect();
+            const pointInEl = [(x-rect.left)/this.moveRate,(y-rect.top)/this.moveRate];
+            this.org = pointInEl;
         }
-    }
+    },
+
+    mounted(){
+        const at = new AnyTouch(this.$refs.crop.$el);
+        at.on('panmove', this.onPanmove.bind(this));
+        at.on('pinchstart', this.changeOrg.bind(this));
+        at.on('rotatestart', this.changeOrg.bind(this));
+        at.on('pinchmove', this.onPinchmove.bind(this));
+        at.on('rotatemove', this.onRotatemove.bind(this));
+        at.on('tap', this.changeOrg.bind(this));
+
+
+
+
+    },
 };
 </script>
 
 <style scope lang="scss">
-label{display: block;}
+label {
+    display: block;
+}
 </style>

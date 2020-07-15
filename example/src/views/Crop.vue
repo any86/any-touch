@@ -3,7 +3,6 @@
 </template>
 
 <script>
-import AnyTouch from '../../../packages/any-touch/dist/any-touch.umd';
 import loadImage from './loadImage';
 export default {
     name: 'Crop',
@@ -61,15 +60,6 @@ export default {
     computed: {
         rad() {
             return (this.angle * Math.PI) / 180;
-        },
-
-        moveRate() {
-            return this.$el?.offsetWidth / this.width;
-        },
-
-        _transfrom() {
-            const { scale, org, angle, point, offset } = this;
-            return { scale, org, angle, point, offset };
         }
     },
 
@@ -102,7 +92,6 @@ export default {
     },
 
     mounted() {
-        new AnyTouch(this.$el);
         this.context = this.$el.getContext('2d');
         this.imageApexPointInCanvas = this.getPositionInCanvas(this.point);
         this.offsetInCanvas = this.swtichCoordinateToCanvas(this.offset);
@@ -116,7 +105,7 @@ export default {
          * 元素坐标系下的坐标转换到canvas坐标系
          */
         swtichCoordinateToCanvas([x, y]) {
-            const rad = (this.angle * Math.PI) / 180;
+            const {rad} = this;
             return [
                 (Math.cos(rad) * x + Math.sin(rad) * y) / this.scale,
                 (-Math.sin(rad) * x + Math.cos(rad) * y) / this.scale
@@ -126,7 +115,7 @@ export default {
          * canvas坐标系坐标转到标准坐标系下
          */
         switchCoordinateToStandard([x, y]) {
-            const rad = (this.angle * Math.PI) / 180;
+            const {rad} = this;
             return [
                 (Math.cos(rad) * x - Math.sin(rad) * y) * this.scale,
                 (Math.sin(rad) * x + Math.cos(rad) * y) * this.scale
@@ -149,7 +138,7 @@ export default {
 
             const { context } = this;
             // 初始值
-            const rad = (this.angle * Math.PI) / 180;
+            const {rad} = this;
             context.clearRect(0, 0, this.width, this.height);
             this.drawChessboard();
 
@@ -171,31 +160,15 @@ export default {
             this.$emit('update:point', newPoint);
             // 把外部的偏移变成变化坐标系的xy变化
             context.fillRect(this.offsetInCanvas[0] + x, this.offsetInCanvas[1] + y, 100, 100);
-            // context.drawImage(this.img, 0, 0,this.img.width,this.img.height,x,y,this.img.width,this.img.height,);
+            // context.drawImage(this.img, 0, 0,this.img.width,this.img.height,this.offsetInCanvas[0] + x, this.offsetInCanvas[1] + y,this.img.width,this.img.height);
             context.fillStyle = '#d10';
             context.fillRect(-10/this.scale, -10/this.scale, 20/this.scale, 20/this.scale);
 
             context.restore();
         },
 
-        changeAngle() {},
 
-        onPanmove({ deltaX, deltaY }) {
-            // const dx = deltaX / this.moveRate / this.scale;
-            // const dy = deltaY / this.moveRate / this.scale;
-            // const rad = (this.angle * Math.PI) / 180;
-            // if (0 === rad % Math.PI) {
-            //     this.offsetX += dx;
-            //     this.offsetY += dy;
-            // } else {
-            //     this.offsetX += Math.cos(rad) * dx + Math.sin(rad) * dy;
-            //     this.offsetY += -Math.sin(rad) * dx + Math.cos(rad) * dy;
-            // }
 
-            this.render();
-        },
-
-        getPeak() {},
 
         drawRect() {
             const { width, height } = this.img;
