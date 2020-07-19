@@ -6,10 +6,10 @@
             :width="width"
             :img="img"
             :point.sync="point"
+            :offset.sync="offset"
             :org="org"
             :scale="scale"
             :angle="angle"
-            :offset="offset"
             style="border:2px solid #643;"
         />
         <hr />

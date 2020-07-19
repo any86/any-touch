@@ -72,11 +72,14 @@ export default {
             deep: true,
             handler() {
                 this.offsetInCanvas = this.swtichCoordinateToCanvas(this.offset);
+                
                 this.render();
             }
         },
 
         scale(){
+            const newOffset = this.switchCoordinateToStandard(this.offsetInCanvas);
+            this.$emit('update:offset', newOffset);
             this.render();
         },
 
@@ -87,6 +90,8 @@ export default {
         },
 
         angle(angle) {
+            this.$emit('update:offset', newOffset);
+            this.render();
             this.render();
         }
     },
@@ -158,6 +163,9 @@ export default {
                 this.org[1] + _point[1]
             ];
             this.$emit('update:point', newPoint);
+
+            
+
             // 把外部的偏移变成变化坐标系的xy变化
             context.fillRect(this.offsetInCanvas[0] + x, this.offsetInCanvas[1] + y, 100, 100);
             // context.drawImage(this.img, 0, 0,this.img.width,this.img.height,this.offsetInCanvas[0] + x, this.offsetInCanvas[1] + y,this.img.width,this.img.height);
