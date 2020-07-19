@@ -1,4 +1,4 @@
-<template>
+r<template>
     <main>
         <header>
             <a target="_new" href="https://github.com/any86/any-touch">
@@ -7,6 +7,7 @@
 
             <a class="link" target="_new" href="https://github.com/any86/any-touch">文档</a>
             <router-link class="link" to="/topology">拓扑图demo</router-link>
+e:             <router-link class="link" to="/diy">diy</router-link>
         </header>
         <article ref="panel" class="panel">
             <div
