@@ -1,5 +1,5 @@
 <template>
-    <canvas :width="width" :height="height"></canvas>
+    <canvas style="width:100%;" :width="width" :height="height"></canvas>
 </template>
 
 <script>
@@ -54,6 +54,8 @@ export default {
             // 图片左上角在canvas坐标系中的坐标
             imageApexPointInCanvas: null,
             offsetInCanvas:null,
+            imgWidth: null,
+            imgHeight:null,
         };
     },
 
@@ -64,7 +66,13 @@ export default {
     },
 
     watch: {
-        img() {
+        img(img) {
+            const {top,left,width,height} = this.getCenterRect(img.width, img.height, this.width,this.height);
+            this.offsetInCanvas = [left,top];
+            this.imgWidth = width;
+            this.imgHeight = height;
+            const newOffset = this.switchCoordinateToStandard(this.offsetInCanvas);
+            this.$emit('update:offset', newOffset);
             this.render();
         },
 
@@ -90,8 +98,6 @@ export default {
         },
 
         angle(angle) {
-            this.$emit('update:offset', newOffset);
-            this.render();
             this.render();
         }
     },
@@ -106,6 +112,32 @@ export default {
     },
 
     methods: {
+        /**
+         * 获取图片在canvas中的定位信息
+         * 让图片居中对齐
+         */
+        getCenterRect(width, height, viewWidth, viewHeight){
+            console.log({ viewWidth, viewHeight,width, height})
+            let rate = [width/viewWidth, height/viewHeight];
+            if(rate[0]>rate[1]){
+                const newHeight = Math.floor(viewWidth * height/width);
+                return {
+                    width:viewWidth,
+                    height : newHeight,
+                    top:(viewHeight - newHeight)/2,
+                    left:0
+                }
+            } else {
+                const newWidth = Math.floor(viewHeight * width/height);
+                return {
+                    width:newWidth,
+                    height :viewHeight,
+                    top:0,
+                    left:(viewWidth - newWidth) / 2
+                }
+            }
+        },
+
         /**
          * 元素坐标系下的坐标转换到canvas坐标系
          */
@@ -138,7 +170,7 @@ export default {
             return this.swtichCoordinateToCanvas([dx, dy]);
         },
 
-        render() {
+        render({width, height}={}) {
             if (!this.img) return;
 
             const { context } = this;
@@ -164,17 +196,17 @@ export default {
             ];
             this.$emit('update:point', newPoint);
 
-            
-
             // 把外部的偏移变成变化坐标系的xy变化
-            context.fillRect(this.offsetInCanvas[0] + x, this.offsetInCanvas[1] + y, 100, 100);
-            // context.drawImage(this.img, 0, 0,this.img.width,this.img.height,this.offsetInCanvas[0] + x, this.offsetInCanvas[1] + y,this.img.width,this.img.height);
+            // context.fillRect(this.offsetInCanvas[0] + x, this.offsetInCanvas[1] + y, 100, 100);
+            console.log(this.offsetInCanvas[0] + x, this.offsetInCanvas[1] + y,this.imgWidth, this.imgHeight)
+            context.drawImage(this.img, 
+            0, 0,this.img.width,this.img.height,
+            this.offsetInCanvas[0] + x, this.offsetInCanvas[1] + y,this.imgWidth, this.imgHeight);
             context.fillStyle = '#d10';
             context.fillRect(-10/this.scale, -10/this.scale, 20/this.scale, 20/this.scale);
 
             context.restore();
         },
-
 
 
 

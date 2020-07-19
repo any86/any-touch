@@ -4,15 +4,17 @@
         <Crop
             ref="crop"
             :width="width"
+            :height="height"
             :img="img"
             :point.sync="point"
             :offset.sync="offset"
             :org="org"
             :scale="scale"
             :angle="angle"
-            style="border:2px solid #643;"
+            class="mt-2"
+            style="border:1px solid #69c;"
         />
-        <hr />
+        <hr  class="mt-2" />
         <label class="a-input">
             <input v-model.number="point[0]" type="range" />
             图片顶点X: {{point[0]}}
@@ -21,8 +23,7 @@
             <input v-model.number="point[1]" type="range" />
             图片顶点Y: {{point[1]}}
         </label>
-
-        <hr />
+<hr  class="mt-2"/>
         <!-- Offset -->
         <label class="a-input">
             <input v-model.number="offset[0]" type="range" />
@@ -32,13 +33,7 @@
             <input v-model.number="offset[1]" type="range" />
             OffsetY: {{offset[1]}}
         </label>
-        <hr />
-
-        <label class="a-input">
-            <input v-model.number="scale" min="0.1" max="2" step="0.1" type="range" />
-            Scale: {{scale}}
-        </label>
-        <hr />
+        <hr  class="mt-2" />
 
         <label class="a-input">
             <input v-model.number="org[0]" type="range" />
@@ -47,6 +42,11 @@
         <label class="a-input">
             <input v-model.number="org[1]" type="range" />
             OY:{{org[1]}}
+        </label>
+        
+        <label class="a-input">
+            <input v-model.number="scale" min="0.1" max="2" step="0.1" type="range" />
+            Scale: {{scale}}
         </label>
         <label class="a-input">
             <input v-model.number="angle" type="range" max="360" />
@@ -66,7 +66,16 @@ export default {
     components: { ButtonLoadFile, Crop },
 
     data() {
-        return { context: null, img: null, org: [0, 0], angle: 0, point: [0, 0], scale: 1, offset: [0, 0] ,width:300,};
+        return { 
+            context: null, 
+            img: null, 
+            org: [150, 150], 
+            angle: 0, 
+            point: [0, 0], 
+            scale: 1, 
+            offset: [0, 0] ,
+            width:300,
+            height:300};
     },
 
     computed:{
@@ -76,9 +85,12 @@ export default {
     },
 
     methods: {
+
+
+
         onPanmove({ deltaX, deltaY }) {
             const [offsetX, offsetY] = this.offset;
-            this.offset = [offsetX+deltaX, offsetY+deltaY];
+            this.offset = [offsetX+deltaX/this.moveRate, offsetY+deltaY/this.moveRate];
         },
 
         onRotatemove({deltaAngle}){
@@ -92,6 +104,7 @@ export default {
         onImageLoaded(e) {
             const { img } = e[0].source;
             this.img = img;
+            // const rect = this.getCenterRect(img.width, img.height,this.width,this.height);
         },
 
         changeOrg({x,y}){
@@ -102,6 +115,9 @@ export default {
     },
 
     mounted(){
+
+
+        
         const at = new AnyTouch(this.$refs.crop.$el);
         at.on('panmove', this.onPanmove.bind(this));
         at.on('pinchstart', this.changeOrg.bind(this));
@@ -109,9 +125,6 @@ export default {
         at.on('pinchmove', this.onPinchmove.bind(this));
         at.on('rotatemove', this.onRotatemove.bind(this));
         at.on('tap', this.changeOrg.bind(this));
-
-
-
 
     },
 };

@@ -7,7 +7,7 @@ r<template>
 
             <a class="link" target="_new" href="https://github.com/any86/any-touch">文档</a>
             <router-link class="link" to="/topology">拓扑图demo</router-link>
-e:             <router-link class="link" to="/diy">diy</router-link>
+            <router-link class="link" to="/diy">diy</router-link>
         </header>
         <article ref="panel" class="panel">
             <div
@@ -74,7 +74,7 @@ e:             <router-link class="link" to="/diy">diy</router-link>
 function C(text, bgColor = '#000', color = '#fff') {
     console.log(`%c${text}`, `color:${color};background-color:${bgColor};padding:2px 6px;border-radius:4px;`);
 }
-import AnyTouch from '../../../packages/any-touch/dist/index.js';
+import AnyTouch from '../../../packages/any-touch/dist/any-touch.umd';
 export default {
     name: 'Home',
     data() {
