@@ -28,7 +28,6 @@
         "test:q": "jest --collectCoverage false",
         "size": "node ./scripts/calcSize",
         "test-no-cache": "jest --no-cache",
-        "release:demo": "node ./scripts/demo.js",
         "removeAll": "rimraf ./node_modules",
         "commit": "git-cz",
         "version": "standard-version"
