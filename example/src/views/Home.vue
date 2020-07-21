@@ -6,8 +6,8 @@ r<template>
             </a>
 
             <a class="link" target="_new" href="https://github.com/any86/any-touch">文档</a>
-            <router-link class="link" to="/topology">拓扑图demo</router-link>
-            <router-link class="link" to="/diy">diy</router-link>
+            <router-link class="link" to="/topology">拓扑图</router-link>
+            <router-link class="link" to="/diy">canvas</router-link>
         </header>
         <article ref="panel" class="panel">
             <div
