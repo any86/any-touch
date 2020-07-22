@@ -1,4 +1,3 @@
-import * as d3 from 'd3';
 export const dataset = {
     "name": "顶级",
     value: 99,

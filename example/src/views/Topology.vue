@@ -32,7 +32,7 @@
             >
                 <body xmlns="http://www.w3.org/1999/xhtml">
                     <div class="text">
-                        <p>{{node.hidden}} 节点层级: {{node.depth}}</p>
+                        <p>节点层级: {{node.depth}}</p>
                         <p>节点顺序: {{index}}</p>
                     </div>
                 </body>
@@ -50,7 +50,8 @@
 import {hierarchy, tree} from 'd3-hierarchy'
 import {linkHorizontal} from 'd3-shape'
 import AnyTouch from '../../../packages/any-touch/dist/any-touch.umd';
-import { dataset, animate } from './topology';
+import { dataset, animate } from './utils';
+// console.log({hierarchy, tree,linkHorizontal,AnyTouch,dataset,animate})
 const pointsGroup = [];
 const paths = [];
 export default {
