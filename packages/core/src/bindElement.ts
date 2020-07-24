@@ -18,27 +18,19 @@ const TOUCH_EVENT_NAMES = [TOUCH_START, TOUCH_MOVE, TOUCH_END, TOUCH_CANCEL];
 * 根据输入设备绑定事件
 */
 export default function (el: HTMLElement, callback: (ev: SupportEvent) => void, options?: boolean | AddEventListenerOptions): () => void {
-    // Touch
-    if (SUPPORT_TOUCH) {
-        // https://stackoverflow.com/questions/55092588/typescript-addeventlistener-set-event-type
+    // https://stackoverflow.com/questions/55092588/typescript-addeventlistener-set-event-type
+    TOUCH_EVENT_NAMES.forEach((eventName) => {
+        el.addEventListener(eventName, callback, options);
+    });
+    el.addEventListener(MOUSE_DOWN, callback, options);
+    window.addEventListener(MOUSE_MOVE, callback, options);
+    window.addEventListener(MOUSE_UP, callback, options);
+    return () => {
         TOUCH_EVENT_NAMES.forEach((eventName) => {
-            el.addEventListener(eventName, callback, options);
+            el.removeEventListener(eventName, callback);
         });
-        return () => {
-            TOUCH_EVENT_NAMES.forEach((eventName) => {
-                el.removeEventListener(eventName, callback);
-            });
-        };
-    }
-    // Mouse
-    else {
-        el.addEventListener(MOUSE_DOWN, callback, options);
-        window.addEventListener(MOUSE_MOVE, callback, options);
-        window.addEventListener(MOUSE_UP, callback, options);
-        return () => {
-            el.removeEventListener(MOUSE_DOWN, callback);
-            window.removeEventListener(MOUSE_MOVE, callback);
-            window.removeEventListener(MOUSE_UP, callback);
-        };
-    }
+        el.removeEventListener(MOUSE_DOWN, callback);
+        window.removeEventListener(MOUSE_MOVE, callback);
+        window.removeEventListener(MOUSE_UP, callback);
+    };
 }
