@@ -4,6 +4,7 @@
 
 <script>
 import loadImage from './loadImage';
+
 export default {
     name: 'Crop',
 
