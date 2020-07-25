@@ -2,7 +2,10 @@ r<template>
     <main>
         <header>
             <a target="_new" href="https://github.com/any86/any-touch">
-                <img width="100" src="https://img.shields.io/github/stars/any86/any-touch?style=social"/>
+                <img
+                    width="100"
+                    src="https://img.shields.io/github/stars/any86/any-touch?style=social"
+                />
             </a>
 
             <a class="link" target="_new" href="https://github.com/any86/any-touch">文档</a>
@@ -36,7 +39,7 @@ r<template>
         </article>
 
         <article class="info">
-            <template  v-if="data.type">
+            <template v-if="data.type">
                 <h1>{{data.type}}</h1>
                 <table>
                     <tr align="left">
@@ -44,26 +47,26 @@ r<template>
                         <th>值</th>
                         <th>说明</th>
                     </tr>
-                    <tr  v-if="data[key]" v-for="{key,desc} in map"  :key="key">
-                        <td>{{key}}</td>
-                        <td>{{data[key]}}</td>
-                        <td>{{desc}}</td>
-
-                    </tr>
-                </table>  
+                    <template v-for="{key,desc} in map">
+                        <tr  v-if="data[key]" :key="key">
+                            <td>{{key}}</td>
+                            <td>{{data[key]}}</td>
+                            <td>{{desc}}</td>
+                        </tr>
+                    </template>
+                </table>
             </template>
             <h1 v-else>👋请拖拽 / 点击 / 按压 / 划 / 缩放 / 旋转</h1>
-        <span class="btn-add" @click="add">添加一个(第{{styles.length+1}}个)</span>
-
+            <span class="btn-add" @click="add">添加一个(第{{styles.length+1}}个)</span>
         </article>
 
         <p class="tip">
             👋 支持6类手势:
-            <span >tap(点击)</span>
+            <span>tap(点击)</span>
             <span>press(按)</span>
             <span>pan(拖拽)</span>
-            <span >swipe(划)</span>
-            <span >pinch(捏合)</span>
+            <span>swipe(划)</span>
+            <span>pinch(捏合)</span>
             <span>rotate(旋转)</span>
         </p>
     </main>
@@ -80,7 +83,7 @@ export default {
     data() {
         return {
             map: [
-                {key:'baseType', desc: '基础事件名'},
+                { key: 'baseType', desc: '基础事件名' },
                 { key: 'x', desc: '触点中心X坐标' },
                 { key: 'y', desc: '触点中心Y坐标' },
                 { key: 'deltaX', desc: 'X轴位移增量' },
@@ -97,22 +100,20 @@ export default {
                 { key: 'deltaScale', desc: '每次触发pinch的缩放增量' },
                 { key: 'scale', desc: '一个识别周期pinch的累计缩放量' },
                 { key: 'deltaAngle', desc: '每次触发rotate的选装增量' },
-                { key: 'angle', desc: '一个识别周期rotate的累计选装量' }
+                { key: 'angle', desc: '一个识别周期rotate的累计选装量' },
             ],
             action: '',
             data: {},
             styles: [
                 { left: `50px`, top: `160px`, zIndex: 1, scale: 1, angle: 0 },
                 { left: `50px`, top: `320px`, zIndex: 1, scale: 1, angle: 0 },
-                { left: `50px`, top: `480px`, zIndex: 1, scale: 1, angle: 0 }
+                { left: `50px`, top: `480px`, zIndex: 1, scale: 1, angle: 0 },
             ],
         };
     },
 
     mounted() {
-
-
-        const at = new AnyTouch(this.$refs.panel, {isPreventDefault:true});
+        const at = new AnyTouch(this.$refs.panel, { isPreventDefault: true });
         // at.on('tap', ev=>{
         //     console.warn('tap')
         // })
@@ -127,42 +128,40 @@ export default {
     },
 
     methods: {
-        add(){
+        add() {
             const style = { left: `50px`, top: `160px`, zIndex: 1, scale: 1, angle: 0 };
             this.styles.push(style);
         },
-        onAfter(ev){
+        onAfter(ev) {
             ev.currentTarget.setAttribute('at', ev.baseType);
         },
         onTouch(ev) {
             // console.log('html:', ev.target.innerHTML);
             ev.currentTarget.setAttribute('at-stage', ev.inputType);
-
         },
         afterEach(ev) {
             this.action = ev.baseType;
             this.$set(this, 'data', ev);
         },
-        onRotate(ev, index=0) {
+        onRotate(ev, index = 0) {
             // if(ev.isMatch() ) return;
             // console.log(`deltaAngle:${ev.deltaAngle}`,ev.inputType,ev.pointLength)
             this.styles[index].angle += ev.deltaAngle;
         },
 
-        onPinch(ev, index=0) {
-                        // if(ev.isMatch() ) return;
-
+        onPinch(ev, index = 0) {
+            // if(ev.isMatch() ) return;
 
             // console.log(`deltaScale:${ev.deltaScale}`,ev.inputType,ev.pointLength)
             this.styles[index].scale = Math.round(this.styles[index].scale * ev.deltaScale * 100) / 100;
         },
 
-        onRotate1(ev, index=1) {
+        onRotate1(ev, index = 1) {
             // console.log(`deltaAngle:${ev.deltaAngle}`,ev.inputType,ev.pointLength)
             this.styles[index].angle += ev.deltaAngle;
         },
 
-        onPinch1(ev, index=1) {
+        onPinch1(ev, index = 1) {
             // console.log(`deltaScale:${ev.deltaScale}`,ev.inputType,ev.pointLength)
             this.styles[index].scale = Math.round(this.styles[index].scale * ev.deltaScale * 100) / 100;
         },
@@ -175,7 +174,6 @@ export default {
         onPress(ev) {
             C(ev.type, '#710');
         },
-
 
         onSwipe({ speedX, speedY }, index) {
             this.styles[index].top = Math.round(parseInt(this.styles[index].top) + speedY * 120) + 'px';
@@ -195,10 +193,8 @@ export default {
             this.styles[index].left = parseInt(this.styles[index].left) + ev.deltaX + 'px';
         },
 
-        onPandown(ev,index){
-            console.warn(ev)
-        }
-    }
+        onPandown(ev, index) {},
+    },
 };
 </script>
 
@@ -235,17 +231,17 @@ main {
     background-color: #eee;
     height: 100vh;
     width: 100%;
-    >header{
-        display:flex;
-        align-items:center;
-        padding:16px;
-        background:#fff;
-        box-shadow:1px 2px 8px rgba(0,0,0,.1);
-        .link{
-            font-size:16px;
-            line-height:12px;
-            color:#69c;
-            margin-left:16px;
+    > header {
+        display: flex;
+        align-items: center;
+        padding: 16px;
+        background: #fff;
+        box-shadow: 1px 2px 8px rgba(0, 0, 0, 0.1);
+        .link {
+            font-size: 16px;
+            line-height: 12px;
+            color: #69c;
+            margin-left: 16px;
             text-decoration: none;
         }
     }
@@ -270,13 +266,12 @@ main {
                 rgba(1, 206, 2, 0.8),
                 rgba(52, 4, 44, 0.8),
                 rgba(219, 66, 140, 0.8),
-                rgba(66, 66, 1, 0.8),
-
+                rgba(66, 66, 1, 0.8)
             );
 
-            @for $i from 1 through 10{
+            @for $i from 1 through 10 {
                 &:nth-of-type(10n + #{$i}) {
-                    background-color: nth($colors,$i);
+                    background-color: nth($colors, $i);
                 }
             }
 
@@ -305,29 +300,37 @@ main {
         border-radius: 4px;
         padding: 16px;
         margin: 16px;
-        min-height:80vh;
-        h1{padding:8px;}
-        tr{ 
-            td,th{padding:6px 8px;font-size:16px;}
+        min-height: 80vh;
+        h1 {
+            padding: 8px;
+        }
+        tr {
+            td,
+            th {
+                padding: 6px 8px;
+                font-size: 16px;
+            }
         }
 
-            .btn-add{
-        color:#fff;
-        padding:16px;
-        position:absolute;
-        background-color:#69c;border-radius:4px;
-        z-index:1986;right:16px;bottom:16px;
-        box-shadow:0 2px 8px rgba(0,0,0,0.3);
-        &:hover{
-            cursor: pointer;
+        .btn-add {
+            color: #fff;
+            padding: 16px;
+            position: absolute;
+            background-color: #69c;
+            border-radius: 4px;
+            z-index: 1986;
+            right: 16px;
+            bottom: 16px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+            &:hover {
+                cursor: pointer;
+            }
+            &:active {
+            }
         }
-        &:active{
-        }
-    }
     }
 
     .tip {
-        
         color: #000;
         font-size: 14px;
         padding: 16px 24px;
@@ -341,6 +344,5 @@ main {
             }
         }
     }
-
 }
 </style>

@@ -73,7 +73,7 @@ export default class AnyTouch extends AnyEvent {
         this.el = el;
 
         // 适配器
-        this.input = new InputFactory();
+        this.input = new InputFactory(el);
         this.options = { ...DEFAULT_OPTIONS, ...options };
 
         // 同步到插件到实例

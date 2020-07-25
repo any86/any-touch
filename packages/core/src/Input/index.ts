@@ -13,17 +13,19 @@ export default class {
     public activeInput?: PureInput;
     public startInput?: PureInput;
     public startMultiInput?: PureInput;
-
-    constructor() {
+    public el?:HTMLElement;
+    constructor(el?:HTMLElement) {
         const Input = SUPPORT_TOUCH ? Touch : Mouse;
         this.adapter = new Input();
         this.id = 0;
+        this.el = el;
     };
 
     public transform(event: SupportEvent): Input | void {
+
         this.prevInput = this.activeInput;
         // 从event中采集的数据
-        const baseInputWithoutId = this.adapter.load(event);
+        const baseInputWithoutId = this.adapter.load(event,this.el);
         if (void 0 !== baseInputWithoutId) {
             // 过滤第一个点非绑定元素, 但是第二个触点是绑定元素的情况
             // 不然会错误的触发pinch/rotate等多指操作

@@ -7,6 +7,7 @@ function ComputeVectorForMutli() {
         if (void 0 !== startMultiInput &&
             void 0 !== prevInput &&
             input.id !== startMultiInput.id &&
+            1 < prevInput.pointLength &&
             1 < input.pointLength) {
             // 2指形成的向量
             return {
