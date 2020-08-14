@@ -17,7 +17,6 @@ interface EmitBeforeHook {
     (options?: { target?: SupportTarget }): boolean;
 }
 
-
 export default class <Payload = any> {
     listenersMap: ListenersMap = {};
     // beforeEachHook?: BeforeEachHook;
@@ -35,15 +34,18 @@ export default class <Payload = any> {
      * @param {String|Symbol} 事件名
      * @param {Function} 回调函数
      */
-    on(eventName: string, listener: Listener, { target }: { target?: SupportTarget } = {}): void {
-        if (void 0 === this.listenersMap[eventName]) {
-            this.listenersMap[eventName] = [];
+    on(eventName: string | string[], listener: Listener, { target }: { target?: SupportTarget } = {}): void {
+        const eventNames = Array.isArray(eventName) ? eventName : [eventName];
+        for (const name of eventNames) {
+            if (void 0 === this.listenersMap[name]) {
+                this.listenersMap[name] = [];
+            }
+            //  备注targets信息
+            if (void 0 !== target) {
+                listener.target = target;
+            }
+            this.listenersMap[name].push(listener);
         }
-        //  备注targets信息
-        if (void 0 !== target) {
-            listener.target = target;
-        }
-        this.listenersMap[eventName].push(listener);
     };
 
     /**
