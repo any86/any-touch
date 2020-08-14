@@ -11,11 +11,6 @@ const routes = [
         component: Home
     },
     {
-        path: '/diy',
-        name: 'diy',
-        component: () => import('../views/DIY')
-    },
-    {
         path: '/topology',
         name: 'Topology',
         component: () => import('../views/Topology.vue')

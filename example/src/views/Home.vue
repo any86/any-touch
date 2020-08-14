@@ -1,5 +1,5 @@
-r<template>
-    <main>
+<template>
+    <main class="ovh">
         <header>
             <a target="_new" href="https://github.com/any86/any-touch">
                 <img
@@ -9,8 +9,8 @@ r<template>
             </a>
 
             <a class="link" target="_new" href="https://github.com/any86/any-touch">文档</a>
-            <router-link class="link" to="/topology">拓扑图</router-link>
-            <router-link class="link" to="/diy">canvas</router-link>
+            <router-link class="link" to="/topology">SVG</router-link>
+            <a class="link" href="https://any86.github.io/photo-touch">canvas</a>
         </header>
         <article ref="panel" class="panel">
             <div
@@ -38,7 +38,7 @@ r<template>
             </div>
         </article>
 
-        <article class="info">
+        <article class="info p-2 mt-6">
             <template v-if="data.type">
                 <h1>{{data.type}}</h1>
                 <table>
@@ -48,7 +48,7 @@ r<template>
                         <th>说明</th>
                     </tr>
                     <template v-for="{key,desc} in map">
-                        <tr  v-if="data[key]" :key="key">
+                        <tr v-if="data[key]" :key="key">
                             <td>{{key}}</td>
                             <td>{{data[key]}}</td>
                             <td>{{desc}}</td>
@@ -56,19 +56,19 @@ r<template>
                     </template>
                 </table>
             </template>
-            <h1 v-else>👋请拖拽 / 点击 / 按压 / 划 / 缩放 / 旋转</h1>
+
+            <div v-else class="info__tip">
+                <b class="mb-1">👋 支持: </b>
+                <span>tap(点击)</span>
+                <span>press(按)</span>
+                <span>pan(拖拽)</span>
+                <span>swipe(划)</span>
+                <span>pinch(捏合)</span>
+                <span>rotate(旋转)</span>
+            </div>
+
             <span class="btn-add" @click="add">添加一个(第{{styles.length+1}}个)</span>
         </article>
-
-        <p class="tip">
-            👋 支持6类手势:
-            <span>tap(点击)</span>
-            <span>press(按)</span>
-            <span>pan(拖拽)</span>
-            <span>swipe(划)</span>
-            <span>pinch(捏合)</span>
-            <span>rotate(旋转)</span>
-        </p>
     </main>
 </template>
 
@@ -114,16 +114,6 @@ export default {
 
     mounted() {
         const at = new AnyTouch(this.$refs.panel, { isPreventDefault: true });
-        // at.on('tap', ev=>{
-        //     console.warn('tap')
-        // })
-        // at.target(this.$refs.circle[0]).on('pinch', this.onPinch);
-        // at.target(this.$refs.circle[0]).on('rotate', this.onRotate);
-        // at.target(this.$refs.circle[1]).on('pinch', this.onPinch1);
-        // at.target(this.$refs.circle[1]).on('rotate', this.onRotate1);
-        // at.target(this.$refs.circle[0]).on('panmove', e=>{
-        //     this.onPanmove(e,0)
-        // });
         at.on('at:after', this.afterEach);
     },
 
@@ -133,6 +123,7 @@ export default {
             this.styles.push(style);
         },
         onAfter(ev) {
+            console.log(ev)
             ev.currentTarget.setAttribute('at', ev.baseType);
         },
         onTouch(ev) {
@@ -225,18 +216,18 @@ body {
 }
 
 main {
-    // overflow: hidden;
     position: relative;
     z-index: 1;
-    background-color: #eee;
     height: 100vh;
     width: 100%;
-    > header {
+    header {
+        position: fixed;
         display: flex;
         align-items: center;
         padding: 16px;
         background: #fff;
         box-shadow: 1px 2px 8px rgba(0, 0, 0, 0.1);
+        width: 100%;
         .link {
             font-size: 16px;
             line-height: 12px;
@@ -246,7 +237,7 @@ main {
         }
     }
 
-    > .panel {
+    .panel {
         .circle {
             position: absolute;
             border-radius: 4px;
@@ -293,14 +284,25 @@ main {
         }
     }
 
-    > .info {
+    .info {
         box-sizing: border-box;
-        background-color: #fff;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        border-radius: 4px;
-        padding: 16px;
-        margin: 16px;
         min-height: 80vh;
+
+        &__tip {
+            color: #000;
+            font-size: 16px;
+            padding: 16px 24px;
+            span {
+                &:after {
+                    content: ' / ';
+                }
+
+                &.active {
+                    color: #f10;
+                }
+            }
+        }
+
         h1 {
             padding: 8px;
         }
@@ -314,33 +316,23 @@ main {
 
         .btn-add {
             color: #fff;
+            display: inline-block;
             padding: 16px;
             position: absolute;
-            background-color: #69c;
-            border-radius: 4px;
+            background-color: #dc3545;
+            border-radius: 999px;
             z-index: 1986;
-            right: 16px;
+            left: 50%;
             bottom: 16px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+            transform: translateX(-50%);
+            box-shadow: 1px  2px 20px rgba(139, 8, 8, 0.589);
             &:hover {
                 cursor: pointer;
             }
             &:active {
-            }
-        }
-    }
-
-    .tip {
-        color: #000;
-        font-size: 14px;
-        padding: 16px 24px;
-        span {
-            &:after {
-                content: ' / ';
-            }
-
-            &.active {
-                color: #f10;
+                transition: all 500ms;
+                background-color: #dc3546a4;
+                box-shadow: none;
             }
         }
     }
