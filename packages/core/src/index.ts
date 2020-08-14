@@ -23,6 +23,7 @@ export interface Options {
     isPreventDefault?: boolean;
     // 不阻止默认行为的白名单
     preventDefaultExclude?: RegExp | ((ev: SupportEvent) => boolean);
+    device?: 'Touch'|'Mouse'
 }
 
 // 默认设置
@@ -101,7 +102,7 @@ export default class AnyTouch extends AnyEvent {
                 window.addEventListener('_', () => void 0, opts);
             } catch{ }
             // 绑定元素
-            this.on('unbind', bindElement(el, this.catchEvent.bind(this), !this.options.isPreventDefault && supportsPassive ? { passive: true } : false));
+            this.on('unbind', bindElement(el, this.catchEvent.bind(this), !this.options.isPreventDefault && supportsPassive ? { passive: true } : false, this.options.device));
         }
     }
 
