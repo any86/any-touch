@@ -18,9 +18,9 @@ export default class extends Recognizer {
      * @param {AnyTouchEvent} 计算数据
      */
     test(input: Input): boolean {
-        const { inputType } = input;
+        const { stage } = input;
         // 非end阶段, 开始校验数据
-        if (INPUT_END !== inputType) return false;
+        if (INPUT_END !== stage) return false;
         const { velocityX, velocityY, maxPointLength, distance } = this.computed;
         return this.options.pointLength === maxPointLength &&
             this.options.threshold < distance &&

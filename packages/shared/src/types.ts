@@ -8,12 +8,12 @@ export type SupportEvent = MouseEvent | TouchEvent;
 
 export interface PointClientXY { target: EventTarget | null, clientX: number, clientY: number };
 // 输入类型
-export type InputType = 'start' | 'move' | 'end' | 'cancel';
+export type stage = 'start' | 'move' | 'end' | 'cancel';
 
 // 事件统一变形
 export interface BaseInput {
     readonly id: number;
-    readonly inputType: InputType;
+    readonly stage: stage;
     readonly changedPoints: PointClientXY[];
     readonly points: PointClientXY[];
     readonly target: EventTarget | null;

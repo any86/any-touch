@@ -127,7 +127,7 @@ export default {
         },
         onTouch(ev) {
             // console.log('html:', ev.target.innerHTML);
-            ev.currentTarget.setAttribute('at-stage', ev.inputType);
+            ev.currentTarget.setAttribute('at-stage', ev.stage);
         },
         afterEach(ev) {
             this.action = ev.baseType;
@@ -135,24 +135,24 @@ export default {
         },
         onRotate(ev, index = 0) {
             // if(ev.isMatch() ) return;
-            // console.log(`deltaAngle:${ev.deltaAngle}`,ev.inputType,ev.pointLength)
+            // console.log(`deltaAngle:${ev.deltaAngle}`,ev.stage,ev.pointLength)
             this.styles[index].angle += ev.deltaAngle;
         },
 
         onPinch(ev, index = 0) {
             // if(ev.isMatch() ) return;
 
-            // console.log(`deltaScale:${ev.deltaScale}`,ev.inputType,ev.pointLength)
+            // console.log(`deltaScale:${ev.deltaScale}`,ev.stage,ev.pointLength)
             this.styles[index].scale = Math.round(this.styles[index].scale * ev.deltaScale * 100) / 100;
         },
 
         onRotate1(ev, index = 1) {
-            // console.log(`deltaAngle:${ev.deltaAngle}`,ev.inputType,ev.pointLength)
+            // console.log(`deltaAngle:${ev.deltaAngle}`,ev.stage,ev.pointLength)
             this.styles[index].angle += ev.deltaAngle;
         },
 
         onPinch1(ev, index = 1) {
-            // console.log(`deltaScale:${ev.deltaScale}`,ev.inputType,ev.pointLength)
+            // console.log(`deltaScale:${ev.deltaScale}`,ev.stage,ev.pointLength)
             this.styles[index].scale = Math.round(this.styles[index].scale * ev.deltaScale * 100) / 100;
         },
 

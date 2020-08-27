@@ -4,7 +4,7 @@
 delete window.ontouchstart;
 
 import bindElement from '../src/bindElement';
-import Mouse from '../src/Input/adapters/Mouse';
+import Mouse from '../src/Input/Mouse';
 
 import { GestureSimulator, sleep } from '@any-touch/simulator';
 

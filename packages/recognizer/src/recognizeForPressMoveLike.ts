@@ -14,7 +14,7 @@ import {
 } from '@any-touch/shared'
 import resetStatus from './resetStatusForPressMoveLike';
 
-function flow(isVaild: boolean, activeStatus: SupportStatus, inputType: string): SupportStatus {
+function flow(isVaild: boolean, activeStatus: SupportStatus, stage: string): SupportStatus {
     const STATE_MAP: { [k: number]: any } = {
         // isVaild === true,
         // Number(true) === 1
@@ -56,7 +56,7 @@ function flow(isVaild: boolean, activeStatus: SupportStatus, inputType: string):
         }
     };
     if (void 0 !== STATE_MAP[Number(isVaild)][activeStatus]) {
-        return STATE_MAP[Number(isVaild)][activeStatus][inputType] || activeStatus;
+        return STATE_MAP[Number(isVaild)][activeStatus][stage] || activeStatus;
     } else {
         return activeStatus;
     }
@@ -73,20 +73,20 @@ function flow(isVaild: boolean, activeStatus: SupportStatus, inputType: string):
 export default function (recognizer: Recognizer, input: Input, emit: CommonEmitFunction): boolean {
     // 是否识别成功
     const isVaild = recognizer.test(input);
-    // console.log({isVaild},input.inputType,recognizer.name)
+    // console.log({isVaild},input.stage,recognizer.name)
     resetStatus(recognizer);
 
     // 状态变化流程
-    const { inputType } = input;
+    const { stage } = input;
 
-    recognizer.status = flow(isVaild, recognizer.status, inputType);
+    recognizer.status = flow(isVaild, recognizer.status, stage);
     const { computed } = recognizer;
 
     // 是否已识别, 包含end
     recognizer.isRecognized = ([STATUS_START, STATUS_MOVE] as SupportStatus[]).includes(recognizer.status);
 
     const { name, status, isRecognized } = recognizer;
-    // if('pan' == name) console.warn(status,inputType,{isRecognized,isVaild},input.pointLength)
+    // if('pan' == name) console.warn(status,stage,{isRecognized,isVaild},input.pointLength)
     // 识别后触发的事件
     if (isRecognized) {
         emit(name, computed);

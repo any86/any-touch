@@ -1,8 +1,9 @@
 /**
+ * event(Mouse|Touch) => Input => Computed => AnyTouchEvent
  * 构造统一的Input格式
  */
-import { BaseInput, PureInput, Input, SupportEvent, Point } from '@any-touch/shared';
-import { SUPPORT_TOUCH, CLIENT_X, CLIENT_Y, INPUT_START, INPUT_CANCEL, INPUT_END } from '@any-touch/shared';
+import type { BaseInput, PureInput, Input, Point } from '@any-touch/shared';
+import { CLIENT_X, CLIENT_Y, INPUT_START, INPUT_CANCEL, INPUT_END } from '@any-touch/shared';
 export default function () {
     let id = 0;
     let prevInput: PureInput | undefined;
@@ -11,15 +12,9 @@ export default function () {
     let startMultiInput: PureInput | undefined;
 
     return function (baseInputWithoutId: Omit<BaseInput, 'id'>): Input | void {
-
         prevInput = activeInput;
         // 从event中采集的数据
         if (void 0 !== baseInputWithoutId) {
-            // 过滤第一个点非绑定元素, 但是第二个触点是绑定元素的情况
-            // 不然会错误的触发pinch/rotate等多指操作
-            // !!!后续考虑是否仅仅排除错误的触点, 而保留本次事件部分数据
-            // if (hasTouchTargetOutOfCurrentTarget(baseInputWithoutId)) return;
-
             id = Number.MAX_SAFE_INTEGER > id ? ++id : 1
             const baseInput = { ...baseInputWithoutId, id };
 
@@ -72,10 +67,10 @@ function getCenter(points: { clientX: number, clientY: number }[]): Point | void
 
 
 function extendInput(inputBase: BaseInput): Omit<Input, 'prevInput' | 'startInput' | 'startMultiInput'> {
-    const { inputType, points, changedPoints, nativeEvent } = inputBase;
+    const { stage, points, changedPoints, nativeEvent } = inputBase;
     const pointLength = points.length;
-    const isStart = INPUT_START === inputType;
-    const isEnd = (INPUT_END === inputType && 0 === pointLength) || INPUT_CANCEL === inputType;
+    const isStart = INPUT_START === stage;
+    const isEnd = (INPUT_END === stage && 0 === pointLength) || INPUT_CANCEL === stage;
     // 当前时间
     const timestamp = Date.now();
     // 触点中心

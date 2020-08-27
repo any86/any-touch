@@ -12,9 +12,9 @@ function computeDistance() {
     let overallDirection: directionString = NONE;
 
     return function (input: Input): { displacementX: number, displacementY: number, distanceX: number, distanceY: number, distance: number, overallDirection: directionString } {
-        const { inputType, startInput } = input;
+        const { stage, startInput } = input;
 
-        if (INPUT_START === inputType) {
+        if (INPUT_START === stage) {
             displacementX = 0;
             displacementY = 0;
             distanceX = 0;
@@ -23,7 +23,7 @@ function computeDistance() {
             overallDirection = NONE;
         }
 
-        else if (INPUT_MOVE === inputType) {
+        else if (INPUT_MOVE === stage) {
             displacementX = Math.round(input.points[0][CLIENT_X] - startInput.points[0][CLIENT_X]);
             displacementY = Math.round(input.points[0][CLIENT_Y] - startInput.points[0][CLIENT_Y]);
             distanceX = Math.abs(displacementX);
@@ -48,8 +48,8 @@ export default computeDistance;
 //     overallDirection: directionString = NONE;
 
 //     compute(input: Input): { displacementX: number, displacementY: number, distanceX: number, distanceY: number, distance: number, overallDirection: directionString } {
-//         const { inputType, startInput } = input;
-//         if (INPUT_START === inputType) {
+//         const { stage, startInput } = input;
+//         if (INPUT_START === stage) {
 //             this.displacementX = 0;
 //             this.displacementY = 0;
 //             this.distanceX = 0;
@@ -58,7 +58,7 @@ export default computeDistance;
 //             this.overallDirection = NONE;
 //         }
 
-//         else if (INPUT_MOVE === inputType) {
+//         else if (INPUT_MOVE === stage) {
 //             this.displacementX = Math.round(input.points[0][CLIENT_X] - startInput.points[0][CLIENT_X]);
 //             this.displacementY = Math.round(input.points[0][CLIENT_Y] - startInput.points[0][CLIENT_Y]);
 //             this.distanceX = Math.abs(this.displacementX);

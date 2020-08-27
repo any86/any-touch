@@ -10,7 +10,7 @@ at.on('pan', ev=>{
 |名称|数据类型|说明|
 |-|-|-|
 |type|`String`|事件名,如tap/pan等|
-|eventType|`String`|事件类型:start\|move\|end\|cancel|
+|stage|`String`|事件类型:start\|move\|end\|cancel|
 |x|`Number`|**当前触点中心**x坐标|
 |y|`Number`|**当前触点中心**y坐标|
 |deltaX|`Number`|**当前触点**和**前触点**的x轴偏移距离|

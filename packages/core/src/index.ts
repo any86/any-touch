@@ -8,9 +8,8 @@
  */
 import AnyEvent from 'any-event';
 import { SupportEvent, Recognizer, Input, TOUCH } from '@any-touch/shared';
-import InputFactory from './Input';
-import Mouse from './Input/adapters/Mouse';
-import Touch from './Input/adapters/Touch';
+import Mouse from './Input/Mouse';
+import Touch from './Input/Touch';
 
 import dispatchDomEvent from './dispatchDomEvent';
 import canPreventDefault from './canPreventDefault';
@@ -151,7 +150,7 @@ export default class AnyTouch extends AnyEvent {
         // 比如鼠标还没有mousedown阶段的mousemove等都是无效操作
         if (void 0 !== input) {
             const AT_TOUCH = `at:${TOUCH}`;
-            const AT_TOUCH_WITH_STATUS = AT_TOUCH + input.inputType;
+            const AT_TOUCH_WITH_STATUS = AT_TOUCH + input.stage;
             this.emit(AT_TOUCH, input);
             this.emit(AT_TOUCH_WITH_STATUS, input);
 

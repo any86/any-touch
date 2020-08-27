@@ -21,7 +21,7 @@ export default class extends Recognizer {
 
         const { distance } = this.computed;
         return (
-            // INPUT_MOVE === inputType &&
+            // INPUT_MOVE === stage &&
             (this.isRecognized || this.options.threshold <= distance) &&
             this.isValidPointLength(pointLength)
         );

@@ -4,7 +4,7 @@ import Tap from '@any-touch/tap';
 test('依次输入start->move->end->start-cancel', async done => {
     const { gs, at, mockCB, mock, sleep } = create();
     at.on('at:touch', ev => {
-        mockCB(ev.inputType);
+        mockCB(ev.stage);
     });
     gs.dispatchTouchStart();
     gs.dispatchTouchMove([{ x: 1, y: 1 }]);

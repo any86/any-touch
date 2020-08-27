@@ -11,8 +11,8 @@
 //     target.addEventListener(type,listener,options);
 // }
 
-import InputFactory from './Input';
-import { SupportEvent, TOUCH_START, TOUCH_MOVE, TOUCH_END, TOUCH_CANCEL, MOUSE_DOWN, MOUSE_MOVE, MOUSE_UP } from '@any-touch/shared';
+import type { SupportEvent } from '@any-touch/shared';
+import { TOUCH_START, TOUCH_MOVE, TOUCH_END, TOUCH_CANCEL, MOUSE_DOWN, MOUSE_MOVE, MOUSE_UP } from '@any-touch/shared';
 const TOUCH_EVENTS = [TOUCH_START, TOUCH_MOVE, TOUCH_END, TOUCH_CANCEL];
 
 /*
@@ -24,7 +24,6 @@ export default function (
     adapters: any[],
     options?: boolean | AddEventListenerOptions,
 ): () => void {
-
 
     function transfromTouch(e: SupportEvent) {
         catchEvent(e, adapters[0])

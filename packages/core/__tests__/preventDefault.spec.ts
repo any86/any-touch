@@ -1,5 +1,5 @@
 import { create } from '@testUtils';
-import Touch from '../src/Input/adapters/Touch';
+import Touch from '../src/Input/Touch';
 
 test(`preventDefault.spec`, () => {
     const {el, GestureSimulator} = create();

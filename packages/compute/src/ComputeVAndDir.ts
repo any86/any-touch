@@ -23,13 +23,13 @@ function ComputeVAndDir() {
     return function (input: Input): { speedX: number, speedY: number, velocityX: number, velocityY: number, direction?: directionString } {
         // 点击鼠标左键, 会出现undefined
         if (void 0 !== input) {
-            const { inputType } = input;
+            const { stage } = input;
             _lastValidInput = _lastValidInput || input.startInput;
             const deltaTime = input.timestamp - _lastValidInput.timestamp;
 
 
             // 每16ms刷新速度数据
-            if (INPUT_MOVE === inputType && COMPUTE_INTERVAL < deltaTime) {
+            if (INPUT_MOVE === stage && COMPUTE_INTERVAL < deltaTime) {
                 const deltaX = input.x - _lastValidInput.x;
                 const deltaY = input.y - _lastValidInput.y;
                 speedX = Math.round(deltaX / deltaTime * 100) / 100;
@@ -66,13 +66,13 @@ export default ComputeVAndDir;
 //     compute(input: Input): { speedX: number, speedY: number, velocityX: number, velocityY: number, direction?: directionString } {
 //         // 点击鼠标左键, 会出现undefined
 //         if (void 0 !== input) {
-//             const { inputType } = input;
+//             const { stage } = input;
 //             this._lastValidInput = this._lastValidInput || input.startInput;
 //             const deltaTime = input.timestamp - this._lastValidInput.timestamp;
 
 
 //             // 每16ms刷新速度数据
-//             if (INPUT_MOVE === inputType && COMPUTE_INTERVAL < deltaTime) {
+//             if (INPUT_MOVE === stage && COMPUTE_INTERVAL < deltaTime) {
 //                 const deltaX = input.x - this._lastValidInput.x;
 //                 const deltaY = input.y - this._lastValidInput.y;
 //                 this.speedX = Math.round(deltaX / deltaTime * 100) / 100;

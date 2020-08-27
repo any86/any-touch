@@ -1,4 +1,4 @@
-import Mouse from '../src/Input/adapters/Mouse';
+import Mouse from '../src/Input/Mouse';
 import { GestureSimulator } from '@any-touch/simulator';
 
 test('鼠标输入move-> start-> move-> end', async done => {
@@ -18,13 +18,13 @@ test('鼠标输入move-> start-> move-> end', async done => {
     expect(mouseLoader(event3)).toHaveProperty(['points'], [{ "clientX": 1, "clientY": 1,target:el }]);
 
     const event4 = gs.dispatchTouchEnd();
-    expect(mouseLoader(event4)).toHaveProperty('inputType', 'end');
+    expect(mouseLoader(event4)).toHaveProperty('stage', 'end');
 
 
     // const event5 = gs.dispatchTouchStart();
     // expect(mouseLoader(event5)).toHaveProperty(['points'], [{ "clientX": 0, "clientY": 0 }]);
     // const event6 = gs.dispatchTouchEnd();
-    // expect(mouseLoader(event6)).toHaveProperty('inputType', 'end');
+    // expect(mouseLoader(event6)).toHaveProperty('stage', 'end');
 
     done();
 });
