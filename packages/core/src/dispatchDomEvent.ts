@@ -18,5 +18,6 @@ export default function (el: EventTarget, payload: Record<string, any> & Input, 
                 (event.currentTarget as HTMLElement).contains(target as HTMLElement)
             )
     });
+    // if('panmove' == event.type)  console.log(event.type,el)
     return el.dispatchEvent(event);
 }

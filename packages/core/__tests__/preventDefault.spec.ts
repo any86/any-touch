@@ -1,12 +1,12 @@
 import { create } from '@testUtils';
-import Input from '../src/Input/index';
+import Touch from '../src/Input/adapters/Touch';
 
 test(`preventDefault.spec`, () => {
     const {el, GestureSimulator} = create();
-    const inputFactory = new Input();
+    const touchLoader = Touch();
     const gs = new GestureSimulator(el);
     const event = gs.dispatchTouchStart();
-    const input = inputFactory.transform(event);
+    const input = touchLoader(event);
     expect(input).not.toBeUndefined();
     if(void 0 !== input){
         input.nativeEvent.preventDefault();

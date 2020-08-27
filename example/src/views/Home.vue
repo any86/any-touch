@@ -58,7 +58,7 @@
             </template>
 
             <div v-else class="info__tip">
-                <b class="mb-1">👋 支持: </b>
+                <b class="mb-1">👋 支持:</b>
                 <span>tap(点击)</span>
                 <span>press(按)</span>
                 <span>pan(拖拽)</span>
@@ -123,7 +123,6 @@ export default {
             this.styles.push(style);
         },
         onAfter(ev) {
-            console.log(ev)
             ev.currentTarget.setAttribute('at', ev.baseType);
         },
         onTouch(ev) {
@@ -180,6 +179,7 @@ export default {
         onPanmove(ev, index) {
             // console.log(ev.preventDefault)
             // console.dir(ev.target)
+            // console.log(ev.deltaX,ev.deltaY)
             this.styles[index].top = parseInt(this.styles[index].top) + ev.deltaY + 'px';
             this.styles[index].left = parseInt(this.styles[index].left) + ev.deltaX + 'px';
         },
@@ -325,7 +325,7 @@ main {
             left: 50%;
             bottom: 16px;
             transform: translateX(-50%);
-            box-shadow: 1px  2px 20px rgba(139, 8, 8, 0.589);
+            box-shadow: 1px 2px 20px rgba(139, 8, 8, 0.589);
             &:hover {
                 cursor: pointer;
             }

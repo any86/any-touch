@@ -9,6 +9,9 @@
 import AnyEvent from 'any-event';
 import { SupportEvent, Recognizer, Input, TOUCH } from '@any-touch/shared';
 import InputFactory from './Input';
+import Mouse from './Input/adapters/Mouse';
+import Touch from './Input/adapters/Touch';
+
 import dispatchDomEvent from './dispatchDomEvent';
 import canPreventDefault from './canPreventDefault';
 import bindElement from './bindElement';
@@ -23,7 +26,6 @@ export interface Options {
     isPreventDefault?: boolean;
     // 不阻止默认行为的白名单
     preventDefaultExclude?: RegExp | ((ev: SupportEvent) => boolean);
-    device?: 'Touch'|'Mouse'
 }
 
 // 默认设置
@@ -58,8 +60,6 @@ export default class AnyTouch extends AnyEvent {
     el?: HTMLElement;
     // 选项
     options: Options;
-    // 统一转换器
-    input: InputFactory;
 
     recognizerMap: Record<string, Recognizer> = {};
     recognizers: Recognizer[] = [];
@@ -73,8 +73,7 @@ export default class AnyTouch extends AnyEvent {
         super();
         this.el = el;
 
-        // 适配器
-        this.input = new InputFactory(el);
+
         this.options = { ...DEFAULT_OPTIONS, ...options };
 
         // 同步到插件到实例
@@ -101,8 +100,18 @@ export default class AnyTouch extends AnyEvent {
                 }));
                 window.addEventListener('_', () => void 0, opts);
             } catch{ }
+
+
             // 绑定元素
-            this.on('unbind', bindElement(el, this.catchEvent.bind(this), !this.options.isPreventDefault && supportsPassive ? { passive: true } : false, this.options.device));
+            this.on(
+                'unbind',
+                bindElement(
+                    el,
+                    this.catchEvent.bind(this),
+                    [Touch(this.el), Mouse()],
+                    !this.options.isPreventDefault && supportsPassive ? { passive: true } : false
+                )
+            );
         }
     }
 
@@ -127,7 +136,7 @@ export default class AnyTouch extends AnyEvent {
      * 监听input变化s
      * @param {Event}
      */
-    catchEvent(event: SupportEvent): void {
+    catchEvent(event: SupportEvent, transformToInput?: any): void {
         if (canPreventDefault(event, this.options)) {
             event.preventDefault();
         }
@@ -136,7 +145,7 @@ export default class AnyTouch extends AnyEvent {
         // }
 
         // 统一不同输入
-        const input = this.input.transform(event);
+        const input = transformToInput(event);
         // 跳过无效输入
         // 当是鼠标事件的时候, 会有undefined的时候
         // 比如鼠标还没有mousedown阶段的mousemove等都是无效操作

@@ -1,52 +1,52 @@
-import { BaseInput, InputType, PointClientXY } from '@any-touch/shared';
-import Adapter from './Abstract';
+import type { InputType, PointClientXY } from '@any-touch/shared';
 import { MOUSE_DOWN, MOUSE_MOVE, MOUSE_UP, INPUT_START, INPUT_MOVE, INPUT_END } from '@any-touch/shared';
-export default class extends Adapter {
-    prevPoints?: PointClientXY[];
-    isPressed: boolean;
-    target: EventTarget | null = null;
-    constructor() {
-        super();
-        this.isPressed = false;
-    };
-    load(event: MouseEvent): Omit<BaseInput, 'id'> | void {
+import InputFactory from '../index';
+export default function () {
+    let prevPoints: PointClientXY[];
+    let isPressed = false;
+    // mousedown阶段的target,
+    // 因为mousemove/end都绑定的window, 
+    // 所以需要对move/end阶段的target进行修改同步
+    let _target: EventTarget | null = null;
+    const transformFunction = InputFactory();
+    return function (event: MouseEvent) {
         const { clientX, clientY, type, button, target } = event;
-        let points = [{ clientX, clientY,target }];
+
+        // points中存target是为了多触点的时候校验target是否相同
+        let points = [{ clientX, clientY, target }];
         let inputType: InputType | undefined;
+
         if (MOUSE_DOWN === type && 0 === button) {
-            this.target = target;
+            _target = target;
             // 必须左键
-            this.isPressed = true;
+            isPressed = true;
             inputType = INPUT_START;
-        } else if (this.isPressed) {
+        } else if (isPressed) {
             if (MOUSE_MOVE === type) {
                 inputType = INPUT_MOVE;
             } else if (MOUSE_UP === type) {
                 points = [];
                 inputType = INPUT_END;
-                this.isPressed = false;
+                isPressed = false;
             }
         }
 
         // changedPoints = prevPoints其实并不能完全等于touch下的changedPoints
         // 但是由于鼠标没有多点输入的需求, 
         // 所以暂时如此实现
-        const changedPoints = this.prevPoints || [{ clientX, clientY,target }];
+        const changedPoints = prevPoints || [{ clientX, clientY, target }];
 
-        this.prevPoints = [{ clientX, clientY,target }];
+        prevPoints = [{ clientX, clientY, target }];
 
         if (void 0 !== inputType) {
-            return {
+            return transformFunction({
                 inputType,
                 changedPoints,
                 points,
-                // 覆盖target为window
-                // 后续做currentTarget判断会读取此处target和targets
-                target: this.target,
-                targets: [this.target],
+                target: _target,
+                targets: [_target],
                 nativeEvent: event
-            };
+            });
         }
-
     }
-}; 
+}

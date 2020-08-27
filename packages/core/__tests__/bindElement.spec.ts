@@ -4,15 +4,17 @@
 delete window.ontouchstart;
 
 import bindElement from '../src/bindElement';
+import Mouse from '../src/Input/adapters/Mouse';
+
 import { GestureSimulator, sleep } from '@any-touch/simulator';
 
-test(`mouse下产生一次输入, bindElement触发一次`, async (done) => {
+test.skip(`mouse下产生一次输入, bindElement触发一次`, async (done) => {
     const el = document.createElement('div');
     const gs = new GestureSimulator(el, { device: 'mouse' });
     const mockCallback = jest.fn();
     const unbind  = bindElement(el, ev => {
         mockCallback(ev);
-    });
+    },[Mouse()]);
     gs.dispatchTouchStart();
     gs.dispatchTouchMove([{x:10,y:90}]);
     gs.dispatchTouchEnd();

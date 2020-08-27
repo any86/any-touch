@@ -1,6 +1,3 @@
-import { SupportEvent, SUPPORT_TOUCH, TOUCH_START, TOUCH_MOVE, TOUCH_END, TOUCH_CANCEL, MOUSE_DOWN, MOUSE_MOVE, MOUSE_UP } from '@any-touch/shared';
-const TOUCH_EVENT_NAMES = [TOUCH_START, TOUCH_MOVE, TOUCH_END, TOUCH_CANCEL];
-
 // interface AddEvent{
 //     <K extends keyof WindowEventMap>(type: K, listener: (this: Window, ev: WindowEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
 
@@ -14,31 +11,45 @@ const TOUCH_EVENT_NAMES = [TOUCH_START, TOUCH_MOVE, TOUCH_END, TOUCH_CANCEL];
 //     target.addEventListener(type,listener,options);
 // }
 
+import InputFactory from './Input';
+import { SupportEvent, TOUCH_START, TOUCH_MOVE, TOUCH_END, TOUCH_CANCEL, MOUSE_DOWN, MOUSE_MOVE, MOUSE_UP } from '@any-touch/shared';
+const TOUCH_EVENTS = [TOUCH_START, TOUCH_MOVE, TOUCH_END, TOUCH_CANCEL];
+
 /*
 * 根据输入设备绑定事件
 */
-export default function (el: HTMLElement, callback: (ev: SupportEvent) => void, options?: boolean | AddEventListenerOptions, device?:'Touch'|'Mouse'): () => void {
-    // Touch
-    if (SUPPORT_TOUCH || 'Touch' === device) {
-        // https://stackoverflow.com/questions/55092588/typescript-addeventlistener-set-event-type
-        TOUCH_EVENT_NAMES.forEach((eventName) => {
-            el.addEventListener(eventName, callback, options);
+export default function (
+    el: HTMLElement,
+    catchEvent: (e: SupportEvent, transformToInput: any) => void,
+    adapters: any[],
+    options?: boolean | AddEventListenerOptions,
+): () => void {
+
+
+    function transfromTouch(e: SupportEvent) {
+        catchEvent(e, adapters[0])
+    }
+
+    function transfromMouse(e: SupportEvent) {
+        catchEvent(e, adapters[1])
+    }
+
+    TOUCH_EVENTS.forEach(eventName => {
+        el.addEventListener(eventName, transfromTouch, options);
+    });
+
+    el.addEventListener(MOUSE_DOWN, transfromMouse, options);
+    window.addEventListener(MOUSE_MOVE, transfromMouse, options);
+    window.addEventListener(MOUSE_UP, transfromMouse, options);
+
+
+    return () => {
+        TOUCH_EVENTS.forEach(eventName => {
+            el.removeEventListener(eventName, transfromTouch);
         });
-        return () => {
-            TOUCH_EVENT_NAMES.forEach((eventName) => {
-                el.removeEventListener(eventName, callback);
-            });
-        };
-    }
-    // Mouse
-    else {
-        el.addEventListener(MOUSE_DOWN, callback, options);
-        window.addEventListener(MOUSE_MOVE, callback, options);
-        window.addEventListener(MOUSE_UP, callback, options);
-        return () => {
-            el.removeEventListener(MOUSE_DOWN, callback);
-            window.removeEventListener(MOUSE_MOVE, callback);
-            window.removeEventListener(MOUSE_UP, callback);
-        };
-    }
+
+        el.removeEventListener(MOUSE_DOWN, transfromMouse, options);
+        window.removeEventListener(MOUSE_MOVE, transfromMouse, options);
+        window.removeEventListener(MOUSE_UP, transfromMouse, options);
+    };
 }

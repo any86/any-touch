@@ -91,7 +91,11 @@ export default function (recognizer: Recognizer, input: Input, emit: CommonEmitF
     if (isRecognized) {
         emit(name, computed);
     }
+    // if('pan' == recognizer.name){
+    //     console.log(isRecognized,recognizer.name)
+    // }
     if (isRecognized || ([STATUS_END, STATUS_CANCELLED] as SupportStatus[]).includes(recognizer.status)) {
+        // console.log(name + status,computed.deltaX )
         emit(name + status, computed);
     }
     return isVaild;
