@@ -1,12 +1,14 @@
-## :lollipop: 事件对象
+## :lollipop: 事件对象(event)
 监听事件返回数据.
 
+
 ```javascript
-at.on('pan', ev=>{
-    // ev包含速度/方向等数据
+at.on('pan', event=>{
+    // event包含速度/方向等数据
 });
 ```
 
+### event
 |名称|数据类型|说明|
 |-|-|-|
 |type|`String`|事件名,如tap/pan等|
