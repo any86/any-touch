@@ -1,6 +1,6 @@
 import type { stage, PointClientXY } from '@any-touch/shared';
 import { MOUSE_DOWN, MOUSE_MOVE, MOUSE_UP, INPUT_START, INPUT_MOVE, INPUT_END } from '@any-touch/shared';
-import createInputFunction from './createInputFunction';
+import inputCreator from './inputCreator';
 export default function () {
     let prevPoints: PointClientXY[];
     let isPressed = false;
@@ -10,7 +10,7 @@ export default function () {
     // 主要为了在事件委派这种模式下,
     // 可以正确的判断事件返回的target是否包含于_target中
     let _target: EventTarget | null = null;
-    const createInput = createInputFunction();
+    const createInput = inputCreator();
     return function (event: MouseEvent) {
         const { clientX, clientY, type, button, target } = event;
 

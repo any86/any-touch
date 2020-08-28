@@ -7,10 +7,10 @@
  * hammer.js http://hammerjs.github.io/
  */
 import AnyEvent from 'any-event';
-import { SupportEvent, Recognizer, Input, TOUCH } from '@any-touch/shared';
-import Mouse from './Input/Mouse';
-import Touch from './Input/Touch';
+import type { SupportEvent, Recognizer } from '@any-touch/shared';
+import { TOUCH, IS_WX } from '@any-touch/shared';
 
+import { mouse, touch } from './createInput';
 import dispatchDomEvent from './dispatchDomEvent';
 import canPreventDefault from './canPreventDefault';
 import bindElement from './bindElement';
@@ -20,6 +20,9 @@ import emit2 from './emit2';
 
 
 type BeforeEachHook = (recognizer: Recognizer, next: () => void) => void;
+/**
+ * 默认设置
+ */
 export interface Options {
     domEvents?: false | EventInit;
     isPreventDefault?: boolean;
@@ -27,14 +30,14 @@ export interface Options {
     preventDefaultExclude?: RegExp | ((ev: SupportEvent) => boolean);
 }
 
-// 默认设置
+/**
+ * 默认设置
+ */
 const DEFAULT_OPTIONS: Options = {
     domEvents: { bubbles: true, cancelable: true },
     isPreventDefault: true,
     preventDefaultExclude: /^(?:INPUT|TEXTAREA|BUTTON|SELECT)$/
 };
-
-
 
 export default class AnyTouch extends AnyEvent {
     static version = '__VERSION__';
@@ -100,6 +103,8 @@ export default class AnyTouch extends AnyEvent {
                 window.addEventListener('_', () => void 0, opts);
             } catch{ }
 
+            const inputCreator = [touch(this.el), mouse()];
+            if (!IS_WX) inputCreator.pop();
 
             // 绑定元素
             this.on(
@@ -107,7 +112,7 @@ export default class AnyTouch extends AnyEvent {
                 bindElement(
                     el,
                     this.catchEvent.bind(this),
-                    [Touch(this.el), Mouse()],
+                    inputCreator,
                     !this.options.isPreventDefault && supportsPassive ? { passive: true } : false
                 )
             );
@@ -135,19 +140,17 @@ export default class AnyTouch extends AnyEvent {
      * 监听input变化s
      * @param {Event}
      */
-    catchEvent(event: SupportEvent, transformToInput?: any): void {
+    catchEvent(event: SupportEvent, createInput?: any): void {
         if (canPreventDefault(event, this.options)) {
             event.preventDefault();
         }
         // if (!event.cancelable) {
         //     this.eventEmitter.emit('error', { code: 0, message: '页面滚动的时候, 请暂时不要操作元素!' });
         // }
+        const input = createInput(event);
 
-        // 统一不同输入
-        const input = transformToInput(event);
         // 跳过无效输入
-        // 当是鼠标事件的时候, 会有undefined的时候
-        // 比如鼠标还没有mousedown阶段的mousemove等都是无效操作
+        // 比如没有按住鼠标的移动会返回undefined
         if (void 0 !== input) {
             const AT_TOUCH = `at:${TOUCH}`;
             const AT_TOUCH_WITH_STATUS = AT_TOUCH + input.stage;

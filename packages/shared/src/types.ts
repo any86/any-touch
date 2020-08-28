@@ -1,18 +1,27 @@
 import { STATUS_POSSIBLE, STATUS_START, STATUS_MOVE, STATUS_END, STATUS_CANCELLED, STATUS_FAILED, STATUS_RECOGNIZED } from '@any-touch/shared';
 import Base from '@any-touch/recognizer';
+/**
+ * 基础识别器类型
+ */
 export type Recognizer = Base;
 export type AnyTouchPlugin = any;
 
-// 适配器支持的事件类型
+/**
+ * 适配器支持的事件类型
+ */
 export type SupportEvent = MouseEvent | TouchEvent;
 
 export interface PointClientXY { target: EventTarget | null, clientX: number, clientY: number };
-// 输入类型
+
+/**
+ * 输入阶段
+ */
 export type stage = 'start' | 'move' | 'end' | 'cancel';
 
-// 事件统一变形
-export interface BaseInput {
-    readonly id: number;
+/**
+ * 原生事件对象最基础的统一化
+ */
+export interface BasicsInput {
     readonly stage: stage;
     readonly changedPoints: PointClientXY[];
     readonly points: PointClientXY[];
@@ -22,8 +31,11 @@ export interface BaseInput {
 }
 
 
-// 不包含prevInput等表示记录的input
-export interface PureInput extends BaseInput {
+/**
+ * 不包含prevInput/startInput/startMultiInput的Input
+ */
+export interface InputOnlyHasCurrent extends BasicsInput {
+    readonly id: number;
     // readonly preventDefault: () => void;
     // 新一轮手势识别的开始和结束
     readonly isStart: boolean;
@@ -39,20 +51,22 @@ export interface PureInput extends BaseInput {
     // 同centerX/Y
     readonly x: number;
     readonly y: number;
-    readonly getOffset: (el: HTMLElement | SVGElement) => { x: number, y: number }
+    readonly getOffset: (el: HTMLElement) => { x: number, y: number }
 }
 
-export interface Input extends PureInput {
-    readonly startInput: PureInput;
-    readonly startMultiInput?: PureInput;
-    readonly prevInput?: PureInput;
+/**
+ * 统一化event后数据
+ */
+export interface Input extends InputOnlyHasCurrent {
+    readonly startInput: InputOnlyHasCurrent;
+    readonly startMultiInput?: InputOnlyHasCurrent;
+    readonly prevInput?: InputOnlyHasCurrent;
 }
 
 // 标准class
-export interface StdClass {
-    new(...args: any[]): any;
-}
-
+// export interface StdClass {
+//     new(...args: any[]): any;
+// }
 
 export interface ComputeConstructor {
     _id: string;
@@ -65,13 +79,14 @@ export interface CommonEmitFunction {
     (type: string, ...payload: any[]): void
 }
 
-
-
-
+/**
+ * 方向
+ */
 export type directionString = 'up' | 'right' | 'down' | 'left' | 'none';
-export type RecognizerStatus = 'possible' | 'recognized' | 'began' | 'changed' | 'ended' | 'failed' | 'cancelled';
 
-
+/**
+ * 点
+ */
 export interface Point {
     x: number;
     y: number;
@@ -79,16 +94,9 @@ export interface Point {
 
 export type Vector = Point;
 
-// 输入记录
-export type InputRecord = {
-    input: Input;
-    startInput: Input;
-    prevInput?: Input;
-    startMultiInput?: Input;
-}
-
-
-
+/**
+ * Input执行计算后的数据格式
+ */
 export interface Computed {
     // 一次识别周期中出现的最大触点数
     maxPointLength?: number;
@@ -119,4 +127,8 @@ export interface Computed {
 export interface AnyTouchEvent extends Input, Readonly<Computed> {
     readonly type: string
 }
-export type SupportStatus = typeof STATUS_POSSIBLE | typeof STATUS_START | typeof STATUS_MOVE | typeof STATUS_END | typeof STATUS_CANCELLED | typeof STATUS_FAILED | typeof STATUS_RECOGNIZED;
+
+/**
+ * 识别器状态
+ */
+export type RecognizerStatus = typeof STATUS_POSSIBLE | typeof STATUS_START | typeof STATUS_MOVE | typeof STATUS_END | typeof STATUS_CANCELLED | typeof STATUS_FAILED | typeof STATUS_RECOGNIZED;

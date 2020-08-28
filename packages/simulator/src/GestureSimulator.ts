@@ -1,7 +1,7 @@
 interface Input {
     x: number;
     y: number;
-    target?:HTMLElement|SVGElement
+    target?:HTMLElement
 };
 interface Options {
     device: 'touch' | 'mouse';
@@ -18,7 +18,7 @@ export default class TouchSimulator {
     public device: 'touch' | 'mouse';
     public index: number;
 
-    constructor(el: Element | SVGElement, { device = 'touch' }: Options = <Options>{}) {
+    constructor(el: Element , { device = 'touch' }: Options = <Options>{}) {
         this.el = el;
         this.device = device;
         this.prevTouches = [];

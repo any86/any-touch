@@ -2,8 +2,6 @@
 一些公用方法和常量.
 
 ```javascript
-export const SUPPORT_TOUCH = 'ontouchstart' in window;
-
 // input的类型
 export const INPUT_START = 'start';
 export const INPUT_MOVE = 'move';

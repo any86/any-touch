@@ -24,7 +24,6 @@ export default function (
     adapters: any[],
     options?: boolean | AddEventListenerOptions,
 ): () => void {
-
     function transfromTouch(e: SupportEvent) {
         catchEvent(e, adapters[0])
     }

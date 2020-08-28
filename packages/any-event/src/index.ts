@@ -1,4 +1,4 @@
-type SupportTarget = HTMLElement | SVGElement;
+type SupportTarget = HTMLElement;
 
 interface Listener {
     (...payload: any): void;

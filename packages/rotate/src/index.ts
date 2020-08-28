@@ -26,7 +26,7 @@ export default class extends Recognizer {
 
     /**
  * 开始识别
- * @param {InputRecord} 输入 
+ * @param {Input} 输入 
  */
     recognize(input: Input, emit: CommonEmitFunction) {
         const computed = this.compute([ComputeVectorForMutli], input);

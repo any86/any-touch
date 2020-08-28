@@ -1,4 +1,4 @@
-import Mouse from '../src/Input/Mouse';
+import Mouse from '../src/createInput/mouse';
 import { GestureSimulator } from '@any-touch/simulator';
 
 test('鼠标输入move-> start-> move-> end', async done => {

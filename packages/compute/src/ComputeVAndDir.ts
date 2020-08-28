@@ -2,7 +2,7 @@
 // 默认间隔25ms做一次计算, 让数据更新,
 // 让end阶段读取上一步的计算数据, 比如方向, 速率等...
 // 防止快速滑动到慢速滑动的手势识别成swipe
-import type { Input, PureInput, directionString } from '@any-touch/shared';
+import type { Input, InputOnlyHasCurrent, directionString } from '@any-touch/shared';
 import { INPUT_MOVE, COMPUTE_INTERVAL } from '@any-touch/shared';
 import { getDirection } from '@any-touch/vector';
 
@@ -13,7 +13,7 @@ function ComputeVAndDir() {
     let speedY = 0;
     let direction: directionString;
     // 上一次发生计算时候参与计算的input
-    let _lastValidInput: PureInput | Input
+    let _lastValidInput: InputOnlyHasCurrent | Input
 
     /**
      * 计算
@@ -56,7 +56,7 @@ export default ComputeVAndDir;
 //     speedY = 0;
 //     direction?: directionString;
 //     // 上一次发生计算时候参与计算的input
-//     private _lastValidInput?: PureInput | Input
+//     private _lastValidInput?: InputOnlyHasCurrent | Input
 
 //     /**
 //      * 计算

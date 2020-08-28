@@ -1,10 +1,10 @@
-import type {stage } from '@any-touch/shared';
-import createInput from './createInputFunction';
+import type { stage } from '@any-touch/shared';
+import inputCreator from './inputCreator';
 /**
  * 格式化Touch事件对象
  */
 export default function (el?: HTMLElement) {
-    const transform = createInput();
+    const createInput = inputCreator();
 
     return function (event: TouchEvent) {
         // tip: wx下没有targetTouches
@@ -18,7 +18,7 @@ export default function (el?: HTMLElement) {
             }
         });
         const changedPoints = Array.from(event.changedTouches).map(({ clientX, clientY, target }) => ({ clientX, clientY, target }));
-        return transform({
+        return createInput({
             stage: <stage>event.type.replace('touch', ''),
             changedPoints,
             points,

@@ -1,16 +1,26 @@
-// 计算时候取touchs.clientX | clientY
+/**
+ * 是否微信
+ */
+export const IS_WX = !!(window as any).wx;
+
 export const CLIENT_X = 'clientX';
 export const CLIENT_Y = 'clientY';
-
+/**
+ * 计算方向/速度的时间间隔
+ */
 export const COMPUTE_INTERVAL = 16;
 
-// input的类型
+/**
+ * 输入阶段
+ */
 export const INPUT_START = 'start';
 export const INPUT_MOVE = 'move';
 export const INPUT_CANCEL = 'cancel';
 export const INPUT_END = 'end';
 
-// 方向
+/**
+ * 方向
+ */
 export const DIRECTION_LEFT = 'left';
 export const DIRECTION_RIGHT = 'right';
 export const DIRECTION_UP = 'up';
@@ -29,7 +39,6 @@ export const MOUSE_UP = MOUSE + DIRECTION_UP as 'mouseup';
 export const MOUSE_MOVE = MOUSE + INPUT_MOVE as 'mousemove';
 export const MOUSE_DOWN = MOUSE + DIRECTION_DOWN as 'mousedown';
 
-export const SUPPORT_TOUCH = (window as any).wx ||`on${TOUCH_START}` in window;
 
 
 // 识别器状态码
