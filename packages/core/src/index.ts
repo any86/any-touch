@@ -7,8 +7,8 @@
  * hammer.js http://hammerjs.github.io/
  */
 import AnyEvent from 'any-event';
-import type { SupportEvent, Recognizer } from '@any-touch/shared';
-import { TOUCH, IS_WX } from '@any-touch/shared';
+import { SupportEvent, Recognizer, IS_WX } from '@any-touch/shared';
+import { TOUCH, TOUCH_START, TOUCH_MOVE, TOUCH_END, TOUCH_CANCEL, MOUSE_DOWN, MOUSE_MOVE, MOUSE_UP } from '@any-touch/shared';
 
 import { mouse, touch } from './createInput';
 import dispatchDomEvent from './dispatchDomEvent';
@@ -62,7 +62,7 @@ export default class AnyTouch extends AnyEvent {
     el?: HTMLElement;
     // 选项
     options: Options;
-
+    inputCreatorMap: any;
     recognizerMap: Record<string, Recognizer> = {};
     recognizers: Recognizer[] = [];
     beforeEachHook?: BeforeEachHook;
@@ -74,13 +74,25 @@ export default class AnyTouch extends AnyEvent {
     constructor(el?: HTMLElement, options?: Options) {
         super();
         this.el = el;
-
-
         this.options = { ...DEFAULT_OPTIONS, ...options };
 
         // 同步到插件到实例
         this.recognizerMap = AnyTouch.recognizerMap;
         this.recognizers = AnyTouch.recognizers;
+        
+        // 事件名和Input构造器的映射
+        // 事件回调中用
+        const createInputFromTouch = touch(this.el);
+        const createInputFromMouse = IS_WX ? () => {} : mouse();
+        this.inputCreatorMap = {
+            [TOUCH_START]: createInputFromTouch,
+            [TOUCH_MOVE]: createInputFromTouch,
+            [TOUCH_END]: createInputFromTouch,
+            [TOUCH_CANCEL]: createInputFromTouch,
+            [MOUSE_DOWN]: createInputFromMouse,
+            [MOUSE_MOVE]: createInputFromMouse,
+            [MOUSE_UP]: createInputFromMouse
+        };
 
         // 绑定事件
         if (void 0 !== el) {
@@ -103,16 +115,12 @@ export default class AnyTouch extends AnyEvent {
                 window.addEventListener('_', () => void 0, opts);
             } catch{ }
 
-            const inputCreator = [touch(this.el), mouse()];
-            if (!IS_WX) inputCreator.pop();
-
             // 绑定元素
             this.on(
                 'unbind',
                 bindElement(
                     el,
                     this.catchEvent.bind(this),
-                    inputCreator,
                     !this.options.isPreventDefault && supportsPassive ? { passive: true } : false
                 )
             );
@@ -140,14 +148,14 @@ export default class AnyTouch extends AnyEvent {
      * 监听input变化s
      * @param {Event}
      */
-    catchEvent(event: SupportEvent, createInput?: any): void {
+    catchEvent(event: SupportEvent): void {
         if (canPreventDefault(event, this.options)) {
             event.preventDefault();
         }
         // if (!event.cancelable) {
         //     this.eventEmitter.emit('error', { code: 0, message: '页面滚动的时候, 请暂时不要操作元素!' });
         // }
-        const input = createInput(event);
+        const input = this.inputCreatorMap[event.type](event);
 
         // 跳过无效输入
         // 比如没有按住鼠标的移动会返回undefined

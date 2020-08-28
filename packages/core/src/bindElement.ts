@@ -11,7 +11,9 @@
 //     target.addEventListener(type,listener,options);
 // }
 
+import { IS_WX } from '@any-touch/shared';
 import type { SupportEvent } from '@any-touch/shared';
+
 import { TOUCH_START, TOUCH_MOVE, TOUCH_END, TOUCH_CANCEL, MOUSE_DOWN, MOUSE_MOVE, MOUSE_UP } from '@any-touch/shared';
 const TOUCH_EVENTS = [TOUCH_START, TOUCH_MOVE, TOUCH_END, TOUCH_CANCEL];
 
@@ -20,34 +22,28 @@ const TOUCH_EVENTS = [TOUCH_START, TOUCH_MOVE, TOUCH_END, TOUCH_CANCEL];
 */
 export default function (
     el: HTMLElement,
-    catchEvent: (e: SupportEvent, transformToInput: any) => void,
-    adapters: any[],
+    catchEvent: (e: SupportEvent) => void,
     options?: boolean | AddEventListenerOptions,
 ): () => void {
-    function transfromTouch(e: SupportEvent) {
-        catchEvent(e, adapters[0])
-    }
-
-    function transfromMouse(e: SupportEvent) {
-        catchEvent(e, adapters[1])
-    }
 
     TOUCH_EVENTS.forEach(eventName => {
-        el.addEventListener(eventName, transfromTouch, options);
+        el.addEventListener(eventName, catchEvent, options);
     });
 
-    el.addEventListener(MOUSE_DOWN, transfromMouse, options);
-    window.addEventListener(MOUSE_MOVE, transfromMouse, options);
-    window.addEventListener(MOUSE_UP, transfromMouse, options);
-
+    if (!IS_WX) {
+        el.addEventListener(MOUSE_DOWN, catchEvent, options);
+        window.addEventListener(MOUSE_MOVE, catchEvent, options);
+        window.addEventListener(MOUSE_UP, catchEvent, options);
+    }
 
     return () => {
         TOUCH_EVENTS.forEach(eventName => {
-            el.removeEventListener(eventName, transfromTouch);
+            el.removeEventListener(eventName, catchEvent);
         });
-
-        el.removeEventListener(MOUSE_DOWN, transfromMouse, options);
-        window.removeEventListener(MOUSE_MOVE, transfromMouse, options);
-        window.removeEventListener(MOUSE_UP, transfromMouse, options);
+        if (!IS_WX) {
+            el.removeEventListener(MOUSE_DOWN, catchEvent, options);
+            window.removeEventListener(MOUSE_MOVE, catchEvent, options);
+            window.removeEventListener(MOUSE_UP, catchEvent, options);
+        }
     };
 }

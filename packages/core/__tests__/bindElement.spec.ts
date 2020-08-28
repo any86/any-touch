@@ -2,10 +2,7 @@
 // 强制识别为Mouse
 // !必须放在最顶部
 delete window.ontouchstart;
-
 import bindElement from '../src/bindElement';
-import Mouse from '../src/createInput/mouse';
-
 import { GestureSimulator, sleep } from '@any-touch/simulator';
 
 test(`mouse下产生一次输入, bindElement触发一次`, async (done) => {
@@ -14,7 +11,7 @@ test(`mouse下产生一次输入, bindElement触发一次`, async (done) => {
     const mockCallback = jest.fn();
     const unbind  = bindElement(el, ev => {
         mockCallback(ev);
-    },[Mouse()]);
+    });
     gs.dispatchTouchStart();
     gs.dispatchTouchMove([{x:10,y:90}]);
     gs.dispatchTouchEnd();
