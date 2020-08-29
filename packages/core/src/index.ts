@@ -7,6 +7,8 @@
  * hammer.js http://hammerjs.github.io/
  */
 import AnyEvent from 'any-event';
+import type { Listener } from 'any-event';
+
 import { SupportEvent, Recognizer, IS_WX } from '@any-touch/shared';
 import { TOUCH, TOUCH_START, TOUCH_MOVE, TOUCH_END, TOUCH_CANCEL, MOUSE_DOWN, MOUSE_MOVE, MOUSE_UP } from '@any-touch/shared';
 
@@ -79,11 +81,11 @@ export default class AnyTouch extends AnyEvent {
         // 同步到插件到实例
         this.recognizerMap = AnyTouch.recognizerMap;
         this.recognizers = AnyTouch.recognizers;
-        
+
         // 事件名和Input构造器的映射
         // 事件回调中用
         const createInputFromTouch = touch(this.el);
-        const createInputFromMouse = IS_WX ? () => {} : mouse();
+        const createInputFromMouse = IS_WX ? () => { } : mouse();
         this.inputCreatorMap = {
             [TOUCH_START]: createInputFromTouch,
             [TOUCH_MOVE]: createInputFromTouch,
@@ -126,6 +128,19 @@ export default class AnyTouch extends AnyEvent {
             );
         }
     }
+
+    target(el: HTMLElement) {
+        return {
+            on: (eventName: string, listener: Listener): void => {
+                this.on(eventName, listener, event => {
+                    const { targets } = event;
+                    // 检查当前触发事件的元素是否是其子元素
+                    return event.target === el &&
+                        targets.every((target: any) => el.contains(target as HTMLElement))
+                });
+            }
+        };
+    };
 
     /**
      * 使用插件

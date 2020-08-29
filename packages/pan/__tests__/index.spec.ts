@@ -30,7 +30,7 @@ test(`向下拖拽, 触发${PAN_NAME}down`, async done => {
     const el = document.createElement('div');
     const at = new AnyTouch(el);
     const mockCB = jest.fn();
-    at.on(`${PAN_NAME}down`, ev => {
+    at.on(`${PAN_NAME}down`, (ev:any) => {
         mockCB(ev.type)
     });
     const gs = new GestureSimulator(el);
