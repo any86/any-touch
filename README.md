@@ -110,30 +110,17 @@ export default {
 
 ```xml
 <view 
-  @touchstart="onTouchstart"
-  @touchmove="onTouchmove"
-  @touchend="onTouchend"></view>
+  @touchstart="at.catchEvent"
+  @touchmove="at.catchEvent"
+  @touchend="at.catchEvent">
+</view>
 ```
 
 ```javascript
 const at = new AnyTouch()
 {
     onload(){
-        at.on('press', ev=>{
-            // 按压
-        });
-    },
-
-    methods: {
-      onTouchstart(ev){
-        at.catchEvent(ev);
-      },
-      onTouchmove(ev){
-        at.catchEvent(ev);
-      },
-      onTouchend(ev){
-        at.catchEvent(ev);
-      }
+        at.on('press', onPress);
     }
 }
 ```
