@@ -16,9 +16,9 @@ function ComputeVAndDir() {
     let _lastValidInput: InputOnlyHasCurrent | Input
 
     /**
-     * 计算
-     * 往复滑动会出现direction为none
-     * @param {Input} 输入
+     * 计算速度和方向
+     * 注意: 往复滑动会出现direction为none
+     * @param input 输入
      */
     return function (input: Input): { speedX: number, speedY: number, velocityX: number, velocityY: number, direction?: directionString } {
         // 点击鼠标左键, 会出现undefined
@@ -26,7 +26,6 @@ function ComputeVAndDir() {
             const { stage } = input;
             _lastValidInput = _lastValidInput || input.startInput;
             const deltaTime = input.timestamp - _lastValidInput.timestamp;
-
 
             // 每16ms刷新速度数据
             if (INPUT_MOVE === stage && COMPUTE_INTERVAL < deltaTime) {
@@ -48,46 +47,3 @@ function ComputeVAndDir() {
 }
 ComputeVAndDir._id = `ComputeVAndDir`;
 export default ComputeVAndDir;
-// export default class {
-//     static _id='ComputeVAndDir';
-//     velocityX = 0;
-//     velocityY = 0;
-//     speedX = 0;
-//     speedY = 0;
-//     direction?: directionString;
-//     // 上一次发生计算时候参与计算的input
-//     private _lastValidInput?: InputOnlyHasCurrent | Input
-
-//     /**
-//      * 计算
-//      * 往复滑动会出现direction为none
-//      * @param {Input} 输入
-//      */
-//     compute(input: Input): { speedX: number, speedY: number, velocityX: number, velocityY: number, direction?: directionString } {
-//         // 点击鼠标左键, 会出现undefined
-//         if (void 0 !== input) {
-//             const { stage } = input;
-//             this._lastValidInput = this._lastValidInput || input.startInput;
-//             const deltaTime = input.timestamp - this._lastValidInput.timestamp;
-
-
-//             // 每16ms刷新速度数据
-//             if (INPUT_MOVE === stage && COMPUTE_INTERVAL < deltaTime) {
-//                 const deltaX = input.x - this._lastValidInput.x;
-//                 const deltaY = input.y - this._lastValidInput.y;
-//                 this.speedX = Math.round(deltaX / deltaTime * 100) / 100;
-//                 this.speedY = Math.round(deltaY / deltaTime * 100) / 100;
-//                 this.velocityX = Math.abs(this.speedX);
-//                 this.velocityY = Math.abs(this.speedY);
-//                 this.direction = getDirection(deltaX, deltaY) || <directionString>(this.direction);
-
-//                 // if(NONE === this.direction) console.warn({deltaX,deltaY},input.id,this._lastValidInput.id );
-
-//                 this._lastValidInput = input;
-//             }
-//         }
-//         const { velocityX, velocityY, speedX, speedY, direction } = this;
-
-//         return { velocityX, velocityY, speedX, speedY, direction };
-//     }
-// }

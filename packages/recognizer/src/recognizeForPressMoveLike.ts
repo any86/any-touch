@@ -1,4 +1,4 @@
-import { CommonEmitFunction, Input, STATUS_FAILED ,RecognizerStatus} from '@any-touch/shared';
+import { CommonEmitFunction, Input, STATUS_FAILED, RecognizerStatus } from '@any-touch/shared';
 import Recognizer from './index';
 import {
     INPUT_CANCEL, INPUT_END, INPUT_MOVE
@@ -14,23 +14,45 @@ import {
 } from '@any-touch/shared'
 import resetStatus from './resetStatusForPressMoveLike';
 
-function flow(isVaild: boolean, activeStatus: RecognizerStatus, stage: string): RecognizerStatus {
+/**
+ * 计算当前识别器状态
+ * 是否test通过 + 上一轮识别器状态 + 输入阶段 => 当前识别器状态 
+ * @param isVaild 是否通过test
+ * @param lastStatus 上一轮识别器状态
+ * @param stage 输入阶段
+ * @returns 识别器状态
+ */
+function flow(isVaild: boolean, lastStatus: RecognizerStatus, stage: string): RecognizerStatus {
+    /*
+    * {
+    *  isValid {
+    *    lastStatus {
+    *      stage: currentStatus
+    *    }
+    *  }
+    * }
+    * Number(true) === 1
+    * 这个分支不会出现STATUS_FAILED
+    * STATUS_END在上面的代码中也会被重置为STATUS_POSSIBLE, 从而进行重新识别
+    */
     const STATE_MAP: { [k: number]: any } = {
-        // isVaild === true,
-        // Number(true) === 1
-        // 这个分支不会出现STATUS_FAILED
-        // STATUS_END在上面的代码中也会被重置为STATUS_POSSIBLE, 从而进行重新识别
         1: {
             [STATUS_POSSIBLE]: {
+                // 下面都没有INPUT_START
+                // 是因为pressmove类的判断都是从INPUT_MOVE阶段开始
                 [INPUT_MOVE]: STATUS_START,
-                // [INPUT_END]: STATUS_RECOGNIZED,
-                // [INPUT_CANCEL]: STATUS_CANCELLED
+                // 暂时下面2种可有可无, 
+                // 因为做requireFail判断的时候possible和failure没区别
+                [INPUT_END]: STATUS_FAILED,
+                [INPUT_CANCEL]: STATUS_FAILED
             },
+
             [STATUS_START]: {
                 [INPUT_MOVE]: STATUS_MOVE,
                 [INPUT_END]: STATUS_END,
                 [INPUT_CANCEL]: STATUS_CANCELLED
             },
+
             [STATUS_MOVE]: {
                 [INPUT_MOVE]: STATUS_MOVE,
                 [INPUT_END]: STATUS_END,
@@ -39,36 +61,37 @@ function flow(isVaild: boolean, activeStatus: RecognizerStatus, stage: string): 
         },
         // isVaild === false
         // 这个分支有STATUS_FAILED
-        // 2020年1月30, 未看完, 有待商榷
         0: {
+            // 此处没有STATUS_POSSIBLE和STATUS_END
+            // 是因为返回值仍然是STATUS_POSSIBLE
             [STATUS_START]: {
-                // [INPUT_START]: STATUS_FAILED,
-                [INPUT_MOVE]: STATUS_CANCELLED,
-                [INPUT_END]: STATUS_END,
+                // 此处的INPUT_MOVE和INPUT_END
+                // 主要是针对多触点识别器
+                [INPUT_MOVE]: STATUS_FAILED,
+                [INPUT_END]: STATUS_FAILED,
                 [INPUT_CANCEL]: STATUS_CANCELLED
             },
+
             [STATUS_MOVE]: {
                 [INPUT_START]: STATUS_FAILED,
-                [INPUT_MOVE]: STATUS_CANCELLED,
-                [INPUT_END]: STATUS_END,
+                [INPUT_MOVE]: STATUS_FAILED,
+                [INPUT_END]: STATUS_FAILED,
                 [INPUT_CANCEL]: STATUS_CANCELLED
             }
         }
     };
-    if (void 0 !== STATE_MAP[Number(isVaild)][activeStatus]) {
-        return STATE_MAP[Number(isVaild)][activeStatus][stage] || activeStatus;
-    } else {
-        return activeStatus;
-    }
+
+    const stageToStatusMap = STATE_MAP[Number(isVaild)][lastStatus];
+    return void 0 !== stageToStatusMap && stageToStatusMap[stage] || lastStatus;
 };
-
-
 
 /**
  * 适用于大部分移动类型的手势, 
  * 如pan/rotate/pinch/swipe
- * @param {Input} 输入记录 
- * @returns {Boolean} test是否通过
+ * @param recognizer 识别器实例
+ * @param input 当前输入
+ * @param emit at实例上的emit函数
+ * @returns 是否通过test
  */
 export default function (recognizer: Recognizer, input: Input, emit: CommonEmitFunction): boolean {
     // 是否识别成功

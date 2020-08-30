@@ -9,8 +9,8 @@
 import AnyEvent from 'any-event';
 import type { Listener } from 'any-event';
 
-import { SupportEvent, Recognizer, IS_WX } from '@any-touch/shared';
-import { TOUCH, TOUCH_START, TOUCH_MOVE, TOUCH_END, TOUCH_CANCEL, MOUSE_DOWN, MOUSE_MOVE, MOUSE_UP } from '@any-touch/shared';
+import type { AnyTouchEvent, SupportEvent, } from '@any-touch/shared';
+import { Recognizer, IS_WX, TOUCH, TOUCH_START, TOUCH_MOVE, TOUCH_END, TOUCH_CANCEL, MOUSE_DOWN, MOUSE_MOVE, MOUSE_UP } from '@any-touch/shared';
 
 import { mouse, touch } from './createInput';
 import dispatchDomEvent from './dispatchDomEvent';
@@ -41,7 +41,7 @@ const DEFAULT_OPTIONS: Options = {
     preventDefaultExclude: /^(?:INPUT|TEXTAREA|BUTTON|SELECT)$/
 };
 
-export default class AnyTouch extends AnyEvent {
+export default class AnyTouch extends AnyEvent<AnyTouchEvent> {
     static version = '__VERSION__';
     static recognizers: Recognizer[] = [];
     static recognizerMap: Record<string, Recognizer> = {};
@@ -131,7 +131,7 @@ export default class AnyTouch extends AnyEvent {
 
     target(el: HTMLElement) {
         return {
-            on: (eventName: string, listener: Listener): void => {
+            on: (eventName: string, listener: Listener<AnyTouchEvent>): void => {
                 this.on(eventName, listener, event => {
                     const { targets } = event;
                     // 检查当前触发事件的元素是否是其子元素
@@ -196,9 +196,9 @@ export default class AnyTouch extends AnyEvent {
                 // 恢复上次的缓存
                 recognizer.computedGroup = cacheComputedGroup;
                 recognizer.computeFunctionMap = this.cacheComputedFunctionGroup;
-                recognizer.recognize(input, (type, ev) => {
+                recognizer.recognize(input, (type, e) => {
                     // 此时的ev就是this.computed
-                    const payload = { ...input, ...ev, type, baseType: recognizer.name };
+                    const payload = { ...input, ...e, type, baseType: recognizer.name };
 
                     // 防止数据被vue类框架拦截
                     Object.freeze(payload);

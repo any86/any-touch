@@ -52,7 +52,7 @@ export default abstract class {
 
     /**
      * 设置识别器
-     * @param {Object} 选项 
+     * @param options 选项 
      */
     set(options?: Record<string, any>) {
         if (void 0 !== options) {
@@ -63,7 +63,7 @@ export default abstract class {
 
     /**
      * 验证触点
-     * @param {Number} 触点数
+     * @param pointLength 触点数
      */
     isValidPointLength(pointLength: number): boolean {
         return 0 === this.options.pointLength || this.options.pointLength === pointLength;

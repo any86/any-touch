@@ -1,10 +1,10 @@
-export interface Listener<Payload = any> {
+export interface Listener<Payload> {
     (...payload: Payload[]): void;
     (arg?: Payload): void;
     beforeEmit?: (payload: Payload) => boolean;
 }
 
-export interface ListenersMap<Payload = any> {
+export interface ListenersMap<Payload> {
     [propName: string]: Listener<Payload>[] | undefined;
 }
 

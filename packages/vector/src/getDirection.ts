@@ -1,10 +1,10 @@
-import {DIRECTION_UP, DIRECTION_DOWN, DIRECTION_RIGHT, DIRECTION_LEFT, NONE } from '@any-touch/shared';
-import { directionString} from '@any-touch/shared';
+import { DIRECTION_UP, DIRECTION_DOWN, DIRECTION_RIGHT, DIRECTION_LEFT, NONE } from '@any-touch/shared';
+import { directionString } from '@any-touch/shared';
 
 /**
- * 
- * @param {Number} 事件开始到结束的X位移 
-* @param {Number} 事件开始到结束的Y位移 
+ * 计算点相对于(0,0)的方向
+ * @param x 事件开始到结束的X位移 
+ * @param y 事件开始到结束的Y位移 
  */
 export default (x: number, y: number): directionString => {
     if (x === y) {

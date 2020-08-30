@@ -234,6 +234,10 @@ main {
             color: #69c;
             margin-left: 16px;
             text-decoration: none;
+            &+.link{
+                border-left:1px solid #ccc;
+                padding-left: 16px;
+            }
         }
     }
 

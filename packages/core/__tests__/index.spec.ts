@@ -3,20 +3,18 @@ import Tap from '@any-touch/tap';
 
 test('依次输入start->move->end->start-cancel', async done => {
     const { gs, at, mockCB, mock, sleep } = create();
-    at.on('at:touch', ev => {
-        mockCB(ev.stage);
-    });
+    at.on('at:touch', mockCB);
     gs.dispatchTouchStart();
     gs.dispatchTouchMove([{ x: 1, y: 1 }]);
     gs.dispatchTouchEnd();
     gs.dispatchTouchStart();
     gs.dispatchTouchCancel();
     await sleep(100);
-    expect(mock.calls[0][0]).toBe('start');
-    expect(mock.calls[1][0]).toBe('move');
-    expect(mock.calls[2][0]).toBe('end');
-    expect(mock.calls[3][0]).toBe('start');
-    expect(mock.calls[4][0]).toBe('cancel');
+    expect(mock.calls[0][0].stage).toBe('start');
+    expect(mock.calls[1][0].stage).toBe('move');
+    expect(mock.calls[2][0].stage).toBe('end');
+    expect(mock.calls[3][0].stage).toBe('start');
+    expect(mock.calls[4][0].stage).toBe('cancel');
     done();
 });
 
@@ -50,9 +48,7 @@ test(`通过set设置不触发dom事件`, async done => {
     const at = new AnyTouch(el);
     at.set({domEvents:false});
     const gs = new GestureSimulator(el);
-    el.addEventListener('tap', ev => {
-        mockCB();
-    });
+    el.addEventListener('tap', mockCB);
     gs.dispatchTouchStart();
     gs.dispatchTouchEnd();
     await sleep();
@@ -62,9 +58,7 @@ test(`通过set设置不触发dom事件`, async done => {
 
 test('destroy实例', () => {
     const { at, touch, sleep, mockCB } = create();
-    at.on('at:touch', () => {
-        mockCB();
-    });
+    at.on('at:touch', mockCB);
     at.destroy();
     sleep();
     touch.dispatchTouchStart();

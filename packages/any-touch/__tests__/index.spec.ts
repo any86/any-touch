@@ -14,9 +14,7 @@ test(`AnyTouch是否默认加载了所有手势`, async done => {
     expect(at.recognizerMap).toHaveProperty(['pan']);
     expect(at.recognizers).toHaveLength(6);
 
-    at.on('tap', ev=>{
-        mockCallback(ev);
-    });
+    at.on('tap',mockCallback);
     gs.dispatchTouchStart();
     gs.dispatchTouchEnd();
     await sleep();

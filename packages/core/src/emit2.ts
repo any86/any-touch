@@ -1,14 +1,14 @@
 import AnyTouch from './index';
 import dispatchDomEvent from './dispatchDomEvent'
-import { Input } from '@any-touch/shared';
+import { AnyTouchEvent } from '@any-touch/shared';
 const AT_AFTER = 'at:after';
 /**
  * 触发自定义和dom事件
  * @param at AnyTouch实例
  * @param payload 数据
  */
-export default function emit2(at: AnyTouch, payload: Record<string, any> & Input) {
-    const { type, target, targets } = payload;
+export default function emit2(at: AnyTouch, payload: AnyTouchEvent) {
+    const { type, target } = payload;
     at.emit(type, payload);
     at.emit(AT_AFTER, payload);
     // 触发DOM事件

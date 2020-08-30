@@ -5,7 +5,7 @@ test(`通过实例加载/卸载插件`, async done => {
     const at = new AnyTouch(el);
     const gs = new GestureSimulator(el);
     at.use(Tap);
-    at.on('tap', ev => {
+    at.on('tap', (ev:any) => {
         mockCB(ev.type);
     });
 
@@ -16,9 +16,7 @@ test(`通过实例加载/卸载插件`, async done => {
 
     // 卸载
     at.removeUse('tap');
-    at.on('tap', ev => {
-        mockCB();
-    });
+    at.on('tap', mockCB);
     await sleep();
     expect(mockCB).toHaveBeenCalledTimes(1);
     done();
