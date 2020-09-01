@@ -83,3 +83,26 @@ test(`如果点击用时超过指定时间(250ms), 不识别成tap`, async done 
     AnyTouch.removeUse('tap');
     done();
 });
+
+
+test('测试2触点双击', async done => {
+    const el = document.createElement('div');
+    const gs = new GestureSimulator(el);
+    AnyTouch.use(Tap, { name: 'twoFingersTap', tapTimes: 2, pointLength: 2,maxDistanceFromPrevTap:30 });
+    const at = new AnyTouch(el);
+    at.on('twoFingersTap', (ev: any) => {
+        expect(ev.type).toBe('twoFingersTap');
+    });
+
+    gs.dispatchTouchStart([{x:100,y:100}, {x:101,y:101}]);
+    await sleep(50);
+    gs.dispatchTouchEnd();
+
+    gs.dispatchTouchStart([{x:110,y:100}, {x:111,y:101}]);
+    await sleep(50);
+    gs.dispatchTouchEnd();
+
+    await sleep(50);
+    done();
+
+});

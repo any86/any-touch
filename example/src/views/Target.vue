@@ -7,6 +7,7 @@
 
 <script>
 import AnyTouch from '../../../packages/any-touch/dist/any-touch.umd';
+console.dir(AnyTouch)
 export default {
     name: 'Target',
     data() {
@@ -14,7 +15,13 @@ export default {
     },
 
     mounted() {
+        const {Tap} = AnyTouch;
+        AnyTouch.use(Tap,{name:'twoFingersTap',tapTimes:2,pointLength:2,maxDistanceFromPrevTap:100});
         const at = new AnyTouch(this.$el, { isPreventDefault: true });
+
+        at.on('twoFingersTap', e=>{
+            console.warn(e.type)
+        })
         at.target(this.$refs.t1).on('tap', (e) => {
             console.log(e.type);
         });
