@@ -10,7 +10,7 @@ import AnyEvent from 'any-event';
 import type { Listener } from 'any-event';
 
 import type { AnyTouchEvent, SupportEvent, } from '@any-touch/shared';
-import { Recognizer, IS_WX, TOUCH, TOUCH_START, TOUCH_MOVE, TOUCH_END, TOUCH_CANCEL, MOUSE_DOWN, MOUSE_MOVE, MOUSE_UP } from '@any-touch/shared';
+import { Recognizer, TOUCH, TOUCH_START, TOUCH_MOVE, TOUCH_END, TOUCH_CANCEL, MOUSE_DOWN, MOUSE_MOVE, MOUSE_UP } from '@any-touch/shared';
 
 import { mouse, touch } from './createInput';
 import dispatchDomEvent from './dispatchDomEvent';
@@ -85,7 +85,7 @@ export default class AnyTouch extends AnyEvent<AnyTouchEvent> {
         // 事件名和Input构造器的映射
         // 事件回调中用
         const createInputFromTouch = touch(this.el);
-        const createInputFromMouse = IS_WX ? () => { } : mouse();
+        const createInputFromMouse = mouse();
         this.inputCreatorMap = {
             [TOUCH_START]: createInputFromTouch,
             [TOUCH_MOVE]: createInputFromTouch,
@@ -175,17 +175,17 @@ export default class AnyTouch extends AnyEvent<AnyTouchEvent> {
         // 跳过无效输入
         // 比如没有按住鼠标的移动会返回undefined
         if (void 0 !== input) {
-            const AT_TOUCH = `at:${TOUCH}`;
-            const AT_TOUCH_WITH_STATUS = AT_TOUCH + input.stage;
-            this.emit(AT_TOUCH, input);
-            this.emit(AT_TOUCH_WITH_STATUS, input);
+            const AT = `at`;
+            const AT_WITH_STATUS = AT + ':' + input.stage;
+            this.emit(AT, input);
+            this.emit(AT_WITH_STATUS, input);
 
             const { domEvents } = this.options;
             if (false !== domEvents) {
                 const { target } = event;
                 if (null !== target) {
-                    dispatchDomEvent(target, { ...input, type: AT_TOUCH }, domEvents);
-                    dispatchDomEvent(target, { ...input, type: AT_TOUCH_WITH_STATUS }, domEvents);
+                    dispatchDomEvent(target, { ...input, type: AT }, domEvents);
+                    dispatchDomEvent(target, { ...input, type: AT_WITH_STATUS }, domEvents);
                 }
             }
             // 缓存每次计算的结果

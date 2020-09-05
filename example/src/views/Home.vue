@@ -19,7 +19,7 @@
                 :style="{top,left,zIndex,transform:`scale(${scale}) rotate(${angle}deg)`}"
                 :key="index"
                 :index="index"
-                @at:touch="onTouch"
+                @at="onTouch"
                 @at:after="onAfter($event,index)"
                 @panstart="onPanstart($event,index)"
                 @panmove="onPanmove($event,index)"
