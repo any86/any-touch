@@ -11,6 +11,7 @@ export type AnyTouchPlugin = any;
  */
 export type SupportEvent = MouseEvent | TouchEvent;
 
+
 export interface PointClientXY { target: EventTarget | null, clientX: number, clientY: number };
 
 /**
@@ -68,11 +69,25 @@ export interface Input extends InputOnlyHasCurrent {
 //     new(...args: any[]): any;
 // }
 
-export interface ComputeConstructor {
-    _id: string;
-    new(...args: any[]): {
-        compute(input: Input): Record<string, any> | void;
-    };
+// export interface ComputeConstructor {
+//     _id: string;
+//     new(...args: any[]): {
+//         compute(input: Input): Record<string, any> | void;
+//     };
+// }
+
+
+/**
+ * 计算函数
+ */
+export interface ComputeFunction {
+    (input: Input): Record<string, string | number>
+}
+/**
+ * 计算函数外壳函数
+ */
+export interface ComputeWrapFunction {
+    (): ComputeFunction
 }
 
 export interface CommonEmitFunction {
@@ -97,7 +112,7 @@ export type Vector = Point;
 /**
  * Input执行计算后的数据格式
  */
-export interface Computed {
+export interface Computed extends Input {
     // 一次识别周期中出现的最大触点数
     maxPointLength?: number;
     velocityX: number;
@@ -132,3 +147,22 @@ export interface AnyTouchEvent extends Input, Readonly<Computed> {
  * 识别器状态
  */
 export type RecognizerStatus = typeof STATUS_POSSIBLE | typeof STATUS_START | typeof STATUS_MOVE | typeof STATUS_END | typeof STATUS_CANCELLED | typeof STATUS_FAILED | typeof STATUS_RECOGNIZED;
+
+/**
+ * Input转换器
+ */
+export interface InputCreatorFunction<T> {
+    (event: T): void | Input;
+}
+
+export interface InputCreatorWrapFunction {
+    (el?: HTMLElement): InputCreatorFunction<TouchEvent>;
+    (): InputCreatorFunction<MouseEvent>;
+}
+
+/**
+ * Input转换器外壳函数映射
+ */
+export interface InputCreatorFunctionMap {
+    [k:string]: InputCreatorFunction<TouchEvent>|InputCreatorFunction<MouseEvent>;
+}

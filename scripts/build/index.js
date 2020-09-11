@@ -36,7 +36,14 @@ module.exports = {
                 }),
 
                 replace({
-                    __VERSION__: version
+                    __VERSION__: version,
+                    // 计算函数的id
+                    __ComputeAngle__: 'a',
+                    __ComputeDeltaXY__: 'b',
+                    __ComputeDistance__: 'c',
+                    __ComputeMaxLength__: 'd',
+                    __ComputeScale__: 'e',
+                    __ComputeVAndDir__: 'f',
                 }),
 
                 json(),

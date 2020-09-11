@@ -1,4 +1,4 @@
-import { CommonEmitFunction, Input } from '@any-touch/shared';
+import type { CommonEmitFunction, Input, Computed } from '@any-touch/shared';
 import {
     STATUS_FAILED, STATUS_RECOGNIZED, DIRECTION_UP, INPUT_CANCEL, INPUT_END, INPUT_START
 } from '@any-touch/shared';
@@ -15,10 +15,11 @@ export default class extends Recognizer {
 
     constructor(options: Partial<typeof DEFAULT_OPTIONS>) {
         super({ ...DEFAULT_OPTIONS, ...options });
+        this.computeFunctions = [ComputeDistance];
     };
 
-    recognize(input: Input, emit: CommonEmitFunction): void {
-        const { stage, startInput, pointLength } = input;
+    recognize(computed: Computed, emit: CommonEmitFunction): void {
+        const { stage, startInput, pointLength } = computed;
         // 1. start阶段
         // 2. 触点数符合
         // 那么等待minPressTime时间后触发press
@@ -29,7 +30,7 @@ export default class extends Recognizer {
             this.cancel();
             this._timeoutId = (setTimeout as Window['setTimeout'])(() => {
                 this.status = STATUS_RECOGNIZED;
-                emit(this.options.name, input);
+                emit(this.options.name, computed);
             }, this.options.minPressTime);
         }
         // 触发pressup条件:
@@ -39,10 +40,10 @@ export default class extends Recognizer {
             emit(`${this.options.name}${DIRECTION_UP}`, this.computed);
         }
         else if (STATUS_RECOGNIZED !== this.status) {
-            const deltaTime = input.timestamp - startInput.timestamp;
+            const deltaTime = computed.timestamp - startInput.timestamp;
             // 一旦不满足必要条件,
             // 发生了大的位移变化
-            if (!this.test(input) ||
+            if (!this.test(computed) ||
                 // end 或 cancel触发的时候还不到要求的press触发时间
                 (this.options.minPressTime > deltaTime && [INPUT_END, INPUT_CANCEL].includes(stage))) {
                 this.cancel();
@@ -55,9 +56,8 @@ export default class extends Recognizer {
      * 是否满足:
      * 移动距离不大
      */
-    test(input: Input): boolean {
-        this.computed = this.compute([ComputeDistance], input);
-        const { distance } = this.computed;
+    test(computed: Computed): boolean {
+        const { distance } = computed;
         return this.options.maxDistance > distance;
     };
 

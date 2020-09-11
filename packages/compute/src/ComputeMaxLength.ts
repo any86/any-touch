@@ -1,7 +1,7 @@
 import type { Input } from '@any-touch/shared';
 import { INPUT_START } from '@any-touch/shared';
 
-function computeMaxLength() {
+function ComputeMaxLength() {
     let maxPointLength = 0;
     return function (input: Input) {
         const { stage } = input;
@@ -11,5 +11,5 @@ function computeMaxLength() {
         return { maxPointLength };
     }
 }
-computeMaxLength._id = `computeMaxLength`;
-export default computeMaxLength;
+ComputeMaxLength._id = `__ComputeMaxLength__`;
+export default ComputeMaxLength;

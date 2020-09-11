@@ -35,7 +35,7 @@ function ComputeVAndDir() {
                 speedY = Math.round(deltaY / deltaTime * 100) / 100;
                 velocityX = Math.abs(speedX);
                 velocityY = Math.abs(speedY);
-                direction = getDirection(deltaX, deltaY) || <directionString>(direction);
+                direction = getDirection(deltaX, deltaY) || direction;
 
                 // if(NONE === direction) console.warn({deltaX,deltaY},input.id,_lastValidInput.id );
 
@@ -45,5 +45,5 @@ function ComputeVAndDir() {
         return { velocityX, velocityY, speedX, speedY, direction };
     }
 }
-ComputeVAndDir._id = `ComputeVAndDir`;
+ComputeVAndDir._id = `__ComputeVAndDir__`;
 export default ComputeVAndDir;

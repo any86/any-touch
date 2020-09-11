@@ -1,4 +1,4 @@
-import { Input} from '@any-touch/shared';
+import { Input, Computed } from '@any-touch/shared';
 import {
     STATUS_POSSIBLE, RecognizerStatus
 } from '@any-touch/shared';
@@ -45,6 +45,8 @@ export default abstract class {
     // 当前输入
     input?: Input;
 
+    computeFunctions:any[] = [];
+
     constructor(options: { name: string, [k: string]: any }) {
         this.options = options;
         this.name = this.options.name;
@@ -62,47 +64,21 @@ export default abstract class {
     };
 
     /**
-     * 验证触点
+     * 验证触点数量
      * @param pointLength 触点数
      */
     isValidPointLength(pointLength: number): boolean {
-        return 0 === this.options.pointLength || this.options.pointLength === pointLength;
+        return this.options.pointLength === pointLength;
+        // return 0 === this.options.pointLength || this.options.pointLength === pointLength;
     };
-
-    /**
-     * 缓存计算函数的结果
-     * @param Cs 计算函数 
-     * @param input 计算函数的参数
-     */
-    protected compute<T extends GenComputeFunction>(Cs: T[], input: Input): UnionToIntersection<Exclude<ReturnType<ReturnType<T>>, void>> {
-        const computed = Object.create(null);
-        // console.warn(this.name, JSON.stringify(this.computeFunctionMap));
-        for (const C of Cs) {
-            const { _id } = C;
-            // computedGroup 键为函数名(_id), 值为计算结果
-            const { computedGroup, computeFunctionMap } = this;
-            if (void 0 === computeFunctionMap[_id]) {
-                // 缓存初始化后的实例
-                computeFunctionMap[_id] = C();
-            }
-
-            // 缓存计算结果
-            computedGroup[_id] = computedGroup[_id] || computeFunctionMap[_id](input);
-            for (const key in computedGroup[_id]) {
-                computed[key] = computedGroup[_id][key];
-            }
-        }
-        return computed;
-    };
-
 
 
     /**
      * 适用于大部分移动类型的手势, 
      * 如pan/rotate/pinch/swipe
-     * @param {Input} 输入记录 
+     * @param computed 计算值 
      */
-    abstract recognize(Input: Input, callback: (type: string, ...payload: any[]) => void): void;
+    abstract recognize(computed: Computed, callback: (type: string, ...payload: any[]) => void): void;
 
 
     /**

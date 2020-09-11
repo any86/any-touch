@@ -127,8 +127,6 @@ at.set({ isPreventDefault: true });
 加载手势识别器, options 为手势识别器的参数.
 
 ```javascript
-at.use(AnyTouch.Tap, { tapTime: 2, name: 'doubletap' });
-// 也可在初始化之前加载
 AnyTouch.use(AnyTouch.Tap, { tapTime: 2, name: 'doubletap' });
 ```
 

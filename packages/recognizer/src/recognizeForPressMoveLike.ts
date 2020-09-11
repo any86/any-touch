@@ -1,4 +1,4 @@
-import { CommonEmitFunction, Input, STATUS_FAILED, RecognizerStatus } from '@any-touch/shared';
+import { CommonEmitFunction, Input, Computed,STATUS_FAILED, RecognizerStatus } from '@any-touch/shared';
 import Recognizer from './index';
 import {
     INPUT_CANCEL, INPUT_END, INPUT_MOVE
@@ -89,21 +89,20 @@ function flow(isVaild: boolean, lastStatus: RecognizerStatus, stage: string): Re
  * 适用于大部分移动类型的手势, 
  * 如pan/rotate/pinch/swipe
  * @param recognizer 识别器实例
- * @param input 当前输入
+ * @param computed 当前输入
  * @param emit at实例上的emit函数
  * @returns 是否通过test
  */
-export default function (recognizer: Recognizer, input: Input, emit: CommonEmitFunction): boolean {
+export default function (recognizer: Recognizer, computed: Computed, emit: CommonEmitFunction): boolean {
     // 是否识别成功
-    const isVaild = recognizer.test(input);
+    const isVaild = recognizer.test(computed);
     // console.log({isVaild},input.stage,recognizer.name)
     resetStatus(recognizer);
 
     // 状态变化流程
-    const { stage } = input;
+    const { stage } = computed;
 
     recognizer.status = flow(isVaild, recognizer.status, stage);
-    const { computed } = recognizer;
 
     // 是否已识别, 包含end
     recognizer.isRecognized = ([STATUS_START, STATUS_MOVE] as RecognizerStatus[]).includes(recognizer.status);
