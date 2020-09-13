@@ -9,16 +9,11 @@ export { default as recognizeForPressMoveLike } from './recognizeForPressMoveLik
 export { default as resetStatusForPressMoveLike } from './resetStatusForPressMoveLike';
 
 // 联合变交叉
-type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends ((k: infer I) => void) ? I : never;
+// type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends ((k: infer I) => void) ? I : never;
 
 
 interface ComputeFunction {
     (input: Input): Record<string, any> | void;
-}
-
-interface GenComputeFunction {
-    (): ComputeFunction;
-    _id: string;
 }
 
 export default abstract class {

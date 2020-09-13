@@ -5,7 +5,7 @@ import Base from '@any-touch/recognizer';
  */
 export type Recognizer = Base;
 export type AnyTouchPlugin = any;
-
+export type RecognizerConstruct = typeof Base;
 /**
  * 适配器支持的事件类型
  */
@@ -164,5 +164,5 @@ export interface InputCreatorWrapFunction {
  * Input转换器外壳函数映射
  */
 export interface InputCreatorFunctionMap {
-    [k:string]: InputCreatorFunction<TouchEvent>|InputCreatorFunction<MouseEvent>;
+    [k:string]: InputCreatorFunction<SupportEvent>;
 }

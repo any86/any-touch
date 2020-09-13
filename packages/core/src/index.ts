@@ -11,8 +11,12 @@
 import AnyEvent from 'any-event';
 import type { Listener } from 'any-event';
 
-import type { AnyTouchEvent, SupportEvent, ComputeFunction, ComputeWrapFunction, InputCreatorFunctionMap } from '@any-touch/shared';
-import { Recognizer, TOUCH_START, TOUCH_MOVE, TOUCH_END, TOUCH_CANCEL, MOUSE_DOWN, MOUSE_MOVE, MOUSE_UP } from '@any-touch/shared';
+import type { RecognizerConstruct, AnyTouchEvent, SupportEvent, ComputeFunction, ComputeWrapFunction, InputCreatorFunctionMap, InputCreatorFunction } from '@any-touch/shared';
+import {
+    Recognizer,
+    TOUCH_START, TOUCH_MOVE, TOUCH_END, TOUCH_CANCEL, MOUSE_DOWN, MOUSE_MOVE, MOUSE_UP,
+    STATUS_POSSIBLE, STATUS_START, STATUS_MOVE, STATUS_END, STATUS_CANCELLED, STATUS_FAILED, STATUS_RECOGNIZED
+} from '@any-touch/shared';
 
 import { mouse, touch } from './createInput';
 import dispatchDomEvent from './dispatchDomEvent';
@@ -42,8 +46,21 @@ const DEFAULT_OPTIONS: Options = {
     isPreventDefault: true,
     preventDefaultExclude: /^(?:INPUT|TEXTAREA|BUTTON|SELECT)$/
 };
-
 export default class AnyTouch extends AnyEvent<AnyTouchEvent> {
+    static Tap: RecognizerConstruct;
+    static Pan: RecognizerConstruct;
+    static Swipe: RecognizerConstruct;
+    static Press: RecognizerConstruct;
+    static Pinch: RecognizerConstruct;
+    static Rotate: RecognizerConstruct;
+    static STATUS_POSSIBLE: typeof STATUS_POSSIBLE;
+    static STATUS_START: typeof STATUS_START;
+    static STATUS_MOVE: typeof STATUS_MOVE;
+    static STATUS_END: typeof STATUS_END;
+    static STATUS_CANCELLED: typeof STATUS_CANCELLED;
+    static STATUS_FAILED: typeof STATUS_FAILED;
+    static STATUS_RECOGNIZED: typeof STATUS_RECOGNIZED;
+
     static version = '__VERSION__';
     // 识别器集合
     static recognizers: Recognizer[] = [];
@@ -93,10 +110,11 @@ export default class AnyTouch extends AnyEvent<AnyTouchEvent> {
         this.recognizerMap = AnyTouch.recognizerMap;
         this.recognizers = AnyTouch.recognizers;
 
-        // 事件名和Input构造器的映射
-        // 事件回调中用
-        const createInputFromTouch = touch(this.el);
-        const createInputFromMouse = mouse();
+        // 之所以强制是InputCreatorFunction<SupportEvent>,
+        // 是因为调用this.inputCreatorMap[event.type]的时候还要判断类型,
+        // 因为都是固定(touch&mouse)事件绑定好的, 没必要判断
+        const createInputFromTouch = touch(this.el) as InputCreatorFunction<SupportEvent>;
+        const createInputFromMouse = mouse() as InputCreatorFunction<SupportEvent>;
         this.inputCreatorMap = {
             [TOUCH_START]: createInputFromTouch,
             [TOUCH_MOVE]: createInputFromTouch,
@@ -167,7 +185,7 @@ export default class AnyTouch extends AnyEvent<AnyTouchEvent> {
         // }
         // 此处强制类型无奈
         // 不想增加判断来让类型标注好看
-        const input = this.inputCreatorMap[event.type](event as MouseEvent & TouchEvent);
+        const input = this.inputCreatorMap[event.type](event);
 
         // 跳过无效输入
         // 比如没有按住鼠标的移动会返回undefined
