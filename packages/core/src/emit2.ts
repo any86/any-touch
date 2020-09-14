@@ -7,7 +7,7 @@ const AT_AFTER = 'at:after';
  * @param at AnyTouch实例
  * @param payload 数据
  */
-export default function emit2(at: AnyTouch, payload: AnyTouchEvent) {
+export default function(at: AnyTouch, payload: AnyTouchEvent) {
     const { type, target } = payload;
     at.emit(type, payload);
     at.emit(AT_AFTER, payload);

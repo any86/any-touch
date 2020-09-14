@@ -1,4 +1,4 @@
-import { Input, CommonEmitFunction } from '@any-touch/shared';
+import type { EventTrigger, Computed } from '@any-touch/shared';
 import { ComputeDistance, ComputeDeltaXY, ComputeVAndDir } from '@any-touch/compute';
 import Recognizer, { recognizeForPressMoveLike } from '@any-touch/recognizer';
 const DEFAULT_OPTIONS = {
@@ -9,17 +9,16 @@ const DEFAULT_OPTIONS = {
 export default class extends Recognizer {
     constructor(options: Partial<typeof DEFAULT_OPTIONS>) {
         super({ ...DEFAULT_OPTIONS, ...options });
+        this.computeFunctions = [ComputeVAndDir, ComputeDistance, ComputeDeltaXY];
     }
 
     /**
      * 必要条件
-     * @param input 计算数据
+     * @param computed 计算数据
      * @return 是否是当前手势
      */
-    test(input: Input): boolean {
-        const { pointLength } = input;
-
-        const { distance } = this.computed;
+    test(computed: Computed): boolean {
+        const { pointLength, distance } = computed;
         return (
             // INPUT_MOVE === stage &&
             (this.isRecognized || this.options.threshold <= distance) &&
@@ -32,13 +31,12 @@ export default class extends Recognizer {
      * @param input 输入
      * @param emit 触发事件函数
      */
-    recognize(input: Input, emit: CommonEmitFunction): void {
-        this.computed = this.compute([ComputeVAndDir, ComputeDistance, ComputeDeltaXY], input);
+    recognize(computed: Computed, emit: EventTrigger): void {
         // 需要有方向
-        const isRecognized = void 0 !== this.computed.direction && recognizeForPressMoveLike(this, input, emit);
+        const isRecognized = void 0 !== computed.direction && recognizeForPressMoveLike(this, computed, emit);
         // panleft/panup/panright/pandown
         if (isRecognized) {
-            emit(this.options.name + this.computed.direction, this.computed);
+            emit(this.options.name + computed.direction);
         }
     }
 }

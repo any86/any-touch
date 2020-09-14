@@ -1,4 +1,4 @@
-import { Point, Input } from '@any-touch/shared';
+import { Point, Input, Computed } from '@any-touch/shared';
 import {
     STATUS_RECOGNIZED,
     STATUS_POSSIBLE,
@@ -38,6 +38,7 @@ export default class extends Recognizer {
 
     constructor(options: Partial<typeof DEFAULT_OPTIONS>) {
         super({ ...DEFAULT_OPTIONS, ...options });
+        this.computeFunctions = [ComputeDistance, ComputeMaxLength];
         this.tapCount = 0;
     };
 
@@ -119,16 +120,15 @@ export default class extends Recognizer {
      * 
      * @param {Input} 计算数据 
      */
-    recognize(input: Input, emit: (type: string, ...payload: any[]) => void): void {
-        const { stage, x, y } = input;
-        // type Computed = ReturnType<ComputeMaxLength['compute']> & ReturnType<ComputeDistance['compute']>
-        this.computed = this.compute([ComputeMaxLength, ComputeDistance], input)
+    recognize(computed: Computed, emit: (type: string, ...payload: any[]) => void): void {
+        const { stage, x, y } = computed;
+
         // 只在end阶段去识别
         if (INPUT_END !== stage) return;
 
         this.status = STATUS_POSSIBLE;
         // 每一次点击是否符合要求
-        if (this.test(input)) {
+        if (this.test(computed)) {
 
             this.cancelCountDownToFail();
             // 判断2次点击之间的距离是否过大
@@ -143,7 +143,7 @@ export default class extends Recognizer {
             // 之所以用%, 是因为如果连续点击3次, 单击的tapCount会为3, 但是其实tap也应该触发
             if (0 === this.tapCount % this.options.tapTimes) {
                 this.status = STATUS_RECOGNIZED;
-                emit(this.options.name, { ...this.computed, tapCount: this.tapCount });
+                emit(this.options.name, { ...computed, tapCount: this.tapCount });
                 this.reset();
             } else {
                 this.countDownToFail();
@@ -176,17 +176,17 @@ export default class extends Recognizer {
 
     /**
       * 识别条件
-      * @param {Input} 输入记录
-      * @return {Boolean} 是否验证成功
+      * @param computed 计算结果
+      * @return 是否验证成功
       */
-    test(input: Input): boolean {
-        const { startInput, pointLength } = input;
-        const deltaTime = input.timestamp - startInput.timestamp;
+    test(computed: Computed): boolean {
+        const { startInput, pointLength } = computed;
+        const deltaTime = computed.timestamp - startInput.timestamp;
         // 1. 触点数
         // 2. 当前点击数为0, 也就是当所有触点离开才通过
         // 3. 移动距离
         // 4. start至end的事件, 区分tap和press
-        const { maxPointLength, distance } = this.computed;
+        const { maxPointLength, distance } = computed;
         // console.log(this.name,pointLength, maxPointLength)
         return maxPointLength === this.options.pointLength &&
             0 === pointLength &&

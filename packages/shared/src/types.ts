@@ -5,11 +5,12 @@ import Base from '@any-touch/recognizer';
  */
 export type Recognizer = Base;
 export type AnyTouchPlugin = any;
-
+export type RecognizerConstruct = typeof Base;
 /**
  * 适配器支持的事件类型
  */
 export type SupportEvent = MouseEvent | TouchEvent;
+
 
 export interface PointClientXY { target: EventTarget | null, clientX: number, clientY: number };
 
@@ -68,15 +69,33 @@ export interface Input extends InputOnlyHasCurrent {
 //     new(...args: any[]): any;
 // }
 
-export interface ComputeConstructor {
+// export interface ComputeConstructor {
+//     _id: string;
+//     new(...args: any[]): {
+//         compute(input: Input): Record<string, any> | void;
+//     };
+// }
+
+
+/**
+ * 计算函数
+ */
+export interface ComputeFunction {
+    (input: Input): Partial<Computed> | void;
+}
+/**
+ * 计算函数外壳函数
+ */
+export interface ComputeWrapFunction {
+    (): ComputeFunction;
     _id: string;
-    new(...args: any[]): {
-        compute(input: Input): Record<string, any> | void;
-    };
 }
 
-export interface CommonEmitFunction {
-    (type: string, ...payload: any[]): void
+/**
+ * 仅用来作为识别器和at通知的载体函数
+ */
+export interface EventTrigger {
+    (type: string): void
 }
 
 /**
@@ -94,34 +113,43 @@ export interface Point {
 
 export type Vector = Point;
 
+
+/**
+ * 仅仅是获取scale/angle的前置计算值
+ */
+export interface VS {
+    prevV: Point, startV: Point, activeV: Point
+}
+
+
 /**
  * Input执行计算后的数据格式
  */
-export interface Computed {
+export interface Computed extends Input {
     // 一次识别周期中出现的最大触点数
-    maxPointLength?: number;
-    velocityX: number;
-    velocityY: number;
-    speedX: number;
-    speedY: number;
-    scale: number;
-    deltaScale: number;
-    angle: number;
-    deltaAngle: number;
-    deltaX: number;
-    deltaY: number;
-    deltaXYAngle: number;
-    displacementX: number;
-    displacementY: number;
+    readonly maxPointLength: number;
+    readonly velocityX: number;
+    readonly velocityY: number;
+    readonly speedX: number;
+    readonly speedY: number;
+    readonly scale: number;
+    readonly deltaScale: number;
+    readonly angle: number;
+    readonly deltaAngle: number;
+    readonly deltaX: number;
+    readonly deltaY: number;
+    readonly deltaXYAngle: number;
+    readonly displacementX: number;
+    readonly displacementY: number;
 
-    distanceX: number;
-    distanceY: number;
-    distance: number;
-    deltaTime: number;
+    readonly distanceX: number;
+    readonly distanceY: number;
+    readonly distance: number;
+    readonly deltaTime: number;
     // 与起始点的偏移方向
-    overallDirection?: directionString;
+    readonly overallDirection: directionString;
     // 瞬时方向
-    direction?: directionString;
+    readonly direction: directionString;
 }
 
 export interface AnyTouchEvent extends Input, Readonly<Computed> {
@@ -132,3 +160,22 @@ export interface AnyTouchEvent extends Input, Readonly<Computed> {
  * 识别器状态
  */
 export type RecognizerStatus = typeof STATUS_POSSIBLE | typeof STATUS_START | typeof STATUS_MOVE | typeof STATUS_END | typeof STATUS_CANCELLED | typeof STATUS_FAILED | typeof STATUS_RECOGNIZED;
+
+/**
+ * Input转换器
+ */
+export interface InputCreatorFunction<T> {
+    (event: T): void | Input;
+}
+
+export interface InputCreatorWrapFunction {
+    (el?: HTMLElement): InputCreatorFunction<TouchEvent>;
+    (): InputCreatorFunction<MouseEvent>;
+}
+
+/**
+ * Input转换器外壳函数映射
+ */
+export interface InputCreatorFunctionMap {
+    [k: string]: InputCreatorFunction<SupportEvent>;
+}

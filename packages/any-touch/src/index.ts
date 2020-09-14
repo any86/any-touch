@@ -7,6 +7,8 @@
 * pan 拖拽
 * swipe 快划
 */
+
+
 import AnyTouch from '@any-touch/core';
 import Tap from '@any-touch/tap';
 import Pan from '@any-touch/pan';
@@ -21,17 +23,17 @@ AnyTouch.use(Swipe);
 AnyTouch.use(Press);
 AnyTouch.use(Pinch);
 AnyTouch.use(Rotate);
-(AnyTouch as any).Tap = Tap;
-(AnyTouch as any).Pan = Pan;
-(AnyTouch as any).Swipe = Swipe;
-(AnyTouch as any).Press = Press;
-(AnyTouch as any).Pinch = Pinch;
-(AnyTouch as any).Rotate = Rotate;
-(AnyTouch as any).STATUS_POSSIBLE = STATUS_POSSIBLE;
-(AnyTouch as any).STATUS_START = STATUS_START;
-(AnyTouch as any).STATUS_MOVE = STATUS_MOVE;
-(AnyTouch as any).STATUS_END = STATUS_END;
-(AnyTouch as any).STATUS_CANCELLED = STATUS_CANCELLED;
-(AnyTouch as any).STATUS_FAILED = STATUS_FAILED;
-(AnyTouch as any).STATUS_RECOGNIZED = STATUS_RECOGNIZED;
+AnyTouch.Tap = Tap;
+AnyTouch.Pan = Pan;
+AnyTouch.Swipe = Swipe;
+AnyTouch.Press = Press;
+AnyTouch.Pinch = Pinch;
+AnyTouch.Rotate = Rotate;
+AnyTouch.STATUS_POSSIBLE = STATUS_POSSIBLE;
+AnyTouch.STATUS_START = STATUS_START;
+AnyTouch.STATUS_MOVE = STATUS_MOVE;
+AnyTouch.STATUS_END = STATUS_END;
+AnyTouch.STATUS_CANCELLED = STATUS_CANCELLED;
+AnyTouch.STATUS_FAILED = STATUS_FAILED;
+AnyTouch.STATUS_RECOGNIZED = STATUS_RECOGNIZED;
 export default AnyTouch;

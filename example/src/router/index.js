@@ -15,7 +15,11 @@ const routes = [
         name: 'target',
         component: () => import('../views/Target.vue')
     },
-
+    {
+        path: '/use',
+        name: 'use',
+        component: () => import('../views/Use.vue')
+    },
     {
         path: '/topology',
         name: 'Topology',

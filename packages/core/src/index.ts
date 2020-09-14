@@ -5,12 +5,18 @@
  * https://segmentfault.com/a/1190000010511484#articleHeader0
  * https://segmentfault.com/a/1190000007448808#articleHeader1
  * hammer.js http://hammerjs.github.io/
+ * ==================== 流程 ====================
+ * Event(Mouse|Touch) => BaseInput => Input => Computed => AnyTouchEvent
  */
 import AnyEvent from 'any-event';
 import type { Listener } from 'any-event';
 
-import type { AnyTouchEvent, SupportEvent, } from '@any-touch/shared';
-import { Recognizer, IS_WX, TOUCH, TOUCH_START, TOUCH_MOVE, TOUCH_END, TOUCH_CANCEL, MOUSE_DOWN, MOUSE_MOVE, MOUSE_UP } from '@any-touch/shared';
+import type { RecognizerConstruct, AnyTouchEvent, SupportEvent, ComputeFunction, ComputeWrapFunction, InputCreatorFunctionMap, InputCreatorFunction, Computed } from '@any-touch/shared';
+import {
+    Recognizer,
+    TOUCH_START, TOUCH_MOVE, TOUCH_END, TOUCH_CANCEL, MOUSE_DOWN, MOUSE_MOVE, MOUSE_UP,
+    STATUS_POSSIBLE, STATUS_START, STATUS_MOVE, STATUS_END, STATUS_CANCELLED, STATUS_FAILED, STATUS_RECOGNIZED
+} from '@any-touch/shared';
 
 import { mouse, touch } from './createInput';
 import dispatchDomEvent from './dispatchDomEvent';
@@ -40,11 +46,27 @@ const DEFAULT_OPTIONS: Options = {
     isPreventDefault: true,
     preventDefaultExclude: /^(?:INPUT|TEXTAREA|BUTTON|SELECT)$/
 };
-
 export default class AnyTouch extends AnyEvent<AnyTouchEvent> {
+    static Tap: RecognizerConstruct;
+    static Pan: RecognizerConstruct;
+    static Swipe: RecognizerConstruct;
+    static Press: RecognizerConstruct;
+    static Pinch: RecognizerConstruct;
+    static Rotate: RecognizerConstruct;
+    static STATUS_POSSIBLE: typeof STATUS_POSSIBLE;
+    static STATUS_START: typeof STATUS_START;
+    static STATUS_MOVE: typeof STATUS_MOVE;
+    static STATUS_END: typeof STATUS_END;
+    static STATUS_CANCELLED: typeof STATUS_CANCELLED;
+    static STATUS_FAILED: typeof STATUS_FAILED;
+    static STATUS_RECOGNIZED: typeof STATUS_RECOGNIZED;
+
     static version = '__VERSION__';
+    // 识别器集合
     static recognizers: Recognizer[] = [];
     static recognizerMap: Record<string, Recognizer> = {};
+    // 计算函数外壳函数集合
+    static computeFunctionMap: Record<string, ComputeWrapFunction> = {};
     /**
      * 安装插件
      * @param {AnyTouchPlugin} 插件
@@ -54,17 +76,17 @@ export default class AnyTouch extends AnyEvent<AnyTouchEvent> {
         use(AnyTouch, Recognizer, options);
     };
     /**
-     * 卸载插件
+     * 卸载插件[不建议]
      */
     static removeUse = (recognizerName?: string): void => {
         removeUse(AnyTouch, recognizerName);
     };
-
+    computeFunctionMap: Record<string, ComputeFunction> = {};
     // 目标元素
     el?: HTMLElement;
     // 选项
     options: Options;
-    inputCreatorMap: any;
+    inputCreatorMap: InputCreatorFunctionMap;
     recognizerMap: Record<string, Recognizer> = {};
     recognizers: Recognizer[] = [];
     beforeEachHook?: BeforeEachHook;
@@ -75,17 +97,24 @@ export default class AnyTouch extends AnyEvent<AnyTouchEvent> {
      */
     constructor(el?: HTMLElement, options?: Options) {
         super();
+
         this.el = el;
         this.options = { ...DEFAULT_OPTIONS, ...options };
 
-        // 同步到插件到实例
+        // 同步通过静态方法use引入的手势附带的"计算函数"
+        for (const k in AnyTouch.computeFunctionMap) {
+            this.computeFunctionMap[k] = AnyTouch.computeFunctionMap[k]();
+        }
+
+        // 同步插件到实例
         this.recognizerMap = AnyTouch.recognizerMap;
         this.recognizers = AnyTouch.recognizers;
 
-        // 事件名和Input构造器的映射
-        // 事件回调中用
-        const createInputFromTouch = touch(this.el);
-        const createInputFromMouse = IS_WX ? () => { } : mouse();
+        // 之所以强制是InputCreatorFunction<SupportEvent>,
+        // 是因为调用this.inputCreatorMap[event.type]的时候还要判断类型,
+        // 因为都是固定(touch&mouse)事件绑定好的, 没必要判断
+        const createInputFromTouch = touch(this.el) as InputCreatorFunction<SupportEvent>;
+        const createInputFromMouse = mouse() as InputCreatorFunction<SupportEvent>;
         this.inputCreatorMap = {
             [TOUCH_START]: createInputFromTouch,
             [TOUCH_MOVE]: createInputFromTouch,
@@ -115,7 +144,7 @@ export default class AnyTouch extends AnyEvent<AnyTouchEvent> {
                     }
                 }));
                 window.addEventListener('_', () => void 0, opts);
-            } catch{ }
+            } catch { }
 
             // 绑定元素
             this.on(
@@ -136,10 +165,72 @@ export default class AnyTouch extends AnyEvent<AnyTouchEvent> {
                     const { targets } = event;
                     // 检查当前触发事件的元素是否是其子元素
                     return event.target === el &&
-                        targets.every((target: any) => el.contains(target as HTMLElement))
+                        targets.every((target) => el.contains(target as HTMLElement))
                 });
             }
         };
+    };
+
+
+    /**
+     * 监听input变化s
+     * @param event Touch / Mouse事件对象
+     */
+    catchEvent(event: SupportEvent): void {
+        if (canPreventDefault(event, this.options)) {
+            event.preventDefault();
+        }
+        // if (!event.cancelable) {
+        //     this.eventEmitter.emit('error', { code: 0, message: '页面滚动的时候, 请暂时不要操作元素!' });
+        // }
+        const input = this.inputCreatorMap[event.type](event);
+
+        // 跳过无效输入
+        // 比如没有按住鼠标左键的移动会返回undefined
+        if (void 0 !== input) {
+            const AT = `at`;
+            const AT_WITH_STATUS = AT + ':' + input.stage;
+            this.emit(AT, input as AnyTouchEvent);
+            this.emit(AT_WITH_STATUS, input as AnyTouchEvent);
+
+            const { domEvents } = this.options;
+            if (false !== domEvents) {
+                const { target } = event;
+                if (null !== target) {
+                    dispatchDomEvent(target, { ...input, type: AT }, domEvents);
+                    dispatchDomEvent(target, { ...input, type: AT_WITH_STATUS }, domEvents);
+                }
+            }
+
+            // input -> computed
+            const computed = input as Computed;
+            for (const k in this.computeFunctionMap) {
+                const f = this.computeFunctionMap[k];
+                Object.assign(computed, f(computed));
+            }
+
+            // 缓存每次计算的结果
+            // 以函数名为键值
+            for (const recognizer of this.recognizers) {
+                if (recognizer.disabled) continue;
+                // 恢复上次的缓存
+                recognizer.recognize(computed, type => {
+                    // 此时的e就是this.computed
+                    const payload = { ...computed, type, baseType: recognizer.name };
+
+                    // 防止数据被vue类框架拦截
+                    Object?.freeze(payload);
+
+                    if (void 0 === this.beforeEachHook) {
+                        emit2(this, payload);
+                    } else {
+                        this.beforeEachHook(recognizer, () => {
+                            emit2(this, payload);
+                        });
+                    }
+                });
+            }
+        }
     };
 
     /**
@@ -159,64 +250,6 @@ export default class AnyTouch extends AnyEvent<AnyTouchEvent> {
         removeUse(this, name);
     };
 
-    /**
-     * 监听input变化s
-     * @param {Event}
-     */
-    catchEvent(event: SupportEvent): void {
-        if (canPreventDefault(event, this.options)) {
-            event.preventDefault();
-        }
-        // if (!event.cancelable) {
-        //     this.eventEmitter.emit('error', { code: 0, message: '页面滚动的时候, 请暂时不要操作元素!' });
-        // }
-        const input = this.inputCreatorMap[event.type](event);
-
-        // 跳过无效输入
-        // 比如没有按住鼠标的移动会返回undefined
-        if (void 0 !== input) {
-            const AT_TOUCH = `at:${TOUCH}`;
-            const AT_TOUCH_WITH_STATUS = AT_TOUCH + input.stage;
-            this.emit(AT_TOUCH, input);
-            this.emit(AT_TOUCH_WITH_STATUS, input);
-
-            const { domEvents } = this.options;
-            if (false !== domEvents) {
-                const { target } = event;
-                if (null !== target) {
-                    dispatchDomEvent(target, { ...input, type: AT_TOUCH }, domEvents);
-                    dispatchDomEvent(target, { ...input, type: AT_TOUCH_WITH_STATUS }, domEvents);
-                }
-            }
-            // 缓存每次计算的结果
-            // 以函数名为键值
-            let cacheComputedGroup = Object.create(null);
-            for (const recognizer of this.recognizers) {
-                if (recognizer.disabled) continue;
-                // 恢复上次的缓存
-                recognizer.computedGroup = cacheComputedGroup;
-                recognizer.computeFunctionMap = this.cacheComputedFunctionGroup;
-                recognizer.recognize(input, (type, e) => {
-                    // 此时的ev就是this.computed
-                    const payload = { ...input, ...e, type, baseType: recognizer.name };
-
-                    // 防止数据被vue类框架拦截
-                    Object.freeze(payload);
-
-                    if (void 0 === this.beforeEachHook) {
-                        emit2(this, payload);
-                    } else {
-                        this.beforeEachHook(recognizer, () => {
-                            emit2(this, payload);
-                        });
-                    }
-                });
-                // 记录到缓存
-                cacheComputedGroup = recognizer.computedGroup;
-                this.cacheComputedFunctionGroup = recognizer.computeFunctionMap;
-            }
-        }
-    };
 
     /**
      * 事件拦截器

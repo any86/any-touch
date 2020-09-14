@@ -5,12 +5,12 @@
 import Core from '@any-touch/core';
 const at = new Core(el);
 // 兼容Mouse/Touch
-at.on('at:touch', (ev) => {
+at.on('at', (ev) => {
     // ev包含位置/时间/事件对象等属性.
 });
 // start / move / end / cancel
-at.on('at:touchstart', onStart);
-at.on('at:touchmove', onMove);
-at.on('at:touchend', onEnd);
-at.on('at:touchcancel', onCancel);
+at.on('at:start', onStart);
+at.on('at:move', onMove);
+at.on('at:end', onEnd);
+at.on('at:cancel', onCancel);
 ```

@@ -1,6 +1,5 @@
 export interface Listener<Payload> {
-    (...payload: Payload[]): void;
-    (arg?: Payload): void;
+    (a?: Payload, ...payload: any[]): void;
     beforeEmit?: (payload: Payload) => boolean;
 }
 
@@ -17,7 +16,7 @@ export default class <Payload = any> {
      * @param listener 回调函数
      * @param beforeEmit 触发拦截器, 一般用在对on的二次封装
      */
-    on(eventName: string | string[], listener: Listener<Payload>, beforeEmit?: (payload: Payload) => boolean): void {
+    on(eventName: string | string[], listener: Listener<Payload>, beforeEmit?: (payload: Payload) => boolean): this {
         const eventNames = Array.isArray(eventName) ? eventName : [eventName];
         for (const name of eventNames) {
             if (void 0 === this.listenersMap[name]) {
@@ -26,6 +25,7 @@ export default class <Payload = any> {
             listener.beforeEmit = beforeEmit;
             (this.listenersMap[name] as Array<Listener<Payload> | undefined>).push(listener);
         }
+        return this;
     };
 
     /**

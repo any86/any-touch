@@ -19,7 +19,7 @@
                 :style="{top,left,zIndex,transform:`scale(${scale}) rotate(${angle}deg)`}"
                 :key="index"
                 :index="index"
-                @at:touch="onTouch"
+                @at="onTouch"
                 @at:after="onAfter($event,index)"
                 @panstart="onPanstart($event,index)"
                 @panmove="onPanmove($event,index)"
@@ -322,7 +322,7 @@ main {
             color: #fff;
             display: inline-block;
             padding: 16px;
-            position: absolute;
+            position: fixed;
             background-color: #dc3545;
             border-radius: 999px;
             z-index: 1986;

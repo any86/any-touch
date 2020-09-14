@@ -156,17 +156,17 @@ at.on('pan', (ev) => {
 import Core from '@any-touch/core';
 const at = new Core(el);
 // 兼容Mouse/Touch
-at.on('at:touch', (ev) => {
+at.on('at', (ev) => {
     // ev包含位置/时间/事件对象等属性.
 });
 // touchstart 或 mousedown
-at.on('at:touchstart', onStart);
+at.on('at:start', onStart);
 // touchmove 或 mousemove
-at.on('at:touchmove', onMove);
+at.on('at:move', onMove);
 // touchend 或 mouseup
-at.on('at:touchend', onEnd);
+at.on('at:end', onEnd);
 // touchcancel
-at.on('at:touchcancel', onCancel);
+at.on('at:cancel', onCancel);
 ```
 <!-- [更多](core) -->
 

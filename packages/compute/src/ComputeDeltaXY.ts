@@ -25,5 +25,5 @@ function ComputeDeltaXY() {
     }
 }
 
-ComputeDeltaXY._id = `ComputeDeltaXY`;
+ComputeDeltaXY._id = `__ComputeDeltaXY__`;
 export default ComputeDeltaXY;

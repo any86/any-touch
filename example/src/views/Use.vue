@@ -1,15 +1,13 @@
 <template>
     <main class="ovh">
-        <div ref="t1" class="p-6 bg-success">target_1</div>
-        <div ref="t2" class="p-6 bg-info">target_2</div>
+        <div ref="tap" class="p-6 bg-success">Tap</div>
     </main>
 </template>
 
 <script>
 import AnyTouch from '../../../packages/any-touch/dist/any-touch.umd';
-console.dir(AnyTouch)
 export default {
-    name: 'Target',
+    name: 'UseR',
     data() {
         return {};
     },
@@ -19,16 +17,10 @@ export default {
         AnyTouch.use(Tap,{name:'twoFingersTap',tapTimes:2,pointLength:2,maxDistanceFromPrevTap:100});
         const at = new AnyTouch(this.$el, { isPreventDefault: true });
 
-        at.on('twoFingersTap', e=>{
-            console.warn(e.type)
-        })
-        at.target(this.$refs.t1).on('tap', (e) => {
+        at.target(this.$refs.tap).on('tap', (e) => {
             console.log(e.type);
         });
 
-        at.target(this.$refs.t2).on('pan', (e) => {
-            console.log(e.type);
-        });
     },
 };
 </script>
