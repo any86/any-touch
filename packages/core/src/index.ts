@@ -11,7 +11,7 @@
 import AnyEvent from 'any-event';
 import type { Listener } from 'any-event';
 
-import type { RecognizerConstruct, AnyTouchEvent, SupportEvent, ComputeFunction, ComputeWrapFunction, InputCreatorFunctionMap, InputCreatorFunction } from '@any-touch/shared';
+import type { RecognizerConstruct, AnyTouchEvent, SupportEvent, ComputeFunction, ComputeWrapFunction, InputCreatorFunctionMap, InputCreatorFunction, Computed } from '@any-touch/shared';
 import {
     Recognizer,
     TOUCH_START, TOUCH_MOVE, TOUCH_END, TOUCH_CANCEL, MOUSE_DOWN, MOUSE_MOVE, MOUSE_UP,
@@ -205,11 +205,10 @@ export default class AnyTouch extends AnyEvent<AnyTouchEvent> {
             }
 
             // input -> computed
-            let computed = Object.create(null);
+            let computed = input as Computed;
             for (const k in this.computeFunctionMap) {
                 const f = this.computeFunctionMap[k];
-                computed = { ...computed, ...f(input) }
-                // console.log(c)
+                Object.assign(computed, f(computed));
             }
 
             // 缓存每次计算的结果
@@ -217,9 +216,9 @@ export default class AnyTouch extends AnyEvent<AnyTouchEvent> {
             for (const recognizer of this.recognizers) {
                 if (recognizer.disabled) continue;
                 // 恢复上次的缓存
-                recognizer.recognize({ ...input, ...computed }, (type, e) => {
+                recognizer.recognize(computed, type => {
                     // 此时的e就是this.computed
-                    const payload = { ...input, ...e, type, baseType: recognizer.name };
+                    const payload = { ...computed, type, baseType: recognizer.name };
 
                     // 防止数据被vue类框架拦截
                     Object?.freeze(payload);

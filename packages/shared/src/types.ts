@@ -81,7 +81,7 @@ export interface Input extends InputOnlyHasCurrent {
  * 计算函数
  */
 export interface ComputeFunction {
-    (input: Input): Record<string, string | number>
+    (input: Input): Computed
 }
 /**
  * 计算函数外壳函数
@@ -90,8 +90,11 @@ export interface ComputeWrapFunction {
     (): ComputeFunction
 }
 
-export interface CommonEmitFunction {
-    (type: string, ...payload: any[]): void
+/**
+ * 仅用来作为识别器和at通知的载体函数
+ */
+export interface EventTrigger {
+    (type: string): void
 }
 
 /**

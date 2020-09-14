@@ -1,4 +1,4 @@
-import type { CommonEmitFunction, Computed } from '@any-touch/shared';
+import type { EventTrigger, Computed } from '@any-touch/shared';
 import { ComputeDistance, ComputeDeltaXY, ComputeVAndDir } from '@any-touch/compute';
 import Recognizer, { recognizeForPressMoveLike } from '@any-touch/recognizer';
 const DEFAULT_OPTIONS = {
@@ -31,12 +31,12 @@ export default class extends Recognizer {
      * @param input 输入
      * @param emit 触发事件函数
      */
-    recognize(computed: Computed, emit: CommonEmitFunction): void {
+    recognize(computed: Computed, emit: EventTrigger): void {
         // 需要有方向
         const isRecognized = void 0 !== computed.direction && recognizeForPressMoveLike(this, computed, emit);
         // panleft/panup/panright/pandown
         if (isRecognized) {
-            emit(this.options.name + computed.direction, computed);
+            emit(this.options.name + computed.direction);
         }
     }
 }

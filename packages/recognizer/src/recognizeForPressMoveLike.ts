@@ -1,4 +1,4 @@
-import { CommonEmitFunction, Input, Computed,STATUS_FAILED, RecognizerStatus } from '@any-touch/shared';
+import { EventTrigger, Input, Computed,STATUS_FAILED, RecognizerStatus } from '@any-touch/shared';
 import Recognizer from './index';
 import {
     INPUT_CANCEL, INPUT_END, INPUT_MOVE
@@ -93,7 +93,7 @@ function flow(isVaild: boolean, lastStatus: RecognizerStatus, stage: string): Re
  * @param emit at实例上的emit函数
  * @returns 是否通过test
  */
-export default function (recognizer: Recognizer, computed: Computed, emit: CommonEmitFunction): boolean {
+export default function (recognizer: Recognizer, computed: Computed, emit: EventTrigger): boolean {
     // 是否识别成功
     const isVaild = recognizer.test(computed);
     // console.log({isVaild},input.stage,recognizer.name)
@@ -111,14 +111,14 @@ export default function (recognizer: Recognizer, computed: Computed, emit: Commo
     // if('pan' == name) console.warn(status,stage,{isRecognized,isVaild},input.pointLength)
     // 识别后触发的事件
     if (isRecognized) {
-        emit(name, computed);
+        emit(name);
     }
     // if('pan' == recognizer.name){
     //     console.log(isRecognized,recognizer.name)
     // }
     if (isRecognized || ([STATUS_END, STATUS_CANCELLED] as RecognizerStatus[]).includes(recognizer.status)) {
         // console.log(name + status,computed.deltaX )
-        emit(name + status, computed);
+        emit(name + status);
     }
     return isVaild;
 };

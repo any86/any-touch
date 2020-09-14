@@ -1,4 +1,4 @@
-import type { Computed, CommonEmitFunction } from '@any-touch/shared';
+import type { Computed, EventTrigger } from '@any-touch/shared';
 import { ComputeScale } from '@any-touch/compute';
 import Recognizer, { recognizeForPressMoveLike } from '@any-touch/recognizer';
 const DEFAULT_OPTIONS = {
@@ -30,7 +30,7 @@ export default class extends Recognizer {
      * 开始识别
      * @param computed 计算结果 
      */
-    recognize(computed: Computed, emit: CommonEmitFunction) {
+    recognize(computed: Computed, emit: EventTrigger) {
         // const computed = this.compute([ComputeVectorForMutli], input);
         // if (`activeV` in computed) {
         //     // const {activeV, prevV,startV} = computed;

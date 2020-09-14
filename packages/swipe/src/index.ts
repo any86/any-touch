@@ -1,4 +1,4 @@
-import type { Input, CommonEmitFunction, Computed } from '@any-touch/shared';
+import type { EventTrigger, Computed } from '@any-touch/shared';
 import { INPUT_END } from '@any-touch/shared';
 import { ComputeDistance, ComputeVAndDir, ComputeMaxLength } from '@any-touch/compute';
 import Recognizer from '@any-touch/recognizer';
@@ -30,11 +30,11 @@ export default class extends Recognizer {
      * 开始识别
      * @param {Input} 输入 
      */
-    recognize(computed: Computed, emit: CommonEmitFunction) {
+    recognize(computed: Computed, emit: EventTrigger) {
         if (this.test(computed)) {
-            emit(this.options.name, computed);
+            emit(this.options.name);
             // swipeleft...
-            emit(this.options.name + computed.direction, computed);
+            emit(this.options.name + computed.direction);
         }
 
     };

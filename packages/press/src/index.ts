@@ -1,4 +1,4 @@
-import type { CommonEmitFunction, Input, Computed } from '@any-touch/shared';
+import type { EventTrigger, Computed } from '@any-touch/shared';
 import {
     STATUS_FAILED, STATUS_RECOGNIZED, DIRECTION_UP, INPUT_CANCEL, INPUT_END, INPUT_START
 } from '@any-touch/shared';
@@ -18,7 +18,7 @@ export default class extends Recognizer {
         this.computeFunctions = [ComputeDistance];
     };
 
-    recognize(computed: Computed, emit: CommonEmitFunction): void {
+    recognize(computed: Computed, emit: EventTrigger): void {
         const { stage, startInput, pointLength } = computed;
         // 1. start阶段
         // 2. 触点数符合
@@ -30,14 +30,14 @@ export default class extends Recognizer {
             this.cancel();
             this._timeoutId = (setTimeout as Window['setTimeout'])(() => {
                 this.status = STATUS_RECOGNIZED;
-                emit(this.options.name, computed);
+                emit(this.options.name);
             }, this.options.minPressTime);
         }
         // 触发pressup条件:
         // 1. end阶段
         // 2. 已识别
         else if (INPUT_END === stage && STATUS_RECOGNIZED === this.status) {
-            emit(`${this.options.name}${DIRECTION_UP}`, this.computed);
+            emit(`${this.options.name}${DIRECTION_UP}`);
         }
         else if (STATUS_RECOGNIZED !== this.status) {
             const deltaTime = computed.timestamp - startInput.timestamp;
