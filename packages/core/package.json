@@ -1,6 +1,6 @@
 {
     "name": "@any-touch/core",
-    "version": "0.7.9",
+    "version": "0.8.0",
     "description": "any-touch核心程序, 主要用来兼容Mouse/Touch事件.",
     "unpkg": "dist/any-touch.js",
     "jsdelivr": "dist/any-touch.js",
@@ -24,8 +24,8 @@
         "tslib": "^1.9.3"
     },
     "dependencies": {
-        "@any-touch/shared": "^0.7.9",
-        "any-event": "^0.7.9"
+        "@any-touch/shared": "^0.8.0",
+        "any-event": "^0.8.0"
     },
     "keywords": [
         "touch",
