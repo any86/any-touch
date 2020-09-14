@@ -1,7 +1,7 @@
 /**
  * 是否微信
  */
-export const IS_WX = !!(window as any).wx;
+export const IS_WX = !!(window as any)!.wx;
 
 export const CLIENT_X = 'clientX';
 export const CLIENT_Y = 'clientY';

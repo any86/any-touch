@@ -1,11 +1,68 @@
-import { STATUS_POSSIBLE, STATUS_START, STATUS_MOVE, STATUS_END, STATUS_CANCELLED, STATUS_FAILED, STATUS_RECOGNIZED } from '@any-touch/shared';
-import Base from '@any-touch/recognizer';
+import {
+    STATUS_POSSIBLE,
+    STATUS_START, STATUS_MOVE,
+    STATUS_END, STATUS_CANCELLED,
+    STATUS_FAILED, STATUS_RECOGNIZED
+} from '@any-touch/shared';
 /**
  * 基础识别器类型
  */
-export type Recognizer = Base;
 export type AnyTouchPlugin = any;
-export type RecognizerConstruct = typeof Base;
+
+/**
+ * 计算函数
+ */
+export interface ComputeFunction {
+    (input: Input): Partial<Computed> | void;
+}
+/**
+ * 计算函数外壳函数
+ */
+export interface ComputeWrapFunction {
+    (): ComputeFunction;
+    _id: string;
+}
+
+/**
+ * 仅用来作为识别器和at通知的载体函数
+ */
+export interface EventTrigger {
+    (type: string): void
+}
+
+
+/**
+ * 识别器选项
+ */
+// export type RecognizerOptions<DEFAULT_OPTIONS = object> = Partial<Omit<DEFAULT_OPTIONS, 'name'>>
+//     & { name: string };
+
+
+export type RecognizerOptions<DEFAULT_OPTIONS = {[k:string]:string|number}> = Partial<DEFAULT_OPTIONS>;
+
+/**
+ * 识别器上下文
+ */
+export type RecognizerContext<DEFAULT_OPTIONS = any> = RecognizerOptions<DEFAULT_OPTIONS> & {
+    status: RecognizerStatus;
+    name: string;
+};
+
+/**
+ * 识别器实例
+ */
+export type RecognizerReturn = [RecognizerContext, (computed: Computed, emit: EventTrigger) => void];
+
+/**
+ * 识别器构造函数
+ */
+export interface RecognizerFunction {
+    C: ComputeWrapFunction[];
+    (options?: RecognizerOptions): RecognizerReturn;
+}
+
+
+
 /**
  * 适配器支持的事件类型
  */
@@ -77,25 +134,6 @@ export interface Input extends InputOnlyHasCurrent {
 // }
 
 
-/**
- * 计算函数
- */
-export interface ComputeFunction {
-    (input: Computed): Computed
-}
-/**
- * 计算函数外壳函数
- */
-export interface ComputeWrapFunction {
-    (): ComputeFunction
-}
-
-/**
- * 仅用来作为识别器和at通知的载体函数
- */
-export interface EventTrigger {
-    (type: string): void
-}
 
 /**
  * 方向
@@ -112,35 +150,43 @@ export interface Point {
 
 export type Vector = Point;
 
+
+/**
+ * 仅仅是获取scale/angle的前置计算值
+ */
+export interface VS {
+    prevV: Point, startV: Point, activeV: Point
+}
+
+
 /**
  * Input执行计算后的数据格式
  */
 export interface Computed extends Input {
-    readonly _vs?: { prevV: Point, startV: Point, activeV: Point }
     // 一次识别周期中出现的最大触点数
-    readonly maxPointLength?: number;
-    readonly velocityX?: number;
-    readonly velocityY?: number;
-    readonly speedX?: number;
-    readonly speedY?: number;
-    readonly scale?: number;
-    readonly deltaScale?: number;
-    readonly angle?: number;
-    readonly deltaAngle?: number;
-    readonly deltaX?: number;
-    readonly deltaY?: number;
-    readonly deltaXYAngle?: number;
-    readonly displacementX?: number;
-    readonly displacementY?: number;
+    readonly maxPointLength: number;
+    readonly velocityX: number;
+    readonly velocityY: number;
+    readonly speedX: number;
+    readonly speedY: number;
+    readonly scale: number;
+    readonly deltaScale: number;
+    readonly angle: number;
+    readonly deltaAngle: number;
+    readonly deltaX: number;
+    readonly deltaY: number;
+    readonly deltaXYAngle: number;
+    readonly displacementX: number;
+    readonly displacementY: number;
 
-    readonly distanceX?: number;
-    readonly distanceY?: number;
-    readonly distance?: number;
-    readonly deltaTime?: number;
+    readonly distanceX: number;
+    readonly distanceY: number;
+    readonly distance: number;
+    readonly deltaTime: number;
     // 与起始点的偏移方向
-    readonly overallDirection?: directionString;
+    readonly overallDirection: directionString;
     // 瞬时方向
-    readonly direction?: directionString;
+    readonly direction: directionString;
 }
 
 export interface AnyTouchEvent extends Input, Readonly<Computed> {

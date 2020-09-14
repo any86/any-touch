@@ -1,13 +1,11 @@
-import Recognizer from './index';
 import {
-    STATUS_POSSIBLE,
     STATUS_END,
     STATUS_CANCELLED,
-    STATUS_FAILED, STATUS_RECOGNIZED
+    STATUS_FAILED, STATUS_RECOGNIZED, STATUS_POSSIBLE
 } from '@any-touch/shared'
-export default function(recognizer: Recognizer) {
+import type { RecognizerStatus } from '@any-touch/shared'
+
+export default function (status: RecognizerStatus) {
     // 重置status
-    if (-1 !== [STATUS_END, STATUS_CANCELLED, STATUS_RECOGNIZED, STATUS_FAILED].indexOf(recognizer.status)) {
-        recognizer.status = STATUS_POSSIBLE;
-    };
+    return [STATUS_END, STATUS_CANCELLED, STATUS_RECOGNIZED, STATUS_FAILED].includes(status) ? STATUS_POSSIBLE : status;
 }

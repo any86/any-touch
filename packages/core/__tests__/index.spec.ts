@@ -23,7 +23,7 @@ test(`通过get获取tap手势实例, 并设置maxPressTime为100ms`, async done
     AnyTouch.use(Tap);
     const at = new AnyTouch(el);
     const tap = at.get('tap');
-    expect(tap).toBeInstanceOf(Tap);
+    expect(tap).toHaveProperty('set');
     done();
 });
 

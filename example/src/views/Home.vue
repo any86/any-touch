@@ -113,8 +113,14 @@ export default {
     },
 
     mounted() {
+        AnyTouch.use(AnyTouch.Tap, { name: 'doubletap', maxDistanceFromPrevTap: 20, tapTimes: 2 });
         const at = new AnyTouch(this.$refs.panel, { isPreventDefault: true });
         at.on('at:after', this.afterEach);
+        at.on('doubletap', e=>{
+            console.warn(e)
+        })
+        const tap = at.get('tap')
+        console.log(tap)
     },
 
     methods: {

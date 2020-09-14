@@ -1,7 +1,7 @@
 import Tap from '@any-touch/tap';
 import AnyTouch from '@any-touch/core';
 
-test('set传递的参数如果未空, 那么不修改options(此处仅为了提高代码测试覆盖率)', () => {
+test.skip('set传递的参数如果未空, 那么不修改options(此处仅为了提高代码测试覆盖率)', () => {
     AnyTouch.use(Tap);
     const el = document.createElement('div');
     const at = new AnyTouch(el);
