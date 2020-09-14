@@ -81,7 +81,7 @@ export interface Input extends InputOnlyHasCurrent {
  * 计算函数
  */
 export interface ComputeFunction {
-    (input: Input): Computed
+    (input: Computed): Computed
 }
 /**
  * 计算函数外壳函数
@@ -116,30 +116,31 @@ export type Vector = Point;
  * Input执行计算后的数据格式
  */
 export interface Computed extends Input {
+    readonly _vs?: { prevV: Point, startV: Point, activeV: Point }
     // 一次识别周期中出现的最大触点数
-    maxPointLength?: number;
-    velocityX: number;
-    velocityY: number;
-    speedX: number;
-    speedY: number;
-    scale: number;
-    deltaScale: number;
-    angle: number;
-    deltaAngle: number;
-    deltaX: number;
-    deltaY: number;
-    deltaXYAngle: number;
-    displacementX: number;
-    displacementY: number;
+    readonly maxPointLength?: number;
+    readonly velocityX?: number;
+    readonly velocityY?: number;
+    readonly speedX?: number;
+    readonly speedY?: number;
+    readonly scale?: number;
+    readonly deltaScale?: number;
+    readonly angle?: number;
+    readonly deltaAngle?: number;
+    readonly deltaX?: number;
+    readonly deltaY?: number;
+    readonly deltaXYAngle?: number;
+    readonly displacementX?: number;
+    readonly displacementY?: number;
 
-    distanceX: number;
-    distanceY: number;
-    distance: number;
-    deltaTime: number;
+    readonly distanceX?: number;
+    readonly distanceY?: number;
+    readonly distance?: number;
+    readonly deltaTime?: number;
     // 与起始点的偏移方向
-    overallDirection?: directionString;
+    readonly overallDirection?: directionString;
     // 瞬时方向
-    direction?: directionString;
+    readonly direction?: directionString;
 }
 
 export interface AnyTouchEvent extends Input, Readonly<Computed> {
@@ -167,5 +168,5 @@ export interface InputCreatorWrapFunction {
  * Input转换器外壳函数映射
  */
 export interface InputCreatorFunctionMap {
-    [k:string]: InputCreatorFunction<SupportEvent>;
+    [k: string]: InputCreatorFunction<SupportEvent>;
 }

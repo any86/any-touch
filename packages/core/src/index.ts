@@ -174,7 +174,7 @@ export default class AnyTouch extends AnyEvent<AnyTouchEvent> {
 
     /**
      * 监听input变化s
-     * @param {Event}
+     * @param event Touch / Mouse事件对象
      */
     catchEvent(event: SupportEvent): void {
         if (canPreventDefault(event, this.options)) {
@@ -183,12 +183,10 @@ export default class AnyTouch extends AnyEvent<AnyTouchEvent> {
         // if (!event.cancelable) {
         //     this.eventEmitter.emit('error', { code: 0, message: '页面滚动的时候, 请暂时不要操作元素!' });
         // }
-        // 此处强制类型无奈
-        // 不想增加判断来让类型标注好看
         const input = this.inputCreatorMap[event.type](event);
 
         // 跳过无效输入
-        // 比如没有按住鼠标的移动会返回undefined
+        // 比如没有按住鼠标左键的移动会返回undefined
         if (void 0 !== input) {
             const AT = `at`;
             const AT_WITH_STATUS = AT + ':' + input.stage;
@@ -205,7 +203,7 @@ export default class AnyTouch extends AnyEvent<AnyTouchEvent> {
             }
 
             // input -> computed
-            let computed = input as Computed;
+            const computed = input;
             for (const k in this.computeFunctionMap) {
                 const f = this.computeFunctionMap[k];
                 Object.assign(computed, f(computed));
