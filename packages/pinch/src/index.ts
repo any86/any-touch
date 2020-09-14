@@ -31,12 +31,6 @@ export default class extends Recognizer {
      * @param computed 计算结果 
      */
     recognize(computed: Computed, emit: EventTrigger) {
-        // const computed = this.compute([ComputeVectorForMutli], input);
-        // if (`activeV` in computed) {
-        //     // const {activeV, prevV,startV} = computed;
-        //     this.computed = { ...this.computed, ...computeScale(computed) };
-        // }
-        // console.log(this.computed);
         recognizeForPressMoveLike(this, computed, emit);
     };
 };

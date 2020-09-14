@@ -203,7 +203,7 @@ export default class AnyTouch extends AnyEvent<AnyTouchEvent> {
             }
 
             // input -> computed
-            const computed = input;
+            const computed = input as Computed;
             for (const k in this.computeFunctionMap) {
                 const f = this.computeFunctionMap[k];
                 Object.assign(computed, f(computed));

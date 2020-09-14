@@ -1,4 +1,4 @@
-import { Input, Computed } from '@any-touch/shared';
+import type { Input, Computed, ComputeWrapFunction } from '@any-touch/shared';
 import {
     STATUS_POSSIBLE, RecognizerStatus
 } from '@any-touch/shared';
@@ -11,38 +11,23 @@ export { default as resetStatusForPressMoveLike } from './resetStatusForPressMov
 // 联合变交叉
 // type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends ((k: infer I) => void) ? I : never;
 
-
-interface ComputeFunction {
-    (input: Input): Record<string, any> | void;
-}
-
 export default abstract class {
     // 手势名
     name: string;
     // 是否禁止
     disabled = false;
+    // 是否已识别
+    isRecognized = false;
     // 识别状态
     status: RecognizerStatus = STATUS_POSSIBLE;
-    // 是否已识别
-    isRecognized: boolean = false;
     // 选项
-    options: { [propName: string]: any };
+    options: { [k: string]: any };
 
     recognizerMap: Record<string, this> = {};
-    // 缓存当前手势的计算结果
-    // 每次手势识别前, 
-    // 会把前面所有手势的计算结果作为当前计算结果
-    computedGroup: Record<string, any> = {};
-    computed: Record<string, any> = {};
-    // 使用过的计算函数
-    computeFunctionMap: Record<string, any> = {};
 
-    // 当前输入
-    input?: Input;
+    computeFunctions: ComputeWrapFunction[] = [];
 
-    computeFunctions:any[] = [];
-
-    constructor(options: { name: string, [k: string]: any }) {
+    constructor(options: { name: string, [k: string]: number|string }) {
         this.options = options;
         this.name = this.options.name;
     };

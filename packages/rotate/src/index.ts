@@ -1,4 +1,4 @@
-import type { Input, Computed, EventTrigger } from '@any-touch/shared';
+import type { Computed, EventTrigger } from '@any-touch/shared';
 import { ComputeAngle } from '@any-touch/compute';
 import Recognizer, { recognizeForPressMoveLike } from '@any-touch/recognizer';
 
@@ -11,14 +11,13 @@ const DEFAULT_OPTIONS = {
 export default class extends Recognizer {
     constructor(options: Partial<typeof DEFAULT_OPTIONS>) {
         super({ ...DEFAULT_OPTIONS, ...options });
-        // this.computeFunctions = [ComputeAngle, ComputeVectorForMutli];
         this.computeFunctions = [ComputeAngle];
     };
 
     /**
      * 识别条件
-     * @param {AnyTouchEvent} 计算数据
-     * @return {Boolean} 接收是否识别状态
+     * @param computed 计算数据
+     * @return 接收是否识别状态
      */
     test(computed: Computed): boolean {
         const { pointLength, angle } = computed;
@@ -26,16 +25,10 @@ export default class extends Recognizer {
     };
 
     /**
- * 开始识别
- * @param {Input} 输入 
- */
+     * 开始识别
+     * @param computed 计算数据
+     */
     recognize(computed: Computed, emit: EventTrigger) {
-        // const computed = this.compute([ComputeVectorForMutli], input);
-        // if (`activeV` in computed) {
-        //     // const {activeV, prevV,startV} = computed;
-        //     this.computed = { ...this.computed, ...computeAngle(computed) };
-        // }
-        // console.log(this.computed);
         recognizeForPressMoveLike(this, computed, emit);
     };
 

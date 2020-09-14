@@ -81,13 +81,14 @@ export interface Input extends InputOnlyHasCurrent {
  * 计算函数
  */
 export interface ComputeFunction {
-    (input: Computed): Computed
+    (input: Input): Partial<Computed> | void;
 }
 /**
  * 计算函数外壳函数
  */
 export interface ComputeWrapFunction {
-    (): ComputeFunction
+    (): ComputeFunction;
+    _id: string;
 }
 
 /**
@@ -112,35 +113,43 @@ export interface Point {
 
 export type Vector = Point;
 
+
+/**
+ * 仅仅是获取scale/angle的前置计算值
+ */
+export interface VS {
+    prevV: Point, startV: Point, activeV: Point
+}
+
+
 /**
  * Input执行计算后的数据格式
  */
 export interface Computed extends Input {
-    readonly _vs?: { prevV: Point, startV: Point, activeV: Point }
     // 一次识别周期中出现的最大触点数
-    readonly maxPointLength?: number;
-    readonly velocityX?: number;
-    readonly velocityY?: number;
-    readonly speedX?: number;
-    readonly speedY?: number;
-    readonly scale?: number;
-    readonly deltaScale?: number;
-    readonly angle?: number;
-    readonly deltaAngle?: number;
-    readonly deltaX?: number;
-    readonly deltaY?: number;
-    readonly deltaXYAngle?: number;
-    readonly displacementX?: number;
-    readonly displacementY?: number;
+    readonly maxPointLength: number;
+    readonly velocityX: number;
+    readonly velocityY: number;
+    readonly speedX: number;
+    readonly speedY: number;
+    readonly scale: number;
+    readonly deltaScale: number;
+    readonly angle: number;
+    readonly deltaAngle: number;
+    readonly deltaX: number;
+    readonly deltaY: number;
+    readonly deltaXYAngle: number;
+    readonly displacementX: number;
+    readonly displacementY: number;
 
-    readonly distanceX?: number;
-    readonly distanceY?: number;
-    readonly distance?: number;
-    readonly deltaTime?: number;
+    readonly distanceX: number;
+    readonly distanceY: number;
+    readonly distance: number;
+    readonly deltaTime: number;
     // 与起始点的偏移方向
-    readonly overallDirection?: directionString;
+    readonly overallDirection: directionString;
     // 瞬时方向
-    readonly direction?: directionString;
+    readonly direction: directionString;
 }
 
 export interface AnyTouchEvent extends Input, Readonly<Computed> {
