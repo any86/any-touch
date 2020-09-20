@@ -1,11 +1,8 @@
 import {
-    STATUS_END,
-    STATUS_CANCELLED,
-    STATUS_FAILED, STATUS_RECOGNIZED, STATUS_POSSIBLE
+    RECOGNIZER_STATUS
 } from '@any-touch/shared'
-import type { RecognizerStatus } from '@any-touch/shared'
 
-export default function (status: RecognizerStatus) {
+export default function (status: RECOGNIZER_STATUS) {
     // 重置status
-    return [STATUS_END, STATUS_CANCELLED, STATUS_RECOGNIZED, STATUS_FAILED].includes(status) ? STATUS_POSSIBLE : status;
+    return [RECOGNIZER_STATUS.END, RECOGNIZER_STATUS.CANCELLED, RECOGNIZER_STATUS.RECOGNIZED, RECOGNIZER_STATUS.FAILED].includes(status) ? RECOGNIZER_STATUS.POSSIBLE : status;
 }

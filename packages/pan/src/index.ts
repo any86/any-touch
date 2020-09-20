@@ -1,5 +1,5 @@
-import type { EventTrigger, Computed, RecognizerStatus, RecognizerFunction,RecognizerOptions } from '@any-touch/shared';
-import { STATUS_POSSIBLE } from '@any-touch/shared';
+import type{ EventTrigger, Computed, RecognizerFunction,RecognizerOptions } from '@any-touch/shared';
+import { RECOGNIZER_STATUS } from '@any-touch/shared';
 import { ComputeDistance, ComputeDeltaXY, ComputeVAndDir } from '@any-touch/compute';
 import { recognizeForPressMoveLike, canResetStatusForPressMoveLike } from '@any-touch/recognizer';
 const DEFAULT_OPTIONS = {
@@ -17,7 +17,7 @@ function Pan(options?: RecognizerOptions<typeof DEFAULT_OPTIONS>):ReturnType<Rec
     const _context = Object.assign(
         DEFAULT_OPTIONS,
         options,
-        { status: STATUS_POSSIBLE as RecognizerStatus });
+        { status: RECOGNIZER_STATUS.POSSIBLE});
 
     let _isRecognized = false;
     
@@ -36,7 +36,7 @@ function Pan(options?: RecognizerOptions<typeof DEFAULT_OPTIONS>):ReturnType<Rec
      * @param input 输入
      * @param emit 触发事件函数
      */
-    function _recognize(computed: Computed, emit: EventTrigger): void {
+    function _recognize(computed: Computed, emit: EventTrigger) {
         // 重置status
         _context.status = canResetStatusForPressMoveLike(_context.status);
 

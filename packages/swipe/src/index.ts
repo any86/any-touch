@@ -1,5 +1,5 @@
-import type { EventTrigger, Computed, RecognizerStatus,RecognizerOptions,RecognizerFunction } from '@any-touch/shared';
-import { INPUT_END, STATUS_POSSIBLE, STATUS_RECOGNIZED } from '@any-touch/shared';
+import type { EventTrigger, Computed,RecognizerOptions,RecognizerFunction } from '@any-touch/shared';
+import { INPUT_END, RECOGNIZER_STATUS } from '@any-touch/shared';
 import { ComputeDistance, ComputeVAndDir, ComputeMaxLength } from '@any-touch/compute';
 const DEFAULT_OPTIONS = {
     name: 'swipe',
@@ -10,7 +10,7 @@ const DEFAULT_OPTIONS = {
 
 
 export default function Press(options?: RecognizerOptions<typeof DEFAULT_OPTIONS>):ReturnType<RecognizerFunction>  {
-    const _context = Object.assign(DEFAULT_OPTIONS, options, { status: STATUS_POSSIBLE as RecognizerStatus });
+    const _context = Object.assign(DEFAULT_OPTIONS, options, { status: RECOGNIZER_STATUS.POSSIBLE });
 
     /**
      * 识别条件
@@ -29,9 +29,9 @@ export default function Press(options?: RecognizerOptions<typeof DEFAULT_OPTIONS
      * @param computed 计算数据 
      */
     function _recognize(computed: Computed, emit: EventTrigger) {
-        _context.status = STATUS_POSSIBLE;
+        _context.status = RECOGNIZER_STATUS.POSSIBLE;
         if (_test(computed)) {
-            _context.status = STATUS_RECOGNIZED;
+            _context.status = RECOGNIZER_STATUS.RECOGNIZED;
             emit(_context.name);
             // swipeleft...
             emit(_context.name + computed.direction);

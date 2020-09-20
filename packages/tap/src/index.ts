@@ -1,8 +1,6 @@
-import type { Point, RecognizerStatus, Computed, RecognizerOptions, RecognizerFunction, RecognizerContext } from '@any-touch/shared';
+import type { Point, Computed, RecognizerOptions, RecognizerFunction, RecognizerContext } from '@any-touch/shared';
 import {
-    STATUS_RECOGNIZED,
-    STATUS_POSSIBLE,
-    STATUS_FAILED, INPUT_END
+    RECOGNIZER_STATUS, INPUT_END
 } from '@any-touch/shared';
 import { getVLength } from '@any-touch/vector';
 import { ComputeDistance, ComputeMaxLength } from '@any-touch/compute';
@@ -75,7 +73,7 @@ export default function Tap(options?: RecognizerOptions<typeof DEFAULT_OPTIONS>)
      */
     function _countDownToFail() {
         _countDownToFailTimer = (setTimeout as Window['setTimeout'])(() => {
-            _context.status = STATUS_FAILED;
+            _context.status = RECOGNIZER_STATUS.FAILED;
             _reset();
         }, _context.waitNextTapTime);
     };
@@ -158,7 +156,7 @@ export default function Tap(options?: RecognizerOptions<typeof DEFAULT_OPTIONS>)
         emit: (type: string, ...payload: any[]) => void
     ): void {
         const { stage, x, y } = computed;
-        _context.status = STATUS_POSSIBLE;
+        _context.status = RECOGNIZER_STATUS.POSSIBLE;
         // 只在end阶段去识别
         if (INPUT_END !== stage) return;
 
@@ -177,7 +175,7 @@ export default function Tap(options?: RecognizerOptions<typeof DEFAULT_OPTIONS>)
             // 是否满足点击次数要求
             // 之所以用%, 是因为如果连续点击3次, 单击的tapCount会为3, 但是其实tap也应该触发
             if (0 === _tapCount % _context.tapTimes) {
-                _context.status = STATUS_RECOGNIZED;
+                _context.status = RECOGNIZER_STATUS.RECOGNIZED;
                 emit(_context.name, { ...computed, tapCount: _tapCount });
                 _reset();
             } else {
@@ -185,7 +183,7 @@ export default function Tap(options?: RecognizerOptions<typeof DEFAULT_OPTIONS>)
             }
         } else {
             _reset();
-            _context.status = STATUS_FAILED;
+            _context.status = RECOGNIZER_STATUS.FAILED;
         }
     };
 

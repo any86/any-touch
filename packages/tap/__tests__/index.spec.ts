@@ -1,7 +1,7 @@
 import { create } from '@testUtils';
 import Tap from '@any-touch/tap';
 import AnyTouch from '@any-touch/core';
-import { STATUS_FAILED } from '@any-touch/shared';
+import { RECOGNIZER_STATUS } from '@any-touch/shared';
 import { GestureSimulator, sleep } from '@any-touch/simulator';
 
 test('加载tap, 触发一次tap', async done => {
@@ -31,7 +31,7 @@ test(`双击识别器开启的情况下, 只输入1次点击, 过指定时间识
     gs.dispatchTouchEnd();
     await sleep(500);
     if (void 0 !== doubletap) {
-        expect(doubletap.status).toBe(STATUS_FAILED);
+        expect(doubletap.status).toBe(RECOGNIZER_STATUS.FAILED);
         mockCB();
     }
     expect(mockCB).toHaveBeenCalledTimes(1);

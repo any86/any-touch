@@ -1,15 +1,20 @@
-import { EventTrigger, Computed, STATUS_FAILED, RecognizerStatus } from '@any-touch/shared';
+import { EventTrigger, Computed, RECOGNIZER_STATUS } from '@any-touch/shared';
+
 import {
     INPUT_CANCEL, INPUT_END, INPUT_MOVE
 } from '@any-touch/shared';
 import {
-    STATUS_POSSIBLE,
-    STATUS_START,
-    STATUS_MOVE,
-    STATUS_END,
-    STATUS_CANCELLED,
     INPUT_START
 } from '@any-touch/shared'
+
+
+
+const ACTION_MAP: Record<number, string> = {
+    [RECOGNIZER_STATUS.START]: 'start',
+    [RECOGNIZER_STATUS.MOVE]: 'move',
+    [RECOGNIZER_STATUS.END]: 'end',
+    [RECOGNIZER_STATUS.CANCELLED]: 'cancel'
+};
 
 /**
  * 计算当前识别器状态
@@ -21,8 +26,8 @@ import {
  */
 function flow(
     isVaild: boolean,
-    lastStatus: RecognizerStatus,
-    stage: string): RecognizerStatus {
+    lastStatus: RECOGNIZER_STATUS,
+    stage: string): RECOGNIZER_STATUS {
     /*
     * {
     *  isValid {
@@ -32,51 +37,51 @@ function flow(
     *  }
     * }
     * Number(true) === 1
-    * 这个分支不会出现STATUS_FAILED
-    * STATUS_END在上面的代码中也会被重置为STATUS_POSSIBLE, 从而进行重新识别
+    * 这个分支不会出现RECOGNIZER_STATUS.FAILED
+    * RECOGNIZER_STATUS.END在上面的代码中也会被重置为RECOGNIZER_STATUS.POSSIBLE, 从而进行重新识别
     */
     const STATE_MAP: { [k: number]: any } = {
         1: {
-            [STATUS_POSSIBLE]: {
+            [RECOGNIZER_STATUS.POSSIBLE]: {
                 // 下面都没有INPUT_START
                 // 是因为pressmove类的判断都是从INPUT_MOVE阶段开始
-                [INPUT_MOVE]: STATUS_START,
+                [INPUT_MOVE]: RECOGNIZER_STATUS.START,
                 // 暂时下面2种可有可无, 
                 // 因为做requireFail判断的时候possible和failure没区别
-                [INPUT_END]: STATUS_FAILED,
-                [INPUT_CANCEL]: STATUS_FAILED
+                [INPUT_END]: RECOGNIZER_STATUS.FAILED,
+                [INPUT_CANCEL]: RECOGNIZER_STATUS.FAILED
             },
 
-            [STATUS_START]: {
-                [INPUT_MOVE]: STATUS_MOVE,
-                [INPUT_END]: STATUS_END,
-                [INPUT_CANCEL]: STATUS_CANCELLED
+            [RECOGNIZER_STATUS.START]: {
+                [INPUT_MOVE]: RECOGNIZER_STATUS.MOVE,
+                [INPUT_END]: RECOGNIZER_STATUS.END,
+                [INPUT_CANCEL]: RECOGNIZER_STATUS.CANCELLED
             },
 
-            [STATUS_MOVE]: {
-                [INPUT_MOVE]: STATUS_MOVE,
-                [INPUT_END]: STATUS_END,
-                [INPUT_CANCEL]: STATUS_CANCELLED
+            [RECOGNIZER_STATUS.MOVE]: {
+                [INPUT_MOVE]: RECOGNIZER_STATUS.MOVE,
+                [INPUT_END]: RECOGNIZER_STATUS.END,
+                [INPUT_CANCEL]: RECOGNIZER_STATUS.CANCELLED
             }
         },
         // isVaild === false
-        // 这个分支有STATUS_FAILED
+        // 这个分支有RECOGNIZER_STATUS.FAILED
         0: {
-            // 此处没有STATUS_POSSIBLE和STATUS_END
-            // 是因为返回值仍然是STATUS_POSSIBLE
-            [STATUS_START]: {
+            // 此处没有RECOGNIZER_STATUS.POSSIBLE和RECOGNIZER_STATUS.END
+            // 是因为返回值仍然是RECOGNIZER_STATUS.POSSIBLE
+            [RECOGNIZER_STATUS.START]: {
                 // 此处的INPUT_MOVE和INPUT_END
                 // 主要是针对多触点识别器
-                [INPUT_MOVE]: STATUS_FAILED,
-                [INPUT_END]: STATUS_FAILED,
-                [INPUT_CANCEL]: STATUS_CANCELLED
+                [INPUT_MOVE]: RECOGNIZER_STATUS.FAILED,
+                [INPUT_END]: RECOGNIZER_STATUS.FAILED,
+                [INPUT_CANCEL]: RECOGNIZER_STATUS.CANCELLED
             },
 
-            [STATUS_MOVE]: {
-                [INPUT_START]: STATUS_FAILED,
-                [INPUT_MOVE]: STATUS_FAILED,
-                [INPUT_END]: STATUS_FAILED,
-                [INPUT_CANCEL]: STATUS_CANCELLED
+            [RECOGNIZER_STATUS.MOVE]: {
+                [INPUT_START]: RECOGNIZER_STATUS.FAILED,
+                [INPUT_MOVE]: RECOGNIZER_STATUS.FAILED,
+                [INPUT_END]: RECOGNIZER_STATUS.END,
+                [INPUT_CANCEL]: RECOGNIZER_STATUS.CANCELLED
             }
         }
     };
@@ -99,18 +104,17 @@ export default function (
     computed: Computed,
     test: (c: Computed) => boolean,
     name: string,
-    status: RecognizerStatus,
+    status: RECOGNIZER_STATUS,
     emit: EventTrigger,
-    after: ([isRecognized, status]: [boolean, RecognizerStatus]) => void
+    after: ([isRecognized, status]: [boolean, RECOGNIZER_STATUS]) => void
 ): boolean {
     // 是否识别成功
     const isVaild = test(computed);
 
     // 当前状态
     const newStatus = flow(isVaild, status, computed.stage);
-
     // 是否已识别, 包含end
-    const isRecognizedNow = ([STATUS_START, STATUS_MOVE] as RecognizerStatus[]).includes(newStatus);
+    const isRecognizedNow = ([RECOGNIZER_STATUS.START, RECOGNIZER_STATUS.MOVE]).includes(newStatus);
 
     // 返回数据给识别器
     after([isRecognizedNow, newStatus]);
@@ -120,8 +124,8 @@ export default function (
         emit(name);
     }
 
-    if (isRecognizedNow || ([STATUS_END, STATUS_CANCELLED] as RecognizerStatus[]).includes(newStatus)) {
-        emit(name + newStatus);
+    if (isRecognizedNow || ([RECOGNIZER_STATUS.END, RECOGNIZER_STATUS.CANCELLED]).includes(newStatus)) {
+        emit(name + ACTION_MAP[newStatus]);
     }
     return isVaild;
 };

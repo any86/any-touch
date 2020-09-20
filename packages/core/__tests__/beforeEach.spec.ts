@@ -1,5 +1,5 @@
 import AnyTouch from '@any-touch/core';
-import {STATUS_FAILED,STATUS_POSSIBLE} from '@any-touch/shared';
+import {RECOGNIZER_STATUS} from '@any-touch/shared';
 
 import Tap from '@any-touch/tap';
 import { GestureSimulator, sleep } from '@any-touch/simulator';
@@ -16,7 +16,7 @@ test(`tap延迟300ms触发, 如果届时doubletap状态为"失败或可能"那�
     at.beforeEach(({ recognizerMap, name }, next) => {
         if ('tap' === name) {
             debounce(() => {
-                if ([STATUS_POSSIBLE,STATUS_FAILED].includes(recognizerMap.doubletap.status)) next();
+                if ([RECOGNIZER_STATUS.POSSIBLE,RECOGNIZER_STATUS.FAILED].includes(recognizerMap.doubletap.status)) next();
             }, 300);
         } else {
             next();

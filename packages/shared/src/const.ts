@@ -42,12 +42,12 @@ export const MOUSE_DOWN = MOUSE + DIRECTION_DOWN as 'mousedown';
 
 
 // 识别器状态码
-// 为了简化Array.include的类型判断, 统一字符串类型
-// 稍后都改为数字, 给STATUS_START增加字符串映射
-export const STATUS_POSSIBLE = 'p';
-export const STATUS_START = INPUT_START;
-export const STATUS_MOVE = INPUT_MOVE;
-export const STATUS_END = INPUT_END;
-export const STATUS_RECOGNIZED = 'r';
-export const STATUS_FAILED = 'f';
-export const STATUS_CANCELLED = INPUT_CANCEL;
+export const enum RECOGNIZER_STATUS {
+    POSSIBLE,
+    START,
+    MOVE,
+    END,
+    RECOGNIZED,
+    FAILED,
+    CANCELLED
+}

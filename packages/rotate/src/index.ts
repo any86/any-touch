@@ -1,5 +1,5 @@
-import type { Computed, EventTrigger, RecognizerStatus,RecognizerOptions ,RecognizerFunction} from '@any-touch/shared';
-import { STATUS_POSSIBLE } from '@any-touch/shared';
+import type { Computed, EventTrigger,RecognizerOptions ,RecognizerFunction} from '@any-touch/shared';
+import { RECOGNIZER_STATUS } from '@any-touch/shared';
 import { ComputeAngle } from '@any-touch/compute';
 import { canResetStatusForPressMoveLike, recognizeForPressMoveLike } from '@any-touch/recognizer';
 
@@ -13,7 +13,7 @@ export default function Rotate(options?: RecognizerOptions<typeof DEFAULT_OPTION
     const _context = Object.assign(
         DEFAULT_OPTIONS,
         options,
-        { status: STATUS_POSSIBLE as RecognizerStatus });
+        { status: RECOGNIZER_STATUS.POSSIBLE});
     let _isRecognized = false;
 
     /**

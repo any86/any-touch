@@ -18,8 +18,7 @@ import type {
     AnyTouchEvent, SupportEvent, ComputeFunction, ComputeWrapFunction, InputCreatorFunctionMap, InputCreatorFunction, Computed, RecognizerContext
 } from '@any-touch/shared';
 import {
-    TOUCH_START, TOUCH_MOVE, TOUCH_END, TOUCH_CANCEL, MOUSE_DOWN, MOUSE_MOVE, MOUSE_UP,
-    STATUS_POSSIBLE, STATUS_START, STATUS_MOVE, STATUS_END, STATUS_CANCELLED, STATUS_FAILED, STATUS_RECOGNIZED
+    TOUCH_START, TOUCH_MOVE, TOUCH_END, TOUCH_CANCEL, MOUSE_DOWN, MOUSE_MOVE, MOUSE_UP, RECOGNIZER_STATUS
 } from '@any-touch/shared';
 
 import { mouse, touch } from './createInput';
@@ -57,13 +56,13 @@ export default class AnyTouch extends AnyEvent<AnyTouchEvent> {
     static Press: RecognizerFunction;
     static Pinch: RecognizerFunction;
     static Rotate: RecognizerFunction;
-    static STATUS_POSSIBLE: typeof STATUS_POSSIBLE;
-    static STATUS_START: typeof STATUS_START;
-    static STATUS_MOVE: typeof STATUS_MOVE;
-    static STATUS_END: typeof STATUS_END;
-    static STATUS_CANCELLED: typeof STATUS_CANCELLED;
-    static STATUS_FAILED: typeof STATUS_FAILED;
-    static STATUS_RECOGNIZED: typeof STATUS_RECOGNIZED;
+    static STATUS_POSSIBLE: RECOGNIZER_STATUS;
+    static STATUS_START: RECOGNIZER_STATUS;
+    static STATUS_MOVE: RECOGNIZER_STATUS;
+    static STATUS_END: RECOGNIZER_STATUS;
+    static STATUS_CANCELLED: RECOGNIZER_STATUS;
+    static STATUS_FAILED: RECOGNIZER_STATUS;
+    static STATUS_RECOGNIZED: RECOGNIZER_STATUS;
 
     static version = '__VERSION__';
     // 识别器集合
