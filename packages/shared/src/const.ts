@@ -26,6 +26,13 @@ export const DIRECTION_RIGHT = 'right';
 export const DIRECTION_UP = 'up';
 export const DIRECTION_DOWN = 'down';
 export const NONE = 'none';
+export const enum DIRECTION {
+    LEFT = 'left',
+    RIGHT = 'right',
+    UP = 'up',
+    DOWN = 'down',
+}
+
 
 export const TOUCH = 'touch';
 export const MOUSE = 'mouse';
@@ -41,7 +48,9 @@ export const MOUSE_DOWN = MOUSE + DIRECTION_DOWN as 'mousedown';
 
 
 
-// 识别器状态码
+/**
+ * 识别器状态码
+ */
 export const enum RECOGNIZER_STATUS {
     POSSIBLE,
     START,
