@@ -32,7 +32,7 @@ export function use(
 
         // 识别器管理
         // recognizer.name是默认值或者options给定
-        atOrAT.recognizerMap[name] = recognizer;
+        atOrAT.recognizerMap[name] = recognizer[0];
         // recognizer.recognizerMap = atOrAT.recognizerMap;
         // atOrAT.recognizers.push(atOrAT.recognizerMap[name]);
         atOrAT.recognizers.push(recognizer);

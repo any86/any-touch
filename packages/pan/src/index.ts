@@ -1,7 +1,6 @@
-import type{ EventTrigger, Computed, RecognizerFunction,RecognizerOptions } from '@any-touch/shared';
-import { RECOGNIZER_STATUS } from '@any-touch/shared';
+import type { EventTrigger, Computed, RecognizerFunction, RecognizerOptions } from '@any-touch/shared';
 import { ComputeDistance, ComputeDeltaXY, ComputeVAndDir } from '@any-touch/compute';
-import { recognizeForPressMoveLike, canResetStatusForPressMoveLike } from '@any-touch/recognizer';
+import createContext, { recognizeForPressMoveLike, canResetStatusForPressMoveLike } from '@any-touch/recognizer';
 const DEFAULT_OPTIONS = {
     name: 'pan',
     threshold: 10,
@@ -13,14 +12,10 @@ const DEFAULT_OPTIONS = {
  * 拖拽识别器
  * @param options 选项
  */
-function Pan(options?: RecognizerOptions<typeof DEFAULT_OPTIONS>):ReturnType<RecognizerFunction>  {
-    const _context = Object.assign(
-        DEFAULT_OPTIONS,
-        options,
-        { status: RECOGNIZER_STATUS.POSSIBLE});
-
+function Pan(options?: RecognizerOptions<typeof DEFAULT_OPTIONS>): ReturnType<RecognizerFunction> {
+    const _context = createContext(DEFAULT_OPTIONS, options);
     let _isRecognized = false;
-    
+
     /**
      * 必要条件
      * @param computed 计算数据
@@ -55,7 +50,7 @@ function Pan(options?: RecognizerOptions<typeof DEFAULT_OPTIONS>):ReturnType<Rec
                 }
             );
         // panleft/panup/panright/pandown
-        if (isRecognizedNow) {
+        if (isRecognizedNow && void 0 !== computed.direction) {
             emit(_context.name + computed.direction);
         }
     }

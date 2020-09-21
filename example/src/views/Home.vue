@@ -77,6 +77,7 @@
 function C(text, bgColor = '#000', color = '#fff') {
     console.log(`%c${text}`, `color:${color};background-color:${bgColor};padding:2px 6px;border-radius:4px;`);
 }
+import debounce from 'lodash/debounce';
 import AnyTouch from '../../../packages/any-touch/dist/any-touch.umd';
 export default {
     name: 'Home',
@@ -113,14 +114,35 @@ export default {
     },
 
     mounted() {
-        AnyTouch.use(AnyTouch.Tap, { name: 'doubletap', maxDistanceFromPrevTap: 20, tapTimes: 2 });
+        AnyTouch.use(AnyTouch.Tap, { name: 'doubletap', tapTimes: 2 });
         const at = new AnyTouch(this.$refs.panel, { isPreventDefault: true });
+
+        let timeID = null;
+        at.beforeEach((a, next) => {
+            if ('tap' === a.name) {
+                clearTimeout(timeID);
+                timeID = setTimeout(() => {
+                    // console.log(a.status, at.recognizerMap.doubletap[0].status);
+                    const ok = [AnyTouch.STATUS_POSSIBLE, AnyTouch.STATUS_FAILED].includes(
+                        at.recognizerMap.doubletap.status
+                    );
+                    if (ok) {
+                        next();
+                    }
+                }, 300);
+            } else {
+                next();
+            }
+        });
         at.on('at:after', this.afterEach);
-        at.on('doubletap', e=>{
-            console.warn(e)
-        })
-        const tap = at.get('tap')
-        console.log(tap)
+        at.on('doubletap', (e) => {
+            console.log(`doubletap`);
+        });
+
+        at.on('tap', (e) => {
+            console.log(`tap`);
+        });
+        const tap = at.get('tap');
     },
 
     methods: {
@@ -132,6 +154,9 @@ export default {
             ev.currentTarget.setAttribute('at', ev.baseType);
         },
         onTouch(ev) {
+            if('start' === ev.stage){
+                ev.currentTarget.setAttribute('at', '');
+            }
             // console.log('html:', ev.target.innerHTML);
             ev.currentTarget.setAttribute('at-stage', ev.stage);
         },
@@ -240,8 +265,8 @@ main {
             color: #69c;
             margin-left: 16px;
             text-decoration: none;
-            &+.link{
-                border-left:1px solid #ccc;
+            & + .link {
+                border-left: 1px solid #ccc;
                 padding-left: 16px;
             }
         }

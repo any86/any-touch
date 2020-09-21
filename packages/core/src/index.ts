@@ -18,7 +18,7 @@ import type {
     AnyTouchEvent, SupportEvent, ComputeFunction, ComputeWrapFunction, InputCreatorFunctionMap, InputCreatorFunction, Computed, RecognizerContext
 } from '@any-touch/shared';
 import {
-    TOUCH_START, TOUCH_MOVE, TOUCH_END, TOUCH_CANCEL, MOUSE_DOWN, MOUSE_MOVE, MOUSE_UP, RECOGNIZER_STATUS
+    TOUCH, MOUSE, RECOGNIZER_STATUS
 } from '@any-touch/shared';
 
 import { mouse, touch } from './createInput';
@@ -67,7 +67,7 @@ export default class AnyTouch extends AnyEvent<AnyTouchEvent> {
     static version = '__VERSION__';
     // 识别器集合
     static recognizers: RecognizerReturn[] = [];
-    static recognizerMap: Record<string, RecognizerReturn> = {};
+    static recognizerMap: Record<string, RecognizerContext> = {};
     // 计算函数外壳函数集合
     static computeFunctionMap: Record<string, ComputeWrapFunction> = {};
     /**
@@ -90,10 +90,9 @@ export default class AnyTouch extends AnyEvent<AnyTouchEvent> {
     // 选项
     options: Options;
     inputCreatorMap: InputCreatorFunctionMap;
-    recognizerMap: Record<string, RecognizerReturn> = {};
-    recognizers: RecognizerReturn[] = [];
+    recognizerMap: Record<string, RecognizerContext>;
+    recognizers: RecognizerReturn[];
     beforeEachHook?: BeforeEachHook;
-    cacheComputedFunctionGroup = Object.create(null);
     /**
      * @param el 目标元素
      * @param options 选项
@@ -118,13 +117,13 @@ export default class AnyTouch extends AnyEvent<AnyTouchEvent> {
         const createInputFromTouch = touch(this.el) as InputCreatorFunction<SupportEvent>;
         const createInputFromMouse = mouse() as InputCreatorFunction<SupportEvent>;
         this.inputCreatorMap = {
-            [TOUCH_START]: createInputFromTouch,
-            [TOUCH_MOVE]: createInputFromTouch,
-            [TOUCH_END]: createInputFromTouch,
-            [TOUCH_CANCEL]: createInputFromTouch,
-            [MOUSE_DOWN]: createInputFromMouse,
-            [MOUSE_MOVE]: createInputFromMouse,
-            [MOUSE_UP]: createInputFromMouse
+            [TOUCH.START]: createInputFromTouch,
+            [TOUCH.MOVE]: createInputFromTouch,
+            [TOUCH.END]: createInputFromTouch,
+            [TOUCH.CANCEL]: createInputFromTouch,
+            [MOUSE.DOWN]: createInputFromMouse,
+            [MOUSE.MOVE]: createInputFromMouse,
+            [MOUSE.UP]: createInputFromMouse
         };
 
         // 绑定事件
@@ -266,8 +265,8 @@ export default class AnyTouch extends AnyEvent<AnyTouchEvent> {
      * @param name 识别器的名字
      * @return 返回识别器
      */
-    get(name: string): RecognizerReturn[0] | void {
-        return this.recognizerMap[name][0];
+    get(name: string): RecognizerContext | void {
+        return this.recognizerMap[name];
     };
 
     /**

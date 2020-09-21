@@ -11,12 +11,10 @@
 //     target.addEventListener(type,listener,options);
 // }
 
-import { IS_WX } from '@any-touch/shared';
+import { TOUCH,MOUSE,IS_WX } from '@any-touch/shared';
 import type { SupportEvent } from '@any-touch/shared';
 
-import { TOUCH_START, TOUCH_MOVE, TOUCH_END, TOUCH_CANCEL, MOUSE_DOWN, MOUSE_MOVE, MOUSE_UP } from '@any-touch/shared';
-const TOUCH_EVENTS = [TOUCH_START, TOUCH_MOVE, TOUCH_END, TOUCH_CANCEL];
-
+const TOUCH_EVENTS = [TOUCH.START, TOUCH.MOVE, TOUCH.END, TOUCH.CANCEL];
 /*
 * 根据输入设备绑定事件
 */
@@ -31,9 +29,9 @@ export default function (
     });
 
     if (!IS_WX) {
-        el.addEventListener(MOUSE_DOWN, catchEvent, options);
-        window.addEventListener(MOUSE_MOVE, catchEvent, options);
-        window.addEventListener(MOUSE_UP, catchEvent, options);
+        el.addEventListener(MOUSE.DOWN, catchEvent, options);
+        window.addEventListener(MOUSE.MOVE, catchEvent, options);
+        window.addEventListener(MOUSE.UP, catchEvent, options);
     }
 
     return () => {
@@ -41,9 +39,9 @@ export default function (
             el.removeEventListener(eventName, catchEvent);
         });
         if (!IS_WX) {
-            el.removeEventListener(MOUSE_DOWN, catchEvent, options);
-            window.removeEventListener(MOUSE_MOVE, catchEvent, options);
-            window.removeEventListener(MOUSE_UP, catchEvent, options);
+            el.removeEventListener(MOUSE.DOWN, catchEvent, options);
+            window.removeEventListener(MOUSE.MOVE, catchEvent, options);
+            window.removeEventListener(MOUSE.UP, catchEvent, options);
         }
     };
 }

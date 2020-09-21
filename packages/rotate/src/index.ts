@@ -1,7 +1,6 @@
 import type { Computed, EventTrigger,RecognizerOptions ,RecognizerFunction} from '@any-touch/shared';
-import { RECOGNIZER_STATUS } from '@any-touch/shared';
 import { ComputeAngle } from '@any-touch/compute';
-import { canResetStatusForPressMoveLike, recognizeForPressMoveLike } from '@any-touch/recognizer';
+import createContext,{ canResetStatusForPressMoveLike, recognizeForPressMoveLike } from '@any-touch/recognizer';
 
 const DEFAULT_OPTIONS = {
     name: 'rotate',
@@ -10,10 +9,7 @@ const DEFAULT_OPTIONS = {
     pointLength: 2,
 };
 export default function Rotate(options?: RecognizerOptions<typeof DEFAULT_OPTIONS>):ReturnType<RecognizerFunction> {
-    const _context = Object.assign(
-        DEFAULT_OPTIONS,
-        options,
-        { status: RECOGNIZER_STATUS.POSSIBLE});
+    const _context = createContext(DEFAULT_OPTIONS, options);
     let _isRecognized = false;
 
     /**

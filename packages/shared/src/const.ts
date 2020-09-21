@@ -2,7 +2,7 @@
  * 是否微信
  */
 export const IS_WX = !!(window as any)!.wx;
-
+export const NONE = 'none';
 export const CLIENT_X = 'clientX';
 export const CLIENT_Y = 'clientY';
 /**
@@ -13,19 +13,17 @@ export const COMPUTE_INTERVAL = 16;
 /**
  * 输入阶段
  */
-export const INPUT_START = 'start';
-export const INPUT_MOVE = 'move';
-export const INPUT_CANCEL = 'cancel';
-export const INPUT_END = 'end';
+export const enum STAGE {
+    START = 'start',
+    MOVE = 'move',
+    END = 'end',
+    CANCEL = 'cancel'
+}
+
 
 /**
  * 方向
  */
-export const DIRECTION_LEFT = 'left';
-export const DIRECTION_RIGHT = 'right';
-export const DIRECTION_UP = 'up';
-export const DIRECTION_DOWN = 'down';
-export const NONE = 'none';
 export const enum DIRECTION {
     LEFT = 'left',
     RIGHT = 'right',
@@ -34,19 +32,24 @@ export const enum DIRECTION {
 }
 
 
-export const TOUCH = 'touch';
-export const MOUSE = 'mouse';
+/**
+ * TOUCH事件名称
+ */
+export const enum TOUCH {
+    START = 'touchstart',
+    MOVE = 'touchmove',
+    END = 'touchend',
+    CANCEL = 'touchcancel'
+}
 
-export const TOUCH_START = TOUCH + INPUT_START as 'touchstart';
-export const TOUCH_MOVE = TOUCH + INPUT_MOVE as 'touchmove';
-export const TOUCH_END = TOUCH + INPUT_END as 'touchend';
-export const TOUCH_CANCEL = TOUCH + INPUT_CANCEL as 'touchcancel';
-
-export const MOUSE_UP = MOUSE + DIRECTION_UP as 'mouseup';
-export const MOUSE_MOVE = MOUSE + INPUT_MOVE as 'mousemove';
-export const MOUSE_DOWN = MOUSE + DIRECTION_DOWN as 'mousedown';
-
-
+/**
+ * 鼠标事件名称
+ */
+export const enum MOUSE {
+    UP = 'mouseup',
+    MOVE = 'mousemove',
+    DOWN = 'mousedown'
+}
 
 /**
  * 识别器状态码

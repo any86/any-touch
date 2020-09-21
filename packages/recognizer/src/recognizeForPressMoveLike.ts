@@ -1,19 +1,12 @@
 import { EventTrigger, Computed, RECOGNIZER_STATUS } from '@any-touch/shared';
-
-import {
-    INPUT_CANCEL, INPUT_END, INPUT_MOVE
-} from '@any-touch/shared';
-import {
-    INPUT_START
-} from '@any-touch/shared'
-
+import {STAGE} from '@any-touch/shared';
 
 
 const ACTION_MAP: Record<number, string> = {
-    [RECOGNIZER_STATUS.START]: INPUT_START,
-    [RECOGNIZER_STATUS.MOVE]: INPUT_MOVE,
-    [RECOGNIZER_STATUS.END]: INPUT_END,
-    [RECOGNIZER_STATUS.CANCELLED]: INPUT_CANCEL
+    [RECOGNIZER_STATUS.START]: STAGE.START,
+    [RECOGNIZER_STATUS.MOVE]: STAGE.MOVE,
+    [RECOGNIZER_STATUS.END]: STAGE.END,
+    [RECOGNIZER_STATUS.CANCELLED]: STAGE.CANCEL
 };
 
 /**
@@ -45,23 +38,23 @@ function flow(
             [RECOGNIZER_STATUS.POSSIBLE]: {
                 // 下面都没有INPUT_START
                 // 是因为pressmove类的判断都是从INPUT_MOVE阶段开始
-                [INPUT_MOVE]: RECOGNIZER_STATUS.START,
+                [STAGE.MOVE]: RECOGNIZER_STATUS.START,
                 // 暂时下面2种可有可无, 
                 // 因为做requireFail判断的时候possible和failure没区别
-                [INPUT_END]: RECOGNIZER_STATUS.FAILED,
-                [INPUT_CANCEL]: RECOGNIZER_STATUS.FAILED
+                [STAGE.END]: RECOGNIZER_STATUS.FAILED,
+                [STAGE.CANCEL]: RECOGNIZER_STATUS.FAILED
             },
 
             [RECOGNIZER_STATUS.START]: {
-                [INPUT_MOVE]: RECOGNIZER_STATUS.MOVE,
-                [INPUT_END]: RECOGNIZER_STATUS.END,
-                [INPUT_CANCEL]: RECOGNIZER_STATUS.CANCELLED
+                [STAGE.MOVE]: RECOGNIZER_STATUS.MOVE,
+                [STAGE.END]: RECOGNIZER_STATUS.END,
+                [STAGE.CANCEL]: RECOGNIZER_STATUS.CANCELLED
             },
 
             [RECOGNIZER_STATUS.MOVE]: {
-                [INPUT_MOVE]: RECOGNIZER_STATUS.MOVE,
-                [INPUT_END]: RECOGNIZER_STATUS.END,
-                [INPUT_CANCEL]: RECOGNIZER_STATUS.CANCELLED
+                [STAGE.MOVE]: RECOGNIZER_STATUS.MOVE,
+                [STAGE.END]: RECOGNIZER_STATUS.END,
+                [STAGE.CANCEL]: RECOGNIZER_STATUS.CANCELLED
             }
         },
         // isVaild === false
@@ -72,16 +65,16 @@ function flow(
             [RECOGNIZER_STATUS.START]: {
                 // 此处的INPUT_MOVE和INPUT_END
                 // 主要是针对多触点识别器
-                [INPUT_MOVE]: RECOGNIZER_STATUS.FAILED,
-                [INPUT_END]: RECOGNIZER_STATUS.FAILED,
-                [INPUT_CANCEL]: RECOGNIZER_STATUS.CANCELLED
+                [STAGE.MOVE]: RECOGNIZER_STATUS.FAILED,
+                [STAGE.END]: RECOGNIZER_STATUS.FAILED,
+                [STAGE.CANCEL]: RECOGNIZER_STATUS.CANCELLED
             },
 
             [RECOGNIZER_STATUS.MOVE]: {
-                [INPUT_START]: RECOGNIZER_STATUS.FAILED,
-                [INPUT_MOVE]: RECOGNIZER_STATUS.FAILED,
-                [INPUT_END]: RECOGNIZER_STATUS.END,
-                [INPUT_CANCEL]: RECOGNIZER_STATUS.CANCELLED
+                [STAGE.START]: RECOGNIZER_STATUS.FAILED,
+                [STAGE.MOVE]: RECOGNIZER_STATUS.FAILED,
+                [STAGE.END]: RECOGNIZER_STATUS.END,
+                [STAGE.CANCEL]: RECOGNIZER_STATUS.CANCELLED
             }
         }
     };

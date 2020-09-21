@@ -1,5 +1,5 @@
 
-import { RECOGNIZER_STATUS } from './const';
+import { RECOGNIZER_STATUS, STAGE } from './const';
 /**
  * 基础识别器类型
  */
@@ -76,13 +76,13 @@ export interface PointClientXY { target: EventTarget | null, clientX: number, cl
 /**
  * 输入阶段
  */
-export type stage = 'start' | 'move' | 'end' | 'cancel';
+// export type stage = 'start' | 'move' | 'end' | 'cancel';
 
 /**
  * 原生事件对象最基础的统一化
  */
 export interface BasicsInput {
-    readonly stage: stage;
+    readonly stage: STAGE;
     readonly changedPoints: PointClientXY[];
     readonly points: PointClientXY[];
     readonly target: EventTarget | null;
