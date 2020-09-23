@@ -35,7 +35,7 @@
 ```javascript
 // 初始化
 const el = doucument.getElementById('box');
-const at = new AnyTouch(el, {
+const at = AnyTouch(el, {
     isPreventDefault: false,
     domEvents: false,
     // 如果触发事件的是span元素, 那么不执行"阻止默认事件触发".
@@ -55,7 +55,7 @@ const at = new AnyTouch(el, {
 如果**domEvents**为true, 可以使用原生**addEventListener**监听手势事件:
 ```javascript
 // 默认domEvents等于true
-const at = new AnyTouch(el);
+const at = AnyTouch(el);
 el.addEventListener('tap', onTap);
 ```
 
@@ -160,7 +160,7 @@ AnyTouch.removeUse();
 ```
 
 ```javascript
-const at = new AnyTouch()
+const at = AnyTouch()
 {
     onload(){
         at.on('press', ev=>{
@@ -200,22 +200,28 @@ import AnyTouch from '@any-touch/core';
 import Tap from '@any-touch/tap';
 // 如果引入的是完整版, 那么STATUS_POSSIBLE等可以直接通过AnyTouch.STATUS_POSSIBLE获取
 import { STATUS_POSSIBLE, STATUS_FAILED } from '@any-touch/shared';
-import debounce from 'lodash/debounce';
 AnyTouch.use(Tap);
 AnyTouch.use(Tap, { name: 'doubletap', tapTimes: 2 });
-const at = new AnyTouch(el);
+const at = AnyTouch(el);
 
 // 🚀关键代码
 // beforeEach
-at.beforeEach(({ recognizerMap, name }, next) => {
-    if ('tap' === name) {
-        debounce(() => {
-            if ([STATUS_POSSIBLE, STATUS_FAILED].includes(recognizerMap.doubletap.status)) next();
-        }, 300);
-    } else {
-        next();
-    }
-});
+let timeID = null;
+        at.beforeEach((a, next) => {
+            if ('tap' === a.name) {
+                clearTimeout(timeID);
+                timeID = setTimeout(() => {
+                    const ok = [STATUS_POSSIBLE, STATUS_FAILED].includes(
+                        at.recognizerMap.doubletap[0].status
+                    );
+                    if (ok) {
+                        next();
+                    }
+                }, 300);
+            } else {
+                next();
+            }
+        });
 
 at.on('tap', onTap);
 at.on('doubletap', onDoubleTap);

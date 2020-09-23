@@ -8,7 +8,7 @@ test(`顺时针旋转10度, 然后逆时针旋转20度`, async done => {
     const { mockCB } = create();
     AnyTouch.use(Rotate);
     const el = document.createElement('div');
-    const at = new AnyTouch(el);
+    const at = AnyTouch(el);
     at.on(ROTATE_NAME, mockCB);
     rotateSimulator(el, [10, -20]);
     await sleep();

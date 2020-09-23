@@ -5,4 +5,3 @@ export { default as getDotProduct } from './getDotProduct';
 export { default as getRadian } from './getRadian';
 export { default as getVLength } from './getVLength';
 export { default as radianToAngle } from './radianToAngle';
-

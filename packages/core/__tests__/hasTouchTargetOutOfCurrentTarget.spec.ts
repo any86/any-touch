@@ -7,7 +7,7 @@ test(`缩放的时候, 有一个触点不在绑定元素内, 那么不触发pinc
     AnyTouch.use(Pinch,{threshold:1.2});
     const el = document.createElement('div');
     const {body} = document;
-    const at = new AnyTouch(el);
+    const at = AnyTouch(el);
     const gs = new GestureSimulator(el);
     const onPinch = jest.fn().mockName(`onPinch`);
     at.on(PINCH_NAME, onPinch);

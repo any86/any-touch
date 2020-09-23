@@ -1,11 +1,70 @@
-import { STATUS_POSSIBLE, STATUS_START, STATUS_MOVE, STATUS_END, STATUS_CANCELLED, STATUS_FAILED, STATUS_RECOGNIZED } from '@any-touch/shared';
-import Base from '@any-touch/recognizer';
+
+import { RECOGNIZER_STATUS, STAGE } from './const';
 /**
  * 基础识别器类型
  */
-export type Recognizer = Base;
 export type AnyTouchPlugin = any;
-export type RecognizerConstruct = typeof Base;
+
+/**
+ * 计算函数
+ */
+export interface ComputeFunction {
+    (input: Input): Partial<Computed> | void;
+}
+/**
+ * 计算函数外壳函数
+ */
+export interface ComputeWrapFunction {
+    (): ComputeFunction;
+    _id: string;
+}
+
+/**
+ * 仅用来作为识别器和at通知的载体函数
+ */
+export interface EventTrigger {
+    (type: string): void
+}
+
+
+/**
+ * 识别器选项
+ */
+// export type RecognizerOptions<DEFAULT_OPTIONS = object> = Partial<Omit<DEFAULT_OPTIONS, 'name'>>
+//     & { name: string };
+
+
+export type RecognizerOptions<DEFAULT_OPTIONS = { [k: string]: string | number }> = Partial<DEFAULT_OPTIONS>;
+
+/**
+ * 识别器上下文
+ */
+export type RecognizerContext<DEFAULT_OPTIONS = any> = RecognizerOptions<DEFAULT_OPTIONS> & {
+    /**
+     * 识别状态
+     */
+    status: RECOGNIZER_STATUS;
+    /**
+     * 识别器对应的事件名称
+     */
+    name: string;
+};
+
+/**
+ * 识别器实例
+ */
+export type RecognizerReturn = [RecognizerContext, (computed: Computed, emit: EventTrigger) => void];
+
+/**
+ * 识别器构造函数
+ */
+export interface RecognizerFunction {
+    C: ComputeWrapFunction[];
+    (options?: RecognizerOptions): RecognizerReturn;
+}
+
+
+
 /**
  * 适配器支持的事件类型
  */
@@ -17,13 +76,13 @@ export interface PointClientXY { target: EventTarget | null, clientX: number, cl
 /**
  * 输入阶段
  */
-export type stage = 'start' | 'move' | 'end' | 'cancel';
+// export type stage = 'start' | 'move' | 'end' | 'cancel';
 
 /**
  * 原生事件对象最基础的统一化
  */
 export interface BasicsInput {
-    readonly stage: stage;
+    readonly stage: STAGE;
     readonly changedPoints: PointClientXY[];
     readonly points: PointClientXY[];
     readonly target: EventTarget | null;
@@ -77,26 +136,6 @@ export interface Input extends InputOnlyHasCurrent {
 // }
 
 
-/**
- * 计算函数
- */
-export interface ComputeFunction {
-    (input: Input): Partial<Computed> | void;
-}
-/**
- * 计算函数外壳函数
- */
-export interface ComputeWrapFunction {
-    (): ComputeFunction;
-    _id: string;
-}
-
-/**
- * 仅用来作为识别器和at通知的载体函数
- */
-export interface EventTrigger {
-    (type: string): void
-}
 
 /**
  * 方向
@@ -156,10 +195,6 @@ export interface AnyTouchEvent extends Input, Readonly<Computed> {
     readonly type: string
 }
 
-/**
- * 识别器状态
- */
-export type RecognizerStatus = typeof STATUS_POSSIBLE | typeof STATUS_START | typeof STATUS_MOVE | typeof STATUS_END | typeof STATUS_CANCELLED | typeof STATUS_FAILED | typeof STATUS_RECOGNIZED;
 
 /**
  * Input转换器

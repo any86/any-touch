@@ -56,7 +56,7 @@ https://unpkg.com/any-touch/dist/any-touch.umd.min.js
 ```javascript
 import AnyTouch from 'any-touch';
 const el = doucument.getElementById('box');
-const at = new AnyTouch(el);
+const at = AnyTouch(el);
 // 单击
 at.on('tap', e => {
     // e包含位置/速度/方向等信息
@@ -83,7 +83,7 @@ import AnyTouch from 'any-touch';
 export default {
     mounted() {
         // 没错, 就这2行
-        const at= new AnyTouch(this.$el);
+        const at= AnyTouch(this.$el);
         this.on('hook:destroyed', ()=>{at.destroy()});
     }
 };
@@ -117,7 +117,7 @@ export default {
 ```
 
 ```javascript
-const at = new AnyTouch()
+const at = AnyTouch()
 {
     onload(){
         at.on('press', onPress);

@@ -10,7 +10,7 @@ function createNode() {
 //     const child = createNode();
 //     el.appendChild(child);
 //     const gs = new GestureSimulator(el);
-//     const at = new AnyTouch(el);
+//     const at = AnyTouch(el);
 //     const onPinch = jest.fn();
 //     el.addEventListener('pinch', ev=>{
 //         // (ev as any).match();
@@ -37,7 +37,7 @@ test(`通过"ev.match()"确保每个触点都是currentTarget的子元素`, asyn
     parent.appendChild(child2);
 
     const gs = new GestureSimulator(child);
-    new AnyTouch(el);
+    AnyTouch(el);
     const onPinch = jest.fn();
     const onPinchAftermatch = jest.fn();
     child.addEventListener('pinch', ev => {

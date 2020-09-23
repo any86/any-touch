@@ -3,7 +3,7 @@
 // 让end阶段读取上一步的计算数据, 比如方向, 速率等...
 // 防止快速滑动到慢速滑动的手势识别成swipe
 import type { Input, InputOnlyHasCurrent, directionString } from '@any-touch/shared';
-import { INPUT_MOVE, COMPUTE_INTERVAL } from '@any-touch/shared';
+import { STAGE, COMPUTE_INTERVAL } from '@any-touch/shared';
 import { getDirection } from '@any-touch/vector';
 
 function ComputeVAndDir() {
@@ -17,7 +17,7 @@ function ComputeVAndDir() {
 
     /**
      * 计算速度和方向
-     * 注意: 往复滑动会出现direction为none
+     * 注意: 往复滑动会出现direction为undefined
      * @param input 输入
      */
     return function (input: Input): { speedX: number, speedY: number, velocityX: number, velocityY: number, direction?: directionString } {
@@ -28,7 +28,7 @@ function ComputeVAndDir() {
             const deltaTime = input.timestamp - _lastValidInput.timestamp;
 
             // 每16ms刷新速度数据
-            if (INPUT_MOVE === stage && COMPUTE_INTERVAL < deltaTime) {
+            if (STAGE.MOVE === stage && COMPUTE_INTERVAL < deltaTime) {
                 const deltaX = input.x - _lastValidInput.x;
                 const deltaY = input.y - _lastValidInput.y;
                 speedX = Math.round(deltaX / deltaTime * 100) / 100;

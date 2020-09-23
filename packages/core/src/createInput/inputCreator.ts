@@ -3,7 +3,7 @@
  * 构造统一的Input格式
  */
 import type { BasicsInput, InputOnlyHasCurrent, Input, Point } from '@any-touch/shared';
-import { CLIENT_X, CLIENT_Y, INPUT_START, INPUT_CANCEL, INPUT_END } from '@any-touch/shared';
+import { CLIENT_X, CLIENT_Y, STAGE} from '@any-touch/shared';
 export default function () {
     let id = 0;
     let prevInput: InputOnlyHasCurrent | undefined;
@@ -70,8 +70,8 @@ function extendInput(basicsInput: BasicsInput, id: number): Omit<Input, 'prevInp
 
     const { stage, points, changedPoints, nativeEvent } = basicsInput;
     const pointLength = points.length;
-    const isStart = INPUT_START === stage;
-    const isEnd = (INPUT_END === stage && 0 === pointLength) || INPUT_CANCEL === stage;
+    const isStart = STAGE.START === stage;
+    const isEnd = (STAGE.END === stage && 0 === pointLength) || STAGE.CANCEL === stage;
     // 当前时间
     const timestamp = Date.now();
     // 触点中心

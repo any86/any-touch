@@ -3,7 +3,7 @@ import { GestureSimulator, sleep } from '@any-touch/simulator';
 
 test(`AnyTouch是否默认加载了所有手势`, async done => {
     const el = document.createElement('div');
-    const at = new AnyTouch(el);
+    const at = AnyTouch(el);
     const mockCallback = jest.fn();
     const gs = new GestureSimulator(el);
     expect(at.recognizerMap).toHaveProperty(['tap']);

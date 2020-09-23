@@ -13,7 +13,7 @@ test(`2触点的情况下, 使用on绑定指定target,运行时确保2个触点�
     parent.appendChild(child);
     parent.appendChild(child2);
     const gs = new GestureSimulator(child);
-    const at = new AnyTouch(el);
+    const at = AnyTouch(el);
     const onPinch = jest.fn();
     const onPinchForEl = jest.fn();
 

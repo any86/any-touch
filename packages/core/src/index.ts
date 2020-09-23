@@ -11,11 +11,14 @@
 import AnyEvent from 'any-event';
 import type { Listener } from 'any-event';
 
-import type { RecognizerConstruct, AnyTouchEvent, SupportEvent, ComputeFunction, ComputeWrapFunction, InputCreatorFunctionMap, InputCreatorFunction, Computed } from '@any-touch/shared';
+import type {
+    RecognizerReturn,
+    RecognizerFunction,
+    RecognizerOptions,
+    AnyTouchEvent, SupportEvent, ComputeFunction, ComputeWrapFunction, InputCreatorFunctionMap, InputCreatorFunction, Computed, RecognizerContext
+} from '@any-touch/shared';
 import {
-    Recognizer,
-    TOUCH_START, TOUCH_MOVE, TOUCH_END, TOUCH_CANCEL, MOUSE_DOWN, MOUSE_MOVE, MOUSE_UP,
-    STATUS_POSSIBLE, STATUS_START, STATUS_MOVE, STATUS_END, STATUS_CANCELLED, STATUS_FAILED, STATUS_RECOGNIZED
+    TOUCH, MOUSE
 } from '@any-touch/shared';
 
 import { mouse, touch } from './createInput';
@@ -23,11 +26,10 @@ import dispatchDomEvent from './dispatchDomEvent';
 import canPreventDefault from './canPreventDefault';
 import bindElement from './bindElement';
 import { use, removeUse } from './use';
-import emit2 from './emit2';
 // type TouchAction = 'auto' | 'none' | 'pan-x' | 'pan-left' | 'pan-right' | 'pan-y' | 'pan-up' | 'pan-down' | 'pinch-zoom' | 'manipulation';
 
 
-type BeforeEachHook = (recognizer: Recognizer, next: () => void) => void;
+type BeforeEachHook = (recognizerContext: RecognizerContext, next: () => void) => void;
 /**
  * 默认设置
  */
@@ -46,83 +48,35 @@ const DEFAULT_OPTIONS: Options = {
     isPreventDefault: true,
     preventDefaultExclude: /^(?:INPUT|TEXTAREA|BUTTON|SELECT)$/
 };
-export default class AnyTouch extends AnyEvent<AnyTouchEvent> {
-    static Tap: RecognizerConstruct;
-    static Pan: RecognizerConstruct;
-    static Swipe: RecognizerConstruct;
-    static Press: RecognizerConstruct;
-    static Pinch: RecognizerConstruct;
-    static Rotate: RecognizerConstruct;
-    static STATUS_POSSIBLE: typeof STATUS_POSSIBLE;
-    static STATUS_START: typeof STATUS_START;
-    static STATUS_MOVE: typeof STATUS_MOVE;
-    static STATUS_END: typeof STATUS_END;
-    static STATUS_CANCELLED: typeof STATUS_CANCELLED;
-    static STATUS_FAILED: typeof STATUS_FAILED;
-    static STATUS_RECOGNIZED: typeof STATUS_RECOGNIZED;
 
-    static version = '__VERSION__';
-    // 识别器集合
-    static recognizers: Recognizer[] = [];
-    static recognizerMap: Record<string, Recognizer> = {};
-    // 计算函数外壳函数集合
-    static computeFunctionMap: Record<string, ComputeWrapFunction> = {};
-    /**
-     * 安装插件
-     * @param {AnyTouchPlugin} 插件
-     * @param {any[]} 插件参数
-     */
-    static use = (Recognizer: new (...args: any) => Recognizer, options?: Record<string, any>): void => {
-        use(AnyTouch, Recognizer, options);
-    };
-    /**
-     * 卸载插件[不建议]
-     */
-    static removeUse = (recognizerName?: string): void => {
-        removeUse(AnyTouch, recognizerName);
-    };
-    computeFunctionMap: Record<string, ComputeFunction> = {};
-    // 目标元素
-    el?: HTMLElement;
-    // 选项
-    options: Options;
-    inputCreatorMap: InputCreatorFunctionMap;
-    recognizerMap: Record<string, Recognizer> = {};
-    recognizers: Recognizer[] = [];
-    beforeEachHook?: BeforeEachHook;
-    cacheComputedFunctionGroup = Object.create(null);
-    /**
-     * @param {Element} 目标元素, 微信下没有el
-     * @param {Object} 选项
-     */
-    constructor(el?: HTMLElement, options?: Options) {
-        super();
-
-        this.el = el;
-        this.options = { ...DEFAULT_OPTIONS, ...options };
-
+const AnyTouch = (function () {
+    function _AnyTouch(el?: HTMLElement, options?: Options) {
+        const [$on, $off, $emit, anyEventDestroy] = AnyEvent<AnyTouchEvent>();
+        let _options = { ...DEFAULT_OPTIONS, ...options };
+        let _beforeEachHook: BeforeEachHook;
+        // 计算函数集合
+        const _computeFunctionMap: Record<string, ComputeFunction> = {};
         // 同步通过静态方法use引入的手势附带的"计算函数"
-        for (const k in AnyTouch.computeFunctionMap) {
-            this.computeFunctionMap[k] = AnyTouch.computeFunctionMap[k]();
+        for (const k in _AnyTouch.computeFunctionMap) {
+            _computeFunctionMap[k] = _AnyTouch.computeFunctionMap[k]();
         }
-
         // 同步插件到实例
-        this.recognizerMap = AnyTouch.recognizerMap;
-        this.recognizers = AnyTouch.recognizers;
+        const recognizerMap = _AnyTouch.recognizerMap as Record<string, RecognizerContext>;
+        const recognizers = _AnyTouch.recognizers as RecognizerReturn[];
 
         // 之所以强制是InputCreatorFunction<SupportEvent>,
         // 是因为调用this.inputCreatorMap[event.type]的时候还要判断类型,
         // 因为都是固定(touch&mouse)事件绑定好的, 没必要判断
-        const createInputFromTouch = touch(this.el) as InputCreatorFunction<SupportEvent>;
+        const createInputFromTouch = touch(el) as InputCreatorFunction<SupportEvent>;
         const createInputFromMouse = mouse() as InputCreatorFunction<SupportEvent>;
-        this.inputCreatorMap = {
-            [TOUCH_START]: createInputFromTouch,
-            [TOUCH_MOVE]: createInputFromTouch,
-            [TOUCH_END]: createInputFromTouch,
-            [TOUCH_CANCEL]: createInputFromTouch,
-            [MOUSE_DOWN]: createInputFromMouse,
-            [MOUSE_MOVE]: createInputFromMouse,
-            [MOUSE_UP]: createInputFromMouse
+        const _inputCreatorMap = {
+            [TOUCH.START]: createInputFromTouch,
+            [TOUCH.MOVE]: createInputFromTouch,
+            [TOUCH.END]: createInputFromTouch,
+            [TOUCH.CANCEL]: createInputFromTouch,
+            [MOUSE.DOWN]: createInputFromMouse,
+            [MOUSE.MOVE]: createInputFromMouse,
+            [MOUSE.UP]: createInputFromMouse
         };
 
         // 绑定事件
@@ -145,143 +99,190 @@ export default class AnyTouch extends AnyEvent<AnyTouchEvent> {
                 }));
                 window.addEventListener('_', () => void 0, opts);
             } catch { }
-
             // 绑定元素
-            this.on(
+            $on(
                 'unbind',
                 bindElement(
                     el,
-                    this.catchEvent.bind(this),
-                    !this.options.isPreventDefault && supportsPassive ? { passive: true } : false
+                    catchEvent,
+                    !_options.isPreventDefault && supportsPassive ? { passive: true } : false
                 )
             );
         }
-    }
 
-    target(el: HTMLElement) {
-        return {
-            on: (eventName: string, listener: Listener<AnyTouchEvent>): void => {
-                this.on(eventName, listener, event => {
-                    const { targets } = event;
-                    // 检查当前触发事件的元素是否是其子元素
-                    return event.target === el &&
-                        targets.every((target) => el.contains(target as HTMLElement))
-                });
-            }
+        /**
+         * 事件拦截器
+         * @param hook 钩子函数
+         */
+        function beforeEach(hook: (recognizer: RecognizerContext, next: () => void) => void): void {
+            _beforeEachHook = hook;
         };
-    };
 
+        /**
+         * 监听input变化s
+         * @param event Touch / Mouse事件对象
+         */
+        function catchEvent(event: SupportEvent): void {
+            if (canPreventDefault(event, _options)) {
+                event.preventDefault();
+            }
 
-    /**
-     * 监听input变化s
-     * @param event Touch / Mouse事件对象
-     */
-    catchEvent(event: SupportEvent): void {
-        if (canPreventDefault(event, this.options)) {
-            event.preventDefault();
-        }
-        // if (!event.cancelable) {
-        //     this.eventEmitter.emit('error', { code: 0, message: '页面滚动的时候, 请暂时不要操作元素!' });
-        // }
-        const input = this.inputCreatorMap[event.type](event);
+            const input = _inputCreatorMap[event.type as (TOUCH | MOUSE)](event);
 
-        // 跳过无效输入
-        // 比如没有按住鼠标左键的移动会返回undefined
-        if (void 0 !== input) {
-            const AT = `at`;
-            const AT_WITH_STATUS = AT + ':' + input.stage;
-            this.emit(AT, input as AnyTouchEvent);
-            this.emit(AT_WITH_STATUS, input as AnyTouchEvent);
+            // 跳过无效输入
+            // 比如没有按住鼠标左键的移动会返回undefined
+            if (void 0 !== input) {
+                const AT = `at`;
+                const AT_WITH_STATUS = AT + ':' + input.stage;
+                $emit(AT, input as AnyTouchEvent);
+                $emit(AT_WITH_STATUS, input as AnyTouchEvent);
 
-            const { domEvents } = this.options;
-            if (false !== domEvents) {
-                const { target } = event;
-                if (null !== target) {
-                    dispatchDomEvent(target, { ...input, type: AT }, domEvents);
-                    dispatchDomEvent(target, { ...input, type: AT_WITH_STATUS }, domEvents);
+                const { domEvents } = _options;
+                if (false !== domEvents) {
+                    const { target } = event;
+                    if (null !== target) {
+                        dispatchDomEvent(target, { ...input, type: AT }, domEvents);
+                        dispatchDomEvent(target, { ...input, type: AT_WITH_STATUS }, domEvents);
+                    }
+                }
+
+                // input -> computed
+                const computed = input as Computed;
+                for (const k in _computeFunctionMap) {
+                    const f = _computeFunctionMap[k];
+                    Object.assign(computed, f(computed));
+                }
+
+                // 缓存每次计算的结果
+                // 以函数名为键值
+                for (const [context, recognize] of recognizers) {
+                    // if (recognizer.disabled) continue;
+                    // 恢复上次的缓存
+                    const { name } = context;
+                    recognize(computed, (type: string) => {
+                        // 此时的e就是this.computed
+                        const payload = { ...computed, type, name };
+
+                        // 防止数据被vue类框架拦截
+                        Object?.freeze(payload);
+
+                        if (void 0 === _beforeEachHook) {
+                            _emit2(payload);
+                        } else {
+                            _beforeEachHook(context, () => {
+                                _emit2(payload);
+                            });
+                        }
+                    });
                 }
             }
+        };
 
-            // input -> computed
-            const computed = input as Computed;
-            for (const k in this.computeFunctionMap) {
-                const f = this.computeFunctionMap[k];
-                Object.assign(computed, f(computed));
+        function _emit2(payload: AnyTouchEvent) {
+            const AT_AFTER = 'at:after';
+            const { type, target } = payload;
+            $emit(type, payload);
+            $emit(AT_AFTER, payload);
+            // 触发DOM事件
+            if (!!_options.domEvents
+                && void 0 !== el
+                && null !== target
+            ) {
+                // vue会把绑定元素的所有子元素都进行事件绑定
+                // 所以此处的target会自动冒泡到目标元素
+                dispatchDomEvent(target, payload, _options.domEvents);
+                dispatchDomEvent(target, { ...payload, _type: payload.type, type: AT_AFTER }, _options.domEvents);
             }
+        };
 
-            // 缓存每次计算的结果
-            // 以函数名为键值
-            for (const recognizer of this.recognizers) {
-                if (recognizer.disabled) continue;
-                // 恢复上次的缓存
-                recognizer.recognize(computed, type => {
-                    // 此时的e就是this.computed
-                    const payload = { ...computed, type, baseType: recognizer.name };
+        function target(el: HTMLElement) {
+            return {
+                on: (eventName: string, listener: Listener<AnyTouchEvent>): void => {
+                    $on(eventName, listener, event => {
+                        const { targets } = event;
+                        // 检查当前触发事件的元素是否是其子元素
+                        return event.target === el &&
+                            targets.every((target) => el.contains(target as HTMLElement))
+                    });
+                }
+            };
+        };
 
-                    // 防止数据被vue类框架拦截
-                    Object?.freeze(payload);
+        /**
+         * 获取识别器通过名字
+         * @param name 识别器的名字
+         * @return 返回识别器
+         */
+        function get(name: string): RecognizerContext | void {
+            return recognizerMap[name];
+        };
+        /**
+             * 设置
+             * @param options 选项
+             */
+        function set(options: Options) {
+            _options = { ..._options, ...options };
+        };
 
-                    if (void 0 === this.beforeEachHook) {
-                        emit2(this, payload);
-                    } else {
-                        this.beforeEachHook(recognizer, () => {
-                            emit2(this, payload);
-                        });
-                    }
-                });
-            }
-        }
-    };
+        function _use(Recognizer: RecognizerFunction, options?: RecognizerOptions) {
+            use({ recognizerMap, recognizers, computeFunctionMap: _computeFunctionMap }, Recognizer, options);
+        };
 
+        /**
+         * 移除插件
+         * @param {String} 识别器name
+         */
+        function _removeUse(name?: string) {
+            const context: any = { recognizerMap, recognizers };
+            removeUse(context, name);
+        };
+
+        /**
+        * 销毁
+        */
+        function destroy() {
+            // 解绑事件
+            $emit('unbind');
+            anyEventDestroy();
+        };
+
+        return {
+            target,
+            destroy,
+            use: _use,
+            get,
+            set,
+            beforeEach,
+            removeUse: _removeUse,
+            recognizers,
+            recognizerMap,
+            catchEvent,
+            on: $on,
+            off: $off
+        };
+    }
+    _AnyTouch.computeFunctionMap = {} as Record<string, ComputeWrapFunction>;
+    _AnyTouch.recognizerMap = {} as Record<string, RecognizerContext>;
+    _AnyTouch.recognizers = [] as RecognizerReturn[];
     /**
-     * 使用插件
+     * 安装插件
      * @param {AnyTouchPlugin} 插件
-     * @param {Object} 选项
+     * @param {any[]} 插件参数
      */
-    use(Recognizer: new (...args: any) => Recognizer, options?: Record<string, any>): void {
-        use(this, Recognizer, options);
+    _AnyTouch.use = (Recognizer: RecognizerFunction, options?: RecognizerOptions): void => {
+        use(_AnyTouch, Recognizer, options);
     };
 
     /**
-     * 移除插件
-     * @param {String} 识别器name
+     * 卸载插件[不建议]
      */
-    removeUse(name?: string): void {
-        removeUse(this, name);
+    _AnyTouch.removeUse = (recognizerName?: string): void => {
+        removeUse(_AnyTouch, recognizerName);
     };
 
+    _AnyTouch.version = '__VERSION__';
 
-    /**
-     * 事件拦截器
-     * @param hook 钩子函数
-     */
-    beforeEach(hook: (recognizer: Recognizer, next: () => void) => void): void {
-        this.beforeEachHook = hook;
-    };
+    return _AnyTouch;
+})();
 
-    /**
-     * 获取识别器通过名字
-     * @param name 识别器的名字
-     * @return 返回识别器
-     */
-    get(name: string): Recognizer | void {
-        return this.recognizerMap[name];
-    };
-
-    /**
-     * 设置
-     * @param options 选项
-     */
-    set(options: Options): void {
-        this.options = { ...this.options, ...options };
-    };
-
-    /**
-     * 销毁
-     */
-    destroy() {
-        // 解绑事件
-        this.emit('unbind');
-        this.listenersMap = {};
-    };
-}
+export default AnyTouch;
