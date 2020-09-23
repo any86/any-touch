@@ -10,13 +10,13 @@ test(`tap延迟300ms触发, 如果届时doubletap状态为"失败或可能"那�
 
     const el = document.createElement('div');
     const gs = new GestureSimulator(el);
-    const at = new AnyTouch(el);
+    const at = AnyTouch(el);
     const onTap = jest.fn();
     const onDoubleTap = jest.fn();
-    at.beforeEach(({ recognizerMap, name }, next) => {
+    at.beforeEach(({ name }:any, next:any) => {
         if ('tap' === name) {
             debounce(() => {
-                if ([RECOGNIZER_STATUS.POSSIBLE,RECOGNIZER_STATUS.FAILED].includes(recognizerMap.doubletap.status)) next();
+                if ([RECOGNIZER_STATUS.POSSIBLE,RECOGNIZER_STATUS.FAILED].includes(at.recognizerMap.doubletap.status)) next();
             }, 300);
         } else {
             next();

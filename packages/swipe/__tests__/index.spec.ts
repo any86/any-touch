@@ -8,7 +8,7 @@ test(`向下划`, async done => {
     const { mockCB } = create();
     AnyTouch.use(Swipe);
     const el = document.createElement('div');
-    const at = new AnyTouch(el);
+    const at = AnyTouch(el);
     const gs = new GestureSimulator(el);
     at.on(SWIPE_NAME, mockCB);
 

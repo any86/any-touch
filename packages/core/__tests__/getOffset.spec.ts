@@ -9,7 +9,7 @@ test('元素和浏览器左上角偏移100px,获取触点在元素内的偏移',
         top: 120,
     } as any);
 
-    const at = new AnyTouch(el);
+    const at = AnyTouch(el);
     const callback = jest.fn();
     at.on('at:start', (ev:any) => {
         const data = ev.getOffset(el);

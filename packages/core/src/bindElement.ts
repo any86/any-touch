@@ -23,7 +23,6 @@ export default function (
     catchEvent: (e: SupportEvent) => void,
     options?: boolean | AddEventListenerOptions,
 ): () => void {
-
     TOUCH_EVENTS.forEach(eventName => {
         el.addEventListener(eventName, catchEvent, options);
     });

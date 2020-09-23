@@ -35,7 +35,7 @@
 ```javascript
 // 初始化
 const el = doucument.getElementById('box');
-const at = new AnyTouch(el, {
+const at = AnyTouch(el, {
     isPreventDefault: false,
     domEvents: false,
     // 如果触发事件的是span元素, 那么不执行"阻止默认事件触发".
@@ -55,7 +55,7 @@ const at = new AnyTouch(el, {
 如果**domEvents**为true, 可以使用原生**addEventListener**监听手势事件:
 ```javascript
 // 默认domEvents等于true
-const at = new AnyTouch(el);
+const at = AnyTouch(el);
 el.addEventListener('tap', onTap);
 ```
 
@@ -160,7 +160,7 @@ AnyTouch.removeUse();
 ```
 
 ```javascript
-const at = new AnyTouch()
+const at = AnyTouch()
 {
     onload(){
         at.on('press', ev=>{
@@ -202,7 +202,7 @@ import Tap from '@any-touch/tap';
 import { STATUS_POSSIBLE, STATUS_FAILED } from '@any-touch/shared';
 AnyTouch.use(Tap);
 AnyTouch.use(Tap, { name: 'doubletap', tapTimes: 2 });
-const at = new AnyTouch(el);
+const at = AnyTouch(el);
 
 // 🚀关键代码
 // beforeEach

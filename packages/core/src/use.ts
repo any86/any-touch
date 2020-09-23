@@ -1,7 +1,7 @@
 import type { RecognizerFunction, RecognizerOptions } from '@any-touch/shared';
 import type AnyTouch from './index';
 type C = typeof AnyTouch;
-type I = InstanceType<C>;
+// type I = InstanceType<C>;
 /**
  * 触发dom事件
  * @param atOrAT AnyTouch或者其实例
@@ -9,13 +9,12 @@ type I = InstanceType<C>;
  * @param options 识别器参数
  */
 export function use(
-    atOrAT: C | I,
+    atOrAT: any,
     Recognizer: RecognizerFunction,
     recognizerOptions?: RecognizerOptions): void {
     // const name = recognizerOptions?.name;
     // 保证同一个事件只对应一个识别器
     // if (void 0 !== name && void 0 !== atOrAT.recognizerMap[name]) return;
-
     const recognizer = Recognizer(recognizerOptions);
     const [{ name }] = recognizer;
     const { C } = Recognizer;
@@ -48,7 +47,7 @@ export function use(
  * @param atOrAT AnyTouch或者其实例
  * @param recognizerName 手势名
  */
-export function removeUse(atOrAT: C | I, recognizerName?: string): void {
+export function removeUse(atOrAT: any, recognizerName?: string): void {
     // 如果没有传入指定手势名称
     // 那么删除所有手势识别器
     if (void 0 === recognizerName) {

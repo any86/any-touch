@@ -77,6 +77,7 @@
 function C(text, bgColor = '#000', color = '#fff') {
     console.log(`%c${text}`, `color:${color};background-color:${bgColor};padding:2px 6px;border-radius:4px;`);
 }
+import axios from 'axios';
 import debounce from 'lodash/debounce';
 import AnyTouch from '../../../packages/any-touch/dist/any-touch.umd';
 export default {
@@ -115,7 +116,7 @@ export default {
 
     mounted() {
         AnyTouch.use(AnyTouch.Tap, { name: 'doubletap', tapTimes: 2 });
-        const at = new AnyTouch(this.$refs.panel, { isPreventDefault: true });
+        const at = AnyTouch(this.$refs.panel, { isPreventDefault: true });
 
         let timeID = null;
         at.beforeEach((a, next) => {
@@ -142,7 +143,6 @@ export default {
         at.on('tap', (e) => {
             console.log(`tap`);
         });
-        const tap = at.get('tap');
     },
 
     methods: {
@@ -151,17 +151,17 @@ export default {
             this.styles.push(style);
         },
         onAfter(ev) {
-            ev.currentTarget.setAttribute('at', ev.baseType);
+            ev.currentTarget.setAttribute('at', ev.name);
         },
         onTouch(ev) {
-            if('start' === ev.stage){
+            if ('start' === ev.stage) {
                 ev.currentTarget.setAttribute('at', '');
             }
             // console.log('html:', ev.target.innerHTML);
             ev.currentTarget.setAttribute('at-stage', ev.stage);
         },
         afterEach(ev) {
-            this.action = ev.baseType;
+            this.action = ev.name;
             this.$set(this, 'data', ev);
         },
         onRotate(ev, index = 0) {
@@ -246,6 +246,23 @@ body {
     }
 }
 
+@keyframes DoubleTap {
+    from {
+        transform: scale(0.9) rotate(15deg);
+    }
+
+    25% {
+        transform: scale(1.1);
+    }
+
+    75% {
+        transform: scale(0.9) rotate(-15deg);
+    }
+    to {
+        transform: scale(1);
+    }
+}
+
 main {
     position: relative;
     z-index: 1;
@@ -303,6 +320,10 @@ main {
 
             &[at='tap'][at-stage='end'] {
                 animation: Tap 200ms;
+            }
+
+            &[at='doubletap'][at-stage='end'] {
+                animation: DoubleTap 200ms;
             }
 
             &[at='press']:not([at-stage='end']) {

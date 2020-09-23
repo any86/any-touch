@@ -2,7 +2,7 @@ import { create } from '@testUtils';
 import Tap from '@any-touch/tap';
 test(`通过实例加载/卸载插件`, async done => {
     const { AnyTouch, el, GestureSimulator, mockCB, sleep } = create();
-    const at = new AnyTouch(el);
+    const at = AnyTouch(el);
     const gs = new GestureSimulator(el);
     at.use(Tap);
     at.on('tap', (ev:any) => {

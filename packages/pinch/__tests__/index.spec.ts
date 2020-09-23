@@ -6,7 +6,7 @@ const PINCH_NAME = 'pinch';
 test(`双手捏合缩小`, async done => {
     AnyTouch.use(Pinch,{threshold:1.1});
     const el = document.createElement('div');
-    const at = new AnyTouch(el);
+    const at = AnyTouch(el);
     const gs = new GestureSimulator(el);
     const onPinch = jest.fn().mockName(`onPinch`);
     at.on(PINCH_NAME, onPinch);
