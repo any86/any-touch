@@ -18,7 +18,7 @@ import type {
     AnyTouchEvent, SupportEvent, ComputeFunction, ComputeWrapFunction, InputCreatorFunctionMap, InputCreatorFunction, Computed, RecognizerContext
 } from '@any-touch/shared';
 import {
-    TOUCH, MOUSE
+    TOUCH, MOUSE,RECOGNIZER_STATUS
 } from '@any-touch/shared';
 
 import { mouse, touch } from './createInput';
@@ -27,6 +27,31 @@ import canPreventDefault from './canPreventDefault';
 import bindElement from './bindElement';
 import { use, removeUse } from './use';
 // type TouchAction = 'auto' | 'none' | 'pan-x' | 'pan-left' | 'pan-right' | 'pan-y' | 'pan-up' | 'pan-down' | 'pinch-zoom' | 'manipulation';
+
+
+interface AnyTouchFunction {
+    version?: string;
+    Tap?: RecognizerFunction;
+    Pan?: RecognizerFunction;
+    Swipe?: RecognizerFunction;
+    Press?: RecognizerFunction;
+    Pinch?: RecognizerFunction;
+    Rotate?: RecognizerFunction;
+    STATUS_POSSIBLE?: RECOGNIZER_STATUS;
+    STATUS_START?: RECOGNIZER_STATUS;
+    STATUS_MOVE?: RECOGNIZER_STATUS;
+    STATUS_END?: RECOGNIZER_STATUS;
+    STATUS_CANCELLED?: RECOGNIZER_STATUS;
+    STATUS_FAILED?: RECOGNIZER_STATUS;
+    STATUS_RECOGNIZED?: RECOGNIZER_STATUS;
+    computeFunctionMap?: Record<string, ComputeWrapFunction>;
+    recognizers?: RecognizerReturn[];
+    recognizerMap?: Record<string, RecognizerContext>;
+    use: (Recognizer: RecognizerFunction, options?: RecognizerOptions) => void;
+    removeUse: (recognizerName?: string) => void;
+    (el?: HTMLElement, options?: Options): any;
+    new(el?: HTMLElement, options?: Options): any;
+}
 
 
 type BeforeEachHook = (recognizerContext: RecognizerContext, next: () => void) => void;
@@ -49,20 +74,20 @@ const DEFAULT_OPTIONS: Options = {
     preventDefaultExclude: /^(?:INPUT|TEXTAREA|BUTTON|SELECT)$/
 };
 
-const AnyTouch = (function () {
-    function _AnyTouch(el?: HTMLElement, options?: Options) {
+export function createAnyTouch(preset?: RecognizerFunction[]) {
+    function AnyTouch(el?: HTMLElement, options?: Options) {
         const [$on, $off, $emit, anyEventDestroy] = AnyEvent<AnyTouchEvent>();
         let _options = { ...DEFAULT_OPTIONS, ...options };
         let _beforeEachHook: BeforeEachHook;
         // 计算函数集合
         const _computeFunctionMap: Record<string, ComputeFunction> = {};
         // 同步通过静态方法use引入的手势附带的"计算函数"
-        for (const k in _AnyTouch.computeFunctionMap) {
-            _computeFunctionMap[k] = _AnyTouch.computeFunctionMap[k]();
+        for (const k in AnyTouch.computeFunctionMap) {
+            _computeFunctionMap[k] = AnyTouch.computeFunctionMap[k]();
         }
         // 同步插件到实例
-        const recognizerMap = _AnyTouch.recognizerMap as Record<string, RecognizerContext>;
-        const recognizers = _AnyTouch.recognizers as RecognizerReturn[];
+        const recognizerMap = AnyTouch.recognizerMap as Record<string, RecognizerContext>;
+        const recognizers = AnyTouch.recognizers as RecognizerReturn[];
 
         // 之所以强制是InputCreatorFunction<SupportEvent>,
         // 是因为调用this.inputCreatorMap[event.type]的时候还要判断类型,
@@ -261,28 +286,29 @@ const AnyTouch = (function () {
             off: $off
         };
     }
-    _AnyTouch.computeFunctionMap = {} as Record<string, ComputeWrapFunction>;
-    _AnyTouch.recognizerMap = {} as Record<string, RecognizerContext>;
-    _AnyTouch.recognizers = [] as RecognizerReturn[];
+
+    AnyTouch.computeFunctionMap = {} as Record<string, ComputeWrapFunction>;
+    AnyTouch.recognizerMap = {} as Record<string, RecognizerContext>;
+    AnyTouch.recognizers = [] as RecognizerReturn[];
     /**
      * 安装插件
      * @param {AnyTouchPlugin} 插件
      * @param {any[]} 插件参数
      */
-    _AnyTouch.use = (Recognizer: RecognizerFunction, options?: RecognizerOptions): void => {
-        use(_AnyTouch, Recognizer, options);
+    AnyTouch.use = (Recognizer: RecognizerFunction, options?: RecognizerOptions): void => {
+        use(AnyTouch, Recognizer, options);
     };
 
     /**
      * 卸载插件[不建议]
      */
-    _AnyTouch.removeUse = (recognizerName?: string): void => {
-        removeUse(_AnyTouch, recognizerName);
+    AnyTouch.removeUse = (recognizerName?: string): void => {
+        removeUse(AnyTouch, recognizerName);
     };
 
-    _AnyTouch.version = '__VERSION__';
+    AnyTouch.version = '__VERSION__';
 
-    return _AnyTouch;
-})();
+    return AnyTouch;
+}
 
-export default AnyTouch;
+export default createAnyTouch() as AnyTouchFunction;
