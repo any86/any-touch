@@ -1,11 +1,11 @@
 import type { Input } from '@any-touch/shared';
-import { INPUT_START } from '@any-touch/shared';
+import { STAGE } from '@any-touch/shared';
 
 function ComputeMaxLength() {
     let maxPointLength = 0;
     return function (input: Input) {
         const { stage } = input;
-        if (INPUT_START === stage) {
+        if (STAGE.START === stage) {
             maxPointLength = input.pointLength;
         }
         return { maxPointLength };

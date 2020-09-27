@@ -1,42 +1,47 @@
-import type { Computed, EventTrigger } from '@any-touch/shared';
+import type { Computed, EventTrigger, RecognizerOptions, RecognizerFunction } from '@any-touch/shared';
 import { ComputeScale } from '@any-touch/compute';
-import Recognizer, { recognizeForPressMoveLike } from '@any-touch/recognizer';
+import createContext, { canResetStatusForPressMoveLike, recognizeForPressMoveLike } from '@any-touch/recognizer';
 const DEFAULT_OPTIONS = {
     name: 'pinch',
     // 触发事件所需要的最小缩放比例
     threshold: 0,
     pointLength: 2,
 };
-
-export default class extends Recognizer {
-    constructor(options: Partial<typeof DEFAULT_OPTIONS>) {
-        super({ ...DEFAULT_OPTIONS, ...options });
-        this.computeFunctions = [ComputeScale];
-    };
+export default function Pinch(options?: RecognizerOptions<typeof DEFAULT_OPTIONS>)
+    : ReturnType<RecognizerFunction> {
+    const _context = createContext(DEFAULT_OPTIONS, options);
+    let _isRecognized = false;
 
     /**
      * 识别条件
      * @param computed 计算数据
-     * @param 是否符合
+     * @return 接收是否识别状态
      */
-    test(computed: Computed): boolean {
+    function _test(computed: Computed): boolean {
         const { pointLength, scale } = computed;
-        return this.isValidPointLength(pointLength)
-            && void 0 !== scale
-            && (this.options.threshold < Math.abs(scale - 1) || this.isRecognized);
-    };
+        return (
+            _context.pointLength === pointLength &&
+            void 0 !== scale &&
+            (_context.threshold < Math.abs(scale - 1) || _isRecognized)
+        );
+    }
 
     /**
      * 开始识别
-     * @param computed 计算结果 
+     * @param computed 计算数据
      */
-    recognize(computed: Computed, emit: EventTrigger) {
-        // const computed = this.compute([ComputeVectorForMutli], input);
-        // if (`activeV` in computed) {
-        //     // const {activeV, prevV,startV} = computed;
-        //     this.computed = { ...this.computed, ...computeScale(computed) };
-        // }
-        // console.log(this.computed);
-        recognizeForPressMoveLike(this, computed, emit);
-    };
-};
+    function _recognize(computed: Computed, emit: EventTrigger) {
+        // 重置status
+        _context.status = canResetStatusForPressMoveLike(_context.status);
+
+        recognizeForPressMoveLike(computed,
+            _test, _context.name,
+            _context.status,
+            emit,
+            ([isRecognized, status]) => {
+                _context.status = status;
+                _isRecognized = isRecognized;
+            });
+    }
+    return [_context, _recognize, [ComputeScale]];
+}

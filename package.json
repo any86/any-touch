@@ -12,10 +12,11 @@
     "dev:ex": "cd example && npm run serve",
     "build:ex": "cd example && npm run build",
     "release:ex": "npm run build:ex && node ./scripts/releaseExample.js",
-    "release:next": "npm run build && lerna publish --force-publish --dist-tag next",
-    "release:last": "npm run build && lerna publish --force-publish",
+    "release:next": "npm run cp-md && npm run build && lerna publish --force-publish --dist-tag next",
+    "release:last": "npm run cp-md && npm run build && lerna publish --force-publish",
     "rm": "rimraf packages/**/dist",
     "clean": "rimraf node_modules",
+    "cp-md":"node  ./scripts/cp-md",
     "build": "npm-run-all rm build:umd build:cjs build:es build:dts",
     "build:cjs": "node ./scripts/build.cjs",
     "build:es": "node ./scripts/build.es",
@@ -71,6 +72,5 @@
     "typescript": "^3.8.3",
     "zlib": "^1.0.5"
   },
-  "sideEffects": false,
-  "version": null
+  "sideEffects": false
 }

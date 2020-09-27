@@ -79,7 +79,7 @@ export default {
     },
     mounted() {
         this.renderTree();
-        const at = new AnyTouch(this.$el);
+        const at = AnyTouch(this.$el);
         this.$on('hook:destroy', at.destroy);
     },
     methods: {

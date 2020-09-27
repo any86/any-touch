@@ -1,23 +1,16 @@
 import AnyTouch from 'any-touch';
-import { GestureSimulator, sleep } from '@any-touch/simulator';
-
-test(`AnyTouch是否默认加载了所有手势`, async done => {
-    const el = document.createElement('div');
-    const at = new AnyTouch(el);
-    const mockCallback = jest.fn();
-    const gs = new GestureSimulator(el);
-    expect(at.recognizerMap).toHaveProperty(['tap']);
-    expect(at.recognizerMap).toHaveProperty(['swipe']);
-    expect(at.recognizerMap).toHaveProperty(['rotate']);
-    expect(at.recognizerMap).toHaveProperty(['pinch']);
-    expect(at.recognizerMap).toHaveProperty(['press']);
-    expect(at.recognizerMap).toHaveProperty(['pan']);
-    expect(at.recognizers).toHaveLength(6);
-
-    at.on('tap',mockCallback);
-    gs.dispatchTouchStart();
-    gs.dispatchTouchEnd();
-    await sleep();
-    expect(mockCallback).toHaveBeenCalled();
-    done();
+test('检查AnyTouch上属性是否完整', ()=>{
+    expect(AnyTouch).toHaveProperty('Tap');
+    expect(AnyTouch).toHaveProperty('Pan');
+    expect(AnyTouch).toHaveProperty('Swipe');
+    expect(AnyTouch).toHaveProperty('Pinch');
+    expect(AnyTouch).toHaveProperty('Rotate');
+    expect(AnyTouch).toHaveProperty('Press');
+    expect(AnyTouch).toHaveProperty('STATUS_POSSIBLE');
+    expect(AnyTouch).toHaveProperty('STATUS_START');
+    expect(AnyTouch).toHaveProperty('STATUS_MOVE');
+    expect(AnyTouch).toHaveProperty('STATUS_END');
+    expect(AnyTouch).toHaveProperty('STATUS_CANCELLED');
+    expect(AnyTouch).toHaveProperty('STATUS_FAILED');
+    expect(AnyTouch).toHaveProperty('STATUS_RECOGNIZED');
 });
