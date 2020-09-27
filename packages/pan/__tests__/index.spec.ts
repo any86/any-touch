@@ -1,6 +1,6 @@
 import Pan from '@any-touch/pan';
-import AnyTouch from '@any-touch/core';
-AnyTouch.use(Pan);
+import {createAnyTouch} from '@any-touch/core';
+const AnyTouch = createAnyTouch([Pan]);
 import { sleep, GestureSimulator } from '@any-touch/simulator'
 const PAN_NAME = 'pan';
 

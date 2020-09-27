@@ -1,6 +1,6 @@
 
-import type { Input, DIRECTION } from '@any-touch/shared';
-import { CLIENT_X, CLIENT_Y, STAGE} from '@any-touch/shared';
+import type { Input } from '@any-touch/shared';
+import { CLIENT_X, CLIENT_Y, STAGE } from '@any-touch/shared';
 import { getVLength, getDirection } from '@any-touch/vector';
 
 function ComputeDistance() {
@@ -9,8 +9,6 @@ function ComputeDistance() {
     let distanceX = 0;
     let distanceY = 0;
     let distance = 0;
-    let overallDirection: DIRECTION | undefined;
-
     return function (input: Input) {
         const { stage, startInput } = input;
 
@@ -23,16 +21,17 @@ function ComputeDistance() {
         }
 
         else if (STAGE.MOVE === stage) {
+            // 矢量
             displacementX = Math.round(input.points[0][CLIENT_X] - startInput.points[0][CLIENT_X]);
             displacementY = Math.round(input.points[0][CLIENT_Y] - startInput.points[0][CLIENT_Y]);
+            // 标量
             distanceX = Math.abs(displacementX);
             distanceY = Math.abs(displacementY);
             distance = Math.round(getVLength({ x: distanceX, y: distanceY }));
-            overallDirection = getDirection(displacementX, displacementY);
         }
 
         return {
-            displacementX, displacementY, distanceX, distanceY, distance, overallDirection
+            displacementX, displacementY, distanceX, distanceY, distance, getDirection
         };
     };
 };

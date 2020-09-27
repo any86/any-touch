@@ -40,7 +40,5 @@ export default function Press(options?: RecognizerOptions<typeof DEFAULT_OPTIONS
 
     };
 
-    return [_context, _recognize,];
+    return [_context, _recognize,[ComputeDistance, ComputeVAndDir, ComputeMaxLength]];
 };
-
-Press.C = [ComputeDistance, ComputeVAndDir, ComputeMaxLength];

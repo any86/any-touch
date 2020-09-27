@@ -5,18 +5,19 @@ import Tap from '@any-touch/tap';
 import { GestureSimulator, sleep } from '@any-touch/simulator';
 import debounce from 'lodash/debounce'
 test(`tap延迟300ms触发, 如果届时doubletap状态为"失败或可能"那么触发tap`, async (done) => {
-    AnyTouch.use(Tap);
-    AnyTouch.use(Tap, { name: 'doubletap', tapTimes: 2 });
+
 
     const el = document.createElement('div');
     const gs = new GestureSimulator(el);
     const at = AnyTouch(el);
+    at.use(Tap);
+    at.use(Tap, { name: 'doubletap', tapTimes: 2 });
     const onTap = jest.fn();
     const onDoubleTap = jest.fn();
-    at.beforeEach(({ name }:any, next:any) => {
+    at.beforeEach(({ name },map, next) => {
         if ('tap' === name) {
             debounce(() => {
-                if ([RECOGNIZER_STATUS.POSSIBLE,RECOGNIZER_STATUS.FAILED].includes(at.recognizerMap.doubletap.status)) next();
+                if ([RECOGNIZER_STATUS.POSSIBLE,RECOGNIZER_STATUS.FAILED].includes(map.doubletap.status)) next();
             }, 300);
         } else {
             next();

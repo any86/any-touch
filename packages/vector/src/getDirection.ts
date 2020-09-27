@@ -1,4 +1,4 @@
-import { DIRECTION, NONE } from '@any-touch/shared';
+import { DIRECTION } from '@any-touch/shared';
 
 /**
  * 计算点相对于(0,0)的方向

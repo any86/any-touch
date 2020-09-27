@@ -9,22 +9,15 @@
 */
 
 
-import AnyTouch from '@any-touch/core';
+import { createAnyTouch } from '@any-touch/core';
 import Tap from '@any-touch/tap';
 import Pan from '@any-touch/pan';
 import Swipe from '@any-touch/swipe';
 import Press from '@any-touch/press';
 import Pinch from '@any-touch/pinch';
 import Rotate from '@any-touch/rotate';
-import {RECOGNIZER_STATUS} from '@any-touch/shared';
-
-
-AnyTouch.use(Tap);
-AnyTouch.use(Pan);
-AnyTouch.use(Swipe);
-AnyTouch.use(Press);
-AnyTouch.use(Pinch);
-AnyTouch.use(Rotate);
+import { RECOGNIZER_STATUS } from '@any-touch/shared';
+const AnyTouch = createAnyTouch([Tap, Pan, Swipe, Press, Pinch, Rotate]);
 AnyTouch.Tap = Tap;
 AnyTouch.Pan = Pan;
 AnyTouch.Swipe = Swipe;

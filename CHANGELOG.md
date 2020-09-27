@@ -17,7 +17,7 @@ All notable changes to this project will be documented in this file. See [standa
 
 ### Bug Fixes
 
-* 修复"preventDefaultExclude"逻辑错误,造成的isPreventDefault失效([#8](https://github.com/any86/any-touch/issues/8)) ([c08a589](https://github.com/any86/any-touch/commit/c08a589))
+* 修复"preventDefaultExclude"逻辑错误,造成的preventDefault失效([#8](https://github.com/any86/any-touch/issues/8)) ([c08a589](https://github.com/any86/any-touch/commit/c08a589))
 
 
 

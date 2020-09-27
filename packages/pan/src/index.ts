@@ -55,7 +55,6 @@ function Pan(options?: RecognizerOptions<typeof DEFAULT_OPTIONS>): ReturnType<Re
         }
     }
 
-    return [_context, _recognize];
+    return [_context, _recognize,[ComputeVAndDir, ComputeDistance, ComputeDeltaXY]];
 }
-Pan.C = [ComputeVAndDir, ComputeDistance, ComputeDeltaXY];
 export default Pan;

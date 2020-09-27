@@ -49,7 +49,10 @@ export default {
     flex-wrap: wrap;
     > .card {
         background: #fff;
-        width: 300px;
+        flex-shrink:0;
+        flex-grow: 1;
+        flex-basis: 10%;
+        max-width: 300px;
         box-shadow: 1px 2px 8px 2px rgba(#000, 0.1);
         margin-right: 8px;
         margin-bottom: 8px;

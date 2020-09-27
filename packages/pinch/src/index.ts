@@ -1,6 +1,6 @@
 import type { Computed, EventTrigger, RecognizerOptions, RecognizerFunction } from '@any-touch/shared';
 import { ComputeScale } from '@any-touch/compute';
-import createContext,{ canResetStatusForPressMoveLike, recognizeForPressMoveLike } from '@any-touch/recognizer';
+import createContext, { canResetStatusForPressMoveLike, recognizeForPressMoveLike } from '@any-touch/recognizer';
 const DEFAULT_OPTIONS = {
     name: 'pinch',
     // 触发事件所需要的最小缩放比例
@@ -43,7 +43,5 @@ export default function Pinch(options?: RecognizerOptions<typeof DEFAULT_OPTIONS
                 _isRecognized = isRecognized;
             });
     }
-    return [_context, _recognize];
+    return [_context, _recognize, [ComputeScale]];
 }
-
-Pinch.C = [ComputeScale];

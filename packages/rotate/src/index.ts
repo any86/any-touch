@@ -35,7 +35,5 @@ export default function Rotate(options?: RecognizerOptions<typeof DEFAULT_OPTION
             _isRecognized = isRecognized;
         });
     };
-    return [_context,_recognize];
+    return [_context,_recognize, [ComputeAngle]];
 };
-
-Rotate.C = [ComputeAngle];

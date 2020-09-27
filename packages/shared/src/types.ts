@@ -3,7 +3,7 @@ import { RECOGNIZER_STATUS, STAGE } from './const';
 /**
  * 基础识别器类型
  */
-export type AnyTouchPlugin = any;
+// export type AnyTouchPlugin = any;
 
 /**
  * 计算函数
@@ -53,17 +53,14 @@ export type RecognizerContext<DEFAULT_OPTIONS = any> = RecognizerOptions<DEFAULT
 /**
  * 识别器实例
  */
-export type RecognizerReturn = [RecognizerContext, (computed: Computed, emit: EventTrigger) => void];
+export type Recognizer = [RecognizerContext, (computed: Computed, emit: EventTrigger) => void, ComputeWrapFunction[]];
 
 /**
  * 识别器构造函数
  */
 export interface RecognizerFunction {
-    C: ComputeWrapFunction[];
-    (options?: RecognizerOptions): RecognizerReturn;
+    (options?: RecognizerOptions): Recognizer;
 }
-
-
 
 /**
  * 适配器支持的事件类型
@@ -192,7 +189,8 @@ export interface Computed extends Input {
 }
 
 export interface AnyTouchEvent extends Input, Readonly<Computed> {
-    readonly type: string
+    readonly name: string;
+    readonly type: string;
 }
 
 
@@ -201,11 +199,6 @@ export interface AnyTouchEvent extends Input, Readonly<Computed> {
  */
 export interface InputCreatorFunction<T> {
     (event: T): void | Input;
-}
-
-export interface InputCreatorWrapFunction {
-    (el?: HTMLElement): InputCreatorFunction<TouchEvent>;
-    (): InputCreatorFunction<MouseEvent>;
 }
 
 /**

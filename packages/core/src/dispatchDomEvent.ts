@@ -2,7 +2,7 @@ import { Input } from '@any-touch/shared';
 /**
  * 触发dom事件
  */
-export default function (el: EventTarget, payload: Record<string, any> & Input, eventInit?: EventInit): boolean | void {
+export default function dispatchDomEvent(el: EventTarget, payload: Record<string, any> & Input, eventInit?: EventInit): boolean | void {
     // 过滤掉Event上保留的字段(target, currentTarget,type)
     let { target, currentTarget, type, ...data } = payload;
     let event: Event;
@@ -20,4 +20,16 @@ export default function (el: EventTarget, payload: Record<string, any> & Input, 
     });
     // if('panmove' == event.type)  console.log(event.type,el)
     return el.dispatchEvent(event);
+}
+
+
+export function dispatchDOMEvents(
+    target: EventTarget|null, 
+    payloads: (Record<string, any> & Input)[], 
+    eventInit?: EventInit|false,
+    el?: HTMLElement) {
+    if (void 0 !== el && null !== target && false !== eventInit)
+        for (let i in payloads) {
+            dispatchDomEvent(target, payloads[i], eventInit);
+        }
 }

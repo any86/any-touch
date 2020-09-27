@@ -2,10 +2,7 @@
     <main class="ovh">
         <header>
             <a target="_new" href="https://github.com/any86/any-touch">
-                <img
-                    width="100"
-                    src="https://img.shields.io/github/stars/any86/any-touch?style=social"
-                />
+                <img width="100" src="https://img.shields.io/github/stars/any86/any-touch?style=social" />
             </a>
 
             <a class="link" target="_new" href="https://github.com/any86/any-touch">文档</a>
@@ -15,43 +12,43 @@
         <article ref="panel" class="panel">
             <div
                 ref="circle"
-                v-for="({top,left,zIndex,scale,angle},index) in styles"
-                :style="{top,left,zIndex,transform:`scale(${scale}) rotate(${angle}deg)`}"
+                v-for="({ top, left, zIndex, scale, angle }, index) in styles"
+                :style="{ top, left, zIndex, transform: `scale(${scale}) rotate(${angle}deg)` }"
                 :key="index"
                 :index="index"
                 @at="onTouch"
-                @at:after="onAfter($event,index)"
-                @panstart="onPanstart($event,index)"
-                @panmove="onPanmove($event,index)"
-                @pandown="onPandown($event,index)"
-                @swipe="onSwipe($event,index)"
-                @pinch="$event.match() && onPinch($event,index)"
-                @rotate="$event.match() && onRotate($event,index)"
-                @transitionend="onTransitionend($event,index)"
+                @at:after="onAfter($event, index)"
+                @panstart="onPanstart($event, index)"
+                @panmove="onPanmove($event, index)"
+                @pandown="onPandown($event, index)"
+                @swipe="onSwipe($event, index)"
+                @pinch="$event.match() && onPinch($event, index)"
+                @rotate="$event.match() && onRotate($event, index)"
+                @transitionend="onTransitionend($event, index)"
                 :class="['circle']"
             >
-                <p style="font-size:16px;border-bottom:1px dashed #fff;">👋可拖拽 / 缩放等...</p>
-                <p>Top: {{top}}</p>
-                <p>Left: {{left}}</p>
-                <p>Scale: {{scale}}</p>
-                <p>Angle: {{angle}}</p>
+                <p style="font-size: 16px; border-bottom: 1px dashed #fff">👋可拖拽 / 缩放等...</p>
+                <p>Top: {{ top }}</p>
+                <p>Left: {{ left }}</p>
+                <p>Scale: {{ scale }}</p>
+                <p>Angle: {{ angle }}</p>
             </div>
         </article>
 
         <article class="info p-2 mt-6">
             <template v-if="data.type">
-                <h1>{{data.type}}</h1>
+                <h1>{{ data.type }}</h1>
                 <table>
                     <tr align="left">
                         <th>键值</th>
                         <th>值</th>
                         <th>说明</th>
                     </tr>
-                    <template v-for="{key,desc} in map">
+                    <template v-for="{ key, desc } in map">
                         <tr v-if="data[key]" :key="key">
-                            <td>{{key}}</td>
-                            <td>{{data[key]}}</td>
-                            <td>{{desc}}</td>
+                            <td>{{ key }}</td>
+                            <td>{{ data[key] }}</td>
+                            <td>{{ desc }}</td>
                         </tr>
                     </template>
                 </table>
@@ -67,7 +64,7 @@
                 <span>rotate(旋转)</span>
             </div>
 
-            <span class="btn-add" @click="add">添加一个(第{{styles.length+1}}个)</span>
+            <span class="btn-add" @click="add">添加一个(第{{ styles.length + 1 }}个)</span>
         </article>
     </main>
 </template>
@@ -115,18 +112,15 @@ export default {
     },
 
     mounted() {
-        AnyTouch.use(AnyTouch.Tap, { name: 'doubletap', tapTimes: 2 });
-        const at = AnyTouch(this.$refs.panel, { isPreventDefault: true });
+        const at = new AnyTouch(this.$refs.panel, { preventDefault: true });
+        at.use(AnyTouch.Tap, { name: 'doubletap', tapTimes: 2 });
 
         let timeID = null;
-        at.beforeEach((a, next) => {
+        at.beforeEach((a, map, next) => {
             if ('tap' === a.name) {
                 clearTimeout(timeID);
                 timeID = setTimeout(() => {
-                    // console.log(a.status, at.recognizerMap.doubletap[0].status);
-                    const ok = [AnyTouch.STATUS_POSSIBLE, AnyTouch.STATUS_FAILED].includes(
-                        at.recognizerMap.doubletap.status
-                    );
+                    const ok = [AnyTouch.STATUS_POSSIBLE, AnyTouch.STATUS_FAILED].includes(map.doubletap.status);
                     if (ok) {
                         next();
                     }

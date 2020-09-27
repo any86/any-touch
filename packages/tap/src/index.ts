@@ -186,7 +186,5 @@ export default function Tap(options?: RecognizerOptions<typeof DEFAULT_OPTIONS>)
             _context.status = RECOGNIZER_STATUS.FAILED;
         }
     };
-
-    return [_context, _recognize];
+    return [_context, _recognize,[ComputeDistance, ComputeMaxLength]];
 }
-Tap.C = [ComputeDistance, ComputeMaxLength];

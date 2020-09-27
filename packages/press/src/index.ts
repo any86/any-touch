@@ -69,8 +69,5 @@ export default function Press(options?: RecognizerOptions<typeof DEFAULT_OPTIONS
         clearTimeout(_timeoutId);
     }
 
-    return [_context, _recognize];
+    return [_context,_recognize,[ComputeDistance]];
 };
-
-
-Press.C = [ComputeDistance];

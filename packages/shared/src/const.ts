@@ -20,7 +20,6 @@ export const enum STAGE {
     CANCEL = 'cancel'
 }
 
-
 /**
  * 方向
  */
