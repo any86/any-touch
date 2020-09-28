@@ -1,4 +1,4 @@
-import type { EventTrigger, Computed, RecognizerOptions, RecognizerFunction } from '@any-touch/shared';
+import type { EventTrigger, Computed, RecognizerOptions, RecognizerFunction, ComputedRequired } from '@any-touch/shared';
 import { STAGE, RECOGNIZER_STATUS } from '@any-touch/shared';
 import { ComputeDistance, ComputeVAndDir, ComputeMaxLength } from '@any-touch/compute';
 import createContext from '@any-touch/recognizer';
@@ -20,11 +20,12 @@ export default function Press(options?: RecognizerOptions<typeof DEFAULT_OPTIONS
     function _test(computed: Computed): boolean {
         // 非end阶段, 开始校验数据
         if (STAGE.END !== computed.stage) return false;
-        const { velocityX, velocityY, maxPointLength, distance } = computed;
+        const { velocityX, velocityY, maxPointLength, distance } = computed as ComputedRequired<typeof ComputeDistance, typeof ComputeVAndDir, typeof ComputeMaxLength>;
         return _context.pointLength === maxPointLength &&
             _context.threshold < distance &&
             _context.velocity < Math.max(velocityX, velocityY);
     };
+
     /**
      * 开始识别
      * @param computed 计算数据 
@@ -40,5 +41,5 @@ export default function Press(options?: RecognizerOptions<typeof DEFAULT_OPTIONS
 
     };
 
-    return [_context, _recognize,[ComputeDistance, ComputeVAndDir, ComputeMaxLength]];
+    return [_context, _recognize, [ComputeDistance, ComputeVAndDir, ComputeMaxLength]];
 };

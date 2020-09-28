@@ -1,6 +1,6 @@
-import type { Computed, EventTrigger,RecognizerOptions ,RecognizerFunction} from '@any-touch/shared';
+import type { Computed, EventTrigger, RecognizerOptions, RecognizerFunction, ComputedRequired } from '@any-touch/shared';
 import { ComputeAngle } from '@any-touch/compute';
-import createContext,{ canResetStatusForPressMoveLike, recognizeForPressMoveLike } from '@any-touch/recognizer';
+import createContext, { canResetStatusForPressMoveLike, recognizeForPressMoveLike } from '@any-touch/recognizer';
 
 const DEFAULT_OPTIONS = {
     name: 'rotate',
@@ -8,7 +8,7 @@ const DEFAULT_OPTIONS = {
     threshold: 0,
     pointLength: 2,
 };
-export default function Rotate(options?: RecognizerOptions<typeof DEFAULT_OPTIONS>):ReturnType<RecognizerFunction> {
+export default function Rotate(options?: RecognizerOptions<typeof DEFAULT_OPTIONS>): ReturnType<RecognizerFunction> {
     const _context = createContext(DEFAULT_OPTIONS, options);
     let _isRecognized = false;
 
@@ -18,8 +18,12 @@ export default function Rotate(options?: RecognizerOptions<typeof DEFAULT_OPTION
      * @return 接收是否识别状态
      */
     function _test(computed: Computed): boolean {
-        const { pointLength, angle } = computed;
-        return _context.pointLength === pointLength && (_context.threshold < Math.abs(angle) || _isRecognized);
+        const _c = computed as ComputedRequired<typeof ComputeAngle>
+        if (`angle` in _c && void 0 !== _c.angle) {
+            const { pointLength, angle } = _c;
+            return _context.pointLength === pointLength && (_context.threshold < Math.abs(angle) || _isRecognized);
+        }
+        return false;
     };
 
     /**
@@ -35,5 +39,5 @@ export default function Rotate(options?: RecognizerOptions<typeof DEFAULT_OPTION
             _isRecognized = isRecognized;
         });
     };
-    return [_context,_recognize, [ComputeAngle]];
+    return [_context, _recognize, [ComputeAngle]];
 };

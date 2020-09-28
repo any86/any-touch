@@ -1,4 +1,4 @@
-import type { Point, Computed, RecognizerOptions, RecognizerFunction } from '@any-touch/shared';
+import type { Point, Computed, RecognizerOptions, RecognizerFunction, ComputedRequired } from '@any-touch/shared';
 import {
     RECOGNIZER_STATUS, STAGE
 } from '@any-touch/shared';
@@ -23,6 +23,7 @@ const DEFAULT_OPTIONS = {
     maxPressTime: 250,
 };
 
+
 export default function Tap(options?: RecognizerOptions<typeof DEFAULT_OPTIONS>): ReturnType<RecognizerFunction> {
     const _context = createContext(DEFAULT_OPTIONS, options);
     let _tapCount = 0;
@@ -30,7 +31,7 @@ export default function Tap(options?: RecognizerOptions<typeof DEFAULT_OPTIONS>)
     let _prevTapPoint: Point | undefined;
     let _prevTapTime: number | undefined;
     let _countDownToFailTimer: number;
-    
+
     /**
       * 识别条件
       * @param computed 计算结果
@@ -43,7 +44,7 @@ export default function Tap(options?: RecognizerOptions<typeof DEFAULT_OPTIONS>)
         // 2. 当前点击数为0, 也就是当所有触点离开才通过
         // 3. 移动距离
         // 4. start至end的事件, 区分tap和press
-        const { maxPointLength, distance } = computed;
+        const { maxPointLength, distance } = computed as ComputedRequired<typeof ComputeMaxLength, typeof ComputeDistance>;
         // console.log(this.name,pointLength, maxPointLength)
         return maxPointLength === _context.pointLength &&
             0 === pointLength &&
@@ -186,5 +187,5 @@ export default function Tap(options?: RecognizerOptions<typeof DEFAULT_OPTIONS>)
             _context.status = RECOGNIZER_STATUS.FAILED;
         }
     };
-    return [_context, _recognize,[ComputeDistance, ComputeMaxLength]];
+    return [_context, _recognize, [ComputeDistance, ComputeMaxLength]];
 }

@@ -1,4 +1,4 @@
-import type { EventTrigger, Computed, RecognizerOptions, RecognizerFunction } from '@any-touch/shared';
+import type { EventTrigger, Computed, RecognizerOptions, RecognizerFunction,ComputedRequired } from '@any-touch/shared';
 import {
     RECOGNIZER_STATUS, DIRECTION, STAGE
 } from '@any-touch/shared';
@@ -61,7 +61,7 @@ export default function Press(options?: RecognizerOptions<typeof DEFAULT_OPTIONS
      * 移动距离不大
      */
     function _test(computed: Computed): boolean {
-        const { distance } = computed;
+        const { distance } = computed as ComputedRequired< typeof ComputeDistance>;
         return _context.maxDistance > distance;
     };
 

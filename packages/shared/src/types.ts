@@ -168,3 +168,6 @@ export interface AnyTouchEvent extends Input, Readonly<Computed> {
 export interface InputCreatorFunction<T> {
     (event: T): void | Input;
 }
+
+
+export type ComputedRequired<A extends ComputeWrapFunction = ComputeWrapFunction, B extends ComputeWrapFunction = ComputeWrapFunction, C extends ComputeWrapFunction = ComputeWrapFunction> = ReturnType<ReturnType<A>> & ReturnType<ReturnType<B>> & ReturnType<ReturnType<C>> & Input;

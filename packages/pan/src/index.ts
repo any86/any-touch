@@ -1,4 +1,4 @@
-import type { EventTrigger, Computed, RecognizerFunction, RecognizerOptions } from '@any-touch/shared';
+import type { EventTrigger, Computed, RecognizerFunction, RecognizerOptions, Input,ComputedRequired } from '@any-touch/shared';
 import { ComputeDistance, ComputeDeltaXY, ComputeVAndDir } from '@any-touch/compute';
 import createContext, { recognizeForPressMoveLike, canResetStatusForPressMoveLike } from '@any-touch/recognizer';
 const DEFAULT_OPTIONS = {
@@ -7,6 +7,7 @@ const DEFAULT_OPTIONS = {
     pointLength: 1,
 };
 
+type _C = ComputedRequired<typeof ComputeVAndDir, typeof ComputeDistance, typeof ComputeDeltaXY>  
 
 /**
  * 拖拽识别器
@@ -22,7 +23,7 @@ function Pan(options?: RecognizerOptions<typeof DEFAULT_OPTIONS>): ReturnType<Re
      * @return 是否是当前手势
      */
     function _test(computed: Computed): boolean {
-        const { pointLength, distance } = computed;
+        const { pointLength, distance } = computed as _C;
         return (_isRecognized || _context.threshold <= distance) && _context.pointLength === pointLength;
     }
 
@@ -55,6 +56,6 @@ function Pan(options?: RecognizerOptions<typeof DEFAULT_OPTIONS>): ReturnType<Re
         }
     }
 
-    return [_context, _recognize,[ComputeVAndDir, ComputeDistance, ComputeDeltaXY]];
+    return [_context, _recognize, [ComputeVAndDir, ComputeDistance, ComputeDeltaXY]];
 }
 export default Pan;

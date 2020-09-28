@@ -1,6 +1,8 @@
 import type { Computed, EventTrigger, RecognizerOptions, RecognizerFunction } from '@any-touch/shared';
 import { ComputeScale } from '@any-touch/compute';
 import createContext, { canResetStatusForPressMoveLike, recognizeForPressMoveLike } from '@any-touch/recognizer';
+
+
 const DEFAULT_OPTIONS = {
     name: 'pinch',
     // 触发事件所需要的最小缩放比例
