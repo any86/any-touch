@@ -1,9 +1,8 @@
 import AnyTouch from '@any-touch/core';
 import { GestureSimulator, sleep } from '@any-touch/simulator';
 export function create() {
-    AnyTouch.removeUse();
     const el = document.createElement('div');
-    const at = new AnyTouch(el);
+    const at = AnyTouch(el);
     const gs = new GestureSimulator(el);
     const mouse = new GestureSimulator(el, {device:'mouse'});
     const mockCB = jest.fn();

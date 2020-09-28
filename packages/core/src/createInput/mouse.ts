@@ -1,5 +1,5 @@
-import type { stage, PointClientXY } from '@any-touch/shared';
-import { MOUSE_DOWN, MOUSE_MOVE, MOUSE_UP, INPUT_START, INPUT_MOVE, INPUT_END } from '@any-touch/shared';
+import type { PointClientXY } from '@any-touch/shared';
+import {  STAGE,MOUSE } from '@any-touch/shared';
 import inputCreator from './inputCreator';
 export default function () {
     let prevPoints: PointClientXY[];
@@ -16,19 +16,19 @@ export default function () {
 
         // points中存target是为了多触点的时候校验target是否相同
         let points = [{ clientX, clientY, target }];
-        let stage: stage | undefined;
+        let stage: STAGE | undefined;
 
-        if (MOUSE_DOWN === type && 0 === button) {
+        if (MOUSE.DOWN === type && 0 === button) {
             _target = target;
             // 必须左键
             isPressed = true;
-            stage = INPUT_START;
+            stage = STAGE.START;
         } else if (isPressed) {
-            if (MOUSE_MOVE === type) {
-                stage = INPUT_MOVE;
-            } else if (MOUSE_UP === type) {
+            if (MOUSE.MOVE === type) {
+                stage = STAGE.MOVE;
+            } else if (MOUSE.UP === type) {
                 points = [];
-                stage = INPUT_END;
+                stage = STAGE.END;
                 isPressed = false;
             }
         }

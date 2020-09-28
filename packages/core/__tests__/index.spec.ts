@@ -1,5 +1,7 @@
 import { create } from '@testUtils';
 import Tap from '@any-touch/tap';
+import {createAnyTouch} from '@any-touch/core';
+
 
 test('依次输入start->move->end->start-cancel', async done => {
     const { gs, at, mockCB, mock, sleep } = create();
@@ -20,17 +22,18 @@ test('依次输入start->move->end->start-cancel', async done => {
 
 test(`通过get获取tap手势实例, 并设置maxPressTime为100ms`, async done => {
     const { AnyTouch, el } = create();
-    AnyTouch.use(Tap);
-    const at = new AnyTouch(el);
+    const at = AnyTouch(el);
+    at.use(Tap);
+
     const tap = at.get('tap');
-    expect(tap).toBeInstanceOf(Tap);
+    expect(tap).toHaveProperty('set');
     done();
 });
 
 test('默认会触发dom事件', async done => {
-    const { AnyTouch, el, GestureSimulator, mockCB, sleep } = create();
-    AnyTouch.use(Tap);
-    new AnyTouch(el);
+    const {  el, GestureSimulator, mockCB, sleep } = create();
+    const AnyTouch =  createAnyTouch([Tap]);
+    AnyTouch(el);
     const gs = new GestureSimulator(el);
     el.addEventListener('tap', ev => {
         mockCB(ev.type);
@@ -45,7 +48,7 @@ test('默认会触发dom事件', async done => {
 
 test(`通过set设置不触发dom事件`, async done => {
     const { AnyTouch, el, GestureSimulator, mockCB, sleep } = create();
-    const at = new AnyTouch(el);
+    const at = AnyTouch(el);
     at.set({domEvents:false});
     const gs = new GestureSimulator(el);
     el.addEventListener('tap', mockCB);

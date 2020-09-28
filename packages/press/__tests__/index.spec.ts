@@ -4,8 +4,8 @@ const PRESS_NAME = 'press';
 
 test(`加载${PRESS_NAME}, 触发一次${PRESS_NAME}`, async done => {
     const { gs, el, mockCB, mockCalls, sleep, AnyTouch } = create();
-    AnyTouch.use(Press);
-    const at = new AnyTouch(el);
+    const at = AnyTouch(el);
+    at.use(Press);
     at.on(PRESS_NAME, mockCB);
 
     gs.dispatchTouchStart();
@@ -18,8 +18,8 @@ test(`加载${PRESS_NAME}, 触发一次${PRESS_NAME}`, async done => {
 
 test(`按压的时候移动超过一定"距离", 不触发${PRESS_NAME}`, async done => {
     const { gs, el, mockCB, sleep, AnyTouch } = create();
-    AnyTouch.use(Press);
-    const at = new AnyTouch(el);
+    const at = AnyTouch(el);
+    at.use(Press);
     at.on(PRESS_NAME, mockCB);
 
     gs.dispatchTouchStart();
@@ -33,8 +33,8 @@ test(`按压的时候移动超过一定"距离", 不触发${PRESS_NAME}`, async 
 
 test(`松手的时候还没有构成按压时间要求, 不触发${PRESS_NAME}`, async done => {
     const { gs, el, mockCB, sleep, AnyTouch } = create();
-    AnyTouch.use(Press);
-    const at = new AnyTouch(el);
+    const at = AnyTouch(el);
+    at.use(Press);
     at.on(PRESS_NAME, mockCB);
 
     gs.dispatchTouchStart();

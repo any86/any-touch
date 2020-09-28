@@ -2,10 +2,7 @@
     <main class="ovh">
         <header>
             <a target="_new" href="https://github.com/any86/any-touch">
-                <img
-                    width="100"
-                    src="https://img.shields.io/github/stars/any86/any-touch?style=social"
-                />
+                <img width="100" src="https://img.shields.io/github/stars/any86/any-touch?style=social" />
             </a>
 
             <a class="link" target="_new" href="https://github.com/any86/any-touch">文档</a>
@@ -15,43 +12,43 @@
         <article ref="panel" class="panel">
             <div
                 ref="circle"
-                v-for="({top,left,zIndex,scale,angle},index) in styles"
-                :style="{top,left,zIndex,transform:`scale(${scale}) rotate(${angle}deg)`}"
+                v-for="({ top, left, zIndex, scale, angle }, index) in styles"
+                :style="{ top, left, zIndex, transform: `scale(${scale}) rotate(${angle}deg)` }"
                 :key="index"
                 :index="index"
                 @at="onTouch"
-                @at:after="onAfter($event,index)"
-                @panstart="onPanstart($event,index)"
-                @panmove="onPanmove($event,index)"
-                @pandown="onPandown($event,index)"
-                @swipe="onSwipe($event,index)"
-                @pinch="$event.match() && onPinch($event,index)"
-                @rotate="$event.match() && onRotate($event,index)"
-                @transitionend="onTransitionend($event,index)"
+                @at:after="onAfter($event, index)"
+                @panstart="onPanstart($event, index)"
+                @panmove="onPanmove($event, index)"
+                @pandown="onPandown($event, index)"
+                @swipe="onSwipe($event, index)"
+                @pinch="$event.match() && onPinch($event, index)"
+                @rotate="$event.match() && onRotate($event, index)"
+                @transitionend="onTransitionend($event, index)"
                 :class="['circle']"
             >
-                <p style="font-size:16px;border-bottom:1px dashed #fff;">👋可拖拽 / 缩放等...</p>
-                <p>Top: {{top}}</p>
-                <p>Left: {{left}}</p>
-                <p>Scale: {{scale}}</p>
-                <p>Angle: {{angle}}</p>
+                <p style="font-size: 16px; border-bottom: 1px dashed #fff">👋可拖拽 / 缩放等...</p>
+                <p>Top: {{ top }}</p>
+                <p>Left: {{ left }}</p>
+                <p>Scale: {{ scale }}</p>
+                <p>Angle: {{ angle }}</p>
             </div>
         </article>
 
         <article class="info p-2 mt-6">
             <template v-if="data.type">
-                <h1>{{data.type}}</h1>
+                <h1>{{ data.type }}</h1>
                 <table>
                     <tr align="left">
                         <th>键值</th>
                         <th>值</th>
                         <th>说明</th>
                     </tr>
-                    <template v-for="{key,desc} in map">
+                    <template v-for="{ key, desc } in map">
                         <tr v-if="data[key]" :key="key">
-                            <td>{{key}}</td>
-                            <td>{{data[key]}}</td>
-                            <td>{{desc}}</td>
+                            <td>{{ key }}</td>
+                            <td>{{ data[key] }}</td>
+                            <td>{{ desc }}</td>
                         </tr>
                     </template>
                 </table>
@@ -67,7 +64,7 @@
                 <span>rotate(旋转)</span>
             </div>
 
-            <span class="btn-add" @click="add">添加一个(第{{styles.length+1}}个)</span>
+            <span class="btn-add" @click="add">添加一个(第{{ styles.length + 1 }}个)</span>
         </article>
     </main>
 </template>
@@ -77,6 +74,8 @@
 function C(text, bgColor = '#000', color = '#fff') {
     console.log(`%c${text}`, `color:${color};background-color:${bgColor};padding:2px 6px;border-radius:4px;`);
 }
+import axios from 'axios';
+import debounce from 'lodash/debounce';
 import AnyTouch from '../../../packages/any-touch/dist/any-touch.umd';
 export default {
     name: 'Home',
@@ -113,8 +112,31 @@ export default {
     },
 
     mounted() {
-        const at = new AnyTouch(this.$refs.panel, { isPreventDefault: true });
+        const at = new AnyTouch(this.$refs.panel, { preventDefault: true });
+        at.use(AnyTouch.Tap, { name: 'doubletap', tapTimes: 2 });
+
+        let timeID = null;
+        at.beforeEach((a, map, next) => {
+            if ('tap' === a.name) {
+                clearTimeout(timeID);
+                timeID = setTimeout(() => {
+                    const ok = [AnyTouch.STATUS_POSSIBLE, AnyTouch.STATUS_FAILED].includes(map.doubletap.status);
+                    if (ok) {
+                        next();
+                    }
+                }, 300);
+            } else {
+                next();
+            }
+        });
         at.on('at:after', this.afterEach);
+        at.on('doubletap', (e) => {
+            console.log(`doubletap`);
+        });
+
+        at.on('tap', (e) => {
+            console.log(`tap`);
+        });
     },
 
     methods: {
@@ -123,14 +145,17 @@ export default {
             this.styles.push(style);
         },
         onAfter(ev) {
-            ev.currentTarget.setAttribute('at', ev.baseType);
+            ev.currentTarget.setAttribute('at', ev.name);
         },
         onTouch(ev) {
+            if ('start' === ev.stage) {
+                ev.currentTarget.setAttribute('at', '');
+            }
             // console.log('html:', ev.target.innerHTML);
             ev.currentTarget.setAttribute('at-stage', ev.stage);
         },
         afterEach(ev) {
-            this.action = ev.baseType;
+            this.action = ev.name;
             this.$set(this, 'data', ev);
         },
         onRotate(ev, index = 0) {
@@ -215,6 +240,23 @@ body {
     }
 }
 
+@keyframes DoubleTap {
+    from {
+        transform: scale(0.9) rotate(15deg);
+    }
+
+    25% {
+        transform: scale(1.1);
+    }
+
+    75% {
+        transform: scale(0.9) rotate(-15deg);
+    }
+    to {
+        transform: scale(1);
+    }
+}
+
 main {
     position: relative;
     z-index: 1;
@@ -234,8 +276,8 @@ main {
             color: #69c;
             margin-left: 16px;
             text-decoration: none;
-            &+.link{
-                border-left:1px solid #ccc;
+            & + .link {
+                border-left: 1px solid #ccc;
                 padding-left: 16px;
             }
         }
@@ -272,6 +314,10 @@ main {
 
             &[at='tap'][at-stage='end'] {
                 animation: Tap 200ms;
+            }
+
+            &[at='doubletap'][at-stage='end'] {
+                animation: DoubleTap 200ms;
             }
 
             &[at='press']:not([at-stage='end']) {

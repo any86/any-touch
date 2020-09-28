@@ -8,18 +8,18 @@ import { Options } from './index';
 export default function (event: SupportEvent, options: Options): boolean {
     // 不阻止默认
     // 那么不进行过滤
-    if (!options.isPreventDefault) return false;
-    let isPreventDefault = true;
+    if (!options.preventDefault) return false;
+    let preventDefault = true;
     if (null !== event.target) {
         const { preventDefaultExclude } = options;
         if (isRegExp(preventDefaultExclude)) {
             if ('tagName' in event.target) {
                 const { tagName } = event.target;
-                isPreventDefault = !preventDefaultExclude.test(tagName);
+                preventDefault = !preventDefaultExclude.test(tagName);
             }
         } else if (isFunction(preventDefaultExclude)) {
-            isPreventDefault = !preventDefaultExclude(event);
+            preventDefault = !preventDefaultExclude(event);
         }
     }
-    return isPreventDefault;
+    return preventDefault;
 }

@@ -3,12 +3,34 @@ export interface Listener<Payload> {
     beforeEmit?: (payload: Payload) => boolean;
 }
 
-export interface ListenersMap<Payload> {
-    [propName: string]: Listener<Payload>[] | undefined;
+interface ListenersMap<Payload> {
+    [propName: string]: Listener<Payload>[] | void;
 }
 
-export default class <Payload = any> {
-    listenersMap: ListenersMap<Payload> = {};
+interface On<Payload> {
+    (eventName: string | string[], listener: Listener<Payload>, beforeEmit?: (payload: Payload) => boolean): void;
+}
+
+interface Off<Payload> {
+    (eventName: string, listener?: Listener<Payload>): void;
+}
+
+interface Emit<Payload> {
+    (eventName: string, payload?: Payload): void;
+}
+
+interface Destroy {
+    (): void;
+}
+
+export default function AnyEvent<Payload = any>():
+    [
+        On<Payload>,
+        Off<Payload>,
+        Emit<Payload>,
+        Destroy
+    ] {
+    let _listenersMap: ListenersMap<Payload> = {};
 
     /**
      * 绑定事件
@@ -16,16 +38,15 @@ export default class <Payload = any> {
      * @param listener 回调函数
      * @param beforeEmit 触发拦截器, 一般用在对on的二次封装
      */
-    on(eventName: string | string[], listener: Listener<Payload>, beforeEmit?: (payload: Payload) => boolean): this {
+    const on: On<Payload> = function (eventName, listener, beforeEmit) {
         const eventNames = Array.isArray(eventName) ? eventName : [eventName];
         for (const name of eventNames) {
-            if (void 0 === this.listenersMap[name]) {
-                this.listenersMap[name] = [];
+            if (void 0 === _listenersMap[name]) {
+                _listenersMap[name] = [];
             }
             listener.beforeEmit = beforeEmit;
-            (this.listenersMap[name] as Array<Listener<Payload> | undefined>).push(listener);
+            (_listenersMap[name] as Array<Listener<Payload> | undefined>).push(listener);
         }
-        return this;
     };
 
     /**
@@ -34,8 +55,8 @@ export default class <Payload = any> {
      * @param payload 载荷数据 
      * @returns  如果事件有监听器，则返回 true，否则返回 false。
      */
-    emit(eventName: string, payload?: Payload): void {
-        const listeners = this.listenersMap[eventName];
+    const emit: Emit<Payload> = function (eventName, payload) {
+        const listeners = _listenersMap[eventName];
         if (void 0 !== listeners && 0 < listeners.length) {
             for (const listener of listeners) {
                 if (void 0 === listener.beforeEmit) {
@@ -54,13 +75,13 @@ export default class <Payload = any> {
      * @param eventName 事件名
      * @param listener 回调函数
      */
-    off(eventName: string, listener?: Listener<Payload>): void {
-        const listeners = this.listenersMap[eventName];
+    const off: Off<Payload> = function (eventName, listener) {
+        const listeners = _listenersMap[eventName];
         // 事件存在
         if (void 0 !== listeners) {
             // 清空事件名对应的所有回调
             if (void 0 === listener) {
-                delete this.listenersMap[eventName];
+                delete _listenersMap[eventName];
             }
             // 清空指定回调
             else {
@@ -73,7 +94,8 @@ export default class <Payload = any> {
     /**
      * 销毁实例
      */
-    destroy() {
-        this.listenersMap = {};
+    function destroy() {
+        _listenersMap = {};
     };
-};
+    return [on, off, emit, destroy];
+}
