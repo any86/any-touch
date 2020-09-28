@@ -7,12 +7,11 @@
 [downloads-image]: https://badgen.net/npm/dt/any-touch
 [downloads-url]: https://npmjs.org/package/any-touch
 
-:wave: 支持**6类**手势, **0**依赖.
 
--  支持PC 端 / 移动端 / [微信小程序](#支持微信小程序).
--  默认加载6个手势, 也可🤖[按需加载](#按需加载)手势, 核心**2kb**, 完整**4.5kb**.
--  支持Tap(点击) / Press(按压) / Pan(拖拽) / Swipe(快划) / Pinch(缩放) / Rotate(旋转)6种手势. 
-- 通过6类手势可以扩展出更多手势.
+![6类手势](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/102a244991064824900ac45efeb9251d~tplv-k3u1fbpfcp-zoom-1.image)
+- 支持PC 端 / 移动端 / [微信小程序](#支持微信小程序).
+- 默认加载**6个手势**, 也可🤖[按需加载](#按需加载)手势, 核心**2kb**, 完整**5kb**.
+- 通过6类手势可以**扩展**出更多手势.
 
 ## 演示
 <details>
@@ -50,15 +49,21 @@ https://unpkg.com/any-touch/dist/any-touch.umd.min.js
 ```
 
 ## 快速开始
-
+```html
+<h1 id="box">hello world</h1>
+<script src="https://unpkg.com/any-touch/dist/any-touch.umd.min.js"></script>
+<script>
+const el = doucument.getElementById('box');
+const at = AnyTouch(el);
+at.on('tap', e => console.log('e包含位置等信息',e));
+</script>
+```
+**或者:**
 ```javascript
 import AnyTouch from 'any-touch';
 const el = doucument.getElementById('box');
 const at = AnyTouch(el);
-// 单击
-at.on('tap', e => {
-    // e包含位置/速度/方向等信息
-});
+at.on('pan', e => console.log('e包含位移/速度/方向等信息',e))
 ```
 [:rocket: 返回目录](#目录)
 
@@ -125,8 +130,6 @@ const at = AnyTouch()
 [:rocket: 返回目录](#目录)
 
 
-
-
 ## 按需加载
 **默认any-touch支持所有手势**, 为了减小"体积"和"不必要的识别器执行时间", 提供了按需加载.
 
@@ -142,11 +145,9 @@ import Core from '@any-touch/core';
 import Pan from '@any-touch/pan';
 // 使用Pan
 Core.use(Pan);
-const at = new Core(el);
+const at = Core(el);
 // 拖拽
-at.on('pan', (ev) => {
-    // ev包含位置/速度/方向等信息
-});
+at.on('swipe', onSwipe);
 ```
 ### @any-touch/core
 手势库的核心组件, 主要用来实现PC/移动端的兼容([查看更多](packages/core/README.md)).
