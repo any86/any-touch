@@ -1,6 +1,6 @@
 # any-touch [![NPM Version][npm-image]][npm-url] [![NPM Downloads][downloads-image]][downloads-url] [![size-image]][size-url] [![codecov](https://codecov.io/gh/any86/any-touch/branch/master/graph/badge.svg)](https://codecov.io/gh/any86/any-touch) [![CircleCI](https://circleci.com/gh/any86/any-touch.svg?style=svg)](https://circleci.com/gh/any86/any-touch)
 
-[size-image]: https://badgen.net/bundlephobia/minzip/any-touch
+[size-image]: https://badgen.net/bundlephobia/minzip/@any-touch/core
 [size-url]: https://bundlephobia.com/result?p=@any-touch/core
 [npm-image]: https://badgen.net/npm/v/any-touch
 [npm-url]: https://npmjs.org/package/any-touch
@@ -16,7 +16,7 @@
 ## 演示
 <details>
 <summary>查看二维码</summary>
-<img src="https://user-images.githubusercontent.com/8264787/73740124-83285300-4782-11ea-9660-fcd50183f27b.png" />
+<img src="https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/b84d3a068b7f4ee0a41f94237997bfb7~tplv-k3u1fbpfcp-zoom-1.image" />
 </details>
 
 [直接访问](https://any86.github.io/any-touch)
@@ -109,13 +109,14 @@ export default {
 
 ## 支持微信小程序
 
-由于微信小程序中没有 dom 元素的概念, 所以我们需要通过`catchEvent`方法手动接收 touch 事件的事件对象来进行识别!
+由于**小程序中没有dom元素**的概念, 所以我们需要通过**catchEvent**方法手动接收**touch**事件的事件对象来进行识别!
 
 ```xml
 <view 
   @touchstart="at.catchEvent"
   @touchmove="at.catchEvent"
-  @touchend="at.catchEvent">
+  @touchend="at.catchEvent"
+  @touchcancel="at.catchEvent">
 </view>
 ```
 
@@ -131,13 +132,7 @@ const at = AnyTouch()
 
 
 ## 按需加载
-**默认any-touch支持所有手势**, 为了减小"体积"和"不必要的识别器执行时间", 提供了按需加载.
-
-![](https://user-images.githubusercontent.com/8264787/73827884-4b311680-483b-11ea-9cf5-946ac77fc5f1.png)
-
-### 使用"按需加载"
-
-**⚠️ 注意**: 执行`npm i any-touch`后, "@any-touch/core"和"@any-touch/xx手势"**便已自动安装**, 直接引入即可.
+**默认any-touch支持所有手势**, 为了"**减小体积**"和"**提升效率**", 提供了按需加载.
 
 ```javascript
 // 只加载pan识别器(拖拽)
@@ -149,6 +144,8 @@ const at = Core(el);
 // 拖拽
 at.on('swipe', onSwipe);
 ```
+**⚠️ 注意**: 执行`npm i any-touch`后, "@any-touch/core"和"@any-touch/xx手势"**便已自动安装**, 直接引入即可.
+
 ### @any-touch/core
 手势库的核心组件, 主要用来实现PC/移动端的兼容([查看更多](packages/core/README.md)).
 
@@ -167,6 +164,8 @@ at.on('swipe', onSwipe);
 | **@any-touch/rotate** |[旋转](packages/rotate/README.md)|
 
 **⚠️ 再次提示**: 如果已安装"any-touch", 上面的包便也已经自动安装.
+
+![](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/1fa1a4dae46047d58b371e8ff1704dc8~tplv-k3u1fbpfcp-zoom-1.image)
 
 
 [:rocket: 返回目录](#目录)
