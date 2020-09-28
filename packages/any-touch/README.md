@@ -7,14 +7,11 @@
 [downloads-image]: https://badgen.net/npm/dt/any-touch
 [downloads-url]: https://npmjs.org/package/any-touch
 
-:wave: 一个小巧的手势库.
 
--  **更独立**: 零依赖, 适合任意框架, 不限于vue/react/angular.
--  **更多端**: PC 端 / 移动端 / [微信小程序](#支持微信小程序).
--  **更全面**: 支持Tap(点击) / Press(按压) / Pan(拖拽) / Swipe(快划) / Pinch(缩放) / Rotate(旋转)6种手势. 
--  **更灵巧**: 默认加载6个手势, 也可🤖[按需加载](#按需加载)手势, 核心@any-touch/core只有**2kb**, 完整安装也仅需要**5kb**.
--  **更简单**: [在Vue可直接通过v-on调用](#兼容vue语法), 比如`<div @pan="onPan"></div>`.
--  **更放心**: 代码测试覆盖率**100%**.
+![6类手势](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/102a244991064824900ac45efeb9251d~tplv-k3u1fbpfcp-zoom-1.image)
+- 支持PC 端 / 移动端 / [微信小程序](#支持微信小程序).
+- 默认加载**6个手势**, 也可🤖[按需加载](#按需加载)手势, 核心**2kb**, 完整**5kb**.
+- 通过6类手势可以**扩展**出更多手势.
 
 ## 演示
 <details>
@@ -52,15 +49,21 @@ https://unpkg.com/any-touch/dist/any-touch.umd.min.js
 ```
 
 ## 快速开始
-
+```html
+<h1 id="box">hello world</h1>
+<script src="https://unpkg.com/any-touch/dist/any-touch.umd.min.js"></script>
+<script>
+const el = doucument.getElementById('box');
+const at = AnyTouch(el);
+at.on('tap', e => console.log('e包含位置等信息',e));
+</script>
+```
+**或者:**
 ```javascript
 import AnyTouch from 'any-touch';
 const el = doucument.getElementById('box');
 const at = AnyTouch(el);
-// 单击
-at.on('tap', e => {
-    // e包含位置/速度/方向等信息
-});
+at.on('pan', e => console.log('e包含位移/速度/方向等信息',e))
 ```
 [:rocket: 返回目录](#目录)
 
@@ -127,8 +130,6 @@ const at = AnyTouch()
 [:rocket: 返回目录](#目录)
 
 
-
-
 ## 按需加载
 **默认any-touch支持所有手势**, 为了减小"体积"和"不必要的识别器执行时间", 提供了按需加载.
 
@@ -136,7 +137,7 @@ const at = AnyTouch()
 
 ### 使用"按需加载"
 
-**⚠️ 注意**: 执行`npm i any-touch`后, "@any-touch/core"和"@any-touch/xx手势"**🤖便已自动安装**, 直接引入即可.
+**⚠️ 注意**: 执行`npm i any-touch`后, "@any-touch/core"和"@any-touch/xx手势"**便已自动安装**, 直接引入即可.
 
 ```javascript
 // 只加载pan识别器(拖拽)
@@ -144,31 +145,13 @@ import Core from '@any-touch/core';
 import Pan from '@any-touch/pan';
 // 使用Pan
 Core.use(Pan);
-const at = new Core(el);
+const at = Core(el);
 // 拖拽
-at.on('pan', (ev) => {
-    // ev包含位置/速度/方向等信息
-});
+at.on('swipe', onSwipe);
 ```
 ### @any-touch/core
-手势库的核心组件, 主要用来把Mouse/Touch输入变成统一的输出, 实现PC/Mobile端的兼容, 提供了"**at:**"开头的兼容事件.
-```javascript
-import Core from '@any-touch/core';
-const at = new Core(el);
-// 兼容Mouse/Touch
-at.on('at', (ev) => {
-    // ev包含位置/时间/事件对象等属性.
-});
-// touchstart 或 mousedown
-at.on('at:start', onStart);
-// touchmove 或 mousemove
-at.on('at:move', onMove);
-// touchend 或 mouseup
-at.on('at:end', onEnd);
-// touchcancel
-at.on('at:cancel', onCancel);
-```
-<!-- [更多](core) -->
+手势库的核心组件, 主要用来实现PC/移动端的兼容([查看更多](packages/core/README.md)).
+
 
 
 ### @any-touch/xx手势

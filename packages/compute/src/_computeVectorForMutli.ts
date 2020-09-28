@@ -7,7 +7,6 @@ function computeVector(input: InputOnlyHasCurrent): Vector {
     }
 };
 
-
 export default function (input: Input): { startV: Vector, activeV: Vector, prevV: Vector } | void {
     const { prevInput, startMultiInput } = input;
     if (void 0 !== startMultiInput &&
@@ -23,22 +22,3 @@ export default function (input: Input): { startV: Vector, activeV: Vector, prevV
         }
     }
 }
-
-
-// export default function ComputeVectorForMutli() {
-//     return function (input: Input): { startV: Vector, activeV: Vector, prevV: Vector } | void {
-//         const { prevInput, startMultiInput } = input;
-//         if (void 0 !== startMultiInput &&
-//             void 0 !== prevInput &&
-//             input.id !== startMultiInput.id &&
-//             1 < prevInput.pointLength &&
-//             1 < input.pointLength) {
-//             // 2指形成的向量
-//             return {
-//                 startV: computeVector(startMultiInput),
-//                 prevV: computeVector(prevInput),
-//                 activeV: computeVector(input)
-//             }
-//         }
-//     }
-// };

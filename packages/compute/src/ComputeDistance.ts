@@ -1,5 +1,5 @@
 
-import type { Input } from '@any-touch/shared';
+import type { DIRECTION, Input } from '@any-touch/shared';
 import { CLIENT_X, CLIENT_Y, STAGE } from '@any-touch/shared';
 import { getVLength, getDirection } from '@any-touch/vector';
 
@@ -9,7 +9,9 @@ function ComputeDistance() {
     let distanceX = 0;
     let distanceY = 0;
     let distance = 0;
-    return function (input: Input) {
+    return function (input: Input): {
+        displacementX: number, displacementY: number, distanceX: number, distanceY: number, distance: number, getDirection: (x: number, y: number) => DIRECTION | void
+    } {
         const { stage, startInput } = input;
 
         if (STAGE.START === stage) {

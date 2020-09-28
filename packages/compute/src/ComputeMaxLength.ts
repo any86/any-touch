@@ -3,7 +3,7 @@ import { STAGE } from '@any-touch/shared';
 
 function ComputeMaxLength() {
     let maxPointLength = 0;
-    return function (input: Input) {
+    return function (input: Input):{maxPointLength:number} {
         const { stage } = input;
         if (STAGE.START === stage) {
             maxPointLength = input.pointLength;
