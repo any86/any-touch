@@ -133,7 +133,7 @@ const at = AnyTouch()
 ## 按需加载
 **默认any-touch支持所有手势**, 为了减小"体积"和"不必要的识别器执行时间", 提供了按需加载.
 
-![](https://user-images.githubusercontent.com/8264787/73827884-4b311680-483b-11ea-9cf5-946ac77fc5f1.png)
+![](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/1fa1a4dae46047d58b371e8ff1704dc8~tplv-k3u1fbpfcp-zoom-1.image)
 
 ### 使用"按需加载"
 
