@@ -18,7 +18,7 @@ import type {
     AnyTouchEvent, SupportEvent, ComputeFunction, InputCreatorFunction, Computed, RecognizerContext
 } from '@any-touch/shared';
 import {
-    TOUCH, MOUSE, RECOGNIZER_STATUS
+    TOUCH, MOUSE, RECOGNIZER_STATUS, EVENT_PREFIX
 } from '@any-touch/shared';
 import canPassive from './supportsPassive';
 import { mouse, touch } from './createInput';
@@ -27,7 +27,7 @@ import canPreventDefault from './canPreventDefault';
 import bindElement from './bindElement';
 // type TouchAction = 'auto' | 'none' | 'pan-x' | 'pan-left' | 'pan-right' | 'pan-y' | 'pan-up' | 'pan-down' | 'pinch-zoom' | 'manipulation';
 
-type BeforeEachHook = (recognizerContext: RecognizerContext, map: Record<string, RecognizerContext<any>>, next: () => void) => void;
+type BeforeEachHook = (recognizerContext: RecognizerContext, _map: Record<string, RecognizerContext<any>>, next: () => void) => void;
 /**
  * 默认设置
  */
@@ -35,7 +35,7 @@ export interface Options {
     domEvents?: false | EventInit;
     preventDefault?: boolean;
     // 不阻止默认行为的白名单
-    preventDefaultExclude?: RegExp | ((ev: SupportEvent) => boolean);
+    preventDefaultExclude?: RegExp | ((e: SupportEvent) => boolean);
 }
 
 /**
@@ -48,16 +48,10 @@ const DEFAULT_OPTIONS: Options = {
 };
 
 /**
- * 内部事件前缀
- */
-const AT = 'at';
-
-
-/**
  * 创建带插件的AnyTouch函数
- * @param plugins 插件
+ * @param recognizers 插件
  */
-export function createAnyTouch(plugins: RecognizerFunction[] = []) {
+export function createAnyTouch(recognizers: RecognizerFunction[] = []) {
     const AnyTouch = function (el?: HTMLElement, options?: Options) {
         const [on, off, $emit, destroyAE] = AnyEvent<AnyTouchEvent>();
 
@@ -67,9 +61,9 @@ export function createAnyTouch(plugins: RecognizerFunction[] = []) {
         // 安装插件
         const _computeFunctionMap: Record<string, ComputeFunction> = {};
         let _recognizers: Recognizer[] = [];
-        let map: Record<string, RecognizerContext> = {};
-        plugins.forEach(plugin => {
-            use(plugin)
+        let _map: Record<string, RecognizerContext> = {};
+        recognizers.forEach(recognizer => {
+            use(recognizer)
         });
 
         // 之所以强制是InputCreatorFunction<SupportEvent>,
@@ -101,16 +95,16 @@ export function createAnyTouch(plugins: RecognizerFunction[] = []) {
         }
 
         /**
-         * 使用插件
-         * @param plugin 
-         * @param recognizerOptions 
+         * 使用识别器
+         * @param recognizer 识别器
+         * @param recognizerOptions 识别器选项
          */
-        function use(plugin: RecognizerFunction, recognizerOptions?: RecognizerOptions) {
-            const recognizer = plugin(recognizerOptions)
-            _recognizers.push(recognizer);
-            const { name } = recognizer[0];
-            const computeFunctions = recognizer[2]
-            map[name] = recognizer[0];
+        function use(recognizer: RecognizerFunction, recognizerOptions?: RecognizerOptions) {
+            const instance = recognizer(recognizerOptions)
+            _recognizers.push(instance);
+            const { name } = instance[0];
+            const computeFunctions = instance[2]
+            _map[name] = instance[0];
             // 计算函数集合
             computeFunctions.forEach(computeWrapFunction => {
                 const { _id } = computeWrapFunction
@@ -123,7 +117,7 @@ export function createAnyTouch(plugins: RecognizerFunction[] = []) {
          * 事件拦截器
          * @param hook 钩子函数
          */
-        function beforeEach(hook: (recognizer: RecognizerContext, map: Record<string, RecognizerContext<any>>, next: () => void) => void): void {
+        function beforeEach(hook: (recognizer: RecognizerContext, _map: Record<string, RecognizerContext<any>>, next: () => void) => void): void {
             _beforeEachHook = hook;
         };
 
@@ -143,19 +137,18 @@ export function createAnyTouch(plugins: RecognizerFunction[] = []) {
             // 比如没有按住鼠标左键的移动会返回undefined
             if (void 0 !== input) {
                 // 内部事件: at, at:start...
-                const AT_WITH_STATUS = AT + ':' + input.stage;
-                $emit(AT, input as AnyTouchEvent);
-                $emit(AT + ':' + input.stage, input as AnyTouchEvent);
+                const AT_WITH_STATUS = EVENT_PREFIX + ':' + input.stage;
+                $emit(EVENT_PREFIX, input as AnyTouchEvent);
+                $emit(EVENT_PREFIX + ':' + input.stage, input as AnyTouchEvent);
 
                 const { target } = event;
                 const { domEvents } = _options;
-                dispatchDOMEvents(target, [{ ...input, type: AT }, { ...input, type: AT_WITH_STATUS }], domEvents, el);
+                dispatchDOMEvents(target, [{ ...input, type: EVENT_PREFIX }, { ...input, type: AT_WITH_STATUS }], domEvents, el);
 
                 // input -> computed
-                const computed = input as Computed;
+                const computed = input;
                 for (const k in _computeFunctionMap) {
-                    const f = _computeFunctionMap[k];
-                    Object.assign(computed, f(computed));
+                    Object.assign(computed, _computeFunctionMap[k](computed));
                 }
 
                 // 缓存每次计算的结果
@@ -174,7 +167,7 @@ export function createAnyTouch(plugins: RecognizerFunction[] = []) {
                         if (void 0 === _beforeEachHook) {
                             _emit2(type, aEvent);
                         } else {
-                            _beforeEachHook(context, map, () => {
+                            _beforeEachHook(context, _map, () => {
                                 _emit2(type, aEvent);
                             });
                         }
@@ -184,7 +177,7 @@ export function createAnyTouch(plugins: RecognizerFunction[] = []) {
         };
 
         function _emit2(type: string, aEvent: AnyTouchEvent) {
-            const AT_AFTER = `${AT}:after`;
+            const AT_AFTER = `${EVENT_PREFIX}:after`;
             // 在鼠标下, 此处的target一直是mousedown的target
             // 所以不能改成event.target
             const { target } = aEvent;
@@ -219,7 +212,7 @@ export function createAnyTouch(plugins: RecognizerFunction[] = []) {
          * @return 返回识别器
          */
         function get(name: string): RecognizerContext | void {
-            return map[name];
+            return _map[name];
         };
 
         /**
@@ -241,12 +234,12 @@ export function createAnyTouch(plugins: RecognizerFunction[] = []) {
             // 那么删除所有手势识别器
             if (void 0 === recognizerName) {
                 _recognizers = [];
-                map = {};
+                _map = {};
             } else {
                 for (const [index, [context]] of _recognizers.entries()) {
                     if (recognizerName === context.name) {
                         _recognizers.splice(index, 1);
-                        delete map[recognizerName];
+                        delete _map[recognizerName];
                         break;
                     }
                 }

@@ -1,7 +1,8 @@
+export const EVENT_PREFIX = 'at';
 /**
  * 是否微信
  */
-export const IS_WX = !!(window as any)!.wx;
+// export const IS_WX = !!(window as any)!.wx;
 export const NONE = 'none';
 export const CLIENT_X = 'clientX';
 export const CLIENT_Y = 'clientY';

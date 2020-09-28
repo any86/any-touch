@@ -1,9 +1,5 @@
 
-import { RECOGNIZER_STATUS, STAGE } from './const';
-/**
- * 基础识别器类型
- */
-// export type AnyTouchPlugin = any;
+import { DIRECTION, RECOGNIZER_STATUS, STAGE } from './const';
 
 /**
  * 计算函数
@@ -26,14 +22,9 @@ export interface EventTrigger {
     (type: string): void
 }
 
-
 /**
  * 识别器选项
  */
-// export type RecognizerOptions<DEFAULT_OPTIONS = object> = Partial<Omit<DEFAULT_OPTIONS, 'name'>>
-//     & { name: string };
-
-
 export type RecognizerOptions<DEFAULT_OPTIONS = { [k: string]: string | number }> = Partial<DEFAULT_OPTIONS>;
 
 /**
@@ -53,7 +44,11 @@ export type RecognizerContext<DEFAULT_OPTIONS = any> = RecognizerOptions<DEFAULT
 /**
  * 识别器实例
  */
-export type Recognizer = [RecognizerContext, (computed: Computed, emit: EventTrigger) => void, ComputeWrapFunction[]];
+export type Recognizer = [
+    RecognizerContext,
+    (computed: Computed, emit: EventTrigger) => void,
+    ComputeWrapFunction[]
+];
 
 /**
  * 识别器构造函数
@@ -69,11 +64,6 @@ export type SupportEvent = MouseEvent | TouchEvent;
 
 
 export interface PointClientXY { target: EventTarget | null, clientX: number, clientY: number };
-
-/**
- * 输入阶段
- */
-// export type stage = 'start' | 'move' | 'end' | 'cancel';
 
 /**
  * 原生事件对象最基础的统一化
@@ -108,7 +98,7 @@ export interface InputOnlyHasCurrent extends BasicsInput {
     // 同centerX/Y
     readonly x: number;
     readonly y: number;
-    readonly getOffset: (el: HTMLElement) => { x: number, y: number }
+    readonly getOffset: (el: HTMLElement) => { x: number, y: number };
 }
 
 /**
@@ -119,25 +109,6 @@ export interface Input extends InputOnlyHasCurrent {
     readonly startMultiInput?: InputOnlyHasCurrent;
     readonly prevInput?: InputOnlyHasCurrent;
 }
-
-// 标准class
-// export interface StdClass {
-//     new(...args: any[]): any;
-// }
-
-// export interface ComputeConstructor {
-//     _id: string;
-//     new(...args: any[]): {
-//         compute(input: Input): Record<string, any> | void;
-//     };
-// }
-
-
-
-/**
- * 方向
- */
-export type directionString = 'up' | 'right' | 'down' | 'left' | 'none';
 
 /**
  * 点
@@ -154,7 +125,9 @@ export type Vector = Point;
  * 仅仅是获取scale/angle的前置计算值
  */
 export interface VS {
-    prevV: Point, startV: Point, activeV: Point
+    prevV: Point;
+    startV: Point;
+    activeV: Point;
 }
 
 
@@ -163,29 +136,25 @@ export interface VS {
  */
 export interface Computed extends Input {
     // 一次识别周期中出现的最大触点数
-    readonly maxPointLength: number;
-    readonly velocityX: number;
-    readonly velocityY: number;
-    readonly speedX: number;
-    readonly speedY: number;
-    readonly scale: number;
-    readonly deltaScale: number;
-    readonly angle: number;
-    readonly deltaAngle: number;
-    readonly deltaX: number;
-    readonly deltaY: number;
-    readonly deltaXYAngle: number;
-    readonly displacementX: number;
-    readonly displacementY: number;
-
-    readonly distanceX: number;
-    readonly distanceY: number;
-    readonly distance: number;
-    readonly deltaTime: number;
-    // 与起始点的偏移方向
-    readonly overallDirection: directionString;
-    // 瞬时方向
-    readonly direction: directionString;
+    readonly maxPointLength?: number;
+    readonly velocityX?: number;
+    readonly velocityY?: number;
+    readonly speedX?: number;
+    readonly speedY?: number;
+    readonly scale?: number;
+    readonly deltaScale?: number;
+    readonly angle?: number;
+    readonly deltaAngle?: number;
+    readonly deltaX?: number;
+    readonly deltaY?: number;
+    readonly deltaXYAngle?: number;
+    readonly displacementX?: number;
+    readonly displacementY?: number;
+    readonly distanceX?: number;
+    readonly distanceY?: number;
+    readonly distance?: number;
+    readonly deltaTime?: number;
+    readonly direction?: DIRECTION;
 }
 
 export interface AnyTouchEvent extends Input, Readonly<Computed> {
@@ -193,17 +162,9 @@ export interface AnyTouchEvent extends Input, Readonly<Computed> {
     readonly type: string;
 }
 
-
 /**
  * Input转换器
  */
 export interface InputCreatorFunction<T> {
     (event: T): void | Input;
-}
-
-/**
- * Input转换器外壳函数映射
- */
-export interface InputCreatorFunctionMap {
-    [k: string]: InputCreatorFunction<SupportEvent>;
 }
