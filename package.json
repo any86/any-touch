@@ -16,7 +16,7 @@
     "release:last": "npm run cp-md && npm run build && lerna publish --force-publish",
     "rm": "rimraf packages/**/dist",
     "clean": "rimraf node_modules",
-    "cp-md":"node  ./scripts/cp-md",
+    "cp-md": "node  ./scripts/cp-md",
     "build": "npm-run-all rm build:umd build:cjs build:es build:dts",
     "build:cjs": "node ./scripts/build.cjs",
     "build:es": "node ./scripts/build.es",
@@ -44,7 +44,7 @@
   },
   "homepage": "https://github.com/any86/any-touch#readme",
   "dependencies": {
-    "tslib": "^1.9.3"
+    "tslib": "^2.0.1"
   },
   "devDependencies": {
     "@rollup/plugin-alias": "^2.2.0",
