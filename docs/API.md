@@ -2,11 +2,11 @@
 
 ## 目录
 
-[constructor(初始化)](#constructor)
+[:fire: 初始化](#初始化)
 
 [on(监听)](#on)
 
-[target(事件委派)](#targetZ)
+[target(事件委派)](#target)
 
 [set(设置)](#set)
 
@@ -26,28 +26,40 @@
 
 [AnyTouch.状态码](#AnyTouch状态码)
 
-## constructor
+## AnyTouch([el], [options])
+:fire: 初始化 **any-touch**
 
-**constructor([el], [options])**
-
-初始化设置, 微信小程序下由于没有 DOM 元素, 可以无 el 初始化, 然后通过[catchEvent](#catcheventevent)函数接收 touch 事件.
+#### el
+目标元素,微信小程序下由于没有 DOM 元素, **可以无el初始化**, 然后通过[catchEvent](#catcheventevent)函数接收 touch 事件.
 
 ```javascript
 // 初始化
 const el = doucument.getElementById('box');
-const at = new AnyTouch(el, {
-    isPreventDefault: false,
-    domEvents: false,
+const at = AnyTouch(el);
+```
+
+#### options
+配置项, 是个对象.
+- preventDefault
+默认值为`true`, 代表默认组织浏览器默认事件触发, 比如移动端拖拽目标元素页面也不滚动.
+
+- domEvents
+值为对象, 可以配置元素上定义的手势是否可以"取消"和"冒泡", 详细介绍可以参考[MDN](https://developer.mozilla.org/zh-CN/docs/Web/API/Event/Event), 默认情况下**可取消 / 可冒泡**
+
+- preventDefaultExclude
+用来手动指定哪些情况下any-touch不阻止浏览器默认事件的触发, 比如:
+
+```javascript
+const at = AnyTouch(el, {
     // 如果触发事件的是span元素, 那么不执行"阻止默认事件触发".
     preventDefaultExclude: (ev) => 'SPAN' === ev.target.tagName
 });
 ```
-
-#### options
+**注意:** 只有**preventDefault**值为**true**的情况下, **preventDefaultExclude**才有实际意义.
 
 | 名称                  | 类型                 | 默认值                                  | 简要说明                                  |
 | --------------------- | -------------------- | --------------------------------------- | ----------------------------------------- |
-| isPreventDefault      | `Boolean`            | `true`                                  | 阻止默认事件触发, 比如:页面滚动/click 等. |
+| preventDefault      | `Boolean`            | `true`                                  | 阻止默认事件触发, 比如:页面滚动/click 等. |
 | domEvents             | `Boolean`            | `true`                                  | 是否派发手势名对应的原生事件.             |
 | preventDefaultExclude | `RegExp \| Function` | `/^(INPUT\|TEXTAREA\|BUTTON\|SELECT)$/` | 符合条件可跳过"阻止默认事件".             |
 
@@ -55,7 +67,7 @@ const at = new AnyTouch(el, {
 如果**domEvents**为true, 可以使用原生**addEventListener**监听手势事件:
 ```javascript
 // 默认domEvents等于true
-const at = new AnyTouch(el);
+const at = AnyTouch(el);
 el.addEventListener('tap', onTap);
 ```
 
@@ -64,20 +76,24 @@ el.addEventListener('tap', onTap);
 <div @tap="onTap"></div>
 ```
 
-[返回目录](#目录)
+[:rocket: 返回目录](#目录)
 
-## on
-
-**on(eventName, listener, [options])**
-
+## on(eventName, listener)
 事件监听.
 
+#### eventName
+事件名,
 ```javascript
-at.on('tap', (ev) => {
-    console.log(ev.type);
-    // 输出: 'tap'
-});
+at.on('tap', onTap);
 ```
+可以同时监听多个事件.
+```javascript
+at.on(['tap','pan'], onTouch);
+```
+
+#### listener
+事件触发函数.
+
 
 #### options
 
@@ -92,63 +108,49 @@ at.on('pan', onPan, { target: child });
 
 [:lollipop: 更多事件对象(event)](EVENT.md)
 
-[返回目录](#目录)
+[:rocket: 返回目录](#目录)
 
-## target
+## target(childEl):OnFunction
 
-**target(el):Function**
-
-事件委派的简化写法.
+缩小触发范围, 表示只有触碰目标元素(el)下的**childEl**元素, 满足条件后才触发手势事件.
 
 ```javascript
-at.on('pan', onPan, { target: child });
-// 还可以表示为
-at.target(child).on('pan', onPan);
+at.target(child).on('pan', onChildPan);
 ```
 
-[返回目录](#目录)
+[:rocket: 返回目录](#目录)
 
-## set
-
-**set(options)**
+## set(options)
 
 改变设置
 
 ```javascript
-at.set({ isPreventDefault: true });
+at.set({ preventDefault: true });
 ```
 
-[返回目录](#目录)
+[:rocket: 返回目录](#目录)
 
-## use
-
-**use(Recognizer, options)**
+## use(Recognizer, options)
 
 加载手势识别器, options 为手势识别器的参数.
 
 ```javascript
-AnyTouch.use(AnyTouch.Tap, { tapTime: 2, name: 'doubletap' });
+at.use(AnyTouch.Tap, { tapTime: 2, name: 'doubletap' });
 ```
 
-[返回目录](#目录)
+[:rocket: 返回目录](#目录)
 
-## removeUse
-
-**removeUse([recognizerName])**
+## removeUse([recognizerName])
 
 删除识别器, 如果不传参数, 代表清空所有已加载手势.
 
 ```javascript
 at.removeUse('doubletap');
-// 也可在初始化之前清空默认已加载识别器
-AnyTouch.removeUse();
 ```
 
-[返回目录](#目录)
+[:rocket: 返回目录](#目录)
 
-## catchEvent
-
-**catchEvent(event)**
+## catchEvent(event)
 
 仅仅微信小程序下需要使用, 因为微信小程序没有 dom 元素的概念, 所以需要**手动接收 touch 事件对象**.
 
@@ -160,7 +162,7 @@ AnyTouch.removeUse();
 ```
 
 ```javascript
-const at = new AnyTouch()
+const at = AnyTouch()
 {
     onload(){
         at.on('press', ev=>{
@@ -182,11 +184,9 @@ const at = new AnyTouch()
 }
 ```
 
-[返回目录](#目录)
+[:rocket: 返回目录](#目录)
 
-## beforeEach
-
-**beforeEach(hook)**
+## beforeEach(hook)
 
 拦截器, 在每个手势触发之前可以进行自定义拦截操作.
 hook: (recognizer: Recognizer, next: () => void) => void
@@ -200,17 +200,23 @@ import AnyTouch from '@any-touch/core';
 import Tap from '@any-touch/tap';
 // 如果引入的是完整版, 那么STATUS_POSSIBLE等可以直接通过AnyTouch.STATUS_POSSIBLE获取
 import { STATUS_POSSIBLE, STATUS_FAILED } from '@any-touch/shared';
-import debounce from 'lodash/debounce';
-AnyTouch.use(Tap);
-AnyTouch.use(Tap, { name: 'doubletap', tapTimes: 2 });
-const at = new AnyTouch(el);
+const at = AnyTouch(el);
+at.use(Tap);
+at.use(Tap, { name: 'doubletap', tapTimes: 2 });
 
 // 🚀关键代码
 // beforeEach
-at.beforeEach(({ recognizerMap, name }, next) => {
-    if ('tap' === name) {
-        debounce(() => {
-            if ([STATUS_POSSIBLE, STATUS_FAILED].includes(recognizerMap.doubletap.status)) next();
+let timeID = null;
+at.beforeEach((currentRecognizer,recognizerMap, next) => {
+    if ('tap' === currentRecognizer.name) {
+        clearTimeout(timeID);
+        timeID = setTimeout(() => {
+            const ok = [AnyTouch.STATUS_POSSIBLE, AnyTouch.STATUS_FAILED].includes(
+                recognizerMap.doubletap.status
+            );
+            if (ok) {
+                next();
+            }
         }, 300);
     } else {
         next();
@@ -221,11 +227,9 @@ at.on('tap', onTap);
 at.on('doubletap', onDoubleTap);
 ```
 
-[返回目录](#目录)
+[:rocket: 返回目录](#目录)
 
-## get
-
-**get(name: string): Recognizer | void**
+## get(name: string): Recognizer | void
 
 通过名字获取指定识别器.
 
@@ -236,9 +240,9 @@ if (void 0 !== tap) {
 }
 ```
 
-[返回目录](#目录)
+[:rocket: 返回目录](#目录)
 
-## destroy
+## destroy()
 
 销毁实例.
 
@@ -246,13 +250,13 @@ if (void 0 !== tap) {
 at.destroy();
 ```
 
-[返回目录](#目录)
+[:rocket: 返回目录](#目录)
 
 ## AnyTouch.识别器
 
 手势识别器.
 
-如果是引入的完整版 any-touch, 那么可以通过 AnyTouch 获取到 6 个手势识别器:"**Tap(点击) / Pan(拖拽) / Swipe(快划) / Press(按压) / Pinch(缩放) / Rotate(旋转)**".
+如果是引入的完整版 **any-touch**, 那么可以通过 **AnyTouch** 获取到 **6** 个手势识别器:
 
 ```javascript
 import AnyTouch from 'any-touch`;
@@ -269,7 +273,7 @@ const {Tap, Pan,Swipe,Press,Pinch,Rotate} = AnyTouch;
 | **@any-touch/pinch** |[缩放](../packages/pinch/README.md)|
 | **@any-touch/rotate** |[旋转](../packages/rotate/README.md)|
 
-[返回目录](#目录)
+[:rocket: 返回目录](#目录)
 
 ## AnyTouch.状态码
 
@@ -290,6 +294,6 @@ const {STATUS_POSSIBLE, STATUS_RECOGNIZED} = AnyTouch;
 | STATUS_FAILED     | 表示"识别失败", 比如识别 tap 的时候,触点在 250ms 内没有离开屏幕等            |
 | STATUS_RECOGNIZED | 表示"已识别", 区别于"拖拽类"手势, 用在"瞬发"识别的手势,比如 tap/press/swipe. |
 
-一般用来配合[beforeEach](#beforeeachhook)实现一些自定义功能.
+一般用来配合[beforeEach](#beforeeachhook)控制手势触发.
 
-[返回目录](#目录)
+[:rocket: 返回目录](#目录)
