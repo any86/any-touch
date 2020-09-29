@@ -8,7 +8,7 @@
     "license": "ISC",
     "dependencies": {
         "@any-touch/shared": "^1.0.2",
-        "tslib": "^1.9.3"
+        "tslib": "^2.0.1"
     },
     "publishConfig": {
         "access": "public"

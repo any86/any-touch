@@ -16,5 +16,8 @@
         "dist/*"
     ],
     "sideEffects": false,
-    "gitHead": "033802fd310406b975f03b5358e0300a7decfe81"
+    "gitHead": "033802fd310406b975f03b5358e0300a7decfe81",
+    "dependencies": {
+        "tslib": "^2.0.1"
+    }
 }
