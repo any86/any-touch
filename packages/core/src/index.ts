@@ -38,6 +38,43 @@ export interface Options {
     preventDefaultExclude?: RegExp | ((e: SupportEvent) => boolean);
 }
 
+
+interface AnyTouchFunction {
+    (el?: HTMLElement | undefined, options?: Options): {
+        target: (el: HTMLElement) => {
+            on: (eventName: string, listener: Listener<AnyTouchEvent>) => void;
+        };
+        on: (eventName: string, listener: Listener<AnyTouchEvent>) => void;
+        off: (eventName: string, listener?: Listener<AnyTouchEvent>) => void;
+        use(recognizer: RecognizerFunction, recognizerOptions?: RecognizerOptions): void;
+        beforeEach(hook: (recognizer: RecognizerContext, _map: Record<string, RecognizerContext<any>>, next: () => void) => void): void
+        catchEvent(event: SupportEvent): void;
+        get(name: string): RecognizerContext | void;
+        set(options: Options): void;
+        removeUse(recognizerName?: string): void;
+        destroy: () => void;
+    };
+}
+
+export interface AnyTouchConstructor extends AnyTouchFunction {
+    new(el?: HTMLElement, options?: Options): ReturnType<AnyTouchFunction>;
+    version: string;
+    Tap?: RecognizerFunction;
+    Pan?: RecognizerFunction;
+    Swipe?: RecognizerFunction;
+    Press?: RecognizerFunction;
+    Pinch?: RecognizerFunction;
+    Rotate?: RecognizerFunction;
+    STATUS_POSSIBLE?: RECOGNIZER_STATUS.POSSIBLE;
+    STATUS_START?: RECOGNIZER_STATUS.START;
+    STATUS_MOVE?: RECOGNIZER_STATUS.MOVE;
+    STATUS_END?: RECOGNIZER_STATUS.END;
+    STATUS_CANCELLED?: RECOGNIZER_STATUS.CANCELLED;
+    STATUS_FAILED?: RECOGNIZER_STATUS.FAILED;
+    STATUS_RECOGNIZED?: RECOGNIZER_STATUS.RECOGNIZED;
+}
+
+
 /**
  * 默认设置
  */
@@ -52,7 +89,7 @@ const DEFAULT_OPTIONS: Options = {
  * @param recognizers 插件
  */
 export function createAnyTouch(recognizers: RecognizerFunction[] = []) {
-    const AnyTouch = function (el?: HTMLElement, options?: Options) {
+    const AnyTouch = function (el?: HTMLElement, options?: Options):ReturnType<AnyTouchFunction> {
         const [on, off, $emit, destroyAE] = AnyEvent<AnyTouchEvent>();
 
         let _options = { ...DEFAULT_OPTIONS, ...options };
@@ -271,23 +308,6 @@ export function createAnyTouch(recognizers: RecognizerFunction[] = []) {
 
     AnyTouch.version = '__VERSION__';
 
-    type AnyTouchFunction = typeof AnyTouch;
-    interface AnyTouchConstructor extends AnyTouchFunction {
-        new(el?: HTMLElement, options?: Options): ReturnType<AnyTouchFunction>;
-        Tap?: RecognizerFunction;
-        Pan?: RecognizerFunction;
-        Swipe?: RecognizerFunction;
-        Press?: RecognizerFunction;
-        Pinch?: RecognizerFunction;
-        Rotate?: RecognizerFunction;
-        STATUS_POSSIBLE?: RECOGNIZER_STATUS.POSSIBLE;
-        STATUS_START?: RECOGNIZER_STATUS.START;
-        STATUS_MOVE?: RECOGNIZER_STATUS.MOVE;
-        STATUS_END?: RECOGNIZER_STATUS.END;
-        STATUS_CANCELLED?: RECOGNIZER_STATUS.CANCELLED;
-        STATUS_FAILED?: RECOGNIZER_STATUS.FAILED;
-        STATUS_RECOGNIZED?: RECOGNIZER_STATUS.RECOGNIZED;
-    }
     return AnyTouch as AnyTouchConstructor;
 }
 export default createAnyTouch();

@@ -10,6 +10,7 @@
 
 
 import { createAnyTouch } from '@any-touch/core';
+import type {AnyTouchConstructor} from '@any-touch/core';
 import Tap from '@any-touch/tap';
 import Pan from '@any-touch/pan';
 import Swipe from '@any-touch/swipe';
@@ -31,4 +32,4 @@ AnyTouch.STATUS_END = RECOGNIZER_STATUS.END;
 AnyTouch.STATUS_CANCELLED = RECOGNIZER_STATUS.CANCELLED;
 AnyTouch.STATUS_FAILED = RECOGNIZER_STATUS.FAILED;
 AnyTouch.STATUS_RECOGNIZED = RECOGNIZER_STATUS.RECOGNIZED;
-export default AnyTouch;
+export default AnyTouch as  AnyTouchConstructor;
