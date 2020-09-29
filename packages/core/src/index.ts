@@ -27,7 +27,7 @@ import emit2 from './emit2';
 // type TouchAction = 'auto' | 'none' | 'pan-x' | 'pan-left' | 'pan-right' | 'pan-y' | 'pan-up' | 'pan-down' | 'pinch-zoom' | 'manipulation';
 
 
-type BeforeEachHook = (recognizer: Recognizer, next: () => void) => void;
+type BeforeEachHook = (recognizer: Recognizer,map:Record<string,Recognizer>, next: () => void) => void;
 /**
  * 默认设置
  */
@@ -205,8 +205,7 @@ export default class AnyTouch extends AnyEvent<AnyTouchEvent> {
             // input -> computed
             const computed = input as Computed;
             for (const k in this.computeFunctionMap) {
-                const f = this.computeFunctionMap[k];
-                Object.assign(computed, f(computed));
+                Object.assign(computed, this.computeFunctionMap[k](computed));
             }
 
             // 缓存每次计算的结果
@@ -224,7 +223,7 @@ export default class AnyTouch extends AnyEvent<AnyTouchEvent> {
                     if (void 0 === this.beforeEachHook) {
                         emit2(this, payload);
                     } else {
-                        this.beforeEachHook(recognizer, () => {
+                        this.beforeEachHook(recognizer, this.recognizerMap, () => {
                             emit2(this, payload);
                         });
                     }
@@ -255,7 +254,7 @@ export default class AnyTouch extends AnyEvent<AnyTouchEvent> {
      * 事件拦截器
      * @param hook 钩子函数
      */
-    beforeEach(hook: (recognizer: Recognizer, next: () => void) => void): void {
+    beforeEach(hook: (recognizer: Recognizer, map:Record<string,Recognizer>, next: () => void) => void): void {
         this.beforeEachHook = hook;
     };
 
