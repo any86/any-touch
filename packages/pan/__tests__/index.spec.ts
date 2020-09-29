@@ -29,7 +29,7 @@ test(`触发${PAN_NAME}left`, async done => {
     const el = document.createElement('div');
     const at = new AnyTouch(el);
     const mockCB = jest.fn();
-    at.on(`${PAN_NAME}left`, (ev:any) => {
+    at.on(`${PAN_NAME}left`, (ev) => {
         mockCB(ev.type)
     });
     const gs = new GestureSimulator(el);
@@ -49,7 +49,7 @@ test(`触发${PAN_NAME}down`, async done => {
     const el = document.createElement('div');
     const at = new AnyTouch(el);
     const mockCB = jest.fn();
-    at.on(`${PAN_NAME}down`, (ev:any) => {
+    at.on(`${PAN_NAME}down`, (ev) => {
         mockCB(ev.type)
     });
     const gs = new GestureSimulator(el);

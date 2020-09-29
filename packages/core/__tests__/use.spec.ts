@@ -5,7 +5,7 @@ test(`通过实例加载/卸载插件`, async done => {
     const at = new AnyTouch(el);
     const gs = new GestureSimulator(el);
     at.use(Tap);
-    at.on('tap', (ev:any) => {
+    at.on('tap', (ev) => {
         mockCB(ev.type);
     });
 

@@ -1,5 +1,5 @@
 export interface Listener<Payload> {
-    (a?: Payload, ...payload: any[]): void;
+    (a: Payload, ...payload: any[]): void;
     beforeEmit?: (payload: Payload) => boolean;
 }
 
@@ -34,7 +34,7 @@ export default class <Payload = any> {
      * @param payload 载荷数据 
      * @returns  如果事件有监听器，则返回 true，否则返回 false。
      */
-    emit(eventName: string, payload?: Payload): void {
+    emit(eventName: string, payload?: any): void {
         const listeners = this.listenersMap[eventName];
         if (void 0 !== listeners && 0 < listeners.length) {
             for (const listener of listeners) {
