@@ -139,8 +139,9 @@ const at = new AnyTouch()
 import Core from '@any-touch/core';
 import Pan from '@any-touch/pan';
 // 使用Pan
-Core.use(Pan);
 const at = Core(el);
+at.use(Pan);
+
 // 拖拽
 at.on('swipe', onSwipe);
 ```
