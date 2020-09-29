@@ -10,7 +10,7 @@
 
 
 import { createAnyTouch } from '@any-touch/core';
-import type {AnyTouchConstructor} from '@any-touch/core';
+import type { AnyTouchConstructor } from '@any-touch/core';
 import Tap from '@any-touch/tap';
 import Pan from '@any-touch/pan';
 import Swipe from '@any-touch/swipe';
@@ -18,7 +18,7 @@ import Press from '@any-touch/press';
 import Pinch from '@any-touch/pinch';
 import Rotate from '@any-touch/rotate';
 import { RECOGNIZER_STATUS } from '@any-touch/shared';
-const AnyTouch = createAnyTouch([Tap, Pan, Swipe, Press, Pinch, Rotate]);
+const AnyTouch:AnyTouchConstructor = createAnyTouch([Tap, Pan, Swipe, Press, Pinch, Rotate]);
 AnyTouch.Tap = Tap;
 AnyTouch.Pan = Pan;
 AnyTouch.Swipe = Swipe;
@@ -32,4 +32,4 @@ AnyTouch.STATUS_END = RECOGNIZER_STATUS.END;
 AnyTouch.STATUS_CANCELLED = RECOGNIZER_STATUS.CANCELLED;
 AnyTouch.STATUS_FAILED = RECOGNIZER_STATUS.FAILED;
 AnyTouch.STATUS_RECOGNIZED = RECOGNIZER_STATUS.RECOGNIZED;
-export default AnyTouch as  AnyTouchConstructor;
+export default AnyTouch;
