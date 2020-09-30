@@ -7,9 +7,6 @@
     "types": "dist/index.d.ts",
     "author": "any86",
     "license": "ISC",
-    "peerDependencies": {
-        "tslib": "^1.9.3"
-    },
     "files": [
         "dist/*"
     ],

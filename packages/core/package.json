@@ -20,9 +20,6 @@
         "url": "https://github.com/any86/any-touch/issues"
     },
     "homepage": "https://github.com/any86/any-touch#readme",
-    "peerDependencies": {
-        "tslib": "^1.9.3"
-    },
     "dependencies": {
         "@any-touch/shared": "^1.0.5",
         "any-event": "^1.0.5"

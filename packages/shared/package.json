@@ -6,9 +6,6 @@
     "module": "dist/index.es.js",
     "author": "any86",
     "license": "ISC",
-    "peerDependencies": {
-        "tslib": "^1.9.3"
-    },
     "publishConfig": {
         "access": "public"
     },

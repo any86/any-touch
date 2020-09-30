@@ -10,9 +10,6 @@
     "files": [
         "dist/*"
     ],
-    "peerDependencies": {
-        "tslib": "^1.9.3"
-    },
     "dependencies": {
         "@any-touch/compute": "^1.0.5",
         "@any-touch/recognizer": "^1.0.5"
