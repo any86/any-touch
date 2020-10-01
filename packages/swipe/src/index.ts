@@ -18,7 +18,7 @@ export default class extends Recognizer {
      * 识别条件
      * @param {AnyTouchEvent} 计算数据
      */
-    test(computed: Computed): boolean {
+    _$test(computed: Computed): boolean {
         // 非end阶段, 开始校验数据
         if (INPUT_END !== computed.stage) return false;
         const { velocityX, velocityY, maxPointLength, distance } = computed;
@@ -31,7 +31,7 @@ export default class extends Recognizer {
      * @param {Input} 输入 
      */
     recognize(computed: Computed, emit: EventTrigger) {
-        if (this.test(computed)) {
+        if (this._$test(computed)) {
             emit(this.options.name);
             // swipeleft...
             emit(this.options.name + computed.direction);

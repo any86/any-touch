@@ -19,9 +19,9 @@ export default class extends Recognizer {
      * @param computed 计算数据
      * @return 接收是否识别状态
      */
-    test(computed: Computed): boolean {
+    _$test(computed: Computed): boolean {
         const { pointLength, angle } = computed;
-        return this.isValidPointLength(pointLength) && (this.options.threshold < Math.abs(angle) || this.isRecognized);
+        return this._$isValidPointLength(pointLength) && (this.options.threshold < Math.abs(angle) || this._$isRecognized);
     };
 
     /**

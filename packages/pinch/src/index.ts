@@ -19,11 +19,11 @@ export default class extends Recognizer {
      * @param computed 计算数据
      * @param 是否符合
      */
-    test(computed: Computed): boolean {
+    _$test(computed: Computed): boolean {
         const { pointLength, scale } = computed;
-        return this.isValidPointLength(pointLength)
+        return this._$isValidPointLength(pointLength)
             && void 0 !== scale
-            && (this.options.threshold < Math.abs(scale - 1) || this.isRecognized);
+            && (this.options.threshold < Math.abs(scale - 1) || this._$isRecognized);
     };
 
     /**

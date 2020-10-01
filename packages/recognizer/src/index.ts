@@ -1,6 +1,6 @@
 import type { Input, Computed, ComputeWrapFunction } from '@any-touch/shared';
 import {
-    STATUS_POSSIBLE, RecognizerStatus
+    STATUS_POSSIBLE, _$recognizerstatus
 } from '@any-touch/shared';
 
 // 导出recognizeForPressMoveLike,
@@ -11,23 +11,22 @@ export { default as resetStatusForPressMoveLike } from './resetStatusForPressMov
 // 联合变交叉
 // type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends ((k: infer I) => void) ? I : never;
 
+type Options = { name: string, [k: string]: any };
 export default abstract class {
     // 手势名
     name: string;
     // 是否禁止
     disabled = false;
     // 是否已识别
-    isRecognized = false;
+    _$isRecognized = false;
     // 识别状态
-    status: RecognizerStatus = STATUS_POSSIBLE;
+    _$status: _$recognizerstatus = STATUS_POSSIBLE;
     // 选项
-    options: { [k: string]: any };
-
-    recognizerMap: Record<string, this> = {};
+    options: Options;
 
     computeFunctions: ComputeWrapFunction[] = [];
 
-    constructor(options: { name: string, [k: string]: number|string }) {
+    constructor(options: Options) {
         this.options = options;
         this.name = this.options.name;
     };
@@ -36,7 +35,7 @@ export default abstract class {
      * 设置识别器
      * @param options 选项 
      */
-    set(options?: Record<string, any>) {
+    set(options?: Partial<Options>) {
         if (void 0 !== options) {
             this.options = { ...this.options, ...options };
         }
@@ -47,7 +46,7 @@ export default abstract class {
      * 验证触点数量
      * @param pointLength 触点数
      */
-    isValidPointLength(pointLength: number): boolean {
+    protected _$isValidPointLength(pointLength: number): boolean {
         return this.options.pointLength === pointLength;
         // return 0 === this.options.pointLength || this.options.pointLength === pointLength;
     };
@@ -66,6 +65,6 @@ export default abstract class {
      * @param {Input} 计算数据
      * @returns {Boolean} 校验结果
      */
-    abstract test(input: Input): boolean;
+    abstract _$test(input: Input): boolean;
 };
 

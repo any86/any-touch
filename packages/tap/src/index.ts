@@ -25,21 +25,16 @@ const DEFAULT_OPTIONS = {
     maxPressTime: 250,
 };
 export default class extends Recognizer {
-    public tapCount: number;
-
+    private _$tapCount: number;
     // 记录每次单击完成时的坐标
-    public prevTapPoint?: Point;
-    public prevTapTime?: number;
-
-    // 多次tap之间的距离是否满足要求
-    public isValidDistanceFromPrevTap?: boolean;
-
-    private _countDownToFailTimer?: number;
+    private _$prevTapPoint?: Point;
+    private _$prevTapTime?: number;
+    private _$countDownToFailTimer?: number;
 
     constructor(options: Partial<typeof DEFAULT_OPTIONS>) {
         super({ ...DEFAULT_OPTIONS, ...options });
         this.computeFunctions = [ComputeDistance, ComputeMaxLength];
-        this.tapCount = 0;
+        this._$tapCount = 0;
     };
 
     /**
@@ -49,13 +44,13 @@ export default class extends Recognizer {
      */
     private _isValidDistanceFromPrevTap(center: Point): boolean {
         // 判断2次点击的距离
-        if (void 0 !== this.prevTapPoint) {
-            const distanceFromPreviousTap = getVLength({ x: center.x - this.prevTapPoint.x, y: center.y - this.prevTapPoint.y });
+        if (void 0 !== this._$prevTapPoint) {
+            const distanceFromPreviousTap = getVLength({ x: center.x - this._$prevTapPoint.x, y: center.y - this._$prevTapPoint.y });
             // 缓存当前点, 作为下次点击的上一点
-            this.prevTapPoint = center;
+            this._$prevTapPoint = center;
             return this.options.maxDistanceFromPrevTap >= distanceFromPreviousTap;
         } else {
-            this.prevTapPoint = center;
+            this._$prevTapPoint = center;
             return true;
         }
     };
@@ -66,12 +61,12 @@ export default class extends Recognizer {
      */
     private _isValidInterval(): boolean {
         const now = performance.now();
-        if (void 0 === this.prevTapTime) {
-            this.prevTapTime = now;
+        if (void 0 === this._$prevTapTime) {
+            this._$prevTapTime = now;
             return true;
         } else {
-            const interval = now - this.prevTapTime;
-            this.prevTapTime = now;
+            const interval = now - this._$prevTapTime;
+            this._$prevTapTime = now;
             return interval < this.options.waitNextTapTime;
         }
     };
@@ -126,52 +121,48 @@ export default class extends Recognizer {
         // 只在end阶段去识别
         if (INPUT_END !== stage) return;
 
-        this.status = STATUS_POSSIBLE;
+        this._$status = STATUS_POSSIBLE;
         // 每一次点击是否符合要求
-        if (this.test(computed)) {
+        if (this._$test(computed)) {
 
-            this.cancelCountDownToFail();
+            clearTimeout(this._$countDownToFailTimer);
             // 判断2次点击之间的距离是否过大
             // 对符合要求的点击进行累加
             if (this._isValidDistanceFromPrevTap({ x, y }) && this._isValidInterval()) {
-                this.tapCount++;
+                this._$tapCount++;
             } else {
-                this.tapCount = 1;
+                this._$tapCount = 1;
             }
 
             // 是否满足点击次数要求
             // 之所以用%, 是因为如果连续点击3次, 单击的tapCount会为3, 但是其实tap也应该触发
-            if (0 === this.tapCount % this.options.tapTimes) {
-                this.status = STATUS_RECOGNIZED;
-                emit(this.options.name, { ...computed, tapCount: this.tapCount });
-                this.reset();
+            if (0 === this._$tapCount % this.options.tapTimes) {
+                this._$status = STATUS_RECOGNIZED;
+                emit(this.options.name, { ...computed, tapCount: this._$tapCount });
+                this._$reset();
             } else {
-                this.countDownToFail();
+                this._$countDownToFail();
             }
         } else {
-            this.reset();
-            this.status = STATUS_FAILED;
+            this._$reset();
+            this._$status = STATUS_FAILED;
         }
     };
 
     /**
      * 指定时候后, 状态变为"失败"
      */
-    countDownToFail() {
-        this._countDownToFailTimer = (setTimeout as Window['setTimeout'])(() => {
-            this.status = STATUS_FAILED;
-            this.reset();
+    private _$countDownToFail() {
+        this._$countDownToFailTimer = (setTimeout as Window['setTimeout'])(() => {
+            this._$status = STATUS_FAILED;
+            this._$reset();
         }, this.options.waitNextTapTime);
     };
 
-    cancelCountDownToFail() {
-        clearTimeout(this._countDownToFailTimer);
-    };
-
-    reset() {
-        this.tapCount = 0;
-        this.prevTapPoint = void 0;
-        this.prevTapTime = void 0;
+    private _$reset() {
+        this._$tapCount = 0;
+        this._$prevTapPoint = void 0;
+        this._$prevTapTime = void 0;
     };
 
     /**
@@ -179,7 +170,7 @@ export default class extends Recognizer {
       * @param computed 计算结果
       * @return 是否验证成功
       */
-    test(computed: Computed): boolean {
+    _$test(computed: Computed): boolean {
         const { startInput, pointLength } = computed;
         const deltaTime = computed.timestamp - startInput.timestamp;
         // 1. 触点数

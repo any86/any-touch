@@ -77,7 +77,7 @@
 function C(text, bgColor = '#000', color = '#fff') {
     console.log(`%c${text}`, `color:${color};background-color:${bgColor};padding:2px 6px;border-radius:4px;`);
 }
-import AnyTouch from '../../../packages/any-touch/dist/any-touch.umd';
+import AnyTouch from '../../../packages/any-touch/dist/any-touch.umd.min';
 export default {
     name: 'Home',
     data() {
@@ -113,7 +113,7 @@ export default {
     },
 
     mounted() {
-        const at = new AnyTouch(this.$refs.panel, { isPreventDefault: true });
+        const at = new AnyTouch(this.$refs.panel, { preventDefault: true });
         at.on('at:after', this.afterEach);
     },
 

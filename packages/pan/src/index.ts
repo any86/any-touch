@@ -17,12 +17,12 @@ export default class extends Recognizer {
      * @param computed 计算数据
      * @return 是否是当前手势
      */
-    test(computed: Computed): boolean {
+    _$test(computed: Computed): boolean {
         const { pointLength, distance } = computed;
         return (
             // INPUT_MOVE === stage &&
-            (this.isRecognized || this.options.threshold <= distance) &&
-            this.isValidPointLength(pointLength)
+            (this._$isRecognized || this.options.threshold <= distance) &&
+            this._$isValidPointLength(pointLength)
         );
     }
 
