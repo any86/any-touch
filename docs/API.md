@@ -16,7 +16,7 @@
 
 [catchEvent(注入事件对象)](#catchEvent)
 
-[beforeEach(拦截器)](#beforeEach)
+[beforeEach(拦截器)](#beforeeachhook)
 
 [get(获取手势)](#get)
 
