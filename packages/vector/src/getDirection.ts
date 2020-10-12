@@ -7,9 +7,7 @@ import { directionString } from '@any-touch/shared';
  * @param y 事件开始到结束的Y位移 
  */
 export default (x: number, y: number): directionString => {
-    if (x === y) {
-        return NONE;
-    } else if (Math.abs(x) > Math.abs(y)) {
+    if (Math.abs(x) >= Math.abs(y)) {
         return 0 < x ? DIRECTION_RIGHT : DIRECTION_LEFT;
     } else {
         return 0 < y ? DIRECTION_DOWN : DIRECTION_UP;

@@ -68,14 +68,14 @@ function flow(isVaild: boolean, lastStatus: _$recognizerstatus, stage: string): 
                 // 此处的INPUT_MOVE和INPUT_END
                 // 主要是针对多触点识别器
                 [INPUT_MOVE]: STATUS_FAILED,
-                [INPUT_END]: STATUS_FAILED,
+                [INPUT_END]: STATUS_END,
                 [INPUT_CANCEL]: STATUS_CANCELLED
             },
 
             [STATUS_MOVE]: {
                 [INPUT_START]: STATUS_FAILED,
                 [INPUT_MOVE]: STATUS_FAILED,
-                [INPUT_END]: STATUS_FAILED,
+                [INPUT_END]: STATUS_END,
                 [INPUT_CANCEL]: STATUS_CANCELLED
             }
         }
@@ -103,7 +103,6 @@ export default function (recognizer: Recognizer, computed: Computed, emit: Event
     const { stage } = computed;
 
     recognizer._$status = flow(isVaild, recognizer._$status, stage);
-
     // 是否已识别, 包含end
     recognizer._$isRecognized = ([STATUS_START, STATUS_MOVE] as _$recognizerstatus[]).includes(recognizer._$status);
 

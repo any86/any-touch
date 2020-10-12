@@ -83,3 +83,20 @@ test(`模拟pancancel`, async done=>{
     expect(onPanCancel).toHaveBeenCalledTimes(1);
     done();
 });
+
+
+test('触发一次panend', async done=>{
+    const el = document.createElement('div');
+    const gs = new GestureSimulator(el);
+    const at = new AnyTouch(el);
+    const onPanend = jest.fn().mockName('onPanend');
+    at.on('panend', onPanend);
+    gs.dispatchTouchStart();
+    await sleep(25);
+    gs.dispatchTouchMove([{x:10,y:0}]);
+    await sleep(25);
+    gs.dispatchTouchEnd();
+    await sleep();
+    expect(onPanend).toHaveBeenCalledTimes(1);
+    done();
+});
