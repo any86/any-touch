@@ -121,7 +121,7 @@ export default class extends Recognizer {
         // 只在end阶段去识别
         if (INPUT_END !== stage) return;
 
-        this._$status = STATUS_POSSIBLE;
+        this.status = STATUS_POSSIBLE;
         // 每一次点击是否符合要求
         if (this._$test(computed)) {
 
@@ -137,7 +137,7 @@ export default class extends Recognizer {
             // 是否满足点击次数要求
             // 之所以用%, 是因为如果连续点击3次, 单击的tapCount会为3, 但是其实tap也应该触发
             if (0 === this._$tapCount % this.options.tapTimes) {
-                this._$status = STATUS_RECOGNIZED;
+                this.status = STATUS_RECOGNIZED;
                 emit(this.options.name, { ...computed, tapCount: this._$tapCount });
                 this._$reset();
             } else {
@@ -145,7 +145,7 @@ export default class extends Recognizer {
             }
         } else {
             this._$reset();
-            this._$status = STATUS_FAILED;
+            this.status = STATUS_FAILED;
         }
     };
 
@@ -154,7 +154,7 @@ export default class extends Recognizer {
      */
     private _$countDownToFail() {
         this._$countDownToFailTimer = (setTimeout as Window['setTimeout'])(() => {
-            this._$status = STATUS_FAILED;
+            this.status = STATUS_FAILED;
             this._$reset();
         }, this.options.waitNextTapTime);
     };

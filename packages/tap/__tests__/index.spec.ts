@@ -31,7 +31,7 @@ test(`双击识别器开启的情况下, 只输入1次点击, 过指定时间识
     gs.dispatchTouchEnd();
     await sleep(500);
     if (void 0 !== doubletap) {
-        expect(doubletap._$status).toBe(STATUS_FAILED);
+        expect(doubletap.status).toBe(STATUS_FAILED);
         mockCB();
     }
     expect(mockCB).toHaveBeenCalledTimes(1);

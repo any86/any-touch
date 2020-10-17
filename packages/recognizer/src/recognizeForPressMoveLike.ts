@@ -102,11 +102,11 @@ export default function (recognizer: Recognizer, computed: Computed, emit: Event
     // 状态变化流程
     const { stage } = computed;
 
-    recognizer._$status = flow(isVaild, recognizer._$status, stage);
+    recognizer.status = flow(isVaild, recognizer.status, stage);
     // 是否已识别, 包含end
-    recognizer._$isRecognized = ([STATUS_START, STATUS_MOVE] as _$recognizerstatus[]).includes(recognizer._$status);
+    recognizer._$isRecognized = ([STATUS_START, STATUS_MOVE] as _$recognizerstatus[]).includes(recognizer.status);
 
-    const { name, _$status: status, _$isRecognized: isRecognized } = recognizer;
+    const { name, status: status, _$isRecognized: isRecognized } = recognizer;
     // if('pan' == name) console.warn(status,stage,{isRecognized,isVaild},input.pointLength)
     // 识别后触发的事件
     if (isRecognized) {
@@ -115,7 +115,7 @@ export default function (recognizer: Recognizer, computed: Computed, emit: Event
     // if('pan' == recognizer.name){
     //     console.log(isRecognized,recognizer.name)
     // }
-    if (isRecognized || ([STATUS_END, STATUS_CANCELLED] as _$recognizerstatus[]).includes(recognizer._$status)) {
+    if (isRecognized || ([STATUS_END, STATUS_CANCELLED] as _$recognizerstatus[]).includes(recognizer.status)) {
         // console.log(name + status,computed.deltaX )
         emit(name + status);
     }

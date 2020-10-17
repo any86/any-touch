@@ -214,7 +214,7 @@ export default class AnyTouch extends AnyEvent<AnyTouchEvent> {
                 // 恢复上次的缓存
                 recognizer.recognize(computed, type => {
                     // 此时的e就是this.computed
-                    const payload = { ...computed, type, baseType: recognizer.name };
+                    const payload = { ...computed, type, name: recognizer.name };
 
                     // 防止数据被vue类框架拦截
                     Object?.freeze(payload);

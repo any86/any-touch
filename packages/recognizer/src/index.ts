@@ -20,7 +20,7 @@ export default abstract class {
     // 是否已识别
     _$isRecognized = false;
     // 识别状态
-    _$status: _$recognizerstatus = STATUS_POSSIBLE;
+    status: _$recognizerstatus = STATUS_POSSIBLE;
     // 选项
     options: Options;
 
