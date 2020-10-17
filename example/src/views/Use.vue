@@ -15,7 +15,7 @@ export default {
     mounted() {
         const {Tap} = AnyTouch;
         AnyTouch.use(Tap,{name:'twoFingersTap',tapTimes:2,pointLength:2,maxDistanceFromPrevTap:100});
-        const at = new AnyTouch(this.$el, { isPreventDefault: true });
+        const at = new AnyTouch(this.$el, { preventDefault: true });
 
         at.target(this.$refs.tap).on('tap', (e) => {
             console.log(e.type);

@@ -1,6 +1,6 @@
 
 import type { Input, directionString } from '@any-touch/shared';
-import { CLIENT_X, CLIENT_Y, INPUT_MOVE, INPUT_START, NONE } from '@any-touch/shared';
+import { CLIENT_X, CLIENT_Y, INPUT_MOVE, INPUT_START } from '@any-touch/shared';
 import { getVLength, getDirection } from '@any-touch/vector';
 
 function ComputeDistance() {
@@ -9,7 +9,7 @@ function ComputeDistance() {
     let distanceX = 0;
     let distanceY = 0;
     let distance = 0;
-    let overallDirection: directionString = NONE;
+    let overallDirection: directionString;
 
     return function (input: Input): { displacementX: number, displacementY: number, distanceX: number, distanceY: number, distance: number, overallDirection: directionString } {
         const { stage, startInput } = input;
@@ -20,7 +20,6 @@ function ComputeDistance() {
             distanceX = 0;
             distanceY = 0;
             distance = 0;
-            overallDirection = NONE;
         }
 
         else if (INPUT_MOVE === stage) {

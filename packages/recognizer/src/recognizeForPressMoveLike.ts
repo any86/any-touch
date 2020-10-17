@@ -1,4 +1,4 @@
-import { EventTrigger, Input, Computed,STATUS_FAILED, RecognizerStatus } from '@any-touch/shared';
+import { EventTrigger, Input, Computed,STATUS_FAILED, _$recognizerstatus } from '@any-touch/shared';
 import Recognizer from './index';
 import {
     INPUT_CANCEL, INPUT_END, INPUT_MOVE
@@ -22,7 +22,7 @@ import resetStatus from './resetStatusForPressMoveLike';
  * @param stage 输入阶段
  * @returns 识别器状态
  */
-function flow(isVaild: boolean, lastStatus: RecognizerStatus, stage: string): RecognizerStatus {
+function flow(isVaild: boolean, lastStatus: _$recognizerstatus, stage: string): _$recognizerstatus {
     /*
     * {
     *  isValid {
@@ -68,14 +68,14 @@ function flow(isVaild: boolean, lastStatus: RecognizerStatus, stage: string): Re
                 // 此处的INPUT_MOVE和INPUT_END
                 // 主要是针对多触点识别器
                 [INPUT_MOVE]: STATUS_FAILED,
-                [INPUT_END]: STATUS_FAILED,
+                [INPUT_END]: STATUS_END,
                 [INPUT_CANCEL]: STATUS_CANCELLED
             },
 
             [STATUS_MOVE]: {
                 [INPUT_START]: STATUS_FAILED,
                 [INPUT_MOVE]: STATUS_FAILED,
-                [INPUT_END]: STATUS_FAILED,
+                [INPUT_END]: STATUS_END,
                 [INPUT_CANCEL]: STATUS_CANCELLED
             }
         }
@@ -95,7 +95,7 @@ function flow(isVaild: boolean, lastStatus: RecognizerStatus, stage: string): Re
  */
 export default function (recognizer: Recognizer, computed: Computed, emit: EventTrigger): boolean {
     // 是否识别成功
-    const isVaild = recognizer.test(computed);
+    const isVaild = recognizer._$test(computed);
     // console.log({isVaild},input.stage,recognizer.name)
     resetStatus(recognizer);
 
@@ -103,11 +103,10 @@ export default function (recognizer: Recognizer, computed: Computed, emit: Event
     const { stage } = computed;
 
     recognizer.status = flow(isVaild, recognizer.status, stage);
-
     // 是否已识别, 包含end
-    recognizer.isRecognized = ([STATUS_START, STATUS_MOVE] as RecognizerStatus[]).includes(recognizer.status);
+    recognizer._$isRecognized = ([STATUS_START, STATUS_MOVE] as _$recognizerstatus[]).includes(recognizer.status);
 
-    const { name, status, isRecognized } = recognizer;
+    const { name, status: status, _$isRecognized: isRecognized } = recognizer;
     // if('pan' == name) console.warn(status,stage,{isRecognized,isVaild},input.pointLength)
     // 识别后触发的事件
     if (isRecognized) {
@@ -116,7 +115,7 @@ export default function (recognizer: Recognizer, computed: Computed, emit: Event
     // if('pan' == recognizer.name){
     //     console.log(isRecognized,recognizer.name)
     // }
-    if (isRecognized || ([STATUS_END, STATUS_CANCELLED] as RecognizerStatus[]).includes(recognizer.status)) {
+    if (isRecognized || ([STATUS_END, STATUS_CANCELLED] as _$recognizerstatus[]).includes(recognizer.status)) {
         // console.log(name + status,computed.deltaX )
         emit(name + status);
     }

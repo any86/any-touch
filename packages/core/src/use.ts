@@ -14,25 +14,24 @@ export function use(
     recognizerOptions?: Record<string, any>): void {
     const name = recognizerOptions?.name;
     // 保证同一个事件只对应一个识别器
-    if (void 0 !== name && void 0 !== atOrAT.recognizerMap[name]) return;
+    if (void 0 !== name && void 0 !== atOrAT._$recognizerMap[name]) return;
 
     const recognizer = new Recognizer(recognizerOptions);
 
     // 初始化计算函数
     for (const createComputeFunction of recognizer.computeFunctions) {
         const { _id } = createComputeFunction;
-        if (void 0 === atOrAT.computeFunctionMap[_id]) {
+        if (void 0 === atOrAT._$computeFunctionMap[_id]) {
             // 创建计算函数
             // 区分是实例的use还是构造函数的use
-            atOrAT.computeFunctionMap[_id] = 'version' in atOrAT ? createComputeFunction : createComputeFunction();
+            atOrAT._$computeFunctionMap[_id] = 'version' in atOrAT ? createComputeFunction : createComputeFunction();
         }
     }
 
     // 识别器管理
     // recognizer.name是默认值或者options给定
-    atOrAT.recognizerMap[recognizer.name] = recognizer;
-    recognizer.recognizerMap = atOrAT.recognizerMap;
-    atOrAT.recognizers.push(atOrAT.recognizerMap[recognizer.name]);
+    atOrAT._$recognizerMap[recognizer.name] = recognizer;
+    atOrAT._$recognizers.push(atOrAT._$recognizerMap[recognizer.name]);
 };
 
 /**
@@ -44,13 +43,13 @@ export function removeUse(atOrAT: C | I, recognizerName?: string): void {
     // 如果没有传入指定手势名称
     // 那么删除所有手势识别器
     if (void 0 === recognizerName) {
-        atOrAT.recognizers = [];
-        atOrAT.recognizerMap = {};
+        atOrAT._$recognizers = [];
+        atOrAT._$recognizerMap = {};
     } else {
-        for (const [index, recognizer] of atOrAT.recognizers.entries()) {
+        for (const [index, recognizer] of atOrAT._$recognizers.entries()) {
             if (recognizerName === recognizer.options.name) {
-                atOrAT.recognizers.splice(index, 1);
-                delete atOrAT.recognizerMap[recognizerName];
+                atOrAT._$recognizers.splice(index, 1);
+                delete atOrAT._$recognizerMap[recognizerName];
                 break;
             }
         }

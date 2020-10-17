@@ -49,6 +49,7 @@ https://unpkg.com/any-touch/dist/any-touch.umd.min.js
 ```
 
 ## 快速开始
+**HTML中引入**
 ```html
 <h1 id="box">hello world</h1>
 <script src="https://unpkg.com/any-touch/dist/any-touch.umd.min.js"></script>
@@ -58,7 +59,7 @@ const at = new AnyTouch(el);
 at.on('tap', e => console.log('e包含位置等信息',e));
 </script>
 ```
-**或者:**
+**或者, 使用NPM**
 ```javascript
 import AnyTouch from 'any-touch';
 const el = doucument.getElementById('box');
@@ -132,7 +133,7 @@ const at = new AnyTouch()
 
 
 ## 按需加载
-**默认any-touch支持所有手势**, 为了"**减小体积**"和"**提升效率**", 提供了按需加载.
+**默认any-touch支持所有手势**, 为了**更小的体积**, 提供了按需加载.
 
 ```javascript
 // 只加载pan识别器(拖拽)

@@ -83,7 +83,7 @@ export default {
     data() {
         return {
             map: [
-                { key: 'baseType', desc: '基础事件名' },
+                { key: 'name', desc: '识别器名' },
                 { key: 'x', desc: '触点中心X坐标' },
                 { key: 'y', desc: '触点中心Y坐标' },
                 { key: 'deltaX', desc: 'X轴位移增量' },
@@ -113,8 +113,11 @@ export default {
     },
 
     mounted() {
-        const at = new AnyTouch(this.$refs.panel, { isPreventDefault: true });
+        const at = new AnyTouch(this.$refs.panel, { preventDefault: true });
         at.on('at:after', this.afterEach);
+        at.on('panend', e=>{
+            console.warn('panend')
+        });
     },
 
     methods: {
@@ -123,14 +126,14 @@ export default {
             this.styles.push(style);
         },
         onAfter(ev) {
-            ev.currentTarget.setAttribute('at', ev.baseType);
+            ev.currentTarget.setAttribute('at', ev.name);
         },
         onTouch(ev) {
             // console.log('html:', ev.target.innerHTML);
             ev.currentTarget.setAttribute('at-stage', ev.stage);
         },
         afterEach(ev) {
-            this.action = ev.baseType;
+            this.action = ev.name;
             this.$set(this, 'data', ev);
         },
         onRotate(ev, index = 0) {

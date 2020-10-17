@@ -30,20 +30,16 @@ export default function (
         el.addEventListener(eventName, catchEvent, options);
     });
 
-    if (!IS_WX) {
-        el.addEventListener(MOUSE_DOWN, catchEvent, options);
-        window.addEventListener(MOUSE_MOVE, catchEvent, options);
-        window.addEventListener(MOUSE_UP, catchEvent, options);
-    }
+    el.addEventListener(MOUSE_DOWN, catchEvent, options);
+    window.addEventListener(MOUSE_MOVE, catchEvent, options);
+    window.addEventListener(MOUSE_UP, catchEvent, options);
 
     return () => {
         TOUCH_EVENTS.forEach(eventName => {
             el.removeEventListener(eventName, catchEvent);
         });
-        if (!IS_WX) {
-            el.removeEventListener(MOUSE_DOWN, catchEvent, options);
-            window.removeEventListener(MOUSE_MOVE, catchEvent, options);
-            window.removeEventListener(MOUSE_UP, catchEvent, options);
-        }
+        el.removeEventListener(MOUSE_DOWN, catchEvent, options);
+        window.removeEventListener(MOUSE_MOVE, catchEvent, options);
+        window.removeEventListener(MOUSE_UP, catchEvent, options);
     };
 }
