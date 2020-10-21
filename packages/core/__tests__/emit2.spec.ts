@@ -19,9 +19,9 @@ test(`2触点的情况下, 使用on绑定指定target,运行时确保2个触点�
 
     at.target(child).on('pinch', onPinch);
     at.on('pinch', onPinchForEl);
-    gs.dispatchTouchStart([{ x: 1, y: 1, target: child }, { x: 12, y: 1, target: child }]);
-    gs.dispatchTouchMove([{ x: 2, y: 2, target: child }, { x: 200, y: 100, target: child2 }]);
-    gs.dispatchTouchEnd();
+    gs.start([{ x: 1, y: 1, target: child }, { x: 12, y: 1, target: child }]);
+    gs.move([{ x: 2, y: 2, target: child }, { x: 200, y: 100, target: child2 }]);
+    gs.end();
     expect(onPinch).toHaveBeenCalledTimes(0);
     expect(onPinchForEl).toHaveBeenCalledTimes(1);
     await sleep();

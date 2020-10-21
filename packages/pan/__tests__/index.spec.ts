@@ -10,15 +10,15 @@ test(`加载${PAN_NAME}, 触发一次${PAN_NAME}`, async done => {
     const onPan = jest.fn();
     at.on(PAN_NAME, onPan);
     const gs = new GestureSimulator(el);
-    gs.dispatchTouchStart();
+    gs.start();
     await sleep(25);
-    gs.dispatchTouchMove([{ x: 0, y: 11 }]);
+    gs.move([{ x: 0, y: 11 }]);
     await sleep(25);
-    gs.dispatchTouchMove([{ x: 0, y: 21 }]);
+    gs.move([{ x: 0, y: 21 }]);
     await sleep(25);
-    gs.dispatchTouchMove([{ x: 0, y: 31 }]);
+    gs.move([{ x: 0, y: 31 }]);
     await sleep(25);
-    gs.dispatchTouchEnd();
+    gs.end();
     await sleep();
     expect(onPan).toHaveBeenCalledTimes(3);
     at.destroy
@@ -33,10 +33,10 @@ test(`触发${PAN_NAME}left`, async done => {
         mockCB(ev.type)
     });
     const gs = new GestureSimulator(el);
-    gs.dispatchTouchStart([{x:100,y:100}]);
+    gs.start([{x:100,y:100}]);
     // 保证compute开始计算方向了
     await sleep(25);
-    gs.dispatchTouchMove([{ x: 0, y: 11 }]);
+    gs.move([{ x: 0, y: 11 }]);
     await sleep();
     expect(mockCB).toHaveBeenCalledTimes(1);
     expect(mockCB).toHaveBeenNthCalledWith(1, `${PAN_NAME}left`);
@@ -53,10 +53,10 @@ test(`触发${PAN_NAME}down`, async done => {
         mockCB(ev.type)
     });
     const gs = new GestureSimulator(el);
-    gs.dispatchTouchStart();
+    gs.start();
     // 保证compute开始计算方向了
     await sleep(25);
-    gs.dispatchTouchMove([{ x: 0, y: 11 }]);
+    gs.move([{ x: 0, y: 11 }]);
     await sleep();
     expect(mockCB).toHaveBeenCalledTimes(1);
     expect(mockCB).toHaveBeenNthCalledWith(1, `${PAN_NAME}down`);
@@ -73,11 +73,11 @@ test(`模拟pancancel`, async done=>{
 
     at.on('pan', onPan);
     at.on('pancancel', onPanCancel);
-    gs.dispatchTouchStart();
+    gs.start();
     await sleep(25);
-    gs.dispatchTouchMove([{x:10,y:0}]);
+    gs.move([{x:10,y:0}]);
     await sleep(25);
-    gs.dispatchTouchCancel();
+    gs.cancel();
     await sleep();
     // expect(onPan).toHaveBeenCalledTimes(2);
     expect(onPanCancel).toHaveBeenCalledTimes(1);
@@ -91,11 +91,11 @@ test('触发一次panend', async done=>{
     const at = new AnyTouch(el);
     const onPanend = jest.fn().mockName('onPanend');
     at.on('panend', onPanend);
-    gs.dispatchTouchStart();
+    gs.start();
     await sleep(25);
-    gs.dispatchTouchMove([{x:10,y:0}]);
+    gs.move([{x:10,y:0}]);
     await sleep(25);
-    gs.dispatchTouchEnd();
+    gs.end();
     await sleep();
     expect(onPanend).toHaveBeenCalledTimes(1);
     done();

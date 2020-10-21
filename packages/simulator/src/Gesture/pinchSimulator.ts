@@ -5,9 +5,9 @@ interface Options {
 export default (el: Element, { scales = [2, 3] }: Options={}) => {
     const ts = new TouchSimulator(el);
     const startX = 200;
-    ts.dispatchTouchStart([{ x: 0, y: 0 }, { x: startX, y: 0 }]);
+    ts.start([{ x: 0, y: 0 }, { x: startX, y: 0 }]);
     scales.forEach(scale => {
-        ts.dispatchTouchMove([{ x: 0, y: 0 }, { x: startX*scale, y: 0 }]);
+        ts.move([{ x: 0, y: 0 }, { x: startX*scale, y: 0 }]);
     });
-    ts.dispatchTouchEnd();
+    ts.end();
 };

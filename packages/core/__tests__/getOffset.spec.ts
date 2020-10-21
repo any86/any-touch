@@ -15,8 +15,8 @@ test('元素和浏览器左上角偏移100px,获取触点在元素内的偏移',
         const data = ev.getOffset(el);
         callback(data);
     });
-    gs.dispatchTouchStart([{ x: 200, y: 200 }]);
-    gs.dispatchTouchEnd();
+    gs.start([{ x: 200, y: 200 }]);
+    gs.end();
     await sleep(100);
     expect(callback).toHaveBeenCalledWith({x:80,y:80});
     done();

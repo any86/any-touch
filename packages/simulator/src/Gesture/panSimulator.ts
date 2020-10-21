@@ -14,7 +14,7 @@ function parseMoveInfo({ x, y }: Point, { distance, direction }: MoveInfo):Point
 
 export default (el: Element, moveInfo: MoveInfo = { distance: 10, direction: 'up' }, startPoint = { x: 0, y: 0 }) => {
     const gs = new GestureSimulator(el);
-    gs.dispatchTouchStart([startPoint]);
-    gs.dispatchTouchMove([parseMoveInfo(startPoint, moveInfo)]);
-    return gs.dispatchTouchEnd();
+    gs.start([startPoint]);
+    gs.move([parseMoveInfo(startPoint, moveInfo)]);
+    return gs.end();
 };

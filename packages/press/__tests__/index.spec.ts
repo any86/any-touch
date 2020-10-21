@@ -8,9 +8,9 @@ test(`加载${PRESS_NAME}, 触发一次${PRESS_NAME}`, async done => {
     const at = new AnyTouch(el);
     at.on(PRESS_NAME, mockCB);
 
-    gs.dispatchTouchStart();
+    gs.start();
     await sleep(251);
-    gs.dispatchTouchEnd();
+    gs.end();
     await sleep();
     expect(mockCalls[0][0].type).toBe(PRESS_NAME);
     done();
@@ -22,10 +22,10 @@ test(`按压的时候移动超过一定"距离", 不触发${PRESS_NAME}`, async 
     const at = new AnyTouch(el);
     at.on(PRESS_NAME, mockCB);
 
-    gs.dispatchTouchStart();
-    gs.dispatchTouchMove([{x:10,y:10}]);
+    gs.start();
+    gs.move([{x:10,y:10}]);
     await sleep(251);
-    gs.dispatchTouchEnd();
+    gs.end();
     await sleep();
     expect(mockCB).not.toHaveBeenCalled();
     done();
@@ -37,9 +37,9 @@ test(`松手的时候还没有构成按压时间要求, 不触发${PRESS_NAME}`,
     const at = new AnyTouch(el);
     at.on(PRESS_NAME, mockCB);
 
-    gs.dispatchTouchStart();
+    gs.start();
     await sleep(200);
-    gs.dispatchTouchEnd();
+    gs.end();
     await sleep();
     expect(mockCB).not.toHaveBeenCalled();
     done();
