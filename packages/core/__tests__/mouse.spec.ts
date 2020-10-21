@@ -7,8 +7,8 @@ test('鼠标输入move-> start-> move-> end', async done => {
     const gs = new GestureSimulator(el, { device: 'mouse' });
     // const mockCallback = jest.fn();
     // 直接输入move会
-    const event1 = gs.move([{ x: 1, y: 1 }]);
-    expect(mouseLoader(event1)).toBeUndefined();
+    // const event1 = gs.move([{ x: 1, y: 1 }]);
+    // expect(mouseLoader(event1)).toBeUndefined();
 
     const event2 = gs.start();
     expect(mouseLoader(event2)).toHaveProperty(['points'], [{ "clientX": 0, "clientY": 0,target:el }]);

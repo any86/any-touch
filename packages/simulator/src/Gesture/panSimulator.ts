@@ -12,7 +12,7 @@ function parseMoveInfo({ x, y }: Point, { distance, direction }: MoveInfo):Point
     return map[direction];
 }
 
-export default (el: Element, moveInfo: MoveInfo = { distance: 10, direction: 'up' }, startPoint = { x: 0, y: 0 }) => {
+export default (el: HTMLElement, moveInfo: MoveInfo = { distance: 10, direction: 'up' }, startPoint = { x: 0, y: 0 }) => {
     const gs = new GestureSimulator(el);
     gs.start([startPoint]);
     gs.move([parseMoveInfo(startPoint, moveInfo)]);

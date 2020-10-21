@@ -7,7 +7,7 @@ const MIN_INTERVAL_TIME = 25;
 const MAX_DISTANCE = 300;
 
 // swipedown
-export const swipeDown = (el: Element) => {
+export const swipeDown = (el: HTMLElement) => {
     let ts = new TouchSimulator(el);
     ts.start([{ x: 0, y: MAX_DISTANCE }]);
     setTimeout(() => {
@@ -16,7 +16,7 @@ export const swipeDown = (el: Element) => {
     }, MIN_INTERVAL_TIME);
 }
 
-export const swipeUp = (el: Element) => {
+export const swipeUp = (el: HTMLElement) => {
     let ts = new TouchSimulator(el);
     ts.start([{ x: 0, y: MAX_DISTANCE }]);
     setTimeout(() => {
@@ -26,7 +26,7 @@ export const swipeUp = (el: Element) => {
 }
 
 
-export const swipeRight = (el: Element) => {
+export const swipeRight = (el: HTMLElement) => {
     let ts = new TouchSimulator(el);
     ts.start([{ x: MAX_DISTANCE / 2, y: 0 }]);
     setTimeout(() => {
@@ -35,7 +35,7 @@ export const swipeRight = (el: Element) => {
     }, MIN_INTERVAL_TIME);
 }
 
-export const swipeLeft = (el: Element) => {
+export const swipeLeft = (el: HTMLElement) => {
     let ts = new TouchSimulator(el);
     ts.start([{ x: 100, y: 0 }]);
     setTimeout(() => {
@@ -46,7 +46,7 @@ export const swipeLeft = (el: Element) => {
 
 
 
-export default function (el: Element, { direction = 'up', pointLength = 1 }: Options = <Options>{}) {
+export default function (el: HTMLElement, { direction = 'up', pointLength = 1 }: Options = <Options>{}) {
     // MIN_INTERVAL_TIME秒后, swipe才能得到非0的计算值
     const FN_MAP: any = {
         up: swipeUp,

@@ -1,8 +1,10 @@
 interface Input {
     x: number;
     y: number;
-    target?: HTMLElement
+    target?: HTMLElement | Document;
+    identifier?: number;
 };
+
 interface Options {
     device: 'touch' | 'mouse';
 };
@@ -13,6 +15,8 @@ export default class TouchSimulator {
     private _prevTouches: {
         clientX: number;
         clientY: number;
+        target?: HTMLElement | Document;
+        identifier?: number;
     }[];
     private _el: HTMLElement | Document;
     private _device: 'touch' | 'mouse';
@@ -25,9 +29,17 @@ export default class TouchSimulator {
         this._identifier = 1;
     };
 
+
     private _input2Points(input: Input[]) {
-        return input.map(({ x, y, target }) => ({ [CLIENT_X]: x, [CLIENT_Y]: y, target: target || this._el }));
+        return input.map(({ x, y, target }) =>
+            ({
+                identifier: ++this._identifier,
+                [CLIENT_X]: x,
+                [CLIENT_Y]: y,
+                target: target || this._el
+            }));
     }
+
 
     /**
      * 模拟touchstart
@@ -36,12 +48,11 @@ export default class TouchSimulator {
     public start(inputs: Input[] = [{ x: 0, y: 0 }]) {
         const points = this._input2Points(inputs);
         let type = 'touch' === this._device ? 'touchstart' : 'mousedown';
-        let event: Record<string, any> & Event = new Event(type, { bubbles: true, cancelable: true });
+        let event: any = new Event(type, { bubbles: true, cancelable: true });
         if ('touch' === this._device) {
             event.touches = [...this._prevTouches, ...points];
             event.targetTouches = event.touches;
             event.changedTouches = points;
-            event.identifier = this._identifier++;
             this._prevTouches = event.touches;
         } else {
             event[CLIENT_X] = inputs[0].x;
@@ -60,9 +71,15 @@ export default class TouchSimulator {
      * @param inputs 触点
      */
     public move(inputs: Input[]) {
-        const points = this._input2Points(inputs);
+        const points = this._prevTouches.map(({ identifier }, index) => {
+            const {x,y, target = this._el } = inputs[index];
+            return {
+                clientX:x, clientY:y, target, identifier
+            }
+        });
+
         let type = 'touch' === this._device ? 'touchmove' : 'mousemove';
-        let event: Record<string, any> & Event = new Event(type, { bubbles: true, cancelable: true });
+        let event: any = new Event(type, { bubbles: true, cancelable: true });
 
         if ('touch' === this._device) {
             if (points.length !== this._prevTouches.length) {
@@ -70,7 +87,7 @@ export default class TouchSimulator {
             }
             // 对应点不同就放进changedTouches;
             event.touches = points;
-            event.targetTouches = points.filter(({ target }) => this._el === target);
+            event.targetTouches = points.filter(({ target }) => this._el.contains(target as Node));
 
             event.changedTouches = this._prevTouches.filter((prevTouchItem, index) => {
                 const isXChanged = prevTouchItem[CLIENT_X] != points[index][CLIENT_X];
@@ -98,7 +115,7 @@ export default class TouchSimulator {
      */
     public end(pointerIndex = 0, pointerNumber?: number) {
         let type = 'touch' === this._device ? 'touchend' : 'mouseup';
-        let event: Record<string, any> & Event = new Event(type, { bubbles: true, cancelable: true });
+        let event: any = new Event(type, { bubbles: true, cancelable: true });
         const { length } = this._prevTouches;
         const changePoints = this._prevTouches.splice(pointerIndex, pointerNumber || length);
         if ('touch' === this._device) {
@@ -122,7 +139,7 @@ export default class TouchSimulator {
         if (void 0 === this._prevTouches) {
             throw new Error('不能单独触发Cancel!');
         }
-        let event: Record<string, any> & Event = new Event('touchcancel', { bubbles: true, cancelable: true });
+        let event: any = new Event('touchcancel', { bubbles: true, cancelable: true });
         event.changedTouches = this._prevTouches;
         event.touches = this._prevTouches;
         event.targetTouches = this._prevTouches;
