@@ -11,6 +11,10 @@ interface Options {
 
 const CLIENT_X = 'clientX';
 const CLIENT_Y = 'clientY';
+const PAGE_X = 'pageX';
+const PAGE_Y = 'pageY';
+
+
 export default class TouchSimulator {
     private _prevTouches: {
         clientX: number;
@@ -29,17 +33,22 @@ export default class TouchSimulator {
         this._identifier = 1;
     };
 
-
+    /**
+     * 把参数转变成event对象的格式
+     * @param input 
+     */
     private _input2Points(input: Input[]) {
-        return input.map(({ x, y, target }) =>
-            ({
+        return input.map(({ x, y, target = this._el }) => {
+            return {
                 identifier: ++this._identifier,
+                [PAGE_X]: window.screenLeft + x,
+                [PAGE_Y]: window.screenTop + y,
                 [CLIENT_X]: x,
                 [CLIENT_Y]: y,
-                target: target || this._el
-            }));
-    }
-
+                target
+            };
+        });
+    };
 
     /**
      * 模拟touchstart
@@ -55,8 +64,11 @@ export default class TouchSimulator {
             event.changedTouches = points;
             this._prevTouches = event.touches;
         } else {
-            event[CLIENT_X] = inputs[0].x;
-            event[CLIENT_Y] = inputs[0].y;
+            const { x, y } = inputs[0];
+            event[CLIENT_X] = x;
+            event[CLIENT_Y] = y;
+            event[PAGE_X] = window.screenLeft + x;
+            event[PAGE_Y] = window.screenTop + y;
             event.button = 0;
             const { clientX, clientY } = event;
             this._prevTouches = [{ clientX, clientY }];
@@ -71,10 +83,11 @@ export default class TouchSimulator {
      * @param inputs 触点
      */
     public move(inputs: Input[]) {
+        // 只能改变存在点
         const points = this._prevTouches.map(({ identifier }, index) => {
-            const {x,y, target = this._el } = inputs[index];
+            const { x, y, target = this._el } = inputs[index];
             return {
-                clientX:x, clientY:y, target, identifier
+                clientX: x, clientY: y, target, identifier
             }
         });
 
@@ -95,15 +108,14 @@ export default class TouchSimulator {
                 return hasChanged && points[index];
             });
 
-            this._prevTouches = event.touches;
-            this._el.dispatchEvent(event);
+            this._prevTouches = points;
         } else {
             event[CLIENT_X] = points[0][CLIENT_X];
             event[CLIENT_Y] = points[0][CLIENT_Y];
             window.dispatchEvent(event);
             this._prevTouches = points;
-            this._el.dispatchEvent(event);
         }
+        this._el.dispatchEvent(event);
         return event;
     };
 
@@ -123,11 +135,10 @@ export default class TouchSimulator {
             event.touches = this._prevTouches;
             event.targetTouches = event.touches;
             this._prevTouches = event.touches;
-            this._el.dispatchEvent(event);
         } else {
-            this._el.dispatchEvent(event);
             window.dispatchEvent(event);
         }
+        this._el.dispatchEvent(event);
         return event;
     };
 
