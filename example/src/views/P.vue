@@ -3,7 +3,7 @@
         <ul class="list">
             <li class="card" v-for="item in list" :key="item.createdAt">
                 <a class="card__img" target="_new" :href="base + item.fileURL">
-                    <img :src="base + item.fileURL" :alt="base + item.fileURLt" />
+                    <img v-lazy="base + item.fileURL" :alt="base + item.fileURLt" />
                 </a>
                 <div class="p-1">
                     <h4 class="text-dark">{{ formatTime(item.createdAt) }}</h4>
