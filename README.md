@@ -16,7 +16,7 @@
 ## 演示
 <details>
 <summary>查看二维码</summary>
-<img src="https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/b84d3a068b7f4ee0a41f94237997bfb7~tplv-k3u1fbpfcp-zoom-1.image" />
+<img src="https://user-images.githubusercontent.com/8264787/104836031-a55ca780-58e5-11eb-936a-7e2d1a05ee86.png" />
 </details>
 
 [直接访问](https://any86.github.io/any-touch)
