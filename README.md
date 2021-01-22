@@ -88,7 +88,7 @@ export default {
     mounted() {
         // 没错, 就这2行
         const at= new AnyTouch(this.$el);
-        this.on('hook:destroyed', ()=>{at.destroy()});
+        this.$on('hook:destroyed', ()=>{at.destroy()});
     }
 };
 ```
