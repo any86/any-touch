@@ -25,6 +25,8 @@
 
 [:zap: 快速开始](#快速开始)
 
+[:wave: 还支持哪些手势?](#还支持哪些手势)
+
 [:seedling: 兼容vue语法](#兼容vue语法)
     
 [:iphone: 支持微信小程序](#支持微信小程序)
@@ -68,6 +70,25 @@ at.on('pan', e => console.log('e包含位移/速度/方向等信息',e))
 ```
 [:rocket: 返回目录](#目录)
 
+## 还支持哪些手势?
+除了上面说的6大类手势外, 还细分了更多手势:
+|手势名|说明|
+|---|---|
+|pressup|按压松开|
+|panstart|拖拽开始|
+|panmove|拖拽中|
+|panend|拖拽结束|
+|pinchstart|缩放开始|
+|pinchmove|缩放中|
+|pinchend|缩放结束|
+|rotatestart|旋转开始|
+|rotatemove|旋转中|
+|rotateend|旋转结束|
+```javascript
+at.on('panstart', e=>{
+    console.log('拖拽开始了!');
+});
+```
 ## 兼容vue语法
 
 ```html
@@ -192,4 +213,11 @@ at.on('twoFingersTap', onTwoFingersTap);
 ### macos上的chrome浏览器触发touchend会比较慢
 由于上述原因, swipe事件发生的会"慢半拍",所以请大家最终测试以手机效果为准.
 
+### 移动端尽量使用tap代理click
+在移动端touchstart比click先触发, 所以touchstart阶段的preventDefault会阻止click触发, 恰恰any-touch默认在touchstart中使用了`preventDefault`, 用来阻止了浏览器默认事件的触发,比如click和页面滚动.
+
+如果移动端非要使用click做如下设置
+```javascript
+const at = new AnyTouch(el, { preventDefault: false });
+```
 [:rocket: 返回目录](#目录)
