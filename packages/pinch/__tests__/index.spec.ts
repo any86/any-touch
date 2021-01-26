@@ -10,10 +10,10 @@ test(`双手捏合缩小`, async done => {
     const gs = new GestureSimulator(el);
     const onPinch = jest.fn().mockName(`onPinch`);
     at.on(PINCH_NAME, onPinch);
-    gs.dispatchTouchStart([{ x: 0, y: 0 }, { x: 10, y: 0 }]);
-    gs.dispatchTouchMove([{ x: 0, y: 0 }, { x: 20, y: 0 }]);
-    gs.dispatchTouchMove([{ x: 0, y: 0 }, { x: 30, y: 0 }]);
-    gs.dispatchTouchEnd();
+    gs.start([{ x: 0, y: 0 }, { x: 10, y: 0 }]);
+    gs.move([{ x: 0, y: 0 }, { x: 20, y: 0 }]);
+    gs.move([{ x: 0, y: 0 }, { x: 30, y: 0 }]);
+    gs.end();
     await sleep();
     expect(onPinch).toHaveBeenCalledTimes(1);
     AnyTouch.removeUse();

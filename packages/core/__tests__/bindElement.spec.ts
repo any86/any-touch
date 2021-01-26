@@ -12,9 +12,9 @@ test(`mouse下产生一次输入, bindElement触发一次`, async (done) => {
     const unbind  = bindElement(el, ev => {
         mockCallback(ev);
     });
-    gs.dispatchTouchStart();
-    gs.dispatchTouchMove([{x:10,y:90}]);
-    gs.dispatchTouchEnd();
+    gs.start();
+    gs.move([{x:10,y:90}]);
+    gs.end();
     await sleep();
     expect(mockCallback).toHaveBeenCalledTimes(3);
     expect(mockCallback.mock.calls[1][0]).toHaveProperty('clientX',10);
@@ -23,9 +23,9 @@ test(`mouse下产生一次输入, bindElement触发一次`, async (done) => {
 
     // 解绑事件
     unbind();
-    gs.dispatchTouchStart();
-    gs.dispatchTouchMove([{x:10,y:90}]);
-    gs.dispatchTouchEnd();
+    gs.start();
+    gs.move([{x:10,y:90}]);
+    gs.end();
     await sleep();
     expect(mockCallback).toHaveBeenCalledTimes(3);
     done();

@@ -5,7 +5,7 @@ test(`模拟微信下没有el,通过catchEvent接收数据从而识别手势`, a
     const at = new AnyTouch();
     const el = document.createElement('div');
     const gs = new GestureSimulator(el);
-    const event = gs.dispatchTouchStart();
+    const event = gs.start();
     const onInput = jest.fn();
     at.on('at',onInput);
     at.catchEvent(event);

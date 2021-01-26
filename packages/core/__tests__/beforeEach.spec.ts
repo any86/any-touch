@@ -24,10 +24,10 @@ test(`tap延迟300ms触发, 如果届时doubletap状态为"失败或可能"那�
     at.on('tap', onTap);
     at.on('doubletap', onDoubleTap);
 
-    gs.dispatchTouchStart();
-    gs.dispatchTouchEnd();
-    gs.dispatchTouchStart();
-    gs.dispatchTouchEnd();
+    gs.start();
+    gs.end();
+    gs.start();
+    gs.end();
     await sleep(310);
     expect(onTap).toHaveBeenCalledTimes(0);
     expect(onDoubleTap).toHaveBeenCalledTimes(1);

@@ -91,8 +91,8 @@ export default class AnyTouch extends AnyEvent<AnyTouchEvent> {
     _$recognizers: Recognizer[] = [];
     beforeEachHook?: BeforeEachHook;
     /**
-     * @param {Element} 目标元素, 微信下没有el
-     * @param {Object} 选项
+     * @param el目标元素, 微信下没有el
+     * @param options 选项
      */
     constructor(el?: HTMLElement, options?: Options) {
         super();

@@ -9,7 +9,7 @@ export function create() {
     const mockCB = jest.fn();
     const { mock } = mockCB;
     const mockCalls = mock.calls;
-    const{ dispatchTouchStart, dispatchTouchCancel, dispatchTouchEnd, dispatchTouchMove } = gs;
+    const{ start: dispatchTouchStart, cancel: dispatchTouchCancel, end: dispatchTouchEnd, move: dispatchTouchMove } = gs;
     return {
         GestureSimulator,
         dispatchTouchStart,

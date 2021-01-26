@@ -5,7 +5,7 @@ test(`preventDefault.spec`, () => {
     const {el, GestureSimulator} = create();
     const touchLoader = Touch();
     const gs = new GestureSimulator(el);
-    const event = gs.dispatchTouchStart();
+    const event = gs.start();
     const input = touchLoader(event);
     expect(input).not.toBeUndefined();
     if(void 0 !== input){

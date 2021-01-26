@@ -12,8 +12,8 @@ test('加载tap, 触发一次tap', async done => {
     const at = new AnyTouch(el);
     at.on('tap', onTap);
 
-    gs.dispatchTouchStart();
-    gs.dispatchTouchEnd();
+    gs.start();
+    gs.end();
     await sleep();
     expect(onTap).toBeCalled()
     done();
@@ -27,8 +27,8 @@ test(`双击识别器开启的情况下, 只输入1次点击, 过指定时间识
     const at = new AnyTouch(el);
     const gs = new GestureSimulator(el);
     const doubletap = at.get('doubletap');
-    gs.dispatchTouchStart();
-    gs.dispatchTouchEnd();
+    gs.start();
+    gs.end();
     await sleep(500);
     if (void 0 !== doubletap) {
         expect(doubletap.status).toBe(STATUS_FAILED);
@@ -50,10 +50,10 @@ test(`当2次点击的距离超过阈值(20px), 本次点击不累计`, async do
     const onDoubleTap = jest.fn().mockName('doubletap');
     at.on('tap', onTap);
     at.on('doubletap', onDoubleTap);
-    gs.dispatchTouchStart();
-    gs.dispatchTouchEnd();
-    gs.dispatchTouchStart([{ x: 21, y: 0 }]);
-    gs.dispatchTouchEnd();
+    gs.start();
+    gs.end();
+    gs.start([{ x: 21, y: 0 }]);
+    gs.end();
     await sleep();
     expect(onTap).toHaveBeenCalledTimes(2);
     expect(onDoubleTap).not.toHaveBeenCalled();
@@ -75,9 +75,9 @@ test(`如果点击用时超过指定时间(250ms), 不识别成tap`, async done 
     }
     const onTap = jest.fn().mockName('tap');
     at.on('tap', onTap);
-    gs.dispatchTouchStart();
+    gs.start();
     await sleep(maxPressTime + 1);
-    gs.dispatchTouchEnd();
+    gs.end();
     await sleep();
     expect(onTap).toHaveBeenCalledTimes(0);
     AnyTouch.removeUse('tap');
@@ -94,13 +94,13 @@ test('测试2触点双击', async done => {
         expect(ev.type).toBe('twoFingersTap');
     });
 
-    gs.dispatchTouchStart([{x:100,y:100}, {x:101,y:101}]);
+    gs.start([{x:100,y:100}, {x:101,y:101}]);
     await sleep(50);
-    gs.dispatchTouchEnd();
+    gs.end();
 
-    gs.dispatchTouchStart([{x:110,y:100}, {x:111,y:101}]);
+    gs.start([{x:110,y:100}, {x:111,y:101}]);
     await sleep(50);
-    gs.dispatchTouchEnd();
+    gs.end();
 
     await sleep(50);
     done();

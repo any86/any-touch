@@ -1,92 +1,121 @@
 interface Input {
     x: number;
     y: number;
-    target?:HTMLElement
+    target?: HTMLElement | Document;
+    identifier?: number;
 };
+
 interface Options {
     device: 'touch' | 'mouse';
 };
+
 const CLIENT_X = 'clientX';
 const CLIENT_Y = 'clientY';
+const PAGE_X = 'pageX';
+const PAGE_Y = 'pageY';
+
+
 export default class TouchSimulator {
-    public prevTouches: {
+    private _prevTouches: {
         clientX: number;
         clientY: number;
+        target?: HTMLElement | Document;
+        identifier?: number;
     }[];
+    private _el: HTMLElement | Document;
+    private _device: 'touch' | 'mouse';
+    private _identifier: number;
 
-    public el: Element | Document;
-    public device: 'touch' | 'mouse';
-    public index: number;
-
-    constructor(el: Element , { device = 'touch' }: Options = <Options>{}) {
-        this.el = el;
-        this.device = device;
-        this.prevTouches = [];
-        this.index = 1;
+    constructor(el: HTMLElement | Document, { device = 'touch' }: Options = { device: 'touch' }) {
+        this._el = el;
+        this._device = device;
+        this._prevTouches = [];
+        this._identifier = 1;
     };
 
-
-    public input2Points(input: Input[]) {
-        return input.map(({ x, y,target }: any) => ({ [CLIENT_X]: x, [CLIENT_Y]: y ,target:target||this.el}));
-    }
+    /**
+     * 把参数转变成event对象的格式
+     * @param input 
+     */
+    private _input2Points(input: Input[]) {
+        return input.map(({ x, y, target = this._el }) => {
+            return {
+                identifier: ++this._identifier,
+                [PAGE_X]: window.screenLeft + x,
+                [PAGE_Y]: window.screenTop + y,
+                [CLIENT_X]: x,
+                [CLIENT_Y]: y,
+                target
+            };
+        });
+    };
 
     /**
      * 模拟touchstart
-     * @param {Input[]} 新增触点
+     * @param inputs 新增触点
      */
-    public dispatchTouchStart(input: Input[]=[{x:0,y:0}]) {
-        let type = 'touch' === this.device ? 'touchstart' : 'mousedown';
-        let event: any = new Event(type, {bubbles:true,cancelable:true});
-        if ('touch' === this.device) {
-            event.touches = [...this.prevTouches, ...this.input2Points(input)];
+    public start(inputs: Input[] = [{ x: 0, y: 0 }]) {
+        const points = this._input2Points(inputs);
+        let type = 'touch' === this._device ? 'touchstart' : 'mousedown';
+        let event: any = new Event(type, { bubbles: true, cancelable: true });
+        if ('touch' === this._device) {
+            event.touches = [...this._prevTouches, ...points];
             event.targetTouches = event.touches;
-            event.changedTouches = this.input2Points(input);
-            event.identifier = this.index++;
-            this.prevTouches = event.touches;
+            event.changedTouches = points;
+            this._prevTouches = event.touches;
         } else {
-            event[CLIENT_X] = input[0].x;
-            event[CLIENT_Y] = input[0].y;
+            const { x, y } = inputs[0];
+            event[CLIENT_X] = x;
+            event[CLIENT_Y] = y;
+            event[PAGE_X] = window.screenLeft + x;
+            event[PAGE_Y] = window.screenTop + y;
             event.button = 0;
-            const {clientX,clientY} = event;
-            this.prevTouches = [{clientX,clientY}];
+            const { clientX, clientY } = event;
+            this._prevTouches = [{ clientX, clientY }];
         }
-        
-        this.el.dispatchEvent(event);
+
+        this._el.dispatchEvent(event);
         return event;
     };
 
     /**
      * 模拟touchmove
-     * @param {ELement} dom元素
-     * @param {Input[]} 触点
+     * @param inputs 触点
      */
-    public dispatchTouchMove(input: Input[]) {
-        const points = this.input2Points(input);
-        let type = 'touch' === this.device ? 'touchmove' : 'mousemove';
-        let event: any = new Event(type, {bubbles:true,cancelable:true});
+    public move(inputs: Input[]) {
+        // 只能改变存在点
+        const points = this._prevTouches.map(({ identifier }, index) => {
+            const { x, y, target = this._el } = inputs[index];
+            return {
+                clientX: x, clientY: y, target, identifier
+            }
+        });
 
-        if ('touch' === this.device) {
-            if(points.length !== this.prevTouches.length) {
-                throw new Error(`dispatchTouchMove控制的点的数量必须和prevTouches中的点数量一致! ${points.length} : ${this.prevTouches.length}`)
+        let type = 'touch' === this._device ? 'touchmove' : 'mousemove';
+        let event: any = new Event(type, { bubbles: true, cancelable: true });
+
+        if ('touch' === this._device) {
+            if (points.length !== this._prevTouches.length) {
+                throw new Error(`当前触点数: ${points.length}, 上一步触点数: ${this._prevTouches.length}`);
             }
             // 对应点不同就放进changedTouches;
             event.touches = points;
-            event.targetTouches = event.touches;
-            event.changedTouches = this.prevTouches.filter((prevTouchItem: any, index: number) => {
+            event.targetTouches = points.filter(({ target }) => this._el.contains(target as Node));
+
+            event.changedTouches = this._prevTouches.filter((prevTouchItem, index) => {
                 const isXChanged = prevTouchItem[CLIENT_X] != points[index][CLIENT_X];
                 const hasChanged = isXChanged || (prevTouchItem[CLIENT_Y] != points[index][CLIENT_Y]);
                 return hasChanged && points[index];
             });
 
-            this.prevTouches = event.touches;
-            this.el.dispatchEvent(event);
+            this._prevTouches = points;
         } else {
             event[CLIENT_X] = points[0][CLIENT_X];
             event[CLIENT_Y] = points[0][CLIENT_Y];
             window.dispatchEvent(event);
-            this.prevTouches = points;
-            this.el.dispatchEvent(event);
+            this._prevTouches = points;
         }
+        this._el.dispatchEvent(event);
         return event;
     };
 
@@ -96,21 +125,20 @@ export default class TouchSimulator {
      * @param {Number} 删除点在touchs中的索引起始索引
      * @param {Number} 删除多少个点
      */
-    public dispatchTouchEnd(pointerIndex = 0, pointerNumber?: number) {
-        let type = 'touch' === this.device ? 'touchend' : 'mouseup';
-        let event: any = new Event(type, {bubbles:true,cancelable:true});
-        const { length } = this.prevTouches;
-        const changePoints =  this.prevTouches.splice(pointerIndex, pointerNumber || length);
-        if ('touch' === this.device) {
+    public end(pointerIndex = 0, pointerNumber?: number) {
+        let type = 'touch' === this._device ? 'touchend' : 'mouseup';
+        let event: any = new Event(type, { bubbles: true, cancelable: true });
+        const { length } = this._prevTouches;
+        const changePoints = this._prevTouches.splice(pointerIndex, pointerNumber || length);
+        if ('touch' === this._device) {
             event.changedTouches = changePoints;
-            event.touches = this.prevTouches;
+            event.touches = this._prevTouches;
             event.targetTouches = event.touches;
-            this.prevTouches = event.touches;
-            this.el.dispatchEvent(event);
+            this._prevTouches = event.touches;
         } else {
-            this.el.dispatchEvent(event);
             window.dispatchEvent(event);
         }
+        this._el.dispatchEvent(event);
         return event;
     };
 
@@ -118,16 +146,16 @@ export default class TouchSimulator {
      * 模拟touchcancel
      * @param dom元素 
      */
-    public dispatchTouchCancel() {
-        if(void 0 === this.prevTouches){
+    public cancel() {
+        if (void 0 === this._prevTouches) {
             throw new Error('不能单独触发Cancel!');
         }
-        let event: any = new Event('touchcancel', {bubbles:true,cancelable:true});
-        event.changedTouches = this.prevTouches;
-        event.touches = this.prevTouches;
-        event.targetTouches = this.prevTouches;
-        this.prevTouches = event.touches;
-        this.el.dispatchEvent(event);
+        let event: any = new Event('touchcancel', { bubbles: true, cancelable: true });
+        event.changedTouches = this._prevTouches;
+        event.touches = this._prevTouches;
+        event.targetTouches = this._prevTouches;
+        this._prevTouches = event.touches;
+        this._el.dispatchEvent(event);
         return event;
     };
 }

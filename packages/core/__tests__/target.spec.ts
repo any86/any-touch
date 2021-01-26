@@ -20,7 +20,7 @@ test('通过target指定相应事件的元素', async done => {
     });
 
     const gs = new GestureSimulator(el);
-    gs.dispatchTouchStart();
+    gs.start();
     await sleep();
     expect(mockCallback).toHaveBeenNthCalledWith(1, el);
     expect(mockCallback).toHaveBeenNthCalledWith(2, el);

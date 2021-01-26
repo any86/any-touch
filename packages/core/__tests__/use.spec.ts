@@ -9,8 +9,8 @@ test(`通过实例加载/卸载插件`, async done => {
         mockCB(ev.type);
     });
 
-    gs.dispatchTouchStart();
-    gs.dispatchTouchEnd();
+    gs.start();
+    gs.end();
     await sleep();
     expect(mockCB).toHaveBeenCalledWith('tap');
 
