@@ -56,7 +56,7 @@ https://unpkg.com/any-touch/dist/any-touch.umd.min.js
 <h1 id="box">hello world</h1>
 <script src="https://unpkg.com/any-touch/dist/any-touch.umd.min.js"></script>
 <script>
-const el = doucument.getElementById('box');
+const el = document.getElementById('box');
 const at = new AnyTouch(el);
 at.on('tap', e => console.log('e包含位置等信息',e));
 </script>
@@ -64,7 +64,7 @@ at.on('tap', e => console.log('e包含位置等信息',e));
 **或者, 使用NPM**
 ```javascript
 import AnyTouch from 'any-touch';
-const el = doucument.getElementById('box');
+const el = document.getElementById('box');
 const at = new AnyTouch(el);
 at.on('pan', e => console.log('e包含位移/速度/方向等信息',e))
 ```
