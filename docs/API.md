@@ -4,21 +4,21 @@
 
 [:fire: 初始化](#初始化)
 
-[on(监听)](#on)
+[on(监听)](#oneventname-listener)
 
-[target(事件委派)](#target)
+[target(事件委派)](#targetchildelonfunction)
 
-[set(设置)](#set)
+[set(设置)](#setoptions)
 
-[use(加载手势)](#use)
+[use(加载手势)](#userecognizer-options)
 
-[removeUse(移除手势)](#removeUse)
+[removeUse(移除手势)](#removeuserecognizername)
 
-[catchEvent(注入事件对象)](#catchEvent)
+[catchEvent(注入事件对象)](#catcheventevent)
 
 [beforeEach(拦截器)](#beforeeachhook)
 
-[get(获取手势)](#get)
+[get(获取手势)](#getname-string-recognizer--void)
 
 [destroy(销毁)](#destroy)
 
@@ -127,6 +127,16 @@ at.target(child).on('pan', onChildPan);
 ```javascript
 at.set({ preventDefault: true });
 ```
+
+**手势参数说明**
+| 名称 | 说明 |
+| - | - |
+| **@any-touch/tap**    |[点击](../packages/tap/README.md)|
+| **@any-touch/pan**    |[拖拽](../packages/pan/README.md)|
+| **@any-touch/swipe**  |[划](../packages/swipe/README.md)|
+| **@any-touch/press**  |[按压](../packages/press/README.md)|
+| **@any-touch/pinch**  |[缩放](../packages/pinch/README.md)|
+| **@any-touch/rotate** |[旋转](../packages/rotate/README.md)|
 
 [:rocket: 返回目录](#目录)
 
