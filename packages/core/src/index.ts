@@ -176,8 +176,10 @@ export default class AnyTouch extends AnyEvent<AnyTouchEvent> {
      * @param event Touch / Mouse事件对象
      */
     catchEvent(event: SupportEvent): void {
+        const stopPropagation = ()=> event.stopPropagation();
+        const preventDefault = ()=> event.preventDefault();
         if (canPreventDefault(event, this.options)) {
-            event.preventDefault();
+            preventDefault();
         }
         // if (!event.cancelable) {
         //     this.eventEmitter.emit('error', { code: 0, message: '页面滚动的时候, 请暂时不要操作元素!' });
@@ -214,7 +216,7 @@ export default class AnyTouch extends AnyEvent<AnyTouchEvent> {
                 // 恢复上次的缓存
                 recognizer.recognize(computed, type => {
                     // 此时的e就是this.computed
-                    const payload = { ...computed, type, name: recognizer.name };
+                    const payload = { ...computed, type, name: recognizer.name,stopPropagation,preventDefault };
 
                     // 防止数据被vue类框架拦截
                     Object?.freeze(payload);
