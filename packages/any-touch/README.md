@@ -16,7 +16,7 @@
 ## 演示
 <details>
 <summary>查看二维码</summary>
-<img src="https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/b84d3a068b7f4ee0a41f94237997bfb7~tplv-k3u1fbpfcp-zoom-1.image" />
+<img src="https://user-images.githubusercontent.com/8264787/104836031-a55ca780-58e5-11eb-936a-7e2d1a05ee86.png" />
 </details>
 
 [直接访问](https://any86.github.io/any-touch)
@@ -30,6 +30,8 @@
 [:iphone: 支持微信小程序](#支持微信小程序)
 
 [🤖 按需加载](#按需加载)
+
+[:wave: 还支持哪些手势?](#还支持哪些手势)
 
 [:bulb: API & 高级技巧](docs/API.md)
 
@@ -49,23 +51,25 @@ https://unpkg.com/any-touch/dist/any-touch.umd.min.js
 ```
 
 ## 快速开始
+**HTML中引入**
 ```html
 <h1 id="box">hello world</h1>
 <script src="https://unpkg.com/any-touch/dist/any-touch.umd.min.js"></script>
 <script>
-const el = doucument.getElementById('box');
+const el = document.getElementById('box');
 const at = new AnyTouch(el);
 at.on('tap', e => console.log('e包含位置等信息',e));
 </script>
 ```
-**或者:**
+**或者, 使用NPM**
 ```javascript
 import AnyTouch from 'any-touch';
-const el = doucument.getElementById('box');
+const el = document.getElementById('box');
 const at = new AnyTouch(el);
 at.on('pan', e => console.log('e包含位移/速度/方向等信息',e))
 ```
 [:rocket: 返回目录](#目录)
+
 
 ## 兼容vue语法
 
@@ -87,7 +91,7 @@ export default {
     mounted() {
         // 没错, 就这2行
         const at= new AnyTouch(this.$el);
-        this.on('hook:destroyed', ()=>{at.destroy()});
+        this.$on('hook:destroyed', ()=>{at.destroy()});
     }
 };
 ```
@@ -132,7 +136,7 @@ const at = new AnyTouch()
 
 
 ## 按需加载
-**默认any-touch支持所有手势**, 为了"**减小体积**"和"**提升效率**", 提供了按需加载.
+**默认any-touch支持所有手势**, 为了**更小的体积**, 提供了按需加载.
 
 ```javascript
 // 只加载pan识别器(拖拽)
@@ -169,6 +173,27 @@ at.on('swipe', onSwipe);
 ![](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/1fa1a4dae46047d58b371e8ff1704dc8~tplv-k3u1fbpfcp-zoom-1.image)
 
 
+## 还支持哪些手势?
+除了上面说的6大类手势外, 还细分了更多手势:
+|手势名|说明|
+|---|---|
+|pressup|按压松开|
+|panstart|拖拽开始|
+|panmove|拖拽中|
+|panend|拖拽结束|
+|pinchstart|缩放开始|
+|pinchmove|缩放中|
+|pinchend|缩放结束|
+|rotatestart|旋转开始|
+|rotatemove|旋转中|
+|rotateend|旋转结束|
+```javascript
+at.on('panstart', e=>{
+    console.log('拖拽开始了!');
+});
+```
+
+
 [:rocket: 返回目录](#目录)
 
 ## 注意事项
@@ -191,4 +216,11 @@ at.on('twoFingersTap', onTwoFingersTap);
 ### macos上的chrome浏览器触发touchend会比较慢
 由于上述原因, swipe事件发生的会"慢半拍",所以请大家最终测试以手机效果为准.
 
+### 移动端尽量使用tap代理click
+在移动端touchstart比click先触发, 所以touchstart阶段的preventDefault会阻止click触发, 恰恰any-touch默认在touchstart中使用了`preventDefault`, 用来阻止了浏览器默认事件的触发,比如click和页面滚动.
+
+如果移动端非要使用click做如下设置
+```javascript
+const at = new AnyTouch(el, { preventDefault: false });
+```
 [:rocket: 返回目录](#目录)
