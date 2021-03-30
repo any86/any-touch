@@ -27,7 +27,7 @@ import emit2 from './emit2';
 // type TouchAction = 'auto' | 'none' | 'pan-x' | 'pan-left' | 'pan-right' | 'pan-y' | 'pan-up' | 'pan-down' | 'pinch-zoom' | 'manipulation';
 
 
-type BeforeEachHook = (recognizer: Recognizer,map:Record<string,Recognizer>, next: () => void) => void;
+type BeforeEachHook = (recognizer: Recognizer, map: Record<string, Recognizer>, next: () => void) => void;
 /**
  * 默认设置
  */
@@ -36,6 +36,9 @@ export interface Options {
     preventDefault?: boolean;
     // 不阻止默认行为的白名单
     preventDefaultExclude?: RegExp | ((ev: SupportEvent) => boolean);
+    mousemoveTarget: typeof window;
+    mouseupTarget: typeof window;
+
 }
 
 /**
@@ -44,7 +47,9 @@ export interface Options {
 const DEFAULT_OPTIONS: Options = {
     domEvents: { bubbles: true, cancelable: true },
     preventDefault: true,
-    preventDefaultExclude: /^(?:INPUT|TEXTAREA|BUTTON|SELECT)$/
+    preventDefaultExclude: /^(?:INPUT|TEXTAREA|BUTTON|SELECT)$/,
+    mousemoveTarget: window,
+    mouseupTarget: window
 };
 export default class AnyTouch extends AnyEvent<AnyTouchEvent> {
     static Tap: RecognizerConstruct;
@@ -151,7 +156,8 @@ export default class AnyTouch extends AnyEvent<AnyTouchEvent> {
                 bindElement(
                     el,
                     this.catchEvent.bind(this),
-                    !this.options.preventDefault && supportsPassive ? { passive: true } : false
+                    !this.options.preventDefault && supportsPassive ? { passive: true } : false,
+                    [this.options.mousemoveTarget,this.options.mouseupTarget]
                 )
             );
         }
@@ -176,8 +182,8 @@ export default class AnyTouch extends AnyEvent<AnyTouchEvent> {
      * @param event Touch / Mouse事件对象
      */
     catchEvent(event: SupportEvent): void {
-        const stopPropagation = ()=> event.stopPropagation();
-        const preventDefault = ()=> event.preventDefault();
+        const stopPropagation = () => event.stopPropagation();
+        const preventDefault = () => event.preventDefault();
         if (canPreventDefault(event, this.options)) {
             preventDefault();
         }
@@ -216,7 +222,7 @@ export default class AnyTouch extends AnyEvent<AnyTouchEvent> {
                 // 恢复上次的缓存
                 recognizer.recognize(computed, type => {
                     // 此时的e就是this.computed
-                    const payload = { ...computed, type, name: recognizer.name,stopPropagation,preventDefault };
+                    const payload = { ...computed, type, name: recognizer.name, stopPropagation, preventDefault };
 
                     // 防止数据被vue类框架拦截
                     Object?.freeze(payload);
@@ -255,7 +261,7 @@ export default class AnyTouch extends AnyEvent<AnyTouchEvent> {
      * 事件拦截器
      * @param hook 钩子函数
      */
-    beforeEach(hook: (recognizer: Recognizer, map:Record<string,Recognizer>, next: () => void) => void): void {
+    beforeEach(hook: (recognizer: Recognizer, map: Record<string, Recognizer>, next: () => void) => void): void {
         this.beforeEachHook = hook;
     };
 

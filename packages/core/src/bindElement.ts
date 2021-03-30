@@ -24,22 +24,22 @@ export default function (
     el: HTMLElement,
     catchEvent: (e: SupportEvent) => void,
     options?: boolean | AddEventListenerOptions,
+    [mousemoveTarget, mouseupTarget]: [HTMLElement | typeof window, HTMLElement | typeof window] = [window, window]
 ): () => void {
-
     TOUCH_EVENTS.forEach(eventName => {
         el.addEventListener(eventName, catchEvent, options);
     });
 
     el.addEventListener(MOUSE_DOWN, catchEvent, options);
-    window.addEventListener(MOUSE_MOVE, catchEvent, options);
-    window.addEventListener(MOUSE_UP, catchEvent, options);
+    mousemoveTarget.addEventListener(MOUSE_MOVE, catchEvent as any, options);
+    mouseupTarget.addEventListener(MOUSE_UP, catchEvent as any, options);
 
     return () => {
         TOUCH_EVENTS.forEach(eventName => {
             el.removeEventListener(eventName, catchEvent);
         });
         el.removeEventListener(MOUSE_DOWN, catchEvent, options);
-        window.removeEventListener(MOUSE_MOVE, catchEvent, options);
-        window.removeEventListener(MOUSE_UP, catchEvent, options);
+        mousemoveTarget.removeEventListener(MOUSE_MOVE, catchEvent as any, options);
+        mouseupTarget.removeEventListener(MOUSE_UP, catchEvent as any, options);
     };
 }
