@@ -1,6 +1,6 @@
 {
     "name": "any-event",
-    "version": "1.0.7",
+    "version": "1.0.8",
     "description": "小巧的事件模型",
     "main": "dist/index.js",
     "module": "dist/index.es.js",
