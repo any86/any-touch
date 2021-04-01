@@ -155,6 +155,7 @@ export interface Computed extends Input {
 export interface AnyTouchEvent extends Input, Readonly<Computed> {
     readonly type: string;
     readonly stopPropagation:()=>void;
+    readonly stopImmediatePropagation:()=>void;
     readonly preventDefault:()=>void;
 }
 
