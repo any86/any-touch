@@ -7,7 +7,7 @@ import {
 } from '@any-touch/shared'
 export default function(recognizer: Recognizer) {
     // 重置status
-    if (-1 !== [STATUS_END, STATUS_CANCELLED, STATUS_RECOGNIZED, STATUS_FAILED].indexOf(recognizer.status)) {
+    if ([STATUS_END, STATUS_CANCELLED, STATUS_RECOGNIZED, STATUS_FAILED].includes(recognizer.status)) {
         recognizer.status = STATUS_POSSIBLE;
     };
 }

@@ -16,6 +16,5 @@ test(`双手捏合缩小`, async done => {
     gs.end();
     await sleep();
     expect(onPinch).toHaveBeenCalledTimes(1);
-    AnyTouch.removeUse();
     done();
 });

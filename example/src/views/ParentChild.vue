@@ -19,8 +19,6 @@ export default {
     mounted() {
         const at2 = new AnyTouch(this.$refs.t2);
         const at1 = new AnyTouch(this.$refs.t1);
-
-
          at2.on('panstart', e=>{
             console.log(2);
         })

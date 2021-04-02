@@ -21,6 +21,5 @@ test(`缩放的时候, 有一个触点不在绑定元素内, 那么不触发pinc
     gs.end();
     await sleep();
     expect(onPinch).toHaveBeenCalledTimes(0);
-    AnyTouch.removeUse();
     done();
 });

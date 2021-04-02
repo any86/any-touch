@@ -22,7 +22,6 @@ import { mouse, touch } from './createInput';
 import dispatchDomEvent from './dispatchDomEvent';
 import canPreventDefault from './canPreventDefault';
 import bindElement from './bindElement';
-import { use, removeUse } from './use';
 import emit2 from './emit2';
 // type TouchAction = 'auto' | 'none' | 'pan-x' | 'pan-left' | 'pan-right' | 'pan-y' | 'pan-up' | 'pan-down' | 'pinch-zoom' | 'manipulation';
 
@@ -72,15 +71,10 @@ export default class AnyTouch extends AnyEvent<AnyTouchEvent> {
      * @param {AnyTouchPlugin} 插件
      * @param {any[]} 插件参数
      */
-    static use = (Recognizer: new (...args: any) => Recognizer, options?: Record<string, any>): void => {
-        use(AnyTouch, Recognizer, options);
+    static use = (Recognizer: new (...args: any) => Recognizer, recognizerOptions?: Record<string, any>): void => {
+        AnyTouch._$Recognizers.push([Recognizer, recognizerOptions]);
     };
-    /**
-     * 卸载插件[不建议]
-     */
-    static removeUse = (recognizerName?: string): void => {
-        removeUse(AnyTouch, recognizerName);
-    };
+
     _$computeFunctionMap: Record<string, ComputeFunction> = {};
     // 目标元素
     el?: HTMLElement;
@@ -100,16 +94,9 @@ export default class AnyTouch extends AnyEvent<AnyTouchEvent> {
         this.el = el;
         this.options = { ...DEFAULT_OPTIONS, ...options };
 
-        // 同步通过静态方法use引入的手势附带的"计算函数"
-        for (const k in AnyTouch._$computeFunctionMap) {
-            this._$computeFunctionMap[k] = AnyTouch._$computeFunctionMap[k]();
-        }
-
         // 同步插件到实例
         for (const [Recognizer, options] of AnyTouch._$Recognizers) {
-            const recognizer = new Recognizer(options);
-            this._$recognizerMap[recognizer.name] = recognizer
-            this._$recognizers.push(recognizer);
+            this.use(Recognizer, options);
         }
 
         // 之所以强制是InputCreatorFunction<SupportEvent>,
@@ -248,18 +235,48 @@ export default class AnyTouch extends AnyEvent<AnyTouchEvent> {
      * @param {AnyTouchPlugin} 插件
      * @param {Object} 选项
      */
-    use(Recognizer: new (...args: any) => Recognizer, options?: Record<string, any>): void {
-        use(this, Recognizer, options);
+    use(Recognizer: new (...args: any) => Recognizer, recognizerOptions?: Record<string, any>): void {
+        const name = recognizerOptions?.name;
+        // 保证同一个事件只对应一个识别器
+        if (void 0 !== name && void 0 !== this._$recognizerMap[name]) return;
+
+        // 实例化
+        const recognizer = new Recognizer(recognizerOptions);
+
+        // 初始化计算函数
+        for (const createComputeFunction of recognizer.computeFunctions) {
+            const { _id } = createComputeFunction;
+            if (void 0 === this._$computeFunctionMap[_id]) {
+                // 创建计算函数
+                this._$computeFunctionMap[_id] = createComputeFunction();
+            }
+        }
+
+        // 识别器管理
+        // recognizer.name是默认值或者options给定
+        this._$recognizerMap[recognizer.name] = recognizer;
+        this._$recognizers.push(this._$recognizerMap[recognizer.name]);
+
     };
 
     /**
      * 移除插件
      * @param {String} 识别器name
      */
-    removeUse(name?: string): void {
-        removeUse(this, name);
+    removeUse(recognizerName?: string): void {
+        if (void 0 === recognizerName) {
+            this._$recognizers = [];
+            this._$recognizerMap = {};
+        } else {
+            for (const [index, recognizer] of this._$recognizers.entries()) {
+                if (recognizerName === recognizer.options.name) {
+                    this._$recognizers.splice(index, 1);
+                    delete this._$recognizerMap[recognizerName];
+                    break;
+                }
+            }
+        }
     };
-
 
     /**
      * 事件拦截器
