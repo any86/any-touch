@@ -14,7 +14,11 @@ export function use(
     recognizerOptions?: Record<string, any>): void {
     const name = recognizerOptions?.name;
     // 保证同一个事件只对应一个识别器
-    if (void 0 !== name && void 0 !== atOrAT._$recognizerMap[name]) return;
+    if ('version' in atOrAT) {
+        atOrAT._$Recognizers.push([Recognizer, recognizerOptions]);
+    } else {
+        if (void 0 !== name && void 0 !== atOrAT._$recognizerMap[name]) return;
+    }
 
     const recognizer = new Recognizer(recognizerOptions);
 
@@ -28,10 +32,14 @@ export function use(
         }
     }
 
-    // 识别器管理
-    // recognizer.name是默认值或者options给定
-    atOrAT._$recognizerMap[recognizer.name] = recognizer;
-    atOrAT._$recognizers.push(atOrAT._$recognizerMap[recognizer.name]);
+    if ('version' in atOrAT) {
+
+    } else {
+        // 识别器管理
+        // recognizer.name是默认值或者options给定
+        atOrAT._$recognizerMap[recognizer.name] = recognizer;
+        atOrAT._$recognizers.push(atOrAT._$recognizerMap[recognizer.name]);
+    }
 };
 
 /**
@@ -43,14 +51,20 @@ export function removeUse(atOrAT: C | I, recognizerName?: string): void {
     // 如果没有传入指定手势名称
     // 那么删除所有手势识别器
     if (void 0 === recognizerName) {
-        atOrAT._$recognizers = [];
-        atOrAT._$recognizerMap = {};
+        if ('version' in atOrAT) {
+            atOrAT._$Recognizers = [];
+        } else {
+            atOrAT._$recognizers = [];
+            atOrAT._$recognizerMap = {};
+        }
     } else {
-        for (const [index, recognizer] of atOrAT._$recognizers.entries()) {
-            if (recognizerName === recognizer.options.name) {
-                atOrAT._$recognizers.splice(index, 1);
-                delete atOrAT._$recognizerMap[recognizerName];
-                break;
+        if (!('version' in atOrAT)) {
+            for (const [index, recognizer] of atOrAT._$recognizers.entries()) {
+                if (recognizerName === recognizer.options.name) {
+                    atOrAT._$recognizers.splice(index, 1);
+                    delete atOrAT._$recognizerMap[recognizerName];
+                    break;
+                }
             }
         }
     }

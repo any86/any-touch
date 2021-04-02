@@ -46,6 +46,7 @@ const DEFAULT_OPTIONS: Options = {
     preventDefault: true,
     preventDefaultExclude: /^(?:INPUT|TEXTAREA|BUTTON|SELECT)$/,
 };
+const AT = `at`;
 export default class AnyTouch extends AnyEvent<AnyTouchEvent> {
     static Tap: RecognizerConstruct;
     static Pan: RecognizerConstruct;
@@ -62,9 +63,8 @@ export default class AnyTouch extends AnyEvent<AnyTouchEvent> {
     static STATUS_RECOGNIZED: typeof STATUS_RECOGNIZED;
 
     static version = '__VERSION__';
-    // 识别器集合
-    static _$recognizers: Recognizer[] = [];
-    static _$recognizerMap: Record<string, Recognizer> = {};
+    // 识别器集合(未实例化)
+    static _$Recognizers: any = [];
     // 计算函数外壳函数集合
     static _$computeFunctionMap: Record<string, ComputeWrapFunction> = {};
     /**
@@ -106,8 +106,11 @@ export default class AnyTouch extends AnyEvent<AnyTouchEvent> {
         }
 
         // 同步插件到实例
-        this._$recognizerMap = AnyTouch._$recognizerMap;
-        this._$recognizers = AnyTouch._$recognizers;
+        for (const [Recognizer, options] of AnyTouch._$Recognizers) {
+            const recognizer = new Recognizer(options);
+            this._$recognizerMap[recognizer.name] = recognizer
+            this._$recognizers.push(recognizer);
+        }
 
         // 之所以强制是InputCreatorFunction<SupportEvent>,
         // 是因为调用this._$inputCreatorMap[event.type]的时候还要判断类型,
@@ -190,7 +193,6 @@ export default class AnyTouch extends AnyEvent<AnyTouchEvent> {
         // 跳过无效输入
         // 比如没有按住鼠标左键的移动会返回undefined
         if (void 0 !== input) {
-            const AT = `at`;
             const AT_WITH_STATUS = AT + ':' + input.stage;
             this.emit(AT, input as AnyTouchEvent);
             this.emit(AT_WITH_STATUS, input as AnyTouchEvent);

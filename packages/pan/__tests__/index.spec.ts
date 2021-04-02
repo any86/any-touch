@@ -4,11 +4,18 @@ AnyTouch.use(Pan);
 import { sleep, GestureSimulator, panSimulator } from '@any-touch/simulator'
 const PAN_NAME = 'pan';
 
-test(`加载${PAN_NAME}, 触发一次${PAN_NAME}`, async done => {
+test(`加载2个any-touch, 触发2次panstart`, async done => {
     const el = document.createElement('div');
+    const parnetEl = document.createElement('div');
+    parnetEl.appendChild(el);
     const at = new AnyTouch(el);
-    const onPan = jest.fn();
-    at.on(PAN_NAME, onPan);
+    const pAt = new AnyTouch(parnetEl);
+    const onParentPanStart = jest.fn();
+    const onPanStart = jest.fn();
+
+    at.on('panstart', onPanStart);
+    pAt.on('panstart', onParentPanStart);
+
     const gs = new GestureSimulator(el);
     gs.start();
     await sleep(25);
@@ -20,8 +27,9 @@ test(`加载${PAN_NAME}, 触发一次${PAN_NAME}`, async done => {
     await sleep(25);
     gs.end();
     await sleep();
-    expect(onPan).toHaveBeenCalledTimes(3);
-    at.destroy
+    expect(onPanStart).toHaveBeenCalledTimes(1);
+    expect(onParentPanStart).toHaveBeenCalledTimes(1);
+    // at.destroy
     done();
 });
 

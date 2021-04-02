@@ -21,7 +21,11 @@ const routes = [
         name: 'p',
         component: () => import('../views/P.vue')
     },
-
+    {
+        path: '/parent',
+        name: 'parent',
+        component: () => import('../views/ParentChild.vue')
+    },
     {
         path: '/use',
         name: 'use',
