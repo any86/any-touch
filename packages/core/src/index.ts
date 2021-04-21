@@ -309,6 +309,6 @@ export default class AnyTouch extends AnyEvent<AnyTouchEvent> {
     destroy() {
         // 解绑事件
         this.emit('unbind');
-        this.listenersMap = {};
+        super.destroy();
     };
 }
