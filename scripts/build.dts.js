@@ -1,3 +1,6 @@
+// 这个文件需要执行2遍, 不然core/index.js会丢失声明, 暂时先这样.
+
+
 const fs = require('fs');
 const path = require('path');
 const chalk = require('chalk');
@@ -41,7 +44,6 @@ function compile(fileNames) {
         const typeFileName = path.basename(fileName);
         const typeDir = path.dirname(fileName.replace('src', 'dist'));
         const filePath = path.join(typeDir, typeFileName);
-
         if (!fs.existsSync(typeDir)) {
             fs.mkdirSync(typeDir, {
                 recursive: true

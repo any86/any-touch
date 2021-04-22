@@ -17,7 +17,7 @@
     "rm": "rimraf packages/**/dist",
     "clean": "rimraf node_modules",
     "cp-md": "node  ./scripts/cp-md",
-    "build": "npm-run-all rm build:umd build:cjs build:es build:dts",
+    "build": "npm-run-all rm build:umd build:cjs build:es build:dts build:dts",
     "build:cjs": "node ./scripts/build.cjs",
     "build:es": "node ./scripts/build.es",
     "build:umd": "node ./scripts/build.umd && node ./scripts/build.umd --compress",
