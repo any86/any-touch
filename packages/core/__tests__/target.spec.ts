@@ -2,10 +2,10 @@ import { create } from '@testUtils';
 
 test('通过target指定相应事件的元素', async done => {
     const { GestureSimulator, AnyTouch, sleep } = create();
-    const pEl = document.createElement('div');
-    const at = new AnyTouch(pEl);
+    const parentEl = document.createElement('div');
     const el = document.createElement('span');
-    pEl.appendChild(el);
+    parentEl.appendChild(el);
+    const at = new AnyTouch(parentEl);
 
     // 只触发span的touch事件
     const mockCallback = jest.fn();
