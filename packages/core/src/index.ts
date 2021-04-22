@@ -153,8 +153,7 @@ export default class AnyTouch extends AnyEvent<AnyTouchEvent> {
                 this.on(eventName, listener, event => {
                     const { targets } = event;
                     // 检查当前触发事件的元素是否是其子元素
-                    return event.target === el &&
-                        targets.every((target) => el.contains(target as HTMLElement))
+                    return targets.every((target) => el.contains(target as HTMLElement));
                 });
             }
         };
