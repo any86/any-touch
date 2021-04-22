@@ -1,6 +1,6 @@
 {
     "name": "@any-touch/compute",
-    "version": "1.0.11",
+    "version": "1.0.12",
     "main": "dist/index.js",
     "module": "dist/index.es.js",
     "description": "any-touch内部依赖的包, 进行手势数据计算.",
@@ -11,8 +11,8 @@
         "dist/*"
     ],
     "dependencies": {
-        "@any-touch/shared": "^1.0.11",
-        "@any-touch/vector": "^1.0.11",
+        "@any-touch/shared": "^1.0.12",
+        "@any-touch/vector": "^1.0.12",
         "tslib": "^1.9.3"
     },
     "author": "any86",
