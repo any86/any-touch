@@ -37,6 +37,8 @@
 
 [:lollipop: 事件对象(event)](docs/EVENT.md)
 
+[🎨 自定义手势,比如双击](#自定义手势)
+
 [:heavy_exclamation_mark::heavy_exclamation_mark::heavy_exclamation_mark: 注意事项](#注意事项)
 
 ## 安装
@@ -195,6 +197,10 @@ at.on('panstart', e=>{
 
 
 [:rocket: 返回目录](#目录)
+
+## 自定义手势
+这里有一个实现双击的[例子](https://github.com/any86/any-touch/blob/master/docs/API.md#beforeeachhook)
+
 
 ## 注意事项
 
