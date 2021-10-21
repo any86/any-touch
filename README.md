@@ -37,8 +37,6 @@
 
 [:lollipop: 事件对象(event)](docs/EVENT.md)
 
-[🎨 自定义手势,比如双击](#自定义手势)
-
 [:heavy_exclamation_mark::heavy_exclamation_mark::heavy_exclamation_mark: 注意事项](#注意事项)
 
 ## 安装
@@ -198,10 +196,6 @@ at.on('panstart', e=>{
 
 [:rocket: 返回目录](#目录)
 
-## 自定义手势
-这里有一个实现双击的[例子](https://github.com/any86/any-touch/blob/master/docs/API.md#beforeeachhook)
-
-
 ## 注意事项
 
 ### 手势识别器的name字段必填
@@ -228,5 +222,17 @@ at.on('twoFingersTap', onTwoFingersTap);
 如果移动端非要使用click做如下设置
 ```javascript
 const at = new AnyTouch(el, { preventDefault: false });
+```
+[:rocket: 返回目录](#目录)
+### 可以只有pinch/rotate才"阻止默认事件"吗?
+可以通过"preventDefaultExclude"选项实现:
+
+```javascript
+const at = new AnyTouch(el, {
+    preventDefault: true,
+    preventDefaultExclude(e) {
+        return 1 == e.touches.length;
+    },
+});
 ```
 [:rocket: 返回目录](#目录)

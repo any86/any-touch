@@ -224,3 +224,15 @@ at.on('twoFingersTap', onTwoFingersTap);
 const at = new AnyTouch(el, { preventDefault: false });
 ```
 [:rocket: 返回目录](#目录)
+### 可以只有pinch/rotate才"阻止默认事件"吗?
+可以通过"preventDefaultExclude"选项实现:
+
+```javascript
+const at = new AnyTouch(el, {
+    preventDefault: true,
+    preventDefaultExclude(e) {
+        return 1 == e.touches.length;
+    },
+});
+```
+[:rocket: 返回目录](#目录)
