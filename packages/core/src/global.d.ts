@@ -1,0 +1,3 @@
+interface CSSStyleDeclaration {
+    webkitTapHighlightColor: string;
+}
