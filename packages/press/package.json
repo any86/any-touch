@@ -1,6 +1,6 @@
 {
     "name": "@any-touch/press",
-    "version": "1.0.12",
+    "version": "1.0.13",
     "description": "any-touch的识别器, 用来识别按压手势.",
     "main": "./dist/index",
     "module": "./dist/index.es.js",
@@ -11,9 +11,9 @@
         "dist/*"
     ],
     "dependencies": {
-        "@any-touch/compute": "^1.0.12",
-        "@any-touch/recognizer": "^1.0.12",
-        "@any-touch/shared": "^1.0.12"
+        "@any-touch/compute": "^1.0.13",
+        "@any-touch/recognizer": "^1.0.13",
+        "@any-touch/shared": "^1.0.13"
     },
     "publishConfig": {
         "access": "public"
