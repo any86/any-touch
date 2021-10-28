@@ -63,48 +63,50 @@ export default class AnyTouch extends AnyEvent<AnyTouchEvent> {
 
     static version = '__VERSION__';
     // 识别器集合(未实例化)
-    static _$Recognizers: any = [];
+    static __Recognizers: [new (...args: any) => Recognizer, Record<string, any> | undefined][] = [];
     // 计算函数外壳函数集合
-    static _$computeFunctionMap: Record<string, ComputeWrapFunction> = {};
+    static __computeFunctionMap: Record<string, ComputeWrapFunction> = {};
     /**
      * 安装插件
      * @param {AnyTouchPlugin} 插件
      * @param {any[]} 插件参数
      */
     static use = (Recognizer: new (...args: any) => Recognizer, recognizerOptions?: Record<string, any>): void => {
-        AnyTouch._$Recognizers.push([Recognizer, recognizerOptions]);
+        AnyTouch.__Recognizers.push([Recognizer, recognizerOptions]);
     };
 
-    _$computeFunctionMap: Record<string, ComputeFunction> = {};
     // 目标元素
     el?: HTMLElement;
-    // 选项
-    options: Options;
-    _$inputCreatorMap: InputCreatorFunctionMap;
-    _$recognizerMap: Record<string, Recognizer> = {};
-    _$recognizers: Recognizer[] = [];
     beforeEachHook?: BeforeEachHook;
+
+    private __computeFunctionMap: Record<string, ComputeFunction> = {};
+    // 选项
+    private __options: Options;
+    private __inputCreatorMap: InputCreatorFunctionMap;
+    private __recognizerMap: Record<string, Recognizer> = {};
+    private __recognizers: Recognizer[] = [];
+
     /**
-     * @param el目标元素, 微信下没有el
+     * @param el 目标元素, 微信下没有el
      * @param options 选项
      */
     constructor(el?: HTMLElement, options?: Options) {
         super();
 
         this.el = el;
-        this.options = { ...DEFAULT_OPTIONS, ...options };
+        this.__options = { ...DEFAULT_OPTIONS, ...options };
 
         // 同步插件到实例
-        for (const [Recognizer, options] of AnyTouch._$Recognizers) {
+        for (const [Recognizer, options] of AnyTouch.__Recognizers) {
             this.use(Recognizer, options);
         }
 
         // 之所以强制是InputCreatorFunction<SupportEvent>,
-        // 是因为调用this._$inputCreatorMap[event.type]的时候还要判断类型,
+        // 是因为调用this.__inputCreatorMap[event.type]的时候还要判断类型,
         // 因为都是固定(touch&mouse)事件绑定好的, 没必要判断
         const createInputFromTouch = touch(this.el) as InputCreatorFunction<SupportEvent>;
         const createInputFromMouse = mouse() as InputCreatorFunction<SupportEvent>;
-        this._$inputCreatorMap = {
+        this.__inputCreatorMap = {
             [TOUCH_START]: createInputFromTouch,
             [TOUCH_MOVE]: createInputFromTouch,
             [TOUCH_END]: createInputFromTouch,
@@ -141,7 +143,7 @@ export default class AnyTouch extends AnyEvent<AnyTouchEvent> {
                 bindElement(
                     el,
                     this.catchEvent.bind(this),
-                    !this.options.preventDefault && supportsPassive ? { passive: true } : false,
+                    !this.__options.preventDefault && supportsPassive ? { passive: true } : false,
                 )
             );
         }
@@ -168,13 +170,13 @@ export default class AnyTouch extends AnyEvent<AnyTouchEvent> {
         const stopPropagation = () => event.stopPropagation();
         const preventDefault = () => event.preventDefault();
         const stopImmediatePropagation = () => event.stopImmediatePropagation();
-        if (canPreventDefault(event, this.options)) {
+        if (canPreventDefault(event, this.__options)) {
             preventDefault();
         }
         // if (!event.cancelable) {
         //     this.eventEmitter.emit('error', { code: 0, message: '页面滚动的时候, 请暂时不要操作元素!' });
         // }
-        const input = this._$inputCreatorMap[event.type](event);
+        const input = this.__inputCreatorMap[event.type](event);
 
         // 跳过无效输入
         // 比如没有按住鼠标左键的移动会返回undefined
@@ -183,7 +185,7 @@ export default class AnyTouch extends AnyEvent<AnyTouchEvent> {
             this.emit(AT, input as AnyTouchEvent);
             this.emit(AT_WITH_STATUS, input as AnyTouchEvent);
 
-            const { domEvents } = this.options;
+            const { domEvents } = this.__options;
             if (false !== domEvents) {
                 const { target } = event;
                 if (null !== target) {
@@ -194,13 +196,13 @@ export default class AnyTouch extends AnyEvent<AnyTouchEvent> {
 
             // input -> computed
             const computed = input as Computed;
-            for (const k in this._$computeFunctionMap) {
-                Object.assign(computed, this._$computeFunctionMap[k](computed));
+            for (const k in this.__computeFunctionMap) {
+                Object.assign(computed, this.__computeFunctionMap[k](computed));
             }
 
             // 缓存每次计算的结果
             // 以函数名为键值
-            for (const recognizer of this._$recognizers) {
+            for (const recognizer of this.__recognizers) {
                 if (recognizer.disabled) continue;
                 // 恢复上次的缓存
                 recognizer.recognize(computed, type => {
@@ -218,10 +220,10 @@ export default class AnyTouch extends AnyEvent<AnyTouchEvent> {
                     Object?.freeze(payload);
 
                     if (void 0 === this.beforeEachHook) {
-                        emit2(this, payload);
+                        emit2(this, payload, this.__options);
                     } else {
-                        this.beforeEachHook(recognizer, this._$recognizerMap, () => {
-                            emit2(this, payload);
+                        this.beforeEachHook(recognizer, this.__recognizerMap, () => {
+                            emit2(this, payload, this.__options);
                         });
                     }
                 });
@@ -237,7 +239,7 @@ export default class AnyTouch extends AnyEvent<AnyTouchEvent> {
     use(Recognizer: new (...args: any) => Recognizer, recognizerOptions?: Record<string, any>): void {
         const name = recognizerOptions?.name;
         // 保证同一个事件只对应一个识别器
-        if (void 0 !== name && void 0 !== this._$recognizerMap[name]) return;
+        if (void 0 !== name && void 0 !== this.__recognizerMap[name]) return;
 
         // 实例化
         const recognizer = new Recognizer(recognizerOptions);
@@ -245,16 +247,16 @@ export default class AnyTouch extends AnyEvent<AnyTouchEvent> {
         // 初始化计算函数
         for (const createComputeFunction of recognizer.computeFunctions) {
             const { _id } = createComputeFunction;
-            if (void 0 === this._$computeFunctionMap[_id]) {
+            if (void 0 === this.__computeFunctionMap[_id]) {
                 // 创建计算函数
-                this._$computeFunctionMap[_id] = createComputeFunction();
+                this.__computeFunctionMap[_id] = createComputeFunction();
             }
         }
 
         // 识别器管理
         // recognizer.name是默认值或者options给定
-        this._$recognizerMap[recognizer.name] = recognizer;
-        this._$recognizers.push(this._$recognizerMap[recognizer.name]);
+        this.__recognizerMap[recognizer.name] = recognizer;
+        this.__recognizers.push(this.__recognizerMap[recognizer.name]);
 
     };
 
@@ -264,13 +266,13 @@ export default class AnyTouch extends AnyEvent<AnyTouchEvent> {
      */
     removeUse(recognizerName?: string): void {
         if (void 0 === recognizerName) {
-            this._$recognizers = [];
-            this._$recognizerMap = {};
+            this.__recognizers = [];
+            this.__recognizerMap = {};
         } else {
-            for (const [index, recognizer] of this._$recognizers.entries()) {
+            for (const [index, recognizer] of this.__recognizers.entries()) {
                 if (recognizerName === recognizer.options.name) {
-                    this._$recognizers.splice(index, 1);
-                    delete this._$recognizerMap[recognizerName];
+                    this.__recognizers.splice(index, 1);
+                    delete this.__recognizerMap[recognizerName];
                     break;
                 }
             }
@@ -291,7 +293,7 @@ export default class AnyTouch extends AnyEvent<AnyTouchEvent> {
      * @return 返回识别器
      */
     get(name: string): Recognizer | void {
-        return this._$recognizerMap[name];
+        return this.__recognizerMap[name];
     };
 
     /**
@@ -299,7 +301,7 @@ export default class AnyTouch extends AnyEvent<AnyTouchEvent> {
      * @param options 选项
      */
     set(options: Options): void {
-        this.options = { ...this.options, ...options };
+        this.__options = { ...this.__options, ...options };
     };
 
     /**
