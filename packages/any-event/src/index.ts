@@ -8,7 +8,7 @@ export interface ListenersMap<Payload> {
 }
 
 export default class <Payload = any> {
-    listenersMap: ListenersMap<Payload> = {};
+    private __listenersMap: ListenersMap<Payload> = {};
 
     /**
      * 绑定事件
@@ -19,11 +19,11 @@ export default class <Payload = any> {
     on(eventName: string | string[], listener: Listener<Payload>, beforeEmit?: (payload: Payload) => boolean): this {
         const eventNames = Array.isArray(eventName) ? eventName : [eventName];
         for (const name of eventNames) {
-            if (void 0 === this.listenersMap[name]) {
-                this.listenersMap[name] = [];
+            if (void 0 === this.__listenersMap[name]) {
+                this.__listenersMap[name] = [];
             }
             listener.beforeEmit = beforeEmit;
-            (this.listenersMap[name] as Array<Listener<Payload> | undefined>).push(listener);
+            (this.__listenersMap[name] as Array<Listener<Payload> | undefined>).push(listener);
         }
         return this;
     };
@@ -35,7 +35,7 @@ export default class <Payload = any> {
      * @returns  如果事件有监听器，则返回 true，否则返回 false。
      */
     emit(eventName: string, payload?: any): void {
-        const listeners = this.listenersMap[eventName];
+        const listeners = this.__listenersMap[eventName];
         if (void 0 !== listeners && 0 < listeners.length) {
             for (const listener of listeners) {
                 if (void 0 === listener.beforeEmit) {
@@ -55,12 +55,12 @@ export default class <Payload = any> {
      * @param listener 回调函数
      */
     off(eventName: string, listener?: Listener<Payload>): void {
-        const listeners = this.listenersMap[eventName];
+        const listeners = this.__listenersMap[eventName];
         // 事件存在
         if (void 0 !== listeners) {
             // 清空事件名对应的所有回调
             if (void 0 === listener) {
-                delete this.listenersMap[eventName];
+                delete this.__listenersMap[eventName];
             }
             // 清空指定回调
             else {
@@ -74,6 +74,6 @@ export default class <Payload = any> {
      * 销毁实例
      */
     destroy() {
-        this.listenersMap = {};
+        this.__listenersMap = {};
     };
 };

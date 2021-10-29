@@ -6,14 +6,12 @@ test(`AnyTouch是否默认加载了所有手势`, async done => {
     const at = new AnyTouch(el);
     const mockCallback = jest.fn();
     const gs = new GestureSimulator(el);
-    expect(at.__recognizerMap).toHaveProperty(['tap']);
-    expect(at.__recognizerMap).toHaveProperty(['swipe']);
-    expect(at.__recognizerMap).toHaveProperty(['rotate']);
-    expect(at.__recognizerMap).toHaveProperty(['pinch']);
-    expect(at.__recognizerMap).toHaveProperty(['press']);
-    expect(at.__recognizerMap).toHaveProperty(['pan']);
-    expect(at.__recognizers).toHaveLength(6);
-
+    expect(at.get('tap')).toBeDefined();
+    expect(at.get('swipe')).toBeDefined();
+    expect(at.get('rotate')).toBeDefined();
+    expect(at.get('pinch')).toBeDefined();
+    expect(at.get('press')).toBeDefined();
+    expect(at.get('pan')).toBeDefined();
     at.on('tap',mockCallback);
     gs.start();
     gs.end();
