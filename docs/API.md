@@ -199,11 +199,15 @@ const at = AnyTouch()
 ## beforeEach(hook)
 
 拦截器, 在每个手势触发之前可以进行自定义拦截操作.
+
 hook: (recognizer: Recognizer, next: () => void) => void
+
 **recognizer**: 手势识别器.
+
 **next**: 拦截函数, 只有执行了`next()`才会触发当前识别器对应的事件.
 
-举例实现"单击延迟 300ms, 如果双击没有触发才触发(默认手势事件都是并行触发)":
+
+下面实现"双击"手势, 逻辑如下: "让单击(tap)延迟 300ms, 如果300ms内又出现了一次tap, 那么阻止tap触发, 这样只有doubletap会触发"
 
 ```javascript
 import AnyTouch from '@any-touch/core';
