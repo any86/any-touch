@@ -2,7 +2,7 @@
 
 ## 目录
 
-[:fire: 初始化](#初始化)
+[:fire: 初始化](#anytouchel-options)
 
 [on(监听)](#oneventname-listener)
 
@@ -16,7 +16,7 @@
 
 [catchEvent(注入事件对象)](#catcheventevent)
 
-[beforeEach(拦截器)](#beforeeachhook)
+[⭐beforeEach(拦截器)](#beforeeachhook)
 
 [get(获取手势)](#getname-string-recognizer--void)
 
