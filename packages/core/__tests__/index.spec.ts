@@ -10,11 +10,11 @@ test('依次输入start->move->end->start-cancel', async done => {
     gs.start();
     gs.cancel();
     await sleep(100);
-    expect(mock.calls[0][0].stage).toBe('start');
-    expect(mock.calls[1][0].stage).toBe('move');
-    expect(mock.calls[2][0].stage).toBe('end');
-    expect(mock.calls[3][0].stage).toBe('start');
-    expect(mock.calls[4][0].stage).toBe('cancel');
+    expect(mock.calls[0][0].phase).toBe('start');
+    expect(mock.calls[1][0].phase).toBe('move');
+    expect(mock.calls[2][0].phase).toBe('end');
+    expect(mock.calls[3][0].phase).toBe('start');
+    expect(mock.calls[4][0].phase).toBe('cancel');
     at.destroy();
     done();
 });

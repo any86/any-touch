@@ -116,10 +116,10 @@ export default class extends Recognizer {
      * @param {Input} 计算数据 
      */
     recognize(computed: Computed, emit: (type: string, ...payload: any[]) => void): void {
-        const { stage, x, y } = computed;
+        const { phase, x, y } = computed;
 
         // 只在end阶段去识别
-        if (INPUT_END !== stage) return;
+        if (INPUT_END !== phase) return;
 
         this.status = STATUS_POSSIBLE;
         // 每一次点击是否符合要求

@@ -68,10 +68,10 @@ function getCenter(points: { clientX: number, clientY: number }[]): Point | void
 
 function extendInput(basicsInput: BasicsInput, id: number): Omit<Input, 'prevInput' | 'startInput' | 'startMultiInput'> {
 
-    const { stage, points, changedPoints, nativeEvent } = basicsInput;
+    const { phase, points, changedPoints, nativeEvent } = basicsInput;
     const pointLength = points.length;
-    const isStart = INPUT_START === stage;
-    const isEnd = (INPUT_END === stage && 0 === pointLength) || INPUT_CANCEL === stage;
+    const isStart = INPUT_START === phase;
+    const isEnd = (INPUT_END === phase && 0 === pointLength) || INPUT_CANCEL === phase;
     // 当前时间
     const timestamp = Date.now();
     // 触点中心

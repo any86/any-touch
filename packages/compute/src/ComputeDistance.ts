@@ -12,9 +12,9 @@ export default function () {
     let overallDirection: directionString;
 
     return function (input: Input): { displacementX: number, displacementY: number, distanceX: number, distanceY: number, distance: number, overallDirection: directionString } {
-        const { stage, startInput } = input;
+        const { phase, startInput } = input;
 
-        if (INPUT_START === stage) {
+        if (INPUT_START === phase) {
             displacementX = 0;
             displacementY = 0;
             distanceX = 0;
@@ -22,7 +22,7 @@ export default function () {
             distance = 0;
         }
 
-        else if (INPUT_MOVE === stage) {
+        else if (INPUT_MOVE === phase) {
             displacementX = Math.round(input.points[0][CLIENT_X] - startInput.points[0][CLIENT_X]);
             displacementY = Math.round(input.points[0][CLIENT_Y] - startInput.points[0][CLIENT_Y]);
             distanceX = Math.abs(displacementX);

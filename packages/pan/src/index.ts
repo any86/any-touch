@@ -1,4 +1,4 @@
-import type { EventTrigger, Computed } from '@any-touch/shared';
+import { EventTrigger, Computed, Input } from '@any-touch/shared';
 import { ComputeDistance, ComputeDeltaXY, ComputeVAndDir } from '@any-touch/compute';
 import Recognizer, { recognizeForPressMoveLike } from '@any-touch/recognizer';
 // v2
@@ -11,16 +11,33 @@ const DEFAULT_OPTIONS = {
     pointLength: 1,
 };
 
-function c(a: any) {
-    return { t: Date.now() };
-}
-
-export default function (context: AnyTouch) {
-    context.on('computed', (e) => {
-        console.log(e);
+export default function (context: AnyTouch, {
+    name = 'pan',
+    threshold = 10,
+    pointLength = 1,
+}={}) {
+    context.on('computed', (computed) => {
+        const {distance} = computed;
+        console.log(name);
     });
+
+
+    
+
     context.compute([ComputeVAndDir, ComputeDistance, ComputeDeltaXY]);
 }
+
+
+// function test(computed: Computed) {
+//     const { pointLength, distance } = computed;
+//     return (
+//         // INPUT_MOVE === phase &&
+//         (this._$isRecognized || this.options.threshold <= distance) &&
+//         this._$isValidPointLength(pointLength)
+//     );
+// }
+
+
 // export default class extends Recognizer {
 //     constructor(options: Partial<typeof DEFAULT_OPTIONS>) {
 //         super({ ...DEFAULT_OPTIONS, ...options });
@@ -35,7 +52,7 @@ export default function (context: AnyTouch) {
 //     _$test(computed: Computed): boolean {
 //         const { pointLength, distance } = computed;
 //         return (
-//             // INPUT_MOVE === stage &&
+//             // INPUT_MOVE === phase &&
 //             (this._$isRecognized || this.options.threshold <= distance) &&
 //             this._$isValidPointLength(pointLength)
 //         );

@@ -29,13 +29,13 @@ export interface PointClientXY {
 /**
  * 输入阶段
  */
-export type stage = 'start' | 'move' | 'end' | 'cancel';
+export type phase = 'start' | 'move' | 'end' | 'cancel';
 
 /**
  * 原生事件对象最基础的统一化
  */
 export interface BasicsInput {
-    readonly stage: stage;
+    readonly phase: phase;
     readonly changedPoints: PointClientXY[];
     readonly points: PointClientXY[];
     readonly target: EventTarget | null;
@@ -201,6 +201,7 @@ export interface InputCreatorFunctionMap {
 }
 
 // ======= v2 ========
+export type KV = Record<string | number | symbol, unknown>;
 
 /**
  * 插件
@@ -210,4 +211,4 @@ export type Plugin = (context: Core, pluginOptions: unknown) => unknown;
 /**
  * 计算函数
  */
-export type ComputeFunctionV2 = (input:Input) => Record<string | number | symbol, unknown>;
+export type ComputeFunctionCreator = () => ((input: Input) => KV);

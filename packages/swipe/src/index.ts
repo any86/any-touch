@@ -20,7 +20,7 @@ export default class extends Recognizer {
      */
     _$test(computed: Computed): boolean {
         // 非end阶段, 开始校验数据
-        if (INPUT_END !== computed.stage) return false;
+        if (INPUT_END !== computed.phase) return false;
         const { velocityX, velocityY, maxPointLength, distance } = computed;
         return this.options.pointLength === maxPointLength &&
             this.options.threshold < distance &&

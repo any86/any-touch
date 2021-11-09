@@ -1,4 +1,4 @@
-import type { stage, PointClientXY } from '@any-touch/shared';
+import type { phase, PointClientXY } from '@any-touch/shared';
 import { MOUSE_DOWN, MOUSE_MOVE, MOUSE_UP, INPUT_START, INPUT_MOVE, INPUT_END } from '@any-touch/shared';
 import inputCreator from './inputCreator';
 export default function () {
@@ -16,19 +16,19 @@ export default function () {
 
         // points中存target是为了多触点的时候校验target是否相同
         let points = [{ clientX, clientY, target }];
-        let stage: stage | undefined;
+        let phase: phase | undefined;
 
         if (MOUSE_DOWN === type && 0 === button) {
             _target = target;
             // 必须左键
             isPressed = true;
-            stage = INPUT_START;
+            phase = INPUT_START;
         } else if (isPressed) {
             if (MOUSE_MOVE === type) {
-                stage = INPUT_MOVE;
+                phase = INPUT_MOVE;
             } else if (MOUSE_UP === type) {
                 points = [];
-                stage = INPUT_END;
+                phase = INPUT_END;
                 isPressed = false;
             }
         }
@@ -40,9 +40,9 @@ export default function () {
 
         prevPoints = [{ clientX, clientY, target }];
 
-        if (void 0 !== stage) {
+        if (void 0 !== phase) {
             return createInput({
-                stage,
+                phase,
                 changedPoints,
                 points,
                 target: _target,

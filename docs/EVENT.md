@@ -13,7 +13,7 @@ at.on('pan', event=>{
 |-|-|-|
 |name|`String`|**识别器名**,对应识别器参数的`name`|
 |type|`String`|**事件名**,如tap/panstart等,他比`name`字段范围大,如:当`type`是panstart或panmove, 而`name`返回的都是pan|
-|stage|`String`|当前触碰状态: start \| move \|end \| cancel对应: 第一下触碰 \| 屏幕上移动 \| 离开屏幕 \| 非正常离开 \"可anyTouch\"元素 |
+|phase|`String`|当前触碰状态: start \| move \|end \| cancel对应: 第一下触碰 \| 屏幕上移动 \| 离开屏幕 \| 非正常离开 \"可anyTouch\"元素 |
 |x|`Number`|**当前触点中心**x坐标|
 |y|`Number`|**当前触点中心**y坐标|
 |deltaX|`Number`|**当前触点**和**前触点**的x轴偏移距离|

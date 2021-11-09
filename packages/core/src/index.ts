@@ -19,7 +19,8 @@ import type {
     InputCreatorFunctionMap,
     InputCreatorFunction,
     Computed,
-    ComputeFunctionV2,
+    ComputeFunctionCreator,
+    KV,
 } from '@any-touch/shared';
 
 import {
@@ -94,9 +95,9 @@ export default class AnyTouch extends AnyEvent<AnyTouchEvent> {
 
     // v2
     // 计算函数队列
-    private __computeFunctionList: ComputeFunctionV2[] = [];
+    private __computeFunctionCreatorList: ComputeFunctionCreator[] = [];
     event: Record<string, any> = {};
-
+    __computed: KV = {};
 
     /**
      * @param el 目标元素, 微信下没有el
@@ -192,66 +193,65 @@ export default class AnyTouch extends AnyEvent<AnyTouchEvent> {
         // 跳过无效输入
         // 比如没有按住鼠标左键的移动会返回undefined
         if (void 0 !== input) {
-            const AT_WITH_STATUS = AT + ':' + input.stage;
-            this.emit('input', input as AnyTouchEvent);
-            this.emit(AT_WITH_STATUS, input as AnyTouchEvent);
+            this.emit('input', input);
+            this.emit(`touch:${input.phase}`, input);
 
-            // 计算结果
-            this.__computeFunctionList.map(computeFunction => {
-                const _computed = computeFunction(input);
-                for (const key in _computed) {
-                    this.event[key] = _computed[key];
+            // ====== 计算结果 ======
+            const computed: KV = {};
+            this.__computeFunctionCreatorList.map((computeFunctionCreator) => {
+                const result = computeFunctionCreator()(input);
+                for (const key in result) {
+                    computed[key] = result[key];
                 }
             });
+            this.emit('computed', computed);
+            // 缓存结果
+            this.__computed = computed;
 
-            this.emit('computed', this.event)
+            // const { domEvents } = this.__options;
+            // // 不触发DOM事件
+            // if (false !== domEvents) {
+            //     const { target } = computed;
+            //     if (null !== target) {
+            //         dispatchDomEvent(target, { ...input, type: AT }, domEvents);
+            //         dispatchDomEvent(target, { ...input, type: AT_WITH_STATUS }, domEvents);
+            //     }
+            // }
 
-            return;
+            // // input -> computed
+            // const computed = input as Computed;
+            // for (const k in this.__computeFunctionMap) {
+            //     Object.assign(computed, this.__computeFunctionMap[k](computed));
+            // }
 
-            const { domEvents } = this.__options;
-            // 不触发DOM事件
-            if (false !== domEvents) {
-                const { target } = event;
-                if (null !== target) {
-                    dispatchDomEvent(target, { ...input, type: AT }, domEvents);
-                    dispatchDomEvent(target, { ...input, type: AT_WITH_STATUS }, domEvents);
-                }
-            }
+            // // 缓存每次计算的结果
+            // // 以函数名为键值
+            // for (const recognizer of this.__recognizers) {
+            //     if (recognizer.disabled) continue;
+            //     // 恢复上次的缓存
+            //     recognizer.recognize(computed, (type) => {
+            //         // 此时的e就是this.computed
+            //         const payload = {
+            //             ...computed,
+            //             type,
+            //             name: recognizer.name,
+            //             stopPropagation,
+            //             preventDefault,
+            //             stopImmediatePropagation,
+            //         };
 
-            // input -> computed
-            const computed = input as Computed;
-            for (const k in this.__computeFunctionMap) {
-                Object.assign(computed, this.__computeFunctionMap[k](computed));
-            }
+            //         // 防止数据被vue类框架拦截
+            //         Object?.freeze(payload);
 
-            // 缓存每次计算的结果
-            // 以函数名为键值
-            for (const recognizer of this.__recognizers) {
-                if (recognizer.disabled) continue;
-                // 恢复上次的缓存
-                recognizer.recognize(computed, (type) => {
-                    // 此时的e就是this.computed
-                    const payload = {
-                        ...computed,
-                        type,
-                        name: recognizer.name,
-                        stopPropagation,
-                        preventDefault,
-                        stopImmediatePropagation,
-                    };
-
-                    // 防止数据被vue类框架拦截
-                    Object?.freeze(payload);
-
-                    if (void 0 === this.beforeEachHook) {
-                        emit2(this, payload, this.__options);
-                    } else {
-                        this.beforeEachHook(recognizer, this.__recognizerMap, () => {
-                            emit2(this, payload, this.__options);
-                        });
-                    }
-                });
-            }
+            //         if (void 0 === this.beforeEachHook) {
+            //             emit2(this, payload, this.__options);
+            //         } else {
+            //             this.beforeEachHook(recognizer, this.__recognizerMap, () => {
+            //                 emit2(this, payload, this.__options);
+            //             });
+            //         }
+            //     });
+            // }
         }
     }
 
@@ -259,10 +259,10 @@ export default class AnyTouch extends AnyEvent<AnyTouchEvent> {
      * 缓存计算函数到队列
      * @param computeFunctions
      */
-    compute(computeFunctions: ComputeFunctionV2[]) {
+    compute(computeFunctions: ComputeFunctionCreator[]) {
         for (const computeFunction of computeFunctions) {
-            if (!this.__computeFunctionList.includes(computeFunction)) {
-                this.__computeFunctionList.push(computeFunction);
+            if (!this.__computeFunctionCreatorList.includes(computeFunction)) {
+                this.__computeFunctionCreatorList.push(computeFunction);
             }
         }
     }

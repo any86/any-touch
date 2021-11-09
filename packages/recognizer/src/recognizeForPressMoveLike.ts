@@ -19,15 +19,15 @@ import resetStatus from './resetStatusForPressMoveLike';
  * 是否test通过 + 上一轮识别器状态 + 输入阶段 => 当前识别器状态 
  * @param isVaild 是否通过test
  * @param lastStatus 上一轮识别器状态
- * @param stage 输入阶段
+ * @param phase 输入阶段
  * @returns 识别器状态
  */
-function flow(isVaild: boolean, lastStatus: _$recognizerstatus, stage: string): _$recognizerstatus {
+function flow(isVaild: boolean, lastStatus: _$recognizerstatus, phase: string): _$recognizerstatus {
     /*
     * {
     *  isValid {
     *    lastStatus {
-    *      stage: currentStatus
+    *      phase: currentStatus
     *    }
     *  }
     * }
@@ -81,8 +81,8 @@ function flow(isVaild: boolean, lastStatus: _$recognizerstatus, stage: string): 
         }
     };
 
-    const stageToStatusMap = STATE_MAP[Number(isVaild)][lastStatus];
-    return void 0 !== stageToStatusMap && stageToStatusMap[stage] || lastStatus;
+    const phaseToStatusMap = STATE_MAP[Number(isVaild)][lastStatus];
+    return void 0 !== phaseToStatusMap && phaseToStatusMap[phase] || lastStatus;
 };
 
 /**
@@ -96,18 +96,18 @@ function flow(isVaild: boolean, lastStatus: _$recognizerstatus, stage: string): 
 export default function (recognizer: Recognizer, computed: Computed, emit: EventTrigger): boolean {
     // 是否识别成功
     const isVaild = recognizer._$test(computed);
-    // console.log({isVaild},input.stage,recognizer.name)
+    // console.log({isVaild},input.phase,recognizer.name)
     resetStatus(recognizer);
 
     // 状态变化流程
-    const { stage } = computed;
+    const { phase } = computed;
 
-    recognizer.status = flow(isVaild, recognizer.status, stage);
+    recognizer.status = flow(isVaild, recognizer.status, phase);
     // 是否已识别, 包含end
     recognizer._$isRecognized = ([STATUS_START, STATUS_MOVE] as _$recognizerstatus[]).includes(recognizer.status);
 
     const { name, status: status, _$isRecognized: isRecognized } = recognizer;
-    // if('pan' == name) console.warn(status,stage,{isRecognized,isVaild},input.pointLength)
+    // if('pan' == name) console.warn(status,phase,{isRecognized,isVaild},input.pointLength)
     // 识别后触发的事件
     if (isRecognized) {
         emit(name);

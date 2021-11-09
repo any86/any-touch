@@ -130,7 +130,7 @@ export default {
         },
         onTouch(ev) {
             // console.log('html:', ev.target.innerHTML);
-            ev.currentTarget.setAttribute('at-stage', ev.stage);
+            ev.currentTarget.setAttribute('at-phase', ev.phase);
         },
         afterEach(ev) {
             this.action = ev.name;
@@ -138,24 +138,24 @@ export default {
         },
         onRotate(ev, index = 0) {
             // if(ev.isMatch() ) return;
-            // console.log(`deltaAngle:${ev.deltaAngle}`,ev.stage,ev.pointLength)
+            // console.log(`deltaAngle:${ev.deltaAngle}`,ev.phase,ev.pointLength)
             this.styles[index].angle += ev.deltaAngle;
         },
 
         onPinch(ev, index = 0) {
             // if(ev.isMatch() ) return;
 
-            // console.log(`deltaScale:${ev.deltaScale}`,ev.stage,ev.pointLength)
+            // console.log(`deltaScale:${ev.deltaScale}`,ev.phase,ev.pointLength)
             this.styles[index].scale = Math.round(this.styles[index].scale * ev.deltaScale * 100) / 100;
         },
 
         onRotate1(ev, index = 1) {
-            // console.log(`deltaAngle:${ev.deltaAngle}`,ev.stage,ev.pointLength)
+            // console.log(`deltaAngle:${ev.deltaAngle}`,ev.phase,ev.pointLength)
             this.styles[index].angle += ev.deltaAngle;
         },
 
         onPinch1(ev, index = 1) {
-            // console.log(`deltaScale:${ev.deltaScale}`,ev.stage,ev.pointLength)
+            // console.log(`deltaScale:${ev.deltaScale}`,ev.phase,ev.pointLength)
             this.styles[index].scale = Math.round(this.styles[index].scale * ev.deltaScale * 100) / 100;
         },
 
@@ -274,11 +274,11 @@ main {
                 }
             }
 
-            &[at='tap'][at-stage='end'] {
+            &[at='tap'][at-phase='end'] {
                 animation: Tap 200ms;
             }
 
-            &[at='press']:not([at-stage='end']) {
+            &[at='press']:not([at-phase='end']) {
                 transition: all 200ms;
                 transform: scale(0.9) !important;
             }

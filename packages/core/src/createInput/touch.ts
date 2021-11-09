@@ -1,4 +1,4 @@
-import type { stage } from '@any-touch/shared';
+import type { phase } from '@any-touch/shared';
 import inputCreator from './inputCreator';
 /**
  * 格式化Touch事件对象
@@ -19,7 +19,7 @@ export default function (el?: HTMLElement) {
         });
         const changedPoints = Array.from(event.changedTouches).map(({ clientX, clientY, target }) => ({ clientX, clientY, target }));
         return createInput({
-            stage: <stage>event.type.replace('touch', ''),
+            phase: <phase>event.type.replace('touch', ''),
             changedPoints,
             points,
             nativeEvent: event,

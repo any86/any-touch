@@ -19,11 +19,11 @@ export default class extends Recognizer {
     };
 
     recognize(computed: Computed, emit: EventTrigger): void {
-        const { stage, startInput, pointLength } = computed;
+        const { phase, startInput, pointLength } = computed;
         // 1. start阶段
         // 2. 触点数符合
         // 那么等待minPressTime时间后触发press
-        if (INPUT_START === stage && this._$isValidPointLength(pointLength)) {
+        if (INPUT_START === phase && this._$isValidPointLength(pointLength)) {
             // 重置状态
             resetStatus(this);
             // 延迟触发
@@ -36,7 +36,7 @@ export default class extends Recognizer {
         // 触发pressup条件:
         // 1. end阶段
         // 2. 已识别
-        else if (INPUT_END === stage && STATUS_RECOGNIZED === this.status) {
+        else if (INPUT_END === phase && STATUS_RECOGNIZED === this.status) {
             emit(`${this.options.name}${DIRECTION_UP}`);
         }
         else if (STATUS_RECOGNIZED !== this.status) {
@@ -45,7 +45,7 @@ export default class extends Recognizer {
             // 发生了大的位移变化
             if (!this._$test(computed) ||
                 // end 或 cancel触发的时候还不到要求的press触发时间
-                (this.options.minPressTime > deltaTime && [INPUT_END, INPUT_CANCEL].includes(stage))) {
+                (this.options.minPressTime > deltaTime && [INPUT_END, INPUT_CANCEL].includes(phase))) {
                 this._$cancel();
                 this.status = STATUS_FAILED;
             }

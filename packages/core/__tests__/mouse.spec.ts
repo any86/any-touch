@@ -18,13 +18,13 @@ test('鼠标输入move-> start-> move-> end', async done => {
     expect(mouseLoader(event3)).toHaveProperty(['points'], [{ "clientX": 1, "clientY": 1,target:el }]);
 
     const event4 = gs.end();
-    expect(mouseLoader(event4)).toHaveProperty('stage', 'end');
+    expect(mouseLoader(event4)).toHaveProperty('phase', 'end');
 
 
     // const event5 = gs.dispatchTouchStart();
     // expect(mouseLoader(event5)).toHaveProperty(['points'], [{ "clientX": 0, "clientY": 0 }]);
     // const event6 = gs.dispatchTouchEnd();
-    // expect(mouseLoader(event6)).toHaveProperty('stage', 'end');
+    // expect(mouseLoader(event6)).toHaveProperty('phase', 'end');
 
     done();
 });

@@ -23,12 +23,12 @@ export default function () {
     return function (input: Input): { speedX: number, speedY: number, velocityX: number, velocityY: number, direction?: directionString } {
         // 点击鼠标左键, 会出现undefined
         if (void 0 !== input) {
-            const { stage } = input;
+            const { phase } = input;
             _lastValidInput = _lastValidInput || input.startInput;
             const deltaTime = input.timestamp - _lastValidInput.timestamp;
 
             // 间隔超过16ms刷新速度数据
-            if (INPUT_MOVE === stage && COMPUTE_INTERVAL < deltaTime) {
+            if (INPUT_MOVE === phase && COMPUTE_INTERVAL < deltaTime) {
                 const deltaX = input.x - _lastValidInput.x;
                 const deltaY = input.y - _lastValidInput.y;
                 speedX = Math.round(deltaX / deltaTime * 100) / 100;
