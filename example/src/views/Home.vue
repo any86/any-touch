@@ -160,6 +160,7 @@ export default {
         },
 
         onTransitionend(ev, index) {},
+        
         onTap(ev) {
             C(ev.type, '#f10');
         },

@@ -1,5 +1,14 @@
-import { STATUS_POSSIBLE, STATUS_START, STATUS_MOVE, STATUS_END, STATUS_CANCELLED, STATUS_FAILED, STATUS_RECOGNIZED } from '@any-touch/shared';
+import {
+    STATUS_POSSIBLE,
+    STATUS_START,
+    STATUS_MOVE,
+    STATUS_END,
+    STATUS_CANCELLED,
+    STATUS_FAILED,
+    STATUS_RECOGNIZED,
+} from '@any-touch/shared';
 import Base from '@any-touch/recognizer';
+import Core from '@any-touch/core';
 /**
  * 基础识别器类型
  */
@@ -11,8 +20,11 @@ export type RecognizerConstruct = typeof Base;
  */
 export type SupportEvent = MouseEvent | TouchEvent;
 
-
-export interface PointClientXY { target: EventTarget | null, clientX: number, clientY: number };
+export interface PointClientXY {
+    target: EventTarget | null;
+    clientX: number;
+    clientY: number;
+}
 
 /**
  * 输入阶段
@@ -30,7 +42,6 @@ export interface BasicsInput {
     readonly targets: (EventTarget | null)[];
     readonly nativeEvent: Event;
 }
-
 
 /**
  * 不包含prevInput/startInput/startMultiInput的Input
@@ -52,7 +63,7 @@ export interface InputOnlyHasCurrent extends BasicsInput {
     // 同centerX/Y
     readonly x: number;
     readonly y: number;
-    readonly getOffset: (el: HTMLElement) => { x: number, y: number }
+    readonly getOffset: (el: HTMLElement) => { x: number; y: number };
 }
 
 /**
@@ -76,18 +87,17 @@ export interface Input extends InputOnlyHasCurrent {
 //     };
 // }
 
-
 /**
  * 计算函数
  */
-export interface ComputeFunction {
+export interface V2 {
     (input: Input): Partial<Computed> | void;
 }
 /**
  * 计算函数外壳函数
  */
 export interface ComputeWrapFunction {
-    (): ComputeFunction;
+    (): V2;
     _id: string;
 }
 
@@ -95,7 +105,7 @@ export interface ComputeWrapFunction {
  * 仅用来作为识别器和at通知的载体函数
  */
 export interface EventTrigger {
-    (type: string): void
+    (type: string): void;
 }
 
 /**
@@ -113,14 +123,14 @@ export interface Point {
 
 export type Vector = Point;
 
-
 /**
  * 仅仅是获取scale/angle的前置计算值
  */
 export interface VS {
-    prevV: Point, startV: Point, activeV: Point
+    prevV: Point;
+    startV: Point;
+    activeV: Point;
 }
-
 
 /**
  * Input执行计算后的数据格式
@@ -154,15 +164,22 @@ export interface Computed extends Input {
 
 export interface AnyTouchEvent extends Input, Readonly<Computed> {
     readonly type: string;
-    readonly stopPropagation:()=>void;
-    readonly stopImmediatePropagation:()=>void;
-    readonly preventDefault:()=>void;
+    readonly stopPropagation: () => void;
+    readonly stopImmediatePropagation: () => void;
+    readonly preventDefault: () => void;
 }
 
 /**
  * 识别器状态
  */
-export type _$recognizerstatus = typeof STATUS_POSSIBLE | typeof STATUS_START | typeof STATUS_MOVE | typeof STATUS_END | typeof STATUS_CANCELLED | typeof STATUS_FAILED | typeof STATUS_RECOGNIZED;
+export type _$recognizerstatus =
+    | typeof STATUS_POSSIBLE
+    | typeof STATUS_START
+    | typeof STATUS_MOVE
+    | typeof STATUS_END
+    | typeof STATUS_CANCELLED
+    | typeof STATUS_FAILED
+    | typeof STATUS_RECOGNIZED;
 
 /**
  * Input转换器
@@ -182,3 +199,15 @@ export interface InputCreatorWrapFunction {
 export interface InputCreatorFunctionMap {
     [k: string]: InputCreatorFunction<SupportEvent>;
 }
+
+// ======= v2 ========
+
+/**
+ * 插件
+ */
+export type Plugin = (context: Core, pluginOptions: unknown) => unknown;
+
+/**
+ * 计算函数
+ */
+export type ComputeFunctionV2 = (input:Input) => Record<string | number | symbol, unknown>;

@@ -1,7 +1,7 @@
 import { radianToAngle } from '@any-touch/vector';
 import type { Input } from '@any-touch/shared';
 
-function ComputeDeltaXY() {
+export default function () {
     return function (input: Input): { deltaX: number, deltaY: number, deltaXYAngle: number } {
         const { prevInput } = input;
         let deltaX = 0;
@@ -24,6 +24,3 @@ function ComputeDeltaXY() {
         return { deltaX, deltaY, deltaXYAngle };
     }
 }
-
-ComputeDeltaXY._id = `__ComputeDeltaXY__`;
-export default ComputeDeltaXY;

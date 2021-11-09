@@ -6,7 +6,7 @@ import type { Input, InputOnlyHasCurrent, directionString } from '@any-touch/sha
 import { INPUT_MOVE, COMPUTE_INTERVAL } from '@any-touch/shared';
 import { getDirection } from '@any-touch/vector';
 
-function ComputeVAndDir() {
+export default function () {
     let velocityX = 0;
     let velocityY = 0;
     let speedX = 0;
@@ -27,7 +27,7 @@ function ComputeVAndDir() {
             _lastValidInput = _lastValidInput || input.startInput;
             const deltaTime = input.timestamp - _lastValidInput.timestamp;
 
-            // 每16ms刷新速度数据
+            // 间隔超过16ms刷新速度数据
             if (INPUT_MOVE === stage && COMPUTE_INTERVAL < deltaTime) {
                 const deltaX = input.x - _lastValidInput.x;
                 const deltaY = input.y - _lastValidInput.y;
@@ -45,5 +45,3 @@ function ComputeVAndDir() {
         return { velocityX, velocityY, speedX, speedY, direction };
     }
 }
-ComputeVAndDir._id = `__ComputeVAndDir__`;
-export default ComputeVAndDir;

@@ -3,7 +3,7 @@ import type { Input, directionString } from '@any-touch/shared';
 import { CLIENT_X, CLIENT_Y, INPUT_MOVE, INPUT_START } from '@any-touch/shared';
 import { getVLength, getDirection } from '@any-touch/vector';
 
-function ComputeDistance() {
+export default function () {
     let displacementX = 0;
     let displacementY = 0;
     let distanceX = 0;
@@ -35,5 +35,3 @@ function ComputeDistance() {
         };
     };
 };
-ComputeDistance._id = `__ComputeDistance__`;
-export default ComputeDistance;

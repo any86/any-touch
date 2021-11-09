@@ -1,39 +1,55 @@
 /*
-* ==================== 支持的手势 ====================
-* rotate 旋转
-* pinch 捏合,
-* tap 点击
-* press 按压
-* pan 拖拽
-* swipe 快划
-*/
+ * ==================== 支持的手势 ====================
+ * rotate 旋转
+ * pinch 捏合,
+ * tap 点击
+ * press 按压
+ * pan 拖拽
+ * swipe 快划
+ */
 
-
-import AnyTouch from '@any-touch/core';
+import Core from '@any-touch/core';
 import Tap from '@any-touch/tap';
 import Pan from '@any-touch/pan';
 import Swipe from '@any-touch/swipe';
 import Press from '@any-touch/press';
 import Pinch from '@any-touch/pinch';
 import Rotate from '@any-touch/rotate';
-import {STATUS_POSSIBLE, STATUS_START,STATUS_MOVE,STATUS_END,STATUS_CANCELLED,STATUS_FAILED,STATUS_RECOGNIZED} from '@any-touch/shared';
-AnyTouch.use(Tap);
-AnyTouch.use(Pan);
-AnyTouch.use(Swipe);
-AnyTouch.use(Press);
-AnyTouch.use(Pinch);
-AnyTouch.use(Rotate);
-AnyTouch.Tap = Tap;
-AnyTouch.Pan = Pan;
-AnyTouch.Swipe = Swipe;
-AnyTouch.Press = Press;
-AnyTouch.Pinch = Pinch;
-AnyTouch.Rotate = Rotate;
-AnyTouch.STATUS_POSSIBLE = STATUS_POSSIBLE;
-AnyTouch.STATUS_START = STATUS_START;
-AnyTouch.STATUS_MOVE = STATUS_MOVE;
-AnyTouch.STATUS_END = STATUS_END;
-AnyTouch.STATUS_CANCELLED = STATUS_CANCELLED;
-AnyTouch.STATUS_FAILED = STATUS_FAILED;
-AnyTouch.STATUS_RECOGNIZED = STATUS_RECOGNIZED;
-export default AnyTouch;
+
+import {
+    STATUS_POSSIBLE,
+    STATUS_START,
+    STATUS_MOVE,
+    STATUS_END,
+    STATUS_CANCELLED,
+    STATUS_FAILED,
+    STATUS_RECOGNIZED,
+} from '@any-touch/shared';
+
+// 类型, 为了兼容
+import { Options } from '@any-touch/core';
+import { Plugin } from '@any-touch/shared';
+
+export default class extends Core {
+    static version = '__VERSION__';
+    // 状态码
+    static STATUS_POSSIBLE = STATUS_POSSIBLE;
+    static STATUS_START = STATUS_START;
+    static STATUS_MOVE = STATUS_MOVE;
+    static STATUS_END = STATUS_END;
+    static STATUS_CANCELLED = STATUS_CANCELLED;
+    static STATUS_FAILED = STATUS_FAILED;
+    static STATUS_RECOGNIZED = STATUS_RECOGNIZED;
+    // 手势识别器(插件)
+    static Tap = Tap;
+    static Pan = Pan;
+    static Swipe = Swipe;
+    static Press = Press;
+    static Pinch = Pinch;
+    static Rotate = Rotate;
+
+    constructor(el?: HTMLElement, options?: Options) {
+        super(el, options);
+        Pan(this);
+    }
+}
