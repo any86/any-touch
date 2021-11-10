@@ -1,13 +1,13 @@
 import type { Input, Computed, ComputeWrapFunction } from '@any-touch/shared';
 import {
-    STATUS_POSSIBLE, _$recognizerstatus
+    STATUS_POSSIBLE, RECOGNIZER_STATUS
 } from '@any-touch/shared';
 
 // 导出recognizeForPressMoveLike,
 // resetStatusForPressMoveLike
 export { default as recognizeForPressMoveLike } from './recognizeForPressMoveLike';
 export { default as resetStatusForPressMoveLike } from './resetStatusForPressMoveLike';
-
+export { flow } from './recognizeForPressMoveLike'
 // 联合变交叉
 // type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends ((k: infer I) => void) ? I : never;
 
@@ -20,7 +20,7 @@ export default abstract class {
     // 是否已识别
     _$isRecognized = false;
     // 识别状态
-    status: _$recognizerstatus = STATUS_POSSIBLE;
+    status: RECOGNIZER_STATUS = STATUS_POSSIBLE;
     // 选项
     options: Options;
 

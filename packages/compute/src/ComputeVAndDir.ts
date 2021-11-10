@@ -3,7 +3,7 @@
 // 让end阶段读取上一步的计算数据, 比如方向, 速率等...
 // 防止快速滑动到慢速滑动的手势识别成swipe
 import type { Input, InputOnlyHasCurrent, directionString } from '@any-touch/shared';
-import { INPUT_MOVE, COMPUTE_INTERVAL } from '@any-touch/shared';
+import { COMPUTE_INTERVAL } from '@any-touch/shared';
 import { getDirection } from '@any-touch/vector';
 
 export default function () {
@@ -13,7 +13,7 @@ export default function () {
     let speedY = 0;
     let direction: directionString;
     // 上一次发生计算时候参与计算的input
-    let _lastValidInput: InputOnlyHasCurrent | Input
+    let lastValidInput: InputOnlyHasCurrent | Input
 
     /**
      * 计算速度和方向
@@ -23,23 +23,21 @@ export default function () {
     return function (input: Input): { speedX: number, speedY: number, velocityX: number, velocityY: number, direction?: directionString } {
         // 点击鼠标左键, 会出现undefined
         if (void 0 !== input) {
-            const { phase } = input;
-            _lastValidInput = _lastValidInput || input.startInput;
-            const deltaTime = input.timestamp - _lastValidInput.timestamp;
+            // const { phase } = input;
+            lastValidInput = lastValidInput || input.startInput;
+            const deltaTime = input.timestamp - lastValidInput.timestamp;
 
             // 间隔超过16ms刷新速度数据
-            if (INPUT_MOVE === phase && COMPUTE_INTERVAL < deltaTime) {
-                const deltaX = input.x - _lastValidInput.x;
-                const deltaY = input.y - _lastValidInput.y;
+            if (/*INPUT_MOVE === phase && */COMPUTE_INTERVAL < deltaTime) {
+                const deltaX = input.x - lastValidInput.x;
+                const deltaY = input.y - lastValidInput.y;
                 speedX = Math.round(deltaX / deltaTime * 100) / 100;
                 speedY = Math.round(deltaY / deltaTime * 100) / 100;
                 velocityX = Math.abs(speedX);
                 velocityY = Math.abs(speedY);
                 direction = getDirection(deltaX, deltaY) || direction;
-
                 // if(NONE === direction) console.warn({deltaX,deltaY},input.id,_lastValidInput.id );
-
-                _lastValidInput = input;
+                lastValidInput = input;
             }
         }
         return { velocityX, velocityY, speedX, speedY, direction };

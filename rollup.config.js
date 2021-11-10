@@ -13,6 +13,7 @@ export default {
         }),
         json(),
         replace({
+            preventAssignment:true,
             __VERSION__: version
         })
     ],

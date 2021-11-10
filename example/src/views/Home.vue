@@ -115,8 +115,8 @@ export default {
     mounted() {
         const at = new AnyTouch(this.$refs.panel, { preventDefault: true });
         at.on('at:after', this.afterEach);
-        at.on('panend', e=>{
-            console.warn('panend')
+        at.on('pan', e=>{
+            // console.log('pan')
         });
     },
 

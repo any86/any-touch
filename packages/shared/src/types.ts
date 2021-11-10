@@ -172,7 +172,7 @@ export interface AnyTouchEvent extends Input, Readonly<Computed> {
 /**
  * 识别器状态
  */
-export type _$recognizerstatus =
+export type RECOGNIZER_STATUS =
     | typeof STATUS_POSSIBLE
     | typeof STATUS_START
     | typeof STATUS_MOVE

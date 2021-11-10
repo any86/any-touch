@@ -21,6 +21,7 @@ export const INPUT_END = 'end';
 /**
  * 方向
  */
+
 export const DIRECTION_LEFT = 'left';
 export const DIRECTION_RIGHT = 'right';
 export const DIRECTION_UP = 'up';
@@ -51,3 +52,9 @@ export const STATUS_END = INPUT_END;
 export const STATUS_RECOGNIZED = 'r';
 export const STATUS_FAILED = 'f';
 export const STATUS_CANCELLED = INPUT_CANCEL;
+
+
+// v2
+export const enum DIRECTION {
+    UP = 'up', RIGHT = 'down', LEFT = 'left', DOWN = 'down'
+};

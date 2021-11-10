@@ -1,8 +1,9 @@
-import { Input } from '@any-touch/shared';
+import { AnyTouchEvent } from '@any-touch/shared';
+
 /**
  * 触发dom事件
  */
-export default function (el: EventTarget, payload: Record<string, any> & Input, eventInit?: EventInit): boolean | void {
+export default function (el: EventTarget, payload: AnyTouchEvent, eventInit?: EventInit): boolean | void {
     // 过滤掉Event上保留的字段(target, currentTarget,type)
     let { target, currentTarget, type, ...data } = payload;
     let event: Event;
@@ -14,10 +15,7 @@ export default function (el: EventTarget, payload: Record<string, any> & Input, 
     }
     Object.assign(event, data, {
         match: () =>
-            payload.targets.every(target =>
-                (event.currentTarget as HTMLElement).contains(target as HTMLElement)
-            )
+            payload.targets.every((target) => (event.currentTarget as HTMLElement).contains(target as HTMLElement)),
     });
-    // if('panmove' == event.type)  console.log(event.type,el)
     return el.dispatchEvent(event);
 }

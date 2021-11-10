@@ -30,7 +30,7 @@
         "@any-touch/swipe": "^1.0.14",
         "@any-touch/tap": "^1.0.14",
         "any-event": "^1.0.14",
-        "tslib": "^1.9.3"
+        "tslib": "^2.3.1"
     },
     "keywords": [
         "touch",

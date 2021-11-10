@@ -1,4 +1,4 @@
-import { EventTrigger, Input, Computed,STATUS_FAILED, _$recognizerstatus } from '@any-touch/shared';
+import { EventTrigger, Input, Computed,STATUS_FAILED, RECOGNIZER_STATUS } from '@any-touch/shared';
 import Recognizer from './index';
 import {
     INPUT_CANCEL, INPUT_END, INPUT_MOVE
@@ -22,7 +22,7 @@ import resetStatus from './resetStatusForPressMoveLike';
  * @param phase 输入阶段
  * @returns 识别器状态
  */
-function flow(isVaild: boolean, lastStatus: _$recognizerstatus, phase: string): _$recognizerstatus {
+export function flow(isVaild: boolean, lastStatus: RECOGNIZER_STATUS, phase: string): RECOGNIZER_STATUS {
     /*
     * {
     *  isValid {
@@ -104,7 +104,7 @@ export default function (recognizer: Recognizer, computed: Computed, emit: Event
 
     recognizer.status = flow(isVaild, recognizer.status, phase);
     // 是否已识别, 包含end
-    recognizer._$isRecognized = ([STATUS_START, STATUS_MOVE] as _$recognizerstatus[]).includes(recognizer.status);
+    recognizer._$isRecognized = ([STATUS_START, STATUS_MOVE] as RECOGNIZER_STATUS[]).includes(recognizer.status);
 
     const { name, status: status, _$isRecognized: isRecognized } = recognizer;
     // if('pan' == name) console.warn(status,phase,{isRecognized,isVaild},input.pointLength)
@@ -115,7 +115,7 @@ export default function (recognizer: Recognizer, computed: Computed, emit: Event
     // if('pan' == recognizer.name){
     //     console.log(isRecognized,recognizer.name)
     // }
-    if (isRecognized || ([STATUS_END, STATUS_CANCELLED] as _$recognizerstatus[]).includes(recognizer.status)) {
+    if (isRecognized || ([STATUS_END, STATUS_CANCELLED] as RECOGNIZER_STATUS[]).includes(recognizer.status)) {
         // console.log(name + status,computed.deltaX )
         emit(name + status);
     }

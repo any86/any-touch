@@ -45,7 +45,6 @@ import { mouse, touch } from './createInput';
 import dispatchDomEvent from './dispatchDomEvent';
 import canPreventDefault from './canPreventDefault';
 import bindElement from './bindElement';
-import emit2 from './emit2';
 // type TouchAction = 'auto' | 'none' | 'pan-x' | 'pan-left' | 'pan-right' | 'pan-y' | 'pan-up' | 'pan-down' | 'pinch-zoom' | 'manipulation';
 
 type BeforeEachHook = (recognizer: Recognizer, map: Record<string, Recognizer>, next: () => void) => void;
@@ -68,7 +67,7 @@ const DEFAULT_OPTIONS: Options = {
     preventDefault: true,
     preventDefaultExclude: /^(?:INPUT|TEXTAREA|BUTTON|SELECT)$/,
 };
-const AT = `at`;
+
 export default class AnyTouch extends AnyEvent<AnyTouchEvent> {
     // 识别器集合(未实例化)
     static __Recognizers: [new (...args: any) => Recognizer, Record<string, any> | undefined][] = [];
@@ -175,6 +174,20 @@ export default class AnyTouch extends AnyEvent<AnyTouchEvent> {
     }
 
     /**
+     * 带DOM事件的emit
+     */
+    emit2(type: string, payload: AnyTouchEvent) {
+        this.emit(type, payload);
+        const { target } = payload;
+        const { domEvents } = this.__options;
+        // 触发DOM事件
+        if (!!domEvents && void 0 !== this.el && null !== target) {
+            // 所以此处的target会自动冒泡到目标元素
+            dispatchDomEvent(target, { ...payload, type }, domEvents);
+        }
+    }
+
+    /**
      * 监听input变化s
      * @param event Touch / Mouse事件对象
      */
@@ -204,7 +217,8 @@ export default class AnyTouch extends AnyEvent<AnyTouchEvent> {
                     computed[key] = result[key];
                 }
             });
-            this.emit('computed', computed);
+            this.emit('computed', { ...input, ...computed, stopPropagation, preventDefault, stopImmediatePropagation });
+
             // 缓存结果
             this.__computed = computed;
 
