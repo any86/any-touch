@@ -9,8 +9,8 @@
  */
 
 import Core from '@any-touch/core';
-import Tap from '@any-touch/tap';
-import Pan from '@any-touch/pan';
+import tap from '@any-touch/tap';
+import pan from '@any-touch/pan';
 import Swipe from '@any-touch/swipe';
 import Press from '@any-touch/press';
 import Pinch from '@any-touch/pinch';
@@ -40,16 +40,11 @@ export default class extends Core {
     static STATUS_CANCELLED = STATUS_CANCELLED;
     static STATUS_FAILED = STATUS_FAILED;
     static STATUS_RECOGNIZED = STATUS_RECOGNIZED;
-    // 手势识别器(插件)
-    static Tap = Tap;
-    static Pan = Pan;
-    static Swipe = Swipe;
-    static Press = Press;
-    static Pinch = Pinch;
-    static Rotate = Rotate;
+
 
     constructor(el?: HTMLElement, options?: Options) {
         super(el, options);
-        Pan(this);
+        pan(this);
+        tap(this);
     }
 }
