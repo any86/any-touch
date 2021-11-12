@@ -11,7 +11,7 @@
 import Core from '@any-touch/core';
 import tap from '@any-touch/tap';
 import pan from '@any-touch/pan';
-import Swipe from '@any-touch/swipe';
+import swipe from '@any-touch/swipe';
 import Press from '@any-touch/press';
 import Pinch from '@any-touch/pinch';
 import Rotate from '@any-touch/rotate';
@@ -41,10 +41,10 @@ export default class extends Core {
     static STATUS_FAILED = STATUS_FAILED;
     static STATUS_RECOGNIZED = STATUS_RECOGNIZED;
 
-
     constructor(el?: HTMLElement, options?: Options) {
         super(el, options);
-        pan(this);
         tap(this);
+        pan(this);
+        swipe(this);
     }
 }

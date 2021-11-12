@@ -146,7 +146,7 @@ export default class AnyTouch extends AnyEvent {
                     },
                 });
                 window.addEventListener('_', () => void 0, opts);
-            } catch {}
+            } catch { }
 
             // 绑定元素
             this.on(

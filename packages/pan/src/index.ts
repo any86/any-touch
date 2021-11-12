@@ -34,9 +34,11 @@ export default function (context: AnyTouch, options?: Partial<typeof DEFAULT_OPT
         status = flow(isValid, status, computed.phase);
 
         if (isValid) {
-            context.emit2('pan', computed);
-            context.emit2('pan' + status, computed);
-            context.emit2('pan' + computed.direction, computed);
+            context.emit2(_options.name, computed);
+            context.emit2(_options.name + status, computed);
+            context.emit2(_options.name + computed.direction, computed);
+            context.emit2('at', computed);
+            context.emit2('at:after', {...computed,name:_options.name});
         }
     });
 
