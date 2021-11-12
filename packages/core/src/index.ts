@@ -9,8 +9,6 @@
  * Event(Mouse|Touch) => BaseInput => Input => Computed => AnyTouchEvent
  */
 import AnyEvent from 'any-event';
-import type { Listener } from 'any-event';
-
 import type {
     RecognizerConstruct,
     AnyTouchEvent,
@@ -18,7 +16,7 @@ import type {
     ComputeWrapFunction,
     InputCreatorFunctionMap,
     InputCreatorFunction,
-    Computed,
+    ComputeFunction,
     ComputeFunctionCreator,
     KV,
 } from '@any-touch/shared';
@@ -68,7 +66,7 @@ const DEFAULT_OPTIONS: Options = {
     preventDefaultExclude: /^(?:INPUT|TEXTAREA|BUTTON|SELECT)$/,
 };
 
-export default class AnyTouch extends AnyEvent<AnyTouchEvent> {
+export default class AnyTouch extends AnyEvent {
     // 识别器集合(未实例化)
     static __Recognizers: [new (...args: any) => Recognizer, Record<string, any> | undefined][] = [];
     // 计算函数外壳函数集合
@@ -92,11 +90,12 @@ export default class AnyTouch extends AnyEvent<AnyTouchEvent> {
     private __recognizerMap: Record<string, Recognizer> = {};
     private __recognizers: Recognizer[] = [];
 
-    // v2
     // 计算函数队列
+    private __computeFunctionList: ComputeFunction[] = [];
+    // 计算函数生成器仓库
     private __computeFunctionCreatorList: ComputeFunctionCreator[] = [];
-    event: Record<string, any> = {};
-    __computed: KV = {};
+    // 计算结果
+    private __computed: KV = {};
 
     /**
      * @param el 目标元素, 微信下没有el
@@ -147,7 +146,7 @@ export default class AnyTouch extends AnyEvent<AnyTouchEvent> {
                     },
                 });
                 window.addEventListener('_', () => void 0, opts);
-            } catch { }
+            } catch {}
 
             // 绑定元素
             this.on(
@@ -162,15 +161,15 @@ export default class AnyTouch extends AnyEvent<AnyTouchEvent> {
     }
 
     target(el: HTMLElement) {
-        return {
-            on: (eventName: string, listener: Listener<AnyTouchEvent>): void => {
-                this.on(eventName, listener, (event) => {
-                    const { targets } = event;
-                    // 检查当前触发事件的元素是否是其子元素
-                    return targets.every((target) => el.contains(target as HTMLElement));
-                });
-            },
-        };
+        // return {
+        //     on: (eventName: string, listener: Listener<AnyTouchEvent>): void => {
+        //         this.on(eventName, listener, (event) => {
+        //             const { targets } = event;
+        //             // 检查当前触发事件的元素是否是其子元素
+        //             return targets.every((target) => el.contains(target as HTMLElement));
+        //         });
+        //     },
+        // };
     }
 
     /**
@@ -188,7 +187,7 @@ export default class AnyTouch extends AnyEvent<AnyTouchEvent> {
     }
 
     /**
-     * 监听input变化s
+     * 监听input变化
      * @param event Touch / Mouse事件对象
      */
     catchEvent(event: SupportEvent): void {
@@ -199,7 +198,7 @@ export default class AnyTouch extends AnyEvent<AnyTouchEvent> {
             preventDefault();
         }
         // if (!event.cancelable) {
-        //     this.eventEmitter.emit('error', { code: 0, message: '页面滚动的时候, 请暂时不要操作元素!' });
+        //     this.emit('error', { code: 0, message: '页面滚动的时候, 请暂时不要操作元素!' });
         // }
         const input = this.__inputCreatorMap[event.type](event);
 
@@ -211,8 +210,8 @@ export default class AnyTouch extends AnyEvent<AnyTouchEvent> {
 
             // ====== 计算结果 ======
             const computed: KV = {};
-            this.__computeFunctionCreatorList.map((computeFunctionCreator) => {
-                const result = computeFunctionCreator()(input);
+            this.__computeFunctionList.forEach((computeFunction) => {
+                const result = computeFunction(input);
                 for (const key in result) {
                     computed[key] = result[key];
                 }
@@ -270,13 +269,16 @@ export default class AnyTouch extends AnyEvent<AnyTouchEvent> {
     }
 
     /**
-     * 缓存计算函数到队列
-     * @param computeFunctions
+     * 缓存计算函数生成器到队列
+     * @param computeFunctionCreatorList 一组计算函数生成器
      */
-    compute(computeFunctions: ComputeFunctionCreator[]) {
-        for (const computeFunction of computeFunctions) {
-            if (!this.__computeFunctionCreatorList.includes(computeFunction)) {
-                this.__computeFunctionCreatorList.push(computeFunction);
+    compute(computeFunctionCreatorList: ComputeFunctionCreator[]) {
+        for (const computeFunctionCreator of computeFunctionCreatorList) {
+            if (!this.__computeFunctionCreatorList.includes(computeFunctionCreator)) {
+                // 计算函数生成器队列
+                this.__computeFunctionCreatorList.push(computeFunctionCreator);
+                // 计算函数队列
+                this.__computeFunctionList.push(computeFunctionCreator());
             }
         }
     }
@@ -330,13 +332,13 @@ export default class AnyTouch extends AnyEvent<AnyTouchEvent> {
         }
     }
 
-    /**
-     * 事件拦截器
-     * @param hook 钩子函数
-     */
-    beforeEach(hook: (recognizer: Recognizer, map: Record<string, Recognizer>, next: () => void) => void): void {
-        this.beforeEachHook = hook;
-    }
+    // /**
+    //  * 事件拦截器
+    //  * @param hook 钩子函数
+    //  */
+    // beforeEach(hook: (recognizer: Recognizer, map: Record<string, Recognizer>, next: () => void) => void): void {
+    //     this.beforeEachHook = hook;
+    // }
 
     /**
      * 获取识别器通过名字

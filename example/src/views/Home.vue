@@ -20,6 +20,7 @@
                 :key="index"
                 :index="index"
                 @at="onTouch"
+                @tap="onTap"
                 @at:after="onAfter($event,index)"
                 @panstart="onPanstart($event,index)"
                 @panmove="onPanmove($event,index)"

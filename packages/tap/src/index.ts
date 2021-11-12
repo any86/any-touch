@@ -119,6 +119,8 @@ export default function (context: AnyTouch, options?: Partial<typeof DEFAULT_OPT
                 status = STATUS_RECOGNIZED;
                 // 触发事件
                 context.emit2(_options.name, computed);
+                context.emit2('at', computed);
+                context.emit2('at:after', {...computed,name:_options.name});
                 reset();
             } else {
                 countDownToFail();

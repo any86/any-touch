@@ -23,7 +23,6 @@ const DEFAULT_OPTIONS = { name: 'pan', threshold: 10, pointLength: 1 };
  */
 export default function (context: AnyTouch, options?: Partial<typeof DEFAULT_OPTIONS>) {
     let status: RECOGNIZER_STATUS = STATUS_POSSIBLE;
-
     context.on('computed', (computed) => {
         const _options = { ...options, ...DEFAULT_OPTIONS };
         // 重置status

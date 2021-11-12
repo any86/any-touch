@@ -211,4 +211,8 @@ export type Plugin = (context: Core, pluginOptions: unknown) => unknown;
 /**
  * 计算函数
  */
-export type ComputeFunctionCreator = () => ((input: Input) => KV);
+export type ComputeFunction = (input: Input) => KV;
+/**
+ * 计算函数生成器
+ */
+export type ComputeFunctionCreator = () => ComputeFunction;
