@@ -120,7 +120,7 @@ export default function (context: AnyTouch, options?: Partial<typeof DEFAULT_OPT
                 // 触发事件
                 context.emit2(_options.name, computed);
                 context.emit2('at', computed);
-                context.emit2('at:after', {...computed,name:_options.name});
+                context.emit2('at:after', { ...computed, name: _options.name });
                 reset();
             } else {
                 countDownToFail();
@@ -139,9 +139,9 @@ export default function (context: AnyTouch, options?: Partial<typeof DEFAULT_OPT
  * @param computed 计算结果
  * @return 是否验证成功
  */
-function test(computed: Computed, options: typeof DEFAULT_OPTIONS) {
-    const { startInput, pointLength } = computed;
-    const deltaTime = computed.timestamp - startInput.timestamp;
+function test(computed: Input & Partial<Computed>, options: typeof DEFAULT_OPTIONS) {
+    const { startInput, pointLength, timestamp } = computed;
+    const deltaTime = timestamp - startInput.timestamp;
     // 1. 触点数
     // 2. 当前点击数为0, 也就是当所有触点离开才通过
     // 3. 移动距离
@@ -150,7 +150,7 @@ function test(computed: Computed, options: typeof DEFAULT_OPTIONS) {
     return (
         maxPointLength === options.pointLength &&
         0 === pointLength &&
-        options.maxDistance >= distance &&
+        (distance && options.maxDistance >= distance) &&
         options.maxPressTime > deltaTime
     );
 }

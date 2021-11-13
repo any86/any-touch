@@ -1,8 +1,8 @@
-import AnyTouch from '../src/index';
+import Core from '../src/index';
 import { GestureSimulator, sleep } from '@any-touch/simulator';
 
 test(`模拟微信下没有el,通过catchEvent接收数据从而识别手势`, async (done) => {
-    const at = new AnyTouch();
+    const at = new Core();
     const el = document.createElement('div');
     const gs = new GestureSimulator(el);
     const event = gs.start();

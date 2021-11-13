@@ -1,4 +1,4 @@
-import AnyTouch from '@any-touch/core';
+import Core from '@any-touch/core';
 import { sleep, GestureSimulator } from '@any-touch/simulator'
 test('元素和浏览器左上角偏移100px,获取触点在元素内的偏移', async done => {
     const el = document.createElement('div');
@@ -9,7 +9,7 @@ test('元素和浏览器左上角偏移100px,获取触点在元素内的偏移',
         top: 120,
     } as any);
 
-    const at = new AnyTouch(el);
+    const at = new Core(el);
     const callback = jest.fn();
     at.on('at:start', (ev) => {
         const data = ev.getOffset(el);

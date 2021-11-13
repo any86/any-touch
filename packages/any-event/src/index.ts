@@ -1,6 +1,8 @@
 // 事件名 : 事件对象
 export interface TypeAndEventMap {
-    [type: string | symbol]: any;
+    // symbol暂时不加, 没法兼容低版本的ts
+    // 可以用户手动加
+    [type: string]: any;
 }
 
 
@@ -76,7 +78,7 @@ export default class <EventMap extends TypeAndEventMap = TypeAndEventMap> {
      * @param type 事件名
      * @param listener 回调函数
      */
-    off<Key extends keyof EventMap>(type: Key, listener: AEventListener<EventMap[Key]>) {
+    off<Key extends keyof EventMap>(type: Key, listener?: AEventListener<EventMap[Key]>) {
         const listeners = this.__map[type];
         // 事件存在
         if (void 0 !== listeners) {

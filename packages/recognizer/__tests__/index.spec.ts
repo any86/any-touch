@@ -1,11 +1,11 @@
 import Tap from '@any-touch/tap';
-import AnyTouch from '@any-touch/core';
+import Core from '@any-touch/core';
 import resetStatusForPressMoveLike from '../src/resetStatusForPressMoveLike'
 
 test('set传递的参数如果未空, 那么不修改options(此处仅为了提高代码测试覆盖率)', () => {
-    AnyTouch.use(Tap);
+    Core.use(Tap);
     const el = document.createElement('div');
-    const at = new AnyTouch(el);
+    const at = new Core(el);
     const tap = at.get('tap');
     if(void 0 !== tap){
         const defaultOptions = tap.options;
@@ -16,9 +16,9 @@ test('set传递的参数如果未空, 那么不修改options(此处仅为了提�
 
 
 test('resetStatusForPressMoveLike', () => {
-    AnyTouch.use(Tap);
+    Core.use(Tap);
     const el = document.createElement('div');
-    const at = new AnyTouch(el);
+    const at = new Core(el);
     const tap = at.get('tap');
     if(tap){
         tap.status = 'end'

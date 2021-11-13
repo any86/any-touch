@@ -1,8 +1,8 @@
-import AnyTouch from '@any-touch/core';
+import Core from '@any-touch/core';
 import { GestureSimulator, sleep } from '@any-touch/simulator';
 export function create() {
     const el = document.createElement('div');
-    const at = new AnyTouch(el);
+    const at = new Core(el);
     const gs = new GestureSimulator(el);
     const mouse = new GestureSimulator(el, {device:'mouse'});
     const mockCB = jest.fn();
@@ -22,7 +22,7 @@ export function create() {
         el,
         mockCB,
         mock,
-        AnyTouch,
+        Core: AnyTouch,
         sleep,
         mockCalls
     };

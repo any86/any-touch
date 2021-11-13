@@ -1,4 +1,4 @@
-import AnyTouch from '@any-touch/core';
+import Core from '@any-touch/core';
 import { STATUS_POSSIBLE, STATUS_FAILED } from '@any-touch/shared';
 
 import Tap from '@any-touch/tap';
@@ -7,7 +7,7 @@ import debounce from 'lodash/debounce'
 test(`tap延迟300ms触发, 如果届时doubletap状态为"失败或可能"那么触发tap`, async (done) => {
     const el = document.createElement('div');
     const gs = new GestureSimulator(el);
-    const at = new AnyTouch(el);
+    const at = new Core(el);
     at.use(Tap);
     at.use(Tap, { name: 'doubletap', tapTimes: 2 });
     const onTap = jest.fn();

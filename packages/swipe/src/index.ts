@@ -32,7 +32,7 @@ export default function (context: Core, options?: Partial<typeof DEFAULT_OPTIONS
     return { status }
 }
 
-function test(computed: Computed, options: typeof DEFAULT_OPTIONS) {
+function test(computed: Required<Computed>, options: typeof DEFAULT_OPTIONS) {
     if (INPUT_END !== computed.phase) return false;
     const { velocityX, velocityY, maxPointLength, distance } = computed;
     return options.pointLength === maxPointLength &&

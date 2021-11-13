@@ -2,10 +2,7 @@
     <main class="ovh">
         <header>
             <a target="_new" href="https://github.com/any86/any-touch">
-                <img
-                    width="100"
-                    src="https://img.shields.io/github/stars/any86/any-touch?style=social"
-                />
+                <img width="100" src="https://img.shields.io/github/stars/any86/any-touch?style=social" />
             </a>
 
             <a class="link" target="_new" href="https://github.com/any86/any-touch">文档</a>
@@ -15,44 +12,46 @@
         <article ref="panel" class="panel">
             <div
                 ref="circle"
-                v-for="({top,left,zIndex,scale,angle},index) in styles"
-                :style="{top,left,zIndex,transform:`scale(${scale}) rotate(${angle}deg)`}"
+                v-for="({ top, left, zIndex, scale, angle }, index) in styles"
+                :style="{ top, left, zIndex, transform: `scale(${scale}) rotate(${angle}deg)` }"
                 :key="index"
                 :index="index"
                 @at="onTouch"
                 @tap="onTap"
-                @at:after="onAfter($event,index)"
-                @panstart="onPanstart($event,index)"
-                @panmove="onPanmove($event,index)"
-                @pandown="onPandown($event,index)"
-                @swipe="onSwipe($event,index)"
-                @pinch="$event.match() && onPinch($event,index)"
-                @rotate="$event.match() && onRotate($event,index)"
-                @transitionend="onTransitionend($event,index)"
+                @at:after="onAfter($event, index)"
+                @panstart="onPanstart($event, index)"
+                @panmove="onPanmove($event, index)"
+                @pandown="onPandown($event, index)"
+                @swipe="onSwipe($event, index)"
+                @press="onPress"
+                @pressup="onPressUp"
+                @pinch="$event.match() && onPinch($event, index)"
+                @rotate="$event.match() && onRotate($event, index)"
+                @transitionend="onTransitionend($event, index)"
                 :class="['circle']"
             >
-                <p style="font-size:16px;border-bottom:1px dashed #fff;">👋可拖拽 / 缩放等...</p>
-                <p>Top: {{top}}</p>
-                <p>Left: {{left}}</p>
-                <p>Scale: {{scale}}</p>
-                <p>Angle: {{angle}}</p>
+                <p style="font-size: 16px; border-bottom: 1px dashed #fff">👋可拖拽 / 缩放等...</p>
+                <p>Top: {{ top }}</p>
+                <p>Left: {{ left }}</p>
+                <p>Scale: {{ scale }}</p>
+                <p>Angle: {{ angle }}</p>
             </div>
         </article>
 
         <article class="info p-2 mt-6">
             <template v-if="data.type">
-                <h1>{{data.type}}</h1>
+                <h1>{{ data.type }}</h1>
                 <table>
                     <tr align="left">
                         <th>键值</th>
                         <th>值</th>
                         <th>说明</th>
                     </tr>
-                    <template v-for="{key,desc} in map">
+                    <template v-for="{ key, desc } in map">
                         <tr v-if="data[key]" :key="key">
-                            <td>{{key}}</td>
-                            <td>{{data[key]}}</td>
-                            <td>{{desc}}</td>
+                            <td>{{ key }}</td>
+                            <td>{{ data[key] }}</td>
+                            <td>{{ desc }}</td>
                         </tr>
                     </template>
                 </table>
@@ -68,7 +67,7 @@
                 <span>rotate(旋转)</span>
             </div>
 
-            <span class="btn-add" @click="add">添加一个(第{{styles.length+1}}个)</span>
+            <span class="btn-add" @click="add">添加一个(第{{ styles.length + 1 }}个)</span>
         </article>
     </main>
 </template>
@@ -116,7 +115,7 @@ export default {
     mounted() {
         const at = new AnyTouch(this.$refs.panel, { preventDefault: true });
         at.on('at:after', this.afterEach);
-        at.on('pan', e=>{
+        at.on('pan', (e) => {
             // console.log('pan')
         });
     },
@@ -145,8 +144,6 @@ export default {
 
         onPinch(ev, index = 0) {
             // if(ev.isMatch() ) return;
-
-            // console.log(`deltaScale:${ev.deltaScale}`,ev.phase,ev.pointLength)
             this.styles[index].scale = Math.round(this.styles[index].scale * ev.deltaScale * 100) / 100;
         },
 
@@ -155,19 +152,18 @@ export default {
             this.styles[index].angle += ev.deltaAngle;
         },
 
-        onPinch1(ev, index = 1) {
-            // console.log(`deltaScale:${ev.deltaScale}`,ev.phase,ev.pointLength)
-            this.styles[index].scale = Math.round(this.styles[index].scale * ev.deltaScale * 100) / 100;
-        },
-
         onTransitionend(ev, index) {},
-        
+
         onTap(ev) {
             C(ev.type, '#f10');
         },
 
         onPress(ev) {
             C(ev.type, '#710');
+        },
+
+        onPressUp(ev) {
+            C(ev.type, '#769');
         },
 
         onSwipe({ speedX, speedY }, index) {
@@ -239,8 +235,8 @@ main {
             color: #69c;
             margin-left: 16px;
             text-decoration: none;
-            &+.link{
-                border-left:1px solid #ccc;
+            & + .link {
+                border-left: 1px solid #ccc;
                 padding-left: 16px;
             }
         }

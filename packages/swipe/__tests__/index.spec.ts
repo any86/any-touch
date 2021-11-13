@@ -1,14 +1,14 @@
 import { create } from '@testUtils';
 import Swipe from '@any-touch/swipe';
-import AnyTouch from '@any-touch/core';
+import Core from '@any-touch/core';
 import { GestureSimulator, sleep } from '@any-touch/simulator';
 const SWIPE_NAME = 'swipe';
 
 test(`向下划`, async done => {
     const { mockCB } = create();
-    AnyTouch.use(Swipe);
+    Core.use(Swipe);
     const el = document.createElement('div');
-    const at = new AnyTouch(el);
+    const at = new Core(el);
     const gs = new GestureSimulator(el);
     at.on(SWIPE_NAME, mockCB);
 

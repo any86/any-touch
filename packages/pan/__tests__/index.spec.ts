@@ -1,6 +1,6 @@
 import Pan from '@any-touch/pan';
-import AnyTouch from '@any-touch/core';
-AnyTouch.use(Pan);
+import Core from '@any-touch/core';
+Core.use(Pan);
 import { sleep, GestureSimulator, panSimulator } from '@any-touch/simulator'
 const PAN_NAME = 'pan';
 
@@ -8,8 +8,8 @@ test(`加载2个any-touch, 触发2次panstart`, async done => {
     const el = document.createElement('div');
     const parnetEl = document.createElement('div');
     parnetEl.appendChild(el);
-    const at = new AnyTouch(el);
-    const pAt = new AnyTouch(parnetEl);
+    const at = new Core(el);
+    const pAt = new Core(parnetEl);
     const onParentPanStart = jest.fn();
     const onPanStart = jest.fn();
 
@@ -35,7 +35,7 @@ test(`加载2个any-touch, 触发2次panstart`, async done => {
 
 test(`触发${PAN_NAME}left`, async done => {
     const el = document.createElement('div');
-    const at = new AnyTouch(el);
+    const at = new Core(el);
     const mockCB = jest.fn();
     at.on(`${PAN_NAME}left`, (ev) => {
         mockCB(ev.type)
@@ -52,7 +52,7 @@ test(`触发${PAN_NAME}left`, async done => {
 
 test(`触发${PAN_NAME}down`, async done => {
     const el = document.createElement('div');
-    const at = new AnyTouch(el);
+    const at = new Core(el);
     const mockCB = jest.fn();
     at.on(`${PAN_NAME}down`, (ev) => {
         mockCB(ev.type)
@@ -72,7 +72,7 @@ test(`触发${PAN_NAME}down`, async done => {
 test(`模拟pancancel`, async done => {
     const el = document.createElement('div');
     const gs = new GestureSimulator(el);
-    const at = new AnyTouch(el);
+    const at = new Core(el);
     const onPan = jest.fn().mockName('onPan');
     const onPanCancel = jest.fn().mockName('onPanCancel');
 
@@ -93,7 +93,7 @@ test(`模拟pancancel`, async done => {
 test('触发一次panend', async done => {
     const el = document.createElement('div');
     const gs = new GestureSimulator(el);
-    const at = new AnyTouch(el);
+    const at = new Core(el);
     const onPanend = jest.fn().mockName('onPanend');
     at.on('panend', onPanend);
     gs.start();

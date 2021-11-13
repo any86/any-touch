@@ -5,14 +5,11 @@ import {
     STATUS_MOVE,
     STATUS_END,
     STATUS_CANCELLED,
-    STATUS_RECOGNIZED,
     STATUS_FAILED,
 } from '@any-touch/shared';
 import { ComputeDistance, ComputeDeltaXY, ComputeVAndDir } from '@any-touch/compute';
 import { flow } from '@any-touch/recognizer';
-// v2
-// import Core from '@any-touch/core';
-import AnyTouch from 'any-touch';
+import Core from '@any-touch/core';
 
 const DEFAULT_OPTIONS = { name: 'pan', threshold: 10, pointLength: 1 };
 /**
@@ -21,12 +18,12 @@ const DEFAULT_OPTIONS = { name: 'pan', threshold: 10, pointLength: 1 };
  * @param options AnyTouch选项
  * @returns  
  */
-export default function (context: AnyTouch, options?: Partial<typeof DEFAULT_OPTIONS>) {
+export default function (context: Core, options?: Partial<typeof DEFAULT_OPTIONS>) {
     let status: RECOGNIZER_STATUS = STATUS_POSSIBLE;
     context.on('computed', (computed) => {
         const _options = { ...options, ...DEFAULT_OPTIONS };
         // 重置status
-        if ([STATUS_END, STATUS_CANCELLED /*STATUS_RECOGNIZED*/, , STATUS_FAILED].includes(status)) {
+        if ([STATUS_END, STATUS_CANCELLED, STATUS_FAILED].includes(status)) {
             status = STATUS_POSSIBLE;
         }
 
@@ -38,7 +35,7 @@ export default function (context: AnyTouch, options?: Partial<typeof DEFAULT_OPT
             context.emit2(_options.name + status, computed);
             context.emit2(_options.name + computed.direction, computed);
             context.emit2('at', computed);
-            context.emit2('at:after', {...computed,name:_options.name});
+            context.emit2('at:after', { ...computed, name: _options.name });
         }
     });
 
@@ -52,7 +49,7 @@ function test(computed: Computed, options: typeof DEFAULT_OPTIONS, status: RECOG
     let isRecognized = [STATUS_START, STATUS_MOVE].includes(status);
     const { pointLength, distance, direction, phase } = computed;
     return (
-        ((isRecognized || options.threshold <= distance) &&
+        ((isRecognized || (distance && options.threshold <= distance)) &&
             options.pointLength === pointLength &&
             void 0 !== direction) ||
         (isRecognized && 'end' === phase)

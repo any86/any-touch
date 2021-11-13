@@ -1,4 +1,4 @@
-import AnyTouch from '@any-touch/core';
+import Core from '@any-touch/core';
 import Tap from '@any-touch/tap';
 import { GestureSimulator, sleep } from '@any-touch/simulator';
 function createNode() {
@@ -8,7 +8,7 @@ function createNode() {
 
 // 
 test(`stopImmediatePropagation`, async (done) => {
-    AnyTouch.use(Tap);
+    Core.use(Tap);
     const el = createNode();
     const parent = createNode();
     const tapEl = createNode();
@@ -16,8 +16,8 @@ test(`stopImmediatePropagation`, async (done) => {
     el.appendChild(tapEl);
 
     const gs = new GestureSimulator(tapEl);
-    const at = new AnyTouch(el);
-    const pAt = new AnyTouch(parent);
+    const at = new Core(el);
+    const pAt = new Core(parent);
 
     const onTap = jest.fn();
     const onPTap = jest.fn();

@@ -10,7 +10,7 @@
  */
 import AnyEvent from 'any-event';
 import type {
-    RecognizerConstruct,
+    Computed,
     AnyTouchEvent,
     SupportEvent,
     ComputeWrapFunction,
@@ -66,7 +66,7 @@ const DEFAULT_OPTIONS: Options = {
     preventDefaultExclude: /^(?:INPUT|TEXTAREA|BUTTON|SELECT)$/,
 };
 
-export default class AnyTouch extends AnyEvent {
+export default class Core extends AnyEvent<KV & { computed: AnyTouchEvent }> {
     // 识别器集合(未实例化)
     static __Recognizers: [new (...args: any) => Recognizer, Record<string, any> | undefined][] = [];
     // 计算函数外壳函数集合
@@ -77,7 +77,7 @@ export default class AnyTouch extends AnyEvent {
      * @param {any[]} 插件参数
      */
     static use = (Recognizer: new (...args: any) => Recognizer, recognizerOptions?: Record<string, any>): void => {
-        AnyTouch.__Recognizers.push([Recognizer, recognizerOptions]);
+        Core.__Recognizers.push([Recognizer, recognizerOptions]);
     };
 
     // 目标元素
@@ -209,14 +209,17 @@ export default class AnyTouch extends AnyEvent {
             this.emit(`touch:${input.phase}`, input);
 
             // ====== 计算结果 ======
-            const computed: KV = {};
+            const computed: Computed = {};
             this.__computeFunctionList.forEach((computeFunction) => {
-                const result = computeFunction(input);
-                for (const key in result) {
-                    computed[key] = result[key];
+                const result = computeFunction(input, computed);
+                if (void 0 !== result) {
+                    for (const key in result) {
+                        computed[key] = result[key];
+                    }
                 }
             });
             this.emit('computed', { ...input, ...computed, stopPropagation, preventDefault, stopImmediatePropagation });
+            
 
             // 缓存结果
             this.__computed = computed;
@@ -288,7 +291,7 @@ export default class AnyTouch extends AnyEvent {
      * @param plugin 插件
      * @param pluginOptions 插件选项
      */
-    use(plugin: (context: this, pluginOptions: unknown) => unknown, pluginOptions?: unknown) {
+    use(plugin: (context: this, pluginOptions: any) => unknown, pluginOptions?: unknown) {
         plugin(this, pluginOptions);
 
         // const name = pluginOptions?.name;

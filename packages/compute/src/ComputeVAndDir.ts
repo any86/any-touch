@@ -20,7 +20,7 @@ export default function () {
      * 注意: 往复滑动会出现direction为none
      * @param input 输入
      */
-    return function (input: Input): { speedX: number, speedY: number, velocityX: number, velocityY: number, direction?: directionString } {
+    return function (input: Input){
         // 点击鼠标左键, 会出现undefined
         if (void 0 !== input) {
             // const { phase } = input;

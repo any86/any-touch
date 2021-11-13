@@ -123,46 +123,42 @@ export interface Point {
 
 export type Vector = Point;
 
-/**
- * 仅仅是获取scale/angle的前置计算值
- */
-export interface VS {
-    prevV: Point;
-    startV: Point;
-    activeV: Point;
-}
 
 /**
  * Input执行计算后的数据格式
  */
-export interface Computed extends Input {
+export interface Computed extends KV {
     // 一次识别周期中出现的最大触点数
-    readonly maxPointLength: number;
-    readonly velocityX: number;
-    readonly velocityY: number;
-    readonly speedX: number;
-    readonly speedY: number;
-    readonly scale: number;
-    readonly deltaScale: number;
-    readonly angle: number;
-    readonly deltaAngle: number;
-    readonly deltaX: number;
-    readonly deltaY: number;
-    readonly deltaXYAngle: number;
-    readonly displacementX: number;
-    readonly displacementY: number;
+    readonly maxPointLength?: number;
+    readonly velocityX?: number;
+    readonly velocityY?: number;
+    readonly speedX?: number;
+    readonly speedY?: number;
+    readonly scale?: number;
+    readonly deltaScale?: number;
+    readonly angle?: number;
+    readonly deltaAngle?: number;
+    readonly deltaX?: number;
+    readonly deltaY?: number;
+    readonly deltaXYAngle?: number;
+    readonly displacementX?: number;
+    readonly displacementY?: number;
 
-    readonly distanceX: number;
-    readonly distanceY: number;
-    readonly distance: number;
-    readonly deltaTime: number;
+    readonly distanceX?: number;
+    readonly distanceY?: number;
+    readonly distance?: number;
+    readonly deltaTime?: number;
     // 与起始点的偏移方向
-    readonly overallDirection: directionString;
+    readonly overallDirection?: directionString;
     // 瞬时方向
-    readonly direction: directionString;
+    readonly direction?: directionString;
+    // 多值形成的向量
+    readonly startVecotr?: Vector;
+    readonly prevVecotr?: Vector;
+    readonly activeVecotr?: Vector;
 }
 
-export interface AnyTouchEvent extends Input, Readonly<Computed> {
+export interface AnyTouchEvent extends Input, Required<Computed> {
     readonly type: string;
     readonly stopPropagation: () => void;
     readonly stopImmediatePropagation: () => void;
@@ -201,7 +197,7 @@ export interface InputCreatorFunctionMap {
 }
 
 // ======= v2 ========
-export type KV = Record<string | number | symbol, unknown>;
+export type KV = Record<string | symbol, unknown>;
 
 /**
  * 插件
@@ -211,8 +207,15 @@ export type Plugin = (context: Core, pluginOptions: unknown) => unknown;
 /**
  * 计算函数
  */
-export type ComputeFunction = (input: Input) => KV;
+export type ComputeFunction = (input: Input, computed: Partial<Computed>) => Computed | void;
+
 /**
  * 计算函数生成器
  */
 export type ComputeFunctionCreator = () => ComputeFunction;
+
+
+// type A = {a:1}
+// type B = {b:2}
+// type C = A&B
+// const c:C = {a:1,b:2}

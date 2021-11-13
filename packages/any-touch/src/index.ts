@@ -12,9 +12,9 @@ import Core from '@any-touch/core';
 import tap from '@any-touch/tap';
 import pan from '@any-touch/pan';
 import swipe from '@any-touch/swipe';
-import Press from '@any-touch/press';
-import Pinch from '@any-touch/pinch';
-import Rotate from '@any-touch/rotate';
+import press from '@any-touch/press';
+import pinch from '@any-touch/pinch';
+import rotate from '@any-touch/rotate';
 
 import {
     STATUS_POSSIBLE,
@@ -46,5 +46,8 @@ export default class extends Core {
         tap(this);
         pan(this);
         swipe(this);
+        press(this);
+        pinch(this);
+        rotate(this);
     }
 }

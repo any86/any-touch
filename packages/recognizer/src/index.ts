@@ -5,7 +5,6 @@ import {
 
 // 导出recognizeForPressMoveLike,
 // resetStatusForPressMoveLike
-export { default as recognizeForPressMoveLike } from './recognizeForPressMoveLike';
 export { default as resetStatusForPressMoveLike } from './resetStatusForPressMoveLike';
 export { flow } from './recognizeForPressMoveLike'
 // 联合变交叉
