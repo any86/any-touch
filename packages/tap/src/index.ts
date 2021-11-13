@@ -150,7 +150,7 @@ function test(computed: Input & Partial<Computed>, options: typeof DEFAULT_OPTIO
     return (
         maxPointLength === options.pointLength &&
         0 === pointLength &&
-        (distance && options.maxDistance >= distance) &&
+        (void 0 !== distance && options.maxDistance >= distance) &&
         options.maxPressTime > deltaTime
     );
 }
