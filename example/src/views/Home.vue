@@ -112,9 +112,8 @@ export default {
 
     mounted() {
         const at = new AnyTouch(this.$refs.panel, { preventDefault: true });
-        console.log(at.plugins[0]);
         at.beforeEach((context, next) => {
-            console.log(context);
+            console.log(context.get('tap'));
             next();
         });
     },

@@ -74,7 +74,7 @@ export default class Core extends AnyEvent<KV & { computed: AnyTouchEvent }> {
     private __computeFunctionCreatorList: ComputeFunctionCreator[] = [];
 
     // 插件
-    plugins: (() => PluginContext)[] = [];
+    private __plugins: PluginContext[] = [];
 
     /**
      * @param el 目标元素, 微信下没有el
@@ -167,6 +167,7 @@ export default class Core extends AnyEvent<KV & { computed: AnyTouchEvent }> {
      * @param event Touch / Mouse事件对象
      */
     catchEvent(event: SupportEvent) {
+        console.log(event.type);
         const stopPropagation = () => event.stopPropagation();
         const preventDefault = () => event.preventDefault();
         const stopImmediatePropagation = () => event.stopImmediatePropagation();
@@ -221,7 +222,7 @@ export default class Core extends AnyEvent<KV & { computed: AnyTouchEvent }> {
      * @param pluginOptions 插件选项
      */
     use(plugin: Plugin, pluginOptions?: any) {
-        this.plugins.push(plugin(this, pluginOptions));
+        this.__plugins.push(plugin(this, pluginOptions));
     }
 
     /**
@@ -230,10 +231,9 @@ export default class Core extends AnyEvent<KV & { computed: AnyTouchEvent }> {
      * @return 返回识别器
      */
     get(name: string) {
-        for (const plugin of this.plugins) {
-            const context = plugin();
-            if (name === context.name) {
-                return context;
+        for (const plugin of this.__plugins) {
+            if (name === plugin.name) {
+                return plugin;
             }
         }
     }

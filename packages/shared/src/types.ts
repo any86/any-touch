@@ -162,7 +162,7 @@ export interface InputCreatorFunctionMap {
 /**
  * 插件上下文内容
  */
-export type PluginContext = { state: RECOGNIZER_STATE, disabled: boolean };
+export type PluginContext = { state: RECOGNIZER_STATE, disabled: boolean,name:string };
 
 /**
  * 插件
