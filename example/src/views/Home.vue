@@ -16,9 +16,8 @@
                 :style="{ top, left, zIndex, transform: `scale(${scale}) rotate(${angle}deg)` }"
                 :key="index"
                 :index="index"
-                @at="onTouch"
+                @at:start="onStart"
                 @tap="onTap"
-                @at:after="onAfter($event, index)"
                 @panstart="onPanstart($event, index)"
                 @panmove="onPanmove($event, index)"
                 @pandown="onPandown($event, index)"
@@ -27,7 +26,6 @@
                 @pressup="onPressUp"
                 @pinch="$event.match() && onPinch($event, index)"
                 @rotate="$event.match() && onRotate($event, index)"
-                @transitionend="onTransitionend($event, index)"
                 :class="['circle']"
             >
                 <p style="font-size: 16px; border-bottom: 1px dashed #fff">👋可拖拽 / 缩放等...</p>
@@ -114,9 +112,9 @@ export default {
 
     mounted() {
         const at = new AnyTouch(this.$refs.panel, { preventDefault: true });
-        at.on('at:after', this.afterEach);
-        at.on('pan', (e) => {
-            // console.log('pan')
+        at.beforeEach((context, next) => {
+            console.log(context);
+            next();
         });
     },
 
@@ -125,17 +123,7 @@ export default {
             const style = { left: `50px`, top: `160px`, zIndex: 1, scale: 1, angle: 0 };
             this.styles.push(style);
         },
-        onAfter(ev) {
-            ev.currentTarget.setAttribute('at', ev.name);
-        },
-        onTouch(ev) {
-            // console.log('html:', ev.target.innerHTML);
-            ev.currentTarget.setAttribute('at-phase', ev.phase);
-        },
-        afterEach(ev) {
-            this.action = ev.name;
-            this.$set(this, 'data', ev);
-        },
+
         onRotate(ev, index = 0) {
             // if(ev.isMatch() ) return;
             // console.log(`deltaAngle:${ev.deltaAngle}`,ev.phase,ev.pointLength)
@@ -152,21 +140,26 @@ export default {
             this.styles[index].angle += ev.deltaAngle;
         },
 
-        onTransitionend(ev, index) {},
-
         onTap(ev) {
+            ev.currentTarget.setAttribute('at-phase', ev.phase);
+            ev.currentTarget.setAttribute('at', ev.type);
             C(ev.type, '#f10');
         },
 
         onPress(ev) {
+            ev.currentTarget.setAttribute('at-phase', ev.phase);
+            ev.currentTarget.setAttribute('at', ev.type);
             C(ev.type, '#710');
         },
 
         onPressUp(ev) {
+            ev.currentTarget.setAttribute('at', ev.type);
             C(ev.type, '#769');
         },
 
-        onSwipe({ speedX, speedY }, index) {
+        onSwipe(ev, index) {
+            const { speedX, speedY } = ev;
+            ev.currentTarget.setAttribute('at', ev.type);
             this.styles[index].top = Math.round(parseInt(this.styles[index].top) + speedY * 120) + 'px';
             this.styles[index].left = Math.round(parseInt(this.styles[index].left) + speedX * 120) + 'px';
         },
@@ -178,6 +171,7 @@ export default {
         },
 
         onPanmove(ev, index) {
+            ev.currentTarget.setAttribute('at', ev.type);
             // console.log(ev.preventDefault)
             // console.dir(ev.target)
             // console.log(ev.deltaX,ev.deltaY)
@@ -185,7 +179,10 @@ export default {
             this.styles[index].left = parseInt(this.styles[index].left) + ev.deltaX + 'px';
         },
 
-        onPandown(ev, index) {},
+        onStart(ev) {
+            ev.currentTarget.setAttribute('at-phase', '');
+            ev.currentTarget.setAttribute('at', '');
+        },
     },
 };
 </script>

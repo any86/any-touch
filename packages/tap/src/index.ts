@@ -1,7 +1,6 @@
 import AnyTouch from 'any-touch';
 import { Point, Input, Computed, RECOGNIZER_STATUS } from '@any-touch/shared';
-import { STATUS_RECOGNIZED, STATUS_POSSIBLE, STATUS_FAILED, INPUT_END } from '@any-touch/shared';
-import Recognizer from '@any-touch/recognizer';
+import { STATUS_RECOGNIZED, STATUS_POSSIBLE, STATUS_FAILED, TYPE_END } from '@any-touch/shared';
 import { getVLength } from '@any-touch/vector';
 import { ComputeDistance, ComputeMaxLength } from '@any-touch/compute';
 const DEFAULT_OPTIONS = {
@@ -97,7 +96,7 @@ export default function (context: AnyTouch, options?: Partial<typeof DEFAULT_OPT
         const { phase, x, y } = computed;
 
         // 只在end阶段去识别
-        if (INPUT_END !== phase) return;
+        if (TYPE_END !== phase) return;
         status = STATUS_POSSIBLE;
         // 每一次点击是否符合要求
         if (test(computed, _options)) {
@@ -119,8 +118,8 @@ export default function (context: AnyTouch, options?: Partial<typeof DEFAULT_OPT
                 status = STATUS_RECOGNIZED;
                 // 触发事件
                 context.emit2(_options.name, computed);
-                context.emit2('at', computed);
-                context.emit2('at:after', { ...computed, name: _options.name });
+                // context.emit2('at', computed);
+                // context.emit2('at:after', { ...computed, name: _options.name });
                 reset();
             } else {
                 countDownToFail();
@@ -132,6 +131,8 @@ export default function (context: AnyTouch, options?: Partial<typeof DEFAULT_OPT
     });
 
     context.compute([ComputeDistance, ComputeMaxLength]);
+
+    return () => ({ ..._options, status });
 }
 
 /**
@@ -286,7 +287,7 @@ function isValidInterval(waitNextTapTime: number, prevTapTime?: number) {
 //         const { phase, x, y } = computed;
 
 //         // 只在end阶段去识别
-//         if (INPUT_END !== phase) return;
+//         if (TYPE_END !== phase) return;
 
 //         this.status = STATUS_POSSIBLE;
 //         // 每一次点击是否符合要求

@@ -162,7 +162,7 @@ All notable changes to this project will be documented in this file. See [standa
 
 ### Bug Fixes
 
-* 修复间隔计算数据过程中， 排除INPUT_END阶段的数据刷新 ([3baa6b8](https://github.com/any86/any-touch/commit/3baa6b8))
+* 修复间隔计算数据过程中， 排除TYPE_END阶段的数据刷新 ([3baa6b8](https://github.com/any86/any-touch/commit/3baa6b8))
 
 
 

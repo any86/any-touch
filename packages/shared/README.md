@@ -3,10 +3,10 @@
 
 ```javascript
 // input的类型
-export const INPUT_START = 'start';
-export const INPUT_MOVE = 'move';
-export const INPUT_CANCEL = 'cancel';
-export const INPUT_END = 'end';
+export const TYPE_START = 'start';
+export const TYPE_MOVE = 'move';
+export const TYPE_CANCEL = 'cancel';
+export const TYPE_END = 'end';
 
 export const TOUCH = 'touch';
 export const MOUSE = 'mouse';

@@ -2,8 +2,8 @@
  * event(Mouse|Touch) => BasicsInput => Input => Computed => AnyTouchEvent
  * 构造统一的Input格式
  */
-import type { BasicsInput, InputOnlyHasCurrent, Input, Point } from '@any-touch/shared';
-import { CLIENT_X, CLIENT_Y, INPUT_START, INPUT_CANCEL, INPUT_END } from '@any-touch/shared';
+import type { PubicEvent, InputOnlyHasCurrent, Input, Point } from '@any-touch/shared';
+import { CLIENT_X, CLIENT_Y, TYPE_START, TYPE_CANCEL, TYPE_END } from '@any-touch/shared';
 export default function () {
     let id = 0;
     let prevInput: InputOnlyHasCurrent | undefined;
@@ -11,7 +11,7 @@ export default function () {
     let startInput: InputOnlyHasCurrent | undefined;
     let startMultiInput: InputOnlyHasCurrent | undefined;
 
-    return function (basicsInput: BasicsInput): Input | void {
+    return function (basicsInput: PubicEvent): Input | void {
         prevInput = activeInput;
         // 从event中采集的数据
         if (void 0 !== basicsInput) {
@@ -66,12 +66,12 @@ function getCenter(points: { clientX: number, clientY: number }[]): Point | void
 };
 
 
-function extendInput(basicsInput: BasicsInput, id: number): Omit<Input, 'prevInput' | 'startInput' | 'startMultiInput'> {
+function extendInput(basicsInput: PubicEvent, id: number): Omit<Input, 'prevInput' | 'startInput' | 'startMultiInput'> {
 
     const { phase, points, changedPoints, nativeEvent } = basicsInput;
     const pointLength = points.length;
-    const isStart = INPUT_START === phase;
-    const isEnd = (INPUT_END === phase && 0 === pointLength) || INPUT_CANCEL === phase;
+    const isStart = TYPE_START === phase;
+    const isEnd = (TYPE_END === phase && 0 === pointLength) || TYPE_CANCEL === phase;
     // 当前时间
     const timestamp = Date.now();
     // 触点中心

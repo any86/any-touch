@@ -1,15 +1,13 @@
 import { RECOGNIZER_STATUS, Computed, Input } from '@any-touch/shared';
 import {
     STATUS_POSSIBLE,
-    STATUS_START,
-    STATUS_MOVE,
     STATUS_END,
     STATUS_CANCELLED,
-    STATUS_FAILED,
+    STATUS_FAILED,flow,getStatusName
 } from '@any-touch/shared';
 import { ComputeScale, ComputeVectorForMutli } from '@any-touch/compute';
-import { flow } from '@any-touch/recognizer';
 import Core from '@any-touch/core';
+
 const DEFAULT_OPTIONS = {
     name: 'pinch',
     // 触发事件所需要的最小缩放比例
@@ -23,11 +21,10 @@ const DEFAULT_OPTIONS = {
  * @returns
  */
 export default function (context: Core, options?: Partial<typeof DEFAULT_OPTIONS>) {
-    // console.warn('setup pinch');
+    const _options = { ...options, ...DEFAULT_OPTIONS };
     let status: RECOGNIZER_STATUS = STATUS_POSSIBLE;
 
     context.on('computed', (computed) => {
-        const _options = { ...options, ...DEFAULT_OPTIONS };
         // 重置status
         if ([STATUS_END, STATUS_CANCELLED, STATUS_FAILED].includes(status)) {
             status = STATUS_POSSIBLE;
@@ -37,18 +34,19 @@ export default function (context: Core, options?: Partial<typeof DEFAULT_OPTIONS
         status = flow(isValid, status, computed.phase);
         if (isValid) {
             context.emit2(_options.name, computed);
-            // context.emit2(_options.name + status, computed);
+            context.emit2(_options.name + getStatusName(status), computed);
             // context.emit2('at', computed);
             // context.emit2('at:after', { ...computed, name: _options.name });
         } 
         else if ([STATUS_END, STATUS_CANCELLED].includes(status)) {
-            context.emit2(_options.name + status, computed);
+            context.emit2(_options.name + getStatusName(status), computed);
         }
     });
 
     // 加载计算方法, 有前后顺序
     context.compute([ComputeVectorForMutli, ComputeScale]);
-    return { status };
+
+    return () =>({ ..._options, status });
 }
 
 function test(computed: Computed, options: typeof DEFAULT_OPTIONS) {

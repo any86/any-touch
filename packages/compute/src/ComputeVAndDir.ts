@@ -28,7 +28,7 @@ export default function () {
             const deltaTime = input.timestamp - lastValidInput.timestamp;
 
             // 间隔超过16ms刷新速度数据
-            if (/*INPUT_MOVE === phase && */COMPUTE_INTERVAL < deltaTime) {
+            if (/*TYPE_MOVE === phase && */COMPUTE_INTERVAL < deltaTime) {
                 const deltaX = input.x - lastValidInput.x;
                 const deltaY = input.y - lastValidInput.y;
                 speedX = Math.round(deltaX / deltaTime * 100) / 100;

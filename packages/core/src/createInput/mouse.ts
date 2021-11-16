@@ -1,5 +1,5 @@
 import type { phase, PointClientXY } from '@any-touch/shared';
-import { MOUSE_DOWN, MOUSE_MOVE, MOUSE_UP, INPUT_START, INPUT_MOVE, INPUT_END } from '@any-touch/shared';
+import { MOUSE_DOWN, MOUSE_MOVE, MOUSE_UP, TYPE_START, TYPE_MOVE, TYPE_END } from '@any-touch/shared';
 import inputCreator from './inputCreator';
 export default function () {
     let prevPoints: PointClientXY[];
@@ -22,13 +22,13 @@ export default function () {
             _target = target;
             // 必须左键
             isPressed = true;
-            phase = INPUT_START;
+            phase = TYPE_START;
         } else if (isPressed) {
             if (MOUSE_MOVE === type) {
-                phase = INPUT_MOVE;
+                phase = TYPE_MOVE;
             } else if (MOUSE_UP === type) {
                 points = [];
-                phase = INPUT_END;
+                phase = TYPE_END;
                 isPressed = false;
             }
         }

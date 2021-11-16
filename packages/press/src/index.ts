@@ -1,11 +1,10 @@
 import type { RECOGNIZER_STATUS, Computed } from '@any-touch/shared';
 import {
-    STATUS_FAILED, STATUS_RECOGNIZED, STATUS_END, STATUS_CANCELLED, STATUS_POSSIBLE, DIRECTION_UP, INPUT_CANCEL, INPUT_END, INPUT_START
+    STATUS_FAILED, STATUS_RECOGNIZED, STATUS_END, STATUS_CANCELLED, STATUS_POSSIBLE, DIRECTION_UP, TYPE_CANCEL, TYPE_END, TYPE_START
 } from '@any-touch/shared';
 import { ComputeDistance } from '@any-touch/compute';
 import Core from '@any-touch/core';
 
-import { flow } from '@any-touch/recognizer';
 const DEFAULT_OPTIONS = {
     name: 'press',
     pointLength: 1,
@@ -19,16 +18,16 @@ const DEFAULT_OPTIONS = {
  * @returns  
  */
 export default function (context: Core, options?: Partial<typeof DEFAULT_OPTIONS>) {
+    const _options = { ...options, ...DEFAULT_OPTIONS };
     let status: RECOGNIZER_STATUS = STATUS_POSSIBLE;
     let timeoutId = 0;
     context.on('computed', (computed) => {
-        const _options = { ...options, ...DEFAULT_OPTIONS };
 
         const { phase, startInput, pointLength } = computed;
         // 1. start阶段
         // 2. 触点数符合
         // 那么等待minPressTime时间后触发press
-        if (INPUT_START === phase && _options.pointLength === pointLength) {
+        if (TYPE_START === phase && _options.pointLength === pointLength) {
             // 重置状态
             // 重置status
             if ([STATUS_END, STATUS_CANCELLED, STATUS_RECOGNIZED, STATUS_FAILED].includes(status)) {
@@ -45,7 +44,7 @@ export default function (context: Core, options?: Partial<typeof DEFAULT_OPTIONS
         // 触发pressup条件:
         // 1. end阶段
         // 2. 已识别
-        else if (INPUT_END === phase && STATUS_RECOGNIZED === status) {
+        else if (TYPE_END === phase && STATUS_RECOGNIZED === status) {
             context.emit2(`${_options.name}${DIRECTION_UP}`, computed);
         }
         else if (STATUS_RECOGNIZED !== status) {
@@ -54,7 +53,7 @@ export default function (context: Core, options?: Partial<typeof DEFAULT_OPTIONS
             // 发生了大的位移变化
             if (!test(computed, _options) ||
                 // end 或 cancel触发的时候还不到要求的press触发时间
-                (_options.minPressTime > deltaTime && [INPUT_END, INPUT_CANCEL].includes(phase))) {
+                (_options.minPressTime > deltaTime && [TYPE_END, TYPE_CANCEL].includes(phase))) {
                 clearTimeout(timeoutId)
                 status = STATUS_FAILED;
             }
@@ -63,7 +62,7 @@ export default function (context: Core, options?: Partial<typeof DEFAULT_OPTIONS
 
     // 加载计算方法
     context.compute([ComputeDistance]);
-    return { status }
+    return () =>({ ..._options, status });
 }
 
 
@@ -91,7 +90,7 @@ function test(computed: Required<Computed>, options: typeof DEFAULT_OPTIONS) {
 //         // 1. start阶段
 //         // 2. 触点数符合
 //         // 那么等待minPressTime时间后触发press
-//         if (INPUT_START === phase && this._$isValidPointLength(pointLength)) {
+//         if (TYPE_START === phase && this._$isValidPointLength(pointLength)) {
 //             // 重置状态
 //             resetStatus(this);
 //             // 延迟触发
@@ -104,7 +103,7 @@ function test(computed: Required<Computed>, options: typeof DEFAULT_OPTIONS) {
 //         // 触发pressup条件:
 //         // 1. end阶段
 //         // 2. 已识别
-//         else if (INPUT_END === phase && STATUS_RECOGNIZED === this.status) {
+//         else if (TYPE_END === phase && STATUS_RECOGNIZED === this.status) {
 //             emit(`${this.options.name}${DIRECTION_UP}`);
 //         }
 //         else if (STATUS_RECOGNIZED !== this.status) {
@@ -113,7 +112,7 @@ function test(computed: Required<Computed>, options: typeof DEFAULT_OPTIONS) {
 //             // 发生了大的位移变化
 //             if (!this._$!test(computed) ||
 //                 // end 或 cancel触发的时候还不到要求的press触发时间
-//                 (this.options.minPressTime > deltaTime && [INPUT_END, INPUT_CANCEL].includes(phase))) {
+//                 (this.options.minPressTime > deltaTime && [TYPE_END, TYPE_CANCEL].includes(phase))) {
 //                 this._$cancel();
 //                 this.status = STATUS_FAILED;
 //             }

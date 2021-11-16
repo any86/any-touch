@@ -1,6 +1,6 @@
 
 import type { Input, directionString } from '@any-touch/shared';
-import { CLIENT_X, CLIENT_Y, INPUT_MOVE, INPUT_START } from '@any-touch/shared';
+import { CLIENT_X, CLIENT_Y, TYPE_MOVE, TYPE_START } from '@any-touch/shared';
 import { getVLength, getDirection } from '@any-touch/vector';
 
 export default function () {
@@ -14,7 +14,7 @@ export default function () {
     return function (input: Input): { displacementX: number, displacementY: number, distanceX: number, distanceY: number, distance: number, overallDirection: directionString } {
         const { phase, startInput } = input;
 
-        if (INPUT_START === phase) {
+        if (TYPE_START === phase) {
             displacementX = 0;
             displacementY = 0;
             distanceX = 0;
@@ -22,7 +22,7 @@ export default function () {
             distance = 0;
         }
 
-        else if (INPUT_MOVE === phase) {
+        else if (TYPE_MOVE === phase) {
             displacementX = Math.round(input.points[0][CLIENT_X] - startInput.points[0][CLIENT_X]);
             displacementY = Math.round(input.points[0][CLIENT_Y] - startInput.points[0][CLIENT_Y]);
             distanceX = Math.abs(displacementX);

@@ -7,14 +7,11 @@ import {
     STATUS_FAILED,
     STATUS_RECOGNIZED,
 } from '@any-touch/shared';
-import Base from '@any-touch/recognizer';
+
 import Core from '@any-touch/core';
-/**
- * 基础识别器类型
- */
-export type Recognizer = Base;
-export type AnyTouchPlugin = any;
-export type RecognizerConstruct = typeof Base;
+
+export type KV = Record<string | symbol, unknown>;
+
 /**
  * 适配器支持的事件类型
  */
@@ -32,9 +29,9 @@ export interface PointClientXY {
 export type phase = 'start' | 'move' | 'end' | 'cancel';
 
 /**
- * 原生事件对象最基础的统一化
+ * 原生事件上选取的共有字段
  */
-export interface BasicsInput {
+export interface PubicEvent {
     readonly phase: phase;
     readonly changedPoints: PointClientXY[];
     readonly points: PointClientXY[];
@@ -46,7 +43,7 @@ export interface BasicsInput {
 /**
  * 不包含prevInput/startInput/startMultiInput的Input
  */
-export interface InputOnlyHasCurrent extends BasicsInput {
+export interface InputOnlyHasCurrent extends PubicEvent {
     readonly id: number;
     // readonly preventDefault: () => void;
     // 新一轮手势识别的开始和结束
@@ -67,7 +64,7 @@ export interface InputOnlyHasCurrent extends BasicsInput {
 }
 
 /**
- * 统一化event后数据
+ * 提供给插件(compute函数)之前的统一化数据
  */
 export interface Input extends InputOnlyHasCurrent {
     readonly startInput: InputOnlyHasCurrent;
@@ -75,38 +72,7 @@ export interface Input extends InputOnlyHasCurrent {
     readonly prevInput?: InputOnlyHasCurrent;
 }
 
-// 标准class
-// export interface StdClass {
-//     new(...args: any[]): any;
-// }
 
-// export interface ComputeConstructor {
-//     _id: string;
-//     new(...args: any[]): {
-//         compute(input: Input): Record<string, any> | void;
-//     };
-// }
-
-/**
- * 计算函数
- */
-export interface V2 {
-    (input: Input): Partial<Computed> | void;
-}
-/**
- * 计算函数外壳函数
- */
-export interface ComputeWrapFunction {
-    (): V2;
-    _id: string;
-}
-
-/**
- * 仅用来作为识别器和at通知的载体函数
- */
-export interface EventTrigger {
-    (type: string): void;
-}
 
 /**
  * 方向
@@ -184,10 +150,6 @@ export interface InputCreatorFunction<T> {
     (event: T): void | Input;
 }
 
-export interface InputCreatorWrapFunction {
-    (el?: HTMLElement): InputCreatorFunction<TouchEvent>;
-    (): InputCreatorFunction<MouseEvent>;
-}
 
 /**
  * Input转换器外壳函数映射
@@ -196,13 +158,16 @@ export interface InputCreatorFunctionMap {
     [k: string]: InputCreatorFunction<SupportEvent>;
 }
 
-// ======= v2 ========
-export type KV = Record<string | symbol, unknown>;
 
+/**
+ * 插件返回值
+ */
+export type PluginContext = () => { name: string, status: RECOGNIZER_STATUS };
 /**
  * 插件
  */
-export type Plugin = (context: Core, pluginOptions: unknown) => unknown;
+export type Plugin = (context: Core, pluginOptions: any) => () => PluginContext;
+
 
 /**
  * 计算函数
@@ -215,7 +180,21 @@ export type ComputeFunction = (input: Input, computed: Partial<Computed>) => Com
 export type ComputeFunctionCreator = () => ComputeFunction;
 
 
-// type A = {a:1}
-// type B = {b:2}
-// type C = A&B
-// const c:C = {a:1,b:2}
+/**
+ * 仅用来作为识别器和at通知的载体函数
+ */
+export interface EventTrigger {
+    (type: string): void;
+}
+
+// 标准class
+// export interface StdClass {
+//     new(...args: any[]): any;
+// }
+
+// export interface ComputeConstructor {
+//     _id: string;
+//     new(...args: any[]): {
+//         compute(input: Input): Record<string, any> | void;
+//     };
+// }

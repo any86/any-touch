@@ -1,5 +1,5 @@
 import type { Computed, RECOGNIZER_STATUS } from '@any-touch/shared';
-import { INPUT_END, STATUS_POSSIBLE } from '@any-touch/shared';
+import { TYPE_END, STATUS_POSSIBLE } from '@any-touch/shared';
 import { ComputeDistance, ComputeVAndDir, ComputeMaxLength } from '@any-touch/compute';
 import Core from '@any-touch/core'
 const DEFAULT_OPTIONS = {
@@ -17,23 +17,23 @@ const DEFAULT_OPTIONS = {
  */
 export default function (context: Core, options?: Partial<typeof DEFAULT_OPTIONS>) {
     let status: RECOGNIZER_STATUS = STATUS_POSSIBLE;
+    const _options = { ...options, ...DEFAULT_OPTIONS };
     context.on('computed', (computed) => {
-        const _options = { ...options, ...DEFAULT_OPTIONS };
         if (test(computed, _options)) {
             context.emit2(_options.name, computed);
             context.emit2(_options.name + computed.direction, computed);
-            context.emit2('at', computed);
-            context.emit2('at:after', {...computed,name:_options.name});
+            // context.emit2('at', computed);
+            // context.emit2('at:after', {...computed,name:_options.name});
         }
     });
 
     // 加载计算方法
     context.compute([ComputeDistance, ComputeVAndDir, ComputeMaxLength]);
-    return { status }
+    return () =>({ ..._options, status });
 }
 
 function test(computed: Required<Computed>, options: typeof DEFAULT_OPTIONS) {
-    if (INPUT_END !== computed.phase) return false;
+    if (TYPE_END !== computed.phase) return false;
     const { velocityX, velocityY, maxPointLength, distance } = computed;
     return options.pointLength === maxPointLength &&
         options.threshold < distance &&
@@ -58,7 +58,7 @@ function test(computed: Required<Computed>, options: typeof DEFAULT_OPTIONS) {
 //      */
 //     _$test(computed: Computed): boolean {
 //         // 非end阶段, 开始校验数据
-//         if (INPUT_END !== computed.phase) return false;
+//         if (TYPE_END !== computed.phase) return false;
 //         const { velocityX, velocityY, maxPointLength, distance } = computed;
 //         return this.options.pointLength === maxPointLength &&
 //             this.options.threshold < distance &&

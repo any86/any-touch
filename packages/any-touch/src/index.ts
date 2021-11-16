@@ -28,7 +28,6 @@ import {
 
 // 类型, 为了兼容
 import { Options } from '@any-touch/core';
-import { Plugin } from '@any-touch/shared';
 
 export default class extends Core {
     static version = '__VERSION__';
@@ -43,11 +42,11 @@ export default class extends Core {
 
     constructor(el?: HTMLElement, options?: Options) {
         super(el, options);
-        tap(this);
-        pan(this);
-        swipe(this);
-        press(this);
-        pinch(this);
-        rotate(this);
+        this.use(tap);
+        this.use(pan);
+        this.use(swipe);
+        this.use(press);
+        this.use(pinch);
+        this.use(rotate);
     }
 }
