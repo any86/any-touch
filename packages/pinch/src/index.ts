@@ -1,9 +1,9 @@
-import { RECOGNIZER_STATE, Computed, Input } from '@any-touch/shared';
+import { Computed } from '@any-touch/shared';
 import {
     STATE_POSSIBLE,
     STATE_END,
     STATE_CANCELLED,
-    STATE_FAILED,flow,getStatusName
+    STATE_FAILED, flow, getStatusName, createPluginContext
 } from '@any-touch/shared';
 import { ComputeScale, ComputeVectorForMutli } from '@any-touch/compute';
 import Core from '@any-touch/core';
@@ -16,41 +16,46 @@ const DEFAULT_OPTIONS = {
 };
 /**
  * "啮合"识别器
- * @param context AnyTouch实例
- * @param options AnyTouch选项
+ * @param at AnyTouch实例
+ * @param options 识别器选项
  * @returns
  */
-export default function (context: Core, options?: Partial<typeof DEFAULT_OPTIONS>) {
+export default function (at: Core, options?: Partial<typeof DEFAULT_OPTIONS>) {
     const _options = { ...options, ...DEFAULT_OPTIONS };
-    let state: RECOGNIZER_STATE = STATE_POSSIBLE;
+    const { name } = _options;
+    const context = createPluginContext(name);
 
-    context.on('computed', (computed) => {
+    at.on('computed', (computed) => {
         // 重置status
-        if ([STATE_END, STATE_CANCELLED, STATE_FAILED].includes(state)) {
-            state = STATE_POSSIBLE;
+        if ([STATE_END, STATE_CANCELLED, STATE_FAILED].includes(context.state)) {
+            context.state = STATE_POSSIBLE;
         }
-
+        // 禁止
+        if (context.disabled) {
+            context.state = STATE_POSSIBLE;
+            return;
+        };
         const isValid = test(computed, _options);
-        state = flow(isValid, state, computed.phase);
+        context.state = flow(isValid, context.state, computed.phase);
         if (isValid) {
-            context.emit2(_options.name, computed);
-            context.emit2(_options.name + getStatusName(state), computed);
+            at.emit2(name, computed);
+            at.emit2(name + getStatusName(context.state), computed);
             // context.emit2('at', computed);
             // context.emit2('at:after', { ...computed, name: _options.name });
-        } 
-        else if ([STATE_END, STATE_CANCELLED].includes(state)) {
-            context.emit2(_options.name + getStatusName(state), computed);
+        }
+        else if ([STATE_END, STATE_CANCELLED].includes(context.state)) {
+            at.emit2(name + getStatusName(context.state), computed);
         }
     });
 
     // 加载计算方法, 有前后顺序
-    context.compute([ComputeVectorForMutli, ComputeScale]);
+    at.compute([ComputeVectorForMutli, ComputeScale]);
 
-    return () =>({ ..._options, state });
+    return context;
 }
 
 function test(computed: Computed, options: typeof DEFAULT_OPTIONS) {
-    const { pointLength, scale,deltaScale } = computed;
+    const { pointLength, scale, deltaScale } = computed;
     return (options.pointLength === pointLength && (void 0 !== scale && void 0 !== deltaScale && options.threshold < Math.abs(scale - 1)))
 }
 

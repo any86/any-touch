@@ -6,7 +6,7 @@ import {
     STATE_END,
     STATE_CANCELLED,
     STATE_FAILED,
-    TYPE_END, flow, getStatusName
+    TYPE_END, flow, getStatusName,createPluginContext
 } from '@any-touch/shared';
 import { ComputeDistance, ComputeDeltaXY, ComputeVAndDir } from '@any-touch/compute';
 import Core from '@any-touch/core';
@@ -14,34 +14,38 @@ import Core from '@any-touch/core';
 const DEFAULT_OPTIONS = { name: 'pan', threshold: 10, pointLength: 1 };
 /**
  * "拖拽"识别器
- * @param context AnyTouch实例
- * @param options AnyTouch选项
+ * @param at AnyTouch实例
+ * @param options 识别器选项
  * @returns  
  */
-export default function (context: Core, options?: Partial<typeof DEFAULT_OPTIONS>) {
-    let state: RECOGNIZER_STATE = STATE_POSSIBLE;
+export default function (at: Core, options?: Partial<typeof DEFAULT_OPTIONS>) {
     const _options = { ...options, ...DEFAULT_OPTIONS };
+    const { name } = _options;
+    const context = createPluginContext(name);
 
-    context.on('computed', (computed) => {
-        const { name } = _options;
+    at.on('computed', (computed) => {
         // 重置status
-        if ([STATE_END, STATE_CANCELLED, STATE_FAILED].includes(state)) {
-            state = STATE_POSSIBLE;
+        if ([STATE_END, STATE_CANCELLED, STATE_FAILED].includes(context.state)) {
+            context.state = STATE_POSSIBLE;
         }
 
-        const isValid = test(computed, _options, state);
-        state = flow(isValid, state, computed.phase);
+        // 禁止
+        if(context.disabled) {
+            context.state = STATE_POSSIBLE;
+            return;
+        };
+        const isValid = test(computed, _options, context.state);
+        context.state = flow(isValid, context.state, computed.phase);
 
         if (isValid) {
-            context.emit2(name, computed);
-            context.emit2(name + getStatusName(state), computed);
+            at.emit2(name, computed);
+            at.emit2(name + getStatusName(context.state), computed);
         }
     });
 
     // 加载计算方法
-    context.compute([ComputeVAndDir, ComputeDistance, ComputeDeltaXY]);
-
-    return () =>({ ..._options, state });
+    at.compute([ComputeVAndDir, ComputeDistance, ComputeDeltaXY]);
+    return context;
 }
 
 function test(computed: Computed, options: typeof DEFAULT_OPTIONS, state: RECOGNIZER_STATE) {

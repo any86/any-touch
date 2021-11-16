@@ -1,5 +1,5 @@
 import type { Computed, RECOGNIZER_STATE } from '@any-touch/shared';
-import { TYPE_END, STATE_POSSIBLE } from '@any-touch/shared';
+import { TYPE_END, STATE_POSSIBLE, STATE_RECOGNIZED, createPluginContext } from '@any-touch/shared';
 import { ComputeDistance, ComputeVAndDir, ComputeMaxLength } from '@any-touch/compute';
 import Core from '@any-touch/core'
 const DEFAULT_OPTIONS = {
@@ -11,25 +11,28 @@ const DEFAULT_OPTIONS = {
 
 /**
  * "拖拽"识别器
- * @param context AnyTouch实例
- * @param options AnyTouch选项
+ * @param at AnyTouch实例
+ * @param options 识别器选项
  * @returns  
  */
-export default function (context: Core, options?: Partial<typeof DEFAULT_OPTIONS>) {
-    let state: RECOGNIZER_STATE = STATE_POSSIBLE;
+export default function (at: Core, options?: Partial<typeof DEFAULT_OPTIONS>) {
     const _options = { ...options, ...DEFAULT_OPTIONS };
-    context.on('computed', (computed) => {
+    const { name } = _options;
+    const context = createPluginContext(name);
+
+    at.on('computed', (computed) => {
+        context.state = STATE_POSSIBLE;
+        if (context.disabled) return;
         if (test(computed, _options)) {
-            context.emit2(_options.name, computed);
-            context.emit2(_options.name + computed.direction, computed);
-            // context.emit2('at', computed);
-            // context.emit2('at:after', {...computed,name:_options.name});
+            context.state = STATE_RECOGNIZED;
+            at.emit2(name, computed);
+            at.emit2(name + computed.direction, computed);
         }
     });
 
     // 加载计算方法
-    context.compute([ComputeDistance, ComputeVAndDir, ComputeMaxLength]);
-    return () =>({ ..._options, state });
+    at.compute([ComputeDistance, ComputeVAndDir, ComputeMaxLength]);
+    return context;
 }
 
 function test(computed: Required<Computed>, options: typeof DEFAULT_OPTIONS) {

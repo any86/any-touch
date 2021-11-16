@@ -1,6 +1,6 @@
 import AnyTouch from 'any-touch';
 import { Point, Input, Computed, RECOGNIZER_STATE } from '@any-touch/shared';
-import { STATE_RECOGNIZED, STATE_POSSIBLE, STATE_FAILED, TYPE_END } from '@any-touch/shared';
+import { STATE_RECOGNIZED, STATE_POSSIBLE, STATE_FAILED, TYPE_END, createPluginContext } from '@any-touch/shared';
 import { getVLength } from '@any-touch/vector';
 import { ComputeDistance, ComputeMaxLength } from '@any-touch/compute';
 const DEFAULT_OPTIONS = {
@@ -62,12 +62,14 @@ const DEFAULT_OPTIONS = {
  *       触发, 状态设置为"已识别", 重置(点击次数,位置)
  *              |
  *             结束
- * @param context AnyTouch实例
- * @param options AnyTouch选项
+ * @param at AnyTouch实例
+ * @param options 识别器选项
  */
-export default function (context: AnyTouch, options?: Partial<typeof DEFAULT_OPTIONS>) {
+export default function (at: AnyTouch, options?: Partial<typeof DEFAULT_OPTIONS>) {
     const _options = { ...options, ...DEFAULT_OPTIONS };
-    let state: RECOGNIZER_STATE = STATE_POSSIBLE;
+    const { name } = _options;
+    const context = createPluginContext(name);
+
     let tapCount = 0;
     // 记录每次单击完成时的坐标
     let prevTapPoint: Point | undefined;
@@ -87,17 +89,23 @@ export default function (context: AnyTouch, options?: Partial<typeof DEFAULT_OPT
      */
     function countDownToFail() {
         countDownToFailTimer = (setTimeout as Window['setTimeout'])(() => {
-            state = STATE_FAILED;
+            context.state = STATE_FAILED;
             reset();
         }, _options.waitNextTapTime);
     }
 
-    context.on('computed', (computed) => {
+    at.on('computed', (computed) => {
+        // 禁止
+        if (context.disabled) {
+            context.state = STATE_POSSIBLE;
+            return;
+        };
+
         const { phase, x, y } = computed;
 
         // 只在end阶段去识别
         if (TYPE_END !== phase) return;
-        state = STATE_POSSIBLE;
+        context.state = STATE_POSSIBLE;
         // 每一次点击是否符合要求
         if (test(computed, _options)) {
             clearTimeout(countDownToFailTimer);
@@ -115,9 +123,9 @@ export default function (context: AnyTouch, options?: Partial<typeof DEFAULT_OPT
             // 是否满足点击次数要求
             // 之所以用%, 是因为如果连续点击3次, 单击的tapCount会为3, 但是其实tap也应该触发
             if (0 === tapCount % _options.tapTimes) {
-                state = STATE_RECOGNIZED;
+                context.state = STATE_RECOGNIZED;
                 // 触发事件
-                context.emit2(_options.name, computed);
+                at.emit2(_options.name, computed);
                 // context.emit2('at', computed);
                 // context.emit2('at:after', { ...computed, name: _options.name });
                 reset();
@@ -126,13 +134,13 @@ export default function (context: AnyTouch, options?: Partial<typeof DEFAULT_OPT
             }
         } else {
             reset();
-            state = STATE_FAILED;
+            context.state = STATE_FAILED;
         }
     });
 
-    context.compute([ComputeDistance, ComputeMaxLength]);
+    at.compute([ComputeDistance, ComputeMaxLength]);
 
-    return () => ({ ..._options, state });
+    return context;
 }
 
 /**
