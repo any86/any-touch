@@ -17,13 +17,13 @@ import pinch from '@any-touch/pinch';
 import rotate from '@any-touch/rotate';
 
 import {
-    STATUS_POSSIBLE,
-    STATUS_START,
-    STATUS_MOVE,
-    STATUS_END,
-    STATUS_CANCELLED,
-    STATUS_FAILED,
-    STATUS_RECOGNIZED,
+    STATE_POSSIBLE,
+    STATE_START,
+    STATE_MOVE,
+    STATE_END,
+    STATE_CANCELLED,
+    STATE_FAILED,
+    STATE_RECOGNIZED,
 } from '@any-touch/shared';
 
 // 类型, 为了兼容
@@ -32,13 +32,13 @@ import { Options } from '@any-touch/core';
 export default class extends Core {
     static version = '__VERSION__';
     // 状态码
-    static STATUS_POSSIBLE = STATUS_POSSIBLE;
-    static STATUS_START = STATUS_START;
-    static STATUS_MOVE = STATUS_MOVE;
-    static STATUS_END = STATUS_END;
-    static STATUS_CANCELLED = STATUS_CANCELLED;
-    static STATUS_FAILED = STATUS_FAILED;
-    static STATUS_RECOGNIZED = STATUS_RECOGNIZED;
+    static STATUS_POSSIBLE = STATE_POSSIBLE;
+    static STATUS_START = STATE_START;
+    static STATUS_MOVE = STATE_MOVE;
+    static STATUS_END = STATE_END;
+    static STATUS_CANCELLED = STATE_CANCELLED;
+    static STATUS_FAILED = STATE_FAILED;
+    static STATUS_RECOGNIZED = STATE_RECOGNIZED;
 
     constructor(el?: HTMLElement, options?: Options) {
         super(el, options);

@@ -1,6 +1,6 @@
 import AnyTouch from 'any-touch';
-import { Point, Input, Computed, RECOGNIZER_STATUS } from '@any-touch/shared';
-import { STATUS_RECOGNIZED, STATUS_POSSIBLE, STATUS_FAILED, TYPE_END } from '@any-touch/shared';
+import { Point, Input, Computed, RECOGNIZER_STATE } from '@any-touch/shared';
+import { STATE_RECOGNIZED, STATE_POSSIBLE, STATE_FAILED, TYPE_END } from '@any-touch/shared';
 import { getVLength } from '@any-touch/vector';
 import { ComputeDistance, ComputeMaxLength } from '@any-touch/compute';
 const DEFAULT_OPTIONS = {
@@ -67,7 +67,7 @@ const DEFAULT_OPTIONS = {
  */
 export default function (context: AnyTouch, options?: Partial<typeof DEFAULT_OPTIONS>) {
     const _options = { ...options, ...DEFAULT_OPTIONS };
-    let status: RECOGNIZER_STATUS = STATUS_POSSIBLE;
+    let state: RECOGNIZER_STATE = STATE_POSSIBLE;
     let tapCount = 0;
     // 记录每次单击完成时的坐标
     let prevTapPoint: Point | undefined;
@@ -87,7 +87,7 @@ export default function (context: AnyTouch, options?: Partial<typeof DEFAULT_OPT
      */
     function countDownToFail() {
         countDownToFailTimer = (setTimeout as Window['setTimeout'])(() => {
-            status = STATUS_FAILED;
+            state = STATE_FAILED;
             reset();
         }, _options.waitNextTapTime);
     }
@@ -97,7 +97,7 @@ export default function (context: AnyTouch, options?: Partial<typeof DEFAULT_OPT
 
         // 只在end阶段去识别
         if (TYPE_END !== phase) return;
-        status = STATUS_POSSIBLE;
+        state = STATE_POSSIBLE;
         // 每一次点击是否符合要求
         if (test(computed, _options)) {
             clearTimeout(countDownToFailTimer);
@@ -115,7 +115,7 @@ export default function (context: AnyTouch, options?: Partial<typeof DEFAULT_OPT
             // 是否满足点击次数要求
             // 之所以用%, 是因为如果连续点击3次, 单击的tapCount会为3, 但是其实tap也应该触发
             if (0 === tapCount % _options.tapTimes) {
-                status = STATUS_RECOGNIZED;
+                state = STATE_RECOGNIZED;
                 // 触发事件
                 context.emit2(_options.name, computed);
                 // context.emit2('at', computed);
@@ -126,13 +126,13 @@ export default function (context: AnyTouch, options?: Partial<typeof DEFAULT_OPT
             }
         } else {
             reset();
-            status = STATUS_FAILED;
+            state = STATE_FAILED;
         }
     });
 
     context.compute([ComputeDistance, ComputeMaxLength]);
 
-    return () => ({ ..._options, status });
+    return () => ({ ..._options, state });
 }
 
 /**

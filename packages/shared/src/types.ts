@@ -1,11 +1,11 @@
 import {
-    STATUS_POSSIBLE,
-    STATUS_START,
-    STATUS_MOVE,
-    STATUS_END,
-    STATUS_CANCELLED,
-    STATUS_FAILED,
-    STATUS_RECOGNIZED,
+    STATE_POSSIBLE,
+    STATE_START,
+    STATE_MOVE,
+    STATE_END,
+    STATE_CANCELLED,
+    STATE_FAILED,
+    STATE_RECOGNIZED,
 } from '@any-touch/shared';
 
 import Core from '@any-touch/core';
@@ -134,14 +134,14 @@ export interface AnyTouchEvent extends Input, Required<Computed> {
 /**
  * 识别器状态
  */
-export type RECOGNIZER_STATUS =
-    | typeof STATUS_POSSIBLE
-    | typeof STATUS_START
-    | typeof STATUS_MOVE
-    | typeof STATUS_END
-    | typeof STATUS_CANCELLED
-    | typeof STATUS_FAILED
-    | typeof STATUS_RECOGNIZED;
+export type RECOGNIZER_STATE =
+    | typeof STATE_POSSIBLE
+    | typeof STATE_START
+    | typeof STATE_MOVE
+    | typeof STATE_END
+    | typeof STATE_CANCELLED
+    | typeof STATE_FAILED
+    | typeof STATE_RECOGNIZED;
 
 /**
  * Input转换器
@@ -162,7 +162,7 @@ export interface InputCreatorFunctionMap {
 /**
  * 插件返回值
  */
-export type PluginContext = () => { name: string, status: RECOGNIZER_STATUS };
+export type PluginContext = () => { name: string, state: RECOGNIZER_STATE };
 /**
  * 插件
  */

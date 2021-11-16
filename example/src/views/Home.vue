@@ -113,7 +113,7 @@ export default {
     mounted() {
         const at = new AnyTouch(this.$refs.panel, { preventDefault: true });
         at.beforeEach((context, next) => {
-            console.log(context);
+            // console.log(context);
             next();
         });
     },

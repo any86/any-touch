@@ -1,5 +1,5 @@
-import type { Computed, RECOGNIZER_STATUS } from '@any-touch/shared';
-import { TYPE_END, STATUS_POSSIBLE } from '@any-touch/shared';
+import type { Computed, RECOGNIZER_STATE } from '@any-touch/shared';
+import { TYPE_END, STATE_POSSIBLE } from '@any-touch/shared';
 import { ComputeDistance, ComputeVAndDir, ComputeMaxLength } from '@any-touch/compute';
 import Core from '@any-touch/core'
 const DEFAULT_OPTIONS = {
@@ -16,7 +16,7 @@ const DEFAULT_OPTIONS = {
  * @returns  
  */
 export default function (context: Core, options?: Partial<typeof DEFAULT_OPTIONS>) {
-    let status: RECOGNIZER_STATUS = STATUS_POSSIBLE;
+    let state: RECOGNIZER_STATE = STATE_POSSIBLE;
     const _options = { ...options, ...DEFAULT_OPTIONS };
     context.on('computed', (computed) => {
         if (test(computed, _options)) {
@@ -29,7 +29,7 @@ export default function (context: Core, options?: Partial<typeof DEFAULT_OPTIONS
 
     // 加载计算方法
     context.compute([ComputeDistance, ComputeVAndDir, ComputeMaxLength]);
-    return () =>({ ..._options, status });
+    return () =>({ ..._options, state });
 }
 
 function test(computed: Required<Computed>, options: typeof DEFAULT_OPTIONS) {

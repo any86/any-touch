@@ -1,11 +1,11 @@
-import { RECOGNIZER_STATUS, Computed } from '@any-touch/shared';
+import { RECOGNIZER_STATE, Computed } from '@any-touch/shared';
 import {
-    STATUS_POSSIBLE,
-    STATUS_START,
-    STATUS_MOVE,
-    STATUS_END,
-    STATUS_CANCELLED,
-    STATUS_FAILED, flow, getStatusName
+    STATE_POSSIBLE,
+    STATE_START,
+    STATE_MOVE,
+    STATE_END,
+    STATE_CANCELLED,
+    STATE_FAILED, flow, getStatusName
 } from '@any-touch/shared';
 import { ComputeAngle, ComputeVectorForMutli } from '@any-touch/compute';
 import Core from '@any-touch/core';
@@ -24,32 +24,32 @@ const DEFAULT_OPTIONS = {
  */
 export default function (context: Core, options?: Partial<typeof DEFAULT_OPTIONS>) {
     const _options = { ...options, ...DEFAULT_OPTIONS };
-    let status: RECOGNIZER_STATUS = STATUS_POSSIBLE;
+    let state: RECOGNIZER_STATE = STATE_POSSIBLE;
     context.on('computed', (computed) => {
         // 重置status
-        if ([STATUS_END, STATUS_CANCELLED, STATUS_FAILED].includes(status)) {
-            status = STATUS_POSSIBLE;
+        if ([STATE_END, STATE_CANCELLED, STATE_FAILED].includes(state)) {
+            state = STATE_POSSIBLE;
         }
 
-        const isValid = test(computed, _options, status);
-        status = flow(isValid, status, computed.phase);
+        const isValid = test(computed, _options, state);
+        state = flow(isValid, state, computed.phase);
 
         if (isValid) {
             context.emit2(_options.name, computed);
-            context.emit2(_options.name + getStatusName(status), computed);
+            context.emit2(_options.name + getStatusName(state), computed);
             // context.emit2(_options.name + computed.direction, computed);
-        } if ([STATUS_END, STATUS_CANCELLED].includes(status)) {
-            context.emit2(_options.name + getStatusName(status), computed);
+        } if ([STATE_END, STATE_CANCELLED].includes(state)) {
+            context.emit2(_options.name + getStatusName(state), computed);
         }
     });
 
     // 加载计算方法, 有前后顺序
     context.compute([ComputeVectorForMutli, ComputeAngle]);
-    return () => ({ ..._options, status });
+    return () => ({ ..._options, state });
 }
 
-function test(computed: Required<Computed>, options: typeof DEFAULT_OPTIONS, status: RECOGNIZER_STATUS) {
-    let isRecognized = [STATUS_START, STATUS_MOVE].includes(status);
+function test(computed: Required<Computed>, options: typeof DEFAULT_OPTIONS, state: RECOGNIZER_STATE) {
+    let isRecognized = [STATE_START, STATE_MOVE].includes(state);
     const { pointLength, angle } = computed;
     return options.pointLength === pointLength && (options.threshold < Math.abs(angle) || isRecognized);
 }

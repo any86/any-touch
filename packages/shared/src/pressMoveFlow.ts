@@ -1,11 +1,11 @@
-import { RECOGNIZER_STATUS } from './index';
+import { RECOGNIZER_STATE } from './index';
 import {
-    STATUS_POSSIBLE,
-    STATUS_START,
-    STATUS_MOVE,
-    STATUS_END,
-    STATUS_CANCELLED,
-    STATUS_FAILED,
+    STATE_POSSIBLE,
+    STATE_START,
+    STATE_MOVE,
+    STATE_END,
+    STATE_CANCELLED,
+    STATE_FAILED,
 
     TYPE_START,
     TYPE_CANCEL,
@@ -14,10 +14,10 @@ import {
 } from './const';
 
 const STATUS_CODE_AND_NAME_MAP: { [k: number]: 'start' | 'move' | 'end' | 'cancel' | undefined } = {
-    [STATUS_START]: TYPE_START,
-    [STATUS_MOVE]: TYPE_MOVE,
-    [STATUS_END]: TYPE_END,
-    [STATUS_CANCELLED]: TYPE_CANCEL,
+    [STATE_START]: TYPE_START,
+    [STATE_MOVE]: TYPE_MOVE,
+    [STATE_END]: TYPE_END,
+    [STATE_CANCELLED]: TYPE_CANCEL,
 }
 
 /**
@@ -25,7 +25,7 @@ const STATUS_CODE_AND_NAME_MAP: { [k: number]: 'start' | 'move' | 'end' | 'cance
  * @param code 状态代码
  * @returns 
  */
-export function getStatusName(code: RECOGNIZER_STATUS) {
+export function getStatusName(code: RECOGNIZER_STATE) {
     return STATUS_CODE_AND_NAME_MAP[code];
 }
 
@@ -38,7 +38,7 @@ export function getStatusName(code: RECOGNIZER_STATUS) {
  * @param phase 输入阶段
  * @returns 识别器状态
  */
-export function flow(isVaild: boolean, lastStatus: RECOGNIZER_STATUS, phase: string): RECOGNIZER_STATUS {
+export function flow(isVaild: boolean, lastStatus: RECOGNIZER_STATE, phase: string): RECOGNIZER_STATE {
     /*
      * {
      *  isValid {
@@ -53,26 +53,26 @@ export function flow(isVaild: boolean, lastStatus: RECOGNIZER_STATUS, phase: str
      */
     const STATE_MAP: { [k: number]: any } = {
         1: {
-            [STATUS_POSSIBLE]: {
+            [STATE_POSSIBLE]: {
                 // 下面都没有TYPE_START
                 // 是因为pressmove类的判断都是从TYPE_MOVE阶段开始
-                [TYPE_MOVE]: STATUS_START,
+                [TYPE_MOVE]: STATE_START,
                 // 暂时下面2种可有可无,
                 // 因为做requireFail判断的时候possible和failure没区别
                 // [TYPE_END]: STATUS_POSSIBLE,
                 // [TYPE_CANCEL]: STATUS_POSSIBLE,
             },
 
-            [STATUS_START]: {
-                [TYPE_MOVE]: STATUS_MOVE,
-                [TYPE_END]: STATUS_END,
-                [TYPE_CANCEL]: STATUS_CANCELLED,
+            [STATE_START]: {
+                [TYPE_MOVE]: STATE_MOVE,
+                [TYPE_END]: STATE_END,
+                [TYPE_CANCEL]: STATE_CANCELLED,
             },
 
-            [STATUS_MOVE]: {
-                [TYPE_MOVE]: STATUS_MOVE,
-                [TYPE_END]: STATUS_END,
-                [TYPE_CANCEL]: STATUS_CANCELLED,
+            [STATE_MOVE]: {
+                [TYPE_MOVE]: STATE_MOVE,
+                [TYPE_END]: STATE_END,
+                [TYPE_CANCEL]: STATE_CANCELLED,
             },
         },
         // isVaild === false
@@ -80,22 +80,22 @@ export function flow(isVaild: boolean, lastStatus: RECOGNIZER_STATUS, phase: str
         0: {
             // 此处没有STATUS_POSSIBLE和STATUS_END
             // 是因为返回值仍然是STATUS_POSSIBLE
-            [STATUS_START]: {
+            [STATE_START]: {
                 // 此处的TYPE_MOVE和TYPE_END
                 // 主要是针对多触点识别器
-                [TYPE_MOVE]: STATUS_FAILED,
-                [TYPE_END]: STATUS_END,
-                [TYPE_CANCEL]: STATUS_CANCELLED,
+                [TYPE_MOVE]: STATE_FAILED,
+                [TYPE_END]: STATE_END,
+                [TYPE_CANCEL]: STATE_CANCELLED,
             },
 
-            [STATUS_MOVE]: {
-                [TYPE_START]: STATUS_FAILED,
-                [TYPE_MOVE]: STATUS_FAILED,
-                [TYPE_END]: STATUS_END,
-                [TYPE_CANCEL]: STATUS_CANCELLED,
+            [STATE_MOVE]: {
+                [TYPE_START]: STATE_FAILED,
+                [TYPE_MOVE]: STATE_FAILED,
+                [TYPE_END]: STATE_END,
+                [TYPE_CANCEL]: STATE_CANCELLED,
             },
         },
     };
     const map = STATE_MAP[Number(isVaild)][lastStatus];
-    return (void 0 !== map && map[phase]) || STATUS_POSSIBLE;
+    return (void 0 !== map && map[phase]) || STATE_POSSIBLE;
 }

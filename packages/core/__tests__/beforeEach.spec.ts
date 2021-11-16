@@ -1,5 +1,5 @@
 import Core from '@any-touch/core';
-import { STATUS_POSSIBLE, STATUS_FAILED } from '@any-touch/shared';
+import { STATE_POSSIBLE, STATE_FAILED } from '@any-touch/shared';
 
 import Tap from '@any-touch/tap';
 import { GestureSimulator, sleep } from '@any-touch/simulator';
@@ -15,7 +15,7 @@ test(`tap延迟300ms触发, 如果届时doubletap状态为"失败或可能"那�
     at.beforeEach(({ name }, map, next) => {
         if ('tap' === name) {
             debounce(() => {
-                if ([STATUS_POSSIBLE, STATUS_FAILED].includes(map.doubletap.status)) next();
+                if ([STATE_POSSIBLE, STATE_FAILED].includes(map.doubletap.status)) next();
             }, 300);
         } else {
             next();
