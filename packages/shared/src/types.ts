@@ -162,11 +162,11 @@ export interface InputCreatorFunctionMap {
 /**
  * 插件返回值
  */
-export type PluginContext = () => { name: string, state: RECOGNIZER_STATE };
+export type PluginContext = { name: string, state: RECOGNIZER_STATE };
 /**
  * 插件
  */
-export type Plugin = (context: Core, pluginOptions: any) => () => PluginContext;
+export type Plugin = (context: Core, pluginOptions?: any) => (() => PluginContext);
 
 
 /**

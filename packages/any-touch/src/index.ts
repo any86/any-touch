@@ -32,13 +32,13 @@ import { Options } from '@any-touch/core';
 export default class extends Core {
     static version = '__VERSION__';
     // 状态码
-    static STATUS_POSSIBLE = STATE_POSSIBLE;
-    static STATUS_START = STATE_START;
-    static STATUS_MOVE = STATE_MOVE;
-    static STATUS_END = STATE_END;
-    static STATUS_CANCELLED = STATE_CANCELLED;
-    static STATUS_FAILED = STATE_FAILED;
-    static STATUS_RECOGNIZED = STATE_RECOGNIZED;
+    static STATE_POSSIBLE = STATE_POSSIBLE;
+    static STATE_START = STATE_START;
+    static STATE_MOVE = STATE_MOVE;
+    static STATE_END = STATE_END;
+    static STATE_CANCELLED = STATE_CANCELLED;
+    static STATE_FAILED = STATE_FAILED;
+    static STATE_RECOGNIZED = STATE_RECOGNIZED;
 
     constructor(el?: HTMLElement, options?: Options) {
         super(el, options);

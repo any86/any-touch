@@ -1,4 +1,4 @@
-import type { RECOGNIZER_STATE, Computed } from '@any-touch/shared';
+import type { RECOGNIZER_STATE, Computed, KV } from '@any-touch/shared';
 import {
     STATE_FAILED, STATE_RECOGNIZED, STATE_END, STATE_CANCELLED, STATE_POSSIBLE, DIRECTION_UP, TYPE_CANCEL, TYPE_END, TYPE_START
 } from '@any-touch/shared';
@@ -62,9 +62,9 @@ export default function (context: Core, options?: Partial<typeof DEFAULT_OPTIONS
 
     // 加载计算方法
     context.compute([ComputeDistance]);
-    return () =>({ ..._options, status: state });
-}
 
+    return () => ({ ..._options, state });
+}
 
 
 /**
@@ -85,50 +85,5 @@ function test(computed: Required<Computed>, options: typeof DEFAULT_OPTIONS) {
 //         this.computeFunctions = [ComputeDistance];
 //     };
 
-//     recognize(computed: Computed, emit: EventTrigger): void {
-//         const { phase, startInput, pointLength } = computed;
-//         // 1. start阶段
-//         // 2. 触点数符合
-//         // 那么等待minPressTime时间后触发press
-//         if (TYPE_START === phase && this._$isValidPointLength(pointLength)) {
-//             // 重置状态
-//             resetStatus(this);
-//             // 延迟触发
-//             this._$cancel();
-//             this._timeoutId = (setTimeout as Window['setTimeout'])(() => {
-//                 this.status = STATUS_RECOGNIZED;
-//                 emit(this.options.name);
-//             }, this.options.minPressTime);
-//         }
-//         // 触发pressup条件:
-//         // 1. end阶段
-//         // 2. 已识别
-//         else if (TYPE_END === phase && STATUS_RECOGNIZED === this.status) {
-//             emit(`${this.options.name}${DIRECTION_UP}`);
-//         }
-//         else if (STATUS_RECOGNIZED !== this.status) {
-//             const deltaTime = computed.timestamp - startInput.timestamp;
-//             // 一旦不满足必要条件,
-//             // 发生了大的位移变化
-//             if (!this._$!test(computed) ||
-//                 // end 或 cancel触发的时候还不到要求的press触发时间
-//                 (this.options.minPressTime > deltaTime && [TYPE_END, TYPE_CANCEL].includes(phase))) {
-//                 this._$cancel();
-//                 this.status = STATUS_FAILED;
-//             }
-//         }
-//     };
-
-//     /**
-//      * 是否满足:
-//      * 移动距离不大
-//      */
-//     _$!test(computed: Computed): boolean {
-//         const { distance } = computed;
-//         return this.options.maxDistance > distance;
-//     };
-
-//     _$cancel(): void {
-//         clearTimeout(this._timeoutId);
-//     }
+   
 // };

@@ -17,7 +17,7 @@ import type {
     InputCreatorFunction,
     ComputeFunction,
     ComputeFunctionCreator,
-    KV, PluginContext,
+    KV, PluginContext, Plugin,
 } from '@any-touch/shared';
 
 import {
@@ -56,6 +56,8 @@ const DEFAULT_OPTIONS: Options = {
     preventDefaultExclude: /^(?:INPUT|TEXTAREA|BUTTON|SELECT)$/,
 };
 
+const TYPE_UNBIND = 'u';
+
 export default class Core extends AnyEvent<KV & { computed: AnyTouchEvent }> {
     // 目标元素
     el?: HTMLElement;
@@ -72,7 +74,7 @@ export default class Core extends AnyEvent<KV & { computed: AnyTouchEvent }> {
     private __computeFunctionCreatorList: ComputeFunctionCreator[] = [];
 
     // 插件
-    plugins: PluginContext[] = [];
+    plugins: (() => PluginContext)[] = [];
 
     /**
      * @param el 目标元素, 微信下没有el
@@ -83,11 +85,6 @@ export default class Core extends AnyEvent<KV & { computed: AnyTouchEvent }> {
 
         this.el = el;
         this.__options = { ...DEFAULT_OPTIONS, ...options };
-
-        // 同步插件到实例
-        // for (const [Recognizer, options] of AnyTouch.__Recognizers) {
-        //     this.use(Recognizer, options);
-        // }
 
         // 之所以强制是InputCreatorFunction<SupportEvent>,
         // 是因为调用this.__inputCreatorMap[event.type]的时候还要判断类型,
@@ -127,7 +124,7 @@ export default class Core extends AnyEvent<KV & { computed: AnyTouchEvent }> {
 
             // 绑定元素
             this.on(
-                'unbind',
+                TYPE_UNBIND,
                 bindElement(
                     el,
                     this.catchEvent.bind(this),
@@ -169,7 +166,7 @@ export default class Core extends AnyEvent<KV & { computed: AnyTouchEvent }> {
      * 监听input变化
      * @param event Touch / Mouse事件对象
      */
-    catchEvent(event: SupportEvent): void {
+    catchEvent(event: SupportEvent) {
         const stopPropagation = () => event.stopPropagation();
         const preventDefault = () => event.preventDefault();
         const stopImmediatePropagation = () => event.stopImmediatePropagation();
@@ -190,6 +187,7 @@ export default class Core extends AnyEvent<KV & { computed: AnyTouchEvent }> {
             // ====== 计算结果 ======
             const computed: Computed = {};
             this.__computeFunctionList.forEach((compute) => {
+                // disabled
                 const result = compute(input, computed);
                 if (void 0 !== result) {
                     for (const key in result) {
@@ -199,52 +197,6 @@ export default class Core extends AnyEvent<KV & { computed: AnyTouchEvent }> {
             });
 
             this.emit('computed', { ...input, ...computed, stopPropagation, preventDefault, stopImmediatePropagation });
-
-
-            // const { domEvents } = this.__options;
-            // // 不触发DOM事件
-            // if (false !== domEvents) {
-            //     const { target } = computed;
-            //     if (null !== target) {
-            //         dispatchDomEvent(target, { ...input, type: AT }, domEvents);
-            //         dispatchDomEvent(target, { ...input, type: AT_WITH_STATUS }, domEvents);
-            //     }
-            // }
-
-            // // input -> computed
-            // const computed = input as Computed;
-            // for (const k in this.__computeFunctionMap) {
-            //     Object.assign(computed, this.__computeFunctionMap[k](computed));
-            // }
-
-            // // 缓存每次计算的结果
-            // // 以函数名为键值
-            // for (const recognizer of this.__recognizers) {
-            //     if (recognizer.disabled) continue;
-            //     // 恢复上次的缓存
-            //     recognizer.recognize(computed, (type) => {
-            //         // 此时的e就是this.computed
-            //         const payload = {
-            //             ...computed,
-            //             type,
-            //             name: recognizer.name,
-            //             stopPropagation,
-            //             preventDefault,
-            //             stopImmediatePropagation,
-            //         };
-
-            //         // 防止数据被vue类框架拦截
-            //         Object?.freeze(payload);
-
-            //         if (void 0 === this.beforeEachHook) {
-            //             emit2(this, payload, this.__options);
-            //         } else {
-            //             this.beforeEachHook(recognizer, this.__recognizerMap, () => {
-            //                 emit2(this, payload, this.__options);
-            //             });
-            //         }
-            //     });
-            // }
         }
     }
 
@@ -268,72 +220,29 @@ export default class Core extends AnyEvent<KV & { computed: AnyTouchEvent }> {
      * @param plugin 插件
      * @param pluginOptions 插件选项
      */
-    use(plugin: (context: this, pluginOptions: any) => unknown, pluginOptions?: unknown) {
-        plugin(this, pluginOptions);
-
-        // const name = pluginOptions?.name;
-        // // 保证同一个事件只对应一个识别器
-        // if (void 0 !== name && void 0 !== this.__recognizerMap[name]) return;
-
-        // // 实例化
-        // const recognizer = new Plugin(pluginOptions);
-
-        // // 初始化计算函数
-        // for (const createComputeFunction of recognizer.computeFunctions) {
-        //     const { _id } = createComputeFunction;
-        //     if (void 0 === this.__computeFunctionMap[_id]) {
-        //         // 创建计算函数
-        //         this.__computeFunctionMap[_id] = createComputeFunction();
-        //     }
-        // }
-
-        // // 识别器管理
-        // // recognizer.name是默认值或者options给定
-        // this.__recognizerMap[recognizer.name] = recognizer;
-        // this.__recognizers.push(this.__recognizerMap[recognizer.name]);
+    use(plugin: Plugin, pluginOptions?: any) {
+        this.plugins.push(plugin(this, pluginOptions));
     }
-
-    /**
-     * 移除插件
-     * @param {String} 识别器name
-     */
-    removeUse(recognizerName?: string): void {
-        // if (void 0 === recognizerName) {
-        //     this.__recognizers = [];
-        //     this.__recognizerMap = {};
-        // } else {
-        //     for (const [index, recognizer] of this.__recognizers.entries()) {
-        //         if (recognizerName === recognizer.options.name) {
-        //             this.__recognizers.splice(index, 1);
-        //             delete this.__recognizerMap[recognizerName];
-        //             break;
-        //         }
-        //     }
-        // }
-    }
-
-    // /**
-    //  * 事件拦截器
-    //  * @param hook 钩子函数
-    //  */
-    // beforeEach(hook: (recognizer: Recognizer, map: Record<string, Recognizer>, next: () => void) => void): void {
-    //     this.beforeEachHook = hook;
-    // }
 
     /**
      * 获取识别器通过名字
      * @param name 识别器的名字
      * @return 返回识别器
      */
-    get(name: string){
-        // return this.__recognizerMap[name];
+    get(name: string) {
+        for (const plugin of this.plugins) {
+            const context = plugin();
+            if (name === context.name) {
+                return context;
+            }
+        }
     }
 
     /**
      * 设置
      * @param options 选项
      */
-    set(options: Options): void {
+    set(options: Options) {
         this.__options = { ...this.__options, ...options };
     }
 
@@ -342,7 +251,7 @@ export default class Core extends AnyEvent<KV & { computed: AnyTouchEvent }> {
      */
     destroy() {
         // 解绑事件
-        this.emit('unbind');
+        this.emit(TYPE_UNBIND);
         super.destroy();
     }
 }
