@@ -31,8 +31,9 @@ export default function () {
                 phase = TYPE_END;
                 isPressed = false;
             }
+        } else {
+            return;
         }
-
         // changedPoints = prevPoints其实并不能完全等于touch下的changedPoints
         // 但是由于鼠标没有多点输入的需求, 
         // 所以暂时如此实现

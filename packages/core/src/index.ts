@@ -17,7 +17,7 @@ import type {
     InputCreatorFunction,
     ComputeFunction,
     ComputeFunctionCreator,
-    KV, PluginContext, Plugin,
+    KV, PluginContext, Plugin, PluginOptions,
 } from '@any-touch/shared';
 
 import {
@@ -58,21 +58,22 @@ const DEFAULT_OPTIONS: Options = {
 
 const TYPE_UNBIND = 'u';
 
-export default class Core extends AnyEvent<KV & { computed: AnyTouchEvent }> {
+type DefaultTypeNames = 'tap' | 'press' | 'pressup' | 'pan' | 'panstart' | 'panmove' | 'panend' | 'swipe' | 'pinch' | 'pinchstart' | 'pinchmove' | 'pinchend' | 'rotate' | 'rotatestart' | 'rotatemove' | 'rotateend' | 'computed' | typeof TYPE_UNBIND;
+
+
+export default class extends AnyEvent<{ [typeName in DefaultTypeNames]: AnyTouchEvent }> {
     // 目标元素
     el?: HTMLElement;
-
+    // 当前识别器
+    c?: PluginContext;
     // 选项
     private __options: Options;
     // 事件类型和输入函数的映射
     private __inputCreatorMap: InputCreatorFunctionMap;
-
-
     // 计算函数队列
     private __computeFunctionList: ComputeFunction[] = [];
     // 计算函数生成器仓库
     private __computeFunctionCreatorList: ComputeFunctionCreator[] = [];
-
     // 插件
     private __plugins: PluginContext[] = [];
 
@@ -134,32 +135,33 @@ export default class Core extends AnyEvent<KV & { computed: AnyTouchEvent }> {
         }
     }
 
-    target(el: HTMLElement) {
-        // return {
-        //     on: (eventName: string, listener: Listener<AnyTouchEvent>): void => {
-        //         this.on(eventName, listener, (event) => {
-        //             const { targets } = event;
-        //             // 检查当前触发事件的元素是否是其子元素
-        //             return targets.every((target) => el.contains(target as HTMLElement));
-        //         });
-        //     },
-        // };
+    beforeEach(interceptor: (currentPluginContext: PluginContext, next: () => void) => void) {
+        super.beforeEach.call(this, (context, next) => {
+            if (void 0 === context.c?.name) {
+                next();
+            } else {
+                interceptor(context.c, next)
+            }
+        });
     }
 
     /**
      * 带DOM事件的emit
      */
-    emit2(type: string, payload: AnyTouchEvent) {
-        this.emit(type, payload);
-        // this.emit('at:after',{...payload,name:type})
-        const { target } = payload;
-        const { domEvents } = this.__options;
-        // 触发DOM事件
-        if (!!domEvents && void 0 !== this.el && null !== target) {
-            // 所以此处的target会自动冒泡到目标元素
-            dispatchDomEvent(target, { ...payload, type }, domEvents);
-            // dispatchDomEvent(target, { ...payload, type:'at:after',name:type }, domEvents);
-        }
+    emit2(type: string, payload: AnyTouchEvent, pluginContext: PluginContext) {
+        // console.log(pluginContext?.name, type);
+        this.c = pluginContext;
+        this.emit(type, payload, () => {
+            // this.emit('at:after',{...payload,name:type})
+            const { target } = payload;
+            const { domEvents } = this.__options;
+            // 触发DOM事件
+            if (!!domEvents && void 0 !== this.el && null !== target) {
+                // 所以此处的target会自动冒泡到目标元素
+                dispatchDomEvent(target, { ...payload, type }, domEvents);
+                // dispatchDomEvent(target, { ...payload, type:'at:after',name:type }, domEvents);
+            }
+        });
     }
 
     /**
@@ -167,23 +169,21 @@ export default class Core extends AnyEvent<KV & { computed: AnyTouchEvent }> {
      * @param event Touch / Mouse事件对象
      */
     catchEvent(event: SupportEvent) {
-        console.log(event.type);
-        const stopPropagation = () => event.stopPropagation();
-        const preventDefault = () => event.preventDefault();
-        const stopImmediatePropagation = () => event.stopImmediatePropagation();
-        if (canPreventDefault(event, this.__options)) {
-            preventDefault();
-        }
         // if (!event.cancelable) {
         //     this.emit('error', { code: 0, message: '页面滚动的时候, 请暂时不要操作元素!' });
         // }
         const input = this.__inputCreatorMap[event.type](event);
-
         // 跳过无效输入
         // 比如没有按住鼠标左键的移动会返回undefined
         if (void 0 !== input) {
+            const stopPropagation = () => event.stopPropagation();
+            const preventDefault = () => event.preventDefault();
+            const stopImmediatePropagation = () => event.stopImmediatePropagation();
+            if (canPreventDefault(event, this.__options)) {
+                preventDefault();
+            }
             this.emit('input', input);
-            this.emit2(`at:${input.phase}`, input as AnyTouchEvent);
+            this.emit2(`at:${input.phase}`, input as AnyTouchEvent, {} as PluginContext);
 
             // ====== 计算结果 ======
             const computed: Computed = {};
@@ -221,7 +221,7 @@ export default class Core extends AnyEvent<KV & { computed: AnyTouchEvent }> {
      * @param plugin 插件
      * @param pluginOptions 插件选项
      */
-    use(plugin: Plugin, pluginOptions?: any) {
+    use(plugin: Plugin, pluginOptions?: PluginOptions) {
         this.__plugins.push(plugin(this, pluginOptions));
     }
 
@@ -236,14 +236,6 @@ export default class Core extends AnyEvent<KV & { computed: AnyTouchEvent }> {
                 return plugin;
             }
         }
-    }
-
-    /**
-     * 设置
-     * @param options 选项
-     */
-    set(options: Options) {
-        this.__options = { ...this.__options, ...options };
     }
 
     /**

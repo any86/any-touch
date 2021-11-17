@@ -18,7 +18,7 @@ const DEFAULT_OPTIONS = {
  * @returns  
  */
 export default function (at: Core, options?: Partial<typeof DEFAULT_OPTIONS>) {
-    const _options = { ...options, ...DEFAULT_OPTIONS };
+    const _options = { ...DEFAULT_OPTIONS , ...options};
     const { name } = _options;
     const context = createPluginContext(name);
 
@@ -44,14 +44,14 @@ export default function (at: Core, options?: Partial<typeof DEFAULT_OPTIONS>) {
             clearTimeout(timeoutId)
             timeoutId = (setTimeout as Window['setTimeout'])(() => {
                 context.state = STATE_RECOGNIZED;
-                at.emit2(_options.name, computed);
+                at.emit2(_options.name, computed,context);
             }, _options.minPressTime);
         }
         // 触发pressup条件:
         // 1. end阶段
         // 2. 已识别
         else if (TYPE_END === phase && STATE_RECOGNIZED === context.state) {
-            at.emit2(`${_options.name}${DIRECTION_UP}`, computed);
+            at.emit2(`${_options.name}${DIRECTION_UP}`, computed,context);
         }
         else if (STATE_RECOGNIZED !== context.state) {
             const deltaTime = computed.timestamp - startInput.timestamp;

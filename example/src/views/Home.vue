@@ -18,6 +18,7 @@
                 :index="index"
                 @at:start="onStart"
                 @tap="onTap"
+                @pan="onPan"
                 @panstart="onPanstart($event, index)"
                 @panmove="onPanmove($event, index)"
                 @pandown="onPandown($event, index)"
@@ -112,9 +113,36 @@ export default {
 
     mounted() {
         const at = new AnyTouch(this.$refs.panel, { preventDefault: true });
+        at.use(AnyTouch.tap, { name: 'doubletap', tapTimes: 2 });
+
+        let timeID = null;
         at.beforeEach((context, next) => {
-            console.log(context.get('tap'));
-            next();
+            if ('tap' === context.name) {
+                clearTimeout(timeID);
+                timeID = setTimeout(() => {
+                    const {state} = at.get('doubletap');
+                    const ok = [AnyTouch.STATE_POSSIBLE, AnyTouch.STATE_FAILED].includes(state);
+                    if (ok) {
+                        next();
+                    }
+                }, 300);
+            } else {
+                next();
+            }
+        });
+
+        // at.beforeEach((context, next) => {
+        //     console.log(context.name);
+
+        //     // console.log(AnyTouch.STATE.POSSIBLE);
+        //     if ('doubletap' == name) {
+        //         next();
+        //     }
+        //     // console.log(at.get('pan'));
+        // });
+
+        at.on('doubletap', () => {
+            console.warn('doubletap');
         });
     },
 
@@ -123,7 +151,9 @@ export default {
             const style = { left: `50px`, top: `160px`, zIndex: 1, scale: 1, angle: 0 };
             this.styles.push(style);
         },
-
+        onPan() {
+            // C('Pan', '#970');
+        },
         onRotate(ev, index = 0) {
             // if(ev.isMatch() ) return;
             // console.log(`deltaAngle:${ev.deltaAngle}`,ev.phase,ev.pointLength)

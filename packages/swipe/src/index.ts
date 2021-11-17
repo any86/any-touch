@@ -16,7 +16,7 @@ const DEFAULT_OPTIONS = {
  * @returns  
  */
 export default function (at: Core, options?: Partial<typeof DEFAULT_OPTIONS>) {
-    const _options = { ...options, ...DEFAULT_OPTIONS };
+    const _options = { ...DEFAULT_OPTIONS , ...options};
     const { name } = _options;
     const context = createPluginContext(name);
 
@@ -25,8 +25,8 @@ export default function (at: Core, options?: Partial<typeof DEFAULT_OPTIONS>) {
         if (context.disabled) return;
         if (test(computed, _options)) {
             context.state = STATE_RECOGNIZED;
-            at.emit2(name, computed);
-            at.emit2(name + computed.direction, computed);
+            at.emit2(name, computed,context);
+            at.emit2(name + computed.direction, computed,context);
         }
     });
 

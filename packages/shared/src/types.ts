@@ -10,7 +10,9 @@ import {
 
 import Core from '@any-touch/core';
 
-export type KV = Record<string | symbol, unknown>;
+// export type KV = Record<string | symbol, any>;
+export type KV = Record<string, any>;
+
 
 /**
  * 适配器支持的事件类型
@@ -159,6 +161,8 @@ export interface InputCreatorFunctionMap {
 }
 
 
+export type PluginOptions = { name: string } & KV;
+
 /**
  * 插件上下文内容
  */
@@ -167,7 +171,7 @@ export type PluginContext = { state: RECOGNIZER_STATE, disabled: boolean,name:st
 /**
  * 插件
  */
-export type Plugin = (context: Core, pluginOptions?: { name: string } & KV) => PluginContext;
+export type Plugin = (context: Core, pluginOptions?: PluginOptions) => PluginContext;
 
 
 /**

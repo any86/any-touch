@@ -66,7 +66,7 @@ const DEFAULT_OPTIONS = {
  * @param options 识别器选项
  */
 export default function (at: AnyTouch, options?: Partial<typeof DEFAULT_OPTIONS>) {
-    const _options = { ...options, ...DEFAULT_OPTIONS };
+    const _options = { ...DEFAULT_OPTIONS , ...options};
     const { name } = _options;
     const context = createPluginContext(name);
 
@@ -125,9 +125,8 @@ export default function (at: AnyTouch, options?: Partial<typeof DEFAULT_OPTIONS>
             if (0 === tapCount % _options.tapTimes) {
                 context.state = STATE_RECOGNIZED;
                 // 触发事件
-                at.emit2(_options.name, computed);
-                // context.emit2('at', computed);
-                // context.emit2('at:after', { ...computed, name: _options.name });
+
+                at.emit2(_options.name, computed,context);
                 reset();
             } else {
                 countDownToFail();

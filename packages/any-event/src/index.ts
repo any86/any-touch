@@ -21,11 +21,11 @@ type TypeAndEventListenerMap<EventMap = TypeAndEventMap> = Partial<{
 
 // 拦截器
 export interface Interceptor {
-    (context: ThisType<this>, next: () => void): void
+    (context: any, next: () => void): void
 }
 
 // Payloads 后面会自动转成数组
-export default class <EventMap extends TypeAndEventMap = TypeAndEventMap> {
+export default class AnyEvent<EventMap extends TypeAndEventMap = TypeAndEventMap> {
     // 事件仓库
     private __map: TypeAndEventListenerMap<EventMap> = {};
     // 拦截器
@@ -59,15 +59,18 @@ export default class <EventMap extends TypeAndEventMap = TypeAndEventMap> {
     /**
      * 按照监听器注册的顺序，同步地调用每个注册到名为 eventName 的事件的监听器，并传入提供的参数。
      * @param type 事件名
-     * @param payload 载荷数据
+     * @param payload 数据
+     * @param done 运行成功执行
      */
-    emit(type: string, payload?: unknown) {
+    emit(type: string, payload?: unknown, done?: () => void) {
         if (void 0 !== this.__interceptor) {
             this.__interceptor(this, () => {
                 emit<EventMap>(this.__map, type, payload);
+                done && done();
             });
         } else {
             emit<EventMap>(this.__map, type, payload);
+            done && done();
         }
     }
 
@@ -110,3 +113,19 @@ function emit<T extends TypeAndEventMap>(map: TypeAndEventListenerMap<T>, type: 
         }
     }
 }
+
+// const e = new AnyEvent()
+// e.beforeEach((type, next) => {
+//     if ('c' == type) next();
+// })
+// e.on('a', console.log);
+// e.on('b', console.log);
+// e.on('c', console.log);
+
+// setTimeout(() => {
+//     e.emit('c', 3);
+// }, 1000)
+
+// e.emit('a', 1);
+// e.emit('b', 2);
+

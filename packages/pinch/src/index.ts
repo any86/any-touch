@@ -21,7 +21,7 @@ const DEFAULT_OPTIONS = {
  * @returns
  */
 export default function (at: Core, options?: Partial<typeof DEFAULT_OPTIONS>) {
-    const _options = { ...options, ...DEFAULT_OPTIONS };
+    const _options = { ...DEFAULT_OPTIONS , ...options};
     const { name } = _options;
     const context = createPluginContext(name);
 
@@ -38,13 +38,13 @@ export default function (at: Core, options?: Partial<typeof DEFAULT_OPTIONS>) {
         const isValid = test(computed, _options);
         context.state = flow(isValid, context.state, computed.phase);
         if (isValid) {
-            at.emit2(name, computed);
-            at.emit2(name + getStatusName(context.state), computed);
+            at.emit2(name, computed, context);
+            at.emit2(name + getStatusName(context.state), computed, context);
             // context.emit2('at', computed);
             // context.emit2('at:after', { ...computed, name: _options.name });
         }
         else if ([STATE_END, STATE_CANCELLED].includes(context.state)) {
-            at.emit2(name + getStatusName(context.state), computed);
+            at.emit2(name + getStatusName(context.state), computed, context);
         }
     });
 

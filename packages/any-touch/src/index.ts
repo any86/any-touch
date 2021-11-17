@@ -39,6 +39,12 @@ export default class extends Core {
     static STATE_CANCELLED = STATE_CANCELLED;
     static STATE_FAILED = STATE_FAILED;
     static STATE_RECOGNIZED = STATE_RECOGNIZED;
+    static tap = tap;
+    static pan = pan;
+    static swipe = swipe;
+    static press = press;
+    static rotate = rotate;
+    static pinch = pinch;
 
     constructor(el?: HTMLElement, options?: Options) {
         super(el, options);
