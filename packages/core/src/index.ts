@@ -138,12 +138,14 @@ export default class extends AnyEvent<{ [typeName in DefaultTypeNames]: AnyTouch
         }
     }
 
-    beforeEach(interceptor: (currentPluginContext: PluginContext, next: () => void) => void) {
+    beforeEach(interceptor: (currentPluginContext: PluginContext & { event: AnyTouchEvent }, next: () => void) => void) {
         super.beforeEach.call(this, (context, next) => {
+            // 跳过computed事件,
+            // 只保留识别器通过emit2触发的事件
             if (void 0 === context.c?.name) {
                 next();
             } else {
-                interceptor(context.c, next)
+                interceptor({ ...context.c, event: this.event }, next)
             }
         });
     }

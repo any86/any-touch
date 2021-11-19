@@ -118,6 +118,7 @@ export default {
 
         let timeID = null;
         at.beforeEach((context, next) => {
+            console.log(context.name,context.event.target);
             if ('tap' === context.name) {
                 clearTimeout(timeID);
                 timeID = setTimeout(() => {

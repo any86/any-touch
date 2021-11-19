@@ -32,6 +32,11 @@ export default class AnyEvent<EventMap extends TypeAndEventMap = TypeAndEventMap
     private __interceptor?: Interceptor;
 
     /**
+     * 当前事件对象
+     */
+    event: unknown;
+
+    /**
      * 注册拦截器
      * @param interceptor 拦截器
      */
@@ -66,10 +71,12 @@ export default class AnyEvent<EventMap extends TypeAndEventMap = TypeAndEventMap
         if (void 0 !== this.__interceptor) {
             this.__interceptor(this, () => {
                 emit<EventMap>(this.__map, type, payload);
+                this.event = payload;
                 done && done();
             });
         } else {
             emit<EventMap>(this.__map, type, payload);
+            this.event = payload;
             done && done();
         }
     }
@@ -109,6 +116,7 @@ function emit<T extends TypeAndEventMap>(map: TypeAndEventListenerMap<T>, type: 
     const listeners = map[type];
     if (listeners?.length) {
         for (const listener of listeners) {
+
             listener(payload);
         }
     }
