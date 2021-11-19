@@ -17,7 +17,7 @@ export type KV = Record<string, any>;
 /**
  * 适配器支持的事件类型
  */
-export type SupportEvent = MouseEvent | TouchEvent;
+export type NativeEvent = MouseEvent | TouchEvent;
 
 export interface PointClientXY {
     target: EventTarget | null;
@@ -157,7 +157,7 @@ export interface InputCreatorFunction<T> {
  * Input转换器外壳函数映射
  */
 export interface InputCreatorFunctionMap {
-    [k: string]: InputCreatorFunction<SupportEvent>;
+    [k: string]: InputCreatorFunction<NativeEvent>;
 }
 
 

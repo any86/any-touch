@@ -30,6 +30,7 @@
                 :class="['circle']"
             >
                 <p style="font-size: 16px; border-bottom: 1px dashed #fff">👋可拖拽 / 缩放等...</p>
+                <input/>
                 <p>Top: {{ top }}</p>
                 <p>Left: {{ left }}</p>
                 <p>Scale: {{ scale }}</p>
@@ -112,7 +113,7 @@ export default {
     },
 
     mounted() {
-        const at = new AnyTouch(this.$refs.panel, { preventDefault: true });
+        const at = new AnyTouch(this.$refs.panel);
         at.use(AnyTouch.tap, { name: 'doubletap', tapTimes: 2 });
 
         let timeID = null;

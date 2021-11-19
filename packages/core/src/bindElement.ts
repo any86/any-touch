@@ -11,8 +11,7 @@
 //     target.addEventListener(type,listener,options);
 // }
 
-import { IS_WX } from '@any-touch/shared';
-import type { SupportEvent } from '@any-touch/shared';
+import type { NativeEvent } from '@any-touch/shared';
 
 import { TOUCH_START, TOUCH_MOVE, TOUCH_END, TOUCH_CANCEL, MOUSE_DOWN, MOUSE_MOVE, MOUSE_UP } from '@any-touch/shared';
 const TOUCH_EVENTS = [TOUCH_START, TOUCH_MOVE, TOUCH_END, TOUCH_CANCEL];
@@ -22,7 +21,7 @@ const TOUCH_EVENTS = [TOUCH_START, TOUCH_MOVE, TOUCH_END, TOUCH_CANCEL];
 */
 export default function (
     el: HTMLElement,
-    catchEvent: (e: SupportEvent) => void,
+    catchEvent: (e: NativeEvent) => void,
     options?: boolean | AddEventListenerOptions,
 ): () => void {
     TOUCH_EVENTS.forEach(eventName => {

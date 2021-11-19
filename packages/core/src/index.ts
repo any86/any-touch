@@ -12,7 +12,7 @@ import AnyEvent from 'any-event';
 import type {
     Computed,
     AnyTouchEvent,
-    SupportEvent,
+    NativeEvent,
     InputCreatorFunctionMap,
     InputCreatorFunction,
     ComputeFunction,
@@ -42,9 +42,7 @@ import bindElement from './bindElement';
 export interface Options {
     // 是否触发DOM事件
     domEvents?: false | EventInit;
-    preventDefault?: boolean;
-    // 不阻止默认行为的白名单
-    preventDefaultExclude?: RegExp | ((ev: SupportEvent) => boolean);
+    preventDefault?: boolean | ((e: NativeEvent) => boolean);
 }
 
 /**
@@ -52,8 +50,13 @@ export interface Options {
  */
 const DEFAULT_OPTIONS: Options = {
     domEvents: { bubbles: true, cancelable: true },
-    preventDefault: true,
-    preventDefaultExclude: /^(?:INPUT|TEXTAREA|BUTTON|SELECT)$/,
+    preventDefault: event => {
+        if (event.target && 'tagName' in event.target) {
+            const { tagName } = event.target;
+            return !/^(?:INPUT|TEXTAREA|BUTTON|SELECT)$/.test(tagName);
+        }
+        return false;
+    },
 };
 
 const TYPE_UNBIND = 'u';
@@ -90,8 +93,8 @@ export default class extends AnyEvent<{ [typeName in DefaultTypeNames]: AnyTouch
         // 之所以强制是InputCreatorFunction<SupportEvent>,
         // 是因为调用this.__inputCreatorMap[event.type]的时候还要判断类型,
         // 因为都是固定(touch&mouse)事件绑定好的, 没必要判断
-        const createInputFromTouch = touch(this.el) as InputCreatorFunction<SupportEvent>;
-        const createInputFromMouse = mouse() as InputCreatorFunction<SupportEvent>;
+        const createInputFromTouch = touch(this.el) as InputCreatorFunction<NativeEvent>;
+        const createInputFromMouse = mouse() as InputCreatorFunction<NativeEvent>;
         this.__inputCreatorMap = {
             [TOUCH_START]: createInputFromTouch,
             [TOUCH_MOVE]: createInputFromTouch,
@@ -149,7 +152,6 @@ export default class extends AnyEvent<{ [typeName in DefaultTypeNames]: AnyTouch
      * 带DOM事件的emit
      */
     emit2(type: string, payload: AnyTouchEvent, pluginContext: PluginContext) {
-        // console.log(pluginContext?.name, type);
         this.c = pluginContext;
         this.emit(type, payload, () => {
             // this.emit('at:after',{...payload,name:type})
@@ -168,7 +170,7 @@ export default class extends AnyEvent<{ [typeName in DefaultTypeNames]: AnyTouch
      * 监听input变化
      * @param event Touch / Mouse事件对象
      */
-    catchEvent(event: SupportEvent) {
+    catchEvent(event: NativeEvent) {
         // if (!event.cancelable) {
         //     this.emit('error', { code: 0, message: '页面滚动的时候, 请暂时不要操作元素!' });
         // }
