@@ -17,13 +17,7 @@ import pinch from '@any-touch/pinch';
 import rotate from '@any-touch/rotate';
 
 import {
-    STATE_POSSIBLE,
-    STATE_START,
-    STATE_MOVE,
-    STATE_END,
-    STATE_CANCELLED,
-    STATE_FAILED,
-    STATE_RECOGNIZED,
+    STATE
 } from '@any-touch/shared';
 
 // 类型, 为了兼容
@@ -32,13 +26,13 @@ import { Options } from '@any-touch/core';
 export default class extends Core {
     static version = '__VERSION__';
     // 状态码
-    static STATE_POSSIBLE = STATE_POSSIBLE;
-    static STATE_START = STATE_START;
-    static STATE_MOVE = STATE_MOVE;
-    static STATE_END = STATE_END;
-    static STATE_CANCELLED = STATE_CANCELLED;
-    static STATE_FAILED = STATE_FAILED;
-    static STATE_RECOGNIZED = STATE_RECOGNIZED;
+    static STATE_POSSIBLE = STATE.POSSIBLE;
+    static STATE_START = STATE.START;
+    static STATE_MOVE = STATE.MOVE;
+    static STATE_END = STATE.END;
+    static STATE_CANCELLED = STATE.CANCELLED;
+    static STATE_FAILED = STATE.FAILED;
+    static STATE_RECOGNIZED = STATE.RECOGNIZED;
     static tap = tap;
     static pan = pan;
     static swipe = swipe;

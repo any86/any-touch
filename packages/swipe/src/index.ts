@@ -1,5 +1,5 @@
-import type { Computed, RECOGNIZER_STATE } from '@any-touch/shared';
-import { TYPE_END, STATE_POSSIBLE, STATE_RECOGNIZED, createPluginContext } from '@any-touch/shared';
+import type { Computed } from '@any-touch/shared';
+import { TYPE_END, STATE, createPluginContext } from '@any-touch/shared';
 import { ComputeDistance, ComputeVAndDir, ComputeMaxLength } from '@any-touch/compute';
 import Core from '@any-touch/core'
 const DEFAULT_OPTIONS = {
@@ -21,10 +21,10 @@ export default function (at: Core, options?: Partial<typeof DEFAULT_OPTIONS>) {
     const context = createPluginContext(name);
 
     at.on('computed', (computed) => {
-        context.state = STATE_POSSIBLE;
+        context.state = STATE.POSSIBLE;
         if (context.disabled) return;
         if (test(computed, _options)) {
-            context.state = STATE_RECOGNIZED;
+            context.state = STATE.RECOGNIZED;
             at.emit2(name, computed,context);
             at.emit2(name + computed.direction, computed,context);
         }

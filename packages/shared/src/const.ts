@@ -40,10 +40,12 @@ export const MOUSE_DOWN = MOUSE + DIRECTION_DOWN as 'mousedown';
 
 
 // 识别器状态码
-export const STATE_POSSIBLE = 0;
-export const STATE_RECOGNIZED = 1;
-export const STATE_FAILED = 2;
-export const STATE_START = 3;
-export const STATE_MOVE = 4;
-export const STATE_END = STATE_RECOGNIZED;
-export const STATE_CANCELLED = 5;
+export const enum STATE {
+    POSSIBLE,
+    RECOGNIZED,
+    FAILED,
+    CANCELLED,
+    START,
+    MOVE,
+    END = STATE.RECOGNIZED,
+} 

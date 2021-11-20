@@ -1,6 +1,6 @@
 import type { RECOGNIZER_STATE, Computed } from '@any-touch/shared';
 import {
-    createPluginContext, resetState, STATE_FAILED, STATE_RECOGNIZED,isDisabled, DIRECTION_UP, TYPE_CANCEL, TYPE_END, TYPE_START
+    createPluginContext, resetState, STATE,isDisabled, DIRECTION_UP, TYPE_CANCEL, TYPE_END, TYPE_START
 } from '@any-touch/shared';
 import { ComputeDistance } from '@any-touch/compute';
 import Core from '@any-touch/core';
@@ -38,17 +38,17 @@ export default function (at: Core, options?: Partial<typeof DEFAULT_OPTIONS>) {
             // 延迟触发
             clearTimeout(timeoutId)
             timeoutId = (setTimeout as Window['setTimeout'])(() => {
-                context.state = STATE_RECOGNIZED;
+                context.state = STATE.RECOGNIZED;
                 at.emit2(_options.name, computed, context);
             }, _options.minPressTime);
         }
         // 触发pressup条件:
         // 1. end阶段
         // 2. 已识别
-        else if (TYPE_END === phase && STATE_RECOGNIZED === context.state) {
+        else if (TYPE_END === phase && STATE.RECOGNIZED === context.state) {
             at.emit2(`${_options.name}${DIRECTION_UP}`, computed, context);
         }
-        else if (STATE_RECOGNIZED !== context.state) {
+        else if (STATE.RECOGNIZED !== context.state) {
             const deltaTime = computed.timestamp - startInput.timestamp;
             // 一旦不满足必要条件,
             // 发生了大的位移变化
@@ -56,7 +56,7 @@ export default function (at: Core, options?: Partial<typeof DEFAULT_OPTIONS>) {
                 // end 或 cancel触发的时候还不到要求的press触发时间
                 (_options.minPressTime > deltaTime && [TYPE_END, TYPE_CANCEL].includes(phase))) {
                 clearTimeout(timeoutId)
-                context.state = STATE_FAILED;
+                context.state = STATE.FAILED;
             }
         }
     });

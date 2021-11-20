@@ -1,8 +1,6 @@
 import { RECOGNIZER_STATE, Computed, isRecognized, resetState,isDisabled } from '@any-touch/shared';
 import {
-    STATE_POSSIBLE,
-    STATE_END,
-    STATE_CANCELLED,
+    STATE,
     flow, getStatusName, createPluginContext
 } from '@any-touch/shared';
 import { ComputeAngle, ComputeVectorForMutli } from '@any-touch/compute';
@@ -38,7 +36,7 @@ export default function (at: Core, options?: Partial<typeof DEFAULT_OPTIONS>) {
             at.emit2(_options.name, computed, context);
             at.emit2(_options.name + getStatusName(context.state), computed, context);
             // context.emit2(_options.name + computed.direction, computed);
-        } if ([STATE_END, STATE_CANCELLED].includes(context.state)) {
+        } if ([STATE.END, STATE.CANCELLED].includes(context.state)) {
             at.emit2(_options.name + getStatusName(context.state), computed, context);
         }
     });
