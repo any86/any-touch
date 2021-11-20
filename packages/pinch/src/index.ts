@@ -1,4 +1,4 @@
-import { Computed } from '@any-touch/shared';
+import { Computed,resetState,isRecognized, RECOGNIZER_STATE } from '@any-touch/shared';
 import {
     STATE_POSSIBLE,
     STATE_END,
@@ -27,15 +27,16 @@ export default function (at: Core, options?: Partial<typeof DEFAULT_OPTIONS>) {
 
     at.on('computed', (computed) => {
         // 重置status
-        if ([STATE_END, STATE_CANCELLED, STATE_FAILED].includes(context.state)) {
-            context.state = STATE_POSSIBLE;
-        }
+        // 重置status
+        resetState(context);
+
         // 禁止
         if (context.disabled) {
             context.state = STATE_POSSIBLE;
             return;
         };
-        const isValid = test(computed, _options);
+        const isValid = test(computed, _options,context.state);
+        
         context.state = flow(isValid, context.state, computed.phase);
         if (isValid) {
             at.emit2(name, computed, context);
@@ -54,9 +55,9 @@ export default function (at: Core, options?: Partial<typeof DEFAULT_OPTIONS>) {
     return context;
 }
 
-function test(computed: Computed, options: typeof DEFAULT_OPTIONS) {
+function test(computed: Computed, options: typeof DEFAULT_OPTIONS,state:RECOGNIZER_STATE) {
     const { pointLength, scale, deltaScale } = computed;
-    return (options.pointLength === pointLength && (void 0 !== scale && void 0 !== deltaScale && options.threshold < Math.abs(scale - 1)))
+    return (options.pointLength === pointLength && (void 0 !== scale && void 0 !== deltaScale && options.threshold < Math.abs(scale - 1)||isRecognized(state)))
 }
 
 // class P extends Recognizer {

@@ -3,10 +3,8 @@ import {
     STATE_POSSIBLE,
     STATE_START,
     STATE_MOVE,
-    STATE_END,
-    STATE_CANCELLED,
-    STATE_FAILED,
-    TYPE_END, flow, getStatusName, createPluginContext
+    resetState,
+    TYPE_END, flow, getStatusName, createPluginContext, isRecognized
 } from '@any-touch/shared';
 import { ComputeDistance, ComputeDeltaXY, ComputeVAndDir } from '@any-touch/compute';
 import Core from '@any-touch/core';
@@ -19,14 +17,12 @@ const DEFAULT_OPTIONS = { name: 'pan', threshold: 10, pointLength: 1 };
  * @returns  
  */
 export default function (at: Core, options?: Partial<typeof DEFAULT_OPTIONS>) {
-    const _options = { ...DEFAULT_OPTIONS , ...options};
+    const _options = { ...DEFAULT_OPTIONS, ...options };
     const { name } = _options;
     const context = createPluginContext(name);
     at.on('computed', (computed) => {
         // 重置status
-        if ([STATE_END, STATE_CANCELLED, STATE_FAILED].includes(context.state)) {
-            context.state = STATE_POSSIBLE;
-        }
+        resetState(context);
 
         // 禁止
         if (context.disabled) {
@@ -37,8 +33,8 @@ export default function (at: Core, options?: Partial<typeof DEFAULT_OPTIONS>) {
         context.state = flow(isValid, context.state, computed.phase);
 
         if (isValid) {
-            at.emit2(name, computed,context);
-            at.emit2(name + getStatusName(context.state), computed,context);
+            at.emit2(name, computed, context);
+            at.emit2(name + getStatusName(context.state), computed, context);
         }
     });
 
@@ -48,14 +44,13 @@ export default function (at: Core, options?: Partial<typeof DEFAULT_OPTIONS>) {
 }
 
 function test(computed: Computed, options: typeof DEFAULT_OPTIONS, state: RECOGNIZER_STATE) {
-    let isRecognized = ([STATE_START, STATE_MOVE] as Array<string | number>).includes(state);
 
     const { pointLength, distance, direction, phase } = computed;
 
     return (
-        ((isRecognized || (distance && options.threshold <= distance)) &&
+        ((isRecognized(state) || (distance && options.threshold <= distance)) &&
             options.pointLength === pointLength &&
             void 0 !== direction) ||
-        (isRecognized && TYPE_END === phase)
+        (isRecognized(state) && TYPE_END === phase)
     );
 }

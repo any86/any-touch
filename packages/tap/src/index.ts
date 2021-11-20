@@ -1,5 +1,5 @@
 import AnyTouch from 'any-touch';
-import { Point, Input, Computed, RECOGNIZER_STATE } from '@any-touch/shared';
+import { Point, Input, Computed } from '@any-touch/shared';
 import { STATE_RECOGNIZED, STATE_POSSIBLE, STATE_FAILED, TYPE_END, createPluginContext } from '@any-touch/shared';
 import { getVLength } from '@any-touch/vector';
 import { ComputeDistance, ComputeMaxLength } from '@any-touch/compute';
@@ -66,7 +66,7 @@ const DEFAULT_OPTIONS = {
  * @param options 识别器选项
  */
 export default function (at: AnyTouch, options?: Partial<typeof DEFAULT_OPTIONS>) {
-    const _options = { ...DEFAULT_OPTIONS , ...options};
+    const _options = { ...DEFAULT_OPTIONS, ...options };
     const { name } = _options;
     const context = createPluginContext(name);
 
@@ -126,7 +126,7 @@ export default function (at: AnyTouch, options?: Partial<typeof DEFAULT_OPTIONS>
                 context.state = STATE_RECOGNIZED;
                 // 触发事件
 
-                at.emit2(_options.name, computed,context);
+                at.emit2(_options.name, computed, context);
                 reset();
             } else {
                 countDownToFail();

@@ -11,7 +11,9 @@ import {
     TYPE_CANCEL,
     TYPE_END,
     TYPE_MOVE,
+    STATE_RECOGNIZED,
 } from './const';
+import { PluginContext } from './types';
 
 const STATUS_CODE_AND_NAME_MAP: { [k: number]: 'start' | 'move' | 'end' | 'cancel' | undefined } = {
     [STATE_START]: TYPE_START,
@@ -98,4 +100,23 @@ export function flow(isVaild: boolean, lastStatus: RECOGNIZER_STATE, phase: stri
     };
     const map = STATE_MAP[Number(isVaild)][lastStatus];
     return (void 0 !== map && map[phase]) || STATE_POSSIBLE;
+}
+
+/**
+ * 重置状态到possible
+ * @param context 识别器实例
+ */
+export function resetState(context: PluginContext) {
+    if ([STATE_RECOGNIZED, STATE_CANCELLED, STATE_FAILED].includes(context.state)) {
+        context.state = STATE_POSSIBLE;
+    }
+}
+
+/**
+ * 判断是否已识别
+ * @param state 识别器状态
+ * @returns 是否已识别
+ */
+export function isRecognized(state: RECOGNIZER_STATE) {
+    return [STATE_START, STATE_MOVE].includes(state);
 }

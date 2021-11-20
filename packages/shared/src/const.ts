@@ -45,5 +45,5 @@ export const STATE_RECOGNIZED = 1;
 export const STATE_FAILED = 2;
 export const STATE_START = 3;
 export const STATE_MOVE = 4;
-export const STATE_END = 5;
-export const STATE_CANCELLED = 6;
+export const STATE_END = STATE_RECOGNIZED;
+export const STATE_CANCELLED = 5;

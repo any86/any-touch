@@ -1,11 +1,9 @@
-import { RECOGNIZER_STATE, Computed } from '@any-touch/shared';
+import { RECOGNIZER_STATE, Computed, isRecognized, resetState } from '@any-touch/shared';
 import {
     STATE_POSSIBLE,
-    STATE_START,
-    STATE_MOVE,
     STATE_END,
     STATE_CANCELLED,
-    STATE_FAILED, flow, getStatusName, createPluginContext
+    flow, getStatusName, createPluginContext
 } from '@any-touch/shared';
 import { ComputeAngle, ComputeVectorForMutli } from '@any-touch/compute';
 import Core from '@any-touch/core';
@@ -23,8 +21,8 @@ const DEFAULT_OPTIONS = {
  * @returns
  */
 export default function (at: Core, options?: Partial<typeof DEFAULT_OPTIONS>) {
-    const _options = { ...DEFAULT_OPTIONS , ...options};
-    const {name} = _options;
+    const _options = { ...DEFAULT_OPTIONS, ...options };
+    const { name } = _options;
     const context = createPluginContext(name);
     at.on('computed', (computed) => {
         // 禁止
@@ -34,19 +32,17 @@ export default function (at: Core, options?: Partial<typeof DEFAULT_OPTIONS>) {
         };
 
         // 重置status
-        if ([STATE_END, STATE_CANCELLED, STATE_FAILED].includes(context.state)) {
-            context.state = STATE_POSSIBLE;
-        }
+        resetState(context);
 
         const isValid = test(computed, _options, context.state);
         context.state = flow(isValid, context.state, computed.phase);
 
         if (isValid) {
-            at.emit2(_options.name, computed,context);
-            at.emit2(_options.name + getStatusName(context.state), computed,context);
+            at.emit2(_options.name, computed, context);
+            at.emit2(_options.name + getStatusName(context.state), computed, context);
             // context.emit2(_options.name + computed.direction, computed);
         } if ([STATE_END, STATE_CANCELLED].includes(context.state)) {
-            at.emit2(_options.name + getStatusName(context.state), computed,context);
+            at.emit2(_options.name + getStatusName(context.state), computed, context);
         }
     });
 
@@ -56,9 +52,8 @@ export default function (at: Core, options?: Partial<typeof DEFAULT_OPTIONS>) {
 }
 
 function test(computed: Required<Computed>, options: typeof DEFAULT_OPTIONS, state: RECOGNIZER_STATE) {
-    let isRecognized = [STATE_START, STATE_MOVE].includes(state);
     const { pointLength, angle } = computed;
-    return options.pointLength === pointLength && (options.threshold < Math.abs(angle) || isRecognized);
+    return options.pointLength === pointLength && (options.threshold < Math.abs(angle) || isRecognized(state));
 }
 
 // class A extends Recognizer {
