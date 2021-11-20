@@ -1,6 +1,6 @@
 import type { RECOGNIZER_STATE, Computed } from '@any-touch/shared';
 import {
-    createPluginContext, resetState, STATE_FAILED, STATE_RECOGNIZED, STATE_END, STATE_CANCELLED, STATE_POSSIBLE, DIRECTION_UP, TYPE_CANCEL, TYPE_END, TYPE_START
+    createPluginContext, resetState, STATE_FAILED, STATE_RECOGNIZED,isDisabled, DIRECTION_UP, TYPE_CANCEL, TYPE_END, TYPE_START
 } from '@any-touch/shared';
 import { ComputeDistance } from '@any-touch/compute';
 import Core from '@any-touch/core';
@@ -25,10 +25,7 @@ export default function (at: Core, options?: Partial<typeof DEFAULT_OPTIONS>) {
     let timeoutId = 0;
     at.on('computed', (computed) => {
         // 禁止
-        if (context.disabled) {
-            context.state = STATE_POSSIBLE;
-            return;
-        };
+        if(isDisabled(context)) return;
         const { phase, startInput, pointLength } = computed;
         // 1. start阶段
         // 2. 触点数符合

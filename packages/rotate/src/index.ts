@@ -1,4 +1,4 @@
-import { RECOGNIZER_STATE, Computed, isRecognized, resetState } from '@any-touch/shared';
+import { RECOGNIZER_STATE, Computed, isRecognized, resetState,isDisabled } from '@any-touch/shared';
 import {
     STATE_POSSIBLE,
     STATE_END,
@@ -26,10 +26,7 @@ export default function (at: Core, options?: Partial<typeof DEFAULT_OPTIONS>) {
     const context = createPluginContext(name);
     at.on('computed', (computed) => {
         // 禁止
-        if (context.disabled) {
-            context.state = STATE_POSSIBLE;
-            return;
-        };
+        if(isDisabled(context)) return;
 
         // 重置status
         resetState(context);

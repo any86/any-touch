@@ -120,3 +120,15 @@ export function resetState(context: PluginContext) {
 export function isRecognized(state: RECOGNIZER_STATE) {
     return [STATE_START, STATE_MOVE].includes(state);
 }
+
+/**
+ * 判断是否禁止识别
+ * @param context 识别器实例
+ * @returns 是否禁止识别
+ */
+export function isDisabled(context: PluginContext){
+    if (context.disabled) {
+        context.state = STATE_POSSIBLE;
+        return true;
+    };
+}

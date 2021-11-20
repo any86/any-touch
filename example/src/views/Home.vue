@@ -118,7 +118,7 @@ export default {
 
         let timeID = null;
         at.beforeEach((context, next) => {
-            console.log(context.name,context.event.target);
+            // console.log(context.name,context.event.target);
             if ('tap' === context.name) {
                 clearTimeout(timeID);
                 timeID = setTimeout(() => {
@@ -194,6 +194,7 @@ export default {
             ev.currentTarget.setAttribute('at', ev.type);
             this.styles[index].top = Math.round(parseInt(this.styles[index].top) + speedY * 120) + 'px';
             this.styles[index].left = Math.round(parseInt(this.styles[index].left) + speedX * 120) + 'px';
+            console.log('swipe')
         },
 
         onPanstart(ev, index) {

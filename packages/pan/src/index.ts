@@ -1,8 +1,6 @@
 import { RECOGNIZER_STATE, Computed } from '@any-touch/shared';
 import {
-    STATE_POSSIBLE,
-    STATE_START,
-    STATE_MOVE,
+    isDisabled,
     resetState,
     TYPE_END, flow, getStatusName, createPluginContext, isRecognized
 } from '@any-touch/shared';
@@ -25,10 +23,7 @@ export default function (at: Core, options?: Partial<typeof DEFAULT_OPTIONS>) {
         resetState(context);
 
         // 禁止
-        if (context.disabled) {
-            context.state = STATE_POSSIBLE;
-            return;
-        };
+        if(isDisabled(context)) return;
         const isValid = test(computed, _options, context.state);
         context.state = flow(isValid, context.state, computed.phase);
 

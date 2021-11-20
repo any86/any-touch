@@ -1,9 +1,8 @@
 import { Computed,resetState,isRecognized, RECOGNIZER_STATE } from '@any-touch/shared';
 import {
-    STATE_POSSIBLE,
     STATE_END,
     STATE_CANCELLED,
-    STATE_FAILED, flow, getStatusName, createPluginContext
+    isDisabled, flow, getStatusName, createPluginContext
 } from '@any-touch/shared';
 import { ComputeScale, ComputeVectorForMutli } from '@any-touch/compute';
 import Core from '@any-touch/core';
@@ -31,12 +30,9 @@ export default function (at: Core, options?: Partial<typeof DEFAULT_OPTIONS>) {
         resetState(context);
 
         // 禁止
-        if (context.disabled) {
-            context.state = STATE_POSSIBLE;
-            return;
-        };
+        if(isDisabled(context)) return;
         const isValid = test(computed, _options,context.state);
-        
+
         context.state = flow(isValid, context.state, computed.phase);
         if (isValid) {
             at.emit2(name, computed, context);

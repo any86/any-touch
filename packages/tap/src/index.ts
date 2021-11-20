@@ -1,6 +1,6 @@
 import AnyTouch from 'any-touch';
 import { Point, Input, Computed } from '@any-touch/shared';
-import { STATE_RECOGNIZED, STATE_POSSIBLE, STATE_FAILED, TYPE_END, createPluginContext } from '@any-touch/shared';
+import { STATE_RECOGNIZED, STATE_POSSIBLE, STATE_FAILED, TYPE_END, createPluginContext, isDisabled } from '@any-touch/shared';
 import { getVLength } from '@any-touch/vector';
 import { ComputeDistance, ComputeMaxLength } from '@any-touch/compute';
 const DEFAULT_OPTIONS = {
@@ -96,10 +96,7 @@ export default function (at: AnyTouch, options?: Partial<typeof DEFAULT_OPTIONS>
 
     at.on('computed', (computed) => {
         // 禁止
-        if (context.disabled) {
-            context.state = STATE_POSSIBLE;
-            return;
-        };
+        if (isDisabled(context)) return;
 
         const { phase, x, y } = computed;
 
