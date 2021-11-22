@@ -1,18 +1,8 @@
-import {
-    STATE_POSSIBLE,
-    STATE_START,
-    STATE_MOVE,
-    STATE_END,
-    STATE_CANCELLED,
-    STATE_FAILED,
-    STATE_RECOGNIZED,
-} from '@any-touch/shared';
-
 import Core from '@any-touch/core';
+import { STATE } from './const';
 
 // export type KV = Record<string | symbol, any>;
 export type KV = Record<string, any>;
-
 
 /**
  * 适配器支持的事件类型
@@ -136,14 +126,7 @@ export interface AnyTouchEvent extends Input, Required<Computed> {
 /**
  * 识别器状态
  */
-export type RECOGNIZER_STATE =
-    | typeof STATE_POSSIBLE
-    | typeof STATE_START
-    | typeof STATE_MOVE
-    | typeof STATE_END
-    | typeof STATE_CANCELLED
-    | typeof STATE_FAILED
-    | typeof STATE_RECOGNIZED;
+export type RECOGNIZER_STATE = STATE;
 
 /**
  * Input转换器

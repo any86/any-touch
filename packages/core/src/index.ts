@@ -61,7 +61,7 @@ const DEFAULT_OPTIONS: Options = {
 
 const TYPE_UNBIND = 'u';
 
-type DefaultTypeNames = 'tap' | 'press' | 'pressup' | 'pan' | 'panstart' | 'panmove' | 'panend' | 'swipe' | 'pinch' | 'pinchstart' | 'pinchmove' | 'pinchend' | 'rotate' | 'rotatestart' | 'rotatemove' | 'rotateend' | 'computed' | typeof TYPE_UNBIND;
+type DefaultTypeNames = 'tap' | 'press' | 'pressup' | 'pan' | 'panstart' | 'panmove' | 'panend' | 'pancancel' | 'swipe' | 'pinch' | 'pinchstart' | 'pinchmove' | 'pinchend' | 'pinchcancel' | 'rotate' | 'rotatestart' | 'rotatemove' | 'rotateend' | 'rotatecancel' | 'computed' | typeof TYPE_UNBIND;
 
 
 export default class extends AnyEvent<{ [typeName in DefaultTypeNames]: AnyTouchEvent }> {
