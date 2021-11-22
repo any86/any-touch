@@ -1,15 +1,16 @@
-import Pan from '@any-touch/pan';
+import pan from '@any-touch/pan';
 import Core from '@any-touch/core';
-Core.use(Pan);
 import { sleep, GestureSimulator, panSimulator } from '@any-touch/simulator'
-const PAN_NAME = 'pan';
 
 test(`加载2个any-touch, 触发2次panstart`, async done => {
     const el = document.createElement('div');
     const parnetEl = document.createElement('div');
     parnetEl.appendChild(el);
     const at = new Core(el);
+    at.use(pan);
     const pAt = new Core(parnetEl);
+    pAt.use(pan);
+
     const onParentPanStart = jest.fn();
     const onPanStart = jest.fn();
 
@@ -33,46 +34,27 @@ test(`加载2个any-touch, 触发2次panstart`, async done => {
     done();
 });
 
-test(`触发${PAN_NAME}left`, async done => {
+test(`左拖拽`, async done => {
     const el = document.createElement('div');
     const at = new Core(el);
+    at.use(pan);
     const mockCB = jest.fn();
-    at.on(`${PAN_NAME}left`, (ev) => {
-        mockCB(ev.type)
+    at.on('pan', (e) => {
+        mockCB(e.direction);
     });
-
-    await panSimulator(el, [{ x: 100, y: 100 }], [{ x: 0, y: 11 }])
-
-    expect(mockCB).toHaveBeenCalledTimes(1);
-    expect(mockCB).toHaveBeenNthCalledWith(1, `${PAN_NAME}left`);
-    // 此处增加panright操作会报错, 实际页面并没有报错, 后续需要检查是否touch模拟器写的有问题
+    await panSimulator(el, [{ x: 100, y: 100 }], [{ x: 0, y: 11 }]);
+    expect(mockCB).toHaveBeenCalledTimes(2);
+    expect(mockCB).toHaveBeenNthCalledWith(1, `left`);
+    expect(mockCB).toHaveBeenNthCalledWith(2, `left`);
     done();
 });
 
-
-test(`触发${PAN_NAME}down`, async done => {
-    const el = document.createElement('div');
-    const at = new Core(el);
-    const mockCB = jest.fn();
-    at.on(`${PAN_NAME}down`, (ev) => {
-        mockCB(ev.type)
-    });
-    const gs = new GestureSimulator(el);
-    gs.start();
-    // 保证compute开始计算方向了
-    await sleep(25);
-    gs.move([{ x: 0, y: 11 }]);
-    await sleep();
-    expect(mockCB).toHaveBeenCalledTimes(1);
-    expect(mockCB).toHaveBeenNthCalledWith(1, `${PAN_NAME}down`);
-    // 此处增加panright操作会报错, 实际页面并没有报错, 后续需要检查是否touch模拟器写的有问题
-    done();
-});
 
 test(`模拟pancancel`, async done => {
     const el = document.createElement('div');
     const gs = new GestureSimulator(el);
     const at = new Core(el);
+    at.use(pan);
     const onPan = jest.fn().mockName('onPan');
     const onPanCancel = jest.fn().mockName('onPanCancel');
 
@@ -84,7 +66,7 @@ test(`模拟pancancel`, async done => {
     await sleep(25);
     gs.cancel();
     await sleep();
-    // expect(onPan).toHaveBeenCalledTimes(2);
+    expect(onPan).toHaveBeenCalledTimes(2);
     expect(onPanCancel).toHaveBeenCalledTimes(1);
     done();
 });
@@ -94,6 +76,7 @@ test('触发一次panend', async done => {
     const el = document.createElement('div');
     const gs = new GestureSimulator(el);
     const at = new Core(el);
+    at.use(pan);
     const onPanend = jest.fn().mockName('onPanend');
     at.on('panend', onPanend);
     gs.start();
