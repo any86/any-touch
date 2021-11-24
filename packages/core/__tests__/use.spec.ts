@@ -1,23 +1,16 @@
 import { create } from '@testUtils';
-import Tap from '@any-touch/tap';
-test(`通过实例加载/卸载插件`, async done => {
-    const { AnyTouch, el, GestureSimulator, mockCB, sleep } = create();
-    const at = new AnyTouch(el);
+import tap from '@any-touch/tap';
+test(`通过实例加载插件`, async done => {
+    const { Core, el, GestureSimulator, mockCB, sleep } = create();
+    const at = new Core(el);
     const gs = new GestureSimulator(el);
-    at.use(Tap);
+    at.use(tap);
     at.on('tap', (ev) => {
         mockCB(ev.type);
     });
-
     gs.start();
     gs.end();
     await sleep();
     expect(mockCB).toHaveBeenCalledWith('tap');
-
-    // 卸载
-    at.removeUse('tap');
-    at.on('tap', mockCB);
-    await sleep();
-    expect(mockCB).toHaveBeenCalledTimes(1);
     done();
 });

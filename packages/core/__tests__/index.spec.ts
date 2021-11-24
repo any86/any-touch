@@ -1,9 +1,9 @@
 import { create } from '@testUtils';
-import Tap from '@any-touch/tap';
+import tap from '@any-touch/tap';
 
 test('依次输入start->move->end->start-cancel', async done => {
     const { gs, at, mockCB, mock, sleep } = create();
-    at.on('at', mockCB);
+    at.on('input', mockCB);
     gs.start();
     gs.move([{ x: 1, y: 1 }]);
     gs.end();
@@ -19,20 +19,22 @@ test('依次输入start->move->end->start-cancel', async done => {
     done();
 });
 
-test(`通过get获取tap手势实例, 并设置maxPressTime为100ms`, async done => {
-    const { AnyTouch, el } = create();
-    AnyTouch.use(Tap);
-    const at = new AnyTouch(el);
-    const tap = at.get('tap');
-    expect(tap).toBeInstanceOf(Tap);
+test(`安装tap, 通过tapContext可以获取到name等字段`, async done => {
+    const { Core, el } = create();
+    const at = new Core(el);
+    at.use(tap, { maxPressTime: 100 });
+    const tapContext = at.get('tap');
+    expect(tapContext).toHaveProperty('name');
+    expect(tapContext).toHaveProperty('state');
+    expect(tapContext).toHaveProperty('disabled');
     at.destroy();
     done();
 });
 
 test('默认会触发dom事件', async done => {
-    const { AnyTouch, el, GestureSimulator, mockCB, sleep } = create();
-    AnyTouch.use(Tap);
-    const at =new AnyTouch(el);
+    const { Core, el, GestureSimulator, mockCB, sleep } = create();
+    const at = new Core(el);
+    at.use(tap);
     const gs = new GestureSimulator(el);
     el.addEventListener('tap', ev => {
         mockCB(ev.type);
@@ -47,7 +49,7 @@ test('默认会触发dom事件', async done => {
 
 test('destroy实例', () => {
     const { at, touch, sleep, mockCB } = create();
-    at.on('at', mockCB);
+    at.on('input', mockCB);
     at.destroy();
     sleep();
     touch.start();
@@ -55,16 +57,16 @@ test('destroy实例', () => {
     at.destroy();
 });
 
-test('removeUse所有手势',done=>{
-    const { AnyTouch, el } = create();
-    const onTap = jest.fn().mockName('tap');
-    const at = new AnyTouch(el);
-    at.use(Tap);
-    at.on('tap', onTap);
-    at.removeUse();
-    const tap = at.get('tap');
-    expect(tap).not.toBeInstanceOf(Tap);
-    expect(onTap).toBeCalledTimes(0);
-    at.destroy();
-    done();
-});
+// test('removeUse所有手势',done=>{
+//     const { Core, el } = create();
+//     const onTap = jest.fn().mockName('tap');
+//     const at = new Core(el);
+//     at.use(tap);
+//     at.on('tap', onTap);
+//     at.removeUse();
+//     const tapContext = at.get('tap');
+//     expect(tap).not.toBeInstanceOf(tap);
+//     expect(onTap).toBeCalledTimes(0);
+//     at.destroy();
+//     done();
+// });

@@ -1,7 +1,5 @@
 import EventEmitter from '../src/index';
 
-
-
 test('off指定事件', () => {
     const eventEmitter = new EventEmitter();
     const mockCallback = jest.fn();

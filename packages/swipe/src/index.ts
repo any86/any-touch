@@ -38,6 +38,7 @@ export default function (at: Core, options?: Partial<typeof DEFAULT_OPTIONS>) {
 function test(computed: Required<Computed>, options: typeof DEFAULT_OPTIONS) {
     if (TYPE_END !== computed.phase) return false;
     const { velocityX, velocityY, maxPointLength, distance } = computed;
+    // console.log({ velocityX, velocityY, maxPointLength, distance });
     return options.pointLength === maxPointLength &&
         options.threshold < distance &&
         options.velocity < Math.max(velocityX, velocityY);

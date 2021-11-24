@@ -17,18 +17,12 @@ import type {
     InputCreatorFunction,
     ComputeFunction,
     ComputeFunctionCreator,
-    KV, PluginContext, Plugin, PluginOptions,
+    PluginContext,
+    Plugin,
+    PluginOptions,
 } from '@any-touch/shared';
 
-import {
-    TOUCH_START,
-    TOUCH_MOVE,
-    TOUCH_END,
-    TOUCH_CANCEL,
-    MOUSE_DOWN,
-    MOUSE_MOVE,
-    MOUSE_UP,
-} from '@any-touch/shared';
+import { TOUCH_START, TOUCH_MOVE, TOUCH_END, TOUCH_CANCEL, MOUSE_DOWN, MOUSE_MOVE, MOUSE_UP } from '@any-touch/shared';
 
 import { mouse, touch } from './createInput';
 import dispatchDomEvent from './dispatchDomEvent';
@@ -50,7 +44,7 @@ export interface Options {
  */
 const DEFAULT_OPTIONS: Options = {
     domEvents: { bubbles: true, cancelable: true },
-    preventDefault: event => {
+    preventDefault: (event) => {
         if (event.target && 'tagName' in event.target) {
             const { tagName } = event.target;
             return !/^(?:INPUT|TEXTAREA|BUTTON|SELECT)$/.test(tagName);
@@ -58,16 +52,59 @@ const DEFAULT_OPTIONS: Options = {
         return false;
     },
 };
-
 const TYPE_UNBIND = 'u';
 
-type DefaultTypeNames = 'tap' | 'press' | 'pressup' | 'pan' | 'panstart' | 'panmove' | 'panend' | 'pancancel' | 'swipe' | 'pinch' | 'pinchstart' | 'pinchmove' | 'pinchend' | 'pinchcancel' | 'rotate' | 'rotatestart' | 'rotatemove' | 'rotateend' | 'rotatecancel' | 'computed' | typeof TYPE_UNBIND;
+type DefaultTypeNames =
+    | 'tap'
+    | 'press'
+    | 'pressup'
+    | 'pan'
+    | 'panstart'
+    | 'panmove'
+    | 'panend'
+    | 'pancancel'
+    | 'swipe'
+    | 'pinch'
+    | 'pinchstart'
+    | 'pinchmove'
+    | 'pinchend'
+    | 'pinchcancel'
+    | 'rotate'
+    | 'rotatestart'
+    | 'rotatemove'
+    | 'rotateend'
+    | 'rotatecancel'
+    | 'computed'
+    | 'at:start'
+    | 'at:move'
+    | 'at:end'
+    | 'at:cancel'
+    | 'input'
+    | typeof TYPE_UNBIND;
 
+/**
+ * 默认的事件名和事件对象映射
+ */
+type EventNameMap<K extends string> = { [k in K]: AnyTouchEvent };
 
-export default class extends AnyEvent<{ [typeName in DefaultTypeNames]: AnyTouchEvent }> {
-    // 目标元素
+/**
+ * 手势库的核心,
+ * 本身不具备手势识别,
+ * 需要加载识别器插件.
+ * @example
+ * import Core from '@any-touch/core';
+ * import pan from '@any-touch/pan';
+ * const at = new Core();
+ * at.use(pan);
+ */
+export default class<K extends string = DefaultTypeNames> extends AnyEvent<EventNameMap<DefaultTypeNames | K>> {
+    /**
+     * 当前绑定元素
+     */
     el?: HTMLElement;
-    // 当前识别器
+    /**
+     * 当前插件(仅供插件开发者使用)
+     */
     c?: PluginContext;
     // 选项
     private __options: Options;
@@ -86,7 +123,6 @@ export default class extends AnyEvent<{ [typeName in DefaultTypeNames]: AnyTouch
      */
     constructor(el?: HTMLElement, options?: Options) {
         super();
-
         this.el = el;
         this.__options = { ...DEFAULT_OPTIONS, ...options };
 
@@ -124,8 +160,7 @@ export default class extends AnyEvent<{ [typeName in DefaultTypeNames]: AnyTouch
                     },
                 });
                 window.addEventListener('_', () => void 0, opts);
-            } catch { }
-
+            } catch {}
             // 绑定元素
             this.on(
                 TYPE_UNBIND,
@@ -138,24 +173,65 @@ export default class extends AnyEvent<{ [typeName in DefaultTypeNames]: AnyTouch
         }
     }
 
-    beforeEach(interceptor: (currentPluginContext: PluginContext & { event: AnyTouchEvent }, next: () => void) => void) {
+    /**
+     * 加载并初始化插件
+     * @param plugin 插件
+     * @param pluginOptions 插件选项
+     */
+    use<P extends Plugin = Plugin>(plugin: P, pluginOptions?: Parameters<P>[1]) {
+        this.__plugins.push(plugin(this, pluginOptions));
+    }
+    /**
+     * 拦截器
+     * 可以控制事件的触发
+     * @param interceptor 拦截函数
+     */
+    beforeEach(
+        interceptor: (currentPluginContext: PluginContext & { event: AnyTouchEvent }, next: () => void) => void
+    ) {
         super.beforeEach.call(this, (context, next) => {
             // 跳过computed事件,
             // 只保留识别器通过emit2触发的事件
             if (void 0 === context.c?.name) {
                 next();
             } else {
-                interceptor({ ...context.c, event: this.event }, next)
+                interceptor({ ...context.c, event: this.event }, next);
             }
         });
     }
 
     /**
-     * 带DOM事件的emit
+     * 获取识别器通过名字
+     * @param name 识别器的名字
+     * @return 返回识别器
+     */
+    get(name: string) {
+        for (const plugin of this.__plugins) {
+            if (name === plugin.name) {
+                return plugin;
+            }
+        }
+    }
+
+    /**
+     * 带DOM事件的emit(仅供插件开发者使用)
+     * @param type 事件类型
+     * @param payload 数据
+     * @param pluginContext 插件实例
+     */
+    set(newOptions: Partial<Options>) {
+        this.__options = { ...this.__options, ...newOptions };
+    }
+
+    /**
+     * 带DOM事件的emit(仅供插件开发者使用)
+     * @param type 事件类型
+     * @param payload 数据
+     * @param pluginContext 插件实例
      */
     emit2(type: string, payload: AnyTouchEvent, pluginContext: PluginContext) {
         this.c = pluginContext;
-        this.emit(type, payload, () => {
+        this.emit(type, {...payload,type}, () => {
             // this.emit('at:after',{...payload,name:type})
             const { target } = payload;
             const { domEvents } = this.__options;
@@ -216,28 +292,6 @@ export default class extends AnyEvent<{ [typeName in DefaultTypeNames]: AnyTouch
                 this.__computeFunctionCreatorList.push(computeFunctionCreator);
                 // 计算函数队列
                 this.__computeFunctionList.push(computeFunctionCreator());
-            }
-        }
-    }
-
-    /**
-     * 加载并初始化插件
-     * @param plugin 插件
-     * @param pluginOptions 插件选项
-     */
-    use(plugin: Plugin, pluginOptions?: PluginOptions) {
-        this.__plugins.push(plugin(this, pluginOptions));
-    }
-
-    /**
-     * 获取识别器通过名字
-     * @param name 识别器的名字
-     * @return 返回识别器
-     */
-    get(name: string) {
-        for (const plugin of this.__plugins) {
-            if (name === plugin.name) {
-                return plugin;
             }
         }
     }

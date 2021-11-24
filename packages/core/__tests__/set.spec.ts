@@ -1,10 +1,10 @@
 import { create } from '@testUtils';
-import Tap from '@any-touch/tap';
+import tap from '@any-touch/tap';
 
 test(`通过set设置不触发dom事件`, async done => {
-    const { AnyTouch, el, GestureSimulator, mockCB, sleep } = create();
-    const at = new AnyTouch(el);
-    at.use(Tap);
+    const { Core, el, GestureSimulator, mockCB, sleep } = create();
+    const at = new Core(el);
+    at.use(tap);
     at.set({domEvents:false});
     const gs = new GestureSimulator(el);
     el.addEventListener('tap', mockCB);

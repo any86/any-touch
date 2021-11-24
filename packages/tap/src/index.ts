@@ -1,28 +1,5 @@
-import AnyTouch from 'any-touch';
-import { Point, Input, Computed } from '@any-touch/shared';
-import { STATE, TYPE_END, createPluginContext, isDisabled } from '@any-touch/shared';
-import { getVLength } from '@any-touch/vector';
-import { ComputeDistance, ComputeMaxLength } from '@any-touch/compute';
-const DEFAULT_OPTIONS = {
-    name: 'tap',
-    // 触点数
-    pointLength: 1,
-    // 点击次数
-    tapTimes: 1,
-    // 等待下一次tap的时间,
-    // 超过该事件就立即判断当前点击数量
-    waitNextTapTime: 300,
-
-    // 从接触到离开允许产生的最大距离
-    maxDistance: 2,
-    // 2次tap之间允许的最大位移
-    maxDistanceFromPrevTap: 9,
-    // 从接触到离开屏幕的最大时间
-    maxPressTime: 250,
-};
 /**
- * "单击"识别器
- * 识别后执行, 流程如下:
+ *           流程如下:
  *             开始
  *              |
  *         <是否end阶段> - 否 - 结束
@@ -62,6 +39,31 @@ const DEFAULT_OPTIONS = {
  *       触发, 状态设置为"已识别", 重置(点击次数,位置)
  *              |
  *             结束
+ */
+import AnyTouch from 'any-touch';
+import { Point, Input, Computed } from '@any-touch/shared';
+import { STATE, TYPE_END, createPluginContext, isDisabled } from '@any-touch/shared';
+import { getVLength } from '@any-touch/vector';
+import { ComputeDistance, ComputeMaxLength } from '@any-touch/compute';
+const DEFAULT_OPTIONS = {
+    name: 'tap',
+    // 触点数
+    pointLength: 1,
+    // 点击次数
+    tapTimes: 1,
+    // 等待下一次tap的时间,
+    // 超过该事件就立即判断当前点击数量
+    waitNextTapTime: 300,
+
+    // 从接触到离开允许产生的最大距离
+    maxDistance: 2,
+    // 2次tap之间允许的最大位移
+    maxDistanceFromPrevTap: 9,
+    // 从接触到离开屏幕的最大时间
+    maxPressTime: 250,
+};
+/**
+ * "单击"识别器
  * @param at AnyTouch实例
  * @param options 识别器选项
  */
@@ -94,6 +96,26 @@ export default function (at: AnyTouch, options?: Partial<typeof DEFAULT_OPTIONS>
         }, _options.waitNextTapTime);
     }
 
+    /**
+     * 判断前后2次点击的距离是否超过阈值
+     * @param center 当前触点中心坐标
+     * @param options 选项
+     * @param prevTapPoint 上一个点击的坐标
+     * @return 前后2次点击的距离是否超过阈值
+     */
+    function isValidDistanceFromPrevTap(center: Point, options: typeof DEFAULT_OPTIONS) {
+        // 判断2次点击的距离
+        if (void 0 !== prevTapPoint) {
+            const distanceFromPreviousTap = getVLength({ x: center.x - prevTapPoint.x, y: center.y - prevTapPoint.y });
+            // 缓存当前点, 作为下次点击的上一点
+            prevTapPoint = center;
+            return options.maxDistanceFromPrevTap >= distanceFromPreviousTap;
+        } else {
+            prevTapPoint = center;
+            return true;
+        }
+    }
+
     at.on('computed', (computed) => {
         // 禁止
         if (isDisabled(context)) return;
@@ -109,7 +131,7 @@ export default function (at: AnyTouch, options?: Partial<typeof DEFAULT_OPTIONS>
             // 判断2次点击之间的距离是否过大
             // 对符合要求的点击进行累加
             if (
-                isValidDistanceFromPrevTap({ x, y }, _options, prevTapPoint) &&
+                isValidDistanceFromPrevTap({ x, y }, _options) &&
                 isValidInterval(_options.waitNextTapTime, prevTapTime)
             ) {
                 tapCount++;
@@ -160,25 +182,7 @@ function test(computed: Input & Partial<Computed>, options: typeof DEFAULT_OPTIO
     );
 }
 
-/**
- * 判断前后2次点击的距离是否超过阈值
- * @param center 当前触点中心坐标
- * @param options 选项
- * @param prevTapPoint 上一个点击的坐标
- * @return 前后2次点击的距离是否超过阈值
- */
-function isValidDistanceFromPrevTap(center: Point, options: typeof DEFAULT_OPTIONS, prevTapPoint?: Point) {
-    // 判断2次点击的距离
-    if (void 0 !== prevTapPoint) {
-        const distanceFromPreviousTap = getVLength({ x: center.x - prevTapPoint.x, y: center.y - prevTapPoint.y });
-        // 缓存当前点, 作为下次点击的上一点
-        prevTapPoint = center;
-        return options.maxDistanceFromPrevTap >= distanceFromPreviousTap;
-    } else {
-        prevTapPoint = center;
-        return true;
-    }
-}
+
 
 /**
  * 校验2次tap的时间间隔是否满足

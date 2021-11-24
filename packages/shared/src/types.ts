@@ -144,7 +144,7 @@ export interface InputCreatorFunctionMap {
 }
 
 
-export type PluginOptions = { name: string } & KV;
+export type PluginOptions = { name?: string } & KV;
 
 /**
  * 插件上下文内容

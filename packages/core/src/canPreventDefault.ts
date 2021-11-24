@@ -1,5 +1,5 @@
 import { NativeEvent } from '@any-touch/shared';
-import {isFunction } from '@any-touch/shared';
+import { isFunction } from '@any-touch/shared';
 import { Options } from './index';
 /**
  * 计算是否需要阻止默认事件
@@ -7,7 +7,7 @@ import { Options } from './index';
  * @param options anytouch的选项
  * @returns 是否阻止默认事件
  */
-export default function (event: NativeEvent, options: Options) {
+export default function (event: NativeEvent, options: Options): boolean {
     const { preventDefault } = options;
     if (isFunction(preventDefault)) {
         return preventDefault(event);

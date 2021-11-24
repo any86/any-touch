@@ -1,14 +1,11 @@
 import Core from '@any-touch/core';
-import Tap from '@any-touch/tap';
+import tap from '@any-touch/tap';
 import { GestureSimulator, sleep } from '@any-touch/simulator';
 function createNode() {
     return document.createElement('div')
 }
 
-
-// 
 test(`stopImmediatePropagation`, async (done) => {
-    Core.use(Tap);
     const el = createNode();
     const parent = createNode();
     const tapEl = createNode();
@@ -17,12 +14,15 @@ test(`stopImmediatePropagation`, async (done) => {
 
     const gs = new GestureSimulator(tapEl);
     const at = new Core(el);
+    at.use(tap);
     const pAt = new Core(parent);
+    pAt.use(tap);
 
     const onTap = jest.fn();
     const onPTap = jest.fn();
     
     at.on('tap', e=>{
+        // 绑定的同类事件就不触发了
         e.stopImmediatePropagation();
         onTap();
     })

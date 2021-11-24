@@ -3,7 +3,7 @@
 // 让end阶段读取上一步的计算数据, 比如方向, 速率等...
 // 防止快速滑动到慢速滑动的手势识别成swipe
 import type { Input, InputOnlyHasCurrent, directionString } from '@any-touch/shared';
-import { COMPUTE_INTERVAL } from '@any-touch/shared';
+import { COMPUTE_INTERVAL, TYPE_MOVE } from '@any-touch/shared';
 import { getDirection } from '@any-touch/vector';
 
 export default function () {
@@ -20,15 +20,14 @@ export default function () {
      * 注意: 往复滑动会出现direction为none
      * @param input 输入
      */
-    return function (input: Input){
+    return function (input: Input) {
         // 点击鼠标左键, 会出现undefined
         if (void 0 !== input) {
             // const { phase } = input;
             lastValidInput = lastValidInput || input.startInput;
             const deltaTime = input.timestamp - lastValidInput.timestamp;
-
             // 间隔超过16ms刷新速度数据
-            if (/*TYPE_MOVE === phase && */COMPUTE_INTERVAL < deltaTime) {
+            if (TYPE_MOVE === input.phase && COMPUTE_INTERVAL < deltaTime) {
                 const deltaX = input.x - lastValidInput.x;
                 const deltaY = input.y - lastValidInput.y;
                 speedX = Math.round(deltaX / deltaTime * 100) / 100;

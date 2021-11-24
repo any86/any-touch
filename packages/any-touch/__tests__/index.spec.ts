@@ -12,7 +12,14 @@ test(`AnyTouch是否默认加载了所有手势`, async done => {
     expect(at.get('pinch')).toBeDefined();
     expect(at.get('press')).toBeDefined();
     expect(at.get('pan')).toBeDefined();
-    at.on('tap',mockCallback);
+    expect(AnyTouch.STATE_CANCELLED).toBeDefined();
+    expect(AnyTouch.STATE_END).toBeDefined();
+    expect(AnyTouch.STATE_FAILED).toBeDefined();
+    expect(AnyTouch.STATE_MOVE).toBeDefined();
+    expect(AnyTouch.STATE_POSSIBLE).toBeDefined();
+    expect(AnyTouch.STATE_RECOGNIZED).toBeDefined();
+    expect(AnyTouch.STATE_START).toBeDefined();
+    at.on('tap', mockCallback);
     gs.start();
     gs.end();
     await sleep();

@@ -1,11 +1,11 @@
 import { create } from '@testUtils';
-import Press from '@any-touch/press';
+import press from '@any-touch/press';
 const PRESS_NAME = 'press';
 
 test(`加载${PRESS_NAME}, 触发一次${PRESS_NAME}`, async done => {
-    const { gs, el, mockCB, mockCalls, sleep, AnyTouch } = create();
-    AnyTouch.use(Press);
-    const at = new AnyTouch(el);
+    const { gs, el, mockCB, mockCalls, sleep, Core } = create();
+    const at = new Core(el);
+    at.use(press);
     at.on(PRESS_NAME, mockCB);
 
     gs.start();
@@ -17,13 +17,13 @@ test(`加载${PRESS_NAME}, 触发一次${PRESS_NAME}`, async done => {
 });
 
 test(`按压的时候移动超过一定"距离", 不触发${PRESS_NAME}`, async done => {
-    const { gs, el, mockCB, sleep, AnyTouch } = create();
-    AnyTouch.use(Press);
-    const at = new AnyTouch(el);
+    const { gs, el, mockCB, sleep, Core } = create();
+    const at = new Core(el);
+    at.use(press);
     at.on(PRESS_NAME, mockCB);
 
     gs.start();
-    gs.move([{x:10,y:10}]);
+    gs.move([{ x: 10, y: 10 }]);
     await sleep(251);
     gs.end();
     await sleep();
@@ -32,9 +32,9 @@ test(`按压的时候移动超过一定"距离", 不触发${PRESS_NAME}`, async 
 });
 
 test(`松手的时候还没有构成按压时间要求, 不触发${PRESS_NAME}`, async done => {
-    const { gs, el, mockCB, sleep, AnyTouch } = create();
-    AnyTouch.use(Press);
-    const at = new AnyTouch(el);
+    const { gs, el, mockCB, sleep, Core } = create();
+    const at = new Core(el);
+    at.use(press);
     at.on(PRESS_NAME, mockCB);
 
     gs.start();

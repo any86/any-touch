@@ -1,5 +1,5 @@
 import Core from '@any-touch/core';
-import Pinch from '@any-touch/pinch';
+import pinch from '@any-touch/pinch';
 import { GestureSimulator, sleep } from '@any-touch/simulator';
 function createNode() {
     return document.createElement('div')
@@ -27,7 +27,6 @@ function createNode() {
 
 // 
 test(`通过"ev.match()"确保每个触点都是currentTarget的子元素`, async (done) => {
-    Core.use(Pinch);
     const el = createNode();
     const parent = createNode();
     const child = createNode();
@@ -37,7 +36,8 @@ test(`通过"ev.match()"确保每个触点都是currentTarget的子元素`, asyn
     parent.appendChild(child2);
 
     const gs = new GestureSimulator(child);
-    new Core(el);
+    const at = new Core(el);
+    at.use(pinch)
     const onPinch = jest.fn();
     const onPinchAftermatch = jest.fn();
     child.addEventListener('pinch', ev => {

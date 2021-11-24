@@ -22,7 +22,7 @@ export function create() {
         el,
         mockCB,
         mock,
-        Core: AnyTouch,
+        Core,
         sleep,
         mockCalls
     };
