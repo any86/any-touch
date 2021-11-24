@@ -83,13 +83,14 @@ export default class TouchSimulator {
      * @param inputs 触点
      */
     public move(inputs: Input[]) {
+
         // 只能改变存在点
         const points = this._prevTouches.map(({ identifier }, index) => {
             const { x, y, target = this._el } = inputs[index];
             return {
                 clientX: x, clientY: y, target, identifier
             }
-        });
+        })
 
         let type = 'touch' === this._device ? 'touchmove' : 'mousemove';
         let event: any = new Event(type, { bubbles: true, cancelable: true });
@@ -110,8 +111,14 @@ export default class TouchSimulator {
 
             this._prevTouches = points;
         } else {
-            event[CLIENT_X] = points[0][CLIENT_X];
-            event[CLIENT_Y] = points[0][CLIENT_Y];
+            if (points[0]) {
+                event[CLIENT_X] = points[0][CLIENT_X];
+                event[CLIENT_Y] = points[0][CLIENT_Y];
+            } else {
+                // 当直接mousemove的时候, 没有prevTouchs
+                event[CLIENT_X] = inputs[0].x;
+                event[CLIENT_Y] = inputs[0].y;
+            }
             window.dispatchEvent(event);
             this._prevTouches = points;
         }
@@ -154,7 +161,8 @@ export default class TouchSimulator {
         event.changedTouches = this._prevTouches;
         event.touches = this._prevTouches;
         event.targetTouches = this._prevTouches;
-        this._prevTouches = event.touches;
+        // this._prevTouches = event.touches;
+        this._prevTouches = [];
         this._el.dispatchEvent(event);
         return event;
     };

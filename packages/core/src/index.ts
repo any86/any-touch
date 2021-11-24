@@ -42,7 +42,7 @@ export interface Options {
 /**
  * 默认设置
  */
-const DEFAULT_OPTIONS: Options = {
+export const DEFAULT_OPTIONS: Options = {
     domEvents: { bubbles: true, cancelable: true },
     preventDefault: (event) => {
         if (event.target && 'tagName' in event.target) {

@@ -49,29 +49,6 @@ test(`左拖拽`, async done => {
     done();
 });
 
-
-test(`模拟pancancel`, async done => {
-    const el = document.createElement('div');
-    const gs = new GestureSimulator(el);
-    const at = new Core(el);
-    at.use(pan);
-    const onPan = jest.fn().mockName('onPan');
-    const onPanCancel = jest.fn().mockName('onPanCancel');
-
-    at.on('pan', onPan);
-    at.on('pancancel', onPanCancel);
-    gs.start();
-    await sleep(25);
-    gs.move([{ x: 10, y: 0 }]);
-    await sleep(25);
-    gs.cancel();
-    await sleep();
-    expect(onPan).toHaveBeenCalledTimes(2);
-    expect(onPanCancel).toHaveBeenCalledTimes(1);
-    done();
-});
-
-
 test('触发一次panend', async done => {
     const el = document.createElement('div');
     const gs = new GestureSimulator(el);
@@ -86,5 +63,35 @@ test('触发一次panend', async done => {
     gs.end();
     await sleep();
     expect(onPanend).toHaveBeenCalledTimes(1);
+    done();
+});
+
+
+test(`模拟pancancel, cancel后继续触发pan`, async done => {
+    const el = document.createElement('div');
+    const gs = new GestureSimulator(el);
+    const at = new Core(el);
+    at.use(pan);
+    const onPan = jest.fn().mockName('onPan');
+    const onPanCancel = jest.fn().mockName('onPanCancel');
+    const onPanstartAfterCancel  = jest.fn();
+
+    at.on('pan', onPan);
+    at.on('panstart', onPanstartAfterCancel);
+    at.on('pancancel', onPanCancel);
+    gs.start();
+    await sleep(25);
+    gs.move([{ x: 10, y: 0 }]);
+    await sleep(25);
+    gs.cancel();
+    await sleep();
+
+    gs.start([{ x: 10, y: 0 }]);
+    await sleep(25);
+    gs.move([{ x: 110, y: 0 }]);
+
+    expect(onPan).toHaveBeenCalledTimes(3);
+    expect(onPanCancel).toHaveBeenCalledTimes(1);
+    expect(onPanstartAfterCancel).toHaveBeenCalledTimes(2);
     done();
 });

@@ -101,6 +101,7 @@ export function flow(isVaild: boolean, lastStatus: RECOGNIZER_STATE, phase: stri
  */
 export function resetState(context: PluginContext) {
     if ([STATE.RECOGNIZED, STATE.CANCELLED, STATE.FAILED].includes(context.state)) {
+        console.log('resetState');
         context.state = STATE.POSSIBLE;
     }
 }
@@ -110,7 +111,7 @@ export function resetState(context: PluginContext) {
  * @param state 识别器状态
  * @returns 是否已识别
  */
-export function isRecognized(state: RECOGNIZER_STATE) {
+export function isRecognized(state: RECOGNIZER_STATE):boolean {
     return [STATE.START, STATE.MOVE].includes(state);
 }
 
@@ -119,7 +120,7 @@ export function isRecognized(state: RECOGNIZER_STATE) {
  * @param context 识别器实例
  * @returns 是否禁止识别
  */
-export function isDisabled(context: PluginContext){
+export function isDisabled(context: PluginContext) {
     if (context.disabled) {
         context.state = STATE.POSSIBLE;
         return true;

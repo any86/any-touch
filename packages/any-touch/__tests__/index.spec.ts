@@ -26,3 +26,21 @@ test(`AnyTouch是否默认加载了所有手势`, async done => {
     expect(mockCallback).toHaveBeenCalled();
     done();
 });
+
+test(`通过disabled禁用tap`, done => {
+    const el = document.createElement('div');
+    const at = new AnyTouch(el);
+    const mockCallback = jest.fn();
+    const gs = new GestureSimulator(el);
+    at.on('tap', mockCallback);
+    const tapContext = at.get('tap');
+    if (tapContext) {
+        tapContext.disabled = true;
+    }
+
+    gs.start();
+    gs.end();
+
+    expect(mockCallback).toHaveBeenCalledTimes(0);
+    done();
+});

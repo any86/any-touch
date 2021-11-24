@@ -25,7 +25,6 @@ export default function (at: Core, options?: Partial<typeof DEFAULT_OPTIONS>) {
 
     at.on('computed', (computed) => {
         // 重置status
-        // 重置status
         resetState(context);
 
         // 禁止

@@ -32,7 +32,6 @@ export default function (at: Core, options?: Partial<typeof DEFAULT_OPTIONS>) {
         // 那么等待minPressTime时间后触发press
         if (TYPE_START === phase && _options.pointLength === pointLength) {
             // 重置状态
-            // 重置status
             resetState(context);
 
             // 延迟触发

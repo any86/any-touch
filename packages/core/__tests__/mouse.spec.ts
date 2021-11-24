@@ -5,10 +5,6 @@ test('鼠标输入move-> start-> move-> end', async done => {
     const mouseLoader = Mouse();
     const el = document.createElement('div');
     const gs = new GestureSimulator(el, { device: 'mouse' });
-    // const mockCallback = jest.fn();
-    // 直接输入move会
-    // const event1 = gs.move([{ x: 1, y: 1 }]);
-    // expect(mouseLoader(event1)).toBeUndefined();
 
     const event2 = gs.start();
     expect(mouseLoader(event2)).toHaveProperty(['points'], [{ "clientX": 0, "clientY": 0,target:el }]);
@@ -19,12 +15,15 @@ test('鼠标输入move-> start-> move-> end', async done => {
 
     const event4 = gs.end();
     expect(mouseLoader(event4)).toHaveProperty('phase', 'end');
+    done();
+});
 
 
-    // const event5 = gs.dispatchTouchStart();
-    // expect(mouseLoader(event5)).toHaveProperty(['points'], [{ "clientX": 0, "clientY": 0 }]);
-    // const event6 = gs.dispatchTouchEnd();
-    // expect(mouseLoader(event6)).toHaveProperty('phase', 'end');
-
+test('没有按住, 直接move返回undefined', done=>{
+    const mouseLoader = Mouse();
+    const el = document.createElement('div');
+    const gs = new GestureSimulator(el, { device: 'mouse' });
+    const event = gs.move([{x:1,y:1}]);
+    expect(mouseLoader(event)).not.toBeDefined();
     done();
 });
