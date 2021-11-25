@@ -29,15 +29,15 @@ export default function (
     });
 
     el.addEventListener(MOUSE_DOWN, catchEvent, options);
-    window.addEventListener(MOUSE_MOVE, catchEvent as any, options);
-    window.addEventListener(MOUSE_UP, catchEvent as any, options);
+    window.addEventListener(MOUSE_MOVE, catchEvent, options);
+    window.addEventListener(MOUSE_UP, catchEvent, options);
 
     return () => {
         TOUCH_EVENTS.forEach(eventName => {
             el.removeEventListener(eventName, catchEvent);
         });
         el.removeEventListener(MOUSE_DOWN, catchEvent, options);
-        window.removeEventListener(MOUSE_MOVE, catchEvent as any, options);
-        window.removeEventListener(MOUSE_UP, catchEvent as any, options);
+        window.removeEventListener(MOUSE_MOVE, catchEvent, options);
+        window.removeEventListener(MOUSE_UP, catchEvent, options);
     };
 }

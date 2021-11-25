@@ -67,7 +67,6 @@ function getCenter(points: { clientX: number, clientY: number }[]): Point | void
 
 
 function extendInput(basicsInput: PubicEvent, id: number): Omit<Input, 'prevInput' | 'startInput' | 'startMultiInput'> {
-
     const { phase, points, changedPoints, nativeEvent } = basicsInput;
     const pointLength = points.length;
     const isStart = TYPE_START === phase;

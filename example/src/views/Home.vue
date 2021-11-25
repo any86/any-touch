@@ -1,5 +1,5 @@
 <template>
-    <main class="ovh">
+    <main>
         <header>
             <a target="_new" href="https://github.com/any86/any-touch">
                 <img width="100" src="https://img.shields.io/github/stars/any86/any-touch?style=social" />
@@ -21,7 +21,6 @@
                 @pan="onPan"
                 @panstart="onPanstart($event, index)"
                 @panmove="onPanmove($event, index)"
-                @pandown="onPandown($event, index)"
                 @swipe="onSwipe($event, index)"
                 @press="onPress"
                 @pressup="onPressUp"
@@ -30,7 +29,7 @@
                 :class="['circle']"
             >
                 <p style="font-size: 16px; border-bottom: 1px dashed #fff">👋可拖拽 / 缩放等...</p>
-                <input/>
+                <input class="p-1 mt-1" placeholder="表单元素不阻止默认事件"/>
                 <p>Top: {{ top }}</p>
                 <p>Left: {{ left }}</p>
                 <p>Scale: {{ scale }}</p>
@@ -252,7 +251,7 @@ main {
     height: 100vh;
     width: 100%;
     header {
-        position: fixed;
+        position: fixed;top:0;left:0;
         display: flex;
         align-items: center;
         padding: 16px;

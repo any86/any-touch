@@ -101,7 +101,6 @@ export function flow(isVaild: boolean, lastStatus: RECOGNIZER_STATE, phase: stri
  */
 export function resetState(context: PluginContext) {
     if ([STATE.RECOGNIZED, STATE.CANCELLED, STATE.FAILED].includes(context.state)) {
-        console.log('resetState');
         context.state = STATE.POSSIBLE;
     }
 }

@@ -14,6 +14,7 @@ function computeVector(input: InputOnlyHasCurrent): Vector {
  */
 export default function () {
     return function (input: Input) {
+        console.log(JSON.stringify(input.points));
         const { prevInput, startMultiInput } = input;
         if (void 0 !== startMultiInput &&
             void 0 !== prevInput &&
