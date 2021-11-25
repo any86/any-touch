@@ -14,7 +14,6 @@ export default function () {
     let direction: directionString;
     // 上一次发生计算时候参与计算的input
     let lastValidInput: InputOnlyHasCurrent | Input
-
     /**
      * 计算速度和方向
      * 注意: 往复滑动会出现direction为none
@@ -27,7 +26,7 @@ export default function () {
             lastValidInput = lastValidInput || input.startInput;
             const deltaTime = input.timestamp - lastValidInput.timestamp;
             // 间隔超过16ms刷新速度数据
-            if (TYPE_MOVE === input.phase && COMPUTE_INTERVAL < deltaTime) {
+            if (COMPUTE_INTERVAL < deltaTime) {
                 const deltaX = input.x - lastValidInput.x;
                 const deltaY = input.y - lastValidInput.y;
                 speedX = Math.round(deltaX / deltaTime * 100) / 100;
@@ -38,7 +37,10 @@ export default function () {
                 // if(NONE === direction) console.warn({deltaX,deltaY},input.id,_lastValidInput.id );
                 lastValidInput = input;
             }
+            // console.warn(deltaTime,input.phase,velocityX, velocityY);
+
         }
+        // console.log({velocityX, velocityY});
         return { velocityX, velocityY, speedX, speedY, direction };
     }
 }
