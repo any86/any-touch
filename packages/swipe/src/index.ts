@@ -31,16 +31,16 @@ export default function (at: Core, options?: Partial<typeof DEFAULT_OPTIONS>) {
     });
 
     // 加载计算方法
-    at.compute([ComputeDistance, ComputeVAndDir, ComputeMaxLength]);
+    at.compute([ComputeDistance, ComputeVAndDir]);
     return context;
 }
 
 function test(computed: Required<Computed>, options: typeof DEFAULT_OPTIONS) {
     if (TYPE_END !== computed.phase) return false;
-    const { velocityX, velocityY, maxPointLength, distance } = computed;
+    const { velocityX, velocityY, vPointLengh, distance } = computed;
     // console.log({ velocityX, velocityY, maxPointLength, distance });
     return (
-        options.pointLength === maxPointLength &&
+        options.pointLength === vPointLengh &&
         0 === computed.points.length &&
         options.threshold < distance &&
         options.velocity < Math.max(velocityX, velocityY)

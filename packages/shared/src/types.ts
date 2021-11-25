@@ -88,6 +88,8 @@ export type Vector = Point;
 export interface Computed extends KV {
     // 一次识别周期中出现的最大触点数
     readonly maxPointLength?: number;
+    // 参与速度计算的触点数量
+    readonly vPointLengh?:number;
     readonly velocityX?: number;
     readonly velocityY?: number;
     readonly speedX?: number;

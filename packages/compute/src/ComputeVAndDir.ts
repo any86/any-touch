@@ -41,6 +41,6 @@ export default function () {
 
         }
         // console.log({velocityX, velocityY});
-        return { velocityX, velocityY, speedX, speedY, direction };
+        return { velocityX, velocityY, speedX, speedY, direction, vPointLengh: lastValidInput.pointLength };
     }
 }

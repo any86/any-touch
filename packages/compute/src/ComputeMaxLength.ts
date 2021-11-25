@@ -5,7 +5,7 @@ function ComputeMaxLength() {
     let maxPointLength = 0;
     return function (input: Input) {
         const { phase } = input;
-        if (TYPE_START === phase || TYPE_MOVE === phase) {
+        if (TYPE_START === phase) {
             maxPointLength = input.pointLength;
         }
         return { maxPointLength };
