@@ -1,6 +1,6 @@
 {
     "name": "@any-touch/swipe",
-    "version": "1.0.14",
+    "version": "1.0.15",
     "description": "any-touch的识别器, 用来识别划动手势.",
     "main": "./dist/index.js",
     "module": "./dist/index.es.js",
@@ -8,9 +8,9 @@
     "author": "any86",
     "license": "ISC",
     "dependencies": {
-        "@any-touch/compute": "^1.0.14",
-        "@any-touch/recognizer": "^1.0.14",
-        "@any-touch/shared": "^1.0.14"
+        "@any-touch/compute": "^1.0.15",
+        "@any-touch/recognizer": "^1.0.15",
+        "@any-touch/shared": "^1.0.15"
     },
     "files": [
         "dist/*"
