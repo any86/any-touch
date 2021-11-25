@@ -1,5 +1,5 @@
 <template>
-    <main class="ovh">
+    <main >
         <header>
             <a target="_new" href="https://github.com/any86/any-touch">
                 <img
@@ -225,6 +225,8 @@ main {
     width: 100%;
     header {
         position: fixed;
+        top:0;
+        left:0;
         display: flex;
         align-items: center;
         padding: 16px;

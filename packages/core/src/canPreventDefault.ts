@@ -11,8 +11,9 @@ import { Options } from './index';
  */
 export default function (event: SupportEvent, options: Options): boolean {
     const { preventDefault, preventDefaultExclude } = options;
-    let isPreventDefault = preventDefault || void 0 !== preventDefaultExclude;
-    if (null !== event.target) {
+    let isPreventDefault = !!preventDefault;
+
+    if (void 0 !== preventDefaultExclude && null !== event.target && isPreventDefault) {
         if (isRegExp(preventDefaultExclude)) {
             if ('tagName' in event.target) {
                 const { tagName } = event.target;
@@ -22,5 +23,6 @@ export default function (event: SupportEvent, options: Options): boolean {
             isPreventDefault = !preventDefaultExclude(event);
         }
     }
+
     return isPreventDefault;
 }
