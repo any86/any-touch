@@ -97,7 +97,7 @@ type EventNameMap<K extends string> = { [k in K]: AnyTouchEvent };
  * const at = new Core();
  * at.use(pan);
  */
-export default class<K extends string = DefaultTypeNames> extends AnyEvent<EventNameMap<DefaultTypeNames | K>> {
+export default class <K extends string = DefaultTypeNames> extends AnyEvent<EventNameMap<DefaultTypeNames | K>> {
     /**
      * 当前绑定元素
      */
@@ -160,14 +160,14 @@ export default class<K extends string = DefaultTypeNames> extends AnyEvent<Event
                     },
                 });
                 window.addEventListener('_', () => void 0, opts);
-            } catch {}
+            } catch { }
             // 绑定元素
             this.on(
                 TYPE_UNBIND,
                 bindElement(
                     el,
                     this.catchEvent.bind(this),
-                    !this.__options.preventDefault && supportsPassive ? { passive: true } : false
+                    false === this.__options.preventDefault && supportsPassive ? { passive: true } : false
                 )
             );
         }
@@ -181,6 +181,44 @@ export default class<K extends string = DefaultTypeNames> extends AnyEvent<Event
     use<P extends Plugin = Plugin>(plugin: P, pluginOptions?: Parameters<P>[1]) {
         this.__plugins.push(plugin(this, pluginOptions));
     }
+
+    /**
+     * 监听input变化
+     * @param event Touch / Mouse事件对象
+     */
+    catchEvent(event: NativeEvent) {
+        // if (!event.cancelable) {
+        //     this.emit('error', { code: 0, message: '页面滚动的时候, 请暂时不要操作元素!' });
+        // }
+        const input = this.__inputCreatorMap[event.type](event);
+        // 跳过无效输入
+        // 比如没有按住鼠标左键的移动会返回undefined
+        if (void 0 !== input) {
+            const stopPropagation = () => event.stopPropagation();
+            const preventDefault = () => event.preventDefault();
+            const stopImmediatePropagation = () => event.stopImmediatePropagation();
+            if (canPreventDefault(event, this.__options)) {
+                preventDefault();
+            }
+            this.emit('input', input);
+            this.emit2(`at:${input.phase}`, input as AnyTouchEvent, {} as PluginContext);
+
+            // ====== 计算结果 ======
+            const computed: Computed = {};
+            this.__computeFunctionList.forEach((compute) => {
+                // disabled
+                const result = compute(input, computed);
+                if (void 0 !== result) {
+                    for (const key in result) {
+                        computed[key] = result[key];
+                    }
+                }
+            });
+
+            this.emit('computed', { ...input, ...computed, stopPropagation, preventDefault, stopImmediatePropagation });
+        }
+    }
+
     /**
      * 拦截器
      * 可以控制事件的触发
@@ -231,7 +269,7 @@ export default class<K extends string = DefaultTypeNames> extends AnyEvent<Event
      */
     emit2(type: string, payload: AnyTouchEvent, pluginContext: PluginContext) {
         this.c = pluginContext;
-        this.emit(type, {...payload,type}, () => {
+        this.emit(type, { ...payload, type }, () => {
             // this.emit('at:after',{...payload,name:type})
             const { target } = payload;
             const { domEvents } = this.__options;
@@ -242,43 +280,6 @@ export default class<K extends string = DefaultTypeNames> extends AnyEvent<Event
                 // dispatchDomEvent(target, { ...payload, type:'at:after',name:type }, domEvents);
             }
         });
-    }
-
-    /**
-     * 监听input变化
-     * @param event Touch / Mouse事件对象
-     */
-    catchEvent(event: NativeEvent) {
-        // if (!event.cancelable) {
-        //     this.emit('error', { code: 0, message: '页面滚动的时候, 请暂时不要操作元素!' });
-        // }
-        const input = this.__inputCreatorMap[event.type](event);
-        // 跳过无效输入
-        // 比如没有按住鼠标左键的移动会返回undefined
-        if (void 0 !== input) {
-            const stopPropagation = () => event.stopPropagation();
-            const preventDefault = () => event.preventDefault();
-            const stopImmediatePropagation = () => event.stopImmediatePropagation();
-            if (canPreventDefault(event, this.__options)) {
-                preventDefault();
-            }
-            this.emit('input', input);
-            this.emit2(`at:${input.phase}`, input as AnyTouchEvent, {} as PluginContext);
-
-            // ====== 计算结果 ======
-            const computed: Computed = {};
-            this.__computeFunctionList.forEach((compute) => {
-                // disabled
-                const result = compute(input, computed);
-                if (void 0 !== result) {
-                    for (const key in result) {
-                        computed[key] = result[key];
-                    }
-                }
-            });
-
-            this.emit('computed', { ...input, ...computed, stopPropagation, preventDefault, stopImmediatePropagation });
-        }
     }
 
     /**
