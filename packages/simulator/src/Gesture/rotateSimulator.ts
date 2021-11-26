@@ -1,5 +1,5 @@
 import TouchSimulator from '../GestureSimulator';
-export default function (el: HTMLElement,angles = [5, 15, 25]) {
+export default function (el: HTMLElement, angles = [5, 15, 25]) {
     const ts = new TouchSimulator(el);
     const R = 3;
     // start

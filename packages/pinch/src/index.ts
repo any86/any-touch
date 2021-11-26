@@ -1,7 +1,12 @@
-import { Computed, PluginContext } from '@any-touch/shared';
+import { Computed, PluginContext, TYPE_CANCEL } from '@any-touch/shared';
 import {
-    STATE,
-    isDisabled, flow, getStatusName, resetState, isRecognized, createPluginContext
+    TYPE_END,
+    isDisabled,
+    flow,
+    getStatusName,
+    resetState,
+    isRecognized,
+    createPluginContext,
 } from '@any-touch/shared';
 import { ComputeScale, ComputeVectorForMutli } from '@any-touch/compute';
 import Core from '@any-touch/core';
@@ -33,10 +38,10 @@ export default function (at: Core, options?: Partial<typeof DEFAULT_OPTIONS>) {
         if (isValid) {
             at.emit2(name, computed, context);
         }
-        const stateName = getStatusName(context.state);
-        if(stateName){
-            at.emit2(name + stateName, computed, context);
 
+        const stateName = getStatusName(context.state);
+        if (stateName) {
+            at.emit2(name + stateName, computed, context);
         }
     });
 
@@ -47,6 +52,13 @@ export default function (at: Core, options?: Partial<typeof DEFAULT_OPTIONS>) {
 }
 
 function test(computed: Computed, context: PluginContext<typeof DEFAULT_OPTIONS>) {
-    const { pointLength, scale, deltaScale } = computed;
-    return (context.pointLength === pointLength && (void 0 !== scale && void 0 !== deltaScale && context.threshold < Math.abs(scale - 1) || isRecognized(context.state)))
+    const { pointLength, scale, deltaScale, phase } = computed;
+    // console.warn({scale},phase,context.state,);
+    return (
+        (context.pointLength === pointLength &&
+            ((void 0 !== scale && void 0 !== deltaScale && context.threshold < Math.abs(scale - 1)) ||
+                isRecognized(context.state))) ||
+        // pinchend | pinchcancel
+        (isRecognized(context.state) && [TYPE_END, TYPE_CANCEL].includes(phase))
+    );
 }

@@ -29,7 +29,7 @@
                 :class="['circle']"
             >
                 <p style="font-size: 16px; border-bottom: 1px dashed #fff">👋可拖拽 / 缩放等...</p>
-                <!-- <input class="p-1 mt-1" placeholder="表单元素不阻止默认事件"/> -->
+                <input class="p-1 mt-1" placeholder="表单元素不阻止默认事件"/>
                 <p>Top: {{ top }}</p>
                 <p>Left: {{ left }}</p>
                 <p>Scale: {{ scale }}</p>
@@ -105,8 +105,8 @@ export default {
             data: {},
             styles: [
                 { left: `50px`, top: `160px`, zIndex: 1, scale: 1, angle: 0 },
-                { left: `50px`, top: `320px`, zIndex: 1, scale: 1, angle: 0 },
-                { left: `50px`, top: `480px`, zIndex: 1, scale: 1, angle: 0 },
+                { left: `50px`, top: `360px`, zIndex: 1, scale: 1, angle: 0 },
+                { left: `50px`, top: `560px`, zIndex: 1, scale: 1, angle: 0 },
             ],
         };
     },

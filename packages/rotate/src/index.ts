@@ -6,6 +6,8 @@ import {
     flow,
     getStatusName,
     createPluginContext,
+    TYPE_END,
+    TYPE_CANCEL,
 } from '@any-touch/shared';
 import { ComputeAngle, ComputeVectorForMutli } from '@any-touch/compute';
 import Core from '@any-touch/core';
@@ -41,7 +43,6 @@ export default function (at: Core, options?: Partial<typeof DEFAULT_OPTIONS>) {
         const stateName = getStatusName(context.state);
         if (stateName) {
             at.emit2(name + stateName, computed, context);
-
         }
     });
 
@@ -51,6 +52,10 @@ export default function (at: Core, options?: Partial<typeof DEFAULT_OPTIONS>) {
 }
 
 function test(computed: Required<Computed>, context: PluginContext<typeof DEFAULT_OPTIONS>) {
-    const { pointLength, angle } = computed;
-    return context.pointLength === pointLength && (context.threshold < Math.abs(angle) || isRecognized(context.state));
+    const { pointLength, angle, phase } = computed;
+    return (
+        (context.pointLength === pointLength && (context.threshold < Math.abs(angle) || isRecognized(context.state))) ||
+        // rotateend | rotatecancel
+        (isRecognized(context.state) && [TYPE_END, TYPE_CANCEL].includes(phase))
+    );
 }

@@ -92,6 +92,8 @@ export function flow(isVaild: boolean, lastStatus: RECOGNIZER_STATE, phase: stri
         },
     };
     const map = STATE_MAP[Number(isVaild)][lastStatus];
+    // console.log(isVaild, lastStatus, phase);
+    // console.log(void 0 !== map && map[phase],'xxx');
     return (void 0 !== map && map[phase]) || STATE.POSSIBLE;
 }
 
