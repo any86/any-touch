@@ -13,9 +13,10 @@ export default function (el: EventTarget, payload: AnyTouchEvent, eventInit?: Ev
     } else {
         event = new Event(type, eventInit);
     }
+
     Object.assign(event, data, {
         match: () =>
-            payload.targets.every((target) => (event.currentTarget as HTMLElement).contains(target as HTMLElement)),
+            0 < payload.targets.length && payload.targets.every((target) => (event.currentTarget as HTMLElement).contains(target as HTMLElement)),
     });
     return el.dispatchEvent(event);
 }
