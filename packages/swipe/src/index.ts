@@ -36,10 +36,10 @@ export default function (at: Core, options?: Partial<typeof DEFAULT_OPTIONS>) {
 
 function test(computed: Required<Computed>, context: PluginContext<typeof DEFAULT_OPTIONS>) {
     if (TYPE_END !== computed.phase) return false;
-    const { velocityX, velocityY, vPointLengh, distance, maxPointLength } = computed;
+    const { velocityX, velocityY, distance, maxPointLength } = computed;
     return (
         maxPointLength === context.pointLength &&
-        context.pointLength === vPointLengh &&
+        // context.pointLength === vPointLengh &&
         0 === computed.points.length &&
         context.threshold < distance &&
         context.velocity < Math.max(velocityX, velocityY)

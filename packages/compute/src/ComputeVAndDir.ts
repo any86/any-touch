@@ -3,7 +3,7 @@
 // 让end阶段读取上一步的计算数据, 比如方向, 速率等...
 // 防止快速滑动到慢速滑动的手势识别成swipe
 import type { Input, InputOnlyHasCurrent, directionString } from '@any-touch/shared';
-import { COMPUTE_INTERVAL, TYPE_MOVE } from '@any-touch/shared';
+import { COMPUTE_INTERVAL } from '@any-touch/shared';
 import { getDirection } from '@any-touch/vector';
 
 export default function () {
@@ -40,7 +40,9 @@ export default function () {
             // console.warn(deltaTime,input.phase,velocityX, velocityY);
 
         }
+        return { velocityX, velocityY, speedX, speedY, direction};
+
         // console.log({velocityX, velocityY});
-        return { velocityX, velocityY, speedX, speedY, direction, vPointLengh: lastValidInput.pointLength };
+        // return { velocityX, velocityY, speedX, speedY, direction, vPointLengh: lastValidInput.pointLength };
     }
 }

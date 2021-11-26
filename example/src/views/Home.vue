@@ -113,6 +113,7 @@ export default {
 
     mounted() {
         const at = new AnyTouch(this.$refs.panel);
+        // at.get('swipe').pointLength = 2;
         at.use(AnyTouch.tap, { name: 'doubletap', tapTimes: 2 });
         let timeID = null;
         at.beforeEach((context, next) => {
