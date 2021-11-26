@@ -2,7 +2,7 @@ const chalk = require('chalk');
 const {
     terser
 } = require('rollup-plugin-terser');
-const {build,walkPackageDirs} = require('./build');
+const { build, walkPackageDirs } = require('./build');
 
 console.log(chalk.blue('正在生成es模块!'));
 walkPackageDirs((dirName) => {
@@ -16,6 +16,11 @@ walkPackageDirs((dirName) => {
         tsConfig: {
             target: 'ES5',
             module: "ESNEXT",
-        }
+        }, terser: terser({
+            // include: [/^.+\.prod\.js$/],
+            output: {
+                comments: false
+            }
+        })
     });
 });

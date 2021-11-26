@@ -24,7 +24,7 @@ const genRollupConfig = (dirName) => ({
     terser: terser({
         // include: [/^.+\.prod\.js$/],
         output: {
-            comments: false
+            comments: true
         }
     })
 });
