@@ -39,6 +39,7 @@ function test(computed: Required<Computed>, context: PluginContext<typeof DEFAUL
     const { velocityX, velocityY, distance, maxPointLength } = computed;
     return (
         maxPointLength === context.pointLength &&
+        // 开启vPointLengh的情况, 用户就很难实现多手指swipe
         // context.pointLength === vPointLengh &&
         0 === computed.points.length &&
         context.threshold < distance &&

@@ -34,6 +34,8 @@ export default function (at: Core, options?: Partial<typeof DEFAULT_OPTIONS>) {
         const isValid = test(computed, context);
 
         context.state = flow(isValid, context.state, computed.phase);
+    // console.log(computed.scale,computed.phase,context.state);
+        
         const { name } = context;
         if (isValid) {
             at.emit2(name, computed, context);
@@ -52,8 +54,9 @@ export default function (at: Core, options?: Partial<typeof DEFAULT_OPTIONS>) {
 }
 
 function test(computed: Computed, context: PluginContext<typeof DEFAULT_OPTIONS>) {
+    // context.state 是上一个状态
     const { pointLength, scale, deltaScale, phase } = computed;
-    // console.warn({scale},phase,context.state,);
+
     return (
         (context.pointLength === pointLength &&
             ((void 0 !== scale && void 0 !== deltaScale && context.threshold < Math.abs(scale - 1)) ||

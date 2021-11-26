@@ -18,8 +18,8 @@ test(`双手捏合缩小`, async done => {
     at.on(`pinchend`, onPinchEnd);
 
     gs.start([{ x: 0, y: 0 }, { x: 10, y: 0 }]);
-    gs.move([{ x: 0, y: 0 }, { x: 20, y: 0 }]);// pinchstart
-    gs.move([{ x: 0, y: 0 }, { x: 30, y: 0 }]);
+    gs.move([{ x: 0, y: 0 }, { x: 20, y: 0 }]); // pinchstart 2
+    gs.move([{ x: 0, y: 0 }, { x: 30, y: 0 }]); // pinchmove 3
     gs.end();
     await sleep();
     expect(onPinch).toHaveBeenCalledTimes(3);
