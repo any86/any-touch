@@ -41,10 +41,10 @@
  *             结束
  */
 import AnyTouch from 'any-touch';
-import { Point, Input, Computed } from '@any-touch/shared';
-import { STATE, TYPE_START, TYPE_MOVE, TYPE_END, createPluginContext, isDisabled } from '@any-touch/shared';
+import type { Point, Input, Computed, PluginContext } from '@any-touch/shared';
+import { STATE, TYPE_START, TYPE_END, createPluginContext, isDisabled } from '@any-touch/shared';
 import { getVLength } from '@any-touch/vector';
-import { ComputeDistance, ComputeMaxLength } from '@any-touch/compute';
+import { ComputeDistance } from '@any-touch/compute';
 const DEFAULT_OPTIONS = {
     name: 'tap',
     // 触点数
@@ -68,9 +68,7 @@ const DEFAULT_OPTIONS = {
  * @param options 识别器选项
  */
 export default function (at: AnyTouch, options?: Partial<typeof DEFAULT_OPTIONS>) {
-    const _options = { ...DEFAULT_OPTIONS, ...options };
-    const { name } = _options;
-    const context = createPluginContext(name);
+    const context = createPluginContext(DEFAULT_OPTIONS, options);
 
     let tapCount = 0;
     // 记录每次单击完成时的坐标
@@ -93,7 +91,7 @@ export default function (at: AnyTouch, options?: Partial<typeof DEFAULT_OPTIONS>
         countDownToFailTimer = (setTimeout as Window['setTimeout'])(() => {
             context.state = STATE.FAILED;
             reset();
-        }, _options.waitNextTapTime);
+        }, context.waitNextTapTime);
     }
 
     /**
@@ -139,20 +137,20 @@ export default function (at: AnyTouch, options?: Partial<typeof DEFAULT_OPTIONS>
         // 禁止
         if (isDisabled(context)) return;
         const { phase, x, y, pointLength } = computed;
-        if(TYPE_START === phase){
+        if (TYPE_START === phase) {
             maxPointLength = pointLength;
         }
         // 只在end阶段去识别
         if (TYPE_END !== phase) return;
         context.state = STATE.POSSIBLE;
         // 每一次点击是否符合要求
-        if (test(computed, _options,maxPointLength)) {
+        if (test(computed, context, maxPointLength)) {
             clearTimeout(countDownToFailTimer);
             // 判断2次点击之间的距离是否过大
             // 对符合要求的点击进行累加
             if (
-                isValidDistanceFromPrevTap({ x, y }, _options) &&
-                isValidInterval(_options.waitNextTapTime)
+                isValidDistanceFromPrevTap({ x, y }, context) &&
+                isValidInterval(context.waitNextTapTime)
             ) {
                 tapCount++;
             } else {
@@ -160,11 +158,11 @@ export default function (at: AnyTouch, options?: Partial<typeof DEFAULT_OPTIONS>
             }
             // 是否满足点击次数要求
             // 之所以用%, 是因为如果连续点击3次, 单击的tapCount会为3, 但是其实tap也应该触发
-            if (0 === tapCount % _options.tapTimes) {
+            if (0 === tapCount % context.tapTimes) {
                 context.state = STATE.RECOGNIZED;
                 // 触发事件
 
-                at.emit2(_options.name, computed, context);
+                at.emit2(context.name, computed, context);
                 reset();
             } else {
                 countDownToFail();
@@ -185,7 +183,7 @@ export default function (at: AnyTouch, options?: Partial<typeof DEFAULT_OPTIONS>
  * @param computed 计算结果
  * @return 是否验证成功
  */
-function test(computed: Input & Partial<Computed>, options: typeof DEFAULT_OPTIONS,maxPointLength:number) {
+function test(computed: Input & Partial<Computed>, context: PluginContext<typeof DEFAULT_OPTIONS>, maxPointLength: number) {
     const { startInput, pointLength, timestamp } = computed;
     const deltaTime = timestamp - startInput.timestamp;
     // 1. 触点数
@@ -194,10 +192,10 @@ function test(computed: Input & Partial<Computed>, options: typeof DEFAULT_OPTIO
     // 4. start至end的事件, 区分tap和press
     const { distance } = computed;
     return (
-        maxPointLength === options.pointLength &&
+        maxPointLength === context.pointLength &&
         0 === pointLength &&
-        (void 0 !== distance && options.maxDistance >= distance) &&
-        options.maxPressTime > deltaTime
+        (void 0 !== distance && context.maxDistance >= distance) &&
+        context.maxPressTime > deltaTime
     );
 }
 

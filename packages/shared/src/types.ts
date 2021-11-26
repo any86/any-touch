@@ -89,7 +89,7 @@ export interface Computed extends KV {
     // 一次识别周期中出现的最大触点数
     readonly maxPointLength?: number;
     // 参与速度计算的触点数量
-    readonly vPointLengh?:number;
+    readonly vPointLengh?: number;
     readonly velocityX?: number;
     readonly velocityY?: number;
     readonly speedX?: number;
@@ -151,7 +151,7 @@ export type PluginOptions = { name?: string } & KV;
 /**
  * 插件上下文内容
  */
-export type PluginContext = { state: RECOGNIZER_STATE, disabled: boolean,name:string };
+export type PluginContext<D extends Required<PluginOptions> = Required<PluginOptions>> = { state: RECOGNIZER_STATE, disabled: boolean } & D;
 
 /**
  * 插件

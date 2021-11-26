@@ -1,6 +1,6 @@
-import type { Computed } from '@any-touch/shared';
+import type { Computed, PluginContext } from '@any-touch/shared';
 import { TYPE_END, STATE, createPluginContext } from '@any-touch/shared';
-import { ComputeDistance, ComputeVAndDir, ComputeMaxLength } from '@any-touch/compute';
+import { ComputeDistance, ComputeVAndDir } from '@any-touch/compute';
 import Core from '@any-touch/core';
 const DEFAULT_OPTIONS = {
     name: 'swipe',
@@ -16,14 +16,13 @@ const DEFAULT_OPTIONS = {
  * @returns
  */
 export default function (at: Core, options?: Partial<typeof DEFAULT_OPTIONS>) {
-    const _options = { ...DEFAULT_OPTIONS, ...options };
-    const { name } = _options;
-    const context = createPluginContext(name);
+    const context = createPluginContext(DEFAULT_OPTIONS, options);
     at.on('computed', (computed) => {
         context.state = STATE.POSSIBLE;
         if (context.disabled) return;
 
-        if (test(computed, _options)) {
+        if (test(computed, context)) {
+            const { name } = context;
             context.state = STATE.RECOGNIZED;
             at.emit2(name, computed, context);
             at.emit2(name + computed.direction, computed, context);
@@ -35,13 +34,13 @@ export default function (at: Core, options?: Partial<typeof DEFAULT_OPTIONS>) {
     return context;
 }
 
-function test(computed: Required<Computed>, options: typeof DEFAULT_OPTIONS) {
+function test(computed: Required<Computed>, context: PluginContext<typeof DEFAULT_OPTIONS>) {
     if (TYPE_END !== computed.phase) return false;
     const { velocityX, velocityY, vPointLengh, distance } = computed;
     return (
-        options.pointLength === vPointLengh &&
+        context.pointLength === vPointLengh &&
         0 === computed.points.length &&
-        options.threshold < distance &&
-        options.velocity < Math.max(velocityX, velocityY)
+        context.threshold < distance &&
+        context.velocity < Math.max(velocityX, velocityY)
     );
 }

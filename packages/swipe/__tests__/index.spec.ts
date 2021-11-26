@@ -1,4 +1,3 @@
-import { create } from '@testUtils';
 import swipe from '@any-touch/swipe';
 import Core from '@any-touch/core';
 import { GestureSimulator, sleep } from '@any-touch/simulator';

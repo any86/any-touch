@@ -1,4 +1,4 @@
-import { RECOGNIZER_STATE, Computed } from '@any-touch/shared';
+import type { PluginContext, Computed } from '@any-touch/shared';
 import {
     isDisabled,
     resetState,
@@ -15,19 +15,18 @@ const DEFAULT_OPTIONS = { name: 'pan', threshold: 10, pointLength: 1 };
  * @returns  
  */
 export default function (at: Core, options?: Partial<typeof DEFAULT_OPTIONS>) {
-    const _options = { ...DEFAULT_OPTIONS, ...options };
-    const { name } = _options;
-    const context = createPluginContext(name);
+    const context = createPluginContext(DEFAULT_OPTIONS, options);
     at.on('computed', (computed) => {
         // 重置status
         resetState(context);
 
         // 禁止
-        if(isDisabled(context)) return;
-        const isValid = test(computed, _options, context.state);
+        if (isDisabled(context)) return;
+        const isValid = test(computed, context);
         context.state = flow(isValid, context.state, computed.phase);
 
         if (isValid) {
+            const { name } = context;
             at.emit2(name, computed, context);
             at.emit2(name + getStatusName(context.state), computed, context);
         }
@@ -38,13 +37,12 @@ export default function (at: Core, options?: Partial<typeof DEFAULT_OPTIONS>) {
     return context;
 }
 
-function test(computed: Computed, options: typeof DEFAULT_OPTIONS, state: RECOGNIZER_STATE) {
-
+function test(computed: Computed, context: PluginContext<typeof DEFAULT_OPTIONS>) {
     const { pointLength, distance, direction, phase } = computed;
-
+    const { state } = context;
     return (
-        ((isRecognized(state) || (distance && options.threshold <= distance)) &&
-            options.pointLength === pointLength &&
+        ((isRecognized(state) || (distance && context.threshold <= distance)) &&
+            context.pointLength === pointLength &&
             void 0 !== direction) ||
         (isRecognized(state) && TYPE_END === phase)
     );

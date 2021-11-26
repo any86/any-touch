@@ -114,7 +114,6 @@ export default {
     mounted() {
         const at = new AnyTouch(this.$refs.panel);
         at.use(AnyTouch.tap, { name: 'doubletap', tapTimes: 2 });
-
         let timeID = null;
         at.beforeEach((context, next) => {
             // console.log(context.name,context.event.target);

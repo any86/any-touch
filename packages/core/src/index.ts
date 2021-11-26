@@ -248,9 +248,9 @@ export default class <K extends string = DefaultTypeNames> extends AnyEvent<Even
      * @return 返回识别器
      */
     get(name: string) {
-        for (const plugin of this.__plugins) {
-            if (name === plugin.name) {
-                return plugin;
+        for (const pluginContext of this.__plugins) {
+            if (name === pluginContext.name) {
+                return pluginContext;
             }
         }
     }

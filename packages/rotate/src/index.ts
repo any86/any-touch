@@ -1,7 +1,12 @@
-import { RECOGNIZER_STATE, Computed, isRecognized, resetState,isDisabled } from '@any-touch/shared';
+import type { PluginContext, Computed } from '@any-touch/shared';
 import {
     STATE,
-    flow, getStatusName, createPluginContext
+    isRecognized,
+    resetState,
+    isDisabled,
+    flow,
+    getStatusName,
+    createPluginContext,
 } from '@any-touch/shared';
 import { ComputeAngle, ComputeVectorForMutli } from '@any-touch/compute';
 import Core from '@any-touch/core';
@@ -19,25 +24,24 @@ const DEFAULT_OPTIONS = {
  * @returns
  */
 export default function (at: Core, options?: Partial<typeof DEFAULT_OPTIONS>) {
-    const _options = { ...DEFAULT_OPTIONS, ...options };
-    const { name } = _options;
-    const context = createPluginContext(name);
+    const context = createPluginContext(DEFAULT_OPTIONS, options);
     at.on('computed', (computed) => {
         // 禁止
-        if(isDisabled(context)) return;
+        if (isDisabled(context)) return;
 
         // 重置status
         resetState(context);
 
-        const isValid = test(computed, _options, context.state);
+        const isValid = test(computed, context);
         context.state = flow(isValid, context.state, computed.phase);
 
         if (isValid) {
-            at.emit2(_options.name, computed, context);
-            at.emit2(_options.name + getStatusName(context.state), computed, context);
-            // context.emit2(_options.name + computed.direction, computed);
-        } if ([STATE.END, STATE.CANCELLED].includes(context.state)) {
-            at.emit2(_options.name + getStatusName(context.state), computed, context);
+            at.emit2(context.name, computed, context);
+            at.emit2(context.name + getStatusName(context.state), computed, context);
+            // context.emit2(context.name + computed.direction, computed);
+        }
+        if ([STATE.END, STATE.CANCELLED].includes(context.state)) {
+            at.emit2(context.name + getStatusName(context.state), computed, context);
         }
     });
 
@@ -46,33 +50,7 @@ export default function (at: Core, options?: Partial<typeof DEFAULT_OPTIONS>) {
     return context;
 }
 
-function test(computed: Required<Computed>, options: typeof DEFAULT_OPTIONS, state: RECOGNIZER_STATE) {
+function test(computed: Required<Computed>, context: PluginContext<typeof DEFAULT_OPTIONS>) {
     const { pointLength, angle } = computed;
-    return options.pointLength === pointLength && (options.threshold < Math.abs(angle) || isRecognized(state));
+    return context.pointLength === pointLength && (context.threshold < Math.abs(angle) || isRecognized(context.state));
 }
-
-// class A extends Recognizer {
-//     constructor(options: Partial<typeof DEFAULT_OPTIONS>) {
-//         super({ ...DEFAULT_OPTIONS, ...options });
-//         this.computeFunctions = [ComputeAngle];
-//     };
-
-//     /**
-//      * 识别条件
-//      * @param computed 计算数据
-//      * @return 接收是否识别状态
-//      */
-//     _$test(computed: Computed): boolean {
-//         const { pointLength, angle } = computed;
-//         return this._$isValidPointLength(pointLength) && (this.options.threshold < Math.abs(angle) || this._$isRecognized);
-//     };
-
-//     /**
-//      * 开始识别
-//      * @param computed 计算数据
-//      */
-//     recognize(computed: Computed, emit: EventTrigger) {
-//         recognizeForPressMoveLike(this, computed, emit);
-//     };
-
-// };
