@@ -42,7 +42,7 @@
  */
 import AnyTouch from 'any-touch';
 import { Point, Input, Computed } from '@any-touch/shared';
-import { STATE, TYPE_END, createPluginContext, isDisabled } from '@any-touch/shared';
+import { STATE, TYPE_START, TYPE_MOVE, TYPE_END, createPluginContext, isDisabled } from '@any-touch/shared';
 import { getVLength } from '@any-touch/vector';
 import { ComputeDistance, ComputeMaxLength } from '@any-touch/compute';
 const DEFAULT_OPTIONS = {
@@ -134,17 +134,19 @@ export default function (at: AnyTouch, options?: Partial<typeof DEFAULT_OPTIONS>
             return interval < waitNextTapTime;
         }
     }
-
+    let maxPointLength = 0;
     at.on('computed', (computed) => {
         // 禁止
         if (isDisabled(context)) return;
-        const { phase, x, y } = computed;
-
+        const { phase, x, y, pointLength } = computed;
+        if(TYPE_START === phase){
+            maxPointLength = pointLength;
+        }
         // 只在end阶段去识别
         if (TYPE_END !== phase) return;
         context.state = STATE.POSSIBLE;
         // 每一次点击是否符合要求
-        if (test(computed, _options)) {
+        if (test(computed, _options,maxPointLength)) {
             clearTimeout(countDownToFailTimer);
             // 判断2次点击之间的距离是否过大
             // 对符合要求的点击进行累加
@@ -173,7 +175,7 @@ export default function (at: AnyTouch, options?: Partial<typeof DEFAULT_OPTIONS>
         }
     });
 
-    at.compute([ComputeDistance, ComputeMaxLength]);
+    at.compute([ComputeDistance]);
 
     return context;
 }
@@ -183,14 +185,14 @@ export default function (at: AnyTouch, options?: Partial<typeof DEFAULT_OPTIONS>
  * @param computed 计算结果
  * @return 是否验证成功
  */
-function test(computed: Input & Partial<Computed>, options: typeof DEFAULT_OPTIONS) {
+function test(computed: Input & Partial<Computed>, options: typeof DEFAULT_OPTIONS,maxPointLength:number) {
     const { startInput, pointLength, timestamp } = computed;
     const deltaTime = timestamp - startInput.timestamp;
     // 1. 触点数
     // 2. 当前点击数为0, 也就是当所有触点离开才通过
     // 3. 移动距离
     // 4. start至end的事件, 区分tap和press
-    const { maxPointLength, distance } = computed;
+    const { distance } = computed;
     return (
         maxPointLength === options.pointLength &&
         0 === pointLength &&

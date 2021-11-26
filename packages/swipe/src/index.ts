@@ -38,7 +38,6 @@ export default function (at: Core, options?: Partial<typeof DEFAULT_OPTIONS>) {
 function test(computed: Required<Computed>, options: typeof DEFAULT_OPTIONS) {
     if (TYPE_END !== computed.phase) return false;
     const { velocityX, velocityY, vPointLengh, distance } = computed;
-    // console.log({ velocityX, velocityY, maxPointLength, distance });
     return (
         options.pointLength === vPointLengh &&
         0 === computed.points.length &&
