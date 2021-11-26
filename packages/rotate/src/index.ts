@@ -1,6 +1,5 @@
 import type { PluginContext, Computed } from '@any-touch/shared';
 import {
-    STATE,
     isRecognized,
     resetState,
     isDisabled,
@@ -34,14 +33,15 @@ export default function (at: Core, options?: Partial<typeof DEFAULT_OPTIONS>) {
 
         const isValid = test(computed, context);
         context.state = flow(isValid, context.state, computed.phase);
-
+        const { name } = context;
         if (isValid) {
-            at.emit2(context.name, computed, context);
-            at.emit2(context.name + getStatusName(context.state), computed, context);
-            // context.emit2(context.name + computed.direction, computed);
+            at.emit2(name, computed, context);
         }
-        if ([STATE.END, STATE.CANCELLED].includes(context.state)) {
-            at.emit2(context.name + getStatusName(context.state), computed, context);
+
+        const stateName = getStatusName(context.state);
+        if (stateName) {
+            at.emit2(name + stateName, computed, context);
+
         }
     });
 

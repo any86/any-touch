@@ -32,10 +32,11 @@ export default function (at: Core, options?: Partial<typeof DEFAULT_OPTIONS>) {
         const { name } = context;
         if (isValid) {
             at.emit2(name, computed, context);
-            at.emit2(name + getStatusName(context.state), computed, context);
         }
-        else if ([STATE.END, STATE.CANCELLED].includes(context.state)) {
-            at.emit2(name + getStatusName(context.state), computed, context);
+        const stateName = getStatusName(context.state);
+        if(stateName){
+            at.emit2(name + stateName, computed, context);
+
         }
     });
 

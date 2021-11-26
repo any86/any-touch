@@ -29,7 +29,7 @@
                 :class="['circle']"
             >
                 <p style="font-size: 16px; border-bottom: 1px dashed #fff">👋可拖拽 / 缩放等...</p>
-                <input class="p-1 mt-1" placeholder="表单元素不阻止默认事件"/>
+                <!-- <input class="p-1 mt-1" placeholder="表单元素不阻止默认事件"/> -->
                 <p>Top: {{ top }}</p>
                 <p>Left: {{ left }}</p>
                 <p>Scale: {{ scale }}</p>
@@ -76,7 +76,7 @@
 function C(text, bgColor = '#000', color = '#fff') {
     console.log(`%c${text}`, `color:${color};background-color:${bgColor};padding:2px 6px;border-radius:4px;`);
 }
-import AnyTouch from '../../../packages/any-touch/dist/any-touch.umd';
+import AnyTouch from '../../../packages/any-touch/dist/any-touch.umd.js';
 export default {
     name: 'Home',
     data() {

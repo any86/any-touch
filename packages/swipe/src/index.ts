@@ -1,6 +1,6 @@
 import type { Computed, PluginContext } from '@any-touch/shared';
 import { TYPE_END, STATE, createPluginContext } from '@any-touch/shared';
-import { ComputeDistance, ComputeVAndDir } from '@any-touch/compute';
+import { ComputeDistance, ComputeVAndDir, ComputeMaxLength } from '@any-touch/compute';
 import Core from '@any-touch/core';
 const DEFAULT_OPTIONS = {
     name: 'swipe',
@@ -30,14 +30,15 @@ export default function (at: Core, options?: Partial<typeof DEFAULT_OPTIONS>) {
     });
 
     // 加载计算方法
-    at.compute([ComputeDistance, ComputeVAndDir]);
+    at.compute([ComputeDistance, ComputeVAndDir, ComputeMaxLength]);
     return context;
 }
 
 function test(computed: Required<Computed>, context: PluginContext<typeof DEFAULT_OPTIONS>) {
     if (TYPE_END !== computed.phase) return false;
-    const { velocityX, velocityY, vPointLengh, distance } = computed;
+    const { velocityX, velocityY, vPointLengh, distance, maxPointLength } = computed;
     return (
+        maxPointLength === context.pointLength &&
         context.pointLength === vPointLengh &&
         0 === computed.points.length &&
         context.threshold < distance &&
