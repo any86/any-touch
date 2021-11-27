@@ -12,8 +12,6 @@
 
 [use(加载手势)](#userecognizer-options)
 
-[removeUse(移除手势)](#removeuserecognizername)
-
 [catchEvent(注入事件对象)](#catcheventevent)
 
 [⭐beforeEach(拦截器)](#beforeeachhook)
@@ -27,10 +25,12 @@
 [AnyTouch.状态码](#AnyTouch状态码)
 
 ## AnyTouch([el], [options])
+
 :fire: 初始化 **any-touch**
 
 #### el
-目标元素,微信小程序下由于没有 DOM 元素, **可以无el初始化**, 然后通过[catchEvent](#catcheventevent)函数接收 touch 事件.
+
+目标元素,微信小程序下由于没有 DOM 元素, **可以无 el 初始化**, 然后通过[catchEvent](#catcheventevent)函数接收 touch 事件.
 
 ```javascript
 // 初始化
@@ -39,39 +39,45 @@ const at = AnyTouch(el);
 ```
 
 #### options
+
 配置项, 是个对象.
-- preventDefault
-默认值为`true`, 代表默认组织浏览器默认事件触发, 比如移动端拖拽目标元素页面也不滚动.
 
-- domEvents
-值为对象, 可以配置元素上定义的手势是否可以"取消"和"冒泡", 详细介绍可以参考[MDN](https://developer.mozilla.org/zh-CN/docs/Web/API/Event/Event), 默认情况下**可取消 / 可冒泡**
+-   preventDefault
+    默认值为`true`, 代表默认组织浏览器默认事件触发, 比如移动端拖拽目标元素页面也不滚动.
 
-- preventDefaultExclude
-用来手动指定哪些情况下any-touch不阻止浏览器默认事件的触发, 比如:
+-   domEvents
+    值为对象, 可以配置元素上定义的手势是否可以"取消"和"冒泡", 详细介绍可以参考[MDN](https://developer.mozilla.org/zh-CN/docs/Web/API/Event/Event), 默认情况下**可取消 / 可冒泡**
+
+-   preventDefaultExclude
+    用来手动指定哪些情况下 any-touch 不阻止浏览器默认事件的触发, 比如:
 
 ```javascript
 const at = AnyTouch(el, {
     // 如果触发事件的是span元素, 那么不执行"阻止默认事件触发".
-    preventDefaultExclude: (ev) => 'SPAN' === ev.target.tagName
+    preventDefaultExclude: (ev) => 'SPAN' === ev.target.tagName,
 });
 ```
+
 **注意:** 只有**preventDefault**值为**true**的情况下, **preventDefaultExclude**才有实际意义.
 
 | 名称                  | 类型                 | 默认值                                  | 简要说明                                  |
 | --------------------- | -------------------- | --------------------------------------- | ----------------------------------------- |
-| preventDefault      | `Boolean`            | `true`                                  | 阻止默认事件触发, 比如:页面滚动/click 等. |
+| preventDefault        | `Boolean`            | `true`                                  | 阻止默认事件触发, 比如:页面滚动/click 等. |
 | domEvents             | `Boolean`            | `true`                                  | 是否派发手势名对应的原生事件.             |
 | preventDefaultExclude | `RegExp \| Function` | `/^(INPUT\|TEXTAREA\|BUTTON\|SELECT)$/` | 符合条件可跳过"阻止默认事件".             |
 
-#### 使用addEventListener监听手势事件
-如果**domEvents**为true, 可以使用原生**addEventListener**监听手势事件:
+#### 使用 addEventListener 监听手势事件
+
+如果**domEvents**为 true, 可以使用原生**addEventListener**监听手势事件:
+
 ```javascript
 // 默认domEvents等于true
 const at = AnyTouch(el);
 el.addEventListener('tap', onTap);
 ```
 
-所以同理, vue中也可以在模板直接绑定事件:
+所以同理, vue 中也可以在模板直接绑定事件:
+
 ```html
 <div @tap="onTap"></div>
 ```
@@ -79,21 +85,26 @@ el.addEventListener('tap', onTap);
 [:rocket: 返回目录](#目录)
 
 ## on(eventName, listener)
+
 事件监听.
 
 #### eventName
+
 事件名,
+
 ```javascript
 at.on('tap', onTap);
 ```
+
 可以同时监听多个事件.
+
 ```javascript
-at.on(['tap','pan'], onTouch);
+at.on(['tap', 'pan'], onTouch);
 ```
 
 #### listener
-事件触发函数.
 
+事件触发函数.
 
 #### options
 
@@ -131,11 +142,11 @@ at.set({ preventDefault: true });
 **手势参数说明**
 | 名称 | 说明 |
 | - | - |
-| **@any-touch/tap**    |[点击](../packages/tap/README.md)|
-| **@any-touch/pan**    |[拖拽](../packages/pan/README.md)|
-| **@any-touch/swipe**  |[划](../packages/swipe/README.md)|
-| **@any-touch/press**  |[按压](../packages/press/README.md)|
-| **@any-touch/pinch**  |[缩放](../packages/pinch/README.md)|
+| **@any-touch/tap** |[点击](../packages/tap/README.md)|
+| **@any-touch/pan** |[拖拽](../packages/pan/README.md)|
+| **@any-touch/swipe** |[划](../packages/swipe/README.md)|
+| **@any-touch/press** |[按压](../packages/press/README.md)|
+| **@any-touch/pinch** |[缩放](../packages/pinch/README.md)|
 | **@any-touch/rotate** |[旋转](../packages/rotate/README.md)|
 
 [:rocket: 返回目录](#目录)
@@ -200,34 +211,31 @@ const at = AnyTouch()
 
 拦截器, 在每个手势触发之前可以进行自定义拦截操作.
 
-hook: (recognizer: Recognizer, next: () => void) => void
+hook是个函数, 签名: (context: PluginContext & { event: AnyTouchEvent }, next: () => void) => void
 
-**recognizer**: 手势识别器.
+**context**: 对象,包含插件信息和事件对象的信息.
 
 **next**: 拦截函数, 只有执行了`next()`才会触发当前识别器对应的事件.
 
-
-下面实现"双击"手势, 逻辑如下: "让单击(tap)延迟 300ms, 如果300ms内又出现了一次tap, 那么阻止tap触发, 这样只有doubletap会触发"
+**下面实现"双击"手势, 逻辑如下:**
+1. 使用tap插件定义"双击"识别功能.
+2. 使用"beforeEach"控制"单击tap"事件延迟300ms触发.
+3. 如果300ms内出现了"双击doubletap"事件, 那么阻止"单击tap"触发.
+4. 这时只会有"双击doubletap"触发.
 
 ```javascript
-import AnyTouch from '@any-touch/core';
-import Tap from '@any-touch/tap';
-// 如果引入的是完整版, 那么STATUS_POSSIBLE等可以直接通过AnyTouch.STATUS_POSSIBLE获取
+import Core from '@any-touch/core';
+import tap from '@any-touch/tap';
 import { STATUS_POSSIBLE, STATUS_FAILED } from '@any-touch/shared';
-const at = AnyTouch(el);
-at.use(Tap);
-at.use(Tap, { name: 'doubletap', tapTimes: 2 });
-
-// 🚀关键代码
-// beforeEach
+const at = Core(el);
+at.use(tap, { name: 'doubletap', tapTimes: 2 });
 let timeID = null;
-at.beforeEach((currentRecognizer,recognizerMap, next) => {
-    if ('tap' === currentRecognizer.name) {
+at.beforeEach((context, next) => {
+    if ('tap' === context.name) {
         clearTimeout(timeID);
         timeID = setTimeout(() => {
-            const ok = [AnyTouch.STATUS_POSSIBLE, AnyTouch.STATUS_FAILED].includes(
-                recognizerMap.doubletap.status
-            );
+            const { state } = at.get('doubletap');
+            const ok = [STATE_POSSIBLE, STATE_FAILED].includes(state);
             if (ok) {
                 next();
             }

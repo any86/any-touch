@@ -256,10 +256,8 @@ export default class <K extends string = DefaultTypeNames> extends AnyEvent<Even
     }
 
     /**
-     * 带DOM事件的emit(仅供插件开发者使用)
-     * @param type 事件类型
-     * @param payload 数据
-     * @param pluginContext 插件实例
+     * 设置选项
+     * @param newOptions 选项
      */
     set(newOptions: Partial<Options>) {
         this.__options = { ...this.__options, ...newOptions };
