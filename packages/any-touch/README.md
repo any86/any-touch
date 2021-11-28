@@ -75,7 +75,7 @@ at.on('pan', (e) => console.log(e));
 
 ## vue中简写
 
-初始化之后, 可在元素上直接使用"@tap"等手势.
+在vue中, 可在模版元素上直接使用"@tap"语法监听手势事件. react/angular没有验证过, 但是理论上应该也支持这种简写.
 
 ```html
 <template>
@@ -90,6 +90,7 @@ at.on('pan', (e) => console.log(e));
         mounted() {
             // 没错, 就这2行
             const at = new AnyTouch(this.$el);
+            
             this.$on('hook:destroyed', () => {
                 at.destroy();
             });
