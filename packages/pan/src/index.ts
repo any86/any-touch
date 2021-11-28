@@ -1,7 +1,7 @@
 import type { PluginContext, Computed } from '@any-touch/shared';
 import {
     isDisabled,
-    resetState,
+    resetState,TYPE_COMPUTED,
     TYPE_END, flow, getStatusName, createPluginContext, isRecognized
 } from '@any-touch/shared';
 import { ComputeDistance, ComputeDeltaXY, ComputeVAndDir } from '@any-touch/compute';
@@ -16,7 +16,7 @@ const DEFAULT_OPTIONS = { name: 'pan', threshold: 10, pointLength: 1 };
  */
 export default function (at: Core, options?: Partial<typeof DEFAULT_OPTIONS>) {
     const context = createPluginContext(DEFAULT_OPTIONS, options);
-    at.on('computed', (computed) => {
+    at.on(TYPE_COMPUTED, (computed) => {
         // 重置status
         resetState(context);
 

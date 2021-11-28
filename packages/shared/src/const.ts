@@ -18,6 +18,8 @@ export const TYPE_MOVE = 'move';
 export const TYPE_CANCEL = 'cancel';
 export const TYPE_END = 'end';
 
+export const TYPE_COMPUTED = 'computed';
+
 /**
  * 方向
  */

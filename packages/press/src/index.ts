@@ -1,6 +1,6 @@
 import type { PluginContext, Computed } from '@any-touch/shared';
 import {
-    createPluginContext, resetState, STATE,isDisabled, DIRECTION_UP, TYPE_CANCEL, TYPE_END, TYPE_START
+    createPluginContext, resetState,TYPE_COMPUTED, STATE,isDisabled, DIRECTION_UP, TYPE_CANCEL, TYPE_END, TYPE_START
 } from '@any-touch/shared';
 import { ComputeDistance } from '@any-touch/compute';
 import Core from '@any-touch/core';
@@ -21,7 +21,7 @@ export default function (at: Core, options?: Partial<typeof DEFAULT_OPTIONS>) {
     const context = createPluginContext(DEFAULT_OPTIONS, options);
 
     let timeoutId = 0;
-    at.on('computed', (computed) => {
+    at.on(TYPE_COMPUTED, (computed) => {
         // 禁止
         if(isDisabled(context)) return;
         const { phase, startInput, pointLength } = computed;

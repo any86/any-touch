@@ -19,10 +19,10 @@ import type {
     ComputeFunctionCreator,
     PluginContext,
     Plugin,
-    PluginOptions,
+
 } from '@any-touch/shared';
 
-import { TOUCH_START, TOUCH_MOVE, TOUCH_END, TOUCH_CANCEL, MOUSE_DOWN, MOUSE_MOVE, MOUSE_UP } from '@any-touch/shared';
+import { TYPE_COMPUTED, TOUCH_START, TOUCH_MOVE, TOUCH_END, TOUCH_CANCEL, MOUSE_DOWN, MOUSE_MOVE, MOUSE_UP } from '@any-touch/shared';
 
 import { mouse, touch } from './createInput';
 import dispatchDomEvent from './dispatchDomEvent';
@@ -78,12 +78,12 @@ type DefaultTypeNames =
     | 'rotatemove'
     | 'rotateend'
     | 'rotatecancel'
-    | 'computed'
     | 'at:start'
     | 'at:move'
     | 'at:end'
     | 'at:cancel'
     | 'input'
+    | typeof TYPE_COMPUTED
     | typeof TYPE_UNBIND;
 
 /**
@@ -219,7 +219,7 @@ export default class <K extends string = DefaultTypeNames> extends AnyEvent<Even
                 }
             });
 
-            this.emit('computed', { ...input, ...computed, stopPropagation, preventDefault, stopImmediatePropagation });
+            this.emit(TYPE_COMPUTED, { ...input, ...computed, stopPropagation, preventDefault, stopImmediatePropagation });
         }
     }
 

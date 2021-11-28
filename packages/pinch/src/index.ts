@@ -1,6 +1,6 @@
 import { Computed, PluginContext, TYPE_CANCEL } from '@any-touch/shared';
 import {
-    TYPE_END,
+    TYPE_END,TYPE_COMPUTED,
     isDisabled,
     flow,
     getStatusName,
@@ -25,7 +25,7 @@ const DEFAULT_OPTIONS = {
  */
 export default function (at: Core, options?: Partial<typeof DEFAULT_OPTIONS>) {
     const context = createPluginContext(DEFAULT_OPTIONS, options);
-    at.on('computed', (computed) => {
+    at.on(TYPE_COMPUTED, (computed) => {
         // 重置status
         resetState(context);
 

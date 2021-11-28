@@ -1,6 +1,6 @@
 import type { PluginContext, Computed } from '@any-touch/shared';
 import {
-    isRecognized,
+    isRecognized,TYPE_COMPUTED,
     resetState,
     isDisabled,
     flow,
@@ -26,7 +26,7 @@ const DEFAULT_OPTIONS = {
  */
 export default function (at: Core, options?: Partial<typeof DEFAULT_OPTIONS>) {
     const context = createPluginContext(DEFAULT_OPTIONS, options);
-    at.on('computed', (computed) => {
+    at.on(TYPE_COMPUTED, (computed) => {
         // 禁止
         if (isDisabled(context)) return;
 
