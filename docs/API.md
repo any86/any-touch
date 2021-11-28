@@ -141,7 +141,8 @@ at.set({ preventDefault: event=>event.target.tagName ==='A' });
 加载手势识别器, options 为手势识别器的参数.
 
 ```javascript
-at.use(AnyTouch.tap, { tapTime: 2, name: 'doubletap' });
+import tap from '@any-touch/tap';
+at.use(tap, { tapTime: 2, name: 'doubletap' });
 ```
 
 [:rocket: 返回目录](#目录)

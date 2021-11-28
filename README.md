@@ -202,7 +202,7 @@ at.on('panstart', e=>{
 
 自定义手势**一定记得给起一个名字哦**, 而且不要和默认存在的手势同名(已有tap/swipe/pan/rotate/pinch/press).
 ```javascript
-at.use(Tap, { pointLength: 2 , name:'twoFingersTap'});
+at.use(tap, { pointLength: 2 , name:'twoFingersTap'});
 at.on('twoFingersTap', onTwoFingersTap);
 ```
 

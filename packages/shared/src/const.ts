@@ -49,5 +49,5 @@ export const enum STATE {
     CANCELLED,
     START,
     MOVE,
-    END = STATE.RECOGNIZED,
+    END = RECOGNIZED,
 } 

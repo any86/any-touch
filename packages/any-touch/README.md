@@ -160,11 +160,11 @@ at.on(['swipe', 'press', 'rotate', 'pinch'], (e) => {});
 ```javascript
 // 只加载pan识别器(拖拽)
 import Core from '@any-touch/core';
-import Pan from '@any-touch/pan';
+import pan from '@any-touch/pan';
 // Core不识别任何手势.
 const at = Core(el);
 // 加载pan
-at.use(Pan);
+at.use(pan);
 
 at.on('pan', e=>{});
 ```
@@ -282,7 +282,7 @@ at.on('doubletap', onDoubleTap);
 自定义手势**一定记得给起一个名字哦**, 而且不要和默认存在的手势同名(已有 tap/swipe/pan/rotate/pinch/press).
 
 ```javascript
-at.use(Tap, { pointLength: 2, name: 'twoFingersTap' });
+at.use(tap, { pointLength: 2, name: 'twoFingersTap' });
 at.on('twoFingersTap', onTwoFingersTap);
 ```
 
