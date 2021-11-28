@@ -37,8 +37,5 @@ at.on('pan', event=>{
 |target|`EventTarget`|绑定事件的元素|
 |targets|`EventTarget[]`|对应多个触点会存储touches中的每一个target|
 |currentTarget|`EventTarget`|实际触发绑定事件的元素|
-|timestamp|`Number`|**当前时间**|
 |**nativeEvent**|`TouchEvent`|原生事件对象|
-|getXYAngle|`(x,y)=>angle`|计算x,y夹角, 比如计算deltaX与deltaY形成的夹角: `getXYAngle(e.deltaX, e.deltaY)`|
-|getDirection|`(x,y)=>direction`|计算2个向量的**和向量**的方向,比如计算**开始接触点**和**离开屏幕点**连线的指向: `getDirection(e.displacementX,e.displacementY)`|
 

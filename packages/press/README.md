@@ -5,12 +5,12 @@
 ```javascript
 // 只加载press识别器(按压)
 import Core from '@any-touch/core';
-import Press from '@any-touch/press';
-Core.use(Press, 参数)
+import press from '@any-touch/press';
+Core.use(press, 参数)
 const at = new Core(el);
 // 按压
-at.on('press', (ev) => {
-    // ev包含位置/速度/方向等信息
+at.on('press', (event) => {
+    // event包含位置/速度/方向等信息
 });
 ```
 **⚠️注意**: 执行`npm i any-touch`后, **@any-touch/core和@any-touch/press**便已自动安装, 直接引入即可.

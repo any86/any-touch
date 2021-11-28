@@ -5,12 +5,12 @@
 ```javascript
 // 只加载rotate识别器(拖拽)
 import Core from '@any-touch/core';
-import Rotate from '@any-touch/rotate';
-Core.use(Rotate, 参数)
+import rotate from '@any-touch/rotate';
+Core.use(rotate, 参数)
 const at = new Core(el);
 // 拖拽
-at.on('rotate', (ev) => {
-    // ev包含位置/速度/方向等信息
+at.on('rotate', (event) => {
+    // event包含位置/速度/方向等信息
 });
 ```
 **⚠️注意**: 执行`npm i any-touch`后, **@any-touch/core和@any-touch/rotate**便已自动安装, 直接引入即可.

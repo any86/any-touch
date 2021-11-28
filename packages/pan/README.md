@@ -5,12 +5,12 @@
 ```javascript
 // 只加载pan识别器(拖拽)
 import Core from '@any-touch/core';
-import Pan from '@any-touch/pan';
-Core.use(Pan, 参数)
+import pan from '@any-touch/pan';
+Core.use(pan, 参数)
 const at = new Core(el);
 // 拖拽
-at.on('pan', (ev) => {
-    // ev包含位置/速度/方向等信息
+at.on('pan', (event) => {
+    // event包含位置/速度/方向等信息
 });
 ```
 **⚠️注意**: 执行`npm i any-touch`后, **@any-touch/core和@any-touch/pan**便已自动安装, 直接引入即可.

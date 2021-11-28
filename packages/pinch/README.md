@@ -5,12 +5,12 @@
 ```javascript
 // 只加载pinch识别器(拖拽)
 import Core from '@any-touch/core';
-import Pinch from '@any-touch/pinch';
-Core.use(Pinch, 参数)
+import pinch from '@any-touch/pinch';
+Core.use(pinch, 参数)
 const at = new Core(el);
 // 拖拽
-at.on('pinch', (ev) => {
-    // ev包含位置/速度/方向等信息
+at.on('pinch', (event) => {
+    // event包含位置/速度/方向等信息
 });
 ```
 **⚠️注意**: 执行`npm i any-touch`后, **@any-touch/core和@any-touch/pinch**便已自动安装, 直接引入即可.

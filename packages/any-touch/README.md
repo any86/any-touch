@@ -26,16 +26,16 @@
 
 [:zap: 快速开始](#快速开始)
 - [纯js插件, 无依赖](#快速开始)
-- [vue中简写](#vue中简写)
+- [vue等框架中的简写](#vue等框架中的简写)
 - [支持微信小程序](#支持微信小程序)
 
 [📐 按需加载](#按需加载)
 - [完整引入](#完整引入)
 - [按需引入](#按需引入)
 
-[🍕 进阶使用](#进阶使用)
+[🌈 进阶使用](#进阶使用)
 - [阻止默认事件](#阻止默认事件)
-- [双击](#双击)
+- [双击(🥂doubletap)](#双击doubletap)
 
 
 [:bulb: API](docs/API.md)
@@ -73,9 +73,9 @@ at.on('pan', (e) => console.log(e));
 
 [:rocket: 返回目录](#目录)
 
-## vue中简写
+## vue等框架中的简写
 
-初始化之后, 可在元素上直接使用"@tap"等手势.
+在vue中, 可在模版元素上直接使用"@tap"等语法监听手势事件. **react/angular**没有验证过, 但是因为tap/pan等按照原生事件格式封装的, 所以理论上也能在模板中直接绑定事件.
 
 ```html
 <template>
@@ -90,6 +90,7 @@ at.on('pan', (e) => console.log(e));
         mounted() {
             // 没错, 就这2行
             const at = new AnyTouch(this.$el);
+            
             this.$on('hook:destroyed', () => {
                 at.destroy();
             });
@@ -194,10 +195,10 @@ at.on('pan', e=>{});
 | ---------- | ---------------------------------------------------- | ----------------------------- |
 | **tap**    | tap                                                  | 单击                          |
 | **press**  | press / pressup                                      | 按压 / 松开                   |
-| **pan**    | pan / panstart / panmove / panend                    | 拖拽 / 拖拽开始 / 进行 / 结束 |
+| **pan**    | pan / panstart / panmove / panend                    | 拖拽 / 拖拽开始 / 拖拽进行中 / 拖拽结束 |
 | **swipe**  | swipe / swipeup / swipedown / swiperight / swipeleft | 快划 / 不同方向快划           |
-| **pinch**  | pinch / pinchstart / pinchmove / pinchend            | 缩放 / 缩放开始 / 进行 / 结束 |
-| **rotate** | rotate / rotatestart / rotatemove / rotateend        | 旋转 / 旋转开始 / 进行 / 结束 |
+| **pinch**  | pinch / pinchstart / pinchmove / pinchend            | 缩放 / 缩放开始 / 缩放进行中 / 缩放结束 |
+| **rotate** | rotate / rotatestart / rotatemove / rotateend        | 旋转 / 旋转开始 / 旋转进行中 / 旋转结束 |
 
 ```javascript
 // 拖拽中只出发一次
@@ -214,7 +215,7 @@ at.on('panstart', (e) => {
 参数"preventDefault"是一个函数, 可以通过他的返回值的"true/false"来决定是否"阻止默认事件".
 
 
-**比如实现**: "只有pinch/rotate才阻止默认事件"
+**比如实现**: 阻止多点触发的事件的"默认事件", 比如"pinch/rotate".
 
 ```javascript
 const at = new AnyTouch(el, {
@@ -223,16 +224,16 @@ const at = new AnyTouch(el, {
     },
 });
 ```
-参数"**e**"是原生事件对象, 移动端是TouchEvent, PC端是MouseEvent.
+参数"**e**"是原生事件对象, 移动端是[TouchEvent](https://developer.mozilla.org/zh-CN/docs/Web/API/TouchEvent), PC端是[MouseEvent](https://developer.mozilla.org/zh-CN/docs/Web/API/MouseEvent/MouseEvent).
 
 [:rocket: 返回目录](#目录)
 
 
-### 双击
+### 双击(doubletap)
 
 使用**beforeEach**拦截器, 在每个手势触发之前可以进行自定义拦截操作.
 
-hook 是个函数, 签名: (context: PluginContext & { event: AnyTouchEvent }, next: () => void) => void
+hook 是个函数: `(context: PluginContext & { event: AnyTouchEvent }, next: () => void) => void`
 
 **context**: 对象,包含插件信息和事件对象的信息.
 
@@ -272,6 +273,7 @@ at.on('doubletap', onDoubleTap);
 ```
 
 **注意**: 同理可以实现"**3击**"或"**n击**".
+[:rocket: 返回目录](#目录)
 
 ## 注意事项
 

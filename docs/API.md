@@ -6,8 +6,6 @@
 
 [on(监听)](#oneventname-listener)
 
-[target(事件委派)](#targetchildelonfunction)
-
 [set(设置)](#setoptions)
 
 [use(加载手势)](#userecognizer-options)
@@ -26,7 +24,7 @@
 
 ## AnyTouch([el], [options])
 
-:fire: 初始化 **any-touch**
+初始化any-touch
 
 #### el
 
@@ -42,45 +40,44 @@ const at = AnyTouch(el);
 
 配置项, 是个对象.
 
--   preventDefault
-    默认值为`true`, 代表默认组织浏览器默认事件触发, 比如移动端拖拽目标元素页面也不滚动.
+-   **preventDefault**
+    值为Boolean或Function, 函数返回值为Boolean类型, 默认值是函数:
+    ```javascript
+    const preventDefault = (event) => {
+        if (event.target && 'tagName' in event.target) {
+            const { tagName } = event.target;
+            return !/^(?:INPUT|TEXTAREA|BUTTON|SELECT)$/.test(tagName);
+        }
+        return false;
+    },
+    ```
+    默认只对非表单元素进行"阻止默认事件触发".
 
--   domEvents
-    值为对象, 可以配置元素上定义的手势是否可以"取消"和"冒泡", 详细介绍可以参考[MDN](https://developer.mozilla.org/zh-CN/docs/Web/API/Event/Event), 默认情况下**可取消 / 可冒泡**
+-   **domEvents**
+    值为Object或false.
+    **如果是false**, 那么不触发tap/pan等手势的DOM事件, 注意没有true. 
+    
+    **如果是Object**, 那么可以配置元素上定义的手势是否可以"取消"和"冒泡", 详细参数同[eventInit类型](https://developer.mozilla.org/zh-CN/docs/Web/API/Event/Event), 默认情况下**可取消 / 可冒泡**,也就是`{bubbles:true,cancelable:true}`
+    ```javascript
+    const at = AnyTouch(el);
+    el.addEventListener('tap', onTap);
+    ```
 
--   preventDefaultExclude
-    用来手动指定哪些情况下 any-touch 不阻止浏览器默认事件的触发, 比如:
+    由于Vue等框架的模板中都是支持原生事件的,所以vue中可以在模板直接绑定事件:
 
-```javascript
-const at = AnyTouch(el, {
-    // 如果触发事件的是span元素, 那么不执行"阻止默认事件触发".
-    preventDefaultExclude: (ev) => 'SPAN' === ev.target.tagName,
-});
-```
-
-**注意:** 只有**preventDefault**值为**true**的情况下, **preventDefaultExclude**才有实际意义.
-
-| 名称                  | 类型                 | 默认值                                  | 简要说明                                  |
-| --------------------- | -------------------- | --------------------------------------- | ----------------------------------------- |
-| preventDefault        | `Boolean`            | `true`                                  | 阻止默认事件触发, 比如:页面滚动/click 等. |
-| domEvents             | `Boolean`            | `true`                                  | 是否派发手势名对应的原生事件.             |
-| preventDefaultExclude | `RegExp \| Function` | `/^(INPUT\|TEXTAREA\|BUTTON\|SELECT)$/` | 符合条件可跳过"阻止默认事件".             |
-
-#### 使用 addEventListener 监听手势事件
-
-如果**domEvents**为 true, 可以使用原生**addEventListener**监听手势事件:
-
-```javascript
-// 默认domEvents等于true
-const at = AnyTouch(el);
-el.addEventListener('tap', onTap);
-```
-
-所以同理, vue 中也可以在模板直接绑定事件:
-
-```html
-<div @tap="onTap"></div>
-```
+    ```html
+    <template>
+        <div @tap="onTap"></div>
+    </template>
+    <script>
+    import AnyTouch from 'any-touch';
+    export default {
+        mounted() {
+            const at = new AnyTouch(this.$el);
+        },
+    };
+    </script>
+    ```
 
 [:rocket: 返回目录](#目录)
 
@@ -105,38 +102,26 @@ at.on(['tap', 'pan'], onTouch);
 #### listener
 
 事件触发函数.
-
-#### options
-
-| 名称   | 类型          | 默认值 | 简要说明                                                             |
-| ------ | ------------- | ------ | -------------------------------------------------------------------- |
-| target | `HTMLElement` | -      | 使用事件委派模式, 表示只有指定子元素(相对构造函数中的 el)才响应事件. |
-
 ```javascript
-const child = at.el.children[0];
-at.on('pan', onPan, { target: child });
+const listener = event=>{
+    // event是手势事件对象, 可以获取位置等信息
+}
+at.on('pan',listener);
 ```
 
-[:lollipop: 更多事件对象(event)](EVENT.md)
+[:lollipop: 事件对象(event)](EVENT.md)
 
 [:rocket: 返回目录](#目录)
 
-## target(childEl):OnFunction
 
-缩小触发范围, 表示只有触碰目标元素(el)下的**childEl**元素, 满足条件后才触发手势事件.
-
-```javascript
-at.target(child).on('pan', onChildPan);
-```
-
-[:rocket: 返回目录](#目录)
 
 ## set(options)
 
-改变设置
+改变设置.
 
 ```javascript
-at.set({ preventDefault: true });
+//  如果当前元素是a元素, 那么阻止默认事件触发, 比如链接跳转.
+at.set({ preventDefault: event=>event.target.tagName ==='A' });
 ```
 
 **手势参数说明**
@@ -156,17 +141,7 @@ at.set({ preventDefault: true });
 加载手势识别器, options 为手势识别器的参数.
 
 ```javascript
-at.use(AnyTouch.Tap, { tapTime: 2, name: 'doubletap' });
-```
-
-[:rocket: 返回目录](#目录)
-
-## removeUse([recognizerName])
-
-删除识别器, 如果不传参数, 代表清空所有已加载手势.
-
-```javascript
-at.removeUse('doubletap');
+at.use(AnyTouch.tap, { tapTime: 2, name: 'doubletap' });
 ```
 
 [:rocket: 返回目录](#目录)
@@ -282,7 +257,7 @@ at.destroy();
 
 ```javascript
 import AnyTouch from 'any-touch`;
-const {Tap, Pan,Swipe,Press,Pinch,Rotate} = AnyTouch;
+const {tap, pan,swipe,press,pinch,rotate} = AnyTouch;
 ```
 
 **此外**, 手势识别器均已做成独立的包, 从也可按需加载.
