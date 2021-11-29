@@ -55,7 +55,7 @@ npm i -S any-touch
 ```html
 <script src="https://unpkg.com/any-touch/dist/any-touch.umd.min.js"></script>
 <script>
-    console.log(AnyTouch.version); // 2.0.0
+    console.log(AnyTouch.version); // 2.x.x
 </script>
 ```
 
@@ -99,7 +99,7 @@ at.on('pan', (e) => console.log(e));
 </script>
 ```
 
-**注意**: **@tap**这种语法**只能**用在元素标签上, 而**不能**用在自定义组件标签上:
+**注意**: vue中 "**@tap**"这种语法**只能**用在元素标签上, 而**不能**用在自定义组件标签上:
 
 ```html
 <!-- 有效 -->
@@ -230,6 +230,26 @@ const at = new AnyTouch(el, {
 
 
 ### 双击(doubletap)
+**如果你只是想使用双击, 你可以直接复制下面的代码,不需要理解他, 如果你想自己生成更多的手势那么请阅读下面的文字.
+
+#### 识别器的状态
+tap/press/pan/swipe/pinch/rotate等手势的识别器对外都会暴露一个字段叫做"state", 也就是识别器当前的状态.
+
+状态的变化周期为: **"未知"=>"已识别(或识别失败)"**.
+
+如果是pan/press/pinch/rotate他们特殊一些, 是 **"未知"=>"开始识别(或识别失败)"=>"移动中"=>移动结束(已识别)"**
+
+|状态名称|代码|
+|---|---|
+|未知|0|
+|已识别|1|
+|失败|2|
+|取消|3|
+|开始|4|
+|移动中|5|
+|结束|1, 同已识别|
+
+#### 双击代码
 
 使用**beforeEach**拦截器, 在每个手势触发之前可以进行自定义拦截操作.
 
@@ -241,7 +261,7 @@ hook 是个函数: `(context: PluginContext & { event: AnyTouchEvent }, next: ()
 
 **下面实现"双击"手势, 逻辑如下:**
 
-1. 使用 tap 插件定义"双击"识别功能.
+1. 使用tap插件定义"双击"识别功能.
 2. 使用"beforeEach"控制"单击 tap"事件延迟 300ms 触发.
 3. 如果 300ms 内出现了"双击 doubletap"事件, 那么阻止"单击 tap"触发.
 4. 这时只会有"双击 doubletap"触发.
@@ -249,7 +269,6 @@ hook 是个函数: `(context: PluginContext & { event: AnyTouchEvent }, next: ()
 ```javascript
 import Core from '@any-touch/core';
 import tap from '@any-touch/tap';
-import { STATUS_POSSIBLE, STATUS_FAILED } from '@any-touch/shared';
 const at = Core(el);
 at.use(tap, { name: 'doubletap', tapTimes: 2 });
 let timeID = null;
@@ -258,7 +277,8 @@ at.beforeEach((context, next) => {
         clearTimeout(timeID);
         timeID = setTimeout(() => {
             const { state } = at.get('doubletap');
-            const ok = [STATE_POSSIBLE, STATE_FAILED].includes(state);
+            // 0: 未知, 2: 识别失败
+            const ok = [0, 2].includes(state);
             if (ok) {
                 next();
             }
