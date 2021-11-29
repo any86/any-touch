@@ -61,25 +61,6 @@ emitter.off('add', callback);
 emitter.emit('add', 1);
 ```
 
-### once(eventName, listener)
-绑定事件, 只触发一次
-
-|名称|类型|数据类型|是否必填|说明|
-|---|---|---|---|---|
-|eventName| 参数 |`String/Symbol`|是|事件名称|
-|listener| 参数 |`Function`|是|对应的回调函数|
-|emitter| 返回值 |`EventEmitter`|---|实例|
-
-``` javascript
-const callback = data=>{
-    alert(data)
-};
-emitter.once('add', callback);
-// add事件触发
-emitter.emit('add', 1);
-// add事件不会触发
-emitter.emit('add', 1);
-```
 
 ### emit(eventName [, ...args])
 触发事件, 支持任意数量参数
@@ -87,7 +68,7 @@ emitter.emit('add', 1);
 |名称|类型|数据类型|是否必填|说明|
 |---|---|---|---|---|
 |eventName| 参数 |`String/Symbol`|是|事件名称|
-| ...args| 参数 |`Any`|是|对应的回调函数|
+| args| 参数 |`Any`|是|数据|
 |emitter| 返回值 |`Boolean`|---|实例|
 
 ``` javascript
@@ -99,18 +80,6 @@ emitter.once('add', callback);
 emitter.emit('add', 1,2,3,4);
 ```
 
-### has(eventName)
-是否绑定了指定事件
-
-|名称|类型|数据类型|是否必填|说明|
-|---|---|---|---|---|
-|eventName| 参数 |`String/Symbol`|是|事件名称|
-
-``` javascript
-emitter.on('add', callback);
-
-emitter.has('add'; // true
-```
 
 ### destroy()
 销毁实例
