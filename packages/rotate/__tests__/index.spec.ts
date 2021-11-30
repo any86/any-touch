@@ -13,16 +13,28 @@ test(`顺时针旋转10度, 然后逆时针旋转20度`, async done => {
     const onRotateEnd = jest.fn();
 
     at.on('rotate', onRotate);
-    at.on('rotatestart', onRotateStart);
-    at.on('rotatemove', onRotateMove);
-    at.on('rotateend', onRotateEnd);
+    at.on('rotatestart', e=>{
+        onRotateStart(e.angle);
+    });
+    at.on('rotatemove', e=>{
+        onRotateMove(e.angle);
+    });
+    at.on('rotateend', e=>{
+        onRotateEnd(e.angle);
+    });
 
     rotateSimulator(el, [10, -20]);
     await sleep();
     expect(onRotate).toHaveBeenCalledTimes(3);
     expect(onRotateStart).toHaveBeenCalledTimes(1);
+    expect(onRotateStart).toBeCalledWith(10);
+
     expect(onRotateMove).toHaveBeenCalledTimes(1);
+    expect(onRotateMove).toBeCalledWith(-20);
+
     expect(onRotateEnd).toHaveBeenCalledTimes(1);
+    expect(onRotateEnd).toBeCalledWith(-20);
+
 
     done();
 });

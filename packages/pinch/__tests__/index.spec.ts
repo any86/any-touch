@@ -13,9 +13,15 @@ test(`双手捏合缩小`, async done => {
     const onPinchEnd = jest.fn();
 
     at.on(`pinch`, onPinch);
-    at.on(`pinchstart`, onPinchStart);
-    at.on(`pinchmove`, onPinchMove);
-    at.on(`pinchend`, onPinchEnd);
+    at.on(`pinchstart`, e=>{
+        onPinchStart(e.scale);
+    });
+    at.on(`pinchmove`, e=>{
+        onPinchMove(e.scale);
+    });
+    at.on(`pinchend`, e=>{
+        onPinchEnd(e.scale);
+    });
 
     gs.start([{ x: 0, y: 0 }, { x: 10, y: 0 }]);
     gs.move([{ x: 0, y: 0 }, { x: 20, y: 0 }]); // pinchstart 2
@@ -24,8 +30,13 @@ test(`双手捏合缩小`, async done => {
     await sleep();
     expect(onPinch).toHaveBeenCalledTimes(3);
     expect(onPinchStart).toHaveBeenCalledTimes(1);
+    expect(onPinchStart).toBeCalledWith(2);
+
     expect(onPinchMove).toHaveBeenCalledTimes(1);
+    expect(onPinchMove).toBeCalledWith(3);
+
     expect(onPinchEnd).toHaveBeenCalledTimes(1);
+    expect(onPinchEnd).toBeCalledWith(3);
 
     done();
 });
