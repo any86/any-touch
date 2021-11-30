@@ -1,5 +1,5 @@
 // 事件名 : 事件对象
-export interface TypeAndEventMap {
+export interface DefaultTypeAndEventMap {
     // symbol暂时不加, 没法兼容低版本的ts
     // 可以用户手动加
     [type: string]: any;
@@ -13,7 +13,7 @@ export interface AEventListener<Event> {
 
 
 // 事件名 : 回调函数
-type TypeAndEventListenerMap<EventMap = TypeAndEventMap> = Partial<{
+type TypeAndEventListenerMap<EventMap = DefaultTypeAndEventMap> = Partial<{
     [Key in keyof EventMap]: AEventListener<EventMap[Key]>[];
 }>
 
@@ -25,9 +25,9 @@ export interface Interceptor {
 }
 
 // Payloads 后面会自动转成数组
-export default class AnyEvent<EventMap extends TypeAndEventMap = TypeAndEventMap> {
+export default class AnyEvent<TypeAndEventMap extends DefaultTypeAndEventMap = DefaultTypeAndEventMap> {
     // 事件仓库
-    private __map: TypeAndEventListenerMap<EventMap> = {};
+    private __map: TypeAndEventListenerMap<TypeAndEventMap> = {};
     // 拦截器
     private __interceptor?: Interceptor;
 
@@ -49,7 +49,7 @@ export default class AnyEvent<EventMap extends TypeAndEventMap = TypeAndEventMap
      * @param typeOrTypes 事件名
      * @param listener 回调函数
      */
-    on<Key extends keyof EventMap>(typeOrTypes: Key | Key[], listener: AEventListener<EventMap[Key]>): this {
+    on<Key extends keyof TypeAndEventMap>(typeOrTypes: Key | Key[], listener: AEventListener<TypeAndEventMap[Key]>): this {
         const types = Array.isArray(typeOrTypes) ? typeOrTypes : [typeOrTypes];
         for (const type of types) {
             this.__map[type] = this.__map[type] || [];
@@ -67,18 +67,24 @@ export default class AnyEvent<EventMap extends TypeAndEventMap = TypeAndEventMap
      * @param payload 数据
      * @param done 运行成功执行
      */
-    emit(type: string, payload?: unknown, done?: () => void) {
+    emit<Key extends keyof TypeAndEventMap>(type: Key, payload?: TypeAndEventMap[Key]) {
         if (void 0 !== this.__interceptor) {
             this.__interceptor(this, () => {
-                emit<EventMap>(this.__map, type, payload);
-                this.event = payload;
-                done && done();
+                this.__emit<Key, TypeAndEventMap[Key]>(type, payload);
             });
         } else {
-            emit<EventMap>(this.__map, type, payload);
-            this.event = payload;
-            done && done();
+            this.__emit<Key, TypeAndEventMap[Key]>(type, payload);
         }
+    }
+
+    private __emit<Key extends keyof TypeAndEventMap, AEvent>(type: Key, event?: AEvent) {
+        const listeners = this.__map[type];
+        if (Array.isArray(listeners) && listeners?.length) {
+            for (const listener of listeners) {
+                listener(event);
+            }
+        }
+        this.event = event;
     }
 
     /**
@@ -88,7 +94,7 @@ export default class AnyEvent<EventMap extends TypeAndEventMap = TypeAndEventMap
      * @param type 事件名
      * @param listener 回调函数
      */
-    off<Key extends keyof EventMap>(type: Key, listener?: AEventListener<EventMap[Key]>) {
+    off<Key extends keyof TypeAndEventMap>(type: Key, listener?: AEventListener<TypeAndEventMap[Key]>) {
         const listeners = this.__map[type];
         // 事件存在
         if (void 0 !== listeners) {
@@ -111,29 +117,3 @@ export default class AnyEvent<EventMap extends TypeAndEventMap = TypeAndEventMap
         this.__map = {};
     }
 }
-
-function emit<T extends TypeAndEventMap>(map: TypeAndEventListenerMap<T>, type: string, payload: any) {
-    const listeners = map[type];
-    if (listeners?.length) {
-        for (const listener of listeners) {
-
-            listener(payload);
-        }
-    }
-}
-
-// const e = new AnyEvent()
-// e.beforeEach((type, next) => {
-//     if ('c' == type) next();
-// })
-// e.on('a', console.log);
-// e.on('b', console.log);
-// e.on('c', console.log);
-
-// setTimeout(() => {
-//     e.emit('c', 3);
-// }, 1000)
-
-// e.emit('a', 1);
-// e.emit('b', 2);
-

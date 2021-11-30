@@ -131,7 +131,8 @@ export default function (at: AnyTouch, options?: Partial<typeof DEFAULT_OPTIONS>
             return interval < waitNextTapTime;
         }
     }
-    at.on(TYPE_COMPUTED, (computed) => {
+
+    at.compute([ComputeDistance, ComputeMaxLength], (computed) => {
         // 禁止
         if (isDisabled(context)) return;
         const { phase, x, y } = computed;
@@ -140,7 +141,7 @@ export default function (at: AnyTouch, options?: Partial<typeof DEFAULT_OPTIONS>
         if (TYPE_END !== phase) return;
         context.state = STATE.POSSIBLE;
         // 每一次点击是否符合要求
-        if (test(computed, context)) {
+        if (test()) {
             clearTimeout(countDownToFailTimer);
             // 判断2次点击之间的距离是否过大
             // 对符合要求的点击进行累加
@@ -164,31 +165,26 @@ export default function (at: AnyTouch, options?: Partial<typeof DEFAULT_OPTIONS>
             reset();
             context.state = STATE.FAILED;
         }
-    });
 
-    at.compute([ComputeDistance, ComputeMaxLength]);
+        // 是否满足条件
+        function test() {
+            const { startInput, pointLength, timestamp } = computed;
+            const deltaTime = timestamp - startInput.timestamp;
+            // 1. 触点数
+            // 2. 当前点击数为0, 也就是当所有触点离开才通过
+            // 3. 移动距离
+            // 4. start至end的事件, 区分tap和press
+            const { distance, maxPointLength } = computed;
+            return (
+                maxPointLength === context.pointLength &&
+                0 === pointLength &&
+                context.maxDistance >= distance &&
+                context.maxPressTime > deltaTime
+            );
+        }
+    });
 
     return context;
 }
 
-/**
- * 识别条件
- * @param computed 计算结果
- * @return 是否验证成功
- */
-function test(computed: Input & Partial<Computed>, context: PluginContext<typeof DEFAULT_OPTIONS>) {
-    const { startInput, pointLength, timestamp } = computed;
-    const deltaTime = timestamp - startInput.timestamp;
-    // 1. 触点数
-    // 2. 当前点击数为0, 也就是当所有触点离开才通过
-    // 3. 移动距离
-    // 4. start至end的事件, 区分tap和press
-    const { distance, maxPointLength } = computed;
-    return (
-        maxPointLength === context.pointLength &&
-        0 === pointLength &&
-        void 0 !== distance &&
-        context.maxDistance >= distance &&
-        context.maxPressTime > deltaTime
-    );
-}
+

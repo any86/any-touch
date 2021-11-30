@@ -1,6 +1,5 @@
-import type { PluginContext, Computed } from '@any-touch/shared';
 import {
-    createPluginContext, resetState,TYPE_COMPUTED, STATE,isDisabled, DIRECTION_UP, TYPE_CANCEL, TYPE_END, TYPE_START
+    createPluginContext, resetState, STATE, isDisabled, DIRECTION_UP, TYPE_CANCEL, TYPE_END, TYPE_START
 } from '@any-touch/shared';
 import { ComputeDistance } from '@any-touch/compute';
 import Core from '@any-touch/core';
@@ -21,9 +20,12 @@ export default function (at: Core, options?: Partial<typeof DEFAULT_OPTIONS>) {
     const context = createPluginContext(DEFAULT_OPTIONS, options);
 
     let timeoutId = 0;
-    at.on(TYPE_COMPUTED, (computed) => {
+
+
+    // 加载计算方法
+    at.compute([ComputeDistance], (computed) => {
         // 禁止
-        if(isDisabled(context)) return;
+        if (isDisabled(context)) return;
         const { phase, startInput, pointLength } = computed;
         // 1. start阶段
         // 2. 触点数符合
@@ -49,39 +51,22 @@ export default function (at: Core, options?: Partial<typeof DEFAULT_OPTIONS>) {
             const deltaTime = computed.timestamp - startInput.timestamp;
             // 一旦不满足必要条件,
             // 发生了大的位移变化
-            if (!test(computed, context) ||
+            if (!test() ||
                 // end 或 cancel触发的时候还不到要求的press触发时间
                 (context.minPressTime > deltaTime && [TYPE_END, TYPE_CANCEL].includes(phase))) {
                 clearTimeout(timeoutId)
                 context.state = STATE.FAILED;
             }
         }
+
+        /**
+         * 是否满足:
+         * 移动距离不大
+         */
+        function test() {
+            const { distance } = computed;
+            return distance && context.maxDistance > distance;
+        };
     });
-
-    // 加载计算方法
-    at.compute([ComputeDistance]);
-
     return context;
 }
-
-
-/**
- * 是否满足:
- * 移动距离不大
- */
-function test(computed: Required<Computed>, context: PluginContext<typeof DEFAULT_OPTIONS>) {
-    const { distance } = computed;
-    return context.maxDistance > distance;
-};
-
-
-// class Press extends Recognizer {
-//     private _timeoutId?: number;
-
-//     constructor(options: Partial<typeof DEFAULT_OPTIONS>) {
-//         super({ ...DEFAULT_OPTIONS, ...options });
-//         this.computeFunctions = [ComputeDistance];
-//     };
-
-
-// };

@@ -182,9 +182,22 @@ export interface EventTrigger {
 //     new(...args: any[]): any;
 // }
 
-// export interface ComputeConstructor {
-//     _id: string;
-//     new(...args: any[]): {
-//         compute(input: Input): Record<string, any> | void;
-//     };
-// }
+
+// type ArrayStuct<Head extends Record<string, number>, Tail extends Record<string, number>[]> = [Head, ...Tail];
+
+// type Merge<Arr extends Record<string, number>[]> =
+//     Arr extends [] ? {}
+//     : Arr extends ArrayStuct<infer Head, []> ? Head
+//     : Arr extends ArrayStuct<infer Head, infer Tail> ? Head & Merge<Tail>
+//     : never;
+
+// export type ComputedFromFunction<T extends Record<string, number>[]> = Merge<T>;
+
+// type C = ComputedFromFunction<[{ a: 1 }, { c: 3 }]>
+
+
+export type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends ((k: infer I) => void) ? I : never;
+
+// export type UnionToIntersection1<U> = ((k: U) => void) extends ((k: infer I) => void) ? I : never;
+
+type Result = UnionToIntersection<{a:1} | {b:2}>; // T1 & T2

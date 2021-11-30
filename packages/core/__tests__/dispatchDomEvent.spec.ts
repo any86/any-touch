@@ -6,7 +6,7 @@ test('触发自定义事件', () => {
     el.addEventListener(EVENT_NAME, ev => {
         mockCB(ev.type);
     });
-    dispatchDomEvent(el, { type: EVENT_NAME } as any);
+    dispatchDomEvent(EVENT_NAME,el,{});
     sleep();
     expect(mockCB).toHaveBeenCalledWith(EVENT_NAME);
 });
@@ -19,7 +19,7 @@ test('当Event不存的时候, 依然可以触发事件', ()=>{
     el.addEventListener(EVENT_NAME, ev => {
         mockCB(ev.type);
     });
-    dispatchDomEvent(el, { type: EVENT_NAME } as any);
+    dispatchDomEvent(EVENT_NAME,el, {} as any);
     sleep();
     expect(mockCB).toHaveBeenCalledWith(EVENT_NAME);
 });

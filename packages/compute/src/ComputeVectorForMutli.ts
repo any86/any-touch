@@ -7,12 +7,19 @@ function computeVector(input: InputOnlyHasCurrent): Vector {
     }
 };
 
+const zero = { x: 0, y: 0 };
+
+
 /**
  * 
  * @param input 输入
  * @returns 记录多点输入时的"起/上一个/终"向量
  */
 export default function () {
+    let startVecotr: any;
+    let prevVecotr: any;
+    let activeVecotr: any;
+
     return function (input: Input) {
         const { prevInput, startMultiInput } = input;
         if (void 0 !== startMultiInput &&
@@ -21,30 +28,15 @@ export default function () {
             1 < prevInput.pointLength &&
             1 < input.pointLength) {
             // 2指形成的向量
-            return {
-                startVecotr: computeVector(startMultiInput),
-                prevVecotr: computeVector(prevInput),
-                activeVecotr: computeVector(input)
-            }
+            startVecotr = computeVector(startMultiInput);
+            prevVecotr = computeVector(prevInput);
+            activeVecotr = computeVector(input);
+        }
+
+        return {
+            startVecotr,
+            prevVecotr,
+            activeVecotr
         }
     }
 }
-
-
-// export default function ComputeVectorForMutli() {
-//     return function (input: Input): { startV: Vector, activeV: Vector, prevV: Vector } | void {
-//         const { prevInput, startMultiInput } = input;
-//         if (void 0 !== startMultiInput &&
-//             void 0 !== prevInput &&
-//             input.id !== startMultiInput.id &&
-//             1 < prevInput.pointLength &&
-//             1 < input.pointLength) {
-//             // 2指形成的向量
-//             return {
-//                 startV: computeVector(startMultiInput),
-//                 prevV: computeVector(prevInput),
-//                 activeV: computeVector(input)
-//             }
-//         }
-//     }
-// };

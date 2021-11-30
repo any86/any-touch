@@ -10,6 +10,7 @@
  */
 import AnyEvent from 'any-event';
 import type {
+    UnionToIntersection,
     Computed,
     AnyTouchEvent,
     NativeEvent,
@@ -19,10 +20,19 @@ import type {
     ComputeFunctionCreator,
     PluginContext,
     Plugin,
-
+    Input,
 } from '@any-touch/shared';
 
-import { TYPE_COMPUTED, TOUCH_START, TOUCH_MOVE, TOUCH_END, TOUCH_CANCEL, MOUSE_DOWN, MOUSE_MOVE, MOUSE_UP } from '@any-touch/shared';
+import {
+    TYPE_COMPUTED,
+    TOUCH_START,
+    TOUCH_MOVE,
+    TOUCH_END,
+    TOUCH_CANCEL,
+    MOUSE_DOWN,
+    MOUSE_MOVE,
+    MOUSE_UP,
+} from '@any-touch/shared';
 
 import { mouse, touch } from './createInput';
 import dispatchDomEvent from './dispatchDomEvent';
@@ -81,15 +91,11 @@ type DefaultTypeNames =
     | 'at:start'
     | 'at:move'
     | 'at:end'
-    | 'at:cancel'
-    | 'input'
-    | typeof TYPE_COMPUTED
-    | typeof TYPE_UNBIND;
-
+    | 'at:cancel';
 /**
  * 默认的事件名和事件对象映射
  */
-type EventNameMap<K extends string> = { [k in K]: AnyTouchEvent };
+type EventNameMap = { [k in DefaultTypeNames]: AnyTouchEvent } & { input: Input; computed: any; u: undefined };
 
 /**
  * 手势库的核心,
@@ -101,7 +107,7 @@ type EventNameMap<K extends string> = { [k in K]: AnyTouchEvent };
  * const at = new Core();
  * at.use(pan);
  */
-export default class <K extends string = DefaultTypeNames> extends AnyEvent<EventNameMap<DefaultTypeNames | K>> {
+export default class extends AnyEvent<EventNameMap> {
     /**
      * 当前绑定元素
      */
@@ -199,8 +205,8 @@ export default class <K extends string = DefaultTypeNames> extends AnyEvent<Even
         // 比如没有按住鼠标左键的移动会返回undefined
         if (void 0 !== input) {
             const stopPropagation = () => event.stopPropagation();
-            const preventDefault = () => event.preventDefault();
             const stopImmediatePropagation = () => event.stopImmediatePropagation();
+            const preventDefault = () => event.preventDefault();
             if (canPreventDefault(event, this.__options)) {
                 preventDefault();
             }
@@ -218,9 +224,33 @@ export default class <K extends string = DefaultTypeNames> extends AnyEvent<Even
                     }
                 }
             });
-
-            this.emit(TYPE_COMPUTED, { ...input, ...computed, stopPropagation, preventDefault, stopImmediatePropagation });
+            // computed
+            this.emit(TYPE_COMPUTED, { ...input, ...computed,stopPropagation,stopImmediatePropagation,preventDefault });
         }
+    }
+
+    /**
+     * 缓存计算函数生成器到队列
+     * @param computeFunctionCreatorList 一组计算函数生成器
+     */
+    compute<CList extends ComputeFunctionCreator[] = ComputeFunctionCreator[]>(
+        computeFunctionCreatorList: CList,
+        // CList[0]的0是几都没关系, 
+        // 因为不是元祖,
+        // 所以结果都会是ReturnType<ReturnType<CList[0]>|ReturnType<ReturnType<CList[n]>
+        callback: (computed: UnionToIntersection<ReturnType<ReturnType<CList[0]>>> & Input) => void,
+    ) {
+        // 注册到队列
+        for (const computeFunctionCreator of computeFunctionCreatorList) {
+            if (!this.__computeFunctionCreatorList.includes(computeFunctionCreator)) {
+                // 计算函数生成器队列
+                this.__computeFunctionCreatorList.push(computeFunctionCreator);
+                // 计算函数队列
+                this.__computeFunctionList.push(computeFunctionCreator());
+            }
+        }
+        // 🍩computed
+        this.on(TYPE_COMPUTED, callback);
     }
 
     /**
@@ -269,33 +299,17 @@ export default class <K extends string = DefaultTypeNames> extends AnyEvent<Even
      * @param payload 数据
      * @param pluginContext 插件实例
      */
-    emit2(type: string, payload: AnyTouchEvent, pluginContext: PluginContext) {
+    emit2(type: string, payload: Computed, pluginContext: PluginContext) {
         this.c = pluginContext;
-        this.emit(type, { ...payload, type }, () => {
-            // this.emit('at:after',{...payload,name:type})
-            const { target } = payload;
-            const { domEvents } = this.__options;
-            // 触发DOM事件
-            if (!!domEvents && void 0 !== this.el && null !== target) {
-                // 所以此处的target会自动冒泡到目标元素
-                dispatchDomEvent(target, { ...payload, type }, domEvents);
-                // dispatchDomEvent(target, { ...payload, type:'at:after',name:type }, domEvents);
-            }
-        });
-    }
-
-    /**
-     * 缓存计算函数生成器到队列
-     * @param computeFunctionCreatorList 一组计算函数生成器
-     */
-    compute(computeFunctionCreatorList: ComputeFunctionCreator[]) {
-        for (const computeFunctionCreator of computeFunctionCreatorList) {
-            if (!this.__computeFunctionCreatorList.includes(computeFunctionCreator)) {
-                // 计算函数生成器队列
-                this.__computeFunctionCreatorList.push(computeFunctionCreator);
-                // 计算函数队列
-                this.__computeFunctionList.push(computeFunctionCreator());
-            }
+        this.emit(type as keyof EventNameMap, { ...payload, type });
+        // this.emit('at:after',{...payload,name:type})
+        const { target } = payload;
+        const { domEvents } = this.__options;
+        // 触发DOM事件
+        if (!!domEvents && void 0 !== this.el && !!target) {
+            // 所以此处的target会自动冒泡到目标元素
+            dispatchDomEvent(type, target, payload, domEvents);
+            // dispatchDomEvent(target, { ...payload, type:'at:after',name:type }, domEvents);
         }
     }
 
