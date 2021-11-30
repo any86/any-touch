@@ -13,6 +13,13 @@
 - 默认加载**6个手势**, 也可🤖[按需加载](#按需加载)手势, 核心**2kb**, 完整**5kb**.
 - 通过6类手势可以**扩展**出更多手势.
 
+## 🔥 v2.0
+2.0重构完成, 体积更小, API基本无变化, 欢迎大家体验.
+```shell
+yarn add any-touch@next
+```
+[v2文档](https://github.com/any86/any-touch/tree/v2#%E7%9B%AE%E5%BD%95)
+
 ## 演示
 <details>
 <summary>查看二维码</summary>
