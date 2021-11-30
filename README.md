@@ -7,13 +7,14 @@
 [downloads-image]: https://badgen.net/npm/dt/any-touch
 [downloads-url]: https://npmjs.org/package/any-touch
 
-
 ![6类手势](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/102a244991064824900ac45efeb9251d~tplv-k3u1fbpfcp-zoom-1.image)
-- 支持PC 端 / 移动端 / [微信小程序](#支持微信小程序).
-- 默认加载**6个手势**, 也可🤖[按需加载](#按需加载)手势, 核心**2kb**, 完整**5kb**.
-- 通过6类手势可以**扩展**出更多手势.
+
+-   支持 PC 端 / 移动端 / [微信小程序](#支持微信小程序).
+-   默认加载**6 个手势**, 也可[按需加载](#按需加载)手势, 核心**1kb**, 完整**4kb**.
+-   **无依赖, 不限于 Vue / React / Angular等...**
 
 ## 演示
+
 <details>
 <summary>查看二维码</summary>
 <img src="https://user-images.githubusercontent.com/8264787/104836031-a55ca780-58e5-11eb-936a-7e2d1a05ee86.png" />
@@ -24,78 +25,82 @@
 ## 目录
 
 [:zap: 快速开始](#快速开始)
+- [纯js插件, 无依赖](#快速开始)
+- [vue等框架中的简写](#vue等框架中的简写)
+- [支持微信小程序](#支持微信小程序)
 
-[:seedling: 兼容vue语法](#兼容vue语法)
-    
-[:iphone: 支持微信小程序](#支持微信小程序)
+[📐 按需加载](#按需加载)
+- [完整引入](#完整引入)
+- [按需引入](#按需引入)
 
-[🤖 按需加载](#按需加载)
+[🌈 进阶使用](#进阶使用)
+- [阻止默认事件](#阻止默认事件)
+- [双击(🥂doubletap)](#双击doubletap)
 
-[:wave: 还支持哪些手势?](#还支持哪些手势)
 
-[:bulb: API & 高级技巧](docs/API.md)
+[:bulb: API](docs/API.md)
 
 [:lollipop: 事件对象(event)](docs/EVENT.md)
 
 [:heavy_exclamation_mark::heavy_exclamation_mark::heavy_exclamation_mark: 注意事项](#注意事项)
 
 ## 安装
+
 ```javascript
 npm i -S any-touch
 ```
 
 ## CDN
 
-```
-https://unpkg.com/any-touch/dist/any-touch.umd.min.js
+```html
+<script src="https://unpkg.com/any-touch/dist/any-touch.umd.min.js"></script>
+<script>
+    console.log(AnyTouch.version); // 2.x.x
+</script>
 ```
 
 ## 快速开始
-**HTML中引入**
-```html
-<h1 id="box">hello world</h1>
-<script src="https://unpkg.com/any-touch/dist/any-touch.umd.min.js"></script>
-<script>
-const el = document.getElementById('box');
-const at = new AnyTouch(el);
-at.on('tap', e => console.log('e包含位置等信息',e));
-</script>
-```
-**或者, 使用NPM**
+
 ```javascript
 import AnyTouch from 'any-touch';
+
 const el = document.getElementById('box');
 const at = new AnyTouch(el);
-at.on('pan', e => console.log('e包含位移/速度/方向等信息',e))
+
+// e包含位移/速度/方向等信息
+at.on('pan', (e) => console.log(e));
 ```
+
 [:rocket: 返回目录](#目录)
 
+## vue等框架中的简写
 
-## 兼容vue语法
+在vue中, 可在模版元素上直接使用"@tap"等语法监听手势事件. **react/angular**没有验证过, 但是因为tap/pan等按照原生事件格式封装的, 所以理论上也能在模板中直接绑定事件.
 
 ```html
-<div 
-    @tap="onTap" 
-    @swipe="onSwipe" 
-    @press="onPress" 
-    @pan="onPan" 
-    @pinch="onPinch" 
-    @rotate="onRotate">
-    <p>Hello any-touch</p>
-</div>
+<template>
+    <div @tap="onTap" @swipe="onSwipe" @press="onPress" @pan="onPan" @pinch="onPinch" @rotate="onRotate">
+        <p>Hello any-touch</p>
+    </div>
+</template>
+
+<script>
+    import AnyTouch from 'any-touch';
+    export default {
+        mounted() {
+            // 没错, 就这2行
+            const at = new AnyTouch(this.$el);
+            
+            this.$on('hook:destroyed', () => {
+                at.destroy();
+            });
+        },
+    };
+</script>
 ```
 
-```javascript
-import AnyTouch from 'any-touch';
-export default {
-    mounted() {
-        // 没错, 就这2行
-        const at= new AnyTouch(this.$el);
-        this.$on('hook:destroyed', ()=>{at.destroy()});
-    }
-};
-```
-**⚠️注意**: **@tap**这种语法**只能**用在元素标签上, 而**不能**用在自定义组件标签上:
+**注意**: vue中 "**@tap**"这种语法**只能**用在元素标签上, 而**不能**用在自定义组件标签上:
+
 ```html
 <!-- 有效 -->
 <div @tap="onTap"></div>
@@ -113,10 +118,10 @@ export default {
 
 ## 支持微信小程序
 
-由于**小程序中没有dom元素**的概念, 所以我们需要通过**catchEvent**方法手动接收**touch**事件的事件对象来进行识别!
+由于**小程序中没有 dom 元素**的概念, 所以我们需要通过**catchEvent**方法手动接收**touch**事件的事件对象来进行识别
 
 ```xml
-<view 
+<view
   @touchstart="at.catchEvent"
   @touchmove="at.catchEvent"
   @touchend="at.catchEvent"
@@ -132,77 +137,172 @@ const at = new AnyTouch()
     }
 }
 ```
+
 [:rocket: 返回目录](#目录)
 
-
 ## 按需加载
-**默认any-touch支持所有手势**, 为了**更小的体积**, 提供了按需加载.
+
+**默认 any-touch 支持所有手势**, 为了**更小的体积**, 提供了按需加载.
+### 完整引入
+
+```javascript
+// 只加载pan识别器(拖拽)
+import AT from 'any-touch';
+const at = AT(el);
+at.on('tap', (e) => {});
+at.on('pan', (e) => {});
+// 同时监听多个事件
+at.on(['swipe', 'press', 'rotate', 'pinch'], (e) => {});
+```
+### 按需引入
+安装"any-touch"时, 对应的"@any-touch/xxx"会**自动安装**, 直接引入即可.
 
 ```javascript
 // 只加载pan识别器(拖拽)
 import Core from '@any-touch/core';
-import Pan from '@any-touch/pan';
-// 使用Pan
+import pan from '@any-touch/pan';
+// Core不识别任何手势.
 const at = Core(el);
-at.use(Pan);
+// 加载pan
+at.use(pan);
 
-// 拖拽
-at.on('swipe', onSwipe);
+at.on('pan', e=>{});
 ```
-**⚠️ 注意**: 执行`npm i any-touch`后, "@any-touch/core"和"@any-touch/xx手势"**便已自动安装**, 直接引入即可.
 
 ### @any-touch/core
-手势库的核心组件, 主要用来实现PC/移动端的兼容([查看更多](packages/core/README.md)).
 
+手势库的核心组件, 主要用来实现 PC/移动端的兼容([查看更多](packages/core/README.md)).
 
+### @any-touch/xx 手势识别器
 
-### @any-touch/xx手势
-手势识别器均已做成独立的包, 从而实现按需加载.
+**手势识别器**均已做成独立的包, 从而实现按需加载.
 
-| 名称 | 说明 |
-| - | - |
-| **@any-touch/tap**    |[点击](packages/tap/README.md)|
-| **@any-touch/pan**    |[拖拽](packages/pan/README.md)|
-| **@any-touch/swipe**  |[划](packages/swipe/README.md)|
-| **@any-touch/press**  |[按压](packages/press/README.md)|
-| **@any-touch/pinch**  |[缩放](packages/pinch/README.md)|
-| **@any-touch/rotate** |[旋转](packages/rotate/README.md)|
+| 名称                  | 说明                              |
+| --------------------- | --------------------------------- |
+| **@any-touch/tap**    | [点击](packages/tap/README.md)    |
+| **@any-touch/pan**    | [拖拽](packages/pan/README.md)    |
+| **@any-touch/swipe**  | [划](packages/swipe/README.md)    |
+| **@any-touch/press**  | [按压](packages/press/README.md)  |
+| **@any-touch/pinch**  | [缩放](packages/pinch/README.md)  |
+| **@any-touch/rotate** | [旋转](packages/rotate/README.md) |
 
-**⚠️ 再次提示**: 如果已安装"any-touch", 上面的包便也已经自动安装.
 
 ![](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/1fa1a4dae46047d58b371e8ff1704dc8~tplv-k3u1fbpfcp-zoom-1.image)
 
+## 手势识别器支持事件对照表
 
-## 还支持哪些手势?
-除了上面说的6大类手势外, 还细分了更多手势:
-|手势名|说明|
-|---|---|
-|pressup|按压松开|
-|panstart|拖拽开始|
-|panmove|拖拽中|
-|panend|拖拽结束|
-|pinchstart|缩放开始|
-|pinchmove|缩放中|
-|pinchend|缩放结束|
-|rotatestart|旋转开始|
-|rotatemove|旋转中|
-|rotateend|旋转结束|
+| 识别器     | 事件名                                               | 说明                          |
+| ---------- | ---------------------------------------------------- | ----------------------------- |
+| **tap**    | tap                                                  | 单击                          |
+| **press**  | press / pressup                                      | 按压 / 松开                   |
+| **pan**    | pan / panstart / panmove / panend                    | 拖拽 / 拖拽开始 / 拖拽进行中 / 拖拽结束 |
+| **swipe**  | swipe / swipeup / swipedown / swiperight / swipeleft | 快划 / 不同方向快划           |
+| **pinch**  | pinch / pinchstart / pinchmove / pinchend            | 缩放 / 缩放开始 / 缩放进行中 / 缩放结束 |
+| **rotate** | rotate / rotatestart / rotatemove / rotateend        | 旋转 / 旋转开始 / 旋转进行中 / 旋转结束 |
+
 ```javascript
-at.on('panstart', e=>{
-    console.log('拖拽开始了!');
+// 拖拽中只出发一次
+at.on('panstart', (e) => {
+    console.log('拖拽开始');
 });
 ```
 
+[:rocket: 返回目录](#目录)
 
+## 进阶使用
+
+### 阻止默认事件
+参数"preventDefault"是一个函数, 可以通过他的返回值的"true/false"来决定是否"阻止默认事件".
+
+
+**比如实现**: 阻止多点触发的事件的"默认事件", 比如"pinch/rotate".
+
+```javascript
+const at = new AnyTouch(el, {
+    preventDefault(e) {
+        return 1 == e.touches.length;
+    },
+});
+```
+参数"**e**"是原生事件对象, 移动端是[TouchEvent](https://developer.mozilla.org/zh-CN/docs/Web/API/TouchEvent), PC端是[MouseEvent](https://developer.mozilla.org/zh-CN/docs/Web/API/MouseEvent/MouseEvent).
+
+[:rocket: 返回目录](#目录)
+
+
+### 双击(doubletap)
+如果你只是想使用双击, 你可以直接复制下面的代码,不需要理解他, 如果你想自己生成更多的手势那么请阅读下面的文字.
+
+#### 识别器的状态
+tap/press/pan/swipe/pinch/rotate等手势的识别器对外都会暴露一个字段叫做"state", 也就是识别器当前的状态.
+
+状态的变化周期为: **"未知"=>"已识别(或识别失败)"**.
+
+如果是pan/press/pinch/rotate他们特殊一些, 是 **"未知"=>"开始识别(或识别失败)"=>"移动中"=>移动结束(已识别)"**
+
+|状态名称|代码|
+|---|---|
+|未知|0|
+|已识别|1|
+|失败|2|
+|取消|3|
+|开始|4|
+|移动中|5|
+|结束|1, 同已识别|
+
+#### 双击代码
+
+使用**beforeEach**拦截器, 在每个手势触发之前可以进行自定义拦截操作.
+
+hook 是个函数: `(context: PluginContext & { event: AnyTouchEvent }, next: () => void) => void`
+
+**context**: 对象,包含插件信息和事件对象的信息.
+
+**next**: 拦截函数, 只有执行了`next()`才会触发当前识别器对应的事件.
+
+**下面实现"双击"手势, 逻辑如下:**
+
+1. 使用tap插件定义"双击"识别功能.
+2. 使用"beforeEach"控制"单击 tap"事件延迟 300ms 触发.
+3. 如果 300ms 内出现了"双击 doubletap"事件, 那么阻止"单击 tap"触发.
+4. 这时只会有"双击 doubletap"触发.
+
+```javascript
+import Core from '@any-touch/core';
+import tap from '@any-touch/tap';
+const at = Core(el);
+at.use(tap, { name: 'doubletap', tapTimes: 2 });
+let timeID = null;
+at.beforeEach((context, next) => {
+    if ('tap' === context.name) {
+        clearTimeout(timeID);
+        timeID = setTimeout(() => {
+            const { state } = at.get('doubletap');
+            // 0: 未知, 2: 识别失败
+            const ok = [0, 2].includes(state);
+            if (ok) {
+                next();
+            }
+        }, 300);
+    } else {
+        next();
+    }
+});
+
+at.on('tap', onTap);
+at.on('doubletap', onDoubleTap);
+```
+
+**注意**: 同理可以实现"**3击**"或"**n击**".
 [:rocket: 返回目录](#目录)
 
 ## 注意事项
 
-### 手势识别器的name字段必填
+### 手势识别器的 name 字段必填
 
-自定义手势**一定记得给起一个名字哦**, 而且不要和默认存在的手势同名(已有tap/swipe/pan/rotate/pinch/press).
+自定义手势**一定记得给起一个名字哦**, 而且不要和默认存在的手势同名(已有 tap/swipe/pan/rotate/pinch/press).
+
 ```javascript
-at.use(tap, { pointLength: 2 , name:'twoFingersTap'});
+at.use(tap, { pointLength: 2, name: 'twoFingersTap' });
 at.on('twoFingersTap', onTwoFingersTap);
 ```
 
@@ -213,26 +313,19 @@ at.on('twoFingersTap', onTwoFingersTap);
 
 如果仅仅是了在移动端调试, 请使用腾讯的[vconsole](https://github.com/Tencent/vConsole)
 
-### macos上的chrome浏览器触发touchend会比较慢
-由于上述原因, swipe事件发生的会"慢半拍",所以请大家最终测试以手机效果为准.
+### macos 上的 chrome 浏览器触发 touchend 会比较慢
 
-### 移动端尽量使用tap代理click
-在移动端touchstart比click先触发, 所以touchstart阶段的preventDefault会阻止click触发, 恰恰any-touch默认在touchstart中使用了`preventDefault`, 用来阻止了浏览器默认事件的触发,比如click和页面滚动.
+由于上述原因, swipe 事件发生的会"慢半拍",所以请大家最终测试以手机效果为准.
 
-如果移动端非要使用click做如下设置
+### 移动端尽量使用 tap 代理 click
+
+在移动端 touchstart 比 click 先触发, 所以 touchstart 阶段的 preventDefault 会阻止 click 触发, 恰恰 any-touch 默认在 touchstart 中使用了`preventDefault`, 用来阻止了浏览器默认事件的触发,比如 click 和页面滚动.
+
+如果移动端非要使用 click 做如下设置
+
 ```javascript
 const at = new AnyTouch(el, { preventDefault: false });
 ```
-[:rocket: 返回目录](#目录)
-### 可以只有pinch/rotate才"阻止默认事件"吗?
-可以通过"preventDefaultExclude"选项实现:
 
-```javascript
-const at = new AnyTouch(el, {
-    preventDefault: true,
-    preventDefaultExclude(e) {
-        return 1 == e.touches.length;
-    },
-});
-```
 [:rocket: 返回目录](#目录)
+
