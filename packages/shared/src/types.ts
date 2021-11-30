@@ -177,6 +177,40 @@ export interface EventTrigger {
     (type: string): void;
 }
 
+
+import tap from '@any-touch/tap';
+import press from '@any-touch/press';
+import swipe from '@any-touch/swipe';
+import pan from '@any-touch/pan';
+import pinch from '@any-touch/pinch';
+import rotate from '@any-touch/rotate';
+
+export type TapContext = ReturnType<typeof tap>;
+export type PressContext = ReturnType<typeof press>;
+export type SwipeContext = ReturnType<typeof swipe>;
+export type PanContext = ReturnType<typeof pan>;
+export type PinchContext = ReturnType<typeof pinch>;
+export type RotateContext = ReturnType<typeof rotate>;
+
+/**
+ * 插件实例映射
+ * {名称: 插件实例}
+ */
+export interface PluginContextMap {
+    tap: TapContext;
+    press: PressContext;
+    swipe: SwipeContext;
+    pan: PanContext;
+    pinch: PinchContext;
+    rotate: RotateContext;
+}
+
+
+// export type C<Name extends string> = Name extends keyof PluginContextMap ? PluginContextMap[Name] : void;
+
+
+
+
 // 标准class
 // export interface StdClass {
 //     new(...args: any[]): any;
@@ -200,4 +234,4 @@ export type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) ex
 
 // export type UnionToIntersection1<U> = ((k: U) => void) extends ((k: infer I) => void) ? I : never;
 
-type Result = UnionToIntersection<{a:1} | {b:2}>; // T1 & T2
+type Result = UnionToIntersection<{ a: 1 } | { b: 2 }>; // T1 & T2

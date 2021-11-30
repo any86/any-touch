@@ -8,7 +8,6 @@ test(`向下划`, async done => {
     at.use(swipe);
     const mockCB =  jest.fn();
     const mockCB1 =  jest.fn();
-
     const gs = new GestureSimulator(el);
     at.on('swipe', mockCB);
     at.on('swipedown', mockCB1);

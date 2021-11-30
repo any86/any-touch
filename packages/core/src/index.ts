@@ -20,7 +20,7 @@ import type {
     ComputeFunctionCreator,
     PluginContext,
     Plugin,
-    Input,
+    Input, PluginContextMap,
 } from '@any-touch/shared';
 
 import {
@@ -188,7 +188,7 @@ export default class extends AnyEvent<EventNameMap> {
      * @param plugin 插件
      * @param pluginOptions 插件选项
      */
-    use<P extends Plugin = Plugin>(plugin: P, pluginOptions?: Parameters<P>[1]) {
+    use<P extends Plugin>(plugin: P, pluginOptions?: Parameters<P>[1]) {
         this.__plugins.push(plugin(this, pluginOptions));
     }
 
@@ -225,7 +225,7 @@ export default class extends AnyEvent<EventNameMap> {
                 }
             });
             // computed
-            this.emit(TYPE_COMPUTED, { ...input, ...computed,stopPropagation,stopImmediatePropagation,preventDefault });
+            this.emit(TYPE_COMPUTED, { ...input, ...computed, stopPropagation, stopImmediatePropagation, preventDefault });
         }
     }
 
@@ -277,10 +277,10 @@ export default class extends AnyEvent<EventNameMap> {
      * @param name 识别器的名字
      * @return 返回识别器
      */
-    get(name: string) {
+    get<N extends keyof PluginContextMap>(name: N) {
         for (const pluginContext of this.__plugins) {
             if (name === pluginContext.name) {
-                return pluginContext;
+                return pluginContext as PluginContextMap[N];
             }
         }
     }
