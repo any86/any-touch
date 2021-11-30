@@ -1,6 +1,6 @@
 {
     "name": "any-touch",
-    "version": "1.0.14",
+    "version": "2.0.0-alpha.0",
     "description": "一个小巧的手势库",
     "unpkg": "dist/any-touch.umd.min.js",
     "jsdelivr": "dist/any-touch.umd.min.js",
@@ -22,14 +22,14 @@
     },
     "homepage": "https://github.com/any86/any-touch#readme",
     "dependencies": {
-        "@any-touch/core": "^1.0.14",
-        "@any-touch/pan": "^1.0.14",
-        "@any-touch/pinch": "^1.0.14",
-        "@any-touch/press": "^1.0.14",
-        "@any-touch/rotate": "^1.0.14",
-        "@any-touch/swipe": "^1.0.14",
-        "@any-touch/tap": "^1.0.14",
-        "any-event": "^1.0.14",
+        "@any-touch/core": "^2.0.0-alpha.0",
+        "@any-touch/pan": "^2.0.0-alpha.0",
+        "@any-touch/pinch": "^2.0.0-alpha.0",
+        "@any-touch/press": "^2.0.0-alpha.0",
+        "@any-touch/rotate": "^2.0.0-alpha.0",
+        "@any-touch/swipe": "^2.0.0-alpha.0",
+        "@any-touch/tap": "^2.0.0-alpha.0",
+        "any-event": "^2.0.0-alpha.0",
         "tslib": "^2.3.1"
     },
     "keywords": [
