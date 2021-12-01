@@ -36,7 +36,7 @@
 [🌈 进阶使用](#进阶使用)
 - [阻止默认事件](#阻止默认事件)
 - [双击(🥂doubletap)](#双击doubletap)
-
+- [typescript](#typescript)
 
 [:bulb: API](docs/API.md)
 
@@ -294,6 +294,41 @@ at.on('doubletap', onDoubleTap);
 
 **注意**: 同理可以实现"**3击**"或"**n击**".
 [:rocket: 返回目录](#目录)
+
+#### typescript
+针对自定义的手势, 比如上面的"双击", 在ts中我们是需要进行类型扩充的, 补充如下类型:
+```typescript
+// global.d.ts
+import tap from '@any-touch/tap';
+declare module '@any-touch/core' {
+    // 扩充at.get('doubletap')的标注
+    // 如不扩充, get返回的插件实例类型不完整.
+    export interface PluginContextMap {
+        doubletap: ReturnType<typeof tap>;
+    }
+
+    // 扩充at.on('doubletap',e=>{})中的e的值
+    export interface EventMap {
+        doubletap: AnyTouchEvent;
+    }
+}
+```
+
+当然不写声明文件也可以, **偷懒的方法是**:
+```typescript
+// 让"e"和tap事件的e的类型一致,
+// 毕竟都是tap识别器衍生的事件
+at.on('doubletap' as 'tap', e=>{});
+
+// 返回tap识别器的实例,
+// 其实就是同一个实例 
+at.get('doubletap' as 'tap');
+```
+**注意**: 上面2种写法都ok, 在这里写声明文件和断言其实没区别, 都可以正确的推导出其他部分的类型.
+[:rocket: 返回目录](#目录)
+
+
+
 
 ## 注意事项
 
