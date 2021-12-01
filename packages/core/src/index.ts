@@ -20,7 +20,7 @@ import type {
     ComputeFunctionCreator,
     PluginContext,
     Plugin,
-    Input, PluginContextMap,
+    Input,
 } from '@any-touch/shared';
 
 import {
@@ -92,10 +92,25 @@ type DefaultTypeNames =
     | 'at:move'
     | 'at:end'
     | 'at:cancel';
+
 /**
  * 默认的事件名和事件对象映射
  */
-type EventNameMap = { [k in DefaultTypeNames]: AnyTouchEvent } & { input: Input; computed: any; u: undefined };
+type DefaultEventNameMap = { [k in DefaultTypeNames]: AnyTouchEvent };
+export interface EventMap extends DefaultEventNameMap {
+    input: Input;
+    computed: any;
+    u: undefined;
+}
+/**
+ * 插件映射
+ * {名称: 插件实例}
+ * @example
+ * {tap:TapContext}
+ */
+export interface PluginContextMap {
+
+}
 
 /**
  * 手势库的核心,
@@ -107,7 +122,7 @@ type EventNameMap = { [k in DefaultTypeNames]: AnyTouchEvent } & { input: Input;
  * const at = new Core();
  * at.use(pan);
  */
-export default class extends AnyEvent<EventNameMap> {
+export default class extends AnyEvent<EventMap> {
     /**
      * 当前绑定元素
      */
@@ -301,7 +316,7 @@ export default class extends AnyEvent<EventNameMap> {
      */
     emit2(type: string, payload: Computed, pluginContext: PluginContext) {
         this.c = pluginContext;
-        this.emit(type as keyof EventNameMap, { ...payload, type });
+        this.emit(type as keyof EventMap, { ...payload, type });
         // this.emit('at:after',{...payload,name:type})
         const { target } = payload;
         const { domEvents } = this.__options;
