@@ -203,7 +203,7 @@ export default class extends AnyEvent<EventMap> {
      * @param plugin 插件
      * @param pluginOptions 插件选项
      */
-    use<P extends Plugin>(plugin: P, pluginOptions?: Parameters<P>[1]):void {
+    use<P extends Plugin>(plugin: P, pluginOptions?: Parameters<P>[1]): void {
         this.__pluginContexts.push(plugin(this, pluginOptions));
     }
 
@@ -211,7 +211,7 @@ export default class extends AnyEvent<EventMap> {
      * 监听input变化
      * @param event Touch / Mouse事件对象
      */
-    catchEvent(event: NativeEvent):void {
+    catchEvent(event: NativeEvent): void {
         // if (!event.cancelable) {
         //     this.emit('error', { code: 0, message: '页面滚动的时候, 请暂时不要操作元素!' });
         // }
@@ -292,7 +292,7 @@ export default class extends AnyEvent<EventMap> {
      * @param name 识别器的名字
      * @return 返回识别器
      */
-    get<N extends string>(name: N): GetPluginContext<N> {
+    get<N extends keyof PluginContextMap>(name: N): GetPluginContext<N> {
         return this.__pluginContexts.find(pluginContext => name === pluginContext.name) as GetPluginContext<N>;
     }
 
