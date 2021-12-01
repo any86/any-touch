@@ -140,7 +140,7 @@ export default class extends AnyEvent<EventMap> {
     // 计算函数生成器仓库
     private __computeFunctionCreatorList: ComputeFunctionCreator[] = [];
     // 插件
-    private __plugins: PluginContext[] = [];
+    private __pluginContexts: PluginContext[] = [];
 
     /**
      * @param el 目标元素, 微信下没有el
@@ -203,15 +203,15 @@ export default class extends AnyEvent<EventMap> {
      * @param plugin 插件
      * @param pluginOptions 插件选项
      */
-    use<P extends Plugin>(plugin: P, pluginOptions?: Parameters<P>[1]) {
-        this.__plugins.push(plugin(this, pluginOptions));
+    use<P extends Plugin>(plugin: P, pluginOptions?: Parameters<P>[1]):void {
+        this.__pluginContexts.push(plugin(this, pluginOptions));
     }
 
     /**
      * 监听input变化
      * @param event Touch / Mouse事件对象
      */
-    catchEvent(event: NativeEvent) {
+    catchEvent(event: NativeEvent):void {
         // if (!event.cancelable) {
         //     this.emit('error', { code: 0, message: '页面滚动的时候, 请暂时不要操作元素!' });
         // }
@@ -292,12 +292,8 @@ export default class extends AnyEvent<EventMap> {
      * @param name 识别器的名字
      * @return 返回识别器
      */
-    get<N extends keyof PluginContextMap>(name: N) {
-        for (const pluginContext of this.__plugins) {
-            if (name === pluginContext.name) {
-                return pluginContext as PluginContextMap[N];
-            }
-        }
+    get<N extends string>(name: N): GetPluginContext<N> {
+        return this.__pluginContexts.find(pluginContext => name === pluginContext.name) as GetPluginContext<N>;
     }
 
     /**
@@ -337,3 +333,5 @@ export default class extends AnyEvent<EventMap> {
         super.destroy();
     }
 }
+
+type GetPluginContext<N> = N extends keyof PluginContextMap ? PluginContextMap[N] : (PluginContext | undefined);

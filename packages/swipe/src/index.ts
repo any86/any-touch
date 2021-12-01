@@ -1,4 +1,5 @@
-import { TYPE_END, STATE, createPluginContext, TYPE_COMPUTED } from '@any-touch/shared';
+import { TYPE_END, STATE, createPluginContext } from '@any-touch/shared';
+import type { PluginContext } from '@any-touch/shared';
 import { ComputeDistance, ComputeVAndDir, ComputeMaxLength } from '@any-touch/compute';
 import Core from '@any-touch/core';
 const DEFAULT_OPTIONS = {
@@ -9,12 +10,26 @@ const DEFAULT_OPTIONS = {
 };
 
 /**
+ * 实例
+ */
+type SwipeContext = PluginContext & typeof DEFAULT_OPTIONS;
+
+/**
+ * 扩展插件映射
+ */
+declare module '@any-touch/core' {
+    interface PluginContextMap {
+        swipe: SwipeContext;
+    }
+}
+
+/**
  * "拖拽"识别器
  * @param at AnyTouch实例
  * @param options 识别器选项
  * @returns
  */
-export default function (at: Core, options?: Partial<typeof DEFAULT_OPTIONS>) {
+export default function (at: Core, options?: Partial<typeof DEFAULT_OPTIONS>): SwipeContext {
     const context = createPluginContext(DEFAULT_OPTIONS, options);
 
     // 加载计算方法

@@ -41,8 +41,8 @@
  *             结束
  */
 import AnyTouch from 'any-touch';
-import type { Point, Input, Computed, PluginContext } from '@any-touch/shared';
-import { STATE, TYPE_COMPUTED, TYPE_END, createPluginContext, isDisabled } from '@any-touch/shared';
+import type { Point, PluginContext } from '@any-touch/shared';
+import { STATE, TYPE_END, createPluginContext, isDisabled } from '@any-touch/shared';
 import { getVLength } from '@any-touch/vector';
 import { ComputeDistance, ComputeMaxLength } from '@any-touch/compute';
 const DEFAULT_OPTIONS = {
@@ -62,12 +62,27 @@ const DEFAULT_OPTIONS = {
     // 从接触到离开屏幕的最大时间
     maxPressTime: 250,
 };
+
+/**
+ * 实例
+ */
+type TapContext = PluginContext & typeof DEFAULT_OPTIONS;
+
+/**
+ * 扩展插件映射
+ */
+declare module '@any-touch/core' {
+    interface PluginContextMap {
+        tap: TapContext;
+    }
+}
+
 /**
  * "单击"识别器
  * @param at AnyTouch实例
  * @param options 识别器选项
  */
-export default function (at: AnyTouch, options?: Partial<typeof DEFAULT_OPTIONS>) {
+export default function (at: AnyTouch, options?: Partial<typeof DEFAULT_OPTIONS>): TapContext {
     const context = createPluginContext(DEFAULT_OPTIONS, options);
 
     let tapCount = 0;
@@ -186,5 +201,3 @@ export default function (at: AnyTouch, options?: Partial<typeof DEFAULT_OPTIONS>
 
     return context;
 }
-
-

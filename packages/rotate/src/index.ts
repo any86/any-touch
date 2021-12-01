@@ -1,6 +1,6 @@
-import type { PluginContext, Computed } from '@any-touch/shared';
+import type { PluginContext } from '@any-touch/shared';
 import {
-    isRecognized, TYPE_COMPUTED,
+    isRecognized,
     resetState,
     isDisabled,
     flow,
@@ -17,6 +17,22 @@ const DEFAULT_OPTIONS = {
     threshold: 0,
     pointLength: 2,
 };
+
+/**
+ * 实例
+ */
+type RotateContext = PluginContext & typeof DEFAULT_OPTIONS;
+
+/**
+ * 扩展插件映射
+ */
+declare module '@any-touch/core' {
+    interface PluginContextMap {
+        rotate: RotateContext;
+    }
+}
+
+
 
 /**
  * "旋转"识别器
