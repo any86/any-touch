@@ -36,6 +36,7 @@ module.exports = {
                 }),
 
                 replace({
+                    preventAssignment:true,
                     __VERSION__: version,
                     // 计算函数的id
                     // __ComputeAngle__: 'a',
