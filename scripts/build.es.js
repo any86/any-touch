@@ -11,6 +11,7 @@ walkPackageDirs((dirName) => {
         output: {
             file: `./packages/${dirName}/dist/index.es.js`,
             format: 'esm',
+            sourcemap:true,
         },
         external: id => ['any-event', 'any-touch', 'tslib'].includes(id) || /^@/.test(id),
         tsConfig: {

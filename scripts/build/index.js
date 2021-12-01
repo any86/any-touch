@@ -32,7 +32,7 @@ module.exports = {
                 typescript({
                     exclude: 'node_modules/**',
                     typescript: require('typescript'),
-                    ...tsConfig
+                    ...tsConfig,
                 }),
 
                 replace({
@@ -40,18 +40,12 @@ module.exports = {
                     __VERSION__: version,
                     // 计算函数的id
                     // __ComputeAngle__: 'a',
-                    // __ComputeDeltaXY__: 'b',
-                    // __ComputeDistance__: 'c',
-                    // __ComputeMaxLength__: 'd',
-                    // __ComputeScale__: 'e',
-                    // __ComputeVAndDir__: 'f',
                 }),
 
                 json(),
                 terser,
             ],
             external,
-            output:{sourcemap:true}
         });
         // console.log(bundle.watchFiles); // an array of file names this bundle depends on
         await bundle.write(output);
