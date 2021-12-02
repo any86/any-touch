@@ -17,6 +17,7 @@
                 :key="index"
                 :index="index"
                 @at:start="onStart"
+                @at:after="onAfter"
                 @tap="onTap"
                 @pan="onPan"
                 @panstart="onPanstart($event, index)"
@@ -151,6 +152,11 @@ export default {
     },
 
     methods: {
+        onAfter(e){
+            if(/^at:/.test(e.name)) return;
+            const {name} = e;
+            this.data = {...e,type:name};
+        },
         add() {
             const style = { left: `50px`, top: `160px`, zIndex: 1, scale: 1, angle: 0 };
             this.styles.push(style);

@@ -101,6 +101,7 @@ export interface EventMap extends DefaultEventNameMap {
     input: Input;
     computed: any;
     u: undefined;
+    'at:after': Computed;
 }
 /**
  * 插件映射
@@ -313,14 +314,14 @@ export default class extends AnyEvent<EventMap> {
     emit2(type: string, payload: Computed, pluginContext: PluginContext) {
         this.c = pluginContext;
         this.emit(type as keyof EventMap, { ...payload, type });
-        // this.emit('at:after',{...payload,name:type})
+        this.emit('at:after', { ...payload, name: type })
         const { target } = payload;
         const { domEvents } = this.__options;
         // 触发DOM事件
         if (!!domEvents && void 0 !== this.el && !!target) {
             // 所以此处的target会自动冒泡到目标元素
             dispatchDomEvent(type, target, payload, domEvents);
-            // dispatchDomEvent(target, { ...payload, type:'at:after',name:type }, domEvents);
+            dispatchDomEvent('at:after', target, { ...payload, name: type }, domEvents);
         }
     }
 
