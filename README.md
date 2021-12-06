@@ -163,7 +163,7 @@ at.on(['swipe', 'press', 'rotate', 'pinch'], (e) => {});
 import Core from '@any-touch/core';
 import pan from '@any-touch/pan';
 // Core不识别任何手势.
-const at = Core(el);
+const at = new Core(el);
 // 加载pan
 at.use(pan);
 
