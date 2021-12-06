@@ -322,7 +322,7 @@ declare module '@any-touch/core' {
 at.on('doubletap' as 'tap', e=>{});
 
 // ⭐返回tap识别器的实例,
-// 其实就是同一个实例 
+// 其实就是同一个识别器的实例 
 at.get('doubletap' as 'tap');
 ```
 **注意**: 上面2种写法都ok, 在这里写声明文件和断言其实没区别, 都可以正确的推导出其他部分的类型.
