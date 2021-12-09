@@ -14,7 +14,10 @@
 - 通过6类手势可以**扩展**出更多手势.
 
 ## 🔥 v2.0
-2.0逻辑重构, **体积更小**, **typescript声明更全面**, **API无变化**, [欢迎大家体验](https://github.com/any86/any-touch/tree/v2#%E7%9B%AE%E5%BD%95).
+重构完毕, [欢迎大家体验](https://github.com/any86/any-touch/tree/v2#%E7%9B%AE%E5%BD%95).
+- 体积更小(1k - 4k)
+- Typescript声明更全面
+- API无变化
 ```shell
 yarn add any-touch@next
 ```
