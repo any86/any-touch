@@ -7,20 +7,21 @@ function computeVector(input: InputOnlyHasCurrent): Vector {
     }
 };
 
-const zero = { x: 0, y: 0 };
-
-
 /**
  * 
  * @param input 输入
  * @returns 记录多点输入时的"起/上一个/终"向量
  */
 export default function () {
-    let startVecotr: any;
-    let prevVecotr: any;
-    let activeVecotr: any;
+    let startVecotr: Vector;
+    let prevVecotr: Vector;
+    let activeVecotr: Vector | undefined;
 
     return function (input: Input) {
+        if (input.phase == 'end') {
+            console.log(input.points);
+
+        }
         const { prevInput, startMultiInput } = input;
         if (void 0 !== startMultiInput &&
             void 0 !== prevInput &&
@@ -31,6 +32,8 @@ export default function () {
             startVecotr = computeVector(startMultiInput);
             prevVecotr = computeVector(prevInput);
             activeVecotr = computeVector(input);
+        } else {
+            activeVecotr = void 0;
         }
 
         return {
