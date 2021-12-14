@@ -74,13 +74,18 @@ at.on('pan', (e) => console.log(e));
 
 [:rocket: 返回目录](#目录)
 
-## vue等框架中的简写
+## vue中的简写
 
-在vue中, 可在模版元素上直接使用"@tap"等语法监听手势事件. **react/angular**没有验证过, 但是因为tap/pan等按照原生事件格式封装的, 所以理论上也能在模板中直接绑定事件.
-
+默认所有手势都会触发原生DOM事件, 所以在vue中可在模版元素上直接使用"@tap"等语法监听手势事件.
 ```html
 <template>
-    <div @tap="onTap" @swipe="onSwipe" @press="onPress" @pan="onPan" @pinch="onPinch" @rotate="onRotate">
+    <div 
+        @tap="onTap" 
+        @swipe="onSwipe" 
+        @press="onPress" 
+        @pan="onPan" 
+        @pinch="onPinch" 
+        @rotate="onRotate">
         <p>Hello any-touch</p>
     </div>
 </template>
@@ -161,7 +166,7 @@ at.on(['swipe', 'press', 'rotate', 'pinch'], (e) => {});
 ```javascript
 // 只加载pan识别器(拖拽)
 import Core from '@any-touch/core';
-import pan from '@any-touch/pan';
+import pan from '@any-touch/pan
 // Core不识别任何手势.
 const at = new Core(el);
 // 加载pan
@@ -196,9 +201,9 @@ at.on('pan', e=>{});
 | ---------- | ---------------------------------------------------- | ----------------------------- |
 | **tap**    | tap                                                  | 单击                          |
 | **press**  | press / pressup                                      | 按压 / 松开                   |
-| **pan**    | pan / panstart / panmove / panend                    | 拖拽 / 拖拽开始 / 拖拽进行中 / 拖拽结束 |
+| **pan**    | pan / panstart / panmove / panend /panup/pandown/panright/panleft                   | 拖拽 / 拖拽开始 / 拖拽进行中 / 拖拽结束/ 上下左右滑动 |
 | **swipe**  | swipe / swipeup / swipedown / swiperight / swipeleft | 快划 / 不同方向快划           |
-| **pinch**  | pinch / pinchstart / pinchmove / pinchend            | 缩放 / 缩放开始 / 缩放进行中 / 缩放结束 |
+| **pinch**  | pinch / pinchstart / pinchmove / pinchend / pinchin /pinchout           | 缩放 / 缩放开始 / 缩放进行中 / 缩放结束 / 放大 / 缩小 |
 | **rotate** | rotate / rotatestart / rotatemove / rotateend        | 旋转 / 旋转开始 / 旋转进行中 / 旋转结束 |
 
 ```javascript

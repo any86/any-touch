@@ -59,6 +59,11 @@ export default function (at: Core, options?: Partial<typeof DEFAULT_OPTIONS>): P
         const { name } = context;
         if (isValid) {
             at.emit2(name, computed, context);
+            // pinchin | pinchout
+            const { deltaScale } = computed;
+            if (1 !== deltaScale) {
+                at.emit2(name + (1 < deltaScale ? 'in' : 'out'), computed, context);
+            }
         }
 
         const stateName = getStatusName(context.state);

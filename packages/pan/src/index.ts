@@ -45,6 +45,7 @@ export default function (at: Core, options?: Partial<typeof DEFAULT_OPTIONS>): P
         if (isValid) {
             const { name } = context;
             at.emit2(name, computed, context);
+            at.emit2(name + computed.direction, computed, context);
             at.emit2(name + getStatusName(context.state), computed, context);
         }
 
