@@ -1,7 +1,7 @@
 import {
     isDisabled,
     resetState,
-    TYPE_END, flow, getStatusName, createPluginContext, isRecognized
+    TYPE_END, flow, getStatusName, createPluginContext, isRecognized, TYPE_CANCEL
 } from '@any-touch/shared';
 import type { PluginContext } from '@any-touch/shared';
 import { ComputeDistance, ComputeDeltaXY, ComputeVAndDir } from '@any-touch/compute';
@@ -36,17 +36,19 @@ export default function (at: Core, options?: Partial<typeof DEFAULT_OPTIONS>): P
     at.compute([ComputeVAndDir, ComputeDistance, ComputeDeltaXY], computed => {
         // 重置status
         resetState(context);
-
         // 禁止
         if (isDisabled(context)) return;
         const isValid = test();
+
         context.state = flow(isValid, context.state, computed.phase);
 
         if (isValid) {
             const { name } = context;
             at.emit2(name, computed, context);
-            at.emit2(name + computed.direction, computed, context);
             at.emit2(name + getStatusName(context.state), computed, context);
+            if (![TYPE_END, TYPE_CANCEL].includes(computed.phase) && computed.direction) {
+                at.emit2(name + computed.direction, computed, context);
+            }
         }
 
         // 是否满足条件
@@ -57,7 +59,7 @@ export default function (at: Core, options?: Partial<typeof DEFAULT_OPTIONS>): P
                 ((isRecognized(state) || (context.threshold <= distance)) &&
                     context.pointLength === pointLength &&
                     void 0 !== direction) ||
-                (isRecognized(state) && TYPE_END === phase)
+                (isRecognized(state) && [TYPE_CANCEL, TYPE_END].includes(phase))
             );
         }
     });

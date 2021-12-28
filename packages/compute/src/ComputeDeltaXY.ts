@@ -20,7 +20,6 @@ export default function () {
                 deltaXYAngle = Math.round(radianToAngle(Math.acos(Math.abs(deltaX) / deltaXY)));
             }
         }
-
         return { deltaX, deltaY, deltaXYAngle };
     }
 }

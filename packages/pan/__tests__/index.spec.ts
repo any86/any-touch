@@ -45,7 +45,6 @@ test(`左拖拽`, async done => {
     await panSimulator(el, [{ x: 100, y: 100 }], [{ x: 0, y: 11 }]);
     expect(mockCB).toHaveBeenCalledTimes(2);
     expect(mockCB).toHaveBeenNthCalledWith(1, `left`);
-    expect(mockCB).toHaveBeenNthCalledWith(2, `left`);
     done();
 });
 

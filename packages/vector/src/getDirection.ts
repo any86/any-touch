@@ -6,7 +6,12 @@ import { directionString } from '@any-touch/shared';
  * @param x 事件开始到结束的X位移 
  * @param y 事件开始到结束的Y位移 
  */
-export default (x: number, y: number): directionString => {
+export default (x: number, y: number): directionString | undefined => {
+    // 不移动, 就没有方向
+    if (0 === x && 0 === y) {
+        return;
+    }
+
     if (Math.abs(x) >= Math.abs(y)) {
         return 0 < x ? DIRECTION_RIGHT : DIRECTION_LEFT;
     } else {

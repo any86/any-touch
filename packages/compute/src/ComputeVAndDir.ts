@@ -11,7 +11,7 @@ export default function () {
     let velocityY = 0;
     let speedX = 0;
     let speedY = 0;
-    let direction: directionString;
+    let direction: directionString|undefined;
     // 上一次发生计算时候参与计算的input
     let lastValidInput: InputOnlyHasCurrent | Input
     /**
@@ -33,7 +33,7 @@ export default function () {
                 speedY = Math.round(deltaY / deltaTime * 100) / 100;
                 velocityX = Math.abs(speedX);
                 velocityY = Math.abs(speedY);
-                direction = getDirection(deltaX, deltaY) || direction;
+                direction = getDirection(deltaX, deltaY);
                 // if(NONE === direction) console.warn({deltaX,deltaY},input.id,_lastValidInput.id );
                 lastValidInput = input;
             }

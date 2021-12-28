@@ -9,9 +9,9 @@ export default function () {
     let distanceX = 0;
     let distanceY = 0;
     let distance = 0;
-    let overallDirection: directionString;
+    let overallDirection: directionString|undefined;
 
-    return function (input: Input): { displacementX: number, displacementY: number, distanceX: number, distanceY: number, distance: number, overallDirection: directionString } {
+    return function (input: Input): { displacementX: number, displacementY: number, distanceX: number, distanceY: number, distance: number, overallDirection?: directionString } {
         const { phase, startInput } = input;
 
         if (TYPE_START === phase) {

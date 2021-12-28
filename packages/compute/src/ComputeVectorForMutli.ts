@@ -18,10 +18,6 @@ export default function () {
     let activeVecotr: Vector | undefined;
 
     return function (input: Input) {
-        if (input.phase == 'end') {
-            console.log(input.points);
-
-        }
         const { prevInput, startMultiInput } = input;
         if (void 0 !== startMultiInput &&
             void 0 !== prevInput &&
