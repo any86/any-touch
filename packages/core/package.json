@@ -1,6 +1,6 @@
 {
     "name": "@any-touch/core",
-    "version": "2.0.0",
+    "version": "2.0.1-alpha.0",
     "description": "any-touch核心程序, 主要用来兼容Mouse/Touch事件.",
     "unpkg": "dist/any-touch.js",
     "jsdelivr": "dist/any-touch.js",
@@ -21,8 +21,8 @@
     },
     "homepage": "https://github.com/any86/any-touch#readme",
     "dependencies": {
-        "@any-touch/shared": "^2.0.0",
-        "any-event": "^2.0.0"
+        "@any-touch/shared": "^2.0.1-alpha.0",
+        "any-event": "^2.0.1-alpha.0"
     },
     "keywords": [
         "touch",
