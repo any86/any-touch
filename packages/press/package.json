@@ -12,7 +12,6 @@
     ],
     "dependencies": {
         "@any-touch/compute": "^2.0.1",
-        "@any-touch/recognizer": "^1.0.14",
         "@any-touch/shared": "^2.0.1"
     },
     "publishConfig": {
