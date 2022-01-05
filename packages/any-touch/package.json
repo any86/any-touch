@@ -16,7 +16,7 @@
         "url": "git+https://github.com/any86/any-touch.git"
     },
     "author": "any86",
-    "license": "ISC",
+    "license": "MIT",
     "bugs": {
         "url": "https://github.com/any86/any-touch/issues"
     },

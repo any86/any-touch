@@ -5,7 +5,7 @@
     "main": "dist/index.js",
     "module": "dist/index.es.js",
     "author": "any86",
-    "license": "ISC",
+    "license": "MIT",
     "dependencies": {
         "@any-touch/shared": "^2.0.1"
     },

@@ -16,7 +16,7 @@
         "tslib": "^2.3.1"
     },
     "author": "any86",
-    "license": "ISC",
+    "license": "MIT",
     "sideEffects": false,
     "gitHead": "03d744cacb754f8dd381e8c9f18fc9c1db90f234"
 }

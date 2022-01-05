@@ -6,7 +6,7 @@
     "module": "./dist/index.es.js",
     "types": "dist/index.d.ts",
     "author": "any86",
-    "license": "ISC",
+    "license": "MIT",
     "dependencies": {
         "@any-touch/compute": "^2.0.1",
         "@any-touch/shared": "^2.0.1",
