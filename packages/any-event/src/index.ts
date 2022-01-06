@@ -21,7 +21,7 @@ type TypeAndEventListenerMap<EventMap = DefaultTypeAndEventMap> = Partial<{
 
 // 拦截器
 export interface Interceptor {
-    (context: any, next: () => void): void
+    (type: string | number | symbol, next: () => void): void
 }
 
 // Payloads 后面会自动转成数组
@@ -67,13 +67,15 @@ export default class AnyEvent<TypeAndEventMap extends DefaultTypeAndEventMap = D
      * @param payload 数据
      * @param done 运行成功执行
      */
-    emit<Key extends keyof TypeAndEventMap>(type: Key, payload?: TypeAndEventMap[Key]) {
+    emit<Key extends keyof TypeAndEventMap>(type: Key, payload?: TypeAndEventMap[Key], callback?: () => void) {
         if (void 0 !== this.__interceptor) {
-            this.__interceptor(this, () => {
+            this.__interceptor(type, () => {
                 this.__emit<Key, TypeAndEventMap[Key]>(type, payload);
+                callback && callback();
             });
         } else {
             this.__emit<Key, TypeAndEventMap[Key]>(type, payload);
+            callback && callback();
         }
     }
 
@@ -84,7 +86,7 @@ export default class AnyEvent<TypeAndEventMap extends DefaultTypeAndEventMap = D
                 listener(event);
             }
         }
-        this.event = event;
+        this.event = { ...event, __type: type };
     }
 
     /**

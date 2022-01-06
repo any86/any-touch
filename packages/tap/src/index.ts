@@ -66,7 +66,7 @@ const DEFAULT_OPTIONS = {
 /**
  * 实例
  */
-type TapContext = PluginContext & typeof DEFAULT_OPTIONS;
+export type TapContext = PluginContext & typeof DEFAULT_OPTIONS;
 
 /**
  * 扩展插件映射
@@ -146,7 +146,6 @@ export default function (at: AnyTouch, options?: Partial<typeof DEFAULT_OPTIONS>
             return interval < waitNextTapTime;
         }
     }
-
     at.compute([ComputeDistance, ComputeMaxLength], (computed) => {
         // 禁止
         if (isDisabled(context)) return;
@@ -156,6 +155,7 @@ export default function (at: AnyTouch, options?: Partial<typeof DEFAULT_OPTIONS>
         if (TYPE_END !== phase) return;
         context.state = STATE.POSSIBLE;
         // 每一次点击是否符合要求
+
         if (test()) {
             clearTimeout(countDownToFailTimer);
             // 判断2次点击之间的距离是否过大
@@ -170,7 +170,6 @@ export default function (at: AnyTouch, options?: Partial<typeof DEFAULT_OPTIONS>
             if (0 === tapCount % context.tapTimes) {
                 context.state = STATE.RECOGNIZED;
                 // 触发事件
-
                 at.emit2(context.name, computed, context);
                 reset();
             } else {

@@ -15,6 +15,8 @@ import swipe from '@any-touch/swipe';
 import press from '@any-touch/press';
 import pinch from '@any-touch/pinch';
 import rotate from '@any-touch/rotate';
+import doubletap from '@any-touch/doubletap';
+
 
 import {
     STATE
@@ -39,6 +41,7 @@ export default class extends Core {
     static press = press;
     static rotate = rotate;
     static pinch = pinch;
+    static doubletap = doubletap;
 
     constructor(el?: HTMLElement, options?: Options) {
         super(el, options);

@@ -20,8 +20,8 @@ test(`tap延迟300ms触发, 如果届时doubletap状态为"失败或可能"那�
     at.use(tap, { name: 'doubletap', tapTimes: 2 });
     const onTap = jest.fn();
     const onDoubleTap = jest.fn();
-    at.beforeEach((pluginContext, next) => {
-        if ('tap' === pluginContext.name) {
+    at.beforeEach((type, next) => {
+        if ('tap' === type) {
             debounce(() => {
                 const doubletap = at.get('doubletap');
                 if ([STATE.POSSIBLE, STATE.FAILED].includes(doubletap!.state)) next();
@@ -30,7 +30,6 @@ test(`tap延迟300ms触发, 如果届时doubletap状态为"失败或可能"那�
             next();
         }
     });
-    const b = at.get('rotate')
 
     at.on('tap', onTap);
     at.on('doubletap', onDoubleTap);

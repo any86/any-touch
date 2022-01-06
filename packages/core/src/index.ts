@@ -156,8 +156,8 @@ export default class extends AnyEvent<EventMap> {
     constructor(el?: HTMLElement, options?: Options) {
         super();
         this.el = el;
+        this.c = {} as PluginContext;
         this.__options = { ...DEFAULT_OPTIONS, ...options };
-
         // 之所以强制是InputCreatorFunction<SupportEvent>,
         // 是因为调用this.__inputCreatorMap[event.type]的时候还要判断类型,
         // 因为都是固定(touch&mouse)事件绑定好的, 没必要判断
@@ -172,6 +172,17 @@ export default class extends AnyEvent<EventMap> {
             [MOUSE_MOVE]: createInputFromMouse,
             [MOUSE_UP]: createInputFromMouse,
         };
+
+        // 触发DOM事件
+        this.on('at:after', payload => {
+            const { target, __type } = payload;
+            const { domEvents } = this.__options;
+            if (!!domEvents && void 0 !== this.el && !!target) {
+                // 所以此处的target会自动冒泡到目标元素
+                dispatchDomEvent(__type, target, payload, domEvents);
+                dispatchDomEvent('at:after', target, payload, domEvents);
+            }
+        });
 
         // 绑定事件
         if (void 0 !== el) {
@@ -281,15 +292,16 @@ export default class extends AnyEvent<EventMap> {
      * @param interceptor 拦截函数
      */
     beforeEach(
-        interceptor: (currentPluginContext: PluginContext & { event: AnyTouchEvent }, next: () => void) => void
+        interceptor: (type: string, next: () => void) => void
     ) {
-        super.beforeEach.call(this, (context, next) => {
+        super.beforeEach((type, next) => {
             // 跳过computed事件,
             // 只保留识别器通过emit2触发的事件
-            if (void 0 === context.c?.name) {
-                next();
+            if (this.c?.name) {
+                // console.log(this.c?.name);
+                interceptor(type as string, next);
             } else {
-                interceptor({ ...context.c, event: this.event }, next);
+                next();
             }
         });
     }
@@ -319,16 +331,10 @@ export default class extends AnyEvent<EventMap> {
      */
     emit2(type: string, payload: Computed, pluginContext: PluginContext) {
         this.c = pluginContext;
-        this.emit(type as keyof EventMap, { ...payload, type });
-        this.emit('at:after', { ...payload, name: type })
-        const { target } = payload;
-        const { domEvents } = this.__options;
-        // 触发DOM事件
-        if (!!domEvents && void 0 !== this.el && !!target) {
-            // 所以此处的target会自动冒泡到目标元素
-            dispatchDomEvent(type, target, payload, domEvents);
-            dispatchDomEvent('at:after', target, { ...payload, name: type }, domEvents);
-        }
+        this.emit(type as keyof EventMap, { ...payload, type }, () => {
+            this.emit('at:after', { ...payload, name: type, __type: type })
+        });
+        // this.c = {} as PluginContext;
     }
 
     /**

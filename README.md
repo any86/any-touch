@@ -22,7 +22,7 @@
 
 [简单演示](https://any86.github.io/any-touch)
 
-[衍生产物: 🌱any-scroll, 虚拟滚动](https://github.com/any86/any-scroll)
+[衍生产物: any-scroll(虚拟滚动)](https://github.com/any86/any-scroll)
 
 ## 目录
 
@@ -37,7 +37,7 @@
 
 [🌈 进阶使用](#进阶使用)
 - [阻止默认事件](#阻止默认事件)
-- [双击(🥂doubletap)](#双击doubletap)
+- [双击(🥂doubletap)](https://github.com/any86/any-touch/tree/master/packages/doubletap)
 - [typescript](#typescript)
 - ["at:xxx"统一事件](#atxxx事件)
 
@@ -234,73 +234,6 @@ const at = new AnyTouch(el, {
 ```
 参数"**e**"是原生事件对象, 移动端是[TouchEvent](https://developer.mozilla.org/zh-CN/docs/Web/API/TouchEvent), PC端是[MouseEvent](https://developer.mozilla.org/zh-CN/docs/Web/API/MouseEvent/MouseEvent).
 
-[:rocket: 返回目录](#目录)
-
-
-### 双击(doubletap)
-如果你只是想使用双击, 你可以直接复制下面的代码,不需要理解他, 如果你想自己生成更多的手势那么请阅读下面的文字.
-
-#### 识别器的状态
-tap/press/pan/swipe/pinch/rotate等手势的识别器对外都会暴露一个字段叫做"state", 也就是识别器当前的状态.
-
-状态的变化周期为: **"未知"=>"已识别(或识别失败)"**.
-
-如果是pan/press/pinch/rotate他们特殊一些, 是 **"未知"=>"开始识别(或识别失败)"=>"移动中"=>移动结束(已识别)"**
-
-|状态名称|代码|
-|---|---|
-|未知|0|
-|已识别|1|
-|失败|2|
-|取消|3|
-|开始|4|
-|移动中|5|
-|结束|1, 同已识别|
-
-#### 双击代码
-
-使用**beforeEach**拦截器, 在每个手势触发之前可以进行自定义拦截操作.
-
-hook 是个函数: `(context: PluginContext & { event: AnyTouchEvent }, next: () => void) => void`
-
-**context**: 对象,包含插件信息和事件对象的信息.
-
-**next**: 拦截函数, 只有执行了`next()`才会触发当前识别器对应的事件.
-
-**下面实现"双击"手势, 逻辑如下:**
-
-1. 使用tap插件定义"双击"识别功能.
-2. 使用"beforeEach"控制"单击 tap"事件延迟 300ms 触发.
-3. 如果 300ms 内出现了"双击 doubletap"事件, 那么阻止"单击 tap"触发.
-4. 这时只会有"双击 doubletap"触发.
-
-```javascript
-import Core from '@any-touch/core';
-import tap from '@any-touch/tap';
-const at = Core(el);
-at.use(tap, { name: 'doubletap', tapTimes: 2 });
-let timeID = null;
-at.beforeEach((context, next) => {
-    if ('tap' === context.name) {
-        clearTimeout(timeID);
-        timeID = setTimeout(() => {
-            const { state } = at.get('doubletap');
-            // 0: 未知, 2: 识别失败
-            const ok = [0, 2].includes(state);
-            if (ok) {
-                next();
-            }
-        }, 300);
-    } else {
-        next();
-    }
-});
-
-at.on('tap', onTap);
-at.on('doubletap', onDoubleTap);
-```
-
-**注意**: 同理可以实现"**3击**"或"**n击**".
 [:rocket: 返回目录](#目录)
 
 #### typescript

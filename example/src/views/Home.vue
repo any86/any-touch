@@ -30,7 +30,7 @@
                 :class="['circle']"
             >
                 <p style="font-size: 16px; border-bottom: 1px dashed #fff">👋可拖拽 / 缩放等...</p>
-                <input class="p-1 mt-1" placeholder="表单元素不阻止默认事件"/>
+                <input class="p-1 mt-1" placeholder="表单元素不阻止默认事件" />
                 <p>Top: {{ top }}</p>
                 <p>Left: {{ left }}</p>
                 <p>Scale: {{ scale }}</p>
@@ -100,62 +100,37 @@ export default {
                 { key: 'deltaScale', desc: '每次触发pinch的缩放增量' },
                 { key: 'scale', desc: '一个识别周期pinch的累计缩放量' },
                 { key: 'deltaAngle', desc: '每次触发rotate的选装增量' },
-                { key: 'angle', desc: '一个识别周期rotate的累计选装量' },
+                { key: 'angle', desc: '一个识别周期rotate的累计选装量' }
             ],
             action: '',
             data: {},
             styles: [
                 { left: `50px`, top: `160px`, zIndex: 1, scale: 1, angle: 0 },
                 { left: `50px`, top: `360px`, zIndex: 1, scale: 1, angle: 0 },
-                { left: `50px`, top: `560px`, zIndex: 1, scale: 1, angle: 0 },
-            ],
+                { left: `50px`, top: `560px`, zIndex: 1, scale: 1, angle: 0 }
+            ]
         };
     },
 
     mounted() {
         const at = new AnyTouch(this.$refs.panel);
-        // at.get('swipe').pointLength = 2;
-        // at.get('pinch').disabled=true;
-        // at.get('rotate').disabled=true;
 
-        at.use(AnyTouch.tap, { name: 'doubletap', tapTimes: 2 });
-        let timeID = null;
-        at.beforeEach((context, next) => {
-            // console.log(context.name,context.event.target);
-            if ('tap' === context.name) {
-                clearTimeout(timeID);
-                timeID = setTimeout(() => {
-                    const {state} = at.get('doubletap');
-                    const ok = [AnyTouch.STATE_POSSIBLE, AnyTouch.STATE_FAILED].includes(state);
-                    if (ok) {
-                        next();
-                    }
-                }, 300);
-            } else {
-                next();
-            }
-        });
-
-        // at.beforeEach((context, next) => {
-        //     console.log(context.name);
-
-        //     // console.log(AnyTouch.STATE.POSSIBLE);
-        //     if ('doubletap' == name) {
-        //         next();
-        //     }
-        //     // console.log(at.get('pan'));
-        // });
+        at.use(AnyTouch.doubletap);
 
         at.on('doubletap', () => {
-            console.warn('doubletap');
+            C(`doubletap`, '#fb0');
         });
+
+        // at.on('tap', () => {
+        //     C(`tap`, '#111');
+        // });
     },
 
     methods: {
-        onAfter(e){
-            if(/^at:/.test(e.name)) return;
-            const {name} = e;
-            this.data = {...e,type:name};
+        onAfter(e) {
+            if (/^at:/.test(e.name)) return;
+            const { name } = e;
+            this.data = { ...e, type: name };
         },
         add() {
             const style = { left: `50px`, top: `160px`, zIndex: 1, scale: 1, angle: 0 };
@@ -202,7 +177,7 @@ export default {
             ev.currentTarget.setAttribute('at', ev.type);
             this.styles[index].top = Math.round(parseInt(this.styles[index].top) + speedY * 120) + 'px';
             this.styles[index].left = Math.round(parseInt(this.styles[index].left) + speedX * 120) + 'px';
-            console.log('swipe')
+            console.log('swipe');
         },
 
         onPanstart(ev, index) {
@@ -223,8 +198,8 @@ export default {
         onStart(ev) {
             ev.currentTarget.setAttribute('at-phase', '');
             ev.currentTarget.setAttribute('at', '');
-        },
-    },
+        }
+    }
 };
 </script>
 
@@ -260,7 +235,9 @@ main {
     height: 100vh;
     width: 100%;
     header {
-        position: fixed;top:0;left:0;
+        position: fixed;
+        top: 0;
+        left: 0;
         display: flex;
         align-items: center;
         padding: 16px;
