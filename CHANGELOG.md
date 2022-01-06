@@ -2,7 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
-# [](https://github.com/any86/any-touch/compare/v0.7.9...v) (2020-08-28)
+<a name=""></a>
+# [](https://github.com/any86/any-touch/compare/v2.0.2-alpha.1...v) (2022-01-06)
 
 
 
