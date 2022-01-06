@@ -14,9 +14,6 @@
         "@any-touch/compute": "^2.0.2-alpha.1",
         "@any-touch/shared": "^2.0.2-alpha.1"
     },
-    "peerDependencies": {
-        "any-touch": "^2.0.1"
-    },
     "publishConfig": {
         "access": "public"
     },

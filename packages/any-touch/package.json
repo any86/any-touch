@@ -29,18 +29,9 @@
         "@any-touch/rotate": "^2.0.2-alpha.1",
         "@any-touch/swipe": "^2.0.2-alpha.1",
         "@any-touch/tap": "^2.0.2-alpha.1",
+        "@any-touch/doubletap": "^2.0.2-alpha.1",
         "any-event": "^2.0.2-alpha.1",
         "tslib": "^2.3.1"
-    },
-    "peerDependencies": {
-        "@any-touch/core": "^2.0.2-alpha.0",
-        "@any-touch/pan": "^2.0.2-alpha.0",
-        "@any-touch/pinch": "^2.0.2-alpha.0",
-        "@any-touch/press": "^2.0.2-alpha.0",
-        "@any-touch/rotate": "^2.0.2-alpha.0",
-        "@any-touch/swipe": "^2.0.2-alpha.0",
-        "@any-touch/tap": "^2.0.2-alpha.0",
-        "any-event": "^2.0.2-alpha.0"
     },
     "keywords": [
         "touch",
