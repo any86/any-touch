@@ -22,8 +22,6 @@
     "build:es": "node ./scripts/build.es",
     "build:umd": "node ./scripts/build.umd && node ./scripts/build.umd --compress",
     "build:dts": "rimraf packages/*/types && node ./scripts/build.dts",
-    "release": "npm run test && standard-version && npm run build && npm pub && git push",
-    "release-no-test": "standard-version && npm run build && npm pub && git push",
     "dev": "rollup -c  --watch --environment NODE_ENV:development",
     "test": "jest",
     "test:q": "jest --collectCoverage false",
@@ -72,5 +70,5 @@
     "zlib": "^1.0.5"
   },
   "sideEffects": false,
-  "version": null
+  "version": "2.0.2-alpha.1"
 }
