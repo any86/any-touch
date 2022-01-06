@@ -45,8 +45,11 @@
 
 [:lollipop: 事件对象(event)](docs/EVENT.md)
 
-[:heavy_exclamation_mark::heavy_exclamation_mark::heavy_exclamation_mark: 注意事项](#注意事项)
-
+[🍳 常见问题](#常见问题)
+- [不要用 alert 调试](#不要用-alert-调试)
+- [macos上的chrome浏览器触发touchend会比较慢](#macos-上的-chrome-浏览器触发-touchend-会比较慢)
+- [移动端尽量使用 tap 代理 click](#移动端尽量使用-tap-代理-click)
+- [使用pnpm提示找不到@any-touch/xxx](#使用pnpm提示找不到any-touchxxx)
 ## 安装
 
 ```javascript
@@ -289,7 +292,7 @@ at.on('at:after',e=>{
 ```
 [:rocket: 返回目录](#目录)
 
-## 注意事项
+## 常见问题
 
 ### 手势识别器的 name 字段必填
 
@@ -300,6 +303,8 @@ at.use(tap, { pointLength: 2, name: 'twoFingersTap' });
 at.on('twoFingersTap', onTwoFingersTap);
 ```
 
+[:rocket: 返回目录](#目录)
+
 ### 不要用 alert 调试
 
 :heavy_exclamation_mark::heavy_exclamation_mark::heavy_exclamation_mark: 在安卓手机的真机上, 如果`touchstart`或`touchmove`阶段触发了`alert`, 会出现后续的`touchmove/touchend`不触发的 bug. 所以请大家务必避免在手势的事件回调中使用`alert`.
@@ -307,9 +312,13 @@ at.on('twoFingersTap', onTwoFingersTap);
 
 如果仅仅是了在移动端调试, 请使用腾讯的[vconsole](https://github.com/Tencent/vConsole)
 
+[:rocket: 返回目录](#目录)
+
 ### macos 上的 chrome 浏览器触发 touchend 会比较慢
 
 由于上述原因, swipe 事件发生的会"慢半拍",所以请大家最终测试以手机效果为准.
+
+[:rocket: 返回目录](#目录)
 
 ### 移动端尽量使用 tap 代理 click
 
@@ -319,6 +328,21 @@ at.on('twoFingersTap', onTwoFingersTap);
 
 ```javascript
 const at = new AnyTouch(el, { preventDefault: false });
+```
+[:rocket: 返回目录](#目录)
+
+### 使用pnpm提示找不到@any-touch/xxx
+这是因为**pnpm不像yarn和npm, 其不会把any-touch依赖的包安装到node_modules目录的根**, 所以会提示找不到. [参考pnpm说明](https://pnpm.io/zh/faq#%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%881).
+
+如果使用pnpm, 那么只能通过手动安装包解决.
+```shell
+pnpm i -D @any-touch/core
+pnpm i -D @any-touch/tap
+pnpm i -D @any-touch/press
+pnpm i -D @any-touch/pan
+pnpm i -D @any-touch/swipe
+pnpm i -D @any-touch/pinch
+pnpm i -D @any-touch/rotate
 ```
 
 [:rocket: 返回目录](#目录)
