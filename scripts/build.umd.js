@@ -16,12 +16,13 @@ const options = {
         file: `./packages/any-touch/dist/any-touch.umd.js`,
         format: 'umd',
         name: 'AnyTouch',
+        sourcemap:true
     },
     tsConfig: {
         target: "ES5",
     },
     terser: terser({
-        include: [/^.+\.min\.js$/],
+        // include: [/^.+\.min\.js$/],
         output: {
             comments: false
         }
