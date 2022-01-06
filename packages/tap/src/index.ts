@@ -41,7 +41,7 @@
  *             结束
  */
 import AnyTouch from 'any-touch';
-import type { Point, PluginContext } from '@any-touch/shared';
+import type { Point, PluginContext,AnyTouchEvent } from '@any-touch/shared';
 import { STATE, TYPE_END, createPluginContext, isDisabled } from '@any-touch/shared';
 import { getVLength } from '@any-touch/vector';
 import { ComputeDistance, ComputeMaxLength } from '@any-touch/compute';
@@ -74,6 +74,10 @@ export type TapContext = PluginContext & typeof DEFAULT_OPTIONS;
 declare module '@any-touch/core' {
     interface PluginContextMap {
         tap: TapContext;
+    }
+
+    interface EventMap {
+        tap: AnyTouchEvent;
     }
 }
 

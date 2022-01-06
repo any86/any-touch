@@ -63,51 +63,21 @@ export const DEFAULT_OPTIONS: Options = {
     },
 };
 const TYPE_UNBIND = 'u';
-
-type DefaultTypeNames =
-    | 'tap'
-    | 'press'
-    | 'pressup'
-    | 'pan'
-    | 'panstart'
-    | 'panmove'
-    | 'panend'
-    | 'pancancel'
-    | 'panup'
-    | 'pandown'
-    | 'panright'
-    | 'panleft'
-    | 'swipe'
-    | 'swipeup'
-    | 'swiperight'
-    | 'swipedown'
-    | 'swipeleft'
-    | 'pinch'
-    | 'pinchstart'
-    | 'pinchmove'
-    | 'pinchend'
-    | 'pinchin'
-    | 'pinchout'
-    | 'pinchcancel'
-    | 'rotate'
-    | 'rotatestart'
-    | 'rotatemove'
-    | 'rotateend'
-    | 'rotatecancel'
-    | 'at:start'
-    | 'at:move'
-    | 'at:end'
-    | 'at:cancel';
+const TYPE_INPUT = 'input';
+const TYPE_AT_AFTER = 'at:after';
 
 /**
  * 默认的事件名和事件对象映射
  */
-type DefaultEventNameMap = { [k in DefaultTypeNames]: AnyTouchEvent };
-export interface EventMap extends DefaultEventNameMap {
+export interface EventMap {
     input: Input;
-    computed: any;
+    computed: Record<string, any>;
     u: undefined;
     'at:after': Computed;
+    'at:start': Input;
+    'at:move': Input;
+    'at:cancel': Input;
+    'at:end': Input;
 }
 /**
  * 插件映射
@@ -174,13 +144,13 @@ export default class extends AnyEvent<EventMap> {
         };
 
         // 触发DOM事件
-        this.on('at:after', payload => {
+        this.on(TYPE_AT_AFTER, payload => {
             const { target, __type } = payload;
             const { domEvents } = this.__options;
             if (!!domEvents && void 0 !== this.el && !!target) {
                 // 所以此处的target会自动冒泡到目标元素
                 dispatchDomEvent(__type, target, payload, domEvents);
-                dispatchDomEvent('at:after', target, payload, domEvents);
+                dispatchDomEvent(TYPE_AT_AFTER, target, payload, domEvents);
             }
         });
 
@@ -243,7 +213,7 @@ export default class extends AnyEvent<EventMap> {
             if (canPreventDefault(event, this.__options)) {
                 preventDefault();
             }
-            this.emit('input', input);
+            this.emit(TYPE_INPUT, input);
             this.emit2(`at:${input.phase}`, input as AnyTouchEvent, {} as PluginContext);
 
             // ====== 计算结果 ======
@@ -283,7 +253,7 @@ export default class extends AnyEvent<EventMap> {
             }
         }
         // 🍩computed
-        this.on(TYPE_COMPUTED, callback);
+        this.on(TYPE_COMPUTED, callback as ((computed: Computed) => void));
     }
 
     /**
@@ -332,7 +302,7 @@ export default class extends AnyEvent<EventMap> {
     emit2(type: string, payload: Computed, pluginContext: PluginContext) {
         this.c = pluginContext;
         this.emit(type as keyof EventMap, { ...payload, type }, () => {
-            this.emit('at:after', { ...payload, name: type, __type: type })
+            this.emit(TYPE_AT_AFTER, { ...payload, name: type, __type: type })
         });
         // this.c = {} as PluginContext;
     }

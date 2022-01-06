@@ -3,7 +3,7 @@ import {
     resetState,
     TYPE_END, flow, getStatusName, createPluginContext, isRecognized, TYPE_CANCEL
 } from '@any-touch/shared';
-import type { PluginContext } from '@any-touch/shared';
+import type { PluginContext, AnyTouchEvent } from '@any-touch/shared';
 import { ComputeDistance, ComputeDeltaXY, ComputeVAndDir } from '@any-touch/compute';
 import Core from '@any-touch/core';
 
@@ -12,7 +12,7 @@ const DEFAULT_OPTIONS = { name: 'pan', threshold: 10, pointLength: 1 };
 /**
  * 实例
  */
-type PanContext = PluginContext & typeof DEFAULT_OPTIONS;
+export type PanContext = PluginContext & typeof DEFAULT_OPTIONS;
 
 /**
  * 扩展插件映射
@@ -20,6 +20,18 @@ type PanContext = PluginContext & typeof DEFAULT_OPTIONS;
 declare module '@any-touch/core' {
     interface PluginContextMap {
         pan: PanContext;
+    }
+
+    interface EventMap {
+        pan: AnyTouchEvent;
+        panstart: AnyTouchEvent;
+        panmove: AnyTouchEvent;
+        panend: AnyTouchEvent;
+        pancancel: AnyTouchEvent;
+        panup: AnyTouchEvent;
+        pandown: AnyTouchEvent;
+        panright: AnyTouchEvent;
+        panleft: AnyTouchEvent;
     }
 }
 

@@ -1,4 +1,4 @@
-import type { PluginContext } from '@any-touch/shared';
+import type { PluginContext, AnyTouchEvent } from '@any-touch/shared';
 import {
     isRecognized,
     resetState,
@@ -29,6 +29,14 @@ type RotateContext = PluginContext & typeof DEFAULT_OPTIONS;
 declare module '@any-touch/core' {
     interface PluginContextMap {
         rotate: RotateContext;
+    }
+
+    interface EventMap {
+        rotate: AnyTouchEvent;
+        rotatestart: AnyTouchEvent;
+        rotatemove: AnyTouchEvent;
+        rotateend: AnyTouchEvent;
+        rotatecancel: AnyTouchEvent;
     }
 }
 

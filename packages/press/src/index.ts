@@ -2,7 +2,7 @@ import {
     createPluginContext, resetState, STATE, isDisabled, DIRECTION_UP, TYPE_CANCEL, TYPE_END, TYPE_START
 } from '@any-touch/shared';
 
-import type { PluginContext } from '@any-touch/shared';
+import type { PluginContext, AnyTouchEvent } from '@any-touch/shared';
 import { ComputeDistance } from '@any-touch/compute';
 import Core from '@any-touch/core';
 
@@ -12,7 +12,6 @@ const DEFAULT_OPTIONS = {
     maxDistance: 9,
     minPressTime: 251,
 };
-
 
 /**
  * 实例
@@ -25,6 +24,11 @@ type PressContext = PluginContext & typeof DEFAULT_OPTIONS;
 declare module '@any-touch/core' {
     interface PluginContextMap {
         press: PressContext;
+    }
+
+    interface EventMap {
+        press: AnyTouchEvent;
+        pressup: AnyTouchEvent;
     }
 }
 

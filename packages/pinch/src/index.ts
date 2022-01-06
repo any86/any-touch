@@ -1,4 +1,4 @@
-import type { PluginContext } from '@any-touch/shared';
+import type { PluginContext, AnyTouchEvent } from '@any-touch/shared';
 import {
     TYPE_END,
     TYPE_CANCEL,
@@ -33,6 +33,17 @@ type PinchContext = PluginContext & typeof DEFAULT_OPTIONS;
 declare module '@any-touch/core' {
     interface PluginContextMap {
         pinch: PinchContext;
+
+    }
+
+    interface EventMap {
+        pinch: AnyTouchEvent;
+        pinchstart: AnyTouchEvent;
+        pinchmove: AnyTouchEvent;
+        pinchend: AnyTouchEvent;
+        pinchcancel: AnyTouchEvent;
+        pinchin: AnyTouchEvent;
+        pinchout: AnyTouchEvent;
     }
 }
 

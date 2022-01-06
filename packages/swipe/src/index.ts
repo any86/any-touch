@@ -1,5 +1,5 @@
 import { TYPE_END, STATE, createPluginContext } from '@any-touch/shared';
-import type { PluginContext } from '@any-touch/shared';
+import type { PluginContext, AnyTouchEvent } from '@any-touch/shared';
 import { ComputeDistance, ComputeVAndDir, ComputeMaxLength } from '@any-touch/compute';
 import Core from '@any-touch/core';
 const DEFAULT_OPTIONS = {
@@ -20,6 +20,14 @@ type SwipeContext = PluginContext & typeof DEFAULT_OPTIONS;
 declare module '@any-touch/core' {
     interface PluginContextMap {
         swipe: SwipeContext;
+    }
+
+    interface EventMap {
+        swipe: AnyTouchEvent;
+        swipeup: AnyTouchEvent;
+        swiperight: AnyTouchEvent;
+        swipedown: AnyTouchEvent;
+        swipeleft: AnyTouchEvent;
     }
 }
 
