@@ -11,6 +11,9 @@
         "@any-touch/compute": "^2.0.1",
         "@any-touch/shared": "^2.0.1"
     },
+    "peerDependencies": {
+        "any-touch": "^2.0.1"
+    },
     "files": [
         "dist/*"
     ],

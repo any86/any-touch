@@ -13,6 +13,9 @@
     "dependencies": {
         "@any-touch/compute": "^2.0.1"
     },
+    "peerDependencies": {
+        "any-touch": "^2.0.1"
+    },
     "publishConfig": {
         "access": "public"
     },

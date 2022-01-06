@@ -24,6 +24,9 @@
         "@any-touch/shared": "^2.0.1",
         "any-event": "^2.0.1"
     },
+    "peerDependencies": {
+        "any-event": "^2.0.1"
+    },
     "keywords": [
         "touch",
         "mouse",

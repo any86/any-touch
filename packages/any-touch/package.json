@@ -32,6 +32,9 @@
         "any-event": "^2.0.1",
         "tslib": "^2.3.1"
     },
+    "peerDependencies": {
+        "@any-touch/core": "^2.0.1"
+    },
     "keywords": [
         "touch",
         "mouse",
