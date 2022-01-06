@@ -7,14 +7,14 @@ export interface DefaultTypeAndEventMap {
 
 
 // 事件回调
-export interface AEventListener<Event> {
-    (event: Event): void;
+export interface AEventListener<Event,Key> {
+    (event: Event, key:Key): void;
 }
 
 
 // 事件名 : 回调函数
 type TypeAndEventListenerMap<EventMap = DefaultTypeAndEventMap> = Partial<{
-    [Key in keyof EventMap]: AEventListener<EventMap[Key]>[];
+    [Key in keyof EventMap]: AEventListener<EventMap[Key],Key>[];
 }>
 
 // type Covert2Array<T> = T extends unknown[] ? T : T[];
@@ -49,7 +49,7 @@ export default class AnyEvent<TypeAndEventMap extends DefaultTypeAndEventMap = D
      * @param typeOrTypes 事件名
      * @param listener 回调函数
      */
-    on<Key extends keyof TypeAndEventMap>(typeOrTypes: Key | Key[], listener: AEventListener<TypeAndEventMap[Key]>): this {
+    on<Key extends keyof TypeAndEventMap>(typeOrTypes: Key | Key[], listener: AEventListener<TypeAndEventMap[Key],Key>): this {
         const types = Array.isArray(typeOrTypes) ? typeOrTypes : [typeOrTypes];
         for (const type of types) {
             this.__map[type] = this.__map[type] || [];
@@ -83,10 +83,10 @@ export default class AnyEvent<TypeAndEventMap extends DefaultTypeAndEventMap = D
         const listeners = this.__map[type];
         if (Array.isArray(listeners) && listeners?.length) {
             for (const listener of listeners) {
-                listener(event);
+                listener(event,type);
             }
         }
-        this.event = { ...event, __type: type };
+        this.event = event;
     }
 
     /**
@@ -96,7 +96,7 @@ export default class AnyEvent<TypeAndEventMap extends DefaultTypeAndEventMap = D
      * @param type 事件名
      * @param listener 回调函数
      */
-    off<Key extends keyof TypeAndEventMap>(type: Key, listener?: AEventListener<TypeAndEventMap[Key]>) {
+    off<Key extends keyof TypeAndEventMap>(type: Key, listener?: AEventListener<TypeAndEventMap[Key],Key>) {
         const listeners = this.__map[type];
         // 事件存在
         if (void 0 !== listeners) {
