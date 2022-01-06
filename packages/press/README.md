@@ -6,8 +6,9 @@
 // 只加载press识别器(按压)
 import Core from '@any-touch/core';
 import press from '@any-touch/press';
-Core.use(press, 参数)
 const at = new Core(el);
+at.use(press, 参数)
+
 // 按压
 at.on('press', (event) => {
     // event包含位置/速度/方向等信息

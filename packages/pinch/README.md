@@ -6,9 +6,10 @@
 // 只加载pinch识别器(拖拽)
 import Core from '@any-touch/core';
 import pinch from '@any-touch/pinch';
-Core.use(pinch, 参数)
 const at = new Core(el);
-// 拖拽
+at.use(pinch, 参数)
+
+// 缩放
 at.on('pinch', (event) => {
     // event包含位置/速度/方向等信息
 });

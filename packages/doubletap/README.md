@@ -6,8 +6,9 @@
 // 只加载tap识别器(拖拽)
 import Core from '@any-touch/core';
 import doubletap from '@any-touch/doubletap';
-Core.use(doubletap)
 const at = new Core(el);
+at.use(doubletap)
+
 // 双击
 at.on('doubletap', (event) => {
     console.log(event) // 包含点击位置信息

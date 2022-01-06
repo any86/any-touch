@@ -3,12 +3,13 @@
 
 ## 快速开始
 ```javascript
-// 只加载rotate识别器(拖拽)
+// 只加载rotate识别器(旋转)
 import Core from '@any-touch/core';
 import rotate from '@any-touch/rotate';
-Core.use(rotate, 参数)
 const at = new Core(el);
-// 拖拽
+at.use(rotate, 参数)
+
+// 旋转
 at.on('rotate', (event) => {
     // event包含位置/速度/方向等信息
 });

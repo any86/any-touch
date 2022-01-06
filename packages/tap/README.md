@@ -3,12 +3,13 @@
 
 ## 快速开始
 ```javascript
-// 只加载tap识别器(拖拽)
+// 只加载tap识别器(点击)
 import Core from '@any-touch/core';
 import tap from '@any-touch/tap';
-Core.use(tap, 参数)
 const at = new Core(el);
-// 拖拽
+at.use(tap, 参数)
+
+// 点击
 at.on('tap', (event) => {
     // event包含位置/速度/方向等信息
 });
@@ -25,4 +26,3 @@ at.on('tap', (event) => {
 |maxDistance| `Number`|2|从接触到离开允许产生的最大距离|
 |tapTmaxDistanceFromPrevTapimes| `Number`|9|2次点击之间允许的最大位移|
 |maxPressTime| `Number`|250|从接触到离开屏幕的最大容忍时间|
-

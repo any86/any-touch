@@ -6,8 +6,9 @@
 // 只加载pan识别器(拖拽)
 import Core from '@any-touch/core';
 import pan from '@any-touch/pan';
-Core.use(pan, 参数)
 const at = new Core(el);
+at.use(pan, 参数)
+
 // 拖拽
 at.on('pan', (event) => {
     // event包含位置/速度/方向等信息
