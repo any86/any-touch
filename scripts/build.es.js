@@ -15,7 +15,7 @@ walkPackageDirs((dirName) => {
         },
         external: id => ['any-event', 'any-touch', 'tslib'].includes(id) || /^@/.test(id),
         tsConfig: {
-            target: 'ES5',
+            target: 'ES6',
             module: "ESNEXT",
         }, terser: terser({
             // include: [/^.+\.prod\.js$/],
