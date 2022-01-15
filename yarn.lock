@@ -2,18 +2,6 @@
 # yarn lockfile v1
 
 
-"@any-touch/recognizer@^1.0.14":
-  version "1.0.15"
-  resolved "https://registry.yarnpkg.com/@any-touch/recognizer/-/recognizer-1.0.15.tgz#6b14e180874a081f176f168ff31045fe11949f3e"
-  integrity sha512-9vpWQLO2DyUMN3zN+C5lHqhR/vKg5FE7CVkcNu3tb+cXo8jr0RgDSmoe6evgP4TsB3BEYQ3xMu6vsp40uJK4VQ==
-  dependencies:
-    "@any-touch/shared" "^1.0.15"
-
-"@any-touch/shared@^1.0.15":
-  version "1.0.15"
-  resolved "https://registry.yarnpkg.com/@any-touch/shared/-/shared-1.0.15.tgz#6bdc20d121080e5cdcc89bde53a0fb7ab2939d79"
-  integrity sha512-JRtA6h0Wa2gImvPpsM5JATxCK6t7ezBEEVN6ZsB6v3FAK/QmxrnA0O6W4liai7jKj1tA7JLtsRCZJ9v4CWFxsA==
-
 "@babel/code-frame@^7.0.0", "@babel/code-frame@^7.10.4", "@babel/code-frame@^7.16.0":
   version "7.16.0"
   resolved "https://registry.yarnpkg.com/@babel/code-frame/-/code-frame-7.16.0.tgz#0dfc80309beec8411e65e706461c408b0bb9b431"
@@ -6689,9 +6677,9 @@ shell-quote@^1.6.1:
   integrity sha512-Vpfqwm4EnqGdlsBFNmHhxhElJYrdfcxPThu+ryKS5J8L/fhAwLazFZtq+S+TWZ9ANj2piSQLGj6NQg+lKPmxrw==
 
 shelljs@^0.8.3:
-  version "0.8.4"
-  resolved "https://registry.yarnpkg.com/shelljs/-/shelljs-0.8.4.tgz#de7684feeb767f8716b326078a8a00875890e3c2"
-  integrity sha512-7gk3UZ9kOfPLIAbslLzyWeGiEqx9e3rxwZM0KE6EL8GlGwjym9Mrlx5/p33bWTu9YG6vcS4MBxYZDHYr5lr8BQ==
+  version "0.8.5"
+  resolved "https://registry.yarnpkg.com/shelljs/-/shelljs-0.8.5.tgz#de055408d8361bed66c669d2f000538ced8ee20c"
+  integrity sha512-TiwcRcrkhHvbrZbnRcFYMLl30Dfov3HKqzp5tO5b4pt6G/SezKcYhmDg15zXVBswHmctSAQKznqNW2LO5tTDow==
   dependencies:
     glob "^7.0.0"
     interpret "^1.0.0"
