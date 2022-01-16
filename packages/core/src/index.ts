@@ -52,7 +52,7 @@ export interface Options {
 /**
  * 默认设置
  */
-export const DEFAULT_OPTIONS: Options = {
+const DEFAULT_OPTIONS: Options = {
     domEvents: { bubbles: true, cancelable: true },
     preventDefault: (event) => {
         if (event.target && 'tagName' in event.target) {
@@ -65,6 +65,7 @@ export const DEFAULT_OPTIONS: Options = {
 const TYPE_UNBIND = 'u';
 const TYPE_INPUT = 'input';
 const TYPE_AT_AFTER = 'at:after';
+type GetPluginContext<N> = N extends keyof PluginContextMap ? PluginContextMap[N] : (PluginContext | undefined);
 
 /**
  * 默认的事件名和事件对象映射
@@ -100,6 +101,10 @@ export interface PluginContextMap {
  * at.use(pan);
  */
 export default class extends AnyEvent<EventMap> {
+    /**
+     * 版本
+     */
+    v = '__VERSION__';
     /**
      * 当前绑定元素
      */
@@ -316,5 +321,3 @@ export default class extends AnyEvent<EventMap> {
         super.destroy();
     }
 }
-
-type GetPluginContext<N> = N extends keyof PluginContextMap ? PluginContextMap[N] : (PluginContext | undefined);

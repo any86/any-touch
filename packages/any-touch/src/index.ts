@@ -26,7 +26,6 @@ import {
 import { Options } from '@any-touch/core';
 
 export default class extends Core {
-    static version = '__VERSION__';
     // 状态码
     static STATE_POSSIBLE = STATE.POSSIBLE;
     static STATE_START = STATE.START;

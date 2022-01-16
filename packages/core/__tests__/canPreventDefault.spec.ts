@@ -1,5 +1,16 @@
 import canPreventDefault from '../src/canPreventDefault';
-import { DEFAULT_OPTIONS } from '@any-touch/core';
+import type { Options } from '@any-touch/core';
+const DEFAULT_OPTIONS: Options = {
+    domEvents: { bubbles: true, cancelable: true },
+    preventDefault: (event) => {
+        if (event.target && 'tagName' in event.target) {
+            const { tagName } = event.target;
+            return !/^(?:INPUT|TEXTAREA|BUTTON|SELECT)$/.test(tagName);
+        }
+        return false;
+    },
+};
+
 test('isPreventDefaul=false, 那么canPreventDefault === false', () => {
     const event = new TouchEvent('touchstart', { cancelable: true });
     expect(canPreventDefault(event, { preventDefault: false })).toBeFalsy();

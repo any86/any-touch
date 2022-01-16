@@ -11,14 +11,13 @@ walkPackageDirs((dirName) => {
         output: {
             file: `./packages/${dirName}/dist/index.es.js`,
             format: 'esm',
-            sourcemap:true,
+            sourcemap: true,
         },
         external: id => ['any-event', 'any-touch', 'tslib'].includes(id) || /^@/.test(id),
         tsConfig: {
             target: 'ES6',
             module: "ESNEXT",
         }, terser: terser({
-            // include: [/^.+\.prod\.js$/],
             output: {
                 comments: false
             }

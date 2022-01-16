@@ -1,7 +1,7 @@
 // interface AddEvent{
 //     <K extends keyof WindowEventMap>(type: K, listener: (this: Window, ev: WindowEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
 
-//     <K extends keyof HTMLElementEventMap>(el: HTMLElement, type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void 
+//     <K extends keyof HTMLElementEventMap>(el: HTMLElement, type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void
 // }
 // function addEvent<K extends keyof WindowEventMap>(target:Window,type: K, listener: (this: Window, ev: WindowEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
 
@@ -14,30 +14,39 @@
 import type { NativeEvent } from '@any-touch/shared';
 
 import { TOUCH_START, TOUCH_MOVE, TOUCH_END, TOUCH_CANCEL, MOUSE_DOWN, MOUSE_MOVE, MOUSE_UP } from '@any-touch/shared';
-const TOUCH_EVENTS = [TOUCH_START, TOUCH_MOVE, TOUCH_END, TOUCH_CANCEL];
 
+type WType = typeof MOUSE_MOVE | typeof MOUSE_UP;
+type EType = typeof TOUCH_START | typeof TOUCH_MOVE | typeof TOUCH_END | typeof TOUCH_CANCEL;
+
+
+
+
+
+const eTypes = [TOUCH_START, TOUCH_MOVE, TOUCH_END, TOUCH_CANCEL, MOUSE_DOWN];
+const wTypes = [MOUSE_MOVE, MOUSE_UP];
 /*
-* 根据输入设备绑定事件
-*/
+ * 根据输入设备绑定事件
+ */
 export default function (
     el: HTMLElement,
     catchEvent: (e: NativeEvent) => void,
-    options?: boolean | AddEventListenerOptions,
+    options?: boolean | AddEventListenerOptions
 ): () => void {
-    TOUCH_EVENTS.forEach(eventName => {
-        el.addEventListener(eventName, catchEvent, options);
+    eTypes.forEach((type) => {
+        el.addEventListener(type, catchEvent, options);
     });
 
-    el.addEventListener(MOUSE_DOWN, catchEvent, options);
-    window.addEventListener(MOUSE_MOVE, catchEvent, options);
-    window.addEventListener(MOUSE_UP, catchEvent, options);
+    wTypes.forEach((type) => {
+        window.addEventListener(type, catchEvent, options);
+    });
 
     return () => {
-        TOUCH_EVENTS.forEach(eventName => {
-            el.removeEventListener(eventName, catchEvent);
+        eTypes.forEach((types) => {
+            el.removeEventListener(types, catchEvent);
         });
-        el.removeEventListener(MOUSE_DOWN, catchEvent, options);
-        window.removeEventListener(MOUSE_MOVE, catchEvent, options);
-        window.removeEventListener(MOUSE_UP, catchEvent, options);
+
+        wTypes.forEach((type) => {
+            window.removeEventListener(type, catchEvent);
+        });
     };
 }
