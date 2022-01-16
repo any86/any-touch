@@ -9,7 +9,7 @@
         // import * as React from "react"
         "esModuleInterop": true,
         // 目标js的版本
-        "target": "ES5",
+        "target": "ES6",
         // 目标代码的模块结构版本
         // "module": "CommonJS",
         // 在表达式和声明上有隐含的 any类型时报错。

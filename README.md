@@ -336,13 +336,7 @@ const at = new AnyTouch(el, { preventDefault: false });
 
 如果使用pnpm, 那么只能通过手动安装包解决.
 ```shell
-pnpm i -D @any-touch/core
-pnpm i -D @any-touch/tap
-pnpm i -D @any-touch/press
-pnpm i -D @any-touch/pan
-pnpm i -D @any-touch/swipe
-pnpm i -D @any-touch/pinch
-pnpm i -D @any-touch/rotate
+pnpm i @any-touch/core @any-touch/tap @any-touch/press @any-touch/pan @any-touch/swipe @any-touch/pinch @any-touch/rotate
 ```
 
 [:rocket: 返回目录](#目录)
