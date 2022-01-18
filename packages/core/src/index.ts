@@ -59,6 +59,7 @@ const DEFAULT_OPTIONS: Options = {
             const { tagName } = event.target;
             return !/^(?:INPUT|TEXTAREA|BUTTON|SELECT)$/.test(tagName);
         }
+        /* istanbul ignore next */
         return false;
     },
 };
