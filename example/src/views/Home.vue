@@ -113,7 +113,7 @@ export default {
     },
 
     mounted() {
-        const at = new AnyTouch(this.$refs.panel);
+        const at = new AnyTouch(document.body);
 
         at.use(AnyTouch.doubletap);
 

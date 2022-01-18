@@ -180,12 +180,15 @@ export default class extends AnyEvent<EventMap> {
                 window.addEventListener('_', () => void 0, opts);
             } catch { }
             // 绑定元素
+            // 只有在preventDefault中显式的指明false才能使用{ passive: true }
+            // fix: document和body上绑定事件的时候, 默认passive=true
+            // https://github.com/any86/Notes/issues/82
             this.on(
                 TYPE_UNBIND,
                 bindElement(
                     el,
                     this.catchEvent.bind(this),
-                    false === this.__options.preventDefault && supportsPassive ? { passive: true } : false
+                    false === this.__options.preventDefault && supportsPassive ? { passive: true } : { passive: false }
                 )
             );
         }
