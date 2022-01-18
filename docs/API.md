@@ -6,6 +6,9 @@
 
 [on(监听)](#oneventname-listener)
 
+[off(取消监听)](#oneventname-listener)
+
+
 [set(设置)](#setoptions)
 
 [use(加载手势)](#userecognizer-options)
@@ -87,7 +90,7 @@ const at = AnyTouch(el);
 
 #### eventName
 
-事件名,
+事件名
 
 ```javascript
 at.on('tap', onTap);
@@ -107,6 +110,29 @@ const listener = event=>{
     // event是手势事件对象, 可以获取位置等信息
 }
 at.on('pan',listener);
+```
+
+[:lollipop: 事件对象(event)](EVENT.md)
+
+[:rocket: 返回目录](#目录)
+
+
+## off(eventName, [listener])
+
+取消事件监听.
+
+#### eventName
+
+事件名
+
+```javascript
+at.off('tap', onTap);
+```
+
+取消指定事件名的所有监视
+
+```javascript
+at.off('tap');
 ```
 
 [:lollipop: 事件对象(event)](EVENT.md)
