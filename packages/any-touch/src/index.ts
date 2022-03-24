@@ -16,8 +16,6 @@ import press from '@any-touch/press';
 import pinch from '@any-touch/pinch';
 import rotate from '@any-touch/rotate';
 import doubletap from '@any-touch/doubletap';
-
-
 import {
     STATE
 } from '@any-touch/shared';
@@ -25,6 +23,7 @@ import {
 // 类型, 为了兼容
 import { Options } from '@any-touch/core';
 
+export { AnyTouchEvent } from '@any-touch/shared';
 export default class extends Core {
     // 状态码
     static STATE_POSSIBLE = STATE.POSSIBLE;

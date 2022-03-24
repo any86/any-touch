@@ -39,7 +39,7 @@ import dispatchDomEvent from './dispatchDomEvent';
 import canPreventDefault from './canPreventDefault';
 import bindElement from './bindElement';
 // type TouchAction = 'auto' | 'none' | 'pan-x' | 'pan-left' | 'pan-right' | 'pan-y' | 'pan-up' | 'pan-down' | 'pinch-zoom' | 'manipulation';
-
+export { AnyTouchEvent } from '@any-touch/shared';
 /**
  * 默认设置
  */
