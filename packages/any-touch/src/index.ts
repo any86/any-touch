@@ -21,8 +21,9 @@ import {
 } from '@any-touch/shared';
 
 // 类型, 为了兼容
-import { Options } from '@any-touch/core';
+import { Options as O } from '@any-touch/core';
 
+export type Options = O;
 export { AnyTouchEvent } from '@any-touch/shared';
 export default class extends Core {
     // 状态码
@@ -41,7 +42,7 @@ export default class extends Core {
     static pinch = pinch;
     static doubletap = doubletap;
 
-    constructor(el?: HTMLElement, options?: Options) {
+    constructor(el?: HTMLElement, options?: O) {
         super(el, options);
         this.use(tap);
         this.use(pan);
