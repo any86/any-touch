@@ -6,7 +6,11 @@
         // 严格模式, 强烈建议开启
         "strict": true,
         // 支持别名导入:
-        // import * as React from "react"
+        // 让
+        // import React from "react"
+        // 等价于
+        //  import * as React from "react"
+        // 虽然react没有默认导出
         "esModuleInterop": true,
         // 目标js的版本
         "target": "ES6",
@@ -41,9 +45,9 @@
             "any-event": ["packages/any-event/src"],
             "any-touch": ["packages/any-touch/src"],
             "@any-touch/*": ["packages/*/src"],
-            "@testUtils":["testUtils"]
+            "@testUtils": ["testUtils"]
         }
     },
     // 入口文件
-    "include": ["testUtils","packages/*/src", "packages/*/types", "packages/*/__tests__"]
+    "include": ["testUtils", "packages/*/src", "packages/*/types", "packages/*/__tests__"]
 }

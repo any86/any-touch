@@ -3,7 +3,7 @@ import inputCreator from './inputCreator';
 /**
  * 格式化Touch事件对象
  */
-export default function (el?: HTMLElement) {
+export default function (el?: Element) {
     const createInput = inputCreator();
 
     return function (event: TouchEvent) {
@@ -12,7 +12,7 @@ export default function (el?: HTMLElement) {
         const points: { clientX: number, clientY: number, target: EventTarget }[] = [];
         Array.from(event.touches).forEach(({ clientX, clientY, target }) => {
             // 过滤不在根元素上的触点
-            if (el?.contains(target as HTMLElement)) {
+            if (el?.contains(target as Element)) {
                 targets.push(target);
                 points.push({ clientX, clientY, target });
             }

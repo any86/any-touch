@@ -1,4 +1,5 @@
 import { AnyTouchEvent } from '@any-touch/shared';
+import type { SupportElement } from 'any-touch';
 
 /**
  * 触发dom事件
@@ -16,7 +17,7 @@ export default function (typeName: string, el: EventTarget, payload: Partial<Any
 
     Object.assign(event, data, {
         match: () =>
-            payload.targets && 0 < payload.targets.length && payload.targets.every((target) => (event.currentTarget as HTMLElement).contains(target as HTMLElement)),
+            payload.targets && 0 < payload.targets.length && payload.targets.every((target) => (event.currentTarget as SupportElement).contains(target as SupportElement)),
     });
     return el.dispatchEvent(event);
 }
