@@ -338,6 +338,8 @@ const at = new AnyTouch(el, { preventDefault: false });
 ```shell
 pnpm i @any-touch/core @any-touch/tap @any-touch/press @any-touch/pan @any-touch/swipe @any-touch/pinch @any-touch/rotate
 ```
+### 使用了AnyTouch后页面不能滑动了?
+因为AnyTouch默认开启了"preventDefault:true", 你可以设置他为"false", 但是如果交互情况比较复杂未能满足, 你可以参考[阻止默认事件](#阻止默认事件)
 
 [:rocket: 返回目录](#目录)
 
