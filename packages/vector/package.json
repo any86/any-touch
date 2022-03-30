@@ -1,13 +1,13 @@
 {
     "name": "@any-touch/vector",
-    "version": "2.0.3-alpha.0",
+    "version": "2.0.3",
     "description": "any-touch中向量计算相关的函数.",
     "main": "dist/index.js",
     "module": "dist/index.es.js",
     "author": "any86",
     "license": "MIT",
     "dependencies": {
-        "@any-touch/shared": "^2.0.3-alpha.0"
+        "@any-touch/shared": "^2.0.3"
     },
     "publishConfig": {
         "access": "public"

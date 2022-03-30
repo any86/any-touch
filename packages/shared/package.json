@@ -1,6 +1,6 @@
 {
     "name": "@any-touch/shared",
-    "version": "2.0.3-alpha.0",
+    "version": "2.0.3",
     "description": "any-touch内部的公共函数.",
     "main": "dist/index.js",
     "module": "dist/index.es.js",
