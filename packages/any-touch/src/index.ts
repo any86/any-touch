@@ -19,13 +19,14 @@ import doubletap from '@any-touch/doubletap';
 import {
     STATE
 } from '@any-touch/shared';
-
 // 类型, 为了兼容
 import { Options as O } from '@any-touch/core';
 
 export type Options = O;
 export { AnyTouchEvent } from '@any-touch/shared';
-export default class extends Core {
+export type SupportElement = HTMLElement | SVGElement;
+
+export default class  extends Core {
     // 状态码
     static STATE_POSSIBLE = STATE.POSSIBLE;
     static STATE_START = STATE.START;
@@ -42,7 +43,7 @@ export default class extends Core {
     static pinch = pinch;
     static doubletap = doubletap;
 
-    constructor(el?: HTMLElement, options?: O) {
+    constructor(el?: SupportElement, options?: O) {
         super(el, options);
         this.use(tap);
         this.use(pan);

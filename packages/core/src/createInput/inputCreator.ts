@@ -4,6 +4,8 @@
  */
 import type { PubicEvent, InputOnlyHasCurrent, Input, Point } from '@any-touch/shared';
 import { CLIENT_X, CLIENT_Y, TYPE_START, TYPE_CANCEL, TYPE_END } from '@any-touch/shared';
+import type { SupportElement } from 'any-touch';
+
 export default function () {
     let id = 0;
     let prevInput: InputOnlyHasCurrent | undefined;
@@ -90,7 +92,7 @@ function extendInput(basicsInput: PubicEvent, id: number): Omit<Input, 'prevInpu
         pointLength,
         currentTarget,
         // 触点距离指定元素左上角的偏移
-        getOffset(el: HTMLElement = currentTarget as HTMLElement): { x: number, y: number } {
+        getOffset(el: SupportElement = currentTarget as SupportElement): { x: number, y: number } {
             const rect = el.getBoundingClientRect();
             return { x: x - Math.round(rect.left), y: y - Math.round(rect.top) };
         }

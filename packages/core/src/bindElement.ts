@@ -11,41 +11,33 @@
 //     target.addEventListener(type,listener,options);
 // }
 
+import type { SupportElement } from 'any-touch';
 import type { NativeEvent } from '@any-touch/shared';
-
 import { TOUCH_START, TOUCH_MOVE, TOUCH_END, TOUCH_CANCEL, MOUSE_DOWN, MOUSE_MOVE, MOUSE_UP } from '@any-touch/shared';
-
-type WType = typeof MOUSE_MOVE | typeof MOUSE_UP;
-type EType = typeof TOUCH_START | typeof TOUCH_MOVE | typeof TOUCH_END | typeof TOUCH_CANCEL;
-
-
-
-
-
-const eTypes = [TOUCH_START, TOUCH_MOVE, TOUCH_END, TOUCH_CANCEL, MOUSE_DOWN];
-const wTypes = [MOUSE_MOVE, MOUSE_UP];
+const ELEMENT_TYPES = [TOUCH_START, TOUCH_MOVE, TOUCH_END, TOUCH_CANCEL, MOUSE_DOWN];
+const WINDOW_TYPES = [MOUSE_MOVE, MOUSE_UP];
 /*
  * 根据输入设备绑定事件
  */
 export default function (
-    el: HTMLElement,
+    el: SupportElement,
     catchEvent: (e: NativeEvent) => void,
     options?: boolean | AddEventListenerOptions
 ): () => void {
-    eTypes.forEach((type) => {
-        el.addEventListener(type, catchEvent, options);
+    ELEMENT_TYPES.forEach((type) => {
+        el.addEventListener(type, catchEvent as any, options);
     });
 
-    wTypes.forEach((type) => {
+    WINDOW_TYPES.forEach((type) => {
         window.addEventListener(type, catchEvent, options);
     });
 
     return () => {
-        eTypes.forEach((types) => {
-            el.removeEventListener(types, catchEvent);
+        ELEMENT_TYPES.forEach((types) => {
+            el.removeEventListener(types, catchEvent as any);
         });
 
-        wTypes.forEach((type) => {
+        WINDOW_TYPES.forEach((type) => {
             window.removeEventListener(type, catchEvent);
         });
     };

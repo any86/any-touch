@@ -11,8 +11,8 @@ module.exports = {
     collectCoverageFrom: [
         'packages/*/src/**/*.ts'],
     verbose: false,
-    testPathIgnorePatterns: ["<rootDir>/node_modules/","<rootDir>/packages/simulator/"],
-    coveragePathIgnorePatterns: ["<rootDir>/node_modules/","<rootDir>/packages/simulator/"],
+    testPathIgnorePatterns: ["<rootDir>/node_modules/","<rootDir>/packages/simulator/","<rootDir>/packages/vue3/"],
+    coveragePathIgnorePatterns: ["<rootDir>/node_modules/","<rootDir>/packages/simulator/","<rootDir>/packages/vue3/"],
     globals: {
         __TEST__: true,
         __VERSION__: require('./package.json').version,

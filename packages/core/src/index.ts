@@ -9,6 +9,8 @@
  * Event(Mouse|Touch) => BaseInput => Input => Computed => AnyTouchEvent
  */
 import AnyEvent from 'any-event';
+import type { SupportElement } from 'any-touch';
+
 import type {
     UnionToIntersection,
     Computed,
@@ -40,14 +42,12 @@ import canPreventDefault from './canPreventDefault';
 import bindElement from './bindElement';
 // type TouchAction = 'auto' | 'none' | 'pan-x' | 'pan-left' | 'pan-right' | 'pan-y' | 'pan-up' | 'pan-down' | 'pinch-zoom' | 'manipulation';
 export { AnyTouchEvent } from '@any-touch/shared';
-/**
- * 默认设置
- */
 export interface Options {
     // 是否触发DOM事件
     domEvents?: false | EventInit;
     preventDefault?: boolean | ((e: NativeEvent) => boolean);
 }
+
 
 /**
  * 默认设置
@@ -55,10 +55,12 @@ export interface Options {
 const DEFAULT_OPTIONS: Options = {
     domEvents: { bubbles: true, cancelable: true },
     preventDefault: (event) => {
+        // console.log((event.target as any).tagName);
         if (event.target && 'tagName' in event.target) {
             const { tagName } = event.target;
             return !/^(?:INPUT|TEXTAREA|BUTTON|SELECT)$/.test(tagName);
         }
+        /* istanbul ignore next */
         return false;
     },
 };
@@ -108,7 +110,7 @@ export default class extends AnyEvent<EventMap> {
     /**
      * 当前绑定元素
      */
-    el?: HTMLElement;
+    el?: SupportElement;
     /**
      * 当前插件(仅供插件开发者使用)
      */
@@ -128,7 +130,7 @@ export default class extends AnyEvent<EventMap> {
      * @param el 目标元素, 微信下没有el
      * @param options 选项
      */
-    constructor(el?: HTMLElement, options?: Options) {
+    constructor(el?: SupportElement, options?: Options) {
         super();
         this.el = el;
         this.c = {} as PluginContext;
