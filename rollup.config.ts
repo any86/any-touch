@@ -2,8 +2,8 @@ const typescript = require('@rollup/plugin-typescript');
 const json = require('@rollup/plugin-json');
 const replace = require('@rollup/plugin-replace');
 import {version} from './packages/any-touch/package.json';
-
-export default {
+import { defineConfig } from 'rollup';
+export default defineConfig({
     input: './packages/any-touch/src/index.ts',
 
     plugins: [
@@ -24,4 +24,4 @@ export default {
         file: `./packages/any-touch/dist/any-touch.umd.js`,
         sourcemap: false,
     }]
-};
+});
