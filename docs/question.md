@@ -13,7 +13,7 @@ at.use(tap, { pointLength: 2, name: 'twoFingersTap' });
 at.on('twoFingersTap', onTwoFingersTap);
 ```
 
-[:rocket: 返回目录](#目录)
+[:rocket: 返回目录](../README.md#目录)
 
 ### 不要用 alert 调试
 
@@ -22,13 +22,13 @@ at.on('twoFingersTap', onTwoFingersTap);
 
 如果仅仅是了在移动端调试, 请使用腾讯的[vconsole](https://github.com/Tencent/vConsole)
 
-[:rocket: 返回目录](#目录)
+[:rocket: 返回目录](../README.md#目录)
 
 ### macos 上的 chrome 浏览器触发 touchend 会比较慢
 
 由于上述原因, swipe 事件发生的会"慢半拍",所以请大家最终测试以手机效果为准.
 
-[:rocket: 返回目录](#目录)
+[:rocket: 返回目录](../README.md#目录)
 
 ### 移动端尽量使用 tap 代理 click
 
@@ -40,7 +40,7 @@ at.on('twoFingersTap', onTwoFingersTap);
 const at = new AnyTouch(el, { preventDefault: false });
 ```
 
-[:rocket: 返回目录](#目录)
+[:rocket: 返回目录](../README.md#目录)
 
 ### 使用 pnpm 提示找不到@any-touch/xxx
 
@@ -56,4 +56,4 @@ pnpm i @any-touch/core @any-touch/tap @any-touch/press @any-touch/pan @any-touch
 
 因为 AnyTouch 默认开启了"preventDefault:true", 你可以设置他为"false", 但是如果交互情况比较复杂未能满足, 你可以参考[阻止默认事件](#阻止默认事件)
 
-[:rocket: 返回目录](#目录)
+[:rocket: 返回目录](../README.md#目录)
