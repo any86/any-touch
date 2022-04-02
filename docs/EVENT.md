@@ -39,3 +39,4 @@ at.on('pan', event=>{
 |currentTarget|`EventTarget`|实际触发绑定事件的元素|
 |**nativeEvent**|`TouchEvent`|原生事件对象|
 
+[:rocket: 返回目录](../README.md#目录)

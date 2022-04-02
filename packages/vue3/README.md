@@ -1,25 +1,39 @@
-# @any-touch/swipe
-**快划**识别器.
+# @any-touch/vue3
+
+any-touch 的 vue3 指令版本
+
+## 安装
+
+```shell
+npm i -S @any-touch/vue3
+```
 
 ## 快速开始
+
 ```javascript
-// 只加载rotate识别器(旋转)
-import Core from '@any-touch/core';
-import rotate from '@any-touch/rotate';
-const at = new Core(el);
-at.use(rotate, 参数)
+// main.js
 
-// 旋转
-at.on('rotate', (event) => {
-    // event包含位置/速度/方向等信息
-});
+import VTouch from '@any-touch/vue3';
+const app = createApp();
+// ...
+app.use(VTouch);
 ```
-**⚠️注意**: 执行`npm i any-touch`后, **@any-touch/core和@any-touch/rotate**便已自动安装, 直接引入即可.
 
-## 参数
-|名称|数据类型|默认值|说明|
-|---|---|---|---|
-|name|`String`|'swipe'|自定义事件名称|
-|pointLength|`Number`|1|支持的触点数, 可支持多指触发|
-|threshold| `Number`|10|触点离开前, 按压移动的距离超过10px才能触发事件|
-|velocity| `Number`|0.3|快划超过30px/ms才触发事件|
+```html
+// xxx.vue
+<u-component v-touch @tap="onTap" @swipe="onSwipe" @press="onPress" @pan="onPan" @pinch="onPinch" @rotate="onRotate">
+    <!-- 子元素也能监听事件 -->
+    <div @tap="onTap" @swipe="onSwipe" @press="onPress" @pan="onPan" @pinch="onPinch" @rotate="onRotate">子元素</div>
+</u-component>
+```
+
+**注意**: 一旦标记了`v-touch`, 那么当前元素及其子元素都可以监听到手势事件.
+
+
+## 指令的值
+`v-touch`的值是一个对象, 实际他就是any-touch的参数.
+```html
+<div v-touch="{preventDefault:false}"></div>
+```
+
+[any-touch参数说明](../../docs/API.md#options)

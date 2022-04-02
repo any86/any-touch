@@ -1,20 +1,24 @@
 # @any-touch/swipe
 **快划**识别器.
 
+## 安装
+```shell
+npm i -S @any-touch/swipe
+```
+
 ## 快速开始
 ```javascript
 // 只加载rotate识别器(旋转)
 import Core from '@any-touch/core';
-import rotate from '@any-touch/rotate';
+import swipe from '@any-touch/swipe';
 const at = new Core(el);
-at.use(rotate, 参数)
+at.use(swipe, 参数)
 
 // 旋转
-at.on('rotate', (event) => {
+at.on('swipe', (event) => {
     // event包含位置/速度/方向等信息
 });
 ```
-**⚠️注意**: 执行`npm i any-touch`后, **@any-touch/core和@any-touch/rotate**便已自动安装, 直接引入即可.
 
 ## 参数
 |名称|数据类型|默认值|说明|

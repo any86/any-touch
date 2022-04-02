@@ -1,6 +1,11 @@
 # @any-touch/pan
 **拖拽**识别器.
 
+## 安装
+```shell
+npm i -S @any-touch/pan
+```
+
 ## 快速开始
 ```javascript
 // 只加载pan识别器(拖拽)
@@ -14,7 +19,6 @@ at.on('pan', (event) => {
     // event包含位置/速度/方向等信息
 });
 ```
-**⚠️注意**: 执行`npm i any-touch`后, **@any-touch/core和@any-touch/pan**便已自动安装, 直接引入即可.
 
 ## 参数
 |名称|数据类型|默认值|说明|

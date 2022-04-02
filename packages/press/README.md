@@ -1,6 +1,11 @@
 # @any-touch/press
 **按压**识别器.
 
+## 安装
+```shell
+npm i -S @any-touch/press
+```
+
 ## 快速开始
 ```javascript
 // 只加载press识别器(按压)
@@ -14,7 +19,6 @@ at.on('press', (event) => {
     // event包含位置/速度/方向等信息
 });
 ```
-**⚠️注意**: 执行`npm i any-touch`后, **@any-touch/core和@any-touch/press**便已自动安装, 直接引入即可.
 
 ## 参数
 |名称|数据类型|默认值|说明|

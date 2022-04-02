@@ -320,4 +320,4 @@ const {STATUS_POSSIBLE, STATUS_RECOGNIZED} = AnyTouch;
 
 一般用来配合[beforeEach](#beforeeachhook)控制手势触发.
 
-[:rocket: 返回目录](#目录)
+[:rocket: 返回目录](../README.md#目录)

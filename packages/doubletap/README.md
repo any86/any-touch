@@ -1,6 +1,11 @@
 # @any-touch/doubletap
 **双击**识别器. 基于[@any-touch/tap](https://github.com/any86/any-touch/tree/master/packages/tap)实现, 是tap的一个特例.
 
+## 安装
+```shell
+npm i -S @any-touch/doubletap
+```
+
 ## 快速开始
 ```javascript
 // 只加载tap识别器(拖拽)
@@ -14,7 +19,6 @@ at.on('doubletap', (event) => {
     console.log(event) // 包含点击位置信息
 });
 ```
-**⚠️注意**: 使用doubletap后, tap每次触发会延迟300ms, 以便区分是2次tap还是doubletap.
 
 ## 源码解析
 因为是基于[@any-touch/tap](https://github.com/any86/any-touch/tree/master/packages/tap)实现的, 所以代码不多, 只是使用[beforeEach拦截器](https://github.com/any86/any-touch/blob/master/docs/API.md#beforeeachhook).
