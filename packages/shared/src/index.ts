@@ -1,4 +1,3 @@
-export * from './is';
 export * from './const';
 export * from './types'
 export * from './pressMoveFlow'

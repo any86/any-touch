@@ -25,16 +25,13 @@ importers:
       standard-version: ^4.4.0
       terser: ^5.0.0
       ts-jest: ^26.0.0
-      tslib: ^2.3.1
       typescript: ^4.6.0
       zlib: ^1.0.5
-    dependencies:
-      tslib: registry.npmmirror.com/tslib/2.3.1
     devDependencies:
       '@rollup/plugin-alias': registry.npmmirror.com/@rollup/plugin-alias/2.2.0_rollup@2.64.0
       '@rollup/plugin-json': registry.npmmirror.com/@rollup/plugin-json/4.1.0_rollup@2.64.0
       '@rollup/plugin-replace': registry.npmmirror.com/@rollup/plugin-replace/3.0.1_rollup@2.64.0
-      '@rollup/plugin-typescript': 8.3.1_d7b4467172c319d6620c719344e1beb5
+      '@rollup/plugin-typescript': 8.3.1_rollup@2.64.0+typescript@4.6.3
       '@types/jest': 26.0.24
       '@types/lodash': registry.npmmirror.com/@types/lodash/4.14.178
       brotli: registry.npmmirror.com/brotli/1.3.2
@@ -63,15 +60,15 @@ importers:
 
   packages/any-touch:
     specifiers:
-      '@any-touch/core': ^2.0.2
-      '@any-touch/doubletap': ^2.0.2
-      '@any-touch/pan': ^2.0.2
-      '@any-touch/pinch': ^2.0.2
-      '@any-touch/press': ^2.0.2
-      '@any-touch/rotate': ^2.0.2
-      '@any-touch/swipe': ^2.0.2
-      '@any-touch/tap': ^2.0.2
-      any-event: ^2.0.2
+      '@any-touch/core': ^2.0.3
+      '@any-touch/doubletap': ^2.0.3
+      '@any-touch/pan': ^2.0.3
+      '@any-touch/pinch': ^2.0.3
+      '@any-touch/press': ^2.0.3
+      '@any-touch/rotate': ^2.0.3
+      '@any-touch/swipe': ^2.0.3
+      '@any-touch/tap': ^2.0.3
+      any-event: ^2.0.3
       tslib: ^2.3.1
     dependencies:
       '@any-touch/core': link:../core
@@ -87,8 +84,8 @@ importers:
 
   packages/compute:
     specifiers:
-      '@any-touch/shared': ^2.0.2
-      '@any-touch/vector': ^2.0.2
+      '@any-touch/shared': ^2.0.3
+      '@any-touch/vector': ^2.0.3
       tslib: ^2.3.1
     dependencies:
       '@any-touch/shared': link:../shared
@@ -97,17 +94,17 @@ importers:
 
   packages/core:
     specifiers:
-      '@any-touch/shared': ^2.0.2
-      any-event: ^2.0.2
+      '@any-touch/shared': ^2.0.3
+      any-event: ^2.0.3
     dependencies:
       '@any-touch/shared': link:../shared
       any-event: link:../any-event
 
   packages/doubletap:
     specifiers:
-      '@any-touch/compute': ^2.0.2
-      '@any-touch/shared': ^2.0.2
-      '@any-touch/vector': ^2.0.2
+      '@any-touch/compute': ^2.0.3
+      '@any-touch/shared': ^2.0.3
+      '@any-touch/vector': ^2.0.3
     dependencies:
       '@any-touch/compute': link:../compute
       '@any-touch/shared': link:../shared
@@ -115,29 +112,29 @@ importers:
 
   packages/pan:
     specifiers:
-      '@any-touch/compute': ^2.0.2
-      '@any-touch/shared': ^2.0.2
+      '@any-touch/compute': ^2.0.3
+      '@any-touch/shared': ^2.0.3
     dependencies:
       '@any-touch/compute': link:../compute
       '@any-touch/shared': link:../shared
 
   packages/pinch:
     specifiers:
-      '@any-touch/compute': ^2.0.2
+      '@any-touch/compute': ^2.0.3
     dependencies:
       '@any-touch/compute': link:../compute
 
   packages/press:
     specifiers:
-      '@any-touch/compute': ^2.0.2
-      '@any-touch/shared': ^2.0.2
+      '@any-touch/compute': ^2.0.3
+      '@any-touch/shared': ^2.0.3
     dependencies:
       '@any-touch/compute': link:../compute
       '@any-touch/shared': link:../shared
 
   packages/rotate:
     specifiers:
-      '@any-touch/compute': ^2.0.2
+      '@any-touch/compute': ^2.0.3
     dependencies:
       '@any-touch/compute': link:../compute
 
@@ -152,17 +149,17 @@ importers:
 
   packages/swipe:
     specifiers:
-      '@any-touch/compute': ^2.0.2
-      '@any-touch/shared': ^2.0.2
+      '@any-touch/compute': ^2.0.3
+      '@any-touch/shared': ^2.0.3
     dependencies:
       '@any-touch/compute': link:../compute
       '@any-touch/shared': link:../shared
 
   packages/tap:
     specifiers:
-      '@any-touch/compute': ^2.0.2
-      '@any-touch/shared': ^2.0.2
-      '@any-touch/vector': ^2.0.2
+      '@any-touch/compute': ^2.0.3
+      '@any-touch/shared': ^2.0.3
+      '@any-touch/vector': ^2.0.3
     dependencies:
       '@any-touch/compute': link:../compute
       '@any-touch/shared': link:../shared
@@ -170,14 +167,16 @@ importers:
 
   packages/vector:
     specifiers:
-      '@any-touch/shared': ^2.0.2
+      '@any-touch/shared': ^2.0.3
     dependencies:
       '@any-touch/shared': link:../shared
 
   packages/vue3:
     specifiers:
+      any-touch: ^2.0.3
       vue: ^3.2.31
     dependencies:
+      any-touch: link:../any-touch
       vue: registry.npmmirror.com/vue/3.2.31
 
 packages:
@@ -1594,7 +1593,7 @@ packages:
       '@octokit/openapi-types': 11.2.0
     dev: true
 
-  /@rollup/plugin-typescript/8.3.1_d7b4467172c319d6620c719344e1beb5:
+  /@rollup/plugin-typescript/8.3.1_rollup@2.64.0+typescript@4.6.3:
     resolution: {integrity: sha512-84rExe3ICUBXzqNX48WZV2Jp3OddjTMX97O2Py6D1KJaGSwWp0mDHXj+bCGNJqWHIEKDIT2U0sDjhP4czKi6cA==}
     engines: {node: '>=8.0.0'}
     peerDependencies:
@@ -1605,7 +1604,6 @@ packages:
       '@rollup/pluginutils': 3.1.0_rollup@2.64.0
       resolve: 1.21.0
       rollup: registry.npmmirror.com/rollup/2.64.0
-      tslib: registry.npmmirror.com/tslib/2.3.1
       typescript: 4.6.3
     dev: true
 
@@ -8016,7 +8014,7 @@ packages:
     version: 1.1.0
     engines: {node: '>=0.10.0'}
     dependencies:
-      graceful-fs: registry.npmmirror.com/graceful-fs/4.2.9
+      graceful-fs: 4.2.9
       parse-json: registry.npmmirror.com/parse-json/2.2.0
       pify: registry.nlark.com/pify/2.3.0
       pinkie-promise: registry.nlark.com/pinkie-promise/2.0.1
@@ -8029,7 +8027,7 @@ packages:
     version: 2.0.0
     engines: {node: '>=4'}
     dependencies:
-      graceful-fs: registry.npmmirror.com/graceful-fs/4.2.9
+      graceful-fs: 4.2.9
       parse-json: registry.npmmirror.com/parse-json/2.2.0
       pify: registry.nlark.com/pify/2.3.0
       strip-bom: registry.nlark.com/strip-bom/3.0.0
@@ -8312,7 +8310,7 @@ packages:
     version: 1.1.0
     engines: {node: '>=0.10.0'}
     dependencies:
-      graceful-fs: registry.npmmirror.com/graceful-fs/4.2.9
+      graceful-fs: 4.2.9
       pify: registry.nlark.com/pify/2.3.0
       pinkie-promise: registry.nlark.com/pinkie-promise/2.0.1
     dev: true

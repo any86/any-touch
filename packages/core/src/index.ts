@@ -26,7 +26,6 @@ import type {
 } from '@any-touch/shared';
 
 import {
-    TYPE_COMPUTED,
     TOUCH_START,
     TOUCH_MOVE,
     TOUCH_END,
@@ -34,7 +33,7 @@ import {
     MOUSE_DOWN,
     MOUSE_MOVE,
     MOUSE_UP,
-} from '@any-touch/shared';
+} from './const';
 
 import { mouse, touch } from './createInput';
 import dispatchDomEvent from './dispatchDomEvent';
@@ -48,6 +47,7 @@ export interface Options {
     preventDefault?: boolean | ((e: NativeEvent) => boolean);
 }
 
+const TYPE_COMPUTED = 'computed';
 
 /**
  * 默认设置

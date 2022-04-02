@@ -1,4 +1,4 @@
-import { App, DirectiveBinding } from 'vue';
+import type { App, DirectiveBinding } from 'vue';
 import type { Options, SupportElement } from 'any-touch';
 import ATouch from 'any-touch';
 const elAndAtMap = new WeakMap();

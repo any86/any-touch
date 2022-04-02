@@ -13,9 +13,9 @@
 
 import type { SupportElement } from 'any-touch';
 import type { NativeEvent } from '@any-touch/shared';
-import { TOUCH_START, TOUCH_MOVE, TOUCH_END, TOUCH_CANCEL, MOUSE_DOWN, MOUSE_MOVE, MOUSE_UP } from '@any-touch/shared';
-const ELEMENT_TYPES = [TOUCH_START, TOUCH_MOVE, TOUCH_END, TOUCH_CANCEL, MOUSE_DOWN];
-const WINDOW_TYPES = [MOUSE_MOVE, MOUSE_UP];
+import { TOUCH_START, TOUCH_MOVE, TOUCH_END, TOUCH_CANCEL, MOUSE_DOWN, MOUSE_MOVE, MOUSE_UP } from './const';
+const ELEMENT_TYPES = [TOUCH_START, TOUCH_MOVE, TOUCH_END, TOUCH_CANCEL, MOUSE_DOWN] as const;
+const WINDOW_TYPES = [MOUSE_MOVE, MOUSE_UP] as const;
 /*
  * 根据输入设备绑定事件
  */

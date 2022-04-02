@@ -1,5 +1,5 @@
-import { NativeEvent } from '@any-touch/shared';
-import { isFunction } from '@any-touch/shared';
+import type { NativeEvent } from '@any-touch/shared';
+import { isFunction } from './const';
 import { Options } from './index';
 /**
  * 计算是否需要阻止默认事件

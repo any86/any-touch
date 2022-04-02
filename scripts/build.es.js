@@ -18,6 +18,11 @@ walkPackageDirs((dirName) => {
             target: 'ES6',
             module: "ESNEXT",
         }, terser: terser({
+            // mangle: {
+            //     properties: {
+            //         regex: /^__/
+            //     }
+            // },
             output: {
                 comments: false
             }

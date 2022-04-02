@@ -1,5 +1,5 @@
 import type { phase, PointClientXY } from '@any-touch/shared';
-import { MOUSE_DOWN, MOUSE_MOVE, MOUSE_UP, TYPE_START, TYPE_MOVE, TYPE_END } from '@any-touch/shared';
+import { MOUSE_DOWN, MOUSE_MOVE, MOUSE_UP, TYPE_START, TYPE_MOVE, TYPE_END } from '../const';
 import inputCreator from './inputCreator';
 export default function () {
     let prevPoints: PointClientXY[];

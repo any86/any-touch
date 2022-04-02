@@ -6,7 +6,13 @@ import type { SupportElement } from 'any-touch';
  */
 export default function (typeName: string, el: EventTarget, payload: Partial<AnyTouchEvent>, eventInit?: EventInit): boolean | void {
     // 过滤掉Event上保留的字段(target, currentTarget,type)
-    let { target, currentTarget, type, ...data } = payload;
+    const data: Omit<Partial<AnyTouchEvent>, 'target' | 'currentTarget' | 'type'> = {};
+    for (const key in payload) {
+        if (!['target', 'currentTarget', 'type'].includes(key)) {
+            data[key] = payload[key];
+        }
+    }
+
     let event: Event;
     if (document.createEvent) {
         event = document.createEvent('HTMLEvents');

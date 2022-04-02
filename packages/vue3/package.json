@@ -8,6 +8,7 @@
     "author": "any86",
     "license": "MIT",
     "dependencies": {
+        "any-touch":"^2.0.3",
         "vue": "^3.2.31"
     },
     "files": [

@@ -40,9 +40,6 @@
     "url": "https://github.com/any86/any-touch/issues"
   },
   "homepage": "https://github.com/any86/any-touch#readme",
-  "dependencies": {
-    "tslib": "^2.3.1"
-  },
   "devDependencies": {
     "@rollup/plugin-alias": "^2.2.0",
     "@rollup/plugin-json": "^4.0.0",
