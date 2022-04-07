@@ -1,51 +1,50 @@
 # :bulb: API
 
-## 目录
+## content
 
-[:fire: 初始化](#anytouchel-options)
+[:fire:initialize](#anytouchel-options)
 
-[on(监听)](#oneventname-listener)
+[on(listen)](#oneventname-listener)
 
-[off(取消监听)](#oneventname-listener)
+[off (cancel listener)](#oneventname-listener)
 
 
-[set(设置)](#setoptions)
+[set(set)](#setoptions)
 
-[use(加载手势)](#userecognizer-options)
+[use(load gesture)](#userecognizer-options)
 
-[catchEvent(注入事件对象)](#catcheventevent)
+[catchEvent (injected event object)](#catcheventevent)
 
-[⭐beforeEach(拦截器)](#beforeeachhook)
+[⭐beforeEach(interceptor)](#beforeeachhook)
 
-[get(获取手势)](#getname-string-recognizer--void)
+[get(get gesture)](#getname-string-recognizer--void)
 
-[destroy(销毁)](#destroy)
+[destroy(destroy)](#destroy)
 
-[AnyTouch.识别器](#AnyTouch识别器)
+[AnyTouch.identifier] (#AnyTouchidentifier)
 
-[AnyTouch.状态码](#AnyTouch状态码)
-
+[AnyTouch.status code](#AnyTouch status code)
 ## AnyTouch([el], [options])
 
-初始化any-touch
+initialize any-touch
 
 #### el
 
-目标元素,微信小程序下由于没有 DOM 元素, **可以无 el 初始化**, 然后通过[catchEvent](#catcheventevent)函数接收 touch 事件.
+The target element, because there is no DOM element in the WeChat applet, **can be initialized without el**, and then receive the touch event through the [catchEvent](#catcheventevent) function.
 
-```javascript
-// 初始化
+````javascript
+// initialize
 const el = doucument.getElementById('box');
 const at = AnyTouch(el);
-```
+````
 
 #### options
 
-配置项, 是个对象.
+A configuration item is an object.
 
--   **preventDefault**
-    值为Boolean或Function, 函数返回值为Boolean类型, 默认值是函数:
-    ```javascript
+- **preventDefault**
+    The value is Boolean or Function, the return value of the function is of type Boolean, and the default value is a function:
+    ````javascript
     const preventDefault = (event) => {
         if (event.target && 'tagName' in event.target) {
             const { tagName } = event.target;
@@ -53,20 +52,20 @@ const at = AnyTouch(el);
         }
         return false;
     },
-    ```
-    默认只对非表单元素进行"阻止默认事件触发".
+    ````
+    By default only "prevent default event firing" for non-form elements.
 
--   **domEvents**
-    值为Object或false.
-    **如果是false**, 那么不触发tap/pan等手势的DOM事件, 注意没有true. 
+- **domEvents**
+    Value is Object or false.
+    **If it is false**, then the DOM events of gestures such as tap/pan will not be triggered. Note that there is no true.
     
-    **如果是Object**, 那么可以配置元素上定义的手势是否可以"取消"和"冒泡", 详细参数同[eventInit类型](https://developer.mozilla.org/zh-CN/docs/Web/API/Event/Event), 默认情况下**可取消 / 可冒泡**,也就是`{bubbles:true,cancelable:true}`
-    ```javascript
+    **If it is Object**, then you can configure whether the gesture defined on the element can be "cancelled" and "bubble", the detailed parameters are the same as [eventInit type](https://developer.mozilla.org/zh-CN/docs /Web/API/Event/Event), by default **cancellable/bubbable**, which is `{bubbles:true,cancelable:true}`
+    ````javascript
     const at = AnyTouch(el);
     el.addEventListener('tap', onTap);
-    ```
+    ````
 
-    由于Vue等框架的模板中都是支持原生事件的,所以vue中可以在模板直接绑定事件:
+    Since the templates of frameworks such as Vue support native events, events can be bound directly in the template in vue:
 
     ```html
     <template>
@@ -80,116 +79,116 @@ const at = AnyTouch(el);
         },
     };
     </script>
-    ```
+    ````
 
-[:rocket: 返回目录](#目录)
+[:rocket: return to directory](#directory)
 
 ## on(eventName, listener)
 
-事件监听.
+Event listener.
 
 #### eventName
 
-事件名
+event name
 
-```javascript
+````javascript
 at.on('tap', onTap);
-```
+````
 
-可以同时监听多个事件.
+You can listen to multiple events at the same time.
 
-```javascript
+````javascript
 at.on(['tap', 'pan'], onTouch);
-```
+````
 
 #### listener
 
-事件触发函数.
-```javascript
+Event trigger function.
+````javascript
 const listener = event=>{
-    // event是手势事件对象, 可以获取位置等信息
+    // event is a gesture event object, which can get information such as position
 }
 at.on('pan',listener);
-```
+````
 
-[:lollipop: 事件对象(event)](EVENT.md)
+[:lollipop:event object (event)](EVENT.md)
 
-[:rocket: 返回目录](#目录)
+[:rocket: return to directory](#directory)
 
 
 ## off(eventName, [listener])
 
-取消事件监听.
+Cancel the event listener.
 
 #### eventName
 
-事件名
+event name
 
-```javascript
+````javascript
 at.off('tap', onTap);
-```
+````
 
-取消指定事件名的所有监视
+Cancels all monitoring of the specified event name
 
-```javascript
+````javascript
 at.off('tap');
-```
+````
 
-[:lollipop: 事件对象(event)](EVENT.md)
+[:lollipop:event object (event)](EVENT.md)
 
-[:rocket: 返回目录](#目录)
+[:rocket: return to directory](#directory)
 
 
 
-## set(options)
+##set(options)
 
-改变设置.
+Change settings.
 
-```javascript
-//  如果当前元素是a元素, 那么阻止默认事件触发, 比如链接跳转.
+````javascript
+// If the current element is the a element, prevent default events from firing, such as link jumps.
 at.set({ preventDefault: event=>event.target.tagName ==='A' });
-```
+````
 
-**手势参数说明**
-| 名称 | 说明 |
+**Gesture parameter description**
+| Name | Description |
 | - | - |
-| **@any-touch/tap** |[点击](../packages/tap/README.md)|
-| **@any-touch/pan** |[拖拽](../packages/pan/README.md)|
-| **@any-touch/swipe** |[划](../packages/swipe/README.md)|
-| **@any-touch/press** |[按压](../packages/press/README.md)|
-| **@any-touch/pinch** |[缩放](../packages/pinch/README.md)|
-| **@any-touch/rotate** |[旋转](../packages/rotate/README.md)|
+| **@any-touch/tap** |[click](../packages/tap/README.md)|
+| **@any-touch/pan** |[drag](../packages/pan/README.md)|
+| **@any-touch/swipe** |[swipe](../packages/swipe/README.md)|
+| **@any-touch/press** |[press](../packages/press/README.md)|
+| **@any-touch/pinch** |[zoom](../packages/pinch/README.md)|
+| **@any-touch/rotate** |[rotate](../packages/rotate/README.md)|
 
-[:rocket: 返回目录](#目录)
+[:rocket: return to directory](#directory)
 
 ## use(Recognizer, options)
 
-加载手势识别器, options 为手势识别器的参数.
+Load the gesture recognizer, options is the parameter of the gesture recognizer.
 
-```javascript
+````javascript
 import tap from '@any-touch/tap';
 at.use(tap, { tapTime: 2, name: 'doubletap' });
-```
+````
 
-[:rocket: 返回目录](#目录)
+[:rocket: return to directory](#directory)
 
 ## catchEvent(event)
 
-仅仅微信小程序下需要使用, 因为微信小程序没有 dom 元素的概念, 所以需要**手动接收 touch 事件对象**.
+It only needs to be used under the WeChat applet, because the WeChat applet does not have the concept of dom element, so it needs to **manually receive the touch event object**.
 
-```xml
+````xml
 <view
   @touchstart="onTouchstart"
   @touchmove="onTouchmove"
   @touchend="onTouchend"></view>
-```
+````
 
-```javascript
+````javascript
 const at = AnyTouch()
 {
     onload(){
         at.on('press', ev=>{
-            // 按压
+            // press
         });
     },
 
@@ -205,27 +204,26 @@ const at = AnyTouch()
       }
     }
 }
-```
+````
+[:rocket: return to directory](#directory)
 
-[:rocket: 返回目录](#目录)
+##beforeEach(hook)
 
-## beforeEach(hook)
+Interceptor, which can perform custom interception operations before each gesture is triggered.
 
-拦截器, 在每个手势触发之前可以进行自定义拦截操作.
+hook is a function, signature: (context: PluginContext & { event: AnyTouchEvent }, next: () => void) => void
 
-hook是个函数, 签名: (context: PluginContext & { event: AnyTouchEvent }, next: () => void) => void
+**context**: Object, containing plugin information and event object information.
 
-**context**: 对象,包含插件信息和事件对象的信息.
+**next**: The interception function, only when `next()` is executed will the event corresponding to the current recognizer be triggered.
 
-**next**: 拦截函数, 只有执行了`next()`才会触发当前识别器对应的事件.
+**The following implements the "double-click" gesture, the logic is as follows:**
+1. Use the tap plugin to define the "double click" recognition function.
+2. Use "beforeEach" to control the "click tap" event to fire with a delay of 300ms.
+3. If there is a "double tap doubletap" event within 300ms, then prevent "single tap" from triggering.
+4. At this time, only "double tap doubletap" will be triggered.
 
-**下面实现"双击"手势, 逻辑如下:**
-1. 使用tap插件定义"双击"识别功能.
-2. 使用"beforeEach"控制"单击tap"事件延迟300ms触发.
-3. 如果300ms内出现了"双击doubletap"事件, 那么阻止"单击tap"触发.
-4. 这时只会有"双击doubletap"触发.
-
-```javascript
+````javascript
 import Core from '@any-touch/core';
 import tap from '@any-touch/tap';
 import { STATUS_POSSIBLE, STATUS_FAILED } from '@any-touch/shared';
@@ -236,7 +234,7 @@ at.beforeEach((context, next) => {
     if ('tap' === context.name) {
         clearTimeout(timeID);
         timeID = setTimeout(() => {
-            const { state } = at.get('doubletap');
+            const { state } = at. get('doubletap');
             const ok = [STATE_POSSIBLE, STATE_FAILED].includes(state);
             if (ok) {
                 next();
@@ -249,75 +247,75 @@ at.beforeEach((context, next) => {
 
 at.on('tap', onTap);
 at.on('doubletap', onDoubleTap);
-```
+````
 
-[:rocket: 返回目录](#目录)
+[:rocket: return to directory](#directory)
 
 ## get(name: string): Recognizer | void
 
-通过名字获取指定识别器.
+Get the specified identifier by name.
 
-```javascript
+````javascript
 const tap = at.get('tap');
 if (void 0 !== tap) {
     tap.set({ disabled: true });
 }
-```
+````
 
-[:rocket: 返回目录](#目录)
+[:rocket: return to directory](#directory)
 
 ## destroy()
 
-销毁实例.
+Destroy the instance.
 
-```javascript
+````javascript
 at.destroy();
-```
+````
 
-[:rocket: 返回目录](#目录)
+[:rocket: return to directory](#directory)
 
-## AnyTouch.识别器
+## AnyTouch. Recognizer
 
-手势识别器.
+Gesture recognizer.
 
-如果是引入的完整版 **any-touch**, 那么可以通过 **AnyTouch** 获取到 **6** 个手势识别器:
+If the full version of **any-touch** is introduced, then **6** gesture recognizers can be obtained through **AnyTouch**:
 
-```javascript
+````javascript
 import AnyTouch from 'any-touch`;
-const {tap, pan,swipe,press,pinch,rotate} = AnyTouch;
-```
+const {tap, pan, swipe, press, pinch, rotate} = AnyTouch;
+````
 
-**此外**, 手势识别器均已做成独立的包, 从也可按需加载.
-| 名称 | 说明 |
+**Further**, gesture recognizers have been made into separate packages, which can also be loaded on demand.
+| Name | Description |
 | - | - |
-| **@any-touch/tap** |[点击](../packages/tap/README.md)|
-| **@any-touch/pan** |[拖拽](../packages/pan/README.md)|
-| **@any-touch/swipe** |[划](../packages/swipe/README.md)|
-| **@any-touch/press** |[按压](../packages/press/README.md)|
-| **@any-touch/pinch** |[缩放](../packages/pinch/README.md)|
-| **@any-touch/rotate** |[旋转](../packages/rotate/README.md)|
+| **@any-touch/tap** |[click](../packages/tap/README.md)|
+| **@any-touch/pan** |[drag](../packages/pan/README.md)|
+| **@any-touch/swipe** |[swipe](../packages/swipe/README.md)|
+| **@any-touch/press** |[press](../packages/press/README.md)|
+| **@any-touch/pinch** |[zoom](../packages/pinch/README.md)|
+| **@any-touch/rotate** |[rotate](../packages/rotate/README.md)|
 
-[:rocket: 返回目录](#目录)
+[:rocket: return to directory](#directory)
 
-## AnyTouch.状态码
+## AnyTouch. Status Code
 
-识别器状态,共有 6 种状态.
+Recognizer state, there are 6 states in total.
 
-```javascript
+````javascript
 import AnyTouch from 'any-touch`;
 const {STATUS_POSSIBLE, STATUS_RECOGNIZED} = AnyTouch;
-```
+````
 
-| 变量              | 说明                                                                         |
+| Variable              | Describe                                                                         |
 | ----------------- | ---------------------------------------------------------------------------- |
 | STATUS_POSSIBLE   | 表示当前还"未识别"                                                           |
-| STATUS_START      | "**拖拽类**"手势(pan/pinch/rotate 等)中表示"第一次识别."                     |
-| STATUS_MOVE       | "拖拽类"手势中表示"识别后移动中"                                             |
-| STATUS_END        | "拖拽类"手势中表示"有触点离开,即手势结束"                                    |
-| STATUS_CANCELLED  | 手势识别后,发生事件中断,比如"来电话","浏览器最小化"等.                       |
-| STATUS_FAILED     | 表示"识别失败", 比如识别 tap 的时候,触点在 250ms 内没有离开屏幕等            |
-| STATUS_RECOGNIZED | 表示"已识别", 区别于"拖拽类"手势, 用在"瞬发"识别的手势,比如 tap/press/swipe. |
+| STATUS_START      | "**Drag class**" gestures (pan/pinch/rotate, etc.) means "first recognition."                     |
+| STATUS_MOVE       | "Drag and drop" gesture means "moving after recognition"                                             |
+| STATUS_END        | The "drag-like" gesture means "when the contact leaves, the gesture ends"                                  |
+| STATUS_CANCELLED  | After the gesture is recognized, event interruption occurs, such as "incoming call", "browser minimization", etc.                       |
+| STATUS_FAILED     | Indicates "recognition failure", such as when recognizing a tap, the contact does not leave the screen within 250ms, etc.          |
+| STATUS_RECOGNIZED | Indicates "recognized", which is different from "drag-like" gestures, used in "instant" recognized gestures, such as tap/press/swipe. |
 
-一般用来配合[beforeEach](#beforeeachhook)控制手势触发.
+Generally used in conjunction with [beforeEach](#beforeeachhook) to control gesture triggering.
 
-[:rocket: 返回目录](../README.md#目录)
+[:rocket: return to directory](#directory)

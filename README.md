@@ -7,24 +7,28 @@
 [downloads-image]: https://badgen.net/npm/dt/any-touch
 [downloads-url]: https://npmjs.org/package/any-touch
 
-![6类手势](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/102a244991064824900ac45efeb9251d~tplv-k3u1fbpfcp-zoom-1.image)
+![gestures](https://user-images.githubusercontent.com/8264787/162208065-f347f3a5-266e-4fa0-be0a-6a439236d43d.png)
 
--   支持 PC 端 / 移动端 / [微信小程序](docs/wx.md).
--   默认加载**6 个手势**, 也可[按需加载](docs/optional.md)手势, 核心**1kb**, 完整**5kb**.
--   **无依赖, 不限于 Vue / React / Angular 等...**
 
-## 演示
+-   Support PC/Mobile/[WeChat applet](docs/wx.md).
+-   6 gesture recognizers are loaded by default, can also be [loaded on demand](docs/optional.md), core **1kb**, full **5kb**.
+-   **No dependencies, not limited to Vue / React / Angular etc...**
+
+## Language
+[中文](README.CN.md) | **English**
+
+## Demo
 
 <details>
-<summary>查看二维码</summary>
+<summary>QR Code</summary>
 <img src="https://user-images.githubusercontent.com/8264787/104836031-a55ca780-58e5-11eb-936a-7e2d1a05ee86.png" />
 </details>
 
-[简单演示](https://any86.github.io/any-touch)
+[Simple](https://any86.github.io/any-touch)
 
-[衍生产物: any-scroll(虚拟滚动)](https://github.com/any86/any-scroll)
+[Derivatives: any-scroll](https://github.com/any86/any-scroll)
 
-## 安装
+## Install
 
 ```javascript
 npm i -S any-touch
@@ -39,212 +43,210 @@ npm i -S any-touch
 </script>
 ```
 
-## 目录
+## Directory
 
-[⚡ 快速开始](#快速开始)
+[⚡ Get Started](#get-started)
 
--   [👋 手势事件](#-手势事件)
--   [🍭 事件对象](#lollipop-事件对象event)
--   [🔹 Typescript](#Typescript)
+-   [👋 Gesture](#gesture)
 
-[🌱 vue&指令](docs/vue.md)
+-   [🍭 Event](#event)
 
-[🍀 微信小程序](docs/wx.md)
+-   [🔹 Typescript](#typescript)
 
-[📐 按需加载](docs/optional.md)
+[🌱 Vue & Directives](docs/vue.md)
 
-[🌈 进阶使用](docs/advanced.md)
+[🍀 WeChat applet](docs/wx.md)
 
--   [阻止默认事件](docs/advanced.md#阻止默认事件)
--   [双击(doubletap)](https://github.com/any86/any-touch/tree/master/packages/doubletap)
+[📐 Load on demand](docs/optional.md)
+
+[🌈 Advanced](docs/advanced.md)
+
+-   [prevenDefault](docs/advanced.md#阻止默认事件)
+-   [doubletap](https://github.com/any86/any-touch/tree/master/packages/doubletap)
 
 [:bulb: API](docs/API.md)
 
-[🍳 常见问题](docs/question.md)
+[🍳 Q & A](docs/question.md)
 
--   [不要用 alert 调试](docs/question.md#不要用-alert-调试)
--   [macos 上的 chrome 浏览器触发 touchend 会比较慢](docs/question.md#macos-上的-chrome-浏览器触发-touchend-会比较慢)
--   [移动端尽量使用 tap 代理 click](docs/question.md#移动端尽量使用-tap-代理-click)
--   [使用 pnpm 提示找不到@any-touch/xxx](docs/question.md#使用pnpm提示找不到any-touchxxx)
 
-## 快速开始
+## Get Started
 
 ```javascript
 import AnyTouch from 'any-touch';
 
-// 被监视的元素
+// monitored element
 const el = document.getElementById('box');
 
-// 开始监视el上的手势变化
+// Start monitoring gesture changes on el
 const at = new AnyTouch(el);
 
-// 当拖拽的时候pan事件触发
+// The pan event fires when dragging
 at.on('pan', (e) => {
-    // e包含位移/速度/方向等信息
+    // e contains information such as displacement/velocity/direction
     console.log(e);
 });
 ```
 
-这里的`pan`叫做[手势事件](#-手势事件). `e`是[事件对象](#lollipop-事件对象event), 其包含"位置/速度/缩放/角度"等数据,
+The pan here is called [gesture event](#gesture). e is the [event object](#event), which contains data such as "position/speed/zoom/angle",
 
-### 👋 手势事件
+### 👋Gesture
 
-每个手势的不同状态都对应一个事件.
+Each state of the gesture corresponds to an event.
 
 <table>
     <tr>
-        <td>手势</td>
-        <td>事件名</td>
-        <td>说明</td>
+        <th><b>Gesture</th>
+        <th>Name</th>
+        <th>Describe</th>
     </tr>
     <tr>
-        <td rowspan="5"></td>
+        <td rowspan="5">pan</td>
         <td>pan</td>
-        <td>拖拽时持续触发</td>
+        <td>Triggered continuously while dragging</td>
     </tr>
     <tr>
         <td>panstart</td>
-        <td>拖拽开始</td>
+        <td>drag to start</td>
     </tr>   
     <tr>
         <td>panmove</td>
-        <td>拖拽中</td>
+        <td>dragging</td>
     </tr>  
     <tr>
         <td>panstart</td>
-        <td>拖拽停止(离开屏幕)</td>
+        <td>Drag to stop (off screen)</td>
     </tr>  
     <tr>
         <td>panup / pandown / panright / panleft</td>
-        <td>不同方向的拖拽事件</td>
+        <td>Drag events in different directions</td>
     </tr>
     <tr>
         <td rowspan="2">press</td>
         <td>press</td>
-        <td>按压</td>
+        <td>Press</td>
     </tr>  
         <tr>
         <td>press</td>
-        <td>按压释放(离开屏幕)</td>
+        <td>Press release (off screen)</td>
     </tr>     
     <tr>
         <td>tap</td>
         <td>tap</td>
-        <td>点击</td>
+        <td>Click, No problem with 300ms delay</td>
     </tr>  
     <tr>
         <td rowspan="2">swipe</td>
         <td>swipe</td>
-        <td>快划</td>
+        <td>Swipe</td>
     </tr>  
     <tr>
         <td> swipeup / swipedown / swiperight / swipeleft</td>
-        <td>不同方向快划</td>
+        <td>Swipe in different directions</td>
     </tr>  
     <tr>
         <td rowspan="6">pinch</td>
         <td>pinch</td>
-        <td>缩放</td>
+        <td>Zoom</td>
     </tr>  
     <tr>
         <td> pinchstart </td>
-        <td>缩放开始</td>
+        <td>Zoom start</td>
     </tr>  
     <tr>
         <td> pinchmove </td>
-        <td>缩放中</td>
+        <td>Zooming</td>
     </tr>  
     <tr>
         <td> pinchend </td>
-        <td>缩放结束(离开屏幕)</td>
+        <td>Zoom ends (off screen)</td>
     </tr>  
         <tr>
         <td> pinchin </td>
-        <td>放大</td>
+        <td>Zoom in</td>
     </tr>  
         <tr>
         <td> pinchout </td>
-        <td>缩小</td>
+        <td>Zoom out</td>
     </tr>
     <tr>
         <td rowspan="6">rotate</td>
         <td>rotate</td>
-        <td>旋转</td>
+        <td>Rotating, include rotatestart and rotatemove and rotateend </td>
     </tr>  
     <tr>
         <td> rotatestart </td>
-        <td>旋转开始</td>
+        <td>Start of rotation</td>
     </tr>  
     <tr>
         <td> rotatemove </td>
-        <td>旋转中</td>
+        <td>Rotating</td>
     </tr>  
     <tr>
         <td> rotateend </td>
-        <td>旋转结束(离开屏幕)</td>
+        <td>End of rotation (off screen)</td>
     </tr>
 
 </table>
 
-#### 组合事件
+#### Combining events
 
-可以通过数组监听多个事件, 比如同时监听`panleft`和`panright`, 这样就实现监听"x 轴拖拽".
+You can listen to multiple events through the array, such as listening to panleft and panright at the same time, so that you can listen to "x-axis dragging".
 
 ```javascript
 at.on(['panleft', 'panright'], () => {
-    console.log('x轴拖拽');
+    console.log('Drag on the x-axis');
 });
 ```
 
-[:rocket: 返回目录](#目录)
+[:rocket: back to directory](#directory)
 
-### :lollipop: 事件对象(event)
+### 🍭 Event
 
-事件触发的时候, 可以获取"位置/速度/缩放/角度"等数据.
+When the event is triggered, data such as "position/speed/zoom/angle" can be obtained.
 
 ```javascript
 at.on('pan', (event) => {
-    // event包含速度/方向等数据
+    // event contains data such as speed/direction
 });
 ```
 
 #### event
 
-| 名称            | 数据类型        | 说明                                                                                                                     |
+| name            | type            | describe                                                                                                                 |
 | --------------- | --------------- | ------------------------------------------------------------------------------------------------------------------------ |
-| name            | `String`        | **识别器名**,对应识别器参数的`name`                                                                                      |
-| type            | `String`        | **事件名**,如 tap/panstart 等,他比`name`字段范围大,如:当`type`是 panstart 或 panmove, 而`name`返回的都是 pan             |
-| phase           | `String`        | 当前触碰状态: start \| move \|end \| cancel 对应: 第一下触碰 \| 屏幕上移动 \| 离开屏幕 \| 非正常离开 \"可 anyTouch\"元素 |
-| x               | `Number`        | **当前触点中心**x 坐标                                                                                                   |
-| y               | `Number`        | **当前触点中心**y 坐标                                                                                                   |
-| deltaX          | `Number`        | **当前触点**和**前触点**的 x 轴偏移距离                                                                                  |
-| deltaY          | `Number`        | **当前触点**和**前触点**的 y 轴偏移距离                                                                                  |
-| displacementX   | `Number`        | **当前触点**与**起始触点**的 x 位移(矢量)                                                                                |
-| displacementY   | `Number`        | **当前触点**与**起始触点**的 y 位移(矢量)                                                                                |
-| distanceX       | `Number`        | displacementX 的绝对值                                                                                                   |
-| distanceY       | `Number`        | displacementY 的绝对值                                                                                                   |
-| distance        | `Number`        | **当前触点**与**起始触点**的距离(标量)                                                                                   |
-| deltaTime       | `Number`        | **当前时间**与**起始触碰时间**的差值                                                                                     |
-| velocityX       | `Number`        | 当前 x 轴速度                                                                                                            |
-| velocityY       | `Number`        | 当前 y 轴速度                                                                                                            |
-| direction       | `Number`        | **前触点**与**当前触点**的方向,可以理解为瞬时方向                                                                        |
-| angle           | `Number`        | 多点触摸时,**起始触点**与**当前触点**的旋转角度                                                                          |
-| deltaAngle      | `Number`        | 多点触摸时,**前触点**与**当前触点**的旋转角度                                                                            |
-| scale           | `Number`        | 多点触摸时,**起始触点**与**当前触点**的缩放比例                                                                          |
-| deltaScale      | `Number`        | 多点触摸时,**前触点**与**当前触点**的缩放比例                                                                            |
-| maxPointLength  | `Number`        | 本轮识别周期出现过的最大触点数                                                                                           |
-| isStart         | `Boolean`       | 是否当前识别周期的开始, 规律为从 touchstart->touchend 即是一个周期, 即便多点触碰, 有一个点离开,本轮识别结束              |
-| isEnd           | `Boolean`       | 是否当前识别周期的结束                                                                                                   |
-| target          | `EventTarget`   | 绑定事件的元素                                                                                                           |
-| targets         | `EventTarget[]` | 对应多个触点会存储 touches 中的每一个 target                                                                             |
-| currentTarget   | `EventTarget`   | 实际触发绑定事件的元素                                                                                                   |
-| **nativeEvent** | `TouchEvent`    | 原生事件对象                                                                                                             |
+| name            | `String`        | **Gesture recognizer name**, such as: pan/tap/swipe, etc.                                                                                |
+| type            | `String`        | **Event name**, such as `tap` or `panstart`, etc., is larger than the name field, such as: when the type is panstart or panmove, and the name returns pan
+| phase           | `String`        | Current touch state: `start` / `move` / `end` / `cancel` Corresponding: `first touch` / `move on the screen` / `leave the screen` / `abnormally leave the "can anyTouch" element` |
+| x               | `Number`        | Current contact center x coordinate                                                                                                  |
+| y               | `Number`        | Current contact center y coordinate                                                                                                |
+| deltaX          | `Number`        | The x-axis offset distance of the current contact and the previous contact                                                                                  |
+| deltaY          | `Number`        | The y-axis offset distance of the current contact and the previous contact                                                                      |
+| displacementX   | `Number`        | The x displacement of the current contact and the starting contact (vector)                                                                              |
+| displacementY   | `Number`        | The y displacement of the current contact and the starting contact (vector)                                              |
+| distanceX       | `Number`        | absolute value of displacementX                                                                                             |
+| distanceY       | `Number`        | absolute value of displacementY                                                                                            |
+| distance        | `Number`        | The distance between the current contact and the starting contact (scalar)                                                                       |
+| deltaTime       | `Number`        | The difference between the current time and the initial touch time                                                                          |
+| velocityX       | `Number`        | The moving speed of the contact on the X axis                                                                                                           |
+| velocityY       | `Number`        | The moving speed of the contact on the Y axis                                                                                             |
+| direction       | `Number`        | The direction of the front contact and the current contact can be understood as the instantaneous direction                                                         |
+| angle           | `Number`        | When multi-touch, the rotation angle between the starting contact and the current contact                                                    |
+| deltaAngle      | `Number`        | When multi-touch, the rotation angle between the front contact and the current contact                                                        |
+| scale           | `Number`        | When multi-touch, the zoom ratio of the starting touch point and the current touch point                                                                       |
+| deltaScale      | `Number`        | When multi-touch, the zoom ratio between the previous touch point and the current touch point                                             |
+| maxPointLength  | `Number`        | The maximum number of contacts that have occurred in the current identification cycle                                                                                           |
+| isStart         | `Boolean`       | Whether the current recognition cycle starts, the rule is that it is a cycle from touchstart->touchend, even if there is a multi-touch, if a point leaves, the current round of recognition ends              |
+| isEnd           | `Boolean`       | Whether the current recognition cycle is over                                                                                              |
+| target          | `EventTarget`   | The element to which the event is bound                                                                                             |
+| targets         | `EventTarget[]` | For multiple touches, each target in touches will be stored                                                                       |
+| currentTarget   | `EventTarget`   | The element that actually triggered the bound event                                                                                  |
+| **nativeEvent** | `TouchEvent`    | native event object                                                                                                             |
 
-[:rocket: 返回目录](#目录)
+[:rocket: back to directory](#directory)
 
 ## Typescript
 
-如果在 vue 模板中绑定事件函数, 那么事件对象的类型是没法推导的, 所以需要我们自己手动标注.
+If the event function is bound in the vue template, the type of the event object cannot be deduced, so we need to manually annotate it ourselves.
 
 ```html
 <div @tap="onTap"></div>
@@ -254,9 +256,9 @@ at.on('pan', (event) => {
 // xxx.vue
 import type { AnyTouchEvent } from 'any-touch';
 function onTap(e: AnyTouchEvent) {
-    // 可以正确推导出e上有x属性
+    // It can be correctly deduced that there is an x attribute on e
     console.log(e.x);
 }
 ```
 
-[:rocket: 返回目录](#目录)
+[:rocket: back to directory](#directory)

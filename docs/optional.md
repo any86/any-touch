@@ -1,71 +1,71 @@
-# 按需加载
+# load on demand
 
-**默认 any-touch 支持所有手势**, 为了**更小的体积**, 提供了按需加载.
+**The default any-touch supports all gestures**, in order to **smaller size**, provides on-demand loading.
 
-## 完整引入
+## full import
 
-```javascript
-// 只加载pan识别器(拖拽)
+````javascript
+// Load only the pan recognizer (drag and drop)
 import AT from 'any-touch';
 const at = AT(el);
 at.on('tap', (e) => {});
 at.on('pan', (e) => {});
-// 同时监听多个事件
+// Listen to multiple events at the same time
 at.on(['swipe', 'press', 'rotate', 'pinch'], (e) => {});
-```
+````
 
-## 按需引入
+## Import on demand
 
-`@any-touch/core`是核心包, 用来兼容 mouse/touch 输入, 具体的手势需要加载对应的识别器, 比如`@any-touch/pan`拖拽识别器.
-
-```shell
-npm i -S @any-touch/core # 核心
-npm i -S @any-touch/tap  # 点击
-npm i -S @any-touch/pan  # 拖拽
-npm i -S @any-touch/press  # 按压
-npm i -S @any-touch/swipe  # 快划
-npm i -S @any-touch/pinch  # 缩放
-npm i -S @any-touch/rotate  # 旋转
-npm i -S @any-touch/doubletap  # 双击(通过tap扩展的特例)
-```
-
-**汇成一行:**
+`@any-touch/core` is the core package, which is compatible with mouse/touch input. For specific gestures, the corresponding recognizer needs to be loaded, such as the `@any-touch/pan` drag recognizer.
 
 ```shell
-npm i -S @any-touch/core @any-touch/tap @any-touch/pan @any-touch/press @any-touch/swipe @any-touch/pinch @any-touch/rotate @any-touch/doubletap
-```
+npm i -S @any-touch/core # core
+npm i -S @any-touch/tap #click
+npm i -S @any-touch/pan # drag and drop
+npm i -S @any-touch/press #press
+npm i -S @any-touch/swipe # swipe
+npm i -S @any-touch/pinch # zoom
+npm i -S @any-touch/rotate # rotate
+npm i -S @any-touch/doubletap # double tap (special case extended by tap)
+````
 
-```javascript
-// 只加载pan识别器(拖拽)
+**Merge into one line:**
+
+```shell
+npm i -S @any-touch/core @any-touch/tap @any-touch/pan @any-touch/press @any-touch/swipe @any-touch/pinch @any-touch/rotate @any-touch /doubletap
+````
+
+````javascript
+// Load only the pan recognizer (drag and drop)
 import Core from '@any-touch/core';
 import pan from '@any-touch/pan
-// Core不识别任何手势.
+// Core doesn't recognize any gestures.
 const at = new Core(el);
-// 加载pan
+// load pan
 at.use(pan);
 
 at.on('pan', e=>{});
-```
+````
 
 ## @any-touch/core
 
-手势库的核心组件, 主要用来实现 PC/移动端的兼容([查看更多](../packages/core/README.md)).
+The core component of the gesture library, mainly used to achieve PC/mobile compatibility ([See more](../packages/core/README.md)).
 
-## @any-touch/xx 手势识别器
+## @any-touch/xx gesture recognizers
 
-**手势识别器**均已做成独立的包, 从而实现按需加载.
+**Gesture recognizers** have been made into independent packages, so that they can be loaded on demand.
 
-| 名称                  | 说明                              |
-| --------------------- | --------------------------------- |
-| **@any-touch/tap**    | [点击](../packages/tap/README.md)    |
-| **@any-touch/pan**    | [拖拽](../packages/pan/README.md)    |
-| **@any-touch/swipe**  | [划](../packages/swipe/README.md)    |
-| **@any-touch/press**  | [按压](../packages/press/README.md)  |
-| **@any-touch/pinch**  | [缩放](../packages/pinch/README.md)  |
-| **@any-touch/rotate** | [旋转](../packages/rotate/README.md) |
+| Name | Description |
+| --- | --- |
+| **@any-touch/tap** | [click](../packages/tap/README.md) |
+| **@any-touch/pan** | [drag](../packages/pan/README.md) |
+| **@any-touch/swipe** | [swipe](../packages/swipe/README.md) |
+| **@any-touch/press** | [press](../packages/press/README.md) |
+| **@any-touch/pinch** | [zoom](../packages/pinch/README.md) |
+| **@any-touch/rotate** | [rotate](../packages/rotate/README.md) |
 
 ![](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/1fa1a4dae46047d58b371e8ff1704dc8~tplv-k3u1fbpfcp-zoom-1.image)
 
 
 
-[:rocket: 返回目录](../README.md#目录)
+[:rocket: back to directory](../README.md#directory)
