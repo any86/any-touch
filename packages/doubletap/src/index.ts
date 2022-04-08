@@ -5,7 +5,6 @@ import { TapContext } from '@any-touch/tap';
 import type {
     AnyTouchEvent,
 } from '@any-touch/shared';
-const { setTimeout } = window;
 /**
  * 扩展插件映射
  */
@@ -32,7 +31,7 @@ export default function (at: Core) {
     at.beforeEach((type, next) => {
         if ('tap' === type) {
             clearTimeout(timeID);
-            timeID = setTimeout(() => {
+            timeID = (setTimeout as Window['setTimeout'])(() => {
                 if ([STATE.POSSIBLE, STATE.FAILED].includes(doubleTapContext.state)) {
                     next();
                 }
