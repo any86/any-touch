@@ -115,11 +115,11 @@ export default {
     mounted() {
         const at = new AnyTouch(document.body);
 
-        at.use(AnyTouch.doubletap);
+        // at.use(AnyTouch.doubletap);
 
-        at.on('doubletap', () => {
-            C(`doubletap`, '#fb0');
-        });
+        // at.on('doubletap', () => {
+        //     C(`doubletap`, '#fb0');
+        // });
 
         // at.on('tap', () => {
         //     C(`tap`, '#111');
