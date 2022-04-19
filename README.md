@@ -26,7 +26,7 @@
 
 [Simple](https://any86.github.io/any-touch)
 
-[Derivatives: any-scroll](https://github.com/any86/any-scroll)
+[any-scroll](https://github.com/any86/any-scroll)
 
 ## Install
 
