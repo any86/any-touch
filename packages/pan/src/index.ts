@@ -63,7 +63,7 @@ export default function (at: Core, options?: Partial<typeof DEFAULT_OPTIONS>): P
 
         // 是否满足条件
         function test() {
-            const { pointLength, distance, direction } = computed;
+            const { pointLength, distance } = computed;
             return context.pointLength === pointLength && context.threshold <= distance;
         }
     });

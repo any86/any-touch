@@ -108,16 +108,6 @@ export function resetState(context: PluginContext) {
 }
 
 /**
- * 判断是否已识别
- * @param state 识别器状态
- * @returns 是否已识别
- */
-export function isRecognized(state: RECOGNIZER_STATE): boolean {
-    return [STATE.START, STATE.MOVE].includes(state);
-}
-
-
-/**
  * 是否事件的结束
  * @param state 
  * @returns 是否

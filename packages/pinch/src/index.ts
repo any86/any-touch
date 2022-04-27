@@ -1,12 +1,10 @@
 import type { PluginContext, AnyTouchEvent } from '@any-touch/shared';
 import {
-    TYPE_END,
-    TYPE_CANCEL,
     isDisabled,
     flow,
     getStatusName,
     resetState,
-    isRecognized,
+    isMoveOrEndOrCancel,
     createPluginContext,
 } from '@any-touch/shared';
 import { ComputeScale, ComputeVectorForMutli } from '@any-touch/compute';
@@ -33,7 +31,6 @@ type PinchContext = PluginContext & typeof DEFAULT_OPTIONS;
 declare module '@any-touch/core' {
     interface PluginContextMap {
         pinch: PinchContext;
-
     }
 
     interface EventMap {
@@ -68,7 +65,7 @@ export default function (at: Core, options?: Partial<typeof DEFAULT_OPTIONS>): P
         // console.log(computed.scale,computed.phase,context.state);
 
         const { name } = context;
-        if (isValid) {
+        if (isValid || isMoveOrEndOrCancel(context.state)) {
             at.emit2(name, computed, context);
             // pinchin | pinchout
             const { deltaScale } = computed;
@@ -86,17 +83,14 @@ export default function (at: Core, options?: Partial<typeof DEFAULT_OPTIONS>): P
         function test() {
             // context.state 是上一个状态
             const { pointLength, scale, deltaScale, phase } = computed;
-
             return (
-                (context.pointLength === pointLength &&
-                    ((void 0 !== scale && void 0 !== deltaScale && context.threshold < Math.abs(scale - 1)) ||
-                        isRecognized(context.state))) ||
-                // pinchend | pinchcancel
-                (isRecognized(context.state) && [TYPE_END, TYPE_CANCEL].includes(phase))
+                context.pointLength === pointLength &&
+                // void 0 !== scale &&
+                // void 0 !== deltaScale &&
+                context.threshold < Math.abs(scale - 1)
             );
         }
     });
 
     return context;
 }
-
