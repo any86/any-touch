@@ -22,6 +22,7 @@
                 @pan="onPan"
                 @panstart="onPanstart($event, index)"
                 @panmove="onPanmove($event, index)"
+                @panend="onPanend($event, index)"
                 @swipe="onSwipe($event, index)"
                 @press="onPress"
                 @pressup="onPressUp"
@@ -136,8 +137,9 @@ export default {
             const style = { left: `50px`, top: `160px`, zIndex: 1, scale: 1, angle: 0 };
             this.styles.push(style);
         },
-        onPan() {
+        onPan(e) {
             // C('Pan', '#970');
+            // console.log(e);
         },
         onRotate(ev, index = 0) {
             // if(ev.isMatch() ) return;
@@ -164,12 +166,10 @@ export default {
         onPress(ev) {
             ev.currentTarget.setAttribute('at-phase', ev.phase);
             ev.currentTarget.setAttribute('at', ev.type);
-            C(ev.type, '#710');
         },
 
         onPressUp(ev) {
             ev.currentTarget.setAttribute('at', ev.type);
-            C(ev.type, '#769');
         },
 
         onSwipe(ev, index) {
@@ -181,6 +181,9 @@ export default {
         },
 
         onPanstart(ev, index) {
+            C(ev.type, '#726');
+            // console.log(ev);
+
             for (const i in this.styles) {
                 this.styles[i].zIndex = i == index ? 2 : 1;
             }
@@ -193,6 +196,11 @@ export default {
             // console.log(ev.deltaX,ev.deltaY)
             this.styles[index].top = parseInt(this.styles[index].top) + ev.deltaY + 'px';
             this.styles[index].left = parseInt(this.styles[index].left) + ev.deltaX + 'px';
+        },
+
+        onPanend(e, index) {
+            C(e.type, '#2f3');
+            // console.log(e.isEnd, e);
         },
 
         onStart(ev) {

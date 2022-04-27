@@ -62,15 +62,15 @@ importers:
 
   packages/any-touch:
     specifiers:
-      '@any-touch/core': ^2.0.3
-      '@any-touch/doubletap': ^2.0.3
-      '@any-touch/pan': ^2.0.3
-      '@any-touch/pinch': ^2.0.3
-      '@any-touch/press': ^2.0.3
-      '@any-touch/rotate': ^2.0.3
-      '@any-touch/swipe': ^2.0.3
-      '@any-touch/tap': ^2.0.3
-      any-event: ^2.0.3
+      '@any-touch/core': ^2.1.1
+      '@any-touch/doubletap': ^2.1.1
+      '@any-touch/pan': ^2.1.1
+      '@any-touch/pinch': ^2.1.1
+      '@any-touch/press': ^2.1.1
+      '@any-touch/rotate': ^2.1.1
+      '@any-touch/swipe': ^2.1.1
+      '@any-touch/tap': ^2.1.1
+      any-event: ^2.1.1
       tslib: ^2.3.1
     dependencies:
       '@any-touch/core': link:../core
@@ -86,8 +86,8 @@ importers:
 
   packages/compute:
     specifiers:
-      '@any-touch/shared': ^2.0.3
-      '@any-touch/vector': ^2.0.3
+      '@any-touch/shared': ^2.1.1
+      '@any-touch/vector': ^2.1.1
       tslib: ^2.3.1
     dependencies:
       '@any-touch/shared': link:../shared
@@ -96,17 +96,17 @@ importers:
 
   packages/core:
     specifiers:
-      '@any-touch/shared': ^2.0.3
-      any-event: ^2.0.3
+      '@any-touch/shared': ^2.1.1
+      any-event: ^2.1.1
     dependencies:
       '@any-touch/shared': link:../shared
       any-event: link:../any-event
 
   packages/doubletap:
     specifiers:
-      '@any-touch/compute': ^2.0.3
-      '@any-touch/shared': ^2.0.3
-      '@any-touch/vector': ^2.0.3
+      '@any-touch/compute': ^2.1.1
+      '@any-touch/shared': ^2.1.1
+      '@any-touch/vector': ^2.1.1
     dependencies:
       '@any-touch/compute': link:../compute
       '@any-touch/shared': link:../shared
@@ -114,29 +114,29 @@ importers:
 
   packages/pan:
     specifiers:
-      '@any-touch/compute': ^2.0.3
-      '@any-touch/shared': ^2.0.3
+      '@any-touch/compute': ^2.1.1
+      '@any-touch/shared': ^2.1.1
     dependencies:
       '@any-touch/compute': link:../compute
       '@any-touch/shared': link:../shared
 
   packages/pinch:
     specifiers:
-      '@any-touch/compute': ^2.0.3
+      '@any-touch/compute': ^2.1.1
     dependencies:
       '@any-touch/compute': link:../compute
 
   packages/press:
     specifiers:
-      '@any-touch/compute': ^2.0.3
-      '@any-touch/shared': ^2.0.3
+      '@any-touch/compute': ^2.1.1
+      '@any-touch/shared': ^2.1.1
     dependencies:
       '@any-touch/compute': link:../compute
       '@any-touch/shared': link:../shared
 
   packages/rotate:
     specifiers:
-      '@any-touch/compute': ^2.0.3
+      '@any-touch/compute': ^2.1.1
     dependencies:
       '@any-touch/compute': link:../compute
 
@@ -151,17 +151,17 @@ importers:
 
   packages/swipe:
     specifiers:
-      '@any-touch/compute': ^2.0.3
-      '@any-touch/shared': ^2.0.3
+      '@any-touch/compute': ^2.1.1
+      '@any-touch/shared': ^2.1.1
     dependencies:
       '@any-touch/compute': link:../compute
       '@any-touch/shared': link:../shared
 
   packages/tap:
     specifiers:
-      '@any-touch/compute': ^2.0.3
-      '@any-touch/shared': ^2.0.3
-      '@any-touch/vector': ^2.0.3
+      '@any-touch/compute': ^2.1.1
+      '@any-touch/shared': ^2.1.1
+      '@any-touch/vector': ^2.1.1
     dependencies:
       '@any-touch/compute': link:../compute
       '@any-touch/shared': link:../shared
@@ -169,13 +169,13 @@ importers:
 
   packages/vector:
     specifiers:
-      '@any-touch/shared': ^2.0.3
+      '@any-touch/shared': ^2.1.1
     dependencies:
       '@any-touch/shared': link:../shared
 
   packages/vue3:
     specifiers:
-      any-touch: ^2.0.3
+      any-touch: ^2.1.1
       vue: ^3.2.31
     dependencies:
       any-touch: link:../any-touch

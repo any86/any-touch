@@ -43,6 +43,7 @@ test(`左拖拽`, async done => {
         mockCB(e.direction);
     });
     await panSimulator(el, [{ x: 100, y: 100 }], [{ x: 0, y: 11 }]);
+    // panstart和panend
     expect(mockCB).toHaveBeenCalledTimes(2);
     expect(mockCB).toHaveBeenNthCalledWith(1, `left`);
     done();
@@ -70,12 +71,11 @@ test(`模拟pancancel, cancel后继续触发pan`, async done => {
     const el = document.createElement('div');
     const gs = new GestureSimulator(el);
     const at = new Core(el);
-    at.use(pan);
+    at.use(pan, { threshold: 10 });
     const onPan = jest.fn().mockName('onPan');
     const onPanCancel = jest.fn().mockName('onPanCancel');
-    const onPanstartAfterCancel  = jest.fn();
-
-    at.on('pan', onPan);
+    const onPanstartAfterCancel = jest.fn();
+    at.on('pan',onPan);
     at.on('panstart', onPanstartAfterCancel);
     at.on('pancancel', onPanCancel);
     gs.start();

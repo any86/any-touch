@@ -5,9 +5,8 @@ import { Point } from '@any-touch/shared';
 export default async function (el: HTMLElement, start: Point[], end: Point[]) {
     const gs = new GestureSimulator(el);
     gs.start(start);
-    await sleep(25);
+    await sleep();
     gs.move(end);
     await sleep();
     gs.end();
-    return Promise.resolve();
 };
