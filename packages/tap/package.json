@@ -1,6 +1,6 @@
 {
     "name": "@any-touch/tap",
-    "version": "2.1.1",
+    "version": "2.1.2",
     "description": "any-touch的识别器, 用来识别点击手势.",
     "main": "./dist/index",
     "module": "./dist/index.es.js",
@@ -8,9 +8,9 @@
     "author": "any86",
     "license": "MIT",
     "dependencies": {
-        "@any-touch/compute": "^2.1.1",
-        "@any-touch/shared": "^2.1.1",
-        "@any-touch/vector": "^2.1.1"
+        "@any-touch/compute": "^2.1.2",
+        "@any-touch/shared": "^2.1.2",
+        "@any-touch/vector": "^2.1.2"
     },
     "files": [
         "dist/*"
