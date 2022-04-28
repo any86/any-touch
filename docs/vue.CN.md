@@ -38,6 +38,12 @@
 
 进一步简化, 可以直接使用`@any-touch/vue3`, 是一个 vue3 指令.
 
+#### 安装
+```shell
+npm i -S @any-touch/vue3
+```
+
+#### 使用
 ```javascript
 // main.js
 import VTouch from '@any-touch/vue3';

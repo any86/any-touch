@@ -1,4 +1,4 @@
-## vue & Directives
+## Vue & Directive
 
 By default, all gestures will trigger native DOM events, so in vue, you can use syntax such as "@tap" to listen for gesture events directly on template elements.
 
@@ -37,6 +37,13 @@ By default, all gestures will trigger native DOM events, so in vue, you can use 
 ### Directive
 
 To simplify further, you can use `@any-touch/vue3` directly, which is a vue3 directive.
+
+#### Install
+```
+npm i -S @any-touch/vue3
+```
+
+#### Run
 
 ```javascript
 // main.js
