@@ -225,12 +225,10 @@ export default class extends AnyEvent<EventMap> {
             if (canPreventDefault(event, this.__options)) {
                 preventDefault();
             } else {
-                // console.log(event.type);
-
                 if ('touchstart' === event.type) {
                     this.__isIgnoreMouse = true;
                 } else if ('touchmove' === event.type) {
-                    // 这时候肯定不会在触发mouse了
+                    // 这时候肯定不会再触发mouse了
                     // 所以重置开关
                     this.__isIgnoreMouse = false;
                 }
