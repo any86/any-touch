@@ -125,6 +125,8 @@ export default class extends AnyEvent<EventMap> {
     private __computeFunctionCreatorList: ComputeFunctionCreator[] = [];
     // 插件
     private __pluginContexts: PluginContext[] = [];
+    // 是否忽略mouse事件
+    private __isIgnoreMouse: boolean = false;
 
     /**
      * @param el 目标元素, 微信下没有el
@@ -222,6 +224,23 @@ export default class extends AnyEvent<EventMap> {
             const preventDefault = () => event.preventDefault();
             if (canPreventDefault(event, this.__options)) {
                 preventDefault();
+            } else {
+                // console.log(event.type);
+
+                if ('touchstart' === event.type) {
+                    this.__isIgnoreMouse = true;
+                } else if ('touchmove' === event.type) {
+                    // 这时候肯定不会在触发mouse了
+                    // 所以重置开关
+                    this.__isIgnoreMouse = false;
+                }
+
+                if (this.__isIgnoreMouse && event.type.startsWith('mouse')) {
+                    if ('mouseup' === event.type) {
+                        this.__isIgnoreMouse = false;
+                    }
+                    return;
+                }
             }
             this.emit(TYPE_INPUT, input);
             this.emit2(`at:${input.phase}`, input as AnyTouchEvent, {} as PluginContext);
