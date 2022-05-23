@@ -114,7 +114,7 @@ export default {
     },
 
     mounted() {
-        const at = new AnyTouch(document.body);
+        const at = new AnyTouch(document.body,{preventDefault:!false});
 
         // at.use(AnyTouch.doubletap);
 
