@@ -1,6 +1,6 @@
 {
     "name": "@any-touch/vue3",
-    "version": "2.1.2",
+    "version": "2.1.3",
     "description": "any-touch的vue指令版本",
     "main": "./dist/index.js",
     "module": "./dist/index.es.js",
@@ -8,7 +8,7 @@
     "author": "any86",
     "license": "MIT",
     "dependencies": {
-        "any-touch": "^2.1.2",
+        "any-touch": "^2.1.3",
         "vue": "^3.2.31"
     },
     "files": [

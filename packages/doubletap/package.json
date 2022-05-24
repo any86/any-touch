@@ -1,6 +1,6 @@
 {
     "name": "@any-touch/doubletap",
-    "version": "2.1.2",
+    "version": "2.1.3",
     "description": "any-touch的识别器, 用来识别双击手势, 是Tap识别器的一个特例",
     "main": "./dist/index",
     "module": "./dist/index.es.js",
@@ -8,9 +8,9 @@
     "author": "any86",
     "license": "MIT",
     "dependencies": {
-        "@any-touch/compute": "^2.1.2",
-        "@any-touch/shared": "^2.1.2",
-        "@any-touch/vector": "^2.1.2"
+        "@any-touch/compute": "^2.1.3",
+        "@any-touch/shared": "^2.1.3",
+        "@any-touch/vector": "^2.1.3"
     },
     "files": [
         "dist/*"
