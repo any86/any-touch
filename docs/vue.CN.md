@@ -6,7 +6,7 @@
 <template>
     <div @tap="onTap" @swipe="onSwipe" @press="onPress" @pan="onPan" @pinch="onPinch" @rotate="onRotate">
         <!-- 子元素上也可监听手势事件 -->
-        <p tap="onTap" @swipe="onSwipe" @press="onPress" @pan="onPan" @pinch="onPinch" @rotate="onRotate">Hello any-touch</p>
+        <p @tap="onTap" @swipe="onSwipe" @press="onPress" @pan="onPan" @pinch="onPinch" @rotate="onRotate">Hello any-touch</p>
     </div>
 </template>
 

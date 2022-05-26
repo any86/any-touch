@@ -6,7 +6,7 @@ By default, all gestures will trigger native DOM events, so in vue, you can use 
 <template>
     <div @tap="onTap" @swipe="onSwipe" @press="onPress" @pan="onPan" @pinch="onPinch" @rotate="onRotate">
         <!-- Gesture events can also be monitored on child elements -->
-        <p tap="onTap" @swipe="onSwipe" @press="onPress" @pan="onPan" @pinch="onPinch" @rotate="onRotate">Hello any-touch</p>
+        <p @tap="onTap" @swipe="onSwipe" @press="onPress" @pan="onPan" @pinch="onPinch" @rotate="onRotate">Hello any-touch</p>
     </div>
 </template>
 
