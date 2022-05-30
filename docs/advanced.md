@@ -1,8 +1,8 @@
 # Advanced use
 
-- [block default event](#block default event)
+- [block default event](#block-default-events)
 - [doubletap](https://github.com/any86/any-touch/tree/master/packages/doubletap)
-- ["at:xxx" unified event](#atxxx event)
+- ["at:xxx" unified event](#atxxx-event)
 
 
 ## Block default events
