@@ -44,6 +44,8 @@ export { AnyTouchEvent } from '@any-touch/shared';
 export interface Options {
     // 是否触发DOM事件
     domEvents?: false | EventInit;
+    // 是否在捕获阶段处理事件
+    capture?: boolean;
     preventDefault?: boolean | ((e: NativeEvent) => boolean);
 }
 
@@ -54,6 +56,7 @@ const TYPE_COMPUTED = 'computed';
  */
 const DEFAULT_OPTIONS: Options = {
     domEvents: { bubbles: true, cancelable: true },
+    capture: false,
     preventDefault: (event) => {
         // console.log((event.target as any).tagName);
         if (event.target && 'tagName' in event.target) {
@@ -187,14 +190,11 @@ export default class extends AnyEvent<EventMap> {
             // 只有在preventDefault中显式的指明false才能使用{ passive: true }
             // fix: document和body上绑定事件的时候, 默认passive=true
             // https://github.com/any86/Notes/issues/82
-            this.on(
-                TYPE_UNBIND,
-                bindElement(
-                    el,
-                    this.catchEvent.bind(this),
-                    false === this.__options.preventDefault && supportsPassive ? { passive: true } : { passive: false }
-                )
-            );
+            const options: AddEventListenerOptions = {
+                capture: this.__options.capture,
+            };
+            options.passive = false === this.__options.preventDefault && supportsPassive;
+            this.on(TYPE_UNBIND, bindElement(el, this.catchEvent.bind(this), options));
         }
     }
 
@@ -265,7 +265,7 @@ export default class extends AnyEvent<EventMap> {
      */
     compute<CList extends ComputeFunctionCreator[] = ComputeFunctionCreator[]>(
         computeFunctionCreatorList: CList,
-        // CList[0]的0是几都没关系, 
+        // CList[0]的0是几都没关系,
         // 因为不是元祖,
         // 所以结果都会是ReturnType<ReturnType<CList[0]>|ReturnType<ReturnType<CList[n]>
         callback: (computed: UnionToIntersection<ReturnType<ReturnType<CList[0]>>> & Input) => void,
