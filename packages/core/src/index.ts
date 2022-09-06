@@ -46,6 +46,8 @@ export interface Options {
     domEvents?: false | EventInit;
     // 是否在捕获阶段处理事件
     capture?: boolean;
+    // 支持触发事件的鼠标按钮，取值参见MouseEvent.button
+    buttons?: Set<number>;
     preventDefault?: boolean | ((e: NativeEvent) => boolean);
 }
 
@@ -144,7 +146,7 @@ export default class extends AnyEvent<EventMap> {
         // 是因为调用this.__inputCreatorMap[event.type]的时候还要判断类型,
         // 因为都是固定(touch&mouse)事件绑定好的, 没必要判断
         const createInputFromTouch = touch(this.el) as InputCreatorFunction<NativeEvent>;
-        const createInputFromMouse = mouse() as InputCreatorFunction<NativeEvent>;
+        const createInputFromMouse = mouse(this.__options.buttons) as InputCreatorFunction<NativeEvent>;
         this.__inputCreatorMap = {
             [TOUCH_START]: createInputFromTouch,
             [TOUCH_MOVE]: createInputFromTouch,
