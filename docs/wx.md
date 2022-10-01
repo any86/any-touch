@@ -1,6 +1,6 @@
 ## Support WeChat applet
 
-Since there is no concept of dom element in the ** applet **, we need to manually receive the event object of the **touch** event through the **catchEvent** method to identify
+Since there is no concept of dom element in the **applet**, we need to manually receive the event object of the **touch** event through the **catchEvent** method to identify
 
 ````xml
 <view
