@@ -140,7 +140,7 @@ at.off('tap');
 
 
 
-##set(options)
+## set(options)
 
 Change settings.
 
@@ -207,7 +207,7 @@ const at = AnyTouch()
 ````
 [:rocket: return to directory](#directory)
 
-##beforeEach(hook)
+## beforeEach(hook)
 
 Interceptor, which can perform custom interception operations before each gesture is triggered.
 
