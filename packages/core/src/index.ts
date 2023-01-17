@@ -58,7 +58,7 @@ const DEFAULT_OPTIONS: Options = {
         // console.log((event.target as any).tagName);
         if (event.target && 'tagName' in event.target) {
             const { tagName } = event.target;
-            return !/^(?:INPUT|TEXTAREA|BUTTON|SELECT)$/.test(tagName);
+            return !/^(?:INPUT|TEXTAREA|BUTTON|SELECT)$/.test(tagName as string);
         }
         /* istanbul ignore next */
         return false;

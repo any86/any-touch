@@ -5,7 +5,7 @@ const DEFAULT_OPTIONS: Options = {
     preventDefault: (event) => {
         if (event.target && 'tagName' in event.target) {
             const { tagName } = event.target;
-            return !/^(?:INPUT|TEXTAREA|BUTTON|SELECT)$/.test(tagName);
+            return !/^(?:INPUT|TEXTAREA|BUTTON|SELECT)$/.test(tagName as string);
         }
         return false;
     },
