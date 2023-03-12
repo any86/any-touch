@@ -10,7 +10,7 @@
 ![gestures](https://user-images.githubusercontent.com/8264787/162208065-f347f3a5-266e-4fa0-be0a-6a439236d43d.png)
 
 
--   Support PC/Mobile/[WeChat applet](docs/wx.md).
+-   Supports PC/Mobile/[WeChat applet](docs/wx.md).
 -   6 gesture recognizers are loaded by default, can also be [loaded on demand](docs/optional.md), core **1kb**, full **5kb**.
 -   **No dependencies, not limited to Vue / React / Angular etc...**
 
@@ -28,7 +28,7 @@
 
 [any-scroll](https://github.com/any86/any-scroll)
 
-## Install
+## Installation 
 
 ```javascript
 npm i -S any-touch
