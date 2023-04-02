@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "@5a/css": "^0.0.9",
-    "axios": "^0.19.2",
+    "axios": "^0.21.2",
     "dayjs": "^1.9.4",
     "express": "^4.17.1",
     "mathjs": "^7.1.0",
