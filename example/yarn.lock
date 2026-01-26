@@ -941,11 +941,6 @@
   resolved "https://registry.npm.taobao.org/@nodelib/fs.stat/download/@nodelib/fs.stat-1.1.3.tgz#2b5a3ab3f918cca48a8c754c08168e3f03eba61b"
   integrity sha1-K1o6s/kYzKSKjHVMCBaOPwPrphs=
 
-"@photo-touch/photo@^0.0.2":
-  version "0.0.2"
-  resolved "https://registry.npm.taobao.org/@photo-touch/photo/download/@photo-touch/photo-0.0.2.tgz#bda3ee9c8d163866b8441238c39f85d244190237"
-  integrity sha1-vaPunI0WOGa4RBI4w5+F0kQZAjc=
-
 "@soda/friendly-errors-webpack-plugin@^1.7.1":
   version "1.7.1"
   resolved "https://registry.npm.taobao.org/@soda/friendly-errors-webpack-plugin/download/@soda/friendly-errors-webpack-plugin-1.7.1.tgz#706f64bcb4a8b9642b48ae3ace444c70334d615d"
@@ -5986,9 +5981,9 @@ minimatch@^3.0.4:
     brace-expansion "^1.1.7"
 
 minimist@^1.2.0, minimist@^1.2.5:
-  version "1.2.5"
-  resolved "https://registry.npm.taobao.org/minimist/download/minimist-1.2.5.tgz#67d66014b66a6a8aaa0c083c5fd58df4e4e97602"
-  integrity sha1-Z9ZgFLZqaoqqDAg8X9WN9OTpdgI=
+  version "1.2.8"
+  resolved "https://registry.yarnpkg.com/minimist/-/minimist-1.2.8.tgz#c1a464e7693302e082a075cee0c057741ac4772c"
+  integrity sha512-2yyAR8qBkN3YuheJanUpWC5U3bb5osDywNB8RzDVlDwDHbocAJveqqj1u8+SVD7jkWT4yvsHCpWqqWqAxb0zCA==
 
 minipass-collect@^1.0.2:
   version "1.0.2"
@@ -6687,13 +6682,6 @@ performance-now@^2.1.0:
   version "2.1.0"
   resolved "https://registry.npm.taobao.org/performance-now/download/performance-now-2.1.0.tgz#6309f4e0e5fa913ec1c69307ae364b4b377c9e7b"
   integrity sha1-Ywn04OX6kT7BxpMHrjZLSzd8nns=
-
-photo-touch@^0.0.2-a0.0:
-  version "0.0.2"
-  resolved "https://registry.npm.taobao.org/photo-touch/download/photo-touch-0.0.2.tgz#20849cd17d6eb1b3da81735dc95627d246b51a49"
-  integrity sha1-IISc0X1usbPagXNdyVYn0ka1Gkk=
-  dependencies:
-    "@photo-touch/photo" "^0.0.2"
 
 picomatch@^2.0.4, picomatch@^2.2.1:
   version "2.2.2"
