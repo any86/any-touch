@@ -19,6 +19,20 @@ test('off所有对应的事件绑定', ()=>{
     expect(mockCallback.mock.calls.length).toBe(0);
 });
 
+test('off未注册的listener不会移除其他listener', () => {
+    const eventEmitter = new EventEmitter();
+    const registeredCallback = jest.fn();
+    const otherCallback = jest.fn();
+    eventEmitter.on('abc', registeredCallback);
+    eventEmitter.on('abc', otherCallback);
+
+    eventEmitter.off('abc', jest.fn());
+    eventEmitter.emit('abc');
+
+    expect(registeredCallback).toHaveBeenCalledTimes(1);
+    expect(otherCallback).toHaveBeenCalledTimes(1);
+});
+
 // test('once是否正确?', () => {
 //     const eventEmitter = new EventEmitter();
 //     const mockCallback = jest.fn();

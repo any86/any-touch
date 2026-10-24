@@ -107,7 +107,9 @@ export default class AnyEvent<TypeAndEventMap extends DefaultTypeAndEventMap = D
             // 清空指定回调
             else {
                 const index = listeners.findIndex(cb => cb === listener);
-                listeners.splice(index, 1);
+                if (-1 !== index) {
+                    listeners.splice(index, 1);
+                }
             }
         }
     }
